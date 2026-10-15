@@ -160,6 +160,15 @@ export const WalletPassLink = z
   .object({ platform: WalletPlatform, url: z.string(), serial: z.string() })
   .openapi('WalletPassLink');
 
+export const TicketLinkTickets = z
+  .object({
+    ticketIds: z.array(z.uuid()).openapi({
+      description:
+        'The active tickets of the link’s event that the signed-in person holds, in ticket-number order. Open each with `GET /me/tickets/{id}`.',
+    }),
+  })
+  .openapi('TicketLinkTickets');
+
 /* ----------------------------------------------------------------------------- orders ---- */
 
 export const MyOrderSummary = z

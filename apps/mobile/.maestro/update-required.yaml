@@ -9,4 +9,4 @@ appId: com.yayatoh.yayatohapp.preview
 - assertVisible: 'Update required'
 - assertVisible:
     text: 'Update Yayatoh'
-- assertNotVisible: 'Your events and tickets will appear here soon.'
+- assertNotVisible: 'Welcome to Yayatoh'

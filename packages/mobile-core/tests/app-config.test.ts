@@ -1,4 +1,5 @@
 import {
+  apnsEnvironment,
   associatedDomains,
   buildExpoConfig,
   DEVELOPMENT_API_BASE_URL,
@@ -138,18 +139,94 @@ describe('permissions', () => {
   it('asks for the camera in the Staff app only', () => {
     const s = staff();
     expect(s.android?.permissions).toEqual(['android.permission.CAMERA']);
-    expect(s.android?.blockedPermissions).toEqual([]);
+    expect(s.android?.blockedPermissions).not.toContain('android.permission.CAMERA');
     expect(s.ios?.infoPlist?.NSCameraUsageDescription).toMatch(/camera/);
     const m = mobile();
-    expect(m.android?.permissions).toEqual([]);
-    expect(m.android?.blockedPermissions).toEqual(['android.permission.CAMERA']);
+    expect(m.android?.permissions).not.toContain('android.permission.CAMERA');
+    expect(m.android?.blockedPermissions).toContain('android.permission.CAMERA');
     expect(m.ios?.infoPlist?.NSCameraUsageDescription).toBeUndefined();
   });
 
-  it('adds no permission for notifications yet (M7.2c and M7.3d own them)', () => {
+  it('adds the calendar plugin to the attendee app only, write-only, with no reminders (M7.3b)', () => {
+    const calendar = (c: ReturnType<typeof mobile>) =>
+      (c.plugins ?? []).find((p) => Array.isArray(p) && p[0] === 'expo-calendar') as
+        | [string, Record<string, unknown>]
+        | undefined;
+    expect(calendar(mobile())?.[1]).toMatchObject({
+      writeOnlyAccess: true,
+      remindersPermission: false,
+      calendarPermission: expect.stringMatching(/calendar/i),
+      writeOnlyCalendarPermission: expect.stringMatching(/calendar/i),
+    });
+    expect(calendar(staff())).toBeUndefined();
+    // Full brightness is a window setting: it needs no plugin and never asks for WRITE_SETTINGS.
+    expect(JSON.stringify(mobile())).not.toMatch(/WRITE_SETTINGS|expo-brightness/);
+  });
+
+  it('asks for location in the attendee app only: when in use, coarse, never in the background (M7.3c)', () => {
+    const m = mobile();
+    expect(m.ios?.infoPlist?.NSLocationWhenInUseUsageDescription).toMatch(/near me/);
+    expect(JSON.stringify(m.ios?.infoPlist)).not.toMatch(/NSLocationAlways/);
+    expect(m.android?.permissions).toContain('android.permission.ACCESS_COARSE_LOCATION');
+    expect(m.android?.permissions).not.toContain('android.permission.ACCESS_FINE_LOCATION');
+    expect(m.android?.blockedPermissions).toEqual(
+      expect.arrayContaining([
+        'android.permission.ACCESS_FINE_LOCATION',
+        'android.permission.ACCESS_BACKGROUND_LOCATION',
+      ]),
+    );
+    expect(m.plugins).toContainEqual([
+      'expo-location',
+      expect.objectContaining({
+        isAndroidBackgroundLocationEnabled: false,
+        isIosBackgroundLocationEnabled: false,
+      }),
+    ]);
+    const s = staff();
+    expect(s.ios?.infoPlist?.NSLocationWhenInUseUsageDescription).toBeUndefined();
+    expect(s.android?.permissions).toEqual(['android.permission.CAMERA']);
+    expect(JSON.stringify(s.android)).not.toMatch(/LOCATION/);
+    expect(JSON.stringify(s.plugins)).not.toMatch(/expo-location/);
+  });
+
+  it('asks for notifications in the attendee app only (M7.3d): Android 13+ runtime permission, no iOS usage string', () => {
+    const m = mobile();
+    expect(m.android?.permissions).toContain('android.permission.POST_NOTIFICATIONS');
+    expect(staff().android?.permissions).not.toContain('android.permission.POST_NOTIFICATIONS');
+    // iOS asks at runtime and has no Info.plist string for notifications; nothing else rides along.
     for (const c of [mobile(), staff()]) {
-      expect(JSON.stringify(c)).not.toMatch(/NOTIFICATION|UIBackgroundModes|RECORD_AUDIO|LOCATION/);
+      expect(JSON.stringify(c.ios?.infoPlist)).not.toMatch(/Notification|UIBackgroundModes/);
+      expect(JSON.stringify(c)).not.toMatch(/RECORD_AUDIO/);
     }
+    expect(JSON.stringify(staff())).not.toMatch(/LOCATION/);
+  });
+
+  it('adds the expo-notifications plugin to the attendee app with the APNs environment of the build', () => {
+    const plugin = (c: ReturnType<typeof mobile>) =>
+      (c.plugins ?? []).find((p) => Array.isArray(p) && p[0] === 'expo-notifications');
+    expect(plugin(mobile({ APP_ENV: 'development' }))).toEqual([
+      'expo-notifications',
+      { mode: 'development' },
+    ]);
+    expect(plugin(mobile({ APP_ENV: 'preview' }))).toEqual(['expo-notifications', { mode: 'production' }]);
+    expect(plugin(mobile({ APP_ENV: 'production' }))).toEqual(['expo-notifications', { mode: 'production' }]);
+    expect(plugin(staff())).toBeUndefined();
+  });
+
+  it('reports the same APNs environment to the server (sandbox only for development builds)', () => {
+    expect(apnsEnvironment('development')).toBe('sandbox');
+    expect(apnsEnvironment('preview')).toBe('production');
+    expect(apnsEnvironment('production')).toBe('production');
+  });
+
+  it('takes the Firebase client file from the environment, never from the repo', () => {
+    expect(mobile().android?.googleServicesFile).toBeUndefined();
+    expect(mobile({ GOOGLE_SERVICES_FILE: './google-services.json' }).android?.googleServicesFile).toBe(
+      './google-services.json',
+    );
+    expect(
+      staff({ GOOGLE_SERVICES_FILE: './google-services.json' }).android?.googleServicesFile,
+    ).toBeUndefined();
   });
 });
 
@@ -229,7 +306,8 @@ describe('sign-in configuration (M7.1c)', () => {
   it('adds no permission string for sign-in', () => {
     const keys = (c: ReturnType<typeof mobile>) =>
       Object.keys(c.ios?.infoPlist ?? {}).filter((k) => k.startsWith('NS') && k.endsWith('UsageDescription'));
-    expect(keys(mobile())).toEqual([]);
+    // Sign-in adds none: the attendee app's only string is the "near me" location one (M7.3c).
+    expect(keys(mobile())).toEqual(['NSLocationWhenInUseUsageDescription']);
     expect(keys(staff())).toEqual(['NSCameraUsageDescription']);
   });
 });

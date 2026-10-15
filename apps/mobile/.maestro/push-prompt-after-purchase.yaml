@@ -1,0 +1,29 @@
+# Device pass. P7-8: never at launch; after the first purchase, explain first, then the phone's sheet.
+appId: ${APP_ID}
+env:
+  EVENT_SLUG: summit
+---
+- clearState
+- launchApp:
+    clearState: true
+    permissions: { notifications: unset }
+- runFlow: sign-in-seeded.yaml
+# 1. Nothing is asked at launch or while browsing.
+- assertVisible: "Tickets"
+- assertNotVisible: "Get updates about your tickets?"
+# 2. Buy with the fake provider (M7.3c's journey), ending on the order confirmation.
+- openLink: ${SCHEME}://events/${EVENT_SLUG}
+- tapOn: "Buy tickets"
+- tapOn: "Checkout"
+- assertVisible: "Order confirmed"
+# 3. The explanation comes first and names what is sent and what never is.
+- assertVisible: "Get updates about your tickets?"
+- assertVisible: "never your name, email, phone number, payment amount or ticket code"
+# 4. Only now the phone's own sheet.
+- tapOn: "Turn on notifications"
+- tapOn: "Allow"
+- assertNotVisible: "Get updates about your tickets?"
+# 5. Account → Notifications says it is on.
+- tapOn: "Account"
+- tapOn: "Notifications"
+- assertVisible: "Notifications are on"

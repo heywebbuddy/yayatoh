@@ -1,0 +1,40 @@
+# M7.3a: a new person signs in with an emailed code, lands on Tickets, and signs out again.
+# Written, not run in cloud sessions (no simulator). Device pass: a preview build pointed
+# (API_BASE_URL) at a dev server with YAYATOH_DEV_AUTH=1, run with
+#   maestro test apps/mobile/.maestro/sign-in-email-code.yaml -e DEV_SERVER=http://10.0.2.2:3000
+# The email is made up per run; the code is read back from the dev server's mailbox.
+appId: com.yayatoh.yayatohapp.preview
+---
+- launchApp:
+    clearState: true
+- evalScript: ${output.email = 'e2e-' + Date.now() + '@example.test'}
+- assertVisible: 'Welcome to Yayatoh'
+- tapOn: 'Continue with email'
+- tapOn:
+    id: 'email-input'
+- inputText: ${output.email}
+- tapOn: 'Send me a code'
+- assertVisible: 'Check your email'
+# A wrong code is refused with its own message, and the screen stays.
+- tapOn:
+    id: 'code-input'
+- inputText: '000000'
+- assertVisible: 'That code is wrong or has expired. Check it, or ask for a new one.'
+- runScript:
+    file: scripts/last-code.js
+    env:
+      EMAIL: ${output.email}
+- tapOn:
+    id: 'code-input'
+- eraseText: 6
+- inputText: ${output.code}
+# The sixth digit signs in; the first sign-in creates the account.
+- assertVisible: 'Tickets, tab, 1 of 3'
+- assertVisible: 'Discover, tab, 2 of 3'
+- tapOn: 'Account, tab, 3 of 3'
+- assertVisible: ${output.email}
+- assertVisible: 'Verified'
+# Sign out (asks first) and come back to the welcome screen.
+- tapOn: 'Sign out'
+- tapOn: 'Sign out'
+- assertVisible: 'Welcome to Yayatoh'

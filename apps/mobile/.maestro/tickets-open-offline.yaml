@@ -1,0 +1,44 @@
+# M7.3b acceptance: after one sync, My tickets and every ticket's QR open with the network off, and
+# signing out removes them. Written, not run in cloud sessions (device pass: iOS simulator and
+# Android emulator; the runner toggles airplane mode). Seed: persona tess@example.test holds the
+# ticket "General admission" for the event named in EVENT.
+appId: com.yayatoh.yayatohapp.preview
+env:
+  EVENT: Summer Night
+---
+- launchApp:
+    clearState: true
+- runFlow: tickets-sign-in.yaml
+# One sync happens when the tab opens.
+- assertVisible: 'Upcoming'
+- assertVisible:
+    text: ${EVENT}
+- assertVisible: 'Last synced.*'
+- tapOn:
+    text: 'General admission for ${EVENT}.*'
+- assertVisible:
+    text: 'Ticket QR code for ${EVENT}'
+- assertVisible: 'Ticket code'
+- back
+# Network off, app restarted from the saved copy.
+- setAirplaneMode: enabled
+- launchApp
+- assertVisible: 'You’re offline.*'
+- assertVisible:
+    text: ${EVENT}
+- tapOn:
+    text: 'General admission for ${EVENT}.*'
+- assertVisible:
+    text: 'Ticket QR code for ${EVENT}'
+- assertVisible: 'You’re offline. This is the copy saved on this phone.'
+- setAirplaneMode: disabled
+# Signing out removes the saved tickets.
+- back
+- tapOn: 'Account'
+- tapOn: 'Sign out'
+- tapOn: 'Sign out'
+- setAirplaneMode: enabled
+- launchApp
+- assertNotVisible:
+    text: ${EVENT}
+- setAirplaneMode: disabled

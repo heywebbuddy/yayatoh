@@ -1,0 +1,32 @@
+# "Near me" asks for the location only when tapped, then sorts nearest first.
+appId: com.yayatoh.yayatohapp.dev
+env:
+  EMAIL: nia@newcomer.test
+  PASSWORD: persona-dev-password
+---
+- launchApp:
+    clearState: true
+    permissions:
+      location: unset
+- runFlow: subflows/sign-in.yaml
+- tapOn: 'Discover'
+- assertVisible: 'Find events'
+# Nothing has asked for the location yet: no system dialog.
+- assertNotVisible: 'Allow.*'
+- tapOn: 'Near me'
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: 'Allow While Using App'
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn: 'While using the app'
+- assertVisible:
+    text: 'Nearest first'
+    timeout: 20000
+# Tapping again turns it off.
+- tapOn: 'Near me'
+- assertVisible: 'Soonest first'

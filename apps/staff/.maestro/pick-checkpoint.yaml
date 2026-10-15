@@ -1,0 +1,25 @@
+# M7.4a: after enrolling, the device picks where it scans; the choice is kept and the app opens on
+# the scanner from then on. Written, not run in cloud sessions. Device pass: the same environment as
+# enrol-by-link.yaml, plus -e CHECKPOINT='<name of one of the event's entrances>'.
+appId: com.yayatoh.staff.preview
+env:
+  ENROL_EVENT: ''
+  ENROL_KEY: ''
+  CHECKPOINT: 'Main door'
+---
+- launchApp:
+    clearState: true
+- openLink: 'yayatoh-staff-preview://scan#e=${ENROL_EVENT}&k=${ENROL_KEY}'
+- extendedWaitUntil:
+    visible: 'Where is this device scanning?'
+    timeout: 20000
+# Every entrance of the event is on offer, and so is the whole event.
+- assertVisible: '${CHECKPOINT}'
+- assertVisible: 'Whole event'
+- tapOn: '${CHECKPOINT}'
+- assertNotVisible: 'Where is this device scanning?'
+# The choice survives a restart: the gate opens on the scanner, not on the picker.
+- stopApp
+- launchApp
+- assertNotVisible: 'Where is this device scanning?'
+- assertNotVisible: 'Enrol this device'

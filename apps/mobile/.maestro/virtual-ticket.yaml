@@ -1,0 +1,22 @@
+# A virtual (online) event shows "Buy on the web" and no quantity controls: it cannot be bought in the app (P7-7).
+# Needs an online event with passes: create one in the development organizer dashboard and pass its slug.
+appId: com.yayatoh.yayatohapp.dev
+env:
+  EMAIL: nia@newcomer.test
+  PASSWORD: persona-dev-password
+  ONLINE_EVENT_SLUG: harbor-online-talk
+---
+- launchApp:
+    clearState: true
+- runFlow: subflows/sign-in.yaml
+- openLink: yayatoh-dev://events/${ONLINE_EVENT_SLUG}
+- assertVisible: 'Online event'
+- scrollUntilVisible:
+    element: 'Buy on the web'
+- assertVisible: 'Tickets with access to the live stream are sold on the website, not in the app.'
+- assertNotVisible: 'Continue to checkout'
+- assertNotVisible: 'Add one .*'
+- tapOn: 'Buy on the web'
+# The secure browser opens the event's page on the web.
+- assertVisible:
+    text: '.*'

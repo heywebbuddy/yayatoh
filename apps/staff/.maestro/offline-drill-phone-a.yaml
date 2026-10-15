@@ -1,0 +1,30 @@
+# Offline drill (X), phone A (M7.4b). Two phones, both enrolled at the same event, both offline,
+# admit the same ticket; after they reconnect the duplicate is flagged within 60 s. Run this flow on
+# phone A and `offline-drill-phone-b.yaml` on phone B at the same time (`maestro --device <id> test`).
+# A scans first and reconnects first, so it is accepted; B's later scan is the duplicate.
+# Env: ENROL_EVENT and ENROL_KEY (same event on both phones), TICKET_CODE (one seeded active ticket).
+appId: com.yayatoh.staff.preview
+---
+- runFlow: scan-setup.yaml
+- setAirplaneMode: enabled
+- tapOn:
+    id: manual-open
+- tapOn:
+    id: manual-input
+- inputText: ${TICKET_CODE}
+- tapOn:
+    id: manual-submit
+- assertVisible: 'Admit'
+- assertVisible: '1 scan waiting to send'
+# Phone B scans about 20 s later; keep the connection off until it has.
+# (Maestro has no sleep: waiting for text that never shows, as optional, waits out the timeout.)
+- extendedWaitUntil:
+    visible: 'ThisNeverShows'
+    timeout: 30000
+    optional: true
+- setAirplaneMode: disabled
+- extendedWaitUntil:
+    visible: 'All scans sent'
+    timeout: 60000
+- assertNotVisible:
+    id: flagged-panel

@@ -37,3 +37,14 @@ f43c277cbad51bf2648e35fbf8a0e39dda8def5e:packages/modules/webhooks/tests/signing
 09d49dd0221e3423631069f702b5e4f1d55c3bd4:env.rtf:stripe-access-token:67
 # M7.1c deep-link tests: a made-up Staff enrolment key in a parsing fixture (not a credential)
 3590e784251fc3adfb12d5b91fc61034327d26e7:packages/mobile-core/tests/links.test.ts:generic-api-key:79
+# Wave 3 app tests (M7.3b tickets, M7.4c door tools): made-up link tokens and keys in fixtures ("abcdefgh12345", "abcdefghij12", "key-12345678"), not credentials
+a1730d41f9d5bb71d3823358cf1f061a2993a65f:apps/mobile/tests/list.test.tsx:generic-api-key:314
+a1730d41f9d5bb71d3823358cf1f061a2993a65f:apps/mobile/tests/units.test.tsx:generic-api-key:160
+a1730d41f9d5bb71d3823358cf1f061a2993a65f:apps/mobile/tests/units.test.tsx:generic-api-key:163
+a1730d41f9d5bb71d3823358cf1f061a2993a65f:apps/mobile/tests/units.test.tsx:generic-api-key:166
+2a16ecf42a5afbda61107780a73766900809005b:apps/mobile/tests/units.test.tsx:generic-api-key:148
+2a16ecf42a5afbda61107780a73766900809005b:apps/mobile/tests/units.test.tsx:generic-api-key:149
+2a16ecf42a5afbda61107780a73766900809005b:apps/mobile/tests/units.test.tsx:generic-api-key:168
+873172ea93041cf0e8eaf7e6d75c1d23c9531217:apps/mobile/tests/list.test.tsx:generic-api-key:314
+873172ea93041cf0e8eaf7e6d75c1d23c9531217:apps/mobile/tests/list.test.tsx:generic-api-key:321
+99c43b82b5ff25ef46df34f5ed8cf5bc37c069bc:apps/staff/tests/tools/manual-checkin.test.ts:generic-api-key:33

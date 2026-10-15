@@ -1,6 +1,683 @@
 {
+  "scan": {
+    "title": "扫描门票",
+    "ready": "准备扫描",
+    "header": {
+      "at": "入口：{name}",
+      "wholeEvent": "整个活动"
+    },
+    "status": {
+      "queue": "{count, plural, =0 {所有扫描均已发送} other {有 # 条扫描等待发送}}",
+      "updated": "宾客名单已于 {time} 更新"
+    },
+    "sync": {
+      "button": "立即同步",
+      "running": "正在同步…"
+    },
+    "download": {
+      "title": "正在下载宾客名单",
+      "body": "请保持手机联网直至完成。之后即使没有网络也可以扫描。",
+      "failedOffline": "无法下载宾客名单。请检查网络后重试。",
+      "failedNotAssigned": "此设备未分配到该活动。请让组织者检查其注册情况。",
+      "failedScope": "宾客名单未通过安全检查。请重试，或让组织者重新注册此设备。"
+    },
+    "expired": {
+      "title": "宾客名单已删除",
+      "body": "活动已结束超过一天，因此宾客名单已从此手机中删除。"
+    },
+    "camera": {
+      "askTitle": "允许使用相机扫描",
+      "askBody": "Yayatoh Staff 使用相机在入口读取门票二维码。",
+      "allow": "允许使用相机",
+      "deniedTitle": "相机权限已关闭",
+      "deniedBody": "请在“设置”中为 Yayatoh Staff 打开相机以扫描二维码。你仍然可以手动输入票码。",
+      "openSettings": "打开设置",
+      "typeCode": "改为输入票码",
+      "unavailable": "此设备上没有找到相机。",
+      "preview": "相机画面。请对准门票上的二维码。"
+    },
+    "torch": {
+      "on": "打开补光灯",
+      "off": "关闭补光灯"
+    },
+    "manual": {
+      "open": "输入票码",
+      "title": "票码",
+      "label": "票码",
+      "hint": "输入二维码下方印的票码，然后检查。",
+      "placeholder": "票码",
+      "submit": "检查票码",
+      "close": "返回相机",
+      "empty": "请输入票码。"
+    },
+    "direction": {
+      "label": "方向",
+      "in": "进",
+      "out": "出"
+    },
+    "verdict": {
+      "admit": {
+        "title": "放行"
+      },
+      "admitted": {
+        "title": "已放行"
+      },
+      "granted": {
+        "title": "允许进入"
+      },
+      "entered": {
+        "title": "已进入"
+      },
+      "scanned_out": {
+        "title": "已扫码离场"
+      },
+      "provisional": {
+        "title": "放行并标记",
+        "hint": "尚未出现在宾客名单中。请放行，主管会核实。"
+      },
+      "duplicate": {
+        "title": "已扫描过",
+        "hint": "这张票今天已经扫描过。",
+        "hintWhen": "首次入场时间：{time}。",
+        "hintWhere": "首次入场时间：{time}，地点：{place}。"
+      },
+      "duplicate_offline": {
+        "title": "发现重复",
+        "hint": "另一个入口已先放行这张票。"
+      },
+      "superseded": {
+        "title": "旧票",
+        "hint": "此票码已被替换。请对方出示最新的票。"
+      },
+      "void": {
+        "title": "票已作废",
+        "hint": "这张票已退款或取消。请勿放行。"
+      },
+      "invalid": {
+        "title": "无法识别",
+        "hint": "这不是本活动的有效门票。"
+      },
+      "wrong_event": {
+        "title": "活动不符",
+        "hint": "这张票属于另一场活动。"
+      },
+      "outside_window": {
+        "title": "入场未开放"
+      },
+      "wrong_date": {
+        "title": "日期不符"
+      },
+      "not_today": {
+        "title": "今天无效"
+      },
+      "no_access": {
+        "title": "无权进入此处"
+      },
+      "wrong_checkpoint": {
+        "title": "入口不对",
+        "hint": "此设备未设置在该入口扫描。"
+      },
+      "balance_due": {
+        "title": "尚有欠款",
+        "hint": "请让对方到服务台补缴余款。"
+      },
+      "not_in_room": {
+        "title": "不在场内"
+      },
+      "not_enrolled": {
+        "title": "未报名"
+      },
+      "admission_level": {
+        "title": "不包含此项"
+      },
+      "capacity": {
+        "title": "场地已满"
+      }
+    },
+    "flagged": {
+      "title": "{count, plural, other {有 # 条扫描需要再看一眼}}",
+      "duplicate": "另一个入口也放行了这张票。请确认此人没有重复入场。",
+      "rejected": "这条扫描无法发送，已被丢弃。",
+      "other": "服务器对这条扫描的判断不同。主管会进行复核。",
+      "when": "扫描时间：{time}",
+      "dismiss": "忽略",
+      "dismissAll": "全部忽略",
+      "unknownHolder": "一张票"
+    }
+  },
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "活动当天的入场工具即将推出。"
+  },
+  "enrol": {
+    "title": "注册此设备",
+    "intro": "请活动组织者在控制台显示注册二维码，然后在此扫描。此设备不需要个人账号。",
+    "notices": {
+      "revoked": "组织者已将此设备从活动中移除。请扫描新的注册码以再次使用。",
+      "wiped": "组织者已清除此设备。其令牌和数据均已删除。请扫描新的注册码以再次使用。"
+    },
+    "scan": "扫描注册二维码",
+    "working": "正在检查注册…",
+    "linkLabel": "注册链接",
+    "linkPlaceholder": "粘贴控制台中的链接",
+    "submit": "使用此链接注册",
+    "errors": {
+      "invalid_link": "这不是注册链接。请使用活动设备页面上的二维码或链接。",
+      "rejected": "此注册码已失效。请向组织者索取新的注册码。",
+      "wrong_event": "此注册码不属于此设备可处理的活动。请向组织者索取新的注册码。",
+      "unavailable": "无法连接到 Yayatoh。请检查网络连接后重试。"
+    },
+    "replace": {
+      "title": "要替换此设备的注册吗？",
+      "body": "此设备已注册到{event}。重新注册将删除其令牌以及它为该活动保存的所有内容。",
+      "bodyNoEvent": "此设备已注册到某个活动。重新注册将删除其令牌以及它为该活动保存的所有内容。",
+      "confirm": "清除并重新注册",
+      "cancel": "保留当前注册"
+    },
+    "staffPrompt": "不是入口设备？",
+    "signInOrganizer": "组织者：登录",
+    "signInExhibitor": "参展商：登录",
+    "signInTitle": "登录",
+    "backToEnrol": "返回注册",
+    "scanner": {
+      "title": "扫描注册码",
+      "hint": "请将相机对准组织者屏幕上的二维码。",
+      "preview": "用于扫描注册二维码的相机画面",
+      "checking": "正在检查相机权限…",
+      "invalid": "该二维码不是注册码。请扫描活动设备页面上的二维码。",
+      "useLink": "改为输入链接",
+      "permission": {
+        "title": "相机权限已关闭",
+        "body": "Yayatoh Staff 需要使用相机读取注册二维码，不会用于其他用途。",
+        "allow": "允许使用相机",
+        "settingsHint": "相机权限已被关闭。请打开设置，允许 Yayatoh Staff 使用相机，然后返回。",
+        "settings": "打开设置"
+      }
+    }
+  },
+  "device": {
+    "select": {
+      "title": "此设备在哪里扫码？",
+      "unnamedEvent": "活动",
+      "dates": "{start} 至 {end}",
+      "unavailable": "无法加载此活动的入口。您仍可对整个活动扫码，或重试。",
+      "prompt": "请选择此设备扫码的入口。组织者之后可以调整。",
+      "wholeEvent": "整个活动",
+      "wholeEventHint": "在任意入口扫码",
+      "selectedOption": "{name}（已选）",
+      "refused": "此设备无法使用该入口。请选择其他入口。",
+      "continue": "继续扫码",
+      "remove": "移除此设备",
+      "removeTitle": "要移除此设备吗？",
+      "removeBody": "这将删除注册令牌以及此设备为活动保存的所有内容。再次使用需要新的注册码。",
+      "removeConfirm": "清除并移除"
+    }
+  },
+  "organizer": {
+    "about": "您是组织者？可实时查看活动当天的情况：签到、通行速度、扫码问题和设备。",
+    "open": "以组织者身份登录",
+    "title": "组织者登录",
+    "intro": "请使用您的 Yayatoh 账号。必须启用两步验证。",
+    "email": "电子邮件地址",
+    "password": "密码",
+    "continue": "继续",
+    "codeIntro": "请输入验证器应用中的验证码，或输入一个备用码。",
+    "code": "验证码",
+    "verify": "验证并登录",
+    "back": "返回",
+    "twoFactorRequired": "组织者登录需要两步验证。请先在网页控制台中启用，然后在此重新登录。",
+    "errors": {
+      "emailInvalid": "请输入有效的电子邮件地址。",
+      "passwordRequired": "请输入密码。",
+      "codeRequired": "请输入验证码。"
+    }
+  },
+  "exhibitor": {
+    "about": "您是参展商？使用邮件中收到的邀请，在展位上收集销售线索。",
+    "open": "以参展商身份登录",
+    "title": "参展商登录",
+    "intro": "请打开邀请邮件并在此粘贴其中的链接。我们会向受邀邮箱发送一个六位数验证码。",
+    "inviteLabel": "邀请链接",
+    "invitePlaceholder": "粘贴邀请邮件中的链接",
+    "sendCode": "给我发送验证码",
+    "codeIntro": "我们已向您受邀时使用的邮箱发送了六位数验证码，有效期为 10 分钟。",
+    "codeLabel": "六位数验证码",
+    "verify": "验证并登录",
+    "resend": "再发送一个验证码",
+    "back": "返回",
+    "errors": {
+      "inviteInvalid": "这不是邀请链接。请复制邀请邮件中的链接。",
+      "invalidInvite": "此邀请无法使用。它可能已过期或已被替换：请让组织者重新发送。",
+      "codeInvalid": "请输入邮件中的六位数字。",
+      "codeRejected": "此验证码已无法使用。请重新获取。",
+      "wrongCode": "验证码不正确。请检查后重试。",
+      "wrongCodeAttempts": "验证码不正确。{count, plural, other {还剩 # 次机会。}}"
+    }
+  },
+  "tools": {
+    "title": "门禁工具",
+    "nav": {
+      "hub": "门禁工具",
+      "lookup": "查找嘉宾",
+      "guests": "嘉宾名单",
+      "assistance": "求助请求",
+      "today": "今日",
+      "leads": "线索收集",
+      "scanBadge": "扫描胸牌",
+      "lead": "线索",
+      "ops": "活动当天"
+    },
+    "hub": {
+      "intro": "入口所需的一切，尽在这里。",
+      "none": "此手机尚未设置为门禁工作用途。请使用主办方提供的代码登记，或登录。",
+      "lookup": "查找嘉宾",
+      "lookupHint": "按姓名、手机号或邮箱查找。可离线使用。",
+      "guests": "嘉宾名单",
+      "guestsHint": "按姓名或同行团体为嘉宾签到。",
+      "assistance": "求助请求",
+      "assistanceHint": "接手、处理并解决请求。",
+      "today": "今日",
+      "todayHint": "签到人数、设备和提醒。",
+      "leads": "线索收集",
+      "leadsHint": "扫描胸牌并保存您的线索。",
+      "ops": "活动当天",
+      "opsHint": "为主办方提供实时数据。"
+    },
+    "lookup": {
+      "queryLabel": "姓名、手机号或邮箱",
+      "queryHint": "请输入姓名的至少两个字、完整的邮箱地址或手机号码。",
+      "search": "搜索",
+      "tooShort": "请至少输入两个字。",
+      "sourceDevice": "正在搜索此手机上保存的名单。",
+      "sourceDownload": "正在搜索刚下载的名单。",
+      "loading": "正在加载嘉宾名单…",
+      "unavailable": "此手机上还没有嘉宾名单。请联网一次以下载。",
+      "loadFailed": "无法加载嘉宾名单。",
+      "results": "{count, plural, other {# 条结果}}",
+      "none": "未找到任何人",
+      "noneBody": "请检查拼写，或试试邮箱或手机号码。",
+      "pass": "{type} · 代码 {code}",
+      "voidPass": "此票券已作废，无法使用。",
+      "admittedHere": "今天已在此手机上签到。",
+      "checkIn": "签到",
+      "checkInFor": "为 {name} 签到"
+    },
+    "manual": {
+      "title": "为 {name} 签到",
+      "reasonLabel": "为什么要手动签到？",
+      "reasons": {
+        "wont_scan": "二维码无法扫描",
+        "phone_dead": "对方手机没电",
+        "lost_ticket": "对方遗失了票券",
+        "other": "其他原因"
+      },
+      "noteLabel": "备注",
+      "noteHint": "请说明情况。选择其他原因时必填。",
+      "errors": {
+        "reason_missing": "请选择原因。",
+        "note_missing": "请添加至少 3 个字符的简短备注。",
+        "note_too_long": "备注请控制在 300 个字符以内。"
+      },
+      "confirm": "签到",
+      "cancel": "取消",
+      "working": "正在签到…",
+      "noWay": "无网络，也没有已保存的嘉宾名单。请联网后重试。",
+      "failed": "无法签到。请重试。",
+      "offlineNote": "已在此手机上确认。恢复联网后将自动同步。",
+      "firstAdmitted": "首次签到时间：{time}。"
+    },
+    "verdict": {
+      "admitted": "已签到",
+      "provisional": "已签到，待确认",
+      "granted": "准许进入",
+      "duplicate": "已签到过",
+      "duplicate_offline": "已在其他地方签到",
+      "invalid": "票券无效",
+      "void": "票券已作废",
+      "wrong_event": "票券属于其他活动",
+      "not_today": "今日无效",
+      "outside_window": "不在入场时间内",
+      "wrong_date": "票券日期不符",
+      "superseded": "已被新票券取代",
+      "no_access": "无权进入此处",
+      "wrong_checkpoint": "入口错误",
+      "balance_due": "尚有余款待付",
+      "entered": "已放行",
+      "scanned_out": "已扫码离场",
+      "not_in_room": "不在场内",
+      "not_enrolled": "未报名",
+      "admission_level": "票券不含此场次",
+      "capacity": "场次已满"
+    },
+    "guests": {
+      "searchLabel": "按姓名或同行团体搜索",
+      "labels": "标签",
+      "loading": "正在加载嘉宾名单…",
+      "loadFailed": "无法加载嘉宾名单。",
+      "unavailable": "此手机上还没有嘉宾名单。请联网一次以下载。",
+      "emptyList": "此活动没有嘉宾名单。",
+      "prompt": "搜索嘉宾即可为其签到。",
+      "none": "未找到嘉宾",
+      "noneBody": "请检查拼写，或搜索同行团体。",
+      "savedCopy": "离线：显示 {time} 保存的名单。",
+      "guestOf": "{name} 的嘉宾",
+      "unnamed": "嘉宾",
+      "status": {
+        "attending": "出席",
+        "pending": "未回复",
+        "declined": "已婉拒"
+      },
+      "arrived": "{time} 到达",
+      "waiting": "已签到，待发送",
+      "checkIn": "签到",
+      "checkInFor": "为 {name} 签到",
+      "already": "{name} 早些时候已被签到。",
+      "unknown": "{name} 不在此活动的嘉宾名单中。",
+      "pending": "{count, plural, other {# 条签到待发送}}",
+      "sendNow": "立即发送",
+      "sent": "已发送。",
+      "sendFailed": "无法发送。联网后将自动发送。",
+      "noPlace": "暂无桌位"
+    },
+    "assistance": {
+      "empty": "没有待处理的请求",
+      "emptyBody": "新请求会在收到后显示在这里。",
+      "loadFailed": "无法加载请求。",
+      "number": "请求 #{number}",
+      "reason": {
+        "seat": "座位",
+        "accessibility": "无障碍协助",
+        "medical": "医疗",
+        "lost_item": "失物",
+        "other": "其他",
+        "backup": "支援",
+        "supervisor": "主管",
+        "security": "安保",
+        "device": "设备支持"
+      },
+      "priority": {
+        "urgent": "紧急",
+        "high": "高优先级",
+        "normal": "普通优先级"
+      },
+      "state": {
+        "new": "新建",
+        "assigned": "已接手",
+        "in_progress": "处理中",
+        "resolved": "已解决",
+        "cancelled": "已取消"
+      },
+      "overdue": "已逾期",
+      "mine": "由本设备接手",
+      "guest": "嘉宾：{name}",
+      "where": "地点：{location}",
+      "take": "接手",
+      "takeFor": "接手请求 {number}",
+      "start": "开始处理",
+      "startFor": "开始处理请求 {number}",
+      "resolve": "标记已解决",
+      "resolveFor": "将请求 {number} 标记为已解决",
+      "cancel": "取消请求",
+      "cancelFor": "取消请求 {number}",
+      "changed": "此请求已变更，列表已刷新。",
+      "actionFailed": "无法更新请求。请重试。",
+      "raise": {
+        "title": "请求协助",
+        "reasonLabel": "您需要什么？",
+        "reasons": {
+          "backup": "支援",
+          "supervisor": "主管",
+          "medical": "医疗救助",
+          "security": "安保",
+          "device": "设备支持"
+        },
+        "noteLabel": "备注（选填）",
+        "send": "发送请求",
+        "reasonMissing": "请选择您需要的协助。",
+        "sent": "请求 #{number} 已发送。",
+        "failed": "无法发送请求。请重试。"
+      }
+    },
+    "today": {
+      "checkedIn": "已签到",
+      "expected": "预计",
+      "percent": "已达预计的 {percent}%",
+      "entrances": "按入口",
+      "days": "按日期",
+      "devices": "设备",
+      "online": "在线",
+      "deviceOffline": "离线",
+      "thisDevice": "本设备",
+      "battery": "电量 {percent}%",
+      "queue": "{count, plural, other {# 条扫描待发送}}",
+      "alerts": "提醒",
+      "noAlerts": "目前没有提醒。",
+      "alert": {
+        "device_offline": "{label} 已离线。",
+        "device_low_battery": "{label} 电量为 {percent}%。",
+        "device_backlog": "{label} 有扫描待发送。",
+        "capacity_near": "人数即将达到上限。"
+      },
+      "severity": {
+        "warning": "警告",
+        "critical": "严重"
+      },
+      "updated": "{time} 更新",
+      "savedOnly": "离线：显示 {time} 保存的最新数据。",
+      "loadFailed": "无法加载今日数据。",
+      "unlabeled": "某台设备"
+    },
+    "push": {
+      "title": "本手机的提醒",
+      "body": "设备离线、电量不足或落后时，将收到通知。",
+      "on": "提醒已开启。",
+      "off": "提醒已关闭。",
+      "enable": "开启提醒",
+      "disable": "关闭提醒",
+      "denied": "此应用的通知已被禁用。请在手机设置中允许通知，然后重试。",
+      "unavailable": "此手机无法注册提醒。",
+      "failed": "无法更改提醒设置。请重试。",
+      "copy": {
+        "device_offline": {
+          "title": "设备离线",
+          "body": "{label} 已离线。"
+        },
+        "device_low_battery": {
+          "title": "电量不足",
+          "body": "{label} 电量为 {percent}%。"
+        },
+        "device_backlog": {
+          "title": "扫描待发送",
+          "body": "{label} 有扫描待发送。"
+        },
+        "capacity_near": {
+          "title": "人数上限",
+          "body": "人数即将达到上限。"
+        },
+        "assistance": {
+          "title": "有人求助",
+          "body": "入口处有人需要帮助。"
+        }
+      }
+    }
+  },
+  "leads": {
+    "title": "您的线索",
+    "open": "打开",
+    "openFor": "打开 {name} 的线索",
+    "setup": "{exhibitor} · {event}",
+    "count": "{count, plural, other {# 条线索}}",
+    "searchLabel": "搜索线索",
+    "empty": "暂无线索",
+    "emptyBody": "扫描胸牌即可获取您的第一条线索。",
+    "noMatches": "没有符合搜索条件的线索。",
+    "loadFailed": "无法加载您的线索。",
+    "accessEnded": "此活动的线索访问权限已结束。",
+    "notSignedIn": "请以参展商身份登录以使用线索收集。",
+    "scan": "扫描胸牌",
+    "pending": "{count, plural, other {# 条扫描待发送}}",
+    "sendNow": "立即发送",
+    "sent": "已发送。",
+    "scope": {
+      "all": "您所属参展商的全部线索",
+      "team": "您团队的线索",
+      "own": "您扫描的线索"
+    },
+    "gate": {
+      "no_license": "您没有线索授权。请联系参展商管理员为您分配。",
+      "over_allowance": "您所属参展商的线索授权已全部用完。",
+      "terms": "参展商管理员尚未接受线索条款。",
+      "not_open": "线索收集尚未开放。",
+      "closed": "线索收集已结束。您仍可编辑备注。"
+    },
+    "syncFailed": {
+      "unreachable": "无网络。您的扫描已保存，稍后将发送。",
+      "no_license": "您没有线索授权，因此无法发送扫描。",
+      "over_allowance": "您所属参展商的线索授权已超额，因此无法发送扫描。",
+      "terms": "线索条款尚未被接受，因此无法发送扫描。",
+      "ended": "线索访问权限已结束，因此无法发送扫描。",
+      "rejected": "服务器拒绝了这些扫描。"
+    },
+    "scanner": {
+      "hint": "将相机对准参会者的胸牌码。",
+      "cameraOff": "相机不可用。请改为输入胸牌码。",
+      "manualLabel": "胸牌码",
+      "manualHint": "相机无法识别时，请手动输入代码。",
+      "useCode": "使用此代码",
+      "codeMissing": "请输入胸牌码。"
+    },
+    "capture": {
+      "title": "获取线索",
+      "rating": "评级",
+      "ratings": {
+        "hot": "热",
+        "warm": "温",
+        "cold": "冷"
+      },
+      "qualifiers": "筛选标签",
+      "noQualifiers": "您所属参展商尚未设置任何筛选标签。",
+      "notes": "备注",
+      "save": "保存线索",
+      "saving": "正在保存…",
+      "savedOnline": "线索已获取。",
+      "savedOffline": "已保存在此手机上，联网后将发送。",
+      "rescanned": "已在您的线索中，已更新。",
+      "another": "扫描下一个胸牌",
+      "errors": {
+        "too_many_qualifiers": "最多选择 10 个筛选标签。",
+        "qualifier_too_long": "有筛选标签过长。",
+        "notes_too_long": "备注请控制在 2000 个字符以内。"
+      }
+    },
+    "refused": {
+      "invalid": "无法识别该胸牌。",
+      "wrong_event": "该胸牌属于其他活动。",
+      "not_open": "线索收集尚未开放。",
+      "closed": "线索收集已结束。"
+    },
+    "lead": {
+      "consent": "您只能看到参会者同意分享的内容。",
+      "name": "姓名",
+      "jobTitle": "职位",
+      "company": "公司",
+      "email": "邮箱",
+      "notShared": "参会者未分享",
+      "emailWithdrawn": "参会者已撤回分享其邮箱的许可。",
+      "scans": "{count, plural, other {已扫描 # 次}}",
+      "capturedAt": "获取时间：{time}",
+      "scannedBy": "扫描人：{name}",
+      "save": "保存更改",
+      "saved": "已保存。",
+      "saveFailed": "无法保存。请重试。",
+      "notFound": "您的列表中没有此线索。"
+    }
+  },
+  "ops": {
+    "title": "活动当天",
+    "updated": "{time} 更新",
+    "savedOnly": "离线：显示 {time} 的最新数据。",
+    "loadFailed": "无法加载活动当天视图。",
+    "notSignedIn": "请以主办方身份登录以查看活动当天。",
+    "readOnly": "只读。此屏幕打开期间数据会自动刷新。",
+    "changeEvent": "切换活动",
+    "picker": {
+      "title": "选择活动",
+      "chooseOrg": "请选择组织。",
+      "chooseEvent": "{org} 的活动",
+      "noOrgs": "您不属于任何组织。",
+      "noEvents": "此组织没有活动。",
+      "loadFailed": "无法加载您的活动。",
+      "open": "查看",
+      "openFor": "查看 {name}"
+    },
+    "mode": {
+      "planning": "筹备中",
+      "pre_show": "开门前",
+      "live": "进行中",
+      "wrap": "收尾"
+    },
+    "hidden": "您的角色或方案不包含此内容。",
+    "checkins": {
+      "title": "签到",
+      "of": "{checkedIn} / {expected}",
+      "checkedIn": "已签到",
+      "expected": "预计",
+      "remaining": "{count, plural, other {还有 # 位嘉宾未到}}",
+      "entrances": "按入口",
+      "days": "按日期"
+    },
+    "throughput": {
+      "title": "通行量",
+      "rate": "每分钟扫描数：{rate}",
+      "gap": "扫描间隔中位数：{seconds} 秒",
+      "queue": "{minutes, plural, other {排队约 # 分钟}}",
+      "entrances": "各入口每分钟扫描数",
+      "recent": "最近 15 分钟"
+    },
+    "issues": {
+      "title": "扫描问题",
+      "duplicates": "重复",
+      "refused": "被拒",
+      "none": "今日没有扫描问题。"
+    },
+    "devices": {
+      "title": "设备",
+      "online": "在线",
+      "offline": "离线",
+      "battery": "电量 {percent}%",
+      "queue": "{count, plural, other {# 条扫描待发送}}",
+      "at": "位置：{place}",
+      "none": "没有设备。"
+    },
+    "alerts": {
+      "title": "提醒",
+      "none": "目前没有提醒。",
+      "count": "{count, plural, other {# 项受影响}}",
+      "severity": {
+        "info": "信息",
+        "warning": "警告",
+        "critical": "严重"
+      },
+      "state": {
+        "open": "未处理",
+        "acknowledged": "已确认",
+        "snoozed": "已暂缓"
+      },
+      "rule": {
+        "devicesOffline": "设备离线",
+        "devicesLowBattery": "设备电量不足",
+        "devicesBacklog": "设备有扫描待发送",
+        "capacityNear": "人数即将达到上限",
+        "capacityFull": "人数已满",
+        "assistanceOverdue": "求助请求已逾期",
+        "printersKiosksOffline": "打印机或自助终端离线",
+        "paymentsFailed": "付款失败",
+        "paymentsStuck": "付款卡住",
+        "refundSurge": "退款增多",
+        "sellOut": "已售罄",
+        "readiness": "活动尚未就绪",
+        "other": "需要在控制台处理"
+      }
+    }
   }
 }

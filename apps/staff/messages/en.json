@@ -1,6 +1,683 @@
 {
+  "scan": {
+    "title": "Scan tickets",
+    "ready": "Ready to scan",
+    "header": {
+      "at": "At {name}",
+      "wholeEvent": "Whole event"
+    },
+    "status": {
+      "queue": "{count, plural, =0 {All scans sent} one {# scan waiting to send} other {# scans waiting to send}}",
+      "updated": "Guest list updated {time}"
+    },
+    "sync": {
+      "button": "Sync now",
+      "running": "Syncing…"
+    },
+    "download": {
+      "title": "Downloading the guest list",
+      "body": "Keep the phone connected until it finishes. After that, scanning works without a connection.",
+      "failedOffline": "Can't download the guest list. Check the connection and try again.",
+      "failedNotAssigned": "This device isn't assigned to this event. Ask an organizer to check its enrolment.",
+      "failedScope": "The guest list failed its security check. Try again, or ask an organizer to enrol this device again."
+    },
+    "expired": {
+      "title": "Guest list removed",
+      "body": "The event ended more than a day ago, so the guest list was deleted from this phone."
+    },
+    "camera": {
+      "askTitle": "Allow the camera to scan",
+      "askBody": "Yayatoh Staff uses the camera to read ticket QR codes at the door.",
+      "allow": "Allow camera",
+      "deniedTitle": "Camera access is off",
+      "deniedBody": "Turn on the camera for Yayatoh Staff in Settings to scan QR codes. You can still type a ticket code.",
+      "openSettings": "Open settings",
+      "typeCode": "Type a code instead",
+      "unavailable": "No camera was found on this device.",
+      "preview": "Camera view. Point it at a ticket QR code."
+    },
+    "torch": {
+      "on": "Turn the light on",
+      "off": "Turn the light off"
+    },
+    "manual": {
+      "open": "Type a code",
+      "title": "Ticket code",
+      "label": "Ticket code",
+      "hint": "Type the code printed under the QR code, then check it.",
+      "placeholder": "Code",
+      "submit": "Check code",
+      "close": "Back to the camera",
+      "empty": "Enter a ticket code."
+    },
+    "direction": {
+      "label": "Direction",
+      "in": "In",
+      "out": "Out"
+    },
+    "verdict": {
+      "admit": {
+        "title": "Admit"
+      },
+      "admitted": {
+        "title": "Admitted"
+      },
+      "granted": {
+        "title": "Access granted"
+      },
+      "entered": {
+        "title": "Entered"
+      },
+      "scanned_out": {
+        "title": "Scanned out"
+      },
+      "provisional": {
+        "title": "Admit and flag",
+        "hint": "Not on the guest list yet. Let them in; a supervisor will check."
+      },
+      "duplicate": {
+        "title": "Already scanned",
+        "hint": "This ticket was already scanned in today.",
+        "hintWhen": "First admitted at {time}.",
+        "hintWhere": "First admitted at {time} at {place}."
+      },
+      "duplicate_offline": {
+        "title": "Duplicate found",
+        "hint": "Another door admitted this ticket first."
+      },
+      "superseded": {
+        "title": "Old ticket",
+        "hint": "This code was replaced. Ask for the latest ticket."
+      },
+      "void": {
+        "title": "Cancelled ticket",
+        "hint": "This ticket was refunded or cancelled. Do not admit."
+      },
+      "invalid": {
+        "title": "Not recognised",
+        "hint": "This is not a valid ticket for this event."
+      },
+      "wrong_event": {
+        "title": "Wrong event",
+        "hint": "This ticket is for a different event."
+      },
+      "outside_window": {
+        "title": "Doors closed"
+      },
+      "wrong_date": {
+        "title": "Wrong date"
+      },
+      "not_today": {
+        "title": "Not valid today"
+      },
+      "no_access": {
+        "title": "No access here"
+      },
+      "wrong_checkpoint": {
+        "title": "Wrong entrance",
+        "hint": "This device is not set up to scan at this entrance."
+      },
+      "balance_due": {
+        "title": "Balance due",
+        "hint": "Send them to the desk to pay the balance."
+      },
+      "not_in_room": {
+        "title": "Not in the room"
+      },
+      "not_enrolled": {
+        "title": "Not signed up"
+      },
+      "admission_level": {
+        "title": "Not included"
+      },
+      "capacity": {
+        "title": "Room is full"
+      }
+    },
+    "flagged": {
+      "title": "{count, plural, one {# scan needs a second look} other {# scans need a second look}}",
+      "duplicate": "Another door admitted this ticket too. Check that the person is not entering twice.",
+      "rejected": "This scan could not be sent and was dropped.",
+      "other": "The server judged this scan differently. A supervisor will review it.",
+      "when": "Scanned at {time}",
+      "dismiss": "Dismiss",
+      "dismissAll": "Dismiss all",
+      "unknownHolder": "A ticket"
+    }
+  },
   "home": {
     "title": "Yayatoh Staff",
     "tagline": "Door tools for event day are coming soon."
+  },
+  "enrol": {
+    "title": "Enrol this device",
+    "intro": "Ask the event organizer to show the enrolment QR code from the console, then scan it here. This device needs no personal account.",
+    "notices": {
+      "revoked": "An organizer removed this device from the event. Scan a new enrolment code to use it again.",
+      "wiped": "An organizer wiped this device. Its token and data were erased. Scan a new enrolment code to use it again."
+    },
+    "scan": "Scan the enrolment QR code",
+    "working": "Checking the enrolment…",
+    "linkLabel": "Enrolment link",
+    "linkPlaceholder": "Paste the link from the console",
+    "submit": "Enrol with this link",
+    "errors": {
+      "invalid_link": "That is not an enrolment link. Use the QR code or link from the event's devices page.",
+      "rejected": "This enrolment code is no longer valid. Ask the organizer for a new one.",
+      "wrong_event": "This code is not for an event this device can work. Ask the organizer for a new one.",
+      "unavailable": "We could not reach Yayatoh. Check the connection and try again."
+    },
+    "replace": {
+      "title": "Replace this device's enrolment?",
+      "body": "This device is enrolled for {event}. Enrolling again erases its token and everything it saved for that event.",
+      "bodyNoEvent": "This device is enrolled for an event. Enrolling again erases its token and everything it saved for that event.",
+      "confirm": "Erase and enrol again",
+      "cancel": "Keep the current enrolment"
+    },
+    "staffPrompt": "Not a door device?",
+    "signInOrganizer": "Event organizer: sign in",
+    "signInExhibitor": "Exhibitor: sign in",
+    "signInTitle": "Sign in",
+    "backToEnrol": "Back to enrolment",
+    "scanner": {
+      "title": "Scan the enrolment code",
+      "hint": "Point the camera at the QR code on the organizer's screen.",
+      "preview": "Camera view for scanning the enrolment QR code",
+      "checking": "Checking camera access…",
+      "invalid": "That QR code is not an enrolment code. Scan the one from the event's devices page.",
+      "useLink": "Enter the link instead",
+      "permission": {
+        "title": "Camera access is off",
+        "body": "Yayatoh Staff needs the camera to read the enrolment QR code. It is used for nothing else.",
+        "allow": "Allow camera access",
+        "settingsHint": "Camera access was turned off. Open the settings, allow the camera for Yayatoh Staff, then come back.",
+        "settings": "Open settings"
+      }
+    }
+  },
+  "device": {
+    "select": {
+      "title": "Where is this device scanning?",
+      "unnamedEvent": "Event",
+      "dates": "{start} to {end}",
+      "unavailable": "We could not load this event's entrances. You can still scan at the whole event, or try again.",
+      "prompt": "Choose the entrance this device scans at. An organizer can move it later.",
+      "wholeEvent": "Whole event",
+      "wholeEventHint": "Scan at any entrance",
+      "selectedOption": "{name} (selected)",
+      "refused": "That entrance is not available for this device. Choose another one.",
+      "continue": "Continue to scanning",
+      "remove": "Remove this device",
+      "removeTitle": "Remove this device?",
+      "removeBody": "This erases the enrolment token and everything this device saved for the event. You will need a new enrolment code to use it again.",
+      "removeConfirm": "Erase and remove"
+    }
+  },
+  "organizer": {
+    "about": "Event organizer? See the event day live: check-ins, throughput, scan issues and devices.",
+    "open": "Sign in as organizer",
+    "title": "Organizer sign-in",
+    "intro": "Use your Yayatoh account. Two-step verification is required.",
+    "email": "Email address",
+    "password": "Password",
+    "continue": "Continue",
+    "codeIntro": "Enter the code from your authenticator app, or one of your backup codes.",
+    "code": "Verification code",
+    "verify": "Verify and sign in",
+    "back": "Back",
+    "twoFactorRequired": "Organizer sign-in needs two-step verification. Turn it on in the web console, then sign in here again.",
+    "errors": {
+      "emailInvalid": "Enter a valid email address.",
+      "passwordRequired": "Enter your password.",
+      "codeRequired": "Enter the verification code."
+    }
+  },
+  "exhibitor": {
+    "about": "Exhibitor? Capture leads at your booth with the invitation you were emailed.",
+    "open": "Sign in as exhibitor",
+    "title": "Exhibitor sign-in",
+    "intro": "Open the invitation email and paste its link here. We will email a six-digit code to the invited address.",
+    "inviteLabel": "Invitation link",
+    "invitePlaceholder": "Paste the link from your invitation email",
+    "sendCode": "Email me a code",
+    "codeIntro": "We emailed a six-digit code to the address you were invited with. It works for 10 minutes.",
+    "codeLabel": "Six-digit code",
+    "verify": "Verify and sign in",
+    "resend": "Send another code",
+    "back": "Back",
+    "errors": {
+      "inviteInvalid": "That is not an invitation link. Copy the link from your invitation email.",
+      "invalidInvite": "This invitation cannot be used. It may have expired or been replaced: ask the organizer to send it again.",
+      "codeInvalid": "Enter the six digits from the email.",
+      "codeRejected": "That code can no longer be used. Ask for a new one.",
+      "wrongCode": "That code is not right. Check it and try again.",
+      "wrongCodeAttempts": "That code is not right. {count, plural, one {# try left.} other {# tries left.}}"
+    }
+  },
+  "tools": {
+    "title": "Door tools",
+    "nav": {
+      "hub": "Door tools",
+      "lookup": "Find a guest",
+      "guests": "Guest list",
+      "assistance": "Help requests",
+      "today": "Today",
+      "leads": "Lead retrieval",
+      "scanBadge": "Scan a badge",
+      "lead": "Lead",
+      "ops": "Event day"
+    },
+    "hub": {
+      "intro": "Everything for the door in one place.",
+      "none": "This phone is not set up for door work yet. Enrol it with the code from the organizer, or sign in.",
+      "lookup": "Find a guest",
+      "lookupHint": "By name, phone or email. Works offline.",
+      "guests": "Guest list",
+      "guestsHint": "Check in guests by name or party.",
+      "assistance": "Help requests",
+      "assistanceHint": "Take, work and resolve requests.",
+      "today": "Today",
+      "todayHint": "Check-ins, devices and alerts.",
+      "leads": "Lead retrieval",
+      "leadsHint": "Scan badges and keep your leads.",
+      "ops": "Event day",
+      "opsHint": "Live numbers for the organizer."
+    },
+    "lookup": {
+      "queryLabel": "Name, phone or email",
+      "queryHint": "Type at least two letters of a name, a full email address, or a phone number.",
+      "search": "Search",
+      "tooShort": "Type at least two letters.",
+      "sourceDevice": "Searching the list saved on this phone.",
+      "sourceDownload": "Searching the list downloaded just now.",
+      "loading": "Loading the guest list…",
+      "unavailable": "The guest list is not on this phone yet. Connect once to download it.",
+      "loadFailed": "Could not load the guest list.",
+      "results": "{count, plural, one {# match} other {# matches}}",
+      "none": "No one found",
+      "noneBody": "Check the spelling, or try their email or phone number.",
+      "pass": "{type} · Code {code}",
+      "voidPass": "This pass was voided and cannot be used.",
+      "admittedHere": "Already checked in on this phone today.",
+      "checkIn": "Check in",
+      "checkInFor": "Check in {name}"
+    },
+    "manual": {
+      "title": "Check in {name}",
+      "reasonLabel": "Why are you checking them in by hand?",
+      "reasons": {
+        "wont_scan": "The code will not scan",
+        "phone_dead": "Their phone is dead",
+        "lost_ticket": "They lost their ticket",
+        "other": "Another reason"
+      },
+      "noteLabel": "Note",
+      "noteHint": "Say what happened. Required for another reason.",
+      "errors": {
+        "reason_missing": "Choose a reason.",
+        "note_missing": "Add a short note of at least 3 characters.",
+        "note_too_long": "Keep the note under 300 characters."
+      },
+      "confirm": "Check in",
+      "cancel": "Cancel",
+      "working": "Checking in…",
+      "noWay": "No connection and no saved guest list. Connect and try again.",
+      "failed": "Could not check in. Try again.",
+      "offlineNote": "Decided on this phone. It will sync when you are back online.",
+      "firstAdmitted": "First checked in at {time}."
+    },
+    "verdict": {
+      "admitted": "Checked in",
+      "provisional": "Checked in, to be confirmed",
+      "granted": "Access granted",
+      "duplicate": "Already checked in",
+      "duplicate_offline": "Already checked in elsewhere",
+      "invalid": "Not a valid pass",
+      "void": "Pass voided",
+      "wrong_event": "Pass is for another event",
+      "not_today": "Not valid today",
+      "outside_window": "Outside the entry times",
+      "wrong_date": "Pass is for another date",
+      "superseded": "Replaced by a newer pass",
+      "no_access": "No access here",
+      "wrong_checkpoint": "Wrong entrance",
+      "balance_due": "Balance due",
+      "entered": "Let in",
+      "scanned_out": "Scanned out",
+      "not_in_room": "Not in the room",
+      "not_enrolled": "Not enrolled",
+      "admission_level": "Pass does not include this session",
+      "capacity": "Session is full"
+    },
+    "guests": {
+      "searchLabel": "Search by name or party",
+      "labels": "Labels",
+      "loading": "Loading the guest list…",
+      "loadFailed": "Could not load the guest list.",
+      "unavailable": "The guest list is not on this phone yet. Connect once to download it.",
+      "emptyList": "This event has no guest list.",
+      "prompt": "Search for a guest to check them in.",
+      "none": "No guests found",
+      "noneBody": "Check the spelling, or search for the party.",
+      "savedCopy": "Offline: showing the list saved at {time}.",
+      "guestOf": "Guest of {name}",
+      "unnamed": "Guest",
+      "status": {
+        "attending": "Attending",
+        "pending": "Not replied",
+        "declined": "Declined"
+      },
+      "arrived": "Arrived at {time}",
+      "waiting": "Checked in, waiting to send",
+      "checkIn": "Check in",
+      "checkInFor": "Check in {name}",
+      "already": "Someone checked {name} in earlier.",
+      "unknown": "{name} is not on this event's guest list.",
+      "pending": "{count, plural, one {# check-in waiting to send} other {# check-ins waiting to send}}",
+      "sendNow": "Send now",
+      "sent": "Sent.",
+      "sendFailed": "Could not send. They will go when you are online.",
+      "noPlace": "No table yet"
+    },
+    "assistance": {
+      "empty": "No open requests",
+      "emptyBody": "New requests appear here as they come in.",
+      "loadFailed": "Could not load the requests.",
+      "number": "Request #{number}",
+      "reason": {
+        "seat": "Seating",
+        "accessibility": "Accessibility",
+        "medical": "Medical",
+        "lost_item": "Lost item",
+        "other": "Other",
+        "backup": "Backup",
+        "supervisor": "Supervisor",
+        "security": "Security",
+        "device": "Device support"
+      },
+      "priority": {
+        "urgent": "Urgent",
+        "high": "High priority",
+        "normal": "Normal priority"
+      },
+      "state": {
+        "new": "New",
+        "assigned": "Taken",
+        "in_progress": "In progress",
+        "resolved": "Resolved",
+        "cancelled": "Cancelled"
+      },
+      "overdue": "Overdue",
+      "mine": "Taken by this device",
+      "guest": "Guest: {name}",
+      "where": "Where: {location}",
+      "take": "Take",
+      "takeFor": "Take request {number}",
+      "start": "Start",
+      "startFor": "Start request {number}",
+      "resolve": "Resolve",
+      "resolveFor": "Resolve request {number}",
+      "cancel": "Cancel request",
+      "cancelFor": "Cancel request {number}",
+      "changed": "This request changed. The list was refreshed.",
+      "actionFailed": "Could not update the request. Try again.",
+      "raise": {
+        "title": "Ask for help",
+        "reasonLabel": "What do you need?",
+        "reasons": {
+          "backup": "Backup",
+          "supervisor": "Supervisor",
+          "medical": "Medical help",
+          "security": "Security",
+          "device": "Device support"
+        },
+        "noteLabel": "Note (optional)",
+        "send": "Send request",
+        "reasonMissing": "Choose what you need.",
+        "sent": "Request #{number} sent.",
+        "failed": "Could not send the request. Try again."
+      }
+    },
+    "today": {
+      "checkedIn": "Checked in",
+      "expected": "Expected",
+      "percent": "{percent}% of expected",
+      "entrances": "By entrance",
+      "days": "By day",
+      "devices": "Devices",
+      "online": "Online",
+      "deviceOffline": "Offline",
+      "thisDevice": "This device",
+      "battery": "Battery {percent}%",
+      "queue": "{count, plural, one {# scan waiting to send} other {# scans waiting to send}}",
+      "alerts": "Alerts",
+      "noAlerts": "No alerts right now.",
+      "alert": {
+        "device_offline": "{label} is offline.",
+        "device_low_battery": "{label} battery is at {percent}%.",
+        "device_backlog": "{label} has scans waiting to send.",
+        "capacity_near": "Capacity is nearly reached."
+      },
+      "severity": {
+        "warning": "Warning",
+        "critical": "Critical"
+      },
+      "updated": "Updated {time}",
+      "savedOnly": "Offline: showing the last numbers saved at {time}.",
+      "loadFailed": "Could not load today's numbers.",
+      "unlabeled": "A device"
+    },
+    "push": {
+      "title": "Alerts on this phone",
+      "body": "Get a notification when a device goes offline, runs low on battery or falls behind.",
+      "on": "Alerts are on.",
+      "off": "Alerts are off.",
+      "enable": "Turn on alerts",
+      "disable": "Turn off alerts",
+      "denied": "Notifications are blocked for this app. Allow them in the phone's Settings, then try again.",
+      "unavailable": "This phone could not register for alerts.",
+      "failed": "Could not change alerts. Try again.",
+      "copy": {
+        "device_offline": {
+          "title": "Device offline",
+          "body": "{label} is offline."
+        },
+        "device_low_battery": {
+          "title": "Low battery",
+          "body": "{label} battery is at {percent}%."
+        },
+        "device_backlog": {
+          "title": "Scans waiting",
+          "body": "{label} has scans waiting to send."
+        },
+        "capacity_near": {
+          "title": "Capacity",
+          "body": "Capacity is nearly reached."
+        },
+        "assistance": {
+          "title": "Help requested",
+          "body": "Someone needs help at the door."
+        }
+      }
+    }
+  },
+  "leads": {
+    "title": "Your leads",
+    "open": "Open",
+    "openFor": "Open the lead for {name}",
+    "setup": "{exhibitor} · {event}",
+    "count": "{count, plural, one {# lead} other {# leads}}",
+    "searchLabel": "Search leads",
+    "empty": "No leads yet",
+    "emptyBody": "Scan a badge to capture your first lead.",
+    "noMatches": "No leads match your search.",
+    "loadFailed": "Could not load your leads.",
+    "accessEnded": "Lead access for this event has ended.",
+    "notSignedIn": "Sign in as an exhibitor to use lead retrieval.",
+    "scan": "Scan a badge",
+    "pending": "{count, plural, one {# scan waiting to send} other {# scans waiting to send}}",
+    "sendNow": "Send now",
+    "sent": "Sent.",
+    "scope": {
+      "all": "All of your exhibitor's leads",
+      "team": "Your team's leads",
+      "own": "Leads you scanned"
+    },
+    "gate": {
+      "no_license": "You do not have a lead licence. Ask your exhibitor admin to give you one.",
+      "over_allowance": "Your exhibitor has used all of its lead licences.",
+      "terms": "Your exhibitor admin has not accepted the lead terms yet.",
+      "not_open": "Lead capture has not opened yet.",
+      "closed": "Lead capture has closed. You can still edit your notes."
+    },
+    "syncFailed": {
+      "unreachable": "No connection. Your scans are saved and will be sent later.",
+      "no_license": "You do not have a lead licence, so scans cannot be sent.",
+      "over_allowance": "Your exhibitor is over its lead licences, so scans cannot be sent.",
+      "terms": "The lead terms have not been accepted, so scans cannot be sent.",
+      "ended": "Lead access has ended, so scans cannot be sent.",
+      "rejected": "The server refused the scans."
+    },
+    "scanner": {
+      "hint": "Point the camera at the attendee's badge code.",
+      "cameraOff": "The camera is not available. Type the badge code instead.",
+      "manualLabel": "Badge code",
+      "manualHint": "Type the code if the camera cannot read it.",
+      "useCode": "Use this code",
+      "codeMissing": "Enter the badge code."
+    },
+    "capture": {
+      "title": "Capture lead",
+      "rating": "Rating",
+      "ratings": {
+        "hot": "Hot",
+        "warm": "Warm",
+        "cold": "Cold"
+      },
+      "qualifiers": "Qualifiers",
+      "noQualifiers": "Your exhibitor has not set any qualifiers.",
+      "notes": "Notes",
+      "save": "Save lead",
+      "saving": "Saving…",
+      "savedOnline": "Lead captured.",
+      "savedOffline": "Saved on this phone. It will be sent when you are online.",
+      "rescanned": "Already in your leads. Updated.",
+      "another": "Scan another badge",
+      "errors": {
+        "too_many_qualifiers": "Choose at most 10 qualifiers.",
+        "qualifier_too_long": "A qualifier is too long.",
+        "notes_too_long": "Keep notes under 2000 characters."
+      }
+    },
+    "refused": {
+      "invalid": "That badge could not be read.",
+      "wrong_event": "That badge is for another event.",
+      "not_open": "Lead capture is not open yet.",
+      "closed": "Lead capture has closed."
+    },
+    "lead": {
+      "consent": "You see only what the attendee agreed to share.",
+      "name": "Name",
+      "jobTitle": "Job title",
+      "company": "Company",
+      "email": "Email",
+      "notShared": "Not shared by the attendee",
+      "emailWithdrawn": "The attendee withdrew permission to share their email.",
+      "scans": "{count, plural, one {Scanned # time} other {Scanned # times}}",
+      "capturedAt": "Captured {time}",
+      "scannedBy": "Scanned by {name}",
+      "save": "Save changes",
+      "saved": "Saved.",
+      "saveFailed": "Could not save. Try again.",
+      "notFound": "This lead is not in your list."
+    }
+  },
+  "ops": {
+    "title": "Event day",
+    "updated": "Updated {time}",
+    "savedOnly": "Offline: showing the last numbers from {time}.",
+    "loadFailed": "Could not load the event-day view.",
+    "notSignedIn": "Sign in as an organizer to see the event day.",
+    "readOnly": "Read only. Numbers refresh while this screen is open.",
+    "changeEvent": "Change event",
+    "picker": {
+      "title": "Choose an event",
+      "chooseOrg": "Choose an organization.",
+      "chooseEvent": "Events of {org}",
+      "noOrgs": "You are not a member of any organization.",
+      "noEvents": "This organization has no events.",
+      "loadFailed": "Could not load your events.",
+      "open": "Watch",
+      "openFor": "Watch {name}"
+    },
+    "mode": {
+      "planning": "Planning",
+      "pre_show": "Before doors",
+      "live": "Live",
+      "wrap": "Wrap-up"
+    },
+    "hidden": "Not included for your role or plan.",
+    "checkins": {
+      "title": "Check-ins",
+      "of": "{checkedIn} of {expected}",
+      "checkedIn": "Checked in",
+      "expected": "Expected",
+      "remaining": "{count, plural, one {# guest still to arrive} other {# guests still to arrive}}",
+      "entrances": "By entrance",
+      "days": "By day"
+    },
+    "throughput": {
+      "title": "Throughput",
+      "rate": "Scans per minute: {rate}",
+      "gap": "Median gap between scans: {seconds} s",
+      "queue": "{minutes, plural, one {About # minute in the queue} other {About # minutes in the queue}}",
+      "entrances": "Scans per minute by entrance",
+      "recent": "Last 15 minutes"
+    },
+    "issues": {
+      "title": "Scan issues",
+      "duplicates": "Duplicates",
+      "refused": "Refused",
+      "none": "No scan issues today."
+    },
+    "devices": {
+      "title": "Devices",
+      "online": "Online",
+      "offline": "Offline",
+      "battery": "Battery {percent}%",
+      "queue": "{count, plural, one {# scan waiting} other {# scans waiting}}",
+      "at": "At {place}",
+      "none": "No devices."
+    },
+    "alerts": {
+      "title": "Alerts",
+      "none": "No alerts right now.",
+      "count": "{count, plural, one {# affected} other {# affected}}",
+      "severity": {
+        "info": "Info",
+        "warning": "Warning",
+        "critical": "Critical"
+      },
+      "state": {
+        "open": "Open",
+        "acknowledged": "Acknowledged",
+        "snoozed": "Snoozed"
+      },
+      "rule": {
+        "devicesOffline": "Devices offline",
+        "devicesLowBattery": "Devices low on battery",
+        "devicesBacklog": "Devices with scans waiting",
+        "capacityNear": "Capacity nearly reached",
+        "capacityFull": "Capacity full",
+        "assistanceOverdue": "Help requests overdue",
+        "printersKiosksOffline": "Printers or kiosks offline",
+        "paymentsFailed": "Payments failing",
+        "paymentsStuck": "Payments stuck",
+        "refundSurge": "Refunds rising",
+        "sellOut": "Sold out",
+        "readiness": "Event not ready",
+        "other": "Needs attention in the console"
+      }
+    }
   }
 }

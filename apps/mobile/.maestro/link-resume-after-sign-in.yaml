@@ -1,0 +1,9 @@
+# Device pass. A link that needs sign-in opens the front door first, then resumes after sign-in.
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- openLink: https://app.yayatoh.com/my-tickets/${HOLDER_TOKEN}
+- assertVisible: "Continue with email"
+- runFlow: sign-in-seeded.yaml
+- assertVisible: "Ticket QR code"

@@ -21,6 +21,8 @@ export type SessionUser = Schemas['User'];
 export const SESSION_KEY = 'yayatoh.session.v1';
 /** A token that ends within this long is refreshed before a request rather than after its 401. */
 export const REFRESH_SKEW_MS = 30_000;
+/** A `beforeSignOut` callback that takes longer than this is abandoned, so sign-out works offline. */
+export const BEFORE_SIGN_OUT_TIMEOUT_MS = 4_000;
 
 interface StoredSession {
   readonly accessToken: string;
@@ -72,6 +74,12 @@ export interface SessionStore {
   setTokens(tokens: TokenPair): Promise<void>;
   /** Ends the session here and on the server, then wipes. */
   signOut(): Promise<void>;
+  /**
+   * Runs while the tokens still work, before `signOut` revokes them (M7.3d: deleting the phone's
+   * push registration needs a signed request). Best effort: an error or a slow callback never
+   * stops the sign-out. Not run when the server ended the session (the tokens are already dead).
+   */
+  beforeSignOut(callback: () => void | Promise<void>): () => void;
   /** Runs when the session ends for any reason, after the tokens are gone. Returns its remover. */
   onSignedOut(callback: (reason: SignOutReason) => void | Promise<void>): () => void;
 }
@@ -93,6 +101,7 @@ export function createSessionStore(opts: SessionStoreOptions): SessionStore {
   const log = opts.log ?? (() => {});
   const listeners = new Set<() => void>();
   const wipeCallbacks = new Set<(reason: SignOutReason) => void | Promise<void>>();
+  const beforeCallbacks = new Set<() => void | Promise<void>>();
   let current: StoredSession | null = null;
   let state: SessionState = { status: 'loading' };
   let loaded: Promise<SessionState> | null = null;
@@ -218,9 +227,30 @@ export function createSessionStore(opts: SessionStoreOptions): SessionStore {
     async signOut() {
       await load();
       const token = current?.refreshToken;
+      await Promise.all(
+        [...beforeCallbacks].map(async (cb) => {
+          let timer: ReturnType<typeof setTimeout> | undefined;
+          try {
+            await Promise.race([
+              Promise.resolve().then(cb),
+              new Promise<void>((resolve) => {
+                timer = setTimeout(resolve, BEFORE_SIGN_OUT_TIMEOUT_MS);
+              }),
+            ]);
+          } catch {
+            log('session: a before-sign-out callback failed');
+          } finally {
+            clearTimeout(timer);
+          }
+        }),
+      );
       // Tell the server first (best effort): offline sign-out still clears this phone.
       if (token) await opts.endpoint.revoke(token).catch(() => log('session: revoke failed'));
       await end('signed_out');
+    },
+    beforeSignOut(callback) {
+      beforeCallbacks.add(callback);
+      return () => beforeCallbacks.delete(callback);
     },
     onSignedOut(callback) {
       wipeCallbacks.add(callback);

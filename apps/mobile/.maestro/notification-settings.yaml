@@ -1,0 +1,21 @@
+# Device pass. Account → Notifications in each permission state.
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+    permissions: { notifications: unset }
+- runFlow: sign-in-seeded.yaml
+- tapOn: "Account"
+- tapOn: "Notifications"
+- assertVisible: "Notifications are not set up yet"
+- assertVisible: "Orders and tickets"
+- assertVisible: "Reminders"
+- assertVisible: "Event changes"
+- assertVisible: "News and offers"
+- assertVisible: "Off. We only send these if you choose to receive them."
+- tapOn: "Turn on notifications"
+- assertVisible: "Get updates about your tickets?"
+- tapOn: "Turn on notifications"
+- tapOn: "Allow"
+- assertVisible: "Notifications are on"
+- tapOn: "Open phone settings"

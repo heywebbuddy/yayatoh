@@ -1,0 +1,11 @@
+# Device pass. Sign-out deletes the phone's registration. Maestro cannot see the server: check the API
+# log for `POST /v1/me/devices` after granting and `DELETE /v1/me/devices/…` before `POST /v1/auth/revoke`.
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+    permissions: { notifications: allow }
+- runFlow: sign-in-seeded.yaml
+- tapOn: "Account"
+- tapOn: "Sign out"
+- assertVisible: "Continue with email"

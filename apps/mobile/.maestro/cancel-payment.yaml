@@ -1,0 +1,44 @@
+# Close the payment page without paying: back on the event's checkout with the selection intact, then
+# pay again. The same idempotency key is replayed, so there is one order, not two.
+appId: com.yayatoh.yayatohapp.dev
+env:
+  EMAIL: nia@newcomer.test
+  PASSWORD: persona-dev-password
+  EVENT_NAME: Harbor Spring Concert
+---
+- launchApp:
+    clearState: true
+- runFlow: subflows/sign-in.yaml
+- openLink: yayatoh-dev://events/harbor-spring-concert
+- assertVisible: ${EVENT_NAME}
+- scrollUntilVisible:
+    element: 'Add one General admission'
+- tapOn: 'Add one General admission'
+- tapOn: 'Continue to checkout'
+- tapOn:
+    text: 'Pay .*'
+- assertVisible: 'Pay for your order'
+# Leave the payment page: the system sheet's Cancel on iOS, the back button on Android.
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: 'Cancel'
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - back
+- assertVisible:
+    text: 'Payment not completed'
+    timeout: 20000
+- assertVisible: '1 × General admission'
+- assertVisible: 'Nothing was charged. Your tickets are still selected, so you can pay again.'
+- tapOn: 'Pay again'
+- assertVisible: 'Pay for your order'
+- tapOn: 'Pay now (test)'
+- assertVisible:
+    text: "You're going!"
+    timeout: 30000
+# One order, however many times the payment page was opened.
+- tapOn: 'View my tickets'

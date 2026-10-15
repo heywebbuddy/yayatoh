@@ -50,8 +50,14 @@ interface AppIdentity {
   readonly androidPackage: string;
   /** Only the Staff app scans: the attendee app never asks for the camera. */
   readonly camera: boolean;
+  /** Only the attendee app adds an event to the phone's calendar (write-only on iOS 17+). */
+  readonly calendar: boolean;
+  /** Only the attendee app uses the phone's location, and only when the person taps "near me" (M7.3c). */
+  readonly location: boolean;
   /** Sign in with Apple is an attendee sign-in (P7-5); Staff signs in by enrolment QR or account. */
   readonly appleSignIn: boolean;
+  /** Only the attendee app registers for push here (M7.3d); Staff alerts come with M7.4c. */
+  readonly push: boolean;
 }
 
 const APPS: Record<AppId, AppIdentity> = {
@@ -64,7 +70,10 @@ const APPS: Record<AppId, AppIdentity> = {
     iosBundleId: 'com.yayatoh.yayatohapp',
     androidPackage: 'com.yayatoh.yayatohapp',
     camera: false,
+    calendar: true,
+    location: true,
     appleSignIn: true,
+    push: true,
   },
   staff: {
     name: 'Yayatoh Staff',
@@ -73,7 +82,10 @@ const APPS: Record<AppId, AppIdentity> = {
     iosBundleId: 'com.yayatoh.staff',
     androidPackage: 'com.yayatoh.staff',
     camera: true,
+    calendar: false,
+    location: false,
     appleSignIn: false,
+    push: false,
   },
 };
 
@@ -85,6 +97,26 @@ const VARIANTS: Record<AppEnv, { nameSuffix: string; schemeSuffix: string; idSuf
 
 /** Shown by iOS when the Staff app asks for the camera (the permission string, English). */
 export const STAFF_CAMERA_USAGE = 'Yayatoh Staff uses the camera to scan ticket QR codes at the door.';
+
+/** Shown by iOS when the attendee app adds a ticket's event to the calendar (English). */
+export const ATTENDEE_CALENDAR_USAGE = 'Yayatoh adds the events you choose to your calendar.';
+
+/** Shown by iOS when the attendee app asks for the location, after the person taps "near me" (English). */
+export const NEAR_ME_USAGE =
+  'Yayatoh uses your location once, when you tap "near me", to list events close to you.';
+
+/** Android 13+ asks for this at runtime; the manifest must declare it (M7.3d). iOS has no usage string. */
+export const POST_NOTIFICATIONS = 'android.permission.POST_NOTIFICATIONS';
+
+/**
+ * The APNs environment a build's push token belongs to: a development build is signed for the
+ * sandbox, preview and production builds for production. The `expo-notifications` plugin gets the
+ * same answer as its `aps-environment` entitlement (`mode`), and the app reports it to
+ * `POST /v1/me/devices` so the server sends to the right APNs host.
+ */
+export function apnsEnvironment(appEnv: AppEnv): 'sandbox' | 'production' {
+  return appEnv === 'development' ? 'sandbox' : 'production';
+}
 
 export type EnvVars = Readonly<Record<string, string | undefined>>;
 
@@ -182,6 +214,37 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
       },
     ],
   ];
+  // Add to calendar (M7.3b): write-only access, so the app can add an event but never reads one.
+  if (id.calendar) {
+    plugins.push([
+      'expo-calendar',
+      {
+        writeOnlyAccess: true,
+        calendarPermission: ATTENDEE_CALENDAR_USAGE,
+        writeOnlyCalendarPermission: ATTENDEE_CALENDAR_USAGE,
+        remindersPermission: false,
+      },
+    ]);
+  }
+  // Location is asked only when the person taps "near me", only while the app is open, and at city
+  // precision (coarse): no background location, no fine location.
+  if (id.location) {
+    plugins.push([
+      'expo-location',
+      {
+        locationWhenInUsePermission: NEAR_ME_USAGE,
+        isAndroidBackgroundLocationEnabled: false,
+        isIosBackgroundLocationEnabled: false,
+      },
+    ]);
+  }
+  // Push (M7.3d): the APNs environment of the build, and the Android notification permission.
+  if (id.push) {
+    plugins.push([
+      'expo-notifications',
+      { mode: apnsEnvironment(appEnv) === 'sandbox' ? 'development' : 'production' },
+    ]);
+  }
   // Only a development build may talk to a plain-http API on a developer's machine.
   if (!production && apiBaseUrl.startsWith('http://')) {
     plugins.push(['expo-build-properties', { android: { usesCleartextTraffic: true } }]);
@@ -198,6 +261,10 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
     ...(googleIosClientId ? [googleIosRedirectScheme(googleIosClientId)] : []),
     ...(googleAndroidClientId ? [androidPackage] : []),
   ];
+
+  // The FCM client file belongs to the owner's Firebase project (an EAS file secret): the path comes
+  // from the build environment and is never in the repo. Without it Android push is simply off.
+  const googleServicesFile = id.push ? clean(env.GOOGLE_SERVICES_FILE) : undefined;
 
   const config: ExpoConfig = {
     name: `${id.name}${variant.nameSuffix}`,
@@ -223,6 +290,7 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
       infoPlist: {
         CFBundleAllowMixedLocalizations: true,
         ...(id.camera ? { NSCameraUsageDescription: STAFF_CAMERA_USAGE } : {}),
+        ...(id.location ? { NSLocationWhenInUseUsageDescription: NEAR_ME_USAGE } : {}),
         ...(appEnv === 'development' ? { NSAppTransportSecurity: { NSAllowsLocalNetworking: true } } : {}),
       },
     },
@@ -234,8 +302,19 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
       },
       intentFilters: androidIntentFilters(env),
       // The attendee app never scans; keep a library from adding the permission by accident.
-      permissions: id.camera ? ['android.permission.CAMERA'] : [],
-      blockedPermissions: id.camera ? [] : ['android.permission.CAMERA'],
+      permissions: [
+        ...(id.camera ? ['android.permission.CAMERA'] : []),
+        ...(id.location ? ['android.permission.ACCESS_COARSE_LOCATION'] : []),
+        ...(id.push ? [POST_NOTIFICATIONS] : []),
+      ],
+      ...(googleServicesFile ? { googleServicesFile } : {}),
+      // The attendee app uses coarse, foreground location only; Staff is left as it was.
+      blockedPermissions: [
+        ...(id.camera ? [] : ['android.permission.CAMERA']),
+        ...(id.location
+          ? ['android.permission.ACCESS_FINE_LOCATION', 'android.permission.ACCESS_BACKGROUND_LOCATION']
+          : []),
+      ],
     },
     ...(opts.locales ? { locales: { ...opts.locales } } : {}),
     plugins,
