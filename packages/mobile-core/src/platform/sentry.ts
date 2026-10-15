@@ -5,7 +5,7 @@
  *
  * Privacy rules this enforces (`mobile-common.md`): no personal data in crash reports. Sentry's own
  * default PII is off; `scrubEvent` then removes the user, request headers, cookies and bodies,
- * query strings, and masks emails, phone numbers, bearer and Yayatoh tokens, JWTs, long hex strings
+ * query strings, and masks emails, phone numbers, bearer and Yayatoh tokens, ticket codes, JWTs, long hex strings
  * and identifier-like URL segments in every string it can find.
  */
 import * as Sentry from '@sentry/react-native';
@@ -22,6 +22,8 @@ const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
 const BEARER = /\bBearer\s+[A-Za-z0-9._~+/=-]+/gi;
 const YAYATOH_TOKEN = /\byy[a-z]{0,2}_[A-Za-z0-9_-]{6,}/g;
 const JWT = /\beyJ[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]*/g;
+/** A `yy1` ticket code (ADR 0011): the prefix and base32 of the payload and signature. */
+const TICKET_CODE = /\bYY1[A-Z2-7]{16,}\b/gi;
 const LONG_HEX = /\b[0-9a-f]{32,}\b/gi;
 const PHONE = /(?<![\w.])\+?\d[\d\s().-]{7,}\d(?![\w.])/g;
 const SENSITIVE_KEY =
@@ -33,6 +35,7 @@ export function scrubText(text: string): string {
     .replace(BEARER, 'Bearer [token]')
     .replace(JWT, '[jwt]')
     .replace(YAYATOH_TOKEN, '[token]')
+    .replace(TICKET_CODE, '[ticket-code]')
     .replace(EMAIL, '[email]')
     .replace(LONG_HEX, '[hex]')
     .replace(PHONE, '[phone]');

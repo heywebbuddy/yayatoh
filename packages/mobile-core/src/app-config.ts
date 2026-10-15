@@ -296,6 +296,9 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
     },
     android: {
       package: androidPackage,
+      // Tokens, the ticket cache and the door's guest list never go to a cloud backup or a device-to-
+      // device transfer: the keys that open them stay on the phone (M7.x security review).
+      allowBackup: false,
       adaptiveIcon: {
         foregroundImage: opts.assets.adaptiveForeground,
         backgroundColor: opts.adaptiveBackground,
