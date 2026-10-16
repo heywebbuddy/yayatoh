@@ -27,18 +27,33 @@ export function analyticsTickJob(deps: ReportDeps) {
   });
 }
 
-/** Orgs with switched-on alert rules (or a firing one to resolve) or report schedules (platform_reader, audited). */
-export async function orgsWithAnalyticsWork(limit = 500): Promise<string[]> {
-  const rows = await withPlatformReader(
-    { actor: 'system:analytics', reason: 'find orgs with alert rules or report schedules' },
-    (tx) =>
-      tx.execute<{ org_id: string }>(sql`
-        select org_id from analytics.alert_rules where enabled or last_state = 'firing'
-        union
-        select org_id from analytics.report_schedules where enabled
-        limit ${limit}`),
-  );
-  return rows.map((r) => r.org_id);
+/**
+ * Orgs with switched-on alert rules (or a firing one to resolve) or report schedules (platform_reader,
+ * audited). Read in pages of `pageSize` by org id, so every org is found however many have work.
+ */
+export async function orgsWithAnalyticsWork(pageSize = 500): Promise<string[]> {
+  const orgs: string[] = [];
+  let after: string | null = null;
+  for (;;) {
+    const from = after;
+    const rows = await withPlatformReader(
+      { actor: 'system:analytics', reason: 'find orgs with alert rules or report schedules' },
+      (tx) =>
+        tx.execute<{ org_id: string }>(sql`
+          select org_id from (
+            select org_id from analytics.alert_rules where enabled or last_state = 'firing'
+            union
+            select org_id from analytics.report_schedules where enabled
+          ) work
+          ${from ? sql`where org_id > ${from}` : sql``}
+          order by org_id
+          limit ${pageSize}`),
+    );
+    for (const r of rows) orgs.push(r.org_id);
+    const last = rows.at(-1);
+    if (rows.length < pageSize || !last) return orgs;
+    after = last.org_id;
+  }
 }
 
 /** Queue one tick per org with work (leader, every minute). */
