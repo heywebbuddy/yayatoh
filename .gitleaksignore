@@ -48,3 +48,5 @@ a1730d41f9d5bb71d3823358cf1f061a2993a65f:apps/mobile/tests/units.test.tsx:generi
 873172ea93041cf0e8eaf7e6d75c1d23c9531217:apps/mobile/tests/list.test.tsx:generic-api-key:314
 873172ea93041cf0e8eaf7e6d75c1d23c9531217:apps/mobile/tests/list.test.tsx:generic-api-key:321
 99c43b82b5ff25ef46df34f5ed8cf5bc37c069bc:apps/staff/tests/tools/manual-checkin.test.ts:generic-api-key:33
+# M7.x Maestro script tests: the public RFC 6238 appendix B TOTP test key (removed again in 949c3a9a; not a credential)
+2e8e667f570446684299a57684ea9d1840bde11d:tools/check-maestro/tests/scripts.test.ts:generic-api-key:42
