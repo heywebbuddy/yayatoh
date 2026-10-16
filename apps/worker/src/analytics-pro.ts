@@ -35,8 +35,8 @@ export async function orgsWithAnalyticsWork(pageSize = 500): Promise<string[]> {
   const orgs: string[] = [];
   let after: string | null = null;
   for (;;) {
-    const from = after;
-    const rows = await withPlatformReader(
+    const from: string | null = after;
+    const rows: readonly { org_id: string }[] = await withPlatformReader(
       { actor: 'system:analytics', reason: 'find orgs with alert rules or report schedules' },
       (tx) =>
         tx.execute<{ org_id: string }>(sql`
