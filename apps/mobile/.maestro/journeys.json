@@ -1,0 +1,507 @@
+{
+  "$comment": "Journey inventory for the attendee app (M7.x). tools/check-maestro checks this file against the flows in this directory and against docs/plans/mobile.md. Every key is explained in docs/specs/M7.X/maestro.md.",
+  "app": "mobile",
+  "appId": "com.yayatoh.yayatohapp.preview",
+  "flows": {
+    "launch.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": []
+    },
+    "welcome-methods.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": []
+    },
+    "sign-in-email-code.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server"]
+    },
+    "password-two-factor.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server"]
+    },
+    "sign-out.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server"]
+    },
+    "sign-out-removes-device.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server"]
+    },
+    "delete-account.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server"]
+    },
+    "tickets-open-offline.yaml": {
+      "kind": "flow",
+      "platforms": "android",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server", "fake-providers"]
+    },
+    "tickets-transfer-cancel.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server", "fake-providers"]
+    },
+    "claim-from-link.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server", "fake-providers"]
+    },
+    "refund-request.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server", "fake-providers"]
+    },
+    "wallet-add.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "The wallet link opens the system Wallet or a browser outside the app, which Maestro cannot follow deterministically.",
+      "needs": ["dev-server", "fake-providers", "system-ui"]
+    },
+    "calendar-directions.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Hands off to the system Calendar and Maps, whose screens differ by OS version and emulator image.",
+      "needs": ["dev-server", "fake-providers", "system-ui"]
+    },
+    "discover-search.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server"]
+    },
+    "event-page.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server"]
+    },
+    "search-and-buy.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server", "fake-providers"]
+    },
+    "cancel-payment.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server", "fake-providers"]
+    },
+    "orders-detail.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server", "fake-providers"]
+    },
+    "virtual-ticket.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Needs an online event, and no dev route or seed creates one (the organizer console does).",
+      "needs": ["dev-server", "online-event"]
+    },
+    "near-me.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Needs a simulated device location, which the EAS runner does not set.",
+      "needs": ["dev-server", "system-ui"]
+    },
+    "push-prompt-after-purchase.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server", "fake-providers"]
+    },
+    "push-not-now.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server", "fake-providers"]
+    },
+    "push-denied-blocks-nothing.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server", "fake-providers"]
+    },
+    "notification-settings.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server"]
+    },
+    "push-tap-cold-start.yaml": {
+      "kind": "flow",
+      "platforms": "ios",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Needs a push sent from outside Maestro (xcrun simctl push), which an EAS runner cannot do.",
+      "needs": ["dev-server", "push-sender"]
+    },
+    "push-tap-foreground.yaml": {
+      "kind": "flow",
+      "platforms": "ios",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Needs a push sent from outside Maestro (xcrun simctl push), which an EAS runner cannot do.",
+      "needs": ["dev-server", "push-sender"]
+    },
+    "link-cold-start.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server", "fake-providers"]
+    },
+    "link-universal.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "The OS verifies https links only for a store-signed build against the production domains; CI builds are unsigned.",
+      "needs": ["dev-server", "signed-build"]
+    },
+    "ticket-link.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server", "seeded-data"]
+    },
+    "link-resume-after-sign-in.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server", "seeded-data"]
+    },
+    "offline-banner.yaml": {
+      "kind": "flow",
+      "platforms": "android",
+      "clean": true,
+      "ci": true,
+      "needs": []
+    },
+    "update-required.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Needs a server whose minimum app version is above the build's; the shared e2e server is not.",
+      "needs": ["min-version-server"]
+    },
+    "arabic-rtl-smoke.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server"]
+    },
+    "subflows/sign-in.yaml": {
+      "kind": "subflow",
+      "platforms": "both",
+      "clean": false,
+      "needs": []
+    },
+    "subflows/sign-in-code.yaml": {
+      "kind": "subflow",
+      "platforms": "both",
+      "clean": false,
+      "needs": ["dev-server"]
+    },
+    "subflows/acquire-ticket.yaml": {
+      "kind": "subflow",
+      "platforms": "both",
+      "clean": false,
+      "needs": ["dev-server", "fake-providers"]
+    },
+    "subflows/prelude-signed-in.yaml": {
+      "kind": "subflow",
+      "platforms": "both",
+      "clean": true,
+      "needs": ["dev-server", "fake-providers"]
+    },
+    "subflows/prelude-ticket.yaml": {
+      "kind": "subflow",
+      "platforms": "both",
+      "clean": true,
+      "needs": ["dev-server", "fake-providers"]
+    }
+  },
+  "journeys": [
+    {
+      "id": "launch-smoke",
+      "title": "Launch: a fresh install opens on the welcome screen",
+      "platforms": "both",
+      "flows": ["launch.yaml"]
+    },
+    {
+      "id": "sign-in-email-code",
+      "title": "Sign in by email code (new account, wrong code, right code)",
+      "platforms": "both",
+      "flows": ["sign-in-email-code.yaml"]
+    },
+    {
+      "id": "sign-in-apple",
+      "title": "Sign in with Apple",
+      "platforms": "ios",
+      "flows": ["welcome-methods.yaml"],
+      "manual": "Completing Sign in with Apple needs the system's Apple ID sheet and a real Apple account, and the app has no test seam for it; the flow proves only that the button shows on iOS and not on Android. The server side is covered by the api-v1 integration tests.",
+      "devicePass": ["Sign in with Apple on a real iPhone with a sandbox Apple ID."]
+    },
+    {
+      "id": "sign-in-google",
+      "title": "Sign in with Google",
+      "platforms": "both",
+      "flows": ["welcome-methods.yaml"],
+      "manual": "Completing Google sign-in needs a real Google account and the owner's OAuth client ids; the e2e build has none, so the button is absent by design and the flow asserts that. The server side is covered by the api-v1 integration tests.",
+      "devicePass": [
+        "Google sign-in on a real iPhone and an Android phone, once the owner adds the OAuth client ids."
+      ]
+    },
+    {
+      "id": "sign-in-password-two-factor",
+      "title": "Sign in with a password and the two-step code",
+      "platforms": "both",
+      "flows": ["password-two-factor.yaml"]
+    },
+    {
+      "id": "sign-out",
+      "title": "Sign out (and sign out everywhere asks first)",
+      "platforms": "both",
+      "flows": ["sign-out.yaml"]
+    },
+    {
+      "id": "sign-out-removes-device",
+      "title": "Sign out removes the push registration",
+      "platforms": "both",
+      "flows": ["sign-out-removes-device.yaml"],
+      "notes": "The server half (DELETE /v1/me/devices/...) is read from the API log in the device pass."
+    },
+    {
+      "id": "delete-account",
+      "title": "Delete account (App Review 5.1.1(v))",
+      "platforms": "both",
+      "flows": ["delete-account.yaml"]
+    },
+    {
+      "id": "tickets-open-offline",
+      "title": "Tickets open offline after one sync",
+      "platforms": "both",
+      "flows": ["tickets-open-offline.yaml"],
+      "manualPlatforms": {
+        "ios": "Maestro's setAirplaneMode does not work on the iOS simulator, so the offline half is a device-pass step with airplane mode turned on by hand."
+      }
+    },
+    {
+      "id": "ticket-transfer-cancel",
+      "title": "Transfer a ticket and cancel the transfer",
+      "platforms": "both",
+      "flows": ["tickets-transfer-cancel.yaml"]
+    },
+    {
+      "id": "claim-from-link",
+      "title": "Claim a ticket from a link",
+      "platforms": "both",
+      "flows": ["claim-from-link.yaml"]
+    },
+    {
+      "id": "refund-request",
+      "title": "Request a refund",
+      "platforms": "both",
+      "flows": ["refund-request.yaml"]
+    },
+    {
+      "id": "wallet-add",
+      "title": "Add the ticket to Apple Wallet / Google Wallet",
+      "platforms": "both",
+      "flows": ["wallet-add.yaml"],
+      "manual": "A real pass needs the owner's Apple Pass Type ID and Google Wallet issuer account; with the fakes the wallet link is a placeholder and the system sheet is outside the app. The flow checks the button and that the fake link causes no failure message.",
+      "devicePass": ["Add a real pass to Apple Wallet and Google Wallet once the owner adds the accounts."]
+    },
+    {
+      "id": "calendar-directions",
+      "title": "Add to calendar and directions",
+      "platforms": "both",
+      "flows": ["calendar-directions.yaml"],
+      "devicePass": ["Watch the calendar form and the maps hand-off by eye on each OS version."]
+    },
+    {
+      "id": "discover-search",
+      "title": "Discover: search, empty state, clear filters",
+      "platforms": "both",
+      "flows": ["discover-search.yaml"]
+    },
+    {
+      "id": "event-page",
+      "title": "Event page: details and passes with all-in prices",
+      "platforms": "both",
+      "flows": ["event-page.yaml"]
+    },
+    {
+      "id": "near-me",
+      "title": "Discover: near me asks for the location only when tapped",
+      "platforms": "both",
+      "flows": ["near-me.yaml"],
+      "notes": "Not in the plan; the flow was written in M7.3c."
+    },
+    {
+      "id": "buy-ticket-fake-provider",
+      "title": "Buy a ticket through the fake payment provider",
+      "platforms": "both",
+      "flows": ["search-and-buy.yaml"]
+    },
+    {
+      "id": "cancel-payment",
+      "title": "Cancel payment returns to the event, then pay again (one order)",
+      "platforms": "both",
+      "flows": ["cancel-payment.yaml"]
+    },
+    {
+      "id": "orders-list-detail",
+      "title": "Orders: the order screen (the list has no entry point yet)",
+      "platforms": "both",
+      "flows": ["orders-detail.yaml"],
+      "devicePass": ["Open the orders list from the \"still confirming\" screen once a payment is slow."],
+      "notes": "Known gap: /orders (the list) is reachable only from the \"still confirming\" screen; no tab, Account row or link opens it."
+    },
+    {
+      "id": "virtual-ticket-buy-on-web",
+      "title": "A virtual ticket shows \"Buy on the web\", never a checkout",
+      "platforms": "both",
+      "flows": ["virtual-ticket.yaml"]
+    },
+    {
+      "id": "push-prompt-after-purchase",
+      "title": "Push prompt after the first purchase, explanation before the phone sheet",
+      "platforms": "both",
+      "flows": ["push-prompt-after-purchase.yaml"]
+    },
+    {
+      "id": "push-not-now",
+      "title": "Push prompt: \"Not now\"",
+      "platforms": "both",
+      "flows": ["push-not-now.yaml"]
+    },
+    {
+      "id": "push-denied-blocks-nothing",
+      "title": "Push prompt: denied blocks nothing",
+      "platforms": "both",
+      "flows": ["push-denied-blocks-nothing.yaml"]
+    },
+    {
+      "id": "push-tap-foreground",
+      "title": "Push tap while the app is open",
+      "platforms": "both",
+      "flows": ["push-tap-foreground.yaml"],
+      "manualPlatforms": {
+        "android": "Android pushes come from the owner's FCM project; nothing can send one to an emulator from outside, so the Android check is a device-pass step with a real push."
+      },
+      "devicePass": ["Real APNs and FCM delivery, and the tap from the lock screen."]
+    },
+    {
+      "id": "push-tap-cold-start",
+      "title": "Push tap from a closed app, every push type",
+      "platforms": "both",
+      "flows": ["push-tap-cold-start.yaml"],
+      "manualPlatforms": {
+        "android": "Android pushes come from the owner's FCM project; nothing can send one to an emulator from outside, so the Android check is a device-pass step with a real push."
+      },
+      "devicePass": ["Real APNs and FCM delivery, and the tap from the lock screen."]
+    },
+    {
+      "id": "link-cold-start",
+      "title": "App links and universal links open the right screen from a closed app",
+      "platforms": "both",
+      "flows": ["link-cold-start.yaml", "link-universal.yaml"],
+      "devicePass": [
+        "Universal links (https) on a store-signed or TestFlight / Play internal build: the OS verifies apple-app-site-association and assetlinks.json."
+      ]
+    },
+    {
+      "id": "link-resume-after-sign-in",
+      "title": "A link that needs sign-in resumes after sign-in",
+      "platforms": "both",
+      "flows": ["link-resume-after-sign-in.yaml"]
+    },
+    {
+      "id": "web-ticket-link",
+      "title": "A web \"My tickets\" link opens the ticket",
+      "platforms": "both",
+      "flows": ["ticket-link.yaml"]
+    },
+    {
+      "id": "notification-settings",
+      "title": "Account > Notification settings in each permission state",
+      "platforms": "both",
+      "flows": ["notification-settings.yaml"]
+    },
+    {
+      "id": "offline-banner",
+      "title": "Offline banner",
+      "platforms": "both",
+      "flows": ["offline-banner.yaml"],
+      "manualPlatforms": {
+        "ios": "Maestro's setAirplaneMode does not work on the iOS simulator, so the offline half is a device-pass step with airplane mode turned on by hand."
+      }
+    },
+    {
+      "id": "update-required",
+      "title": "Update required (426) screen",
+      "platforms": "both",
+      "flows": ["update-required.yaml"]
+    },
+    {
+      "id": "arabic-rtl-smoke",
+      "title": "Arabic right-to-left smoke",
+      "platforms": "both",
+      "flows": ["arabic-rtl-smoke.yaml"],
+      "devicePass": ["Layout direction, VoiceOver and TalkBack in Arabic."]
+    }
+  ]
+}

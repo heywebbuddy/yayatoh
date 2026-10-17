@@ -1,9 +1,14 @@
-# Offline drill (X), phone A (M7.4b). Two phones, both enrolled at the same event, both offline,
-# admit the same ticket; after they reconnect the duplicate is flagged within 60 s. Run this flow on
-# phone A and `offline-drill-phone-b.yaml` on phone B at the same time (`maestro --device <id> test`).
-# A scans first and reconnects first, so it is accepted; B's later scan is the duplicate.
-# Env: ENROL_EVENT and ENROL_KEY (same event on both phones), TICKET_CODE (one seeded active ticket).
+# Journey: offline drill, phone A (X) — two phones enrolled at the same event, both offline, admit the same
+#   ticket; after they reconnect the duplicate is flagged within 60 s. Run this on phone A and
+#   offline-drill-phone-b.yaml on phone B at the same time (`maestro --device <id> test ...`).
+#   A scans first and reconnects first, so it is accepted; B's later scan is the duplicate.
+# Preconditions: two phones, one door device enrolled on each for the same event (ENROL_EVENT and each
+#   phone's own ENROL_KEY), one seeded active ticket (TICKET_CODE). The only coordination between the phones
+#   is time: the "DRILL_PAUSE" waits below hold a phone offline while the other scans.
+# Personas: none (door devices).
 appId: com.yayatoh.staff.preview
+env:
+  TICKET_CODE: ''
 ---
 - runFlow: scan-setup.yaml
 - setAirplaneMode: enabled
@@ -16,10 +21,10 @@ appId: com.yayatoh.staff.preview
     id: manual-submit
 - assertVisible: 'Admit'
 - assertVisible: '1 scan waiting to send'
-# Phone B scans about 20 s later; keep the connection off until it has.
-# (Maestro has no sleep: waiting for text that never shows, as optional, waits out the timeout.)
+# Phone B scans about 20 s later; keep the connection off until it has. (Maestro has no sleep: waiting
+# for text that never shows, as optional, holds this phone for the timeout.)
 - extendedWaitUntil:
-    visible: 'ThisNeverShows'
+    visible: 'DRILL_PAUSE'
     timeout: 30000
     optional: true
 - setAirplaneMode: disabled

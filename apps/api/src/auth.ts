@@ -7,6 +7,7 @@ import {
   createAuth,
   devPersonaReplayExempt,
   idTokenVerifierFromEnv,
+  reviewerFixedCodes,
   type SecretSealer,
   twoFactorService,
 } from '@yayatoh/auth';
@@ -51,6 +52,8 @@ const mailer: AuthMailer = {
 };
 
 const totpReplayExempt = devPersonaReplayExempt();
+/** The store reviewer demo's fixed sign-in code: non-production only, and only when both values are set (M7.5a). */
+const fixedEmailCodes = reviewerFixedCodes();
 
 /** Better Auth for api.yayatoh.com, created on first use (the build never needs the secret). */
 export function getAuth(): Auth {
@@ -63,6 +66,7 @@ export function getAuth(): Auth {
       mailer,
       sealer,
       ...(totpReplayExempt ? { totpReplayExempt } : {}),
+      ...(fixedEmailCodes ? { fixedEmailCodes } : {}),
     });
   }
   return auth;

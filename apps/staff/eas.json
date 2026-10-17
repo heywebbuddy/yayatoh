@@ -8,21 +8,71 @@
       "developmentClient": true,
       "distribution": "internal",
       "channel": "development",
-      "env": { "APP_ENV": "development" },
-      "ios": { "simulator": true }
+      "environment": "development",
+      "env": {
+        "APP_ENV": "development"
+      },
+      "ios": {
+        "simulator": true
+      }
     },
     "preview": {
       "distribution": "internal",
       "channel": "preview",
-      "env": { "APP_ENV": "preview" }
+      "environment": "preview",
+      "env": {
+        "APP_ENV": "preview"
+      }
     },
     "production": {
+      "distribution": "store",
       "channel": "production",
+      "environment": "production",
       "autoIncrement": true,
-      "env": { "APP_ENV": "production" }
+      "env": {
+        "APP_ENV": "production"
+      }
+    },
+    "e2e-ios": {
+      "distribution": "internal",
+      "channel": "e2e",
+      "env": { "APP_ENV": "preview", "API_BASE_URL": "https://e2e-server.invalid/api/v1" },
+      "ios": { "simulator": true }
+    },
+    "e2e-android": {
+      "distribution": "internal",
+      "channel": "e2e",
+      "env": { "APP_ENV": "preview", "API_BASE_URL": "https://e2e-server.invalid/api/v1" },
+      "android": { "buildType": "apk" }
     }
   },
   "submit": {
-    "production": {}
+    "testflight": {
+      "ios": {
+        "metadataPath": "./store/dist/store.config.json"
+      }
+    },
+    "play-internal": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "completed"
+      }
+    },
+    "play-closed": {
+      "android": {
+        "track": "alpha",
+        "releaseStatus": "completed"
+      }
+    },
+    "production": {
+      "ios": {
+        "metadataPath": "./store/dist/store.config.json"
+      },
+      "android": {
+        "track": "production",
+        "releaseStatus": "inProgress",
+        "rollout": 0.05
+      }
+    }
   }
 }

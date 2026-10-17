@@ -1,0 +1,55 @@
+# Journey: (sub-flow) find an event in Discover and get one ticket of a pass (free, or paid with the
+#   fake provider), ending on the order confirmation. Used wherever a flow needs a ticket in the account.
+# Preconditions: signed in; EVENT_QUERY and EVENT_NAME from scripts/new-event.js; TICKET_TYPE is "Free entry"
+#   (default) or "Supporter" (paid, 15.00, paid on the fake provider's page). PUSH is "dismiss"
+#   (default: the first purchase shows the notification explanation, which this answers "Not now" so the
+#   caller sees the confirmation) or "leave" (the push flows answer it themselves).
+# Personas: the signed-in throwaway account.
+appId: com.yayatoh.yayatohapp.preview
+env:
+  TICKET_TYPE: 'Free entry'
+  PUSH: dismiss
+---
+- tapOn: 'Discover, tab, 2 of 3'
+- tapOn: 'Search events'
+- inputText: ${EVENT_QUERY}
+- extendedWaitUntil:
+    visible: '.*${EVENT_NAME}.*'
+    timeout: 30000
+- tapOn: '.*${EVENT_NAME}.*'
+- scrollUntilVisible:
+    element: 'Add one ${TICKET_TYPE}'
+- tapOn: 'Add one ${TICKET_TYPE}'
+- tapOn: 'Continue to checkout'
+- runFlow:
+    when:
+      true: ${TICKET_TYPE == 'Supporter'}
+    commands:
+      - tapOn:
+          text: 'Pay .*'
+      - extendedWaitUntil:
+          visible: 'Pay for your order'
+          timeout: 30000
+      - tapOn: 'Pay now (test)'
+- runFlow:
+    when:
+      true: ${TICKET_TYPE != 'Supporter'}
+    commands:
+      - tapOn: 'Get tickets'
+- extendedWaitUntil:
+    visible: "You're going!|Get updates about your tickets\\?"
+    timeout: 30000
+- runFlow:
+    when:
+      true: ${PUSH == 'dismiss'}
+    commands:
+      - extendedWaitUntil:
+          visible: 'Get updates about your tickets\?'
+          timeout: 3000
+          optional: true
+      - runFlow:
+          when:
+            visible: 'Get updates about your tickets\?'
+          commands:
+            - tapOn: 'Not now'
+      - assertVisible: "You're going!"

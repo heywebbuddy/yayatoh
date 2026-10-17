@@ -1,17 +1,18 @@
-# M7.3b: start a transfer, see it pending, cancel it. Written, not run in cloud sessions. Seed:
-# persona tess@example.test holds a ticket whose type allows transfers; RECIPIENT_EMAIL is any
-# address that is not the sender's (the fake mailer takes the email).
+# Journey: transfer a ticket and cancel the transfer — validation first, a review step, "Transfer sent",
+#   the ticket stays the sender's and shows "Transfer pending", then a two-step cancel.
+# Preconditions: as subflows/prelude-ticket.yaml; the free pass allows transfers (the API says so; if the
+#   event's transfer rules change, the ticket screen says why and this flow stops at 'Transfer ticket').
+# Personas: a throwaway buyer; the recipient is a made-up address nobody signs in as.
 appId: com.yayatoh.yayatohapp.preview
 env:
-  EVENT: Summer Night
   RECIPIENT_NAME: Sam Rivera
   RECIPIENT_EMAIL: sam.rivera@example.test
 ---
-- launchApp:
-    clearState: true
-- runFlow: tickets-sign-in.yaml
+- runFlow: subflows/prelude-ticket.yaml
 - tapOn:
-    text: 'General admission for ${EVENT}.*'
+    text: 'Free entry for ${output.eventName}.*'
+- scrollUntilVisible:
+    element: 'Transfer ticket'
 - tapOn: 'Transfer ticket'
 # Validation first: nothing entered.
 - tapOn: 'Review transfer'
@@ -26,7 +27,9 @@ env:
 - tapOn: 'Review transfer'
 - assertVisible: 'Confirm transfer'
 - tapOn: 'Send transfer'
-- assertVisible: 'Transfer sent'
+- extendedWaitUntil:
+    visible: 'Transfer sent'
+    timeout: 20000
 - tapOn: 'Done'
 # The ticket stays the sender's until the recipient claims it.
 - assertVisible: 'Transfer pending'

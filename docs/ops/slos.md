@@ -32,5 +32,7 @@ Until then the SLIs below are measured by k6 (`k6/`) and the e2e suite.
 - Retention job (`{"job":"retention"}`) with `failed > 0` → ticket.
 
 **Performance budgets** (roadmap §10) are checked by k6 thresholds: event page p95 < 400 ms (SSR),
-checkout start p95 < 800 ms, scan p95 < 300 ms, manifest page p95 < 1 s. Results:
-docs/ops/security-testing.md.
+checkout start p95 < 800 ms, scan p95 < 300 ms, manifest page p95 < 1 s. The apps' `/v1` routes (M7.x)
+add: my tickets and orders lists p95 < 400 ms, the ticket (QR) p95 < 300 ms, device heartbeat p95 < 300 ms
+with no 429, small `scans/batch` p95 < 300 ms, a 500-scan batch p95 < 1.5 s (docs/specs/M7.X/load.md).
+Results: docs/ops/security-testing.md.

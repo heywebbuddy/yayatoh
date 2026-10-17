@@ -9,6 +9,8 @@ export interface ButtonProps {
   readonly disabled?: boolean;
   /** For toggles (the torch, the direction switch). */
   readonly selected?: boolean;
+  /** `radio` for one choice out of a group (the direction switch); the state is then `checked`. */
+  readonly role?: 'button' | 'radio';
   readonly testID?: string;
   readonly accessibilityHint?: string;
 }
@@ -19,6 +21,7 @@ export function Button({
   variant = 'secondary',
   disabled = false,
   selected,
+  role = 'button',
   testID,
   accessibilityHint,
 }: ButtonProps) {
@@ -26,10 +29,13 @@ export function Button({
   const primary = variant === 'primary' || selected === true;
   return (
     <Pressable
-      accessibilityRole="button"
+      accessibilityRole={role}
       accessibilityLabel={label}
       {...(accessibilityHint ? { accessibilityHint } : {})}
-      accessibilityState={{ disabled, ...(selected === undefined ? {} : { selected }) }}
+      accessibilityState={{
+        disabled,
+        ...(selected === undefined ? {} : role === 'radio' ? { checked: selected } : { selected }),
+      }}
       disabled={disabled}
       onPress={onPress}
       testID={testID}

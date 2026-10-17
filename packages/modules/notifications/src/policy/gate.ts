@@ -191,8 +191,14 @@ export async function runPolicyPhase(
 export interface GateState {
   caps(tx: TenantTx): Promise<Readonly<Record<CapScope, FrequencyCap>>>;
   quota(tx: TenantTx, channel: QuotaChannel): Promise<{ used: number; limit: number; resetsAt: Date }>;
-  /** Count a sent message (SMS: its segments) against the period. */
-  meter(tx: TenantTx, channel: QuotaChannel, units: number): Promise<void>;
+  /** Count a sent message (SMS: its segments) against the period; written by `flush`. */
+  meter(channel: QuotaChannel, units: number): void;
+  /**
+   * Write the counted usage, once per channel in a fixed order, at the end of the dispatch
+   * transaction: concurrent dispatchers then lock the counter rows in the same order and cannot
+   * deadlock on them (metering per message took them in whatever order messages went out).
+   */
+  flush(tx: TenantTx): Promise<void>;
 }
 
 export async function orgCapsTx(tx: TenantTx): Promise<Record<CapScope, FrequencyCap>> {
@@ -233,6 +239,7 @@ export function createGateState(orgId: string, orgTimeZone: string, now: Date): 
   let caps: Record<CapScope, FrequencyCap> | null = null;
   let limits: Record<QuotaChannel, number> | null = null;
   let usage: Record<QuotaChannel, { messages: number; units: number }> | null = null;
+  const pending = new Map<QuotaChannel, { messages: number; units: number }>();
   return {
     async caps(tx) {
       caps ??= await orgCapsTx(tx);
@@ -243,20 +250,29 @@ export function createGateState(orgId: string, orgTimeZone: string, now: Date): 
       usage ??= await usageTx(tx, period);
       return { used: usage[channel].units, limit: limits[channel], resetsAt };
     },
-    async meter(tx, channel, units) {
-      await tx
-        .insert(usageCounters)
-        .values({ orgId, period, channel, messages: 1, units })
-        .onConflictDoUpdate({
-          target: [usageCounters.orgId, usageCounters.period, usageCounters.channel],
-          set: {
-            messages: sql`${usageCounters.messages} + 1`,
-            units: sql`${usageCounters.units} + ${units}`,
-            updatedAt: now,
-          },
-        });
+    meter(channel, units) {
+      const p = pending.get(channel) ?? { messages: 0, units: 0 };
+      pending.set(channel, { messages: p.messages + 1, units: p.units + units });
       if (usage)
         usage[channel] = { messages: usage[channel].messages + 1, units: usage[channel].units + units };
+    },
+    async flush(tx) {
+      for (const channel of [...pending.keys()].sort()) {
+        const p = pending.get(channel);
+        if (!p) continue;
+        await tx
+          .insert(usageCounters)
+          .values({ orgId, period, channel, messages: p.messages, units: p.units })
+          .onConflictDoUpdate({
+            target: [usageCounters.orgId, usageCounters.period, usageCounters.channel],
+            set: {
+              messages: sql`${usageCounters.messages} + ${p.messages}`,
+              units: sql`${usageCounters.units} + ${p.units}`,
+              updatedAt: now,
+            },
+          });
+      }
+      pending.clear();
     },
   };
 }

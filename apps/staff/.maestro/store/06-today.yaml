@@ -1,0 +1,16 @@
+# Store screenshot 06-today for Yayatoh Staff (M7.5a). Written, not run in cloud sessions; `store/capture.sh`
+# runs it on a simulator or emulator against a preview build, with the seeded reviewer demo
+# (`pnpm reviewer-demo`, which prints ENROL_EVENT, ENROL_KEY, TICKET_CODE and HOLDER_NAME).
+# Env: SHOT_DIR (where the PNG goes), ENROL_EVENT, ENROL_KEY, TICKET_CODE, HOLDER_NAME.
+appId: com.yayatoh.staff.preview
+env:
+  SHOT_DIR: ./store/screenshots/manual
+  ENROL_EVENT: ''
+  ENROL_KEY: ''
+  TICKET_CODE: ''
+  HOLDER_NAME: ''
+---
+- runFlow: ../scan-setup.yaml
+- openLink: yayatoh-staff-preview://tools/today
+- assertVisible: 'Checked in'
+- takeScreenshot: ${SHOT_DIR}/06-today

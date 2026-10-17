@@ -1,0 +1,37 @@
+# Journey: assistance queue — the door device raises a help request, sees it in the queue, takes it, starts
+#   it and resolves it; the queue is then empty.
+# Preconditions: an enrolled device (enrol-by-link.yaml) whose event has help requests switched on.
+# Personas: none (a door device).
+appId: com.yayatoh.staff.preview
+---
+- openLink: yayatoh-staff-preview://tools/assistance
+- extendedWaitUntil:
+    visible: 'No open requests|Request #.*'
+    timeout: 30000
+# Ask for help (the form is below the queue): a reason is required.
+- scrollUntilVisible:
+    element:
+      id: raise-send
+- tapOn:
+    id: raise-send
+- assertVisible: 'Choose what you need.'
+- tapOn:
+    id: raise-device
+- tapOn:
+    id: raise-send
+- extendedWaitUntil:
+    visible: 'Request #.* sent.'
+    timeout: 30000
+# Work the request (it is at the top of the queue): take, start, resolve.
+- scrollUntilVisible:
+    element: 'Take request .*'
+    direction: UP
+- tapOn: 'Take request .*'
+- extendedWaitUntil:
+    visible: 'Taken by this device'
+    timeout: 30000
+- tapOn: 'Start request .*'
+- tapOn: 'Resolve request .*'
+- extendedWaitUntil:
+    visible: 'No open requests'
+    timeout: 30000

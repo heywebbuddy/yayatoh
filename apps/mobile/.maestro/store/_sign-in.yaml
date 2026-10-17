@@ -1,0 +1,18 @@
+# Signs in as the reviewer demo attendee (created by `pnpm reviewer-demo`) with its fixed email code.
+# The code is fixed only on a non-production server that sets REVIEWER_DEMO_CODE; production never
+# accepts it. Written, not run in cloud sessions (no simulator): the device pass runs it.
+# Env: REVIEW_DEMO_EMAIL, REVIEW_DEMO_CODE.
+appId: com.yayatoh.yayatohapp.preview
+env:
+  REVIEW_DEMO_EMAIL: ''
+  REVIEW_DEMO_CODE: ''
+---
+- tapOn: 'Continue with email'
+- tapOn:
+    id: 'email-input'
+- inputText: ${REVIEW_DEMO_EMAIL}
+- tapOn: 'Send me a code'
+- tapOn:
+    id: 'code-input'
+- inputText: ${REVIEW_DEMO_CODE}
+- assertVisible: 'Tickets, tab, 1 of 3'

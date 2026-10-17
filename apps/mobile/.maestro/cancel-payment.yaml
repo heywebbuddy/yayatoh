@@ -1,23 +1,24 @@
-# Close the payment page without paying: back on the event's checkout with the selection intact, then
-# pay again. The same idempotency key is replayed, so there is one order, not two.
-appId: com.yayatoh.yayatohapp.dev
-env:
-  EMAIL: nia@newcomer.test
-  PASSWORD: persona-dev-password
-  EVENT_NAME: Harbor Spring Concert
+# Journey: cancel payment — closing the payment page returns to the checkout with the selection intact, and
+#   paying again makes one order, not two.
+# Preconditions: as search-and-buy.yaml. On iOS the secure browser's own Cancel button closes the page; on
+#   Android the system back button does.
+# Personas: a throwaway buyer; the event comes from scripts/new-event.js.
+appId: com.yayatoh.yayatohapp.preview
 ---
-- launchApp:
-    clearState: true
-- runFlow: subflows/sign-in.yaml
-- openLink: yayatoh-dev://events/harbor-spring-concert
-- assertVisible: ${EVENT_NAME}
+- runFlow: subflows/prelude-signed-in.yaml
+- openLink: yayatoh-preview://events/${output.eventSlug}
+- extendedWaitUntil:
+    visible: '.*${output.eventName}.*'
+    timeout: 30000
 - scrollUntilVisible:
-    element: 'Add one General admission'
-- tapOn: 'Add one General admission'
+    element: 'Add one Supporter'
+- tapOn: 'Add one Supporter'
 - tapOn: 'Continue to checkout'
 - tapOn:
     text: 'Pay .*'
-- assertVisible: 'Pay for your order'
+- extendedWaitUntil:
+    visible: 'Pay for your order'
+    timeout: 30000
 # Leave the payment page: the system sheet's Cancel on iOS, the back button on Android.
 - runFlow:
     when:
@@ -29,16 +30,19 @@ env:
       platform: Android
     commands:
       - back
-- assertVisible:
-    text: 'Payment not completed'
+- extendedWaitUntil:
+    visible: 'Payment not completed'
     timeout: 20000
-- assertVisible: '1 × General admission'
+- assertVisible: '1 × Supporter'
 - assertVisible: 'Nothing was charged. Your tickets are still selected, so you can pay again.'
 - tapOn: 'Pay again'
-- assertVisible: 'Pay for your order'
-- tapOn: 'Pay now (test)'
-- assertVisible:
-    text: "You're going!"
+- extendedWaitUntil:
+    visible: 'Pay for your order'
     timeout: 30000
-# One order, however many times the payment page was opened.
+- tapOn: 'Pay now (test)'
+- extendedWaitUntil:
+    visible: "You're going!"
+    timeout: 30000
+# One order, however many times the payment page was opened: the confirmation shows one line.
+- assertVisible: '1 × Supporter'
 - tapOn: 'View my tickets'

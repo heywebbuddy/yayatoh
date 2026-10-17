@@ -19,6 +19,7 @@ import {
 import { useTranslations } from 'use-intl';
 import { px, radius, space, useColors } from '../../theme';
 import { CameraGate, type CameraPermission } from './camera-gate';
+import { Button } from './controls';
 
 /** Module-level so the output is made once (the hook re-creates it when this array changes). */
 const QR_ONLY: ScannedObjectType[] = ['qr'];
@@ -85,17 +86,14 @@ function Preview({ active, torch, height, onCode, onTorchSupport, onTypeCode }: 
   if (!device) {
     return (
       <View
-        style={[styles.empty, { height, backgroundColor: colors.surfaceSolid, borderColor: colors.line }]}
+        style={[
+          styles.empty,
+          { minHeight: height, backgroundColor: colors.surfaceSolid, borderColor: colors.line },
+        ]}
         testID="camera-unavailable"
       >
         <Text style={[styles.emptyText, { color: colors.ink2 }]}>{t('unavailable')}</Text>
-        <Text
-          accessibilityRole="button"
-          onPress={onTypeCode}
-          style={[styles.link, { color: colors.primaryInk }]}
-        >
-          {t('typeCode')}
-        </Text>
+        <Button label={t('typeCode')} onPress={onTypeCode} testID="camera-unavailable-type-code" />
       </View>
     );
   }
@@ -137,5 +135,4 @@ const styles = StyleSheet.create({
     gap: space[3],
   },
   emptyText: { fontSize: 17, textAlign: 'auto' },
-  link: { fontSize: 17, fontWeight: '700', textAlign: 'auto', minHeight: 44, textAlignVertical: 'center' },
 });

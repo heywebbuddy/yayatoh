@@ -1,0 +1,35 @@
+# Journey: calendar and directions — the ticket's "Add to calendar" opens the phone's calendar form (asking
+#   for write-only access first on iOS) and "Directions" opens a maps app; coming back, the app shows none of
+#   its failure messages.
+# Preconditions: as subflows/prelude-ticket.yaml, on a system image with a calendar and a maps app (the
+#   Android emulator image must be a Google APIs one). Both hand off to system UI that differs by OS version,
+#   so this runs in the device pass and the hand-offs are checked by eye.
+# Personas: a throwaway buyer holding one free ticket. The test event has no venue address, so Directions may
+#   be disabled; the flow then only checks the calendar half.
+appId: com.yayatoh.yayatohapp.preview
+---
+- runFlow: subflows/prelude-ticket.yaml
+- tapOn:
+    text: 'Free entry for ${output.eventName}.*'
+- scrollUntilVisible:
+    element: 'Add to calendar'
+- tapOn: 'Add to calendar'
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn:
+          text: 'Allow Full Access|Add Only|OK|Allow'
+          optional: true
+- launchApp:
+    stopApp: false
+- assertNotVisible: 'We couldn’t open your calendar.'
+- assertNotVisible: 'Calendar access is off.*'
+- runFlow:
+    when:
+      visible: 'Directions'
+    commands:
+      - tapOn: 'Directions'
+      - launchApp:
+          stopApp: false
+      - assertNotVisible: 'We couldn’t open a maps app.'

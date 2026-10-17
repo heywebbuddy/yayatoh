@@ -178,6 +178,7 @@ export function RefundPanel({ order }: { order: Order }) {
             error={fieldError === 'messageTooLong' ? t('refund.messageTooLong') : null}
             multiline
             numberOfLines={3}
+            autoComplete="off"
             maxLength={1100}
             testID="refund-message"
           />

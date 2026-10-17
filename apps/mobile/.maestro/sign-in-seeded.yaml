@@ -1,9 +1,0 @@
-# A sub-flow: sign in as the seeded attendee with the fixed development email code.
-appId: ${APP_ID}
----
-- tapOn: "Continue with email"
-- tapOn: "Email"
-- inputText: ${PERSONA_EMAIL}
-- tapOn: "Send code"
-- inputText: ${PERSONA_CODE}
-- assertVisible: "Tickets"

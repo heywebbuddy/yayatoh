@@ -122,6 +122,7 @@ export function DiscoverScreen() {
         value={text}
         onChangeText={setText}
         returnKeyType="search"
+        autoComplete="off"
         autoCapitalize="none"
         autoCorrect={false}
         clearButtonMode="while-editing"
@@ -193,6 +194,7 @@ export function DiscoverScreen() {
             value={fromText}
             onChangeText={(v) => applyTyped(v, toText)}
             keyboardType="numbers-and-punctuation"
+            autoComplete="off"
             autoCapitalize="none"
             maxLength={10}
             error={errors.includes('from_format') ? t('dateError.from_format') : null}
@@ -204,6 +206,7 @@ export function DiscoverScreen() {
             value={toText}
             onChangeText={(v) => applyTyped(fromText, v)}
             keyboardType="numbers-and-punctuation"
+            autoComplete="off"
             autoCapitalize="none"
             maxLength={10}
             error={

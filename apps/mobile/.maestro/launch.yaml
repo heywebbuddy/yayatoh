@@ -1,9 +1,11 @@
-# Smoke flow (M7.1b, updated in M7.3a): a signed-out preview build opens on the welcome screen. Written, not run in
-# cloud sessions (no simulator); the device pass runs it with `maestro test apps/mobile/.maestro`
-# against a preview build (a development build opens the dev launcher first).
+# Journey: launch smoke — a signed-out fresh install opens on the welcome screen with its sign-in choices.
+# Preconditions: an e2e build (APP_ENV=preview) pointed at any reachable server; no sign-in needed.
+#   A development build opens the dev launcher first, so this does not run against one.
+# Personas: none.
 appId: com.yayatoh.yayatohapp.preview
 ---
 - launchApp:
     clearState: true
 - assertVisible: 'Welcome to Yayatoh'
 - assertVisible: 'Continue with email'
+- assertVisible: 'Use a password'

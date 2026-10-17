@@ -1,12 +1,16 @@
-# Offline drill (X), phone B (M7.4b): see offline-drill-phone-a.yaml. B admits the same ticket a
-# little after A, reconnects after A, and must show the duplicate within 60 s of reconnecting.
+# Journey: offline drill, phone B (X) — see offline-drill-phone-a.yaml. B admits the same ticket a little
+#   after A, reconnects after A, and must show the duplicate within 60 s of reconnecting.
+# Preconditions: as offline-drill-phone-a.yaml (B's own ENROL_KEY, the same ENROL_EVENT and TICKET_CODE).
+# Personas: none (door devices).
 appId: com.yayatoh.staff.preview
+env:
+  TICKET_CODE: ''
 ---
 - runFlow: scan-setup.yaml
 - setAirplaneMode: enabled
-# (Maestro has no sleep: waiting for text that never shows, as optional, waits out the timeout.)
+# A scans first. (Maestro has no sleep: waiting for text that never shows, as optional, holds this phone.)
 - extendedWaitUntil:
-    visible: 'ThisNeverShows'
+    visible: 'DRILL_PAUSE'
     timeout: 20000
     optional: true
 - tapOn:
@@ -19,9 +23,8 @@ appId: com.yayatoh.staff.preview
 - assertVisible: 'Admit'
 - assertVisible: '1 scan waiting to send'
 # A reconnects at about +30 s; B follows at +40 s.
-# (Maestro has no sleep: waiting for text that never shows, as optional, waits out the timeout.)
 - extendedWaitUntil:
-    visible: 'ThisNeverShows'
+    visible: 'DRILL_PAUSE'
     timeout: 20000
     optional: true
 - setAirplaneMode: disabled

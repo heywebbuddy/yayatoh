@@ -1,0 +1,24 @@
+# Journey: revoke — an organizer revokes the device from the console; within one heartbeat the app returns to
+#   the enrolment screen and says an organizer removed it from the event, and the old key is refused.
+# Preconditions: as remote-wipe.yaml, but the organizer clicks "Revoke" on the device.
+# Personas: none (a door device); the organizer acts in the console.
+appId: com.yayatoh.staff.preview
+env:
+  ENROL_EVENT: ''
+  ENROL_KEY: ''
+---
+- launchApp:
+    clearState: true
+- openLink: 'yayatoh-staff-preview://scan#e=${ENROL_EVENT}&k=${ENROL_KEY}'
+- extendedWaitUntil:
+    visible: 'Where is this device scanning?'
+    timeout: 30000
+- tapOn: 'Whole event.*'
+# Now the organizer revokes the device. One heartbeat is 30 seconds; allow two.
+- extendedWaitUntil:
+    visible: 'An organizer removed this device from the event.*'
+    timeout: 70000
+- assertVisible: 'Enrol this device'
+- stopApp
+- launchApp
+- assertVisible: 'Enrol this device'

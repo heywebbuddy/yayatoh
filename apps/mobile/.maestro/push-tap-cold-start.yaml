@@ -1,49 +1,94 @@
-# Device pass. Each push type opens its screen from a closed app. Needs the iOS simulator and send-push.sh.
-appId: ${APP_ID}
+# Journey: push tap, cold start — each push type opens its screen from a closed app.
+# Preconditions: a booted iOS simulator (xcrun simctl push; Android has no equivalent, its pushes come from
+#   the owner's FCM project), a build with notifications allowed, and the ids of a ticket, an order and an
+#   event of the signed-in account passed as -e TICKET_ID=... -e ORDER_ID=... -e EVENT_SLUG=....
+#   Where a step says "send it now", run `.maestro/send-push.sh <name>` from a second terminal
+#   (APP_ID=com.yayatoh.yayatohapp.preview plus the same ids in the environment); Maestro cannot send a push.
+# Personas: a throwaway buyer who holds that ticket (any account with a ticket works).
+appId: com.yayatoh.yayatohapp.preview
 env:
-  EVENT_SLUG: summit
+  EVENT_TITLE: Summit 2026
 ---
 - launchApp:
     clearState: true
-    permissions: { notifications: allow }
-- runFlow: sign-in-seeded.yaml
+    permissions:
+      notifications: allow
+- runScript:
+    file: scripts/new-user.js
+- runFlow:
+    file: subflows/sign-in.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${output.password}
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh order-confirmed
-- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
-- tapOn: "Summit 2026"
-- assertVisible: "Order"
+- extendedWaitUntil:
+    visible: ${EVENT_TITLE}
+    timeout: 60000
+- tapOn: ${EVENT_TITLE}
+- extendedWaitUntil:
+    visible: "You're going!|Order .*"
+    timeout: 30000
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh ticket-received
-- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
-- tapOn: "Summit 2026"
-- assertVisible: "Ticket QR code"
+- extendedWaitUntil:
+    visible: ${EVENT_TITLE}
+    timeout: 60000
+- tapOn: ${EVENT_TITLE}
+- extendedWaitUntil:
+    visible: 'Ticket QR code for .*'
+    timeout: 30000
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh transfer-accepted
-- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
-- tapOn: "Summit 2026"
-- assertVisible: "Order"
+- extendedWaitUntil:
+    visible: ${EVENT_TITLE}
+    timeout: 60000
+- tapOn: ${EVENT_TITLE}
+- extendedWaitUntil:
+    visible: "You're going!|Order .*"
+    timeout: 30000
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh transfer-cancelled
-- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
-- tapOn: "Summit 2026"
-- assertVisible: "Ticket QR code"
+- extendedWaitUntil:
+    visible: ${EVENT_TITLE}
+    timeout: 60000
+- tapOn: ${EVENT_TITLE}
+- extendedWaitUntil:
+    visible: 'Ticket QR code for .*'
+    timeout: 30000
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh event-changed
-- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
-- tapOn: "Summit 2026"
-- assertVisible: "Summit"
+- extendedWaitUntil:
+    visible: ${EVENT_TITLE}
+    timeout: 60000
+- tapOn: ${EVENT_TITLE}
+- extendedWaitUntil:
+    visible: 'About this event|Tickets'
+    timeout: 30000
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh event-cancelled
-- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
-- tapOn: "Summit 2026"
-- assertVisible: "Summit"
+- extendedWaitUntil:
+    visible: ${EVENT_TITLE}
+    timeout: 60000
+- tapOn: ${EVENT_TITLE}
+- extendedWaitUntil:
+    visible: 'This event was cancelled.|About this event|Tickets'
+    timeout: 30000
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh reminder-24h
-- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
-- tapOn: "Summit 2026"
-- assertVisible: "Ticket QR code"
+- extendedWaitUntil:
+    visible: ${EVENT_TITLE}
+    timeout: 60000
+- tapOn: ${EVENT_TITLE}
+- extendedWaitUntil:
+    visible: 'Ticket QR code for .*'
+    timeout: 30000
 - stopApp
 # Send it now from a second terminal: .maestro/send-push.sh reminder-2h
-- extendedWaitUntil: { visible: "Summit 2026", timeout: 60000 }
-- tapOn: "Summit 2026"
-- assertVisible: "Ticket QR code"
+- extendedWaitUntil:
+    visible: ${EVENT_TITLE}
+    timeout: 60000
+- tapOn: ${EVENT_TITLE}
+- extendedWaitUntil:
+    visible: 'Ticket QR code for .*'
+    timeout: 30000

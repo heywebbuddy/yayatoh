@@ -1,33 +1,43 @@
-# M7.4a: an organizer signs in with email, password and an authenticator code (two-step verification
-# is required). Written, not run in cloud sessions. Device pass: a seeded organizer with TOTP:
-#   maestro test -e EMAIL=omar@yayatoh.test -e PASSWORD=... -e CODE=<current 6-digit code> ...
+# Journey: organizer sign-in with an authenticator code — email and password, then the second step; a wrong
+#   email shape and a wrong code are refused with their messages, the current code from the authenticator
+#   (scripts/totp.js, from the account's setup key) signs in, and the app opens the door tools.
+# Preconditions: an e2e build pointed (API_BASE_URL) at a server with YAYATOH_DEV_AUTH=1; -e DEV_SERVER=<origin>
+#   and -e DEV_PERSONA_PASSWORD=<the server's value> (or the MAESTRO_ prefixed environment variables).
+# Personas: a throwaway organizer with two-step verification on (scripts/new-organizer.js).
 appId: com.yayatoh.staff.preview
-env:
-  EMAIL: ''
-  PASSWORD: ''
-  CODE: ''
 ---
 - launchApp:
     clearState: true
+- runScript:
+    file: scripts/new-organizer.js
 - tapOn: 'Event organizer: sign in'
 - assertVisible: 'Organizer sign-in'
-# Validation first: an address that is not one, then no password.
+# Validation first: an address that is not one.
 - tapOn: 'Email address'
 - inputText: 'not an email'
 - tapOn: 'Continue'
 - assertVisible: 'Enter a valid email address.'
-- clearState
-- launchApp
-- tapOn: 'Event organizer: sign in'
-- tapOn: 'Email address'
-- inputText: '${EMAIL}'
+- eraseText: 20
+- inputText: ${output.email}
 - tapOn: 'Password'
-- inputText: '${PASSWORD}'
+- inputText: ${output.password}
 - tapOn: 'Continue'
-- assertVisible: 'Enter the code from your authenticator app.*'
+- extendedWaitUntil:
+    visible: 'Enter the code from your authenticator app.*'
+    timeout: 20000
+# A wrong code is refused; the right one signs in.
 - tapOn: 'Verification code'
-- inputText: '${CODE}'
+- inputText: '000000'
+- tapOn: 'Verify and sign in'
+- assertVisible: 'That code is not right.*'
+- runScript:
+    file: scripts/totp.js
+    env:
+      SETUP_KEY: ${output.setupKey}
+- tapOn: 'Verification code'
+- eraseText: 6
+- inputText: ${output.totp}
 - tapOn: 'Verify and sign in'
 - extendedWaitUntil:
-    notVisible: 'Organizer sign-in'
-    timeout: 15000
+    visible: 'Door tools'
+    timeout: 30000

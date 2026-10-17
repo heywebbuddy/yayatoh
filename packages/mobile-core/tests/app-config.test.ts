@@ -8,6 +8,7 @@ import {
   PRODUCTION_API_BASE_URL,
   resolveApiBaseUrl,
   resolveAppEnv,
+  USES_NON_EXEMPT_ENCRYPTION,
 } from '../src/app-config';
 
 const base = {
@@ -132,6 +133,25 @@ describe('link domains', () => {
     const data = [filter?.data ?? []].flat();
     expect(data.map((d) => d.host)).toEqual(['yayatoh.com', 'app.yayatoh.com', '*.yayatoh.events']);
     expect(data.every((d) => d.scheme === 'https')).toBe(true);
+  });
+});
+
+describe('backups (M7.x security review)', () => {
+  it('keeps tokens, the ticket cache and the guest list out of cloud and device-to-device backups', () => {
+    for (const env of ['development', 'preview', 'production']) {
+      expect(mobile({ APP_ENV: env }).android?.allowBackup).toBe(false);
+      expect(staff({ APP_ENV: env }).android?.allowBackup).toBe(false);
+    }
+  });
+
+  it('allows plain-http API traffic in development builds only, and never on a shipping build', () => {
+    expect(() => mobile({ APP_ENV: 'production', API_BASE_URL: 'http://example.test/api/v1' })).toThrow(
+      /https/,
+    );
+    expect(() => staff({ APP_ENV: 'preview', API_BASE_URL: 'http://example.test/api/v1' })).toThrow(/https/);
+    const plugins = (c: ReturnType<typeof mobile>) => JSON.stringify(c.plugins);
+    expect(plugins(mobile({ APP_ENV: 'production' }))).not.toContain('usesCleartextTraffic');
+    expect(plugins(staff({ APP_ENV: 'preview' }))).not.toContain('usesCleartextTraffic');
   });
 });
 
@@ -309,5 +329,25 @@ describe('sign-in configuration (M7.1c)', () => {
     // Sign-in adds none: the attendee app's only string is the "near me" location one (M7.3c).
     expect(keys(mobile())).toEqual(['NSLocationWhenInUseUsageDescription']);
     expect(keys(staff())).toEqual(['NSCameraUsageDescription']);
+  });
+});
+
+describe('export compliance (M7.5a)', () => {
+  it('declares standard encryption beyond the operating system in both apps, in every environment', () => {
+    expect(USES_NON_EXEMPT_ENCRYPTION).toBe(true);
+    for (const APP_ENV of ['development', 'preview', 'production']) {
+      expect(mobile({ APP_ENV }).ios?.config?.usesNonExemptEncryption).toBe(true);
+      expect(staff({ APP_ENV }).ios?.config?.usesNonExemptEncryption).toBe(true);
+    }
+  });
+
+  it('adds the export-compliance code only when the owner sets it', () => {
+    expect(mobile().ios?.infoPlist).not.toHaveProperty('ITSEncryptionExportComplianceCode');
+    expect(mobile({ IOS_ENCRYPTION_COMPLIANCE_CODE: '  ' }).ios?.infoPlist).not.toHaveProperty(
+      'ITSEncryptionExportComplianceCode',
+    );
+    expect(
+      staff({ IOS_ENCRYPTION_COMPLIANCE_CODE: 'abc-123' }).ios?.infoPlist?.ITSEncryptionExportComplianceCode,
+    ).toBe('abc-123');
   });
 });

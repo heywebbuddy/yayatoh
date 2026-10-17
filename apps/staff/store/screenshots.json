@@ -1,0 +1,98 @@
+{
+  "app": "staff",
+  "$comment": "Screenshot plan (M7.5a). `store/capture.sh` runs each screen's Maestro flow on each device in light and dark and saves PNGs to the layout below; `store-kit shots` checks the folder. Nothing runs in a cloud session (no simulator): this is the device pass.",
+  "outputLayout": "apps/staff/store/screenshots/<platform>/<locale>/<device>/<theme>/<order>-<screen>.png",
+  "themes": ["light", "dark"],
+  "locales": ["en"],
+  "otherLocales": "Capture the other 12 locales after English by choosing the language in Account > Language (attendee app) or the phone language (Staff), then re-run capture.sh --locale <code>. Store captions are not baked into the PNGs.",
+  "devices": [
+    {
+      "id": "iphone-6.9",
+      "platform": "ios",
+      "store": "App Store",
+      "width": 1320,
+      "height": 2868,
+      "required": true,
+      "simulator": "iPhone 17 Pro Max",
+      "note": "6.9-inch set; App Store Connect scales it down for smaller iPhones"
+    },
+    {
+      "id": "iphone-6.5",
+      "platform": "ios",
+      "store": "App Store",
+      "width": 1284,
+      "height": 2778,
+      "required": false,
+      "simulator": "iPhone 14 Plus",
+      "note": "Only if the 6.9-inch set is not used"
+    },
+    {
+      "id": "ipad-13",
+      "platform": "ios",
+      "store": "App Store",
+      "width": 2064,
+      "height": 2752,
+      "required": true,
+      "simulator": "iPad Pro 13-inch (M5)",
+      "note": "Required because the app runs on iPad (supportsTablet)"
+    },
+    {
+      "id": "android-phone",
+      "platform": "android",
+      "store": "Google Play",
+      "width": 1080,
+      "height": 1920,
+      "required": true,
+      "emulator": "Pixel_8_API_35",
+      "note": "Phone set, 9:16"
+    },
+    {
+      "id": "android-tablet-10",
+      "platform": "android",
+      "store": "Google Play",
+      "width": 1600,
+      "height": 2560,
+      "required": false,
+      "emulator": "Pixel_Tablet_API_35",
+      "note": "Optional 10-inch tablet set; lifts the tablet ranking"
+    }
+  ],
+  "screens": [
+    {
+      "id": "enrol",
+      "flow": ".maestro/store/01-enrol.yaml",
+      "devices": ["iphone-6.9", "android-phone", "ipad-13", "android-tablet-10"],
+      "caption": "Enrol a door device in seconds"
+    },
+    {
+      "id": "checkpoint",
+      "flow": ".maestro/store/02-checkpoint.yaml",
+      "devices": ["iphone-6.9", "android-phone", "ipad-13", "android-tablet-10"],
+      "caption": "Choose the entrance"
+    },
+    {
+      "id": "scan-ready",
+      "flow": ".maestro/store/03-scan-ready.yaml",
+      "devices": ["iphone-6.9", "android-phone", "ipad-13", "android-tablet-10"],
+      "caption": "Ready to scan"
+    },
+    {
+      "id": "verdict",
+      "flow": ".maestro/store/04-verdict.yaml",
+      "devices": ["iphone-6.9", "android-phone", "ipad-13", "android-tablet-10"],
+      "caption": "A clear result in words, sound and vibration"
+    },
+    {
+      "id": "lookup",
+      "flow": ".maestro/store/05-lookup.yaml",
+      "devices": ["iphone-6.9", "android-phone", "ipad-13", "android-tablet-10"],
+      "caption": "Find a guest by name, phone or email"
+    },
+    {
+      "id": "today",
+      "flow": ".maestro/store/06-today.yaml",
+      "devices": ["iphone-6.9", "android-phone", "ipad-13", "android-tablet-10"],
+      "caption": "Today's numbers and alerts"
+    }
+  ]
+}

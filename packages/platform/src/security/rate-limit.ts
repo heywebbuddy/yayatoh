@@ -216,6 +216,34 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 5, windowMs: 15 * MIN },
     ipCeiling: { limit: 100, windowMs: 10 * MIN },
   },
+  /**
+   * M7.x: the apps' emailed sign-in codes (`POST /v1/auth/email-code`). A phone has no device
+   * cookie, so the tight limit is the address under attack, counted across every server instance;
+   * the per-IP budgets are generous because a venue's Wi-Fi or a carrier shares one address.
+   */
+  appEmailCode: {
+    device: { limit: 5, windowMs: 10 * MIN },
+    anonymousIp: { limit: 600, windowMs: 10 * MIN },
+    identity: { limit: 5, windowMs: 15 * MIN },
+    ipCeiling: { limit: 1200, windowMs: 10 * MIN },
+  },
+  /**
+   * M7.x: the apps' code and challenge checks (`email_code`, `two_factor` and `link_proof` grants);
+   * identity = the address, or the challenge. Each code also locks after a few wrong tries.
+   */
+  appSignInVerify: {
+    device: { limit: 30, windowMs: 10 * MIN },
+    anonymousIp: { limit: 600, windowMs: 10 * MIN },
+    identity: { limit: 10, windowMs: 15 * MIN },
+    ipCeiling: { limit: 1200, windowMs: 10 * MIN },
+  },
+  /** M7.x: the emailed step-up code (`POST /v1/auth/step-up/start`); identity = the signed-in person. */
+  appStepUpMail: {
+    device: { limit: 5, windowMs: 15 * MIN },
+    anonymousIp: { limit: 60, windowMs: 15 * MIN },
+    identity: { limit: 5, windowMs: 15 * MIN },
+    ipCeiling: { limit: 600, windowMs: 15 * MIN },
+  },
   /** Guest email codes (M1.5f: checkout verification, "My tickets" sign-in, seat finder). Each one
    * sends an email: per device, per destination address, and a generous shared-IP ceiling. */
   guestCode: {

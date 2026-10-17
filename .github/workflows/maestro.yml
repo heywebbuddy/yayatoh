@@ -1,0 +1,78 @@
+name: Maestro
+
+# M7.x: the Maestro flows of both apps run on EAS Workflows (.eas/workflows/maestro-*.yml). Nothing here
+# builds or runs a flow itself; it starts the EAS workflow and waits for its result.
+#
+# Without the EXPO_TOKEN secret (a fork pull request never has it, and the owner adds it later: docs/owner-inbox.md)
+# the `gate` job says so in a notice and in the run summary, the `maestro` job is skipped, and the run is green.
+# The secret is read into one environment variable in two places and never echoed.
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: maestro-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: gate (is EXPO_TOKEN set?)
+    runs-on: ubuntu-latest
+    outputs:
+      has_token: ${{ steps.token.outputs.has_token }}
+    steps:
+      - id: token
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          if [ -n "$EXPO_TOKEN" ]; then
+            echo "has_token=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_token=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Maestro on EAS skipped::Maestro on EAS skipped: EXPO_TOKEN is not set (owner: add it as a GitHub secret; see docs/specs/M7.X/maestro.md)"
+            {
+              echo "### Maestro on EAS: skipped"
+              echo
+              echo "The \`EXPO_TOKEN\` secret is not set (this is also the case for pull requests from forks), so no EAS workflow was started and nothing failed."
+              echo
+              echo "Owner: add \`EXPO_TOKEN\` under Settings, Secrets and variables, Actions. See \`docs/specs/M7.X/maestro.md\` and \`docs/owner-inbox.md\`."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  maestro:
+    name: maestro · ${{ matrix.app }} (EAS)
+    needs: gate
+    if: needs.gate.outputs.has_token == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [mobile, staff]
+    env:
+      EXPO_NO_TELEMETRY: '1'
+      APP_ENV: preview
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Cheap and offline: a flow that is not in the manifest never reaches the paid run.
+      - name: Maestro flow inventory
+        run: node tools/check-maestro/cli.ts --app ${{ matrix.app }}
+      # `workflow:run --wait` is UNVERIFIED offline (no EAS account was used to write this). It should start the
+      # workflow, stream its status and exit non-zero when the run fails. If the CLI rejects the flag, replace
+      # it with `workflow:run --json` followed by a loop on `eas workflow:status <id> --json`.
+      - name: Run the EAS workflow and wait for it
+        working-directory: apps/${{ matrix.app }}
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: npx --yes eas-cli@16 workflow:run ../../.eas/workflows/maestro-${{ matrix.app }}.yml --non-interactive --wait
