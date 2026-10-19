@@ -3892,7 +3892,12 @@
     "addSection": "Add section",
     "saveSection": "Save section",
     "emptyAction": "Add your first section",
-    "backToEvent": "Back to the event overview"
+    "backToEvent": "Back to the event overview",
+    "taglineLabel": "Tagline",
+    "taglineHint": "One short line shown under the event name (up to 280 characters). Leave it empty to remove it.",
+    "saveTagline": "Save tagline",
+    "taglineSaved": "Tagline saved.",
+    "taglineInvalid": "Keep the tagline to 280 characters or fewer."
   },
   "dates": {
     "title": "Dates",
@@ -4888,7 +4893,7 @@
     "outOfCredits": "This month's free AI drafts are used up. They renew on the 1st of next month; you can still write everything yourself.",
     "rateLimited": "Too many drafts in a short time. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
     "unavailableTitle": "AI drafting is not switched on",
-    "unavailableDescription": "No AI provider is configured for this site yet.",
+    "unavailableDescription": "No AI provider is configured for this site yet. You can still write the tagline above yourself, and add the description and FAQ as sections below.",
     "what": "What to draft",
     "kinds": {
       "tagline": "Tagline",
@@ -4911,7 +4916,7 @@
       "faq": "FAQ added as a section."
     },
     "errors": {
-      "ai_unavailable": "The AI service didn't answer. Your draft credit was refunded.",
+      "ai_unavailable": "The AI service didn't answer. Your draft credit was refunded. Try again later, or write it yourself on this page.",
       "ai_output": "The draft couldn't be used. Your draft credit was refunded.",
       "faqFormat": "Each question needs an answer below it, with a blank line between questions."
     },
@@ -14914,7 +14919,7 @@
       "title": "Match suggestions",
       "explainer": "Attendees who opted in see people with similar profiles. Only what they chose to show is used; people who opt out are removed at once.",
       "status": "Suggestions ready for {embedded} of {listed, plural, one {# listed person} other {# listed people}}.",
-      "unavailable": "AI is not switched on for this site, so suggestions can't be prepared.",
+      "unavailable": "AI is not switched on for this site, so attendees get suggestions from shared interests instead.",
       "refresh": "{count, plural, one {Update suggestions (# person waiting)} other {Update suggestions (# people waiting)}}",
       "upToDate": "Suggestions are up to date",
       "done": "{count, plural, =0 {Nothing to update.} one {Suggestions ready for # more person.} other {Suggestions ready for # more people.}}",
@@ -18851,7 +18856,7 @@
   "aiCompose": {
     "credits": "{balance, plural, =0 {No AI credits left} one {# AI credit left} other {# AI credits left}} this month (free allowance: {allowance}).",
     "unavailableTitle": "AI drafting is not switched on",
-    "unavailableDescription": "No AI provider is configured for this site yet.",
+    "unavailableDescription": "No AI provider is configured for this site yet. You can still do it yourself with the form on this page.",
     "outOfCreditsTitle": "You're out of AI credits",
     "outOfCredits": "This month's AI credits are used up. They renew on the 1st of next month; you can still write everything yourself.",
     "rateLimited": "Too many AI requests in a short time. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
@@ -18875,7 +18880,7 @@
     "previewTitle": "AI draft",
     "previewNote": "Check it before you use it. Nothing is saved, sent or published until you do it yourself.",
     "errors": {
-      "ai_unavailable": "AI is unavailable right now. Your credit was given back; try again later.",
+      "ai_unavailable": "AI is unavailable right now. Your credit was given back. Try again later, or do it yourself with the form on this page.",
       "ai_output": "The AI result could not be used. Your credit was given back; try different wording."
     }
   },

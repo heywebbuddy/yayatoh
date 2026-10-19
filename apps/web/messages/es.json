@@ -3892,7 +3892,12 @@
     "addSection": "Añadir sección",
     "saveSection": "Guardar sección",
     "emptyAction": "Añade tu primera sección",
-    "backToEvent": "Volver al resumen del evento"
+    "backToEvent": "Volver al resumen del evento",
+    "taglineLabel": "Eslogan",
+    "taglineHint": "Una línea breve que aparece bajo el nombre del evento (hasta 280 caracteres). Déjalo vacío para quitarlo.",
+    "saveTagline": "Guardar eslogan",
+    "taglineSaved": "Eslogan guardado.",
+    "taglineInvalid": "El eslogan debe tener 280 caracteres o menos."
   },
   "dates": {
     "title": "Fechas",
@@ -4888,7 +4893,7 @@
     "outOfCredits": "Se agotaron los borradores de IA gratuitos de este mes. Se renuevan el día 1 del mes próximo; puedes seguir escribiendo todo tú.",
     "rateLimited": "Demasiados borradores en poco tiempo. Inténtalo de nuevo en {minutes, plural, one {# minuto} other {# minutos}}.",
     "unavailableTitle": "La redacción con IA no está activada",
-    "unavailableDescription": "Todavía no hay un proveedor de IA configurado para este sitio.",
+    "unavailableDescription": "Este sitio aún no tiene un proveedor de IA configurado. Puedes escribir tú mismo el eslogan de arriba y añadir la descripción y las preguntas frecuentes como secciones más abajo.",
     "what": "Qué redactar",
     "kinds": {
       "tagline": "Eslogan",
@@ -4911,7 +4916,7 @@
       "faq": "Preguntas frecuentes añadidas como sección."
     },
     "errors": {
-      "ai_unavailable": "El servicio de IA no respondió. Se reembolsó tu crédito.",
+      "ai_unavailable": "El servicio de IA no respondió. Te devolvimos el crédito del borrador. Inténtalo más tarde o escríbelo tú mismo en esta página.",
       "ai_output": "El borrador no se pudo usar. Se reembolsó tu crédito.",
       "faqFormat": "Cada pregunta necesita una respuesta debajo, con una línea en blanco entre preguntas."
     },
@@ -14914,7 +14919,7 @@
       "title": "Sugerencias de contactos",
       "explainer": "Los asistentes que se unieron ven a personas con perfiles parecidos. Solo se usa lo que eligieron mostrar; quien se da de baja desaparece al instante.",
       "status": "Sugerencias listas para {embedded} de {listed, plural, one {# persona} other {# personas}} del directorio.",
-      "unavailable": "La IA no está activada en este sitio, así que no se pueden preparar sugerencias.",
+      "unavailable": "La IA no está activada en este sitio, así que los asistentes reciben sugerencias según los intereses que comparten.",
       "refresh": "{count, plural, one {Actualizar sugerencias (# persona en espera)} other {Actualizar sugerencias (# personas en espera)}}",
       "upToDate": "Las sugerencias están al día",
       "done": "{count, plural, =0 {Nada que actualizar.} one {Sugerencias listas para # persona más.} other {Sugerencias listas para # personas más.}}",
@@ -18851,7 +18856,7 @@
   "aiCompose": {
     "credits": "{balance, plural, =0 {No quedan créditos de IA} one {Queda # crédito de IA} other {Quedan # créditos de IA}} este mes (cupo gratuito: {allowance}).",
     "unavailableTitle": "La redacción con IA no está activada",
-    "unavailableDescription": "Este sitio aún no tiene un proveedor de IA configurado.",
+    "unavailableDescription": "Este sitio aún no tiene un proveedor de IA configurado. Puedes hacerlo tú mismo con el formulario de esta página.",
     "outOfCreditsTitle": "Te has quedado sin créditos de IA",
     "outOfCredits": "Los créditos de IA de este mes se han agotado. Se renuevan el día 1 del próximo mes; puedes seguir escribiendo todo tú.",
     "rateLimited": "Demasiadas solicitudes de IA en poco tiempo. Inténtalo de nuevo en {minutes, plural, one {# minuto} other {# minutos}}.",
@@ -18875,7 +18880,7 @@
     "previewTitle": "Borrador de IA",
     "previewNote": "Revísalo antes de usarlo. Nada se guarda, envía ni publica hasta que lo hagas tú.",
     "errors": {
-      "ai_unavailable": "La IA no está disponible ahora. Te devolvimos el crédito; inténtalo más tarde.",
+      "ai_unavailable": "La IA no está disponible ahora. Te devolvimos el crédito. Inténtalo más tarde o hazlo tú mismo con el formulario de esta página.",
       "ai_output": "No se pudo usar el resultado de la IA. Te devolvimos el crédito; prueba con otras palabras."
     }
   },

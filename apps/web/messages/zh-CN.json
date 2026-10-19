@@ -3892,7 +3892,12 @@
     "addSection": "添加板块",
     "saveSection": "保存板块",
     "emptyAction": "添加第一个板块",
-    "backToEvent": "返回活动概览"
+    "backToEvent": "返回活动概览",
+    "taglineLabel": "标语",
+    "taglineHint": "显示在活动名称下方的一行短文字（最多 280 个字符）。留空即可删除。",
+    "saveTagline": "保存标语",
+    "taglineSaved": "标语已保存。",
+    "taglineInvalid": "标语不能超过 280 个字符。"
   },
   "dates": {
     "title": "场次",
@@ -4888,7 +4893,7 @@
     "outOfCredits": "本月的免费 AI 草稿次数已用完,将于下月 1 日恢复;你仍可以自己撰写所有内容。",
     "rateLimited": "短时间内草稿过多。请在 {minutes, plural, other {# 分钟}}后重试。",
     "unavailableTitle": "AI 起草未开启",
-    "unavailableDescription": "此网站尚未配置 AI 服务商。",
+    "unavailableDescription": "本站点尚未配置 AI 服务。你仍可以在上方自行填写标语，并在下方以版块形式添加介绍和常见问题。",
     "what": "要起草的内容",
     "kinds": {
       "tagline": "标语",
@@ -4911,7 +4916,7 @@
       "faq": "常见问题已作为版块添加。"
     },
     "errors": {
-      "ai_unavailable": "AI 服务没有响应。已退还你的次数。",
+      "ai_unavailable": "AI 服务没有响应。草稿额度已退还。请稍后重试，或在本页自行撰写。",
       "ai_output": "草稿无法使用。已退还你的次数。",
       "faqFormat": "每个问题下方都需要答案,问题之间空一行。"
     },
@@ -14914,7 +14919,7 @@
       "title": "配对推荐",
       "explainer": "加入社交功能的参会者会看到资料相近的人。只使用他们选择公开的内容;退出的人会立即被移除。",
       "status": "目录中 {listed, plural, other {# 人}}里已有 {embedded} 人的推荐准备就绪。",
-      "unavailable": "此站点未开启 AI,无法准备推荐。",
+      "unavailable": "本站点未开启 AI，因此参会者会收到基于共同兴趣的推荐。",
       "refresh": "{count, plural, other {更新推荐(# 人等待中)}}",
       "upToDate": "推荐已是最新",
       "done": "{count, plural, =0 {没有需要更新的内容。} other {又为 # 人准备好了推荐。}}",
@@ -18851,7 +18856,7 @@
   "aiCompose": {
     "credits": "本月剩余 AI 额度:{balance, plural, =0 {无} other {#}}(免费额度:{allowance})。",
     "unavailableTitle": "AI 起草未开启",
-    "unavailableDescription": "此站点尚未配置 AI 服务商。",
+    "unavailableDescription": "本站点尚未配置 AI 服务。你仍可以使用本页的表单自行完成。",
     "outOfCreditsTitle": "AI 额度已用完",
     "outOfCredits": "本月的 AI 额度已用完,将于下月 1 日恢复;你仍可以自己撰写所有内容。",
     "rateLimited": "短时间内 AI 请求过多。请在 {minutes, plural, other {# 分钟}}后重试。",
@@ -18875,7 +18880,7 @@
     "previewTitle": "AI 草稿",
     "previewNote": "使用前请检查。在你亲自操作之前,不会保存、发送或发布任何内容。",
     "errors": {
-      "ai_unavailable": "AI 暂时不可用。额度已退还,请稍后再试。",
+      "ai_unavailable": "AI 暂时不可用。额度已退还。请稍后重试，或使用本页的表单自行完成。",
       "ai_output": "无法使用 AI 的结果。额度已退还,请换个说法再试。"
     }
   },

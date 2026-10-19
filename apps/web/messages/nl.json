@@ -3892,7 +3892,12 @@
     "addSection": "Sectie toevoegen",
     "saveSection": "Sectie opslaan",
     "emptyAction": "Voeg je eerste sectie toe",
-    "backToEvent": "Terug naar het evenementoverzicht"
+    "backToEvent": "Terug naar het evenementoverzicht",
+    "taglineLabel": "Slogan",
+    "taglineHint": "Eén korte regel onder de naam van het evenement (maximaal 280 tekens). Laat leeg om hem te verwijderen.",
+    "saveTagline": "Slogan opslaan",
+    "taglineSaved": "Slogan opgeslagen.",
+    "taglineInvalid": "De slogan mag maximaal 280 tekens zijn."
   },
   "dates": {
     "title": "Data",
@@ -4888,7 +4893,7 @@
     "outOfCredits": "De gratis AI-concepten van deze maand zijn op. Ze worden op de 1e van volgende maand vernieuwd; je kunt alles nog steeds zelf schrijven.",
     "rateLimited": "Te veel concepten in korte tijd. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
     "unavailableTitle": "Schrijven met AI staat niet aan",
-    "unavailableDescription": "Voor deze site is nog geen AI-aanbieder ingesteld.",
+    "unavailableDescription": "Voor deze site is nog geen AI-aanbieder ingesteld. Je kunt de slogan hierboven nog steeds zelf schrijven, en de beschrijving en veelgestelde vragen hieronder als secties toevoegen.",
     "what": "Wat moet er geschreven worden",
     "kinds": {
       "tagline": "Slogan",
@@ -4911,7 +4916,7 @@
       "faq": "Veelgestelde vragen toegevoegd als sectie."
     },
     "errors": {
-      "ai_unavailable": "De AI-dienst reageerde niet. Je tegoed is teruggestort.",
+      "ai_unavailable": "De AI-dienst gaf geen antwoord. Je conceptcredit is teruggestort. Probeer het later opnieuw of schrijf het zelf op deze pagina.",
       "ai_output": "Het concept was niet bruikbaar. Je tegoed is teruggestort.",
       "faqFormat": "Elke vraag heeft een antwoord eronder nodig, met een lege regel tussen de vragen."
     },
@@ -14914,7 +14919,7 @@
       "title": "Contactsuggesties",
       "explainer": "Deelnemers die meedoen aan netwerken zien mensen met vergelijkbare profielen. Alleen wat ze wilden tonen wordt gebruikt; wie zich afmeldt, verdwijnt meteen.",
       "status": "Suggesties klaar voor {embedded} van {listed, plural, one {# persoon} other {# personen}} in de lijst.",
-      "unavailable": "AI staat niet aan voor deze site, dus suggesties kunnen niet worden voorbereid.",
+      "unavailable": "AI staat niet aan voor deze site, dus deelnemers krijgen suggesties op basis van gedeelde interesses.",
       "refresh": "{count, plural, one {Suggesties bijwerken (# persoon wacht)} other {Suggesties bijwerken (# personen wachten)}}",
       "upToDate": "Suggesties zijn bijgewerkt",
       "done": "{count, plural, =0 {Niets bij te werken.} one {Suggesties klaar voor nog # persoon.} other {Suggesties klaar voor nog # personen.}}",
@@ -18851,7 +18856,7 @@
   "aiCompose": {
     "credits": "{balance, plural, =0 {Geen AI-credits meer} one {Nog # AI-credit} other {Nog # AI-credits}} deze maand (gratis tegoed: {allowance}).",
     "unavailableTitle": "Schrijven met AI staat niet aan",
-    "unavailableDescription": "Voor deze site is nog geen AI-aanbieder ingesteld.",
+    "unavailableDescription": "Voor deze site is nog geen AI-aanbieder ingesteld. Je kunt het nog steeds zelf doen met het formulier op deze pagina.",
     "outOfCreditsTitle": "Je AI-credits zijn op",
     "outOfCredits": "De AI-credits van deze maand zijn op. Ze worden op de 1e van volgende maand vernieuwd; je kunt alles nog steeds zelf schrijven.",
     "rateLimited": "Te veel AI-verzoeken in korte tijd. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
@@ -18875,7 +18880,7 @@
     "previewTitle": "AI-concept",
     "previewNote": "Controleer het voordat je het gebruikt. Niets wordt opgeslagen, verstuurd of gepubliceerd tot je dat zelf doet.",
     "errors": {
-      "ai_unavailable": "AI is nu niet beschikbaar. Je credit is teruggegeven; probeer het later opnieuw.",
+      "ai_unavailable": "AI is nu niet beschikbaar. Je credit is teruggegeven. Probeer het later opnieuw of doe het zelf met het formulier op deze pagina.",
       "ai_output": "Het AI-resultaat was niet bruikbaar. Je credit is teruggegeven; probeer andere woorden."
     }
   },

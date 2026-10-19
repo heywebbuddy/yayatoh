@@ -3892,7 +3892,12 @@
     "addSection": "Abschnitt hinzufügen",
     "saveSection": "Abschnitt speichern",
     "emptyAction": "Ersten Abschnitt hinzufügen",
-    "backToEvent": "Zurück zur Veranstaltungsübersicht"
+    "backToEvent": "Zurück zur Veranstaltungsübersicht",
+    "taglineLabel": "Slogan",
+    "taglineHint": "Eine kurze Zeile unter dem Namen des Events (bis zu 280 Zeichen). Lass das Feld leer, um den Slogan zu entfernen.",
+    "saveTagline": "Slogan speichern",
+    "taglineSaved": "Slogan gespeichert.",
+    "taglineInvalid": "Der Slogan darf höchstens 280 Zeichen lang sein."
   },
   "dates": {
     "title": "Termine",
@@ -4888,7 +4893,7 @@
     "outOfCredits": "Die kostenlosen KI-Entwürfe dieses Monats sind aufgebraucht. Sie erneuern sich am 1. des nächsten Monats; du kannst alles weiterhin selbst schreiben.",
     "rateLimited": "Zu viele Entwürfe in kurzer Zeit. Versuche es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
     "unavailableTitle": "KI-Entwürfe sind nicht aktiviert",
-    "unavailableDescription": "Für diese Website ist noch kein KI-Anbieter eingerichtet.",
+    "unavailableDescription": "Für diese Website ist noch kein KI-Anbieter eingerichtet. Du kannst den Slogan oben trotzdem selbst schreiben und Beschreibung und FAQ unten als Abschnitte hinzufügen.",
     "what": "Was entworfen werden soll",
     "kinds": {
       "tagline": "Slogan",
@@ -4911,7 +4916,7 @@
       "faq": "FAQ als Abschnitt hinzugefügt."
     },
     "errors": {
-      "ai_unavailable": "Der KI-Dienst hat nicht geantwortet. Dein Entwurfsguthaben wurde erstattet.",
+      "ai_unavailable": "Der KI-Dienst hat nicht geantwortet. Dein Entwurfs-Credit wurde erstattet. Versuche es später erneut oder schreibe den Text selbst auf dieser Seite.",
       "ai_output": "Der Entwurf war nicht verwendbar. Dein Entwurfsguthaben wurde erstattet.",
       "faqFormat": "Jede Frage braucht darunter eine Antwort, mit einer Leerzeile zwischen den Fragen."
     },
@@ -14914,7 +14919,7 @@
       "title": "Kontaktvorschläge",
       "explainer": "Teilnehmende, die beim Networking mitmachen, sehen Personen mit ähnlichen Profilen. Genutzt wird nur, was sie zeigen wollten; wer sich abmeldet, verschwindet sofort.",
       "status": "Vorschläge bereit für {embedded} von {listed, plural, one {# Person} other {# Personen}} im Verzeichnis.",
-      "unavailable": "Die KI ist für diese Website nicht eingeschaltet, daher können keine Vorschläge vorbereitet werden.",
+      "unavailable": "Für diese Website ist keine KI eingeschaltet, daher erhalten Teilnehmende Vorschläge anhand gemeinsamer Interessen.",
       "refresh": "{count, plural, one {Vorschläge aktualisieren (# Person wartet)} other {Vorschläge aktualisieren (# Personen warten)}}",
       "upToDate": "Die Vorschläge sind aktuell",
       "done": "{count, plural, =0 {Nichts zu aktualisieren.} one {Vorschläge für # weitere Person bereit.} other {Vorschläge für # weitere Personen bereit.}}",
@@ -18851,7 +18856,7 @@
   "aiCompose": {
     "credits": "{balance, plural, =0 {Keine KI-Credits mehr} one {Noch # KI-Credit} other {Noch # KI-Credits}} in diesem Monat (Gratiskontingent: {allowance}).",
     "unavailableTitle": "KI-Entwürfe sind nicht eingeschaltet",
-    "unavailableDescription": "Für diese Website ist noch kein KI-Anbieter eingerichtet.",
+    "unavailableDescription": "Für diese Website ist noch kein KI-Anbieter eingerichtet. Du kannst das trotzdem selbst mit dem Formular auf dieser Seite erledigen.",
     "outOfCreditsTitle": "Keine KI-Credits mehr",
     "outOfCredits": "Die KI-Credits dieses Monats sind aufgebraucht. Sie erneuern sich am 1. des nächsten Monats; du kannst weiterhin alles selbst schreiben.",
     "rateLimited": "Zu viele KI-Anfragen in kurzer Zeit. Versuche es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
@@ -18875,7 +18880,7 @@
     "previewTitle": "KI-Entwurf",
     "previewNote": "Prüfe ihn vor der Verwendung. Nichts wird gespeichert, gesendet oder veröffentlicht, bis du es selbst tust.",
     "errors": {
-      "ai_unavailable": "Die KI ist gerade nicht verfügbar. Dein Credit wurde erstattet; versuche es später erneut.",
+      "ai_unavailable": "Die KI ist gerade nicht verfügbar. Dein Credit wurde erstattet. Versuche es später erneut oder erledige es selbst mit dem Formular auf dieser Seite.",
       "ai_output": "Das KI-Ergebnis war nicht verwendbar. Dein Credit wurde erstattet; versuche eine andere Formulierung."
     }
   },

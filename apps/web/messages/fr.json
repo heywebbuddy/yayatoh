@@ -3892,7 +3892,12 @@
     "addSection": "Ajouter la section",
     "saveSection": "Enregistrer la section",
     "emptyAction": "Ajouter votre première section",
-    "backToEvent": "Retour à l’aperçu de l’événement"
+    "backToEvent": "Retour à l’aperçu de l’événement",
+    "taglineLabel": "Accroche",
+    "taglineHint": "Une courte ligne affichée sous le nom de l'événement (280 caractères maximum). Laissez vide pour la retirer.",
+    "saveTagline": "Enregistrer l'accroche",
+    "taglineSaved": "Accroche enregistrée.",
+    "taglineInvalid": "L'accroche doit faire 280 caractères au maximum."
   },
   "dates": {
     "title": "Dates",
@@ -4888,7 +4893,7 @@
     "outOfCredits": "Les brouillons IA gratuits de ce mois sont épuisés. Ils se renouvellent le 1er du mois prochain ; vous pouvez toujours tout écrire vous-même.",
     "rateLimited": "Trop de brouillons en peu de temps. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
     "unavailableTitle": "La rédaction par IA n'est pas activée",
-    "unavailableDescription": "Aucun fournisseur d'IA n'est encore configuré pour ce site.",
+    "unavailableDescription": "Aucun fournisseur d'IA n'est encore configuré pour ce site. Vous pouvez toujours rédiger vous-même l'accroche ci-dessus, et ajouter la description et la FAQ comme sections ci-dessous.",
     "what": "Que rédiger",
     "kinds": {
       "tagline": "Accroche",
@@ -4911,7 +4916,7 @@
       "faq": "FAQ ajoutée comme section."
     },
     "errors": {
-      "ai_unavailable": "Le service d'IA n'a pas répondu. Votre crédit a été remboursé.",
+      "ai_unavailable": "Le service d'IA n'a pas répondu. Votre crédit de brouillon a été remboursé. Réessayez plus tard, ou rédigez-le vous-même sur cette page.",
       "ai_output": "Le brouillon n'était pas utilisable. Votre crédit a été remboursé.",
       "faqFormat": "Chaque question doit être suivie de sa réponse, avec une ligne vide entre les questions."
     },
@@ -14914,7 +14919,7 @@
       "title": "Suggestions de contacts",
       "explainer": "Les participants inscrits au réseautage voient des personnes au profil proche. Seul ce qu'ils ont choisi de montrer est utilisé ; qui se désinscrit disparaît aussitôt.",
       "status": "Suggestions prêtes pour {embedded} sur {listed, plural, one {# personne} other {# personnes}} de l'annuaire.",
-      "unavailable": "L'IA n'est pas activée sur ce site : les suggestions ne peuvent pas être préparées.",
+      "unavailable": "L'IA n'est pas activée sur ce site : les participants reçoivent donc des suggestions selon leurs centres d'intérêt communs.",
       "refresh": "{count, plural, one {Mettre à jour les suggestions (# personne en attente)} other {Mettre à jour les suggestions (# personnes en attente)}}",
       "upToDate": "Les suggestions sont à jour",
       "done": "{count, plural, =0 {Rien à mettre à jour.} one {Suggestions prêtes pour # personne de plus.} other {Suggestions prêtes pour # personnes de plus.}}",
@@ -18851,7 +18856,7 @@
   "aiCompose": {
     "credits": "{balance, plural, =0 {Plus aucun crédit IA} one {# crédit IA restant} other {# crédits IA restants}} ce mois-ci (quota gratuit : {allowance}).",
     "unavailableTitle": "La rédaction par IA n'est pas activée",
-    "unavailableDescription": "Aucun fournisseur d'IA n'est encore configuré pour ce site.",
+    "unavailableDescription": "Aucun fournisseur d'IA n'est encore configuré pour ce site. Vous pouvez toujours le faire vous-même avec le formulaire de cette page.",
     "outOfCreditsTitle": "Vous n'avez plus de crédits IA",
     "outOfCredits": "Les crédits IA de ce mois sont épuisés. Ils se renouvellent le 1er du mois prochain ; vous pouvez toujours tout écrire vous-même.",
     "rateLimited": "Trop de demandes à l'IA en peu de temps. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
@@ -18875,7 +18880,7 @@
     "previewTitle": "Brouillon IA",
     "previewNote": "Vérifiez-le avant de l'utiliser. Rien n'est enregistré, envoyé ni publié tant que vous ne le faites pas vous-même.",
     "errors": {
-      "ai_unavailable": "L'IA est indisponible pour le moment. Votre crédit a été rendu ; réessayez plus tard.",
+      "ai_unavailable": "L'IA est indisponible pour le moment. Votre crédit a été rendu. Réessayez plus tard, ou faites-le vous-même avec le formulaire de cette page.",
       "ai_output": "Le résultat de l'IA est inutilisable. Votre crédit a été rendu ; essayez une autre formulation."
     }
   },

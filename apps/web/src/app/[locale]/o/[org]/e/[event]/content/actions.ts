@@ -1,6 +1,6 @@
 'use server';
 
-import { DRAFT_KINDS, type DraftKind, draftEventCopy, MAX_NOTES_LENGTH } from '@yayatoh/ai';
+import { DRAFT_KINDS, type DraftKind, draftEventCopy, MAX_NOTES_LENGTH, TAGLINE_MAX } from '@yayatoh/ai';
 import {
   addSectionCommand,
   createAnnouncementCommand,
@@ -26,6 +26,26 @@ import { limitAction, retryAfterMinutes } from '@/server/rate-limit.ts';
 import { sectionContentFrom, sectionTextError } from '@/server/section-content.ts';
 
 const done = (org: string, event: string) => revalidatePath(`/o/${org}/e/${event}/content`);
+
+/** The tagline typed by hand: the same save as an accepted AI draft, with or without AI. */
+export async function saveTaglineAction(
+  org: string,
+  event: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const { data, event: ev } = await loadEvent(org, event, 'content');
+  const tagline = String(form.get('tagline') ?? '').trim();
+  if (tagline.length > TAGLINE_MAX) return { ok: false, code: 'validation_failed', fields: ['tagline'] };
+  try {
+    await executeCommand(updateEventCommand, { eventId: ev.id, tagline: tagline || null }, data.ctx, ports);
+  } catch (err) {
+    return failure(err);
+  }
+  done(org, event);
+  revalidatePath(`/o/${org}/e/${event}`, 'layout');
+  return success();
+}
 
 export async function addSectionAction(
   org: string,

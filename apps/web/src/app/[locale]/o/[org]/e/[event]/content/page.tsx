@@ -1,4 +1,4 @@
-import { creditBalanceQuery } from '@yayatoh/ai';
+import { creditBalanceQuery, TAGLINE_MAX } from '@yayatoh/ai';
 import {
   announcementsQuery,
   type EventSectionDto,
@@ -14,6 +14,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AiDraftPanel } from '@/components/ai-draft-panel.tsx';
 import { AnnouncementForm } from '@/components/announcement-form.tsx';
 import { Markdown } from '@/components/markdown.tsx';
+import { ProgramForm } from '@/components/program-form.tsx';
 import { SectionForm, type SectionValues } from '@/components/section-form.tsx';
 import { SectionList } from '@/components/section-list.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -30,6 +31,7 @@ import {
   draftWithAiAction,
   moveSectionAction,
   reorderSectionsAction,
+  saveTaglineAction,
   updateAnnouncementAction,
   updateSectionAction,
 } from './actions.ts';
@@ -130,6 +132,27 @@ export default async function ContentPage({
         <p className="text-body text-ink-2" data-testid="event-tagline">
           {ev.tagline ?? t('aiDraft.noTagline')}
         </p>
+        {canWrite ? (
+          <Card size="panel">
+            <ProgramForm
+              action={saveTaglineAction.bind(null, org, event)}
+              idPrefix="tagline"
+              submitLabel={t('content.saveTagline')}
+              successLabel={t('content.taglineSaved')}
+              errors={{ tagline: t('content.taglineInvalid') }}
+              fields={[
+                {
+                  kind: 'text',
+                  name: 'tagline',
+                  label: t('content.taglineLabel'),
+                  hint: t('content.taglineHint'),
+                  defaultValue: ev.tagline ?? '',
+                  maxLength: TAGLINE_MAX,
+                },
+              ]}
+            />
+          </Card>
+        ) : null}
       </section>
       {ai ? (
         <section aria-labelledby="ai-heading" className="flex flex-col gap-3">

@@ -368,7 +368,11 @@ describe('matchmaking (opted-in profiles only)', () => {
     // Person 4 never opts in; person 5 opts in and out again.
     await optIn(a, ev, 5, 'Data, AI');
     await executeCommand(optOutCommand, { eventId: ev.id, email: ev.emails[5] }, pub(a), ports);
-    expect((await matches(a, ev, 0)).ready).toBe(false);
+    // No embeddings yet (AI off or not refreshed): suggestions come from shared interests.
+    const before = await matches(a, ev, 0);
+    expect(before.ready).toBe(true);
+    expect(before.matches.map((x) => x.displayName)).toEqual(['Person 3', 'Person 1']);
+    expect(before.matches[0]).toMatchObject({ shared: ['Data', 'AI'], score: 50 });
     const spy = recording();
     const res = await refreshMatchmaking(a.ctx(), ports, spy, { eventId: ev.id });
     expect(res).toMatchObject({ embedded: 4, calls: 1, pending: 0 });
@@ -423,7 +427,8 @@ describe('matchmaking (opted-in profiles only)', () => {
       ports,
     );
     expect(await names(a, ev, 0)).not.toContain('Person 3');
-    expect((await matches(a, ev, 3)).ready).toBe(false);
+    // Without an embedding, Person 3 falls back to shared interests: nobody else likes sailing.
+    expect(await matches(a, ev, 3)).toEqual({ ready: true, matches: [] });
     // Blocked either way: never suggested.
     const p2 = (await matches(a, ev, 0)).matches.find((x) => x.displayName === 'Person 2');
     await executeCommand(
@@ -460,6 +465,36 @@ describe('matchmaking (opted-in profiles only)', () => {
       ),
     );
     expect(left[0]?.n).toBe(0);
+  });
+
+  it('without AI embeddings, suggests people who share interests (blocks and opt-outs respected)', async () => {
+    const ev = await freshEvent(a, 7);
+    await optIn(a, ev, 0, 'data, Pottery');
+    await optIn(a, ev, 1, 'Data, AI');
+    await optIn(a, ev, 2, 'Pottery, Data');
+    await optIn(a, ev, 3, 'Sailing');
+    await optIn(a, ev, 4, 'Pottery');
+    await optIn(a, ev, 5, '');
+    await optIn(a, ev, 6, 'Data');
+    await executeCommand(optOutCommand, { eventId: ev.id, email: ev.emails[6] }, pub(a), ports);
+    const m = await matches(a, ev, 0);
+    expect(m.ready).toBe(true);
+    // Most shared first (case-insensitive), then the larger overlap; no shared interest, opted out: left out.
+    expect(m.matches.map((x) => x.displayName)).toEqual(['Person 2', 'Person 4', 'Person 1']);
+    expect(m.matches[0]).toMatchObject({ shared: ['Pottery', 'Data'], score: 100 });
+    expect(m.matches[2]).toMatchObject({ shared: ['Data'], score: 33 });
+    const p4 = m.matches.find((x) => x.displayName === 'Person 4');
+    await executeCommand(
+      blockPersonCommand,
+      { eventId: ev.id, email: ev.emails[0], personId: p4?.id ?? '' },
+      pub(a),
+      ports,
+    );
+    expect(await names(a, ev, 0)).toEqual(['Person 2', 'Person 1']);
+    expect(await names(a, ev, 4)).not.toContain('Person 0');
+    // Nothing to match on: not ready. And no AI was involved.
+    expect(await matches(a, ev, 5)).toEqual({ ready: false, matches: [] });
+    expect(await embeddedCount(a, ev)).toBe(0);
   });
 
   it('only the event organizer may refresh; a viewer may read the status', async () => {

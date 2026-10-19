@@ -3892,7 +3892,12 @@
     "addSection": "Aggiungi sezione",
     "saveSection": "Salva la sezione",
     "emptyAction": "Aggiungi la tua prima sezione",
-    "backToEvent": "Torna alla panoramica dell’evento"
+    "backToEvent": "Torna alla panoramica dell’evento",
+    "taglineLabel": "Slogan",
+    "taglineHint": "Una riga breve mostrata sotto il nome dell'evento (fino a 280 caratteri). Lascia vuoto per rimuoverlo.",
+    "saveTagline": "Salva slogan",
+    "taglineSaved": "Slogan salvato.",
+    "taglineInvalid": "Lo slogan deve avere al massimo 280 caratteri."
   },
   "dates": {
     "title": "Date",
@@ -4888,7 +4893,7 @@
     "outOfCredits": "Le bozze IA gratuite di questo mese sono esaurite. Si rinnovano il 1° del mese prossimo; puoi comunque scrivere tutto da te.",
     "rateLimited": "Troppe bozze in poco tempo. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
     "unavailableTitle": "La scrittura con IA non è attiva",
-    "unavailableDescription": "Per questo sito non è ancora configurato alcun fornitore di IA.",
+    "unavailableDescription": "Per questo sito non è ancora configurato un fornitore di IA. Puoi comunque scrivere tu lo slogan qui sopra e aggiungere la descrizione e le FAQ come sezioni qui sotto.",
     "what": "Cosa scrivere",
     "kinds": {
       "tagline": "Slogan",
@@ -4911,7 +4916,7 @@
       "faq": "FAQ aggiunte come sezione."
     },
     "errors": {
-      "ai_unavailable": "Il servizio IA non ha risposto. Il credito è stato rimborsato.",
+      "ai_unavailable": "Il servizio di IA non ha risposto. Il credito della bozza ti è stato restituito. Riprova più tardi o scrivilo tu su questa pagina.",
       "ai_output": "La bozza non era utilizzabile. Il credito è stato rimborsato.",
       "faqFormat": "Ogni domanda ha bisogno di una risposta sotto, con una riga vuota tra le domande."
     },
@@ -14914,7 +14919,7 @@
       "title": "Suggerimenti di contatti",
       "explainer": "I partecipanti che hanno aderito al networking vedono persone con profili simili. Si usa solo ciò che hanno scelto di mostrare; chi si ritira sparisce subito.",
       "status": "Suggerimenti pronti per {embedded} su {listed, plural, one {# persona} other {# persone}} nell'elenco.",
-      "unavailable": "L'IA non è attiva su questo sito, quindi non si possono preparare suggerimenti.",
+      "unavailable": "L'IA non è attiva su questo sito, quindi i partecipanti ricevono suggerimenti in base agli interessi in comune.",
       "refresh": "{count, plural, one {Aggiorna i suggerimenti (# persona in attesa)} other {Aggiorna i suggerimenti (# persone in attesa)}}",
       "upToDate": "I suggerimenti sono aggiornati",
       "done": "{count, plural, =0 {Niente da aggiornare.} one {Suggerimenti pronti per # persona in più.} other {Suggerimenti pronti per # persone in più.}}",
@@ -18851,7 +18856,7 @@
   "aiCompose": {
     "credits": "{balance, plural, =0 {Nessun credito IA rimasto} one {# credito IA rimasto} other {# crediti IA rimasti}} questo mese (quota gratuita: {allowance}).",
     "unavailableTitle": "La scrittura con IA non è attiva",
-    "unavailableDescription": "Per questo sito non è ancora configurato un fornitore di IA.",
+    "unavailableDescription": "Per questo sito non è ancora configurato un fornitore di IA. Puoi comunque farlo tu con il modulo di questa pagina.",
     "outOfCreditsTitle": "Hai esaurito i crediti IA",
     "outOfCredits": "I crediti IA di questo mese sono esauriti. Si rinnovano il 1° del mese prossimo; puoi comunque scrivere tutto da te.",
     "rateLimited": "Troppe richieste all'IA in poco tempo. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
@@ -18875,7 +18880,7 @@
     "previewTitle": "Bozza IA",
     "previewNote": "Controllala prima di usarla. Niente viene salvato, inviato o pubblicato finché non lo fai tu.",
     "errors": {
-      "ai_unavailable": "L'IA non è disponibile ora. Il credito ti è stato restituito; riprova più tardi.",
+      "ai_unavailable": "L'IA non è disponibile in questo momento. Il credito ti è stato restituito. Riprova più tardi o fallo tu con il modulo di questa pagina.",
       "ai_output": "Il risultato dell'IA non era utilizzabile. Il credito ti è stato restituito; prova a riformulare."
     }
   },

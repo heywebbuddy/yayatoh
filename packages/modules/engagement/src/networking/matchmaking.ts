@@ -1,3 +1,4 @@
+import type { TenantTx } from '@yayatoh/db';
 import { requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, inArray, isNull, sql } from 'drizzle-orm';
@@ -173,18 +174,80 @@ export const MatchDto = PersonDto.extend({
 });
 export type MatchDto = z.infer<typeof MatchDto>;
 export const MatchesDto = z.object({
-  /** False until the viewer's own profile has an embedding (the organizer refreshes them). */
+  /**
+   * False only when nothing can be suggested yet: no embedding for the viewer and no interests to
+   * match on (without an embedding, suggestions come from shared interests).
+   */
   ready: z.boolean(),
   matches: z.array(MatchDto),
 });
 export type MatchesDto = z.infer<typeof MatchesDto>;
 
 export const MAX_MATCHES = 10;
+/** At most this many people sharing an interest are scored for the suggestions without AI. */
+export const MAX_INTEREST_CANDIDATES = 200;
 
 /**
- * "Suggested for you": the people of the same event closest to the viewer's profile. Both sides
- * must be listed (opted in, not hidden) and attending, with no block either way; people already
- * connected are left out.
+ * Suggestions without AI: while the viewer has no embedding (AI off, no embeddings provider, or
+ * the organizer has not refreshed yet), the event's listed, attending people who share at least one
+ * interest with the viewer, most shared first. The score is the overlap of the two interest lists
+ * (shared ÷ all of them, 0–100). Not ready when the viewer listed no interests.
+ */
+async function interestMatchesTx(
+  tx: TenantTx,
+  eventId: string,
+  me: ProfileRow,
+  blocked: ReadonlySet<string>,
+  limit: number,
+): Promise<MatchesDto> {
+  const myInterests = [...new Set(me.interests.map((i) => i.toLowerCase()))];
+  if (myInterests.length === 0) return { ready: false, matches: [] };
+  const rows = await tx
+    .select()
+    .from(networkProfiles)
+    .where(
+      and(
+        listedWhere(eventId),
+        sql`${networkProfiles.id} <> ${me.id}`,
+        sql`exists (select 1 from unnest(${networkProfiles.interests}) as i(v) where lower(i.v) in ${myInterests})`,
+      ),
+    )
+    .orderBy(asc(networkProfiles.id))
+    .limit(MAX_INTEREST_CANDIDATES);
+  const active = (
+    await activeProfilesTx(
+      tx,
+      eventId,
+      rows.filter((r) => !blocked.has(r.id)),
+    )
+  ).filter(listed);
+  const rel = await relationsTx(
+    tx,
+    me.id,
+    active.map((p) => p.id),
+  );
+  const mineSet = new Set(myInterests);
+  const scored = active
+    .filter((p) => rel.get(p.id)?.connection !== 'connected')
+    .map((p) => {
+      const shared = p.interests.filter((i) => mineSet.has(i.toLowerCase()));
+      const all = new Set([...myInterests, ...p.interests.map((i) => i.toLowerCase())]).size;
+      return { p, shared, score: Math.round((shared.length / all) * 100) };
+    })
+    .filter((m) => m.shared.length > 0)
+    .sort((a, b) => b.shared.length - a.shared.length || b.score - a.score || (a.p.id < b.p.id ? -1 : 1));
+  return {
+    ready: true,
+    matches: scored
+      .slice(0, limit)
+      .map((m) => ({ ...toPerson(m.p, rel.get(m.p.id)), score: m.score, shared: m.shared })),
+  };
+}
+
+/**
+ * "Suggested for you": the people of the same event closest to the viewer's profile (by AI
+ * embeddings; by shared interests while the viewer has none). Both sides must be listed (opted in,
+ * not hidden) and attending, with no block either way; people already connected are left out.
  */
 export const suggestedMatchesQuery = tenantQuery({
   name: 'engagement.suggestedMatches',
@@ -202,8 +265,8 @@ export const suggestedMatchesQuery = tenantQuery({
       .select({ id: networkEmbeddings.id })
       .from(networkEmbeddings)
       .where(eq(networkEmbeddings.profileId, me.id));
-    if (!mine) return { ready: false, matches: [] };
     const blocked = await blockedWithTx(tx, me.id);
+    if (!mine) return interestMatchesTx(tx, input.eventId, me, blocked, input.limit);
     const candidates = await tx.execute<{ id: string; distance: number }>(sql`
       select p.id, (e.embedding operator(extensions.<=>) m.embedding)::float8 as distance
       from engagement.network_embeddings m

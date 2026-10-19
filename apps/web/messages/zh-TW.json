@@ -3892,7 +3892,12 @@
     "addSection": "新增區塊",
     "saveSection": "儲存區塊",
     "emptyAction": "新增第一個區塊",
-    "backToEvent": "返回活動概覽"
+    "backToEvent": "返回活動概覽",
+    "taglineLabel": "標語",
+    "taglineHint": "顯示在活動名稱下方的一行短文字（最多 280 個字元）。留空即可移除。",
+    "saveTagline": "儲存標語",
+    "taglineSaved": "標語已保存。",
+    "taglineInvalid": "標語不能超過 280 個字元。"
   },
   "dates": {
     "title": "場次",
@@ -4888,7 +4893,7 @@
     "outOfCredits": "本月的免費 AI 草稿次數已用完,將於下月 1 日恢復;你仍可以自己撰寫所有內容。",
     "rateLimited": "短時間內草稿過多。請在 {minutes, plural, other {# 分鐘}}後重試。",
     "unavailableTitle": "AI 起草未開启",
-    "unavailableDescription": "此網站尚未設定 AI 服務商。",
+    "unavailableDescription": "本網站尚未設定 AI 服務。你仍可在上方自行填寫標語，並在下方以區塊形式新增介紹與常見問題。",
     "what": "要起草的內容",
     "kinds": {
       "tagline": "標語",
@@ -4911,7 +4916,7 @@
       "faq": "常見問題已作為版塊新增。"
     },
     "errors": {
-      "ai_unavailable": "AI 服務沒有響應。已退還你的次數。",
+      "ai_unavailable": "AI 服務沒有回應。草稿額度已退還。請稍後再試，或在本頁自行撰寫。",
       "ai_output": "草稿無法使用。已退還你的次數。",
       "faqFormat": "每個問題下方都需要答案,問題之間空一行。"
     },
@@ -14914,7 +14919,7 @@
       "title": "配對推薦",
       "explainer": "加入社交功能的參加者會看到資料相近的人。只使用他們選擇公開的內容;退出的人會立即被移除。",
       "status": "名錄中 {listed, plural, other {# 人}}裡已有 {embedded} 人的推薦準備就緒。",
-      "unavailable": "此網站未開啟 AI,無法準備推薦。",
+      "unavailable": "本網站未開啟 AI，因此參加者會收到依共同興趣產生的推薦。",
       "refresh": "{count, plural, other {更新推薦(# 人等待中)}}",
       "upToDate": "推薦已是最新",
       "done": "{count, plural, =0 {沒有需要更新的內容。} other {又為 # 人準備好推薦。}}",
@@ -18851,7 +18856,7 @@
   "aiCompose": {
     "credits": "本月剩餘 AI 額度:{balance, plural, =0 {無} other {#}}(免費額度:{allowance})。",
     "unavailableTitle": "AI 起草未開啟",
-    "unavailableDescription": "此網站尚未設定 AI 服務商。",
+    "unavailableDescription": "本網站尚未設定 AI 服務。你仍可使用本頁的表單自行完成。",
     "outOfCreditsTitle": "AI 額度已用完",
     "outOfCredits": "本月的 AI 額度已用完,將於下月 1 日恢復;你仍可以自己撰寫所有內容。",
     "rateLimited": "短時間內 AI 請求過多。請在 {minutes, plural, other {# 分鐘}}後重試。",
@@ -18875,7 +18880,7 @@
     "previewTitle": "AI 草稿",
     "previewNote": "使用前請檢查。在你親自操作之前,不會儲存、傳送或發布任何內容。",
     "errors": {
-      "ai_unavailable": "AI 暫時無法使用。額度已退還,請稍後再試。",
+      "ai_unavailable": "AI 暫時無法使用。額度已退還。請稍後再試，或使用本頁的表單自行完成。",
       "ai_output": "無法使用 AI 的結果。額度已退還,請換個說法再試。"
     }
   },

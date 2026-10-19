@@ -1,4 +1,6 @@
+import Anthropic from '@anthropic-ai/sdk';
 import { describe, expect, it } from 'vitest';
+import { AiOutputError, type ComposeRequest } from '../src/domain/compose.ts';
 import {
   buildPrompt,
   cleanDraft,
@@ -97,8 +99,84 @@ describe('drafters', () => {
     expect(faq.split('\n\n')).toHaveLength(3);
   });
 
-  it('the Anthropic adapter is a stub until the owner account exists', async () => {
-    await expect(anthropicDrafter({ apiKey: 'k' }).draft(req())).rejects.toBeInstanceOf(AiUnavailableError);
+  const pageReq: ComposeRequest = {
+    task: 'page',
+    locale: 'en',
+    tone: 'friendly',
+    brand: null,
+    orgName: 'Harbor Arts',
+    brief: 'About our venue',
+    event: null,
+  };
+
+  /** A stand-in for the SDK client: records the request and answers with `reply` (or throws it). */
+  const stubClient = (reply: Partial<Anthropic.Beta.BetaMessage> | Error) => {
+    const calls: Anthropic.Beta.MessageCreateParams[] = [];
+    const client = {
+      beta: {
+        messages: {
+          create: async (params: Anthropic.Beta.MessageCreateParams) => {
+            calls.push(params);
+            if (reply instanceof Error) throw reply;
+            return { stop_reason: 'end_turn', content: [], ...reply };
+          },
+        },
+      },
+    } as unknown as Anthropic;
+    return { client, calls };
+  };
+
+  it('the Anthropic adapter sends the hardened prompt and returns the text of the reply', async () => {
+    const { client, calls } = stubClient({
+      content: [{ type: 'text', text: '  Jazz by the water.  ', citations: null }],
+    });
+    const drafter = anthropicDrafter({ apiKey: 'k', client });
+    expect(drafter.name).toBe('anthropic:claude-opus-5-5');
+    expect(await drafter.draft(req({ kind: 'tagline' }))).toBe('Jazz by the water.');
+    const [sent] = calls;
+    const prompt = buildPrompt(req({ kind: 'tagline' }));
+    expect(sent?.model).toBe('claude-opus-5-5');
+    expect(sent?.system).toBe(prompt.system);
+    expect(sent?.messages).toEqual([{ role: 'user', content: prompt.user }]);
+    expect(sent?.output_config).toEqual({ effort: 'low' });
+    expect(sent?.fallbacks).toBe('default');
+  });
+
+  it('provider failures (bad key, outage, timeout) make the adapter unavailable', async () => {
+    const { client } = stubClient(new Anthropic.APIConnectionError({ message: 'down' }));
+    await expect(anthropicDrafter({ apiKey: 'bad', client }).draft(req())).rejects.toBeInstanceOf(
+      AiUnavailableError,
+    );
+    await expect(anthropicDrafter({ apiKey: 'bad', client }).compose(pageReq)).rejects.toBeInstanceOf(
+      AiUnavailableError,
+    );
+  });
+
+  it('a refused, truncated or empty reply is unusable output', async () => {
+    for (const reply of [
+      { stop_reason: 'refusal' as const, content: [] },
+      {
+        stop_reason: 'max_tokens' as const,
+        content: [{ type: 'text' as const, text: 'Half a', citations: null }],
+      },
+      { content: [] },
+    ]) {
+      const { client } = stubClient(reply);
+      await expect(anthropicDrafter({ apiKey: 'k', client }).draft(req())).rejects.toBeInstanceOf(
+        DraftOutputError,
+      );
+    }
+    const { client } = stubClient({ stop_reason: 'refusal', content: [] });
+    await expect(anthropicDrafter({ apiKey: 'k', client }).compose(pageReq)).rejects.toBeInstanceOf(
+      AiOutputError,
+    );
+  });
+
+  it('Claude has no embeddings: matchmaking reports the adapter unavailable', async () => {
+    const { client } = stubClient({ content: [] });
+    await expect(anthropicDrafter({ apiKey: 'k', client }).embed(['x'])).rejects.toBeInstanceOf(
+      AiUnavailableError,
+    );
   });
 
   it('configuration picks the drafter; production without a provider turns drafting off', () => {
@@ -106,8 +184,9 @@ describe('drafters', () => {
     expect(drafterFromEnv({ NODE_ENV: 'production' })).toBeNull();
     expect(drafterFromEnv({ NODE_ENV: 'production', YAYATOH_DEV_AUTH: '1' })?.name).toBe('fake');
     expect(drafterFromEnv({ AI_PROVIDER: 'anthropic' })).toBeNull();
+    expect(drafterFromEnv({ AI_PROVIDER: 'anthropic', ANTHROPIC_API_KEY: ' ' })).toBeNull();
     expect(drafterFromEnv({ AI_PROVIDER: 'anthropic', ANTHROPIC_API_KEY: 'k' })?.name).toBe(
-      'anthropic:claude-opus-5',
+      'anthropic:claude-opus-5-5',
     );
   });
 });

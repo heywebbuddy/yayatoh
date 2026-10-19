@@ -1,5 +1,6 @@
-import { addMinutesLocal, buildComposePrompt, type ComposeRequest } from './domain/compose.ts';
-import { buildPrompt, type DraftRequest } from './domain/drafts.ts';
+import Anthropic from '@anthropic-ai/sdk';
+import { AiOutputError, addMinutesLocal, buildComposePrompt, type ComposeRequest } from './domain/compose.ts';
+import { buildPrompt, DraftOutputError, type DraftRequest } from './domain/drafts.ts';
 import { fakeEmbedding } from './domain/embed.ts';
 import type { Tone } from './domain/tones.ts';
 
@@ -170,31 +171,52 @@ export const failingDrafter: AiDrafter = {
   },
 };
 
+export const ANTHROPIC_DEFAULT_MODEL = 'claude-opus-5-5';
+
 /**
- * Anthropic adapter — a **stub** until the owner's Anthropic account exists (owner inbox). It
- * already builds the hardened prompt; the request itself is sent with the official
- * `@anthropic-ai/sdk` (Messages API, model `claude-opus-5` unless `AI_MODEL` says otherwise)
- * when the key is provisioned. Until then it refuses, and the app falls back to no AI drafting.
+ * Anthropic adapter: the hardened prompt goes to the Messages API through the official
+ * `@anthropic-ai/sdk` (model `claude-opus-5-5` unless `AI_MODEL` says otherwise). Low effort keeps
+ * short copy well inside the callers' 30 s budget; a declined request is retried server-side on a
+ * fallback model. Any provider failure (bad or revoked key, rate limit, outage, timeout) becomes
+ * `AiUnavailableError` and a refused, truncated or empty reply an output error, so the caller
+ * refunds the credit and the organizer carries on by hand.
  */
-export function anthropicDrafter(opts: { apiKey: string; model?: string }): AiDrafter {
-  const model = opts.model ?? 'claude-opus-5';
+export function anthropicDrafter(opts: { apiKey: string; model?: string; client?: Anthropic }): AiDrafter {
+  const model = opts.model ?? ANTHROPIC_DEFAULT_MODEL;
+  const client = opts.client ?? new Anthropic({ apiKey: opts.apiKey, maxRetries: 1, timeout: 25_000 });
+  async function ask(prompt: { system: string; user: string }, unusable: () => Error): Promise<string> {
+    let message: Anthropic.Beta.BetaMessage;
+    try {
+      message = await client.beta.messages.create({
+        model,
+        max_tokens: 8000,
+        system: prompt.system,
+        messages: [{ role: 'user', content: prompt.user }],
+        output_config: { effort: 'low' },
+        betas: ['server-side-fallback-2026-07-01'],
+        fallbacks: 'default',
+      });
+    } catch (err) {
+      if (err instanceof Anthropic.APIError)
+        throw new AiUnavailableError(`The Anthropic API failed (${err.status ?? 'no connection'})`);
+      throw err;
+    }
+    if (message.stop_reason === 'refusal' || message.stop_reason === 'max_tokens') throw unusable();
+    const text = message.content
+      .flatMap((block) => (block.type === 'text' ? [block.text] : []))
+      .join('')
+      .trim();
+    if (!text) throw unusable();
+    return text;
+  }
   return {
     name: `anthropic:${model}`,
-    async draft(req) {
-      buildPrompt(req);
-      throw new AiUnavailableError(
-        'The Anthropic adapter is not enabled yet (owner inbox: AI provider account)',
-      );
-    },
-    async compose(req) {
-      buildComposePrompt(req);
-      throw new AiUnavailableError(
-        'The Anthropic adapter is not enabled yet (owner inbox: AI provider account)',
-      );
-    },
+    draft: (req) => ask(buildPrompt(req), () => new DraftOutputError()),
+    compose: (req) => ask(buildComposePrompt(req), () => new AiOutputError('no usable reply')),
     async embed() {
       // Claude has no embeddings endpoint: production matchmaking needs an embeddings provider
-      // behind this port (owner inbox, M6.12b). Until then matchmaking is off outside dev/CI.
+      // behind this port (owner inbox, M6.12b). Until then attendees get suggestions from shared
+      // interests instead (`suggestedMatchesQuery`).
       throw new AiUnavailableError('No embeddings provider is configured (owner inbox)');
     },
   };
@@ -208,9 +230,9 @@ export function anthropicDrafter(opts: { apiKey: string; model?: string }): AiDr
 export function drafterFromEnv(env: Readonly<Record<string, string | undefined>>): AiDrafter | null {
   const provider = env.AI_PROVIDER ?? (env.NODE_ENV === 'production' && !env.YAYATOH_DEV_AUTH ? '' : 'fake');
   if (provider === 'fake') return fakeDrafter;
-  if (provider === 'anthropic' && env.ANTHROPIC_API_KEY)
+  if (provider === 'anthropic' && env.ANTHROPIC_API_KEY?.trim())
     return anthropicDrafter({
-      apiKey: env.ANTHROPIC_API_KEY,
+      apiKey: env.ANTHROPIC_API_KEY.trim(),
       ...(env.AI_MODEL ? { model: env.AI_MODEL } : {}),
     });
   return null;
