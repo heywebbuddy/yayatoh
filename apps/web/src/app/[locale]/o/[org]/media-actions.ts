@@ -96,7 +96,7 @@ export async function pickerLibraryAction(org: string): Promise<{
 }
 
 /**
- * U10: put a library image in the place an upload ticket names (the same ticket the uploader got:
+ * U10: put one or more library images in the place an upload ticket names (the same ticket the uploader got:
  * it was signed for this member, org, owner and slot). Nothing is uploaded or stored again.
  */
 export async function reuseFromLibraryAction(
@@ -110,26 +110,48 @@ export async function reuseFromLibraryAction(
   if (!t || t.userId !== data.session.userId || t.orgId !== data.org.id)
     return { ok: false, code: 'forbidden' };
   if (t.ownerType === 'library' || t.slot === 'floorplan') return { ok: false, code: 'validation_failed' };
-  const sourceAssetId = String(form.get('sourceAssetId') ?? '');
-  if (!sourceAssetId)
+  // One image, or several at once (each with its own `alt:<id>`; one image uses `alt`).
+  const ids = [...new Set(form.getAll('sourceAssetId').map(String).filter(Boolean))];
+  if (!ids.length)
     return { ok: false, code: 'validation_failed', fields: ['sourceAssetId'], reason: 'no_choice' };
-  try {
-    await reuseMedia(
-      data.ctx,
-      {
-        sourceAssetId,
-        target: { ownerType: t.ownerType, ownerId: t.ownerId, slot: t.slot } as never,
-        alt: String(form.get('alt') ?? '').trim() || null,
-        decorative: form.get('decorative') === '1',
-        replaceAssetId: String(form.get('replaceAssetId') ?? '') || null,
-      },
-      ports,
-    );
-  } catch (err) {
-    return failure(err);
+  const decorative = form.get('decorative') === '1';
+  const replaceAssetId = ids.length === 1 ? String(form.get('replaceAssetId') ?? '') || null : null;
+  const altOf = (id: string) => String(form.get(`alt:${id}`) ?? form.get('alt') ?? '').trim() || null;
+  const undescribed = decorative ? [] : ids.filter((id) => !altOf(id));
+  if (undescribed.length)
+    return {
+      ok: false,
+      code: 'validation_failed',
+      fields: ids.length === 1 ? ['alt'] : undescribed.map((id) => `alt:${id}`),
+    };
+  let skipped = 0;
+  for (const sourceAssetId of ids) {
+    try {
+      await reuseMedia(
+        data.ctx,
+        {
+          sourceAssetId,
+          target: { ownerType: t.ownerType, ownerId: t.ownerId, slot: t.slot } as never,
+          alt: altOf(sourceAssetId),
+          decorative,
+          replaceAssetId,
+        },
+        ports,
+      );
+    } catch (err) {
+      const state = failure(err);
+      // With several images, one that is already here is skipped rather than stopping the rest.
+      if (ids.length > 1 && state.reason === 'already_here') skipped += 1;
+      else {
+        if (sourceAssetId !== ids[0]) revalidatePath('/', 'layout');
+        return state;
+      }
+    }
   }
   revalidatePath('/', 'layout');
-  return success();
+  if (skipped === ids.length) return { ok: false, code: 'conflict', reason: 'already_here' };
+  if (skipped) return { ...success(), reason: 'partly_here' };
+  return ids.length > 1 ? { ...success(), reason: 'placed_many' } : success();
 }
 
 /** U10: delete an image from the library (only when it is used nowhere). */

@@ -39,6 +39,7 @@ import { BrandLink } from '@/components/brand-styled.tsx';
 import { CheckoutForm } from '@/components/checkout-form.tsx';
 import { DatePicker } from '@/components/date-picker.tsx';
 import { EventSections } from '@/components/event-sections.tsx';
+import { GalleryLightbox } from '@/components/gallery-lightbox.tsx';
 import { HolderLinkForm } from '@/components/holder-link-form.tsx';
 import { fallbackOf, MediaPicture } from '@/components/media-picture.tsx';
 import { ProgramSections } from '@/components/program-sections.tsx';
@@ -49,6 +50,7 @@ import { VenueGuide } from '@/components/venue-guide.tsx';
 import { VenueMap } from '@/components/venue-map.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
+import { galleryLabels } from '@/lib/gallery-labels.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { aggregateRatingJsonLd, eventJsonLd, jsonLdScript } from '@/lib/seo/jsonld.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
@@ -271,6 +273,7 @@ export async function PublicEventView({
     agenda: program.sessions.length > 0 ? [] : (demo?.agenda ?? []),
   };
   const t = await getTranslations();
+  const lightbox = galleryLabels(await getTranslations('publicEvent.lightbox'));
   const platformLabel = await categoryLabels((key) => t(`categories.${key}`));
   const f = { locale, currency: ev.currency, timeZone: ev.timezone };
   const range = formatEventDateRange(ev.startsAt.toISOString(), ev.endsAt.toISOString(), f);
@@ -711,17 +714,13 @@ export async function PublicEventView({
                   <h2 id="gallery-heading" className="m-0 text-section">
                     {t('publicEvent.gallery')}
                   </h2>
-                  <ul className="m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
-                    {gallery.map((g) => (
-                      <li key={g.id}>
-                        <MediaPicture
-                          image={g}
-                          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                          className="aspect-[4/3] w-full rounded-tile bg-surface-2 object-cover"
-                        />
-                      </li>
-                    ))}
-                  </ul>
+                  <GalleryLightbox
+                    images={gallery}
+                    labels={lightbox}
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                    gridClassName="m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3"
+                    imageClassName="aspect-[4/3] w-full object-cover"
+                  />
                 </section>
               ) : null}
 

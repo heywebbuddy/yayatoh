@@ -36,13 +36,19 @@ async function uploadToLibrary(page: Page, org: string, alt: string, file = BANN
 const card = (page: Page, alt: string) =>
   page.getByRole('list', { name: 'Library images' }).getByRole('listitem').filter({ hasText: alt }).first();
 
+/** The picker's thumbnails: one image (a radio group) or, in galleries, one or more (checkboxes). */
+const pickGroup = (where: Locator) =>
+  where.getByRole('group', { name: /^Pick (an image|one or more images)/ });
+
 /** Open "Choose from the media library" in an uploader and place the image named `alt`. */
 async function placeFromLibrary(where: Locator, alt: string, placeAlt?: string) {
   await where.getByText('Choose from the media library').click();
-  // The card is the radio's label (the radio itself is visually hidden).
-  await where.getByRole('group', { name: 'Pick an image' }).getByText(alt, { exact: true }).click();
-  await expect(where.getByRole('radio', { name: alt })).toBeChecked();
-  const field = where.getByLabel('Alt text for this place');
+  // The card is the radio's (or, where several fit, the checkbox's) label; the input is visually hidden.
+  await pickGroup(where).getByText(alt, { exact: true }).click();
+  await expect(
+    where.getByRole('radio', { name: alt }).or(where.getByRole('checkbox', { name: alt })),
+  ).toBeChecked();
+  const field = where.getByLabel('Alt text for this place').or(where.getByLabel('Alt text for image 1'));
   await expect(field).toHaveValue(alt);
   if (placeAlt !== undefined) await field.fill(placeAlt);
   await where.getByRole('button', { name: 'Use this image' }).click();
@@ -89,7 +95,7 @@ test.describe('U10 media library', () => {
     await placeFromLibrary(gallery, alt);
     await expect(gallery.getByRole('img', { name: alt })).toBeVisible();
     // The same image twice in one place is refused, with the reason.
-    await gallery.getByRole('group', { name: 'Pick an image' }).getByText(alt, { exact: true }).click();
+    await pickGroup(gallery).getByText(alt, { exact: true }).click();
     await gallery.getByRole('button', { name: 'Use this image' }).click();
     await expect(gallery.getByRole('alert').filter({ hasText: 'This image is already here.' })).toBeVisible();
 

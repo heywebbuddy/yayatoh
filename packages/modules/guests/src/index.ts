@@ -343,6 +343,7 @@ export {
 export {
   addGuestSiteBlockCommand,
   GuestSiteDto,
+  guestSiteOpensEvent,
   guestSitePublishedQuery,
   guestSiteQuery,
   guestSiteTarget,

@@ -769,7 +769,16 @@
     "gallery": "Galerij",
     "register": "Inschrijven",
     "hostedBy": "Georganiseerd door",
-    "exhibitorMap": "Exposantenkaart"
+    "exhibitorMap": "Exposantenkaart",
+    "lightbox": {
+      "open": "Foto {n} van {total} openen",
+      "dialog": "Fotoweergave",
+      "close": "Sluiten",
+      "previous": "Vorige foto",
+      "next": "Volgende foto",
+      "counter": "Foto {n} van {total}",
+      "thumbnails": "Alle foto’s"
+    }
   },
   "portal": {
     "day": "Dag {day} · {date}",
@@ -4921,7 +4930,8 @@
       "faqFormat": "Elke vraag heeft een antwoord eronder nodig, met een lege regel tussen de vragen."
     },
     "aboutTitle": "Over",
-    "faqTitle": "Veelgestelde vragen"
+    "faqTitle": "Veelgestelde vragen",
+    "renderedLabel": "Zo komt het eruit te zien"
   },
   "wizard": {
     "title": "Een evenement maken",
@@ -5067,7 +5077,16 @@
     },
     "defaultAlt": {
       "speaker": "Foto van {name}"
-    }
+    },
+    "fileMany": "Afbeeldingsbestanden",
+    "dropHintMany": "Je kunt meerdere bestanden tegelijk kiezen of hier neerzetten.",
+    "chosenMany": "{count} bestanden geselecteerd.",
+    "tooManyFiles": "Er passen nog maar {count}, dus de eerste {count} worden geüpload.",
+    "altHintMany": "Elk bestand krijgt deze tekst plus zijn nummer; je kunt ze daarna elk aanpassen.",
+    "uploadMany": "{count, plural, one {# afbeelding uploaden} other {# afbeeldingen uploaden}}",
+    "uploadingMany": "Uploaden {current} van {total}… {percent}%",
+    "uploadedMany": "{count, plural, one {# afbeelding geüpload.} other {# afbeeldingen geüpload.}}",
+    "skippedFull": "{count, plural, one {# bestand is weggelaten omdat de galerij vol is.} other {# bestanden zijn weggelaten omdat de galerij vol is.}}"
   },
   "doorStaff": {
     "title": "Equipe de portaria",
@@ -13582,7 +13601,12 @@
     },
     "visit": "Website van {name}",
     "newTab": "(opent in een nieuw tabblad)",
-    "galleryLink": "Foto's bekijken en delen"
+    "galleryLink": "Foto's bekijken en delen",
+    "invited": "Je bent uitgenodigd",
+    "daysToGo": "{count, plural, one {Nog # dag} other {Nog # dagen}}",
+    "celebrated": "Samen gevierd",
+    "seeProgram": "Bekijk het programma",
+    "photos": "Foto’s"
   },
   "gallery": {
     "uploader": {
@@ -18419,7 +18443,15 @@
       "use": "Deze afbeelding gebruiken",
       "placed": "Afbeelding toegevoegd.",
       "alreadyHere": "Deze afbeelding staat hier al.",
-      "noChoice": "Kies eerst een afbeelding."
+      "noChoice": "Kies eerst een afbeelding.",
+      "chooseMany": "Kies een of meer afbeeldingen (tot {max})",
+      "chosenCount": "{count, plural, =0 {Nog geen afbeeldingen gekozen.} one {# afbeelding gekozen.} other {# afbeeldingen gekozen.}}",
+      "roomFull": "Meer passen hier niet.",
+      "altMany": "Alt-tekst voor elke afbeelding",
+      "altForImage": "Alt-tekst voor afbeelding {n}",
+      "partlyHere": "Afbeeldingen toegevoegd. Afbeeldingen die er al waren, zijn overgeslagen.",
+      "useMany": "{count, plural, =0 {Gekozen afbeeldingen gebruiken} one {Deze afbeelding gebruiken} other {Deze # afbeeldingen gebruiken}}",
+      "placedMany": "Afbeeldingen toegevoegd."
     }
   },
   "storage": {

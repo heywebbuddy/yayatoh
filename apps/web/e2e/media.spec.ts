@@ -314,10 +314,24 @@ test.describe('event gallery (M1.4e)', () => {
     const guest = await anonymous(browser);
     await guest.goto(`/events/${slug}`);
     const section = guest.getByRole('region', { name: 'Gallery' });
-    await expect(section.getByRole('img', { name: 'Band on the main stage' })).toBeVisible();
-    // The decorative image is hidden from assistive technology (alt="").
-    await expect(section.locator('img[alt=""]')).toHaveCount(1);
+    // Each photo opens the viewer; its button is named by position and alt text, and the
+    // decorative one by its position only.
+    const band = section.getByRole('button', { name: 'Open photo 1 of 2: Band on the main stage' });
+    await expect(band).toBeVisible();
+    await expect(section.getByRole('button', { name: 'Open photo 2 of 2', exact: true })).toBeVisible();
     await expectAccessible(guest);
+    // The viewer: the photo large with its caption, next/previous, Escape returns to the grid.
+    await band.click();
+    const viewer = guest.getByRole('dialog', { name: 'Photo viewer' });
+    await expect(viewer.getByRole('img', { name: 'Band on the main stage' })).toBeVisible();
+    await expect(viewer.getByText('Photo 1 of 2', { exact: true })).toBeVisible();
+    await viewer.getByRole('button', { name: 'Next photo' }).click();
+    await expect(viewer.getByText('Photo 2 of 2', { exact: true })).toBeVisible();
+    await guest.keyboard.press('ArrowRight');
+    await expect(viewer.getByText('Photo 1 of 2', { exact: true })).toBeVisible();
+    await guest.keyboard.press('Escape');
+    await expect(viewer).toBeHidden();
+    await expect(band).toBeFocused();
     await guest.close();
     await page.goto(base);
     await page.getByRole('button', { name: 'Unpublish' }).click();

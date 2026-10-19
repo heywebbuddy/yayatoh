@@ -50,6 +50,9 @@ interface UploadError {
  * on the zone is optional sugar), alt text (required unless decorative), a progress bar and
  * live status, and per image: alt text editing, replace and remove.
  *
+ * Galleries, venue photos and the library take several files at once: they upload one after
+ * another, each with the alt text plus its number ("Stage (2)"), editable afterwards.
+ *
  * M1.4h: with `kind` it holds a speaker's photo or an exhibitor's/sponsor's logo — one image,
  * never decorative, the alt text prefilled with `defaultAlt` ("Photo of {name}", the company
  * name) for the organizer to edit.
@@ -85,6 +88,7 @@ export function MediaUploader({
   const fileRef = useRef<HTMLInputElement>(null);
   const altRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [fileCount, setFileCount] = useState(0);
   const [alt, setAlt] = useState(defaultAlt);
   const [decorative, setDecorative] = useState(false);
   const [replaceId, setReplaceId] = useState<string | null>(null);
@@ -99,6 +103,10 @@ export function MediaUploader({
   const key = kind ?? slot;
   const altMissing = family === 'content' ? 'alt_required' : kind ? 'alt_missing' : 'alt_required';
   const full = multiple && items.length >= GALLERY_MAX && !replaceId;
+  /** Several files at once: multi-image places, outside "replace this one". */
+  const many = multiple && !replaceId;
+  /** How many more images fit (the library has no per-slot cap). */
+  const room = slot === 'library' ? Number.POSITIVE_INFINITY : Math.max(0, GALLERY_MAX - items.length);
   const size = formatMegabytes(UPLOAD_MAX_BYTES, locale);
   const Heading = headingLevel === 2 ? 'h2' : headingLevel === 3 ? 'h3' : 'h4';
   const replacing = replaceId ? items.find((i) => i.id === replaceId) : null;
@@ -109,6 +117,7 @@ export function MediaUploader({
   function reset() {
     if (fileRef.current) fileRef.current.value = '';
     setFileName(null);
+    setFileCount(0);
     setAlt(defaultAlt);
     setDecorative(false);
     setReplaceId(null);
@@ -122,50 +131,89 @@ export function MediaUploader({
     else if (field === 'file') fileRef.current?.focus();
   }
 
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  /** One file to the upload route; resolves to null when stored, else the error. */
+  function send(file: File, fileAlt: string, onProgress: (pct: number) => void): Promise<UploadError | null> {
+    return new Promise((resolve) => {
+      const body = new FormData();
+      body.set('ticket', ticket ?? '');
+      body.set('file', file);
+      body.set('alt', fileAlt);
+      body.set('locale', locale);
+      if (decorative) body.set('decorative', '1');
+      if (replaceId) body.set('replaceAssetId', replaceId);
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/api/media/upload');
+      xhr.responseType = 'json';
+      xhr.upload.onprogress = (ev) => {
+        if (ev.lengthComputable) onProgress(Math.min(99, Math.round((ev.loaded / ev.total) * 100)));
+      };
+      xhr.onload = () => {
+        const res = (xhr.response ?? {}) as {
+          ok?: boolean;
+          code?: string;
+          reason?: string;
+          fields?: string[];
+        };
+        if (xhr.status === 200 && res.ok) return resolve(null);
+        const field = res.fields?.includes('alt') ? 'alt' : 'file';
+        const reason =
+          res.reason ??
+          (res.fields?.includes('alt') ? altMissing : res.code === 'forbidden' ? 'forbidden' : 'generic');
+        resolve({ reason, field });
+      };
+      xhr.onerror = () => resolve({ reason: 'network', field: null });
+      xhr.send(body);
+    });
+  }
+
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!ticket) return;
-    const file = fileRef.current?.files?.[0];
-    if (!file) return fail('no_file', 'file');
-    if (!looksLikeImage(file)) return fail('unsupported_type', 'file');
-    if (file.size > UPLOAD_MAX_BYTES) return fail('too_large', 'file');
+    const chosen = [...(fileRef.current?.files ?? [])];
+    if (!chosen.length) return fail('no_file', 'file');
+    const files = many ? chosen.slice(0, room) : chosen.slice(0, 1);
+    if (!files.length) return fail('slot_full', 'file');
+    if (files.some((f) => !looksLikeImage(f))) return fail('unsupported_type', 'file');
+    if (files.some((f) => f.size > UPLOAD_MAX_BYTES)) return fail('too_large', 'file');
     if (!decorative && !alt.trim()) return fail(altMissing, 'alt');
     setError(null);
-    const body = new FormData();
-    body.set('ticket', ticket);
-    body.set('file', file);
-    body.set('alt', alt.trim());
-    body.set('locale', locale);
-    if (decorative) body.set('decorative', '1');
-    if (replaceId) body.set('replaceAssetId', replaceId);
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/api/media/upload');
-    xhr.responseType = 'json';
     setProgress(0);
-    setStatus(t('uploading', { percent: 0 }));
-    xhr.upload.onprogress = (ev) => {
-      if (!ev.lengthComputable) return;
-      const pct = Math.min(99, Math.round((ev.loaded / ev.total) * 100));
-      setProgress(pct);
-      setStatus(pct >= 99 ? t('processing') : t('uploading', { percent: pct }));
-    };
-    xhr.onload = () => {
-      const res = (xhr.response ?? {}) as { ok?: boolean; code?: string; reason?: string; fields?: string[] };
-      if (xhr.status === 200 && res.ok) {
-        setProgress(100);
-        setStatus(t('uploaded'));
-        reset();
-        router.refresh();
-        return;
+    const total = files.length;
+    const label = (n: number, pct: number) =>
+      total > 1
+        ? t('uploadingMany', { current: n, total, percent: pct })
+        : pct >= 99
+          ? t('processing')
+          : t('uploading', { percent: pct });
+    let done = 0;
+    for (const [i, file] of files.entries()) {
+      setStatus(label(i + 1, 0));
+      const fileAlt = total > 1 && alt.trim() ? `${alt.trim()} (${i + 1})` : alt.trim();
+      const err = await send(file, fileAlt, (pct) => {
+        setProgress(Math.round(((i + pct / 100) / total) * 100));
+        setStatus(label(i + 1, pct));
+      });
+      if (err) {
+        if (done) router.refresh();
+        return fail(err.reason, err.field);
       }
-      const field = res.fields?.includes('alt') ? 'alt' : 'file';
-      const reason =
-        res.reason ??
-        (res.fields?.includes('alt') ? altMissing : res.code === 'forbidden' ? 'forbidden' : 'generic');
-      fail(reason, field);
-    };
-    xhr.onerror = () => fail('network', null);
-    xhr.send(body);
+      done += 1;
+    }
+    setProgress(100);
+    setStatus(
+      total > 1
+        ? `${t('uploadedMany', { count: done })}${chosen.length > total ? ` ${t('skippedFull', { count: chosen.length - total })}` : ''}`
+        : t('uploaded'),
+    );
+    reset();
+    router.refresh();
+  }
+
+  function pick(list: FileList | null) {
+    const n = list?.length ?? 0;
+    setFileCount(n);
+    setFileName(n === 1 ? (list?.[0]?.name ?? null) : null);
+    setError(null);
   }
 
   function onDrop(e: DragEvent<HTMLFieldSetElement>) {
@@ -173,9 +221,13 @@ export function MediaUploader({
     setDragging(false);
     const files = e.dataTransfer.files;
     if (!files.length || !fileRef.current) return;
-    fileRef.current.files = files;
-    setFileName(files[0]?.name ?? null);
-    setError(null);
+    if (many) fileRef.current.files = files;
+    else {
+      const one = new DataTransfer();
+      if (files[0]) one.items.add(files[0]);
+      fileRef.current.files = one.files;
+    }
+    pick(fileRef.current.files);
   }
 
   const fileError = error?.field === 'file' ? message(error) : undefined;
@@ -254,7 +306,7 @@ export function MediaUploader({
             )}
           >
             <label htmlFor={`${id}-file`} className="text-[13px] font-bold text-ink">
-              {t('file')}
+              {many ? t('fileMany') : t('file')}
             </label>
             <input
               ref={fileRef}
@@ -262,18 +314,23 @@ export function MediaUploader({
               name="file"
               type="file"
               accept={UPLOAD_ACCEPT.join(',')}
+              multiple={many}
               aria-invalid={fileError ? true : undefined}
               aria-describedby={fileError ? `${id}-file-error` : `${id}-file-hint`}
-              onChange={(e) => {
-                setFileName(e.currentTarget.files?.[0]?.name ?? null);
-                setError(null);
-              }}
+              onChange={(e) => pick(e.currentTarget.files)}
               className="min-h-10 w-full min-w-0 text-body file:me-3 file:min-h-8 file:rounded-pill file:border file:border-line-strong file:bg-surface file:px-4 file:text-body"
             />
             <p id={`${id}-file-hint`} className="text-caption text-ink-2">
-              {t('formats', { size })} {t('dropHint')}
+              {t('formats', { size })} {many ? t('dropHintMany') : t('dropHint')}
             </p>
-            {fileName ? <p className="text-caption text-ink-2">{t('chosen', { name: fileName })}</p> : null}
+            {fileName ? (
+              <p className="text-caption text-ink-2">{t('chosen', { name: fileName })}</p>
+            ) : fileCount > 1 ? (
+              <p className="text-caption text-ink-2">
+                {t('chosenMany', { count: fileCount })}
+                {fileCount > room ? ` ${t('tooManyFiles', { count: room })}` : ''}
+              </p>
+            ) : null}
             {fileError ? (
               <p id={`${id}-file-error`} className="text-caption text-danger">
                 {fileError}
@@ -305,7 +362,7 @@ export function MediaUploader({
               </p>
             ) : (
               <p id={`${id}-alt-hint`} className="text-caption text-ink-2">
-                {t('altHint')}
+                {t('altHint')} {fileCount > 1 ? t('altHintMany') : ''}
               </p>
             )}
           </div>
@@ -331,7 +388,11 @@ export function MediaUploader({
               disabled={progress !== null && progress < 100}
               aria-disabled={full || undefined}
             >
-              {replacing || (items.length > 0 && !multiple) ? t('replaceSubmit') : t('upload')}
+              {replacing || (items.length > 0 && !multiple)
+                ? t('replaceSubmit')
+                : fileCount > 1
+                  ? t('uploadMany', { count: Math.min(fileCount, room) })
+                  : t('upload')}
             </Button>
             {replacing ? (
               <Button
@@ -362,6 +423,8 @@ export function MediaUploader({
           allowDecorative={family === 'content'}
           defaultAlt={defaultAlt}
           replaceAssetId={replaceId}
+          multiple={multiple}
+          room={room}
         />
       ) : null}
     </section>

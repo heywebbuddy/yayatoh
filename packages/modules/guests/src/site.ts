@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto';
-import { type TenantTx, withoutTenant } from '@yayatoh/db';
-import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
+import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
+import { eventTicketFactsTx } from '@yayatoh/events';
+import { type Ctx, createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { appTokenSecret, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { findVenueTx } from '@yayatoh/venues';
 import { and, asc, count, eq, sql } from 'drizzle-orm';
@@ -109,6 +110,25 @@ export async function guestSiteTarget(raw: string): Promise<{ orgId: string; eve
     ),
   );
   return rows[0] ? { orgId: rows[0].org_id, eventId: rows[0].event_id } : null;
+}
+
+/**
+ * Whether any of a visitor's guest-site passes (the `yy_site_*` cookies) opens this event's
+ * published site: the media route then serves the private event's images to guests who passed
+ * the site's gate, the same content the site itself shows them.
+ */
+export async function guestSiteOpensEvent(
+  orgId: string,
+  eventId: string,
+  passes: readonly string[],
+): Promise<boolean> {
+  if (passes.length === 0) return false;
+  const row = await withTenant(createCtx({ orgId, actor: { type: 'system', name: 'guest-site' } }), (tx) =>
+    siteOfTx(tx, eventId),
+  );
+  if (row?.status !== 'published') return false;
+  const secret = appTokenSecret();
+  return passes.some((p) => siteAccessValid(p, row.id, row.passwordVersion, secret));
 }
 
 /* ---------------------------------------------------------------------------------- DTOs ---- */
@@ -493,6 +513,12 @@ export const PublicGuestSiteDto = z.discriminatedUnion('state', [
     intro: z.string().nullable(),
     contentLocale: z.string(),
     timezone: z.string(),
+    /** The event's dates, place and brand colour, for the site's hero (P4-3c redesign). */
+    startsAt: z.date(),
+    endsAt: z.date(),
+    venueName: z.string().nullable(),
+    city: z.string().nullable(),
+    brandColor: z.string().nullable(),
     blocks: z.array(PublicSiteBlockDto),
   }),
 ]);
@@ -558,6 +584,11 @@ export const publicGuestSiteQuery = tenantQuery({
       intro: row.intro,
       contentLocale: row.contentLocale,
       timezone: ev.timezone,
+      startsAt: ev.startsAt,
+      endsAt: ev.endsAt,
+      venueName: ev.venueName,
+      city: ev.city,
+      brandColor: (await eventTicketFactsTx(tx, [ev.id])).get(ev.id)?.brandColor ?? null,
       blocks,
     };
   },

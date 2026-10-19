@@ -769,7 +769,16 @@
     "gallery": "المعرض",
     "register": "تسجيل",
     "hostedBy": "يستضيفها",
-    "exhibitorMap": "خريطة العارضين"
+    "exhibitorMap": "خريطة العارضين",
+    "lightbox": {
+      "open": "فتح الصورة {n} من {total}",
+      "dialog": "عارض الصور",
+      "close": "إغلاق",
+      "previous": "الصورة السابقة",
+      "next": "الصورة التالية",
+      "counter": "الصورة {n} من {total}",
+      "thumbnails": "كل الصور"
+    }
   },
   "portal": {
     "day": "اليوم {day} · {date}",
@@ -4921,7 +4930,8 @@
       "faqFormat": "يحتاج كل سؤال إلى إجابة تحته، مع سطر فارغ بين الأسئلة."
     },
     "aboutTitle": "نبذة",
-    "faqTitle": "الأسئلة الشائعة"
+    "faqTitle": "الأسئلة الشائعة",
+    "renderedLabel": "كيف سيبدو"
   },
   "wizard": {
     "title": "إنشاء فعالية",
@@ -5067,7 +5077,16 @@
     },
     "defaultAlt": {
       "speaker": "صورة {name}"
-    }
+    },
+    "fileMany": "ملفات الصور",
+    "dropHintMany": "يمكنك اختيار عدة ملفات أو إفلاتها هنا دفعة واحدة.",
+    "chosenMany": "عدد الملفات المحددة: {count}.",
+    "tooManyFiles": "يتسع المكان لـ {count} فقط، لذلك سيتم رفع أول {count}.",
+    "altHintMany": "يحصل كل ملف على هذا النص مع رقمه، ويمكنك تعديل كل واحد لاحقًا.",
+    "uploadMany": "{count, plural, one {رفع صورة واحدة} other {رفع # صور}}",
+    "uploadingMany": "جارٍ رفع {current} من {total}… {percent}٪",
+    "uploadedMany": "{count, plural, one {تم رفع صورة واحدة.} other {تم رفع # صور.}}",
+    "skippedFull": "{count, plural, one {تم استبعاد ملف واحد لأن المعرض ممتلئ.} other {تم استبعاد # ملفات لأن المعرض ممتلئ.}}"
   },
   "doorStaff": {
     "title": "طاقم الأبواب",
@@ -13582,7 +13601,12 @@
     },
     "visit": "موقع {name}",
     "newTab": "(يفتح في علامة تبويب جديدة)",
-    "galleryLink": "شاهد الصور وشاركها"
+    "galleryLink": "شاهد الصور وشاركها",
+    "invited": "أنت مدعو",
+    "daysToGo": "{count, plural, one {بقي يوم واحد} two {بقي يومان} few {بقيت # أيام} many {بقي # يومًا} other {بقي # يوم}}",
+    "celebrated": "احتفلنا معًا",
+    "seeProgram": "برنامج الاحتفالات",
+    "photos": "الصور"
   },
   "gallery": {
     "uploader": {
@@ -18419,7 +18443,15 @@
       "use": "استخدام هذه الصورة",
       "placed": "تمت إضافة الصورة.",
       "alreadyHere": "هذه الصورة موجودة هنا بالفعل.",
-      "noChoice": "اختر صورة أولًا."
+      "noChoice": "اختر صورة أولًا.",
+      "chooseMany": "اختر صورة واحدة أو أكثر (حتى {max})",
+      "chosenCount": "{count, plural, =0 {لم تختر أي صورة بعد.} other {عدد الصور المختارة: #.}}",
+      "roomFull": "لا يتسع المكان لمزيد هنا.",
+      "altMany": "النص البديل لكل صورة",
+      "altForImage": "النص البديل للصورة {n}",
+      "partlyHere": "أُضيفت الصور. تم تخطي ما كان موجودًا هنا من قبل.",
+      "useMany": "{count, plural, =0 {استخدام الصور المختارة} one {استخدام هذه الصورة} other {استخدام الصور المختارة (#)}}",
+      "placedMany": "أُضيفت الصور."
     }
   },
   "storage": {

@@ -769,7 +769,16 @@
     "gallery": "Galeria",
     "register": "Inscrever-se",
     "hostedBy": "Organizado por",
-    "exhibitorMap": "Mapa de expositores"
+    "exhibitorMap": "Mapa de expositores",
+    "lightbox": {
+      "open": "Abrir a foto {n} de {total}",
+      "dialog": "Visualizador de fotos",
+      "close": "Fechar",
+      "previous": "Foto anterior",
+      "next": "Próxima foto",
+      "counter": "Foto {n} de {total}",
+      "thumbnails": "Todas as fotos"
+    }
   },
   "portal": {
     "day": "Dia {day} · {date}",
@@ -4921,7 +4930,8 @@
       "faqFormat": "Cada pergunta precisa de uma resposta abaixo dela, com uma linha em branco entre as perguntas."
     },
     "aboutTitle": "Sobre",
-    "faqTitle": "Perguntas frequentes"
+    "faqTitle": "Perguntas frequentes",
+    "renderedLabel": "Como vai ficar"
   },
   "wizard": {
     "title": "Criar um evento",
@@ -5067,7 +5077,16 @@
     },
     "defaultAlt": {
       "speaker": "Foto de {name}"
-    }
+    },
+    "fileMany": "Arquivos de imagem",
+    "dropHintMany": "Você pode escolher ou soltar vários arquivos de uma vez.",
+    "chosenMany": "{count} arquivos selecionados.",
+    "tooManyFiles": "Só cabem mais {count}, então os primeiros {count} serão enviados.",
+    "altHintMany": "Cada arquivo recebe este texto mais o seu número; você pode editar cada um depois.",
+    "uploadMany": "{count, plural, one {Enviar # imagem} other {Enviar # imagens}}",
+    "uploadingMany": "Enviando {current} de {total}… {percent}%",
+    "uploadedMany": "{count, plural, one {# imagem enviada.} other {# imagens enviadas.}}",
+    "skippedFull": "{count, plural, one {# arquivo ficou de fora porque a galeria está cheia.} other {# arquivos ficaram de fora porque a galeria está cheia.}}"
   },
   "doorStaff": {
     "title": "Контролёры на входе",
@@ -13582,7 +13601,12 @@
     },
     "visit": "Site de {name}",
     "newTab": "(abre num novo separador)",
-    "galleryLink": "Ver e compartilhar fotos"
+    "galleryLink": "Ver e compartilhar fotos",
+    "invited": "Você está convidado",
+    "daysToGo": "{count, plural, one {Falta # dia} other {Faltam # dias}}",
+    "celebrated": "Celebrado juntos",
+    "seeProgram": "Ver a programação",
+    "photos": "Fotos"
   },
   "gallery": {
     "uploader": {
@@ -18419,7 +18443,15 @@
       "use": "Usar esta imagem",
       "placed": "Imagem adicionada.",
       "alreadyHere": "Esta imagem já está aqui.",
-      "noChoice": "Escolha uma imagem primeiro."
+      "noChoice": "Escolha uma imagem primeiro.",
+      "chooseMany": "Escolha uma ou mais imagens (até {max})",
+      "chosenCount": "{count, plural, =0 {Nenhuma imagem escolhida.} one {# imagem escolhida.} other {# imagens escolhidas.}}",
+      "roomFull": "Não cabem mais aqui.",
+      "altMany": "Texto alternativo de cada imagem",
+      "altForImage": "Texto alternativo da imagem {n}",
+      "partlyHere": "Imagens adicionadas. As que já estavam aqui foram ignoradas.",
+      "useMany": "{count, plural, =0 {Usar as imagens escolhidas} one {Usar esta imagem} other {Usar estas # imagens}}",
+      "placedMany": "Imagens adicionadas."
     }
   },
   "storage": {

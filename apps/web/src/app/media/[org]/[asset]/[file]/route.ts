@@ -1,5 +1,7 @@
+import { guestSiteOpensEvent } from '@yayatoh/guests';
 import { CONTENT_TYPES, FILE_NAME, readVariant, serveTarget, type VariantFormat } from '@yayatoh/media';
 import { publicUnderlayShown } from '@yayatoh/seating';
+import { cookies } from 'next/headers';
 import { orgActor } from '@/server/org-actor.ts';
 import { getSession } from '@/server/session.ts';
 import { currentAccess } from '@/server/visitor.ts';
@@ -12,7 +14,8 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
  * content: long-lived immutable caching.
  *
  * Who gets it: anyone when the owner is public (a published public/unlisted event, a listed venue,
- * an active org's logo); a visitor holding the event's access grant for a private event; otherwise
+ * an active org's logo); a visitor holding the event's access grant for a private event (or a pass
+ * to its guest website, M4.5a); otherwise
  * only signed-in members of that org. Everything else — another org's private image included —
  * is the same 404 as a file that doesn't exist.
  *
@@ -43,6 +46,12 @@ async function allowedPrivately(orgId: string, eventId: string | null, visibilit
   if (visibility === 'private_event' && eventId) {
     const grant = await currentAccess(orgId, eventId);
     if (grant?.unlocksEvent) return true;
+    // A wedding's guests who passed its guest website's password see the images the site shows.
+    const passes = (await cookies())
+      .getAll()
+      .filter((c) => c.name.startsWith('yy_site_'))
+      .map((c) => c.value);
+    if (await guestSiteOpensEvent(orgId, eventId, passes)) return true;
   }
   const session = await getSession();
   if (!session) return false;

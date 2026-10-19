@@ -769,7 +769,16 @@
     "gallery": "ギャラリー",
     "register": "申し込む",
     "hostedBy": "主催",
-    "exhibitorMap": "出展者マップ"
+    "exhibitorMap": "出展者マップ",
+    "lightbox": {
+      "open": "写真 {n}/{total} を開く",
+      "dialog": "写真ビューアー",
+      "close": "閉じる",
+      "previous": "前の写真",
+      "next": "次の写真",
+      "counter": "写真 {n}/{total}",
+      "thumbnails": "すべての写真"
+    }
   },
   "portal": {
     "day": "{day}日目 · {date}",
@@ -4921,7 +4930,8 @@
       "faqFormat": "各質問の下に回答を書き、質問の間は空行を入れてください。"
     },
     "aboutTitle": "概要",
-    "faqTitle": "よくある質問"
+    "faqTitle": "よくある質問",
+    "renderedLabel": "表示イメージ"
   },
   "wizard": {
     "title": "イベントを作成",
@@ -5067,7 +5077,16 @@
     },
     "defaultAlt": {
       "speaker": "{name}の写真"
-    }
+    },
+    "fileMany": "画像ファイル",
+    "dropHintMany": "複数のファイルをまとめて選択、またはここにドロップできます。",
+    "chosenMany": "{count}個のファイルを選択しました。",
+    "tooManyFiles": "ここにはあと{count}枚しか入らないため、最初の{count}枚をアップロードします。",
+    "altHintMany": "各ファイルにはこのテキストと番号が付きます。後から個別に編集できます。",
+    "uploadMany": "{count, plural, other {#枚の画像をアップロード}}",
+    "uploadingMany": "{total}枚中{current}枚目をアップロード中… {percent}%",
+    "uploadedMany": "{count, plural, other {#枚の画像をアップロードしました。}}",
+    "skippedFull": "{count, plural, other {ギャラリーが満杯のため、#個のファイルを除外しました。}}"
   },
   "doorStaff": {
     "title": "Deurpersoneel",
@@ -13582,7 +13601,12 @@
     },
     "visit": "{name} のウェブサイト",
     "newTab": "（新しいタブで開きます）",
-    "galleryLink": "写真を見る・共有する"
+    "galleryLink": "写真を見る・共有する",
+    "invited": "ご招待",
+    "daysToGo": "{count, plural, other {あと#日}}",
+    "celebrated": "みんなでお祝いしました",
+    "seeProgram": "プログラムを見る",
+    "photos": "写真"
   },
   "gallery": {
     "uploader": {
@@ -18419,7 +18443,15 @@
       "use": "この画像を使う",
       "placed": "画像を追加しました。",
       "alreadyHere": "この画像はすでにここにあります。",
-      "noChoice": "まず画像を選んでください。"
+      "noChoice": "まず画像を選んでください。",
+      "chooseMany": "画像を1枚以上選択（最大{max}枚）",
+      "chosenCount": "{count, plural, =0 {まだ画像が選択されていません。} other {#枚の画像を選択中。}}",
+      "roomFull": "ここに追加できるのはこれで上限です。",
+      "altMany": "各画像の代替テキスト",
+      "altForImage": "画像 {n} の代替テキスト",
+      "partlyHere": "画像を追加しました。すでにあった画像はスキップしました。",
+      "useMany": "{count, plural, =0 {選択した画像を使う} one {この画像を使う} other {この#枚の画像を使う}}",
+      "placedMany": "画像を追加しました。"
     }
   },
   "storage": {

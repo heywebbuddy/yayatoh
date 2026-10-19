@@ -769,7 +769,16 @@
     "gallery": "Galleria",
     "register": "Iscriviti",
     "hostedBy": "Organizzato da",
-    "exhibitorMap": "Mappa degli espositori"
+    "exhibitorMap": "Mappa degli espositori",
+    "lightbox": {
+      "open": "Apri la foto {n} di {total}",
+      "dialog": "Visualizzatore di foto",
+      "close": "Chiudi",
+      "previous": "Foto precedente",
+      "next": "Foto successiva",
+      "counter": "Foto {n} di {total}",
+      "thumbnails": "Tutte le foto"
+    }
   },
   "portal": {
     "day": "Giorno {day} · {date}",
@@ -4921,7 +4930,8 @@
       "faqFormat": "Ogni domanda ha bisogno di una risposta sotto, con una riga vuota tra le domande."
     },
     "aboutTitle": "Informazioni",
-    "faqTitle": "FAQ"
+    "faqTitle": "FAQ",
+    "renderedLabel": "Come apparirà"
   },
   "wizard": {
     "title": "Crea un evento",
@@ -5067,7 +5077,16 @@
     },
     "defaultAlt": {
       "speaker": "Foto di {name}"
-    }
+    },
+    "fileMany": "File immagine",
+    "dropHintMany": "Puoi scegliere o trascinare più file insieme.",
+    "chosenMany": "{count} file selezionati.",
+    "tooManyFiles": "Qui ne stanno solo altri {count}, quindi verranno caricati i primi {count}.",
+    "altHintMany": "Ogni file riceve questo testo più il suo numero; potrai modificarli uno per uno in seguito.",
+    "uploadMany": "{count, plural, one {Carica # immagine} other {Carica # immagini}}",
+    "uploadingMany": "Caricamento {current} di {total}… {percent}%",
+    "uploadedMany": "{count, plural, one {# immagine caricata.} other {# immagini caricate.}}",
+    "skippedFull": "{count, plural, one {# file è stato escluso perché la galleria è piena.} other {# file sono stati esclusi perché la galleria è piena.}}"
   },
   "doorStaff": {
     "title": "Personale agli ingressi",
@@ -13582,7 +13601,12 @@
     },
     "visit": "Sito di {name}",
     "newTab": "(si apre in una nuova scheda)",
-    "galleryLink": "Guarda e condividi le foto"
+    "galleryLink": "Guarda e condividi le foto",
+    "invited": "Sei invitato",
+    "daysToGo": "{count, plural, one {Manca # giorno} other {Mancano # giorni}}",
+    "celebrated": "Festeggiato insieme",
+    "seeProgram": "Vedi il programma",
+    "photos": "Foto"
   },
   "gallery": {
     "uploader": {
@@ -18419,7 +18443,15 @@
       "use": "Usa questa immagine",
       "placed": "Immagine aggiunta.",
       "alreadyHere": "Questa immagine è già qui.",
-      "noChoice": "Prima scegli un’immagine."
+      "noChoice": "Prima scegli un’immagine.",
+      "chooseMany": "Scegli una o più immagini (fino a {max})",
+      "chosenCount": "{count, plural, =0 {Nessuna immagine scelta.} one {# immagine scelta.} other {# immagini scelte.}}",
+      "roomFull": "Qui non ce ne stanno altre.",
+      "altMany": "Testo alternativo per ogni immagine",
+      "altForImage": "Testo alternativo dell’immagine {n}",
+      "partlyHere": "Immagini aggiunte. Quelle già presenti sono state saltate.",
+      "useMany": "{count, plural, =0 {Usa le immagini scelte} one {Usa questa immagine} other {Usa queste # immagini}}",
+      "placedMany": "Immagini aggiunte."
     }
   },
   "storage": {

@@ -5,6 +5,7 @@ import { Alert, Button } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useEffect, useId, useRef, useState, useTransition } from 'react';
 import type { AiDraftState } from '@/app/[locale]/o/[org]/e/[event]/content/actions.ts';
+import { Markdown } from '@/components/markdown.tsx';
 import { errorMessageKey } from '@/lib/errors.ts';
 import type { FormState } from '@/lib/form-state.ts';
 
@@ -165,6 +166,17 @@ export function AiDraftPanel({
             {t('previewTitle', { kind: t(`kinds.${preview.kind}`) })}
           </h3>
           <p className="text-caption text-ink-2">{t('previewHint')}</p>
+          {preview.kind === 'tagline' ? null : (
+            <div className="flex flex-col gap-1.5">
+              <p className="text-[13px] font-bold text-ink">{t('renderedLabel')}</p>
+              <div
+                className="rounded-card border border-line bg-surface-2 p-4"
+                data-testid="ai-draft-rendered"
+              >
+                <Markdown source={preview.text} />
+              </div>
+            </div>
+          )}
           <label htmlFor={`${id}-preview`} className="text-[13px] font-bold text-ink">
             {t('previewLabel')}
           </label>

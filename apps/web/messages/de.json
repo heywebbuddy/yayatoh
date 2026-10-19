@@ -769,7 +769,16 @@
     "gallery": "Galerie",
     "register": "Anmelden",
     "hostedBy": "Veranstaltet von",
-    "exhibitorMap": "Ausstellerkarte"
+    "exhibitorMap": "Ausstellerkarte",
+    "lightbox": {
+      "open": "Foto {n} von {total} öffnen",
+      "dialog": "Fotoansicht",
+      "close": "Schließen",
+      "previous": "Vorheriges Foto",
+      "next": "Nächstes Foto",
+      "counter": "Foto {n} von {total}",
+      "thumbnails": "Alle Fotos"
+    }
   },
   "portal": {
     "day": "Tag {day} · {date}",
@@ -4921,7 +4930,8 @@
       "faqFormat": "Jede Frage braucht darunter eine Antwort, mit einer Leerzeile zwischen den Fragen."
     },
     "aboutTitle": "Über",
-    "faqTitle": "FAQ"
+    "faqTitle": "FAQ",
+    "renderedLabel": "So wird es aussehen"
   },
   "wizard": {
     "title": "Event erstellen",
@@ -5067,7 +5077,16 @@
     },
     "defaultAlt": {
       "speaker": "Foto von {name}"
-    }
+    },
+    "fileMany": "Bilddateien",
+    "dropHintMany": "Sie können mehrere Dateien auf einmal auswählen oder hier ablegen.",
+    "chosenMany": "{count} Dateien ausgewählt.",
+    "tooManyFiles": "Hier passen nur noch {count}, daher werden die ersten {count} hochgeladen.",
+    "altHintMany": "Jede Datei erhält diesen Text plus ihre Nummer; Sie können jeden danach bearbeiten.",
+    "uploadMany": "{count, plural, one {# Bild hochladen} other {# Bilder hochladen}}",
+    "uploadingMany": "Lade {current} von {total} hoch… {percent} %",
+    "uploadedMany": "{count, plural, one {# Bild hochgeladen.} other {# Bilder hochgeladen.}}",
+    "skippedFull": "{count, plural, one {# Datei wurde ausgelassen, da die Galerie voll ist.} other {# Dateien wurden ausgelassen, da die Galerie voll ist.}}"
   },
   "doorStaff": {
     "title": "Einlasspersonal",
@@ -13582,7 +13601,12 @@
     },
     "visit": "Website von {name}",
     "newTab": "(öffnet in einem neuen Tab)",
-    "galleryLink": "Fotos ansehen und teilen"
+    "galleryLink": "Fotos ansehen und teilen",
+    "invited": "Du bist eingeladen",
+    "daysToGo": "{count, plural, one {Noch # Tag} other {Noch # Tage}}",
+    "celebrated": "Gemeinsam gefeiert",
+    "seeProgram": "Zum Programm",
+    "photos": "Fotos"
   },
   "gallery": {
     "uploader": {
@@ -18419,7 +18443,15 @@
       "use": "Dieses Bild verwenden",
       "placed": "Bild hinzugefügt.",
       "alreadyHere": "Dieses Bild ist bereits hier.",
-      "noChoice": "Wählen Sie zuerst ein Bild."
+      "noChoice": "Wählen Sie zuerst ein Bild.",
+      "chooseMany": "Ein oder mehrere Bilder auswählen (bis zu {max})",
+      "chosenCount": "{count, plural, =0 {Noch keine Bilder ausgewählt.} one {# Bild ausgewählt.} other {# Bilder ausgewählt.}}",
+      "roomFull": "Mehr passen hier nicht hin.",
+      "altMany": "Alternativtext für jedes Bild",
+      "altForImage": "Alternativtext für Bild {n}",
+      "partlyHere": "Bilder hinzugefügt. Bereits vorhandene wurden übersprungen.",
+      "useMany": "{count, plural, =0 {Ausgewählte Bilder verwenden} one {Dieses Bild verwenden} other {Diese # Bilder verwenden}}",
+      "placedMany": "Bilder hinzugefügt."
     }
   },
   "storage": {

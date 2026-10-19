@@ -769,7 +769,16 @@
     "gallery": "Gallery",
     "register": "Register",
     "hostedBy": "Hosted by",
-    "exhibitorMap": "Exhibitor map"
+    "exhibitorMap": "Exhibitor map",
+    "lightbox": {
+      "open": "Open photo {n} of {total}",
+      "dialog": "Photo viewer",
+      "close": "Close",
+      "previous": "Previous photo",
+      "next": "Next photo",
+      "counter": "Photo {n} of {total}",
+      "thumbnails": "All photos"
+    }
   },
   "portal": {
     "day": "Day {day} · {date}",
@@ -4921,7 +4930,8 @@
       "faqFormat": "Each question needs an answer below it, with a blank line between questions."
     },
     "aboutTitle": "About",
-    "faqTitle": "FAQ"
+    "faqTitle": "FAQ",
+    "renderedLabel": "How it will look"
   },
   "wizard": {
     "title": "Create an event",
@@ -5067,7 +5077,16 @@
     },
     "defaultAlt": {
       "speaker": "Photo of {name}"
-    }
+    },
+    "fileMany": "Image files",
+    "dropHintMany": "You can choose or drop several files at once.",
+    "chosenMany": "{count} files selected.",
+    "tooManyFiles": "Only {count} more fit here, so the first {count} will be uploaded.",
+    "altHintMany": "Each file gets this text plus its number; you can edit each one afterwards.",
+    "uploadMany": "{count, plural, one {Upload # image} other {Upload # images}}",
+    "uploadingMany": "Uploading {current} of {total}… {percent}%",
+    "uploadedMany": "{count, plural, one {# image uploaded.} other {# images uploaded.}}",
+    "skippedFull": "{count, plural, one {# file was left out because the gallery is full.} other {# files were left out because the gallery is full.}}"
   },
   "doorStaff": {
     "title": "Door staff",
@@ -13582,7 +13601,12 @@
     },
     "visit": "Website of {name}",
     "newTab": "(opens in a new tab)",
-    "galleryLink": "See and share photos"
+    "galleryLink": "See and share photos",
+    "invited": "You're invited",
+    "daysToGo": "{count, plural, one {# day to go} other {# days to go}}",
+    "celebrated": "Celebrated together",
+    "seeProgram": "See the celebrations",
+    "photos": "Photos"
   },
   "gallery": {
     "uploader": {
@@ -18419,7 +18443,15 @@
       "use": "Use this image",
       "placed": "Image added.",
       "alreadyHere": "This image is already here.",
-      "noChoice": "Pick an image first."
+      "noChoice": "Pick an image first.",
+      "chooseMany": "Pick one or more images (up to {max})",
+      "chosenCount": "{count, plural, =0 {No images chosen yet.} one {# image chosen.} other {# images chosen.}}",
+      "roomFull": "That is as many as fit here.",
+      "altMany": "Alt text for each image",
+      "altForImage": "Alt text for image {n}",
+      "partlyHere": "Images added. Any that were already here were skipped.",
+      "useMany": "{count, plural, =0 {Use the chosen images} one {Use this image} other {Use these # images}}",
+      "placedMany": "Images added."
     }
   },
   "storage": {
