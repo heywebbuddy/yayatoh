@@ -1,4 +1,7 @@
-# Typing nothing is refused with a message that goes away as soon as typing starts (M7.4b).
+# Journey: scan manual validation — typing nothing is refused with a message that goes away as soon as typing
+#   starts.
+# Preconditions: as enrol-by-link.yaml.
+# Personas: none (a door device).
 appId: com.yayatoh.staff.preview
 ---
 - runFlow: scan-setup.yaml

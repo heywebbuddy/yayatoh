@@ -12,6 +12,8 @@
     "./app-config": "./src/app-config.ts",
     "./catalog-check": "./src/i18n/validate.ts",
     "./jest-setup": "./jest-setup.cjs",
+    "./testing/a11y-audit": "./tests/support/a11y-audit.ts",
+    "./testing/a11y-scan": "./tests/support/a11y-scan.ts",
     "./metro": "./metro.cjs"
   },
   "scripts": {

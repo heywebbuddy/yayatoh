@@ -178,3 +178,95 @@ describe('push payloads', () => {
     expect(routeForPush(data)).toBeNull();
   });
 });
+
+// M7.x security review (link hijacking): hosts and paths a crafted link could use to reach a screen
+// or to leak a secret. None of these may produce a route.
+describe('link hijacking (M7.x)', () => {
+  const KEY = 'yyd_AbCdEfGhIjKlMnOpQrStUvWxYz0123456789_-ABCDE';
+  const EVENT = '3f2b8c1e-5d4a-4e6b-9a7c-0d1e2f3a4b5c';
+
+  it.each([
+    // Look-alike and nested hosts.
+    'https://yayatoh.com.evil.example/claim/abcdefgh1',
+    'https://evilyayatoh.com/claim/abcdefgh1',
+    'https://app.yayatoh.com.evil.example/claim/abcdefgh1',
+    'https://yayatoh.events/claim/abcdefgh1',
+    'https://a.b.yayatoh.events/claim/abcdefgh1',
+    'https://-.yayatoh.events/claim/abcdefgh1',
+    'https://x.yayatoh.events.evil.example/claim/abcdefgh1',
+    // Credentials, ports and encoded separators in the authority.
+    'https://yayatoh.com@evil.example/claim/abcdefgh1',
+    'https://evil.example@yayatoh.com/claim/abcdefgh1',
+    'https://evil.example%40yayatoh.com/claim/abcdefgh1',
+    'https://yayatoh.com:8443/claim/abcdefgh1',
+    'https://yayatoh.com%2eevil.example/claim/abcdefgh1',
+    'https://yayatoh.com\\@evil.example/claim/abcdefgh1',
+    // Plain http, other schemes, odd forms.
+    'http://yayatoh.com/claim/abcdefgh1',
+    'javascript://yayatoh.com/claim/abcdefgh1',
+    'intent://yayatoh.com/claim/abcdefgh1#Intent;scheme=https;end',
+    'file:///claim/abcdefgh1',
+    '//yayatoh.com/claim/abcdefgh1',
+    'yayatoh.com/claim/abcdefgh1',
+    'https:/yayatoh.com/claim/abcdefgh1',
+    // Paths that climb, double up or smuggle separators.
+    'https://yayatoh.com/claim/../tickets/abcdefgh1',
+    'https://yayatoh.com/claim/%2e%2e/abcdefgh1',
+    'https://yayatoh.com/claim/abcdefgh1/extra',
+    'https://yayatoh.com/claim/abc%2Fdefgh1',
+    'https://yayatoh.com/claim/abcdefgh1%00',
+    'https://yayatoh.com/claim/abc defgh1',
+    'https://yayatoh.com/organizer/settings',
+    'https://yayatoh.com/o/acme/events',
+    'https://yayatoh.com/api/v1/me/tickets',
+    'https://yayatoh.com/sign-in',
+    'https://yayatoh.com/admin',
+  ])('is not a route: %s', (url) => {
+    expect(attendee(url)).toBeNull();
+  });
+
+  it('treats a doubled slash and surrounding whitespace as the same link, never as another host', () => {
+    const expected = { pathname: ROUTES.claim, params: { token: 'abcdefgh1' } };
+    expect(attendee('https://yayatoh.com//claim/abcdefgh1')).toEqual(expected);
+    expect(attendee(' https://yayatoh.com/claim/abcdefgh1\n')).toEqual(expected);
+  });
+
+  it('opens nothing from a scheme that merely starts like ours', () => {
+    for (const url of [
+      'yayatoh.evil://claim/abcdefgh1',
+      'yayatohx://claim/abcdefgh1',
+      'xyayatoh://claim/abcdefgh1',
+      'yayatoh-staff2://scan#e=x',
+    ])
+      expect(attendee(url)).toBeNull();
+  });
+
+  it('never routes a Staff enrolment link whose key is not in the fragment or is not a real key shape', () => {
+    // The key in the query string, in the path, doubled, or too short.
+    expect(staff(`https://yayatoh.com/scan?e=${EVENT}&k=${KEY}`)).toBeNull();
+    expect(staff(`https://yayatoh.com/scan/${KEY}#e=${EVENT}`)).toBeNull();
+    expect(staff(`https://yayatoh.com/scan#e=${EVENT}&k=short`)).toBeNull();
+    expect(staff(`https://yayatoh.com/scan#e=not-a-uuid&k=${KEY}`)).toBeNull();
+    // A look-alike host never reaches the enrolment screen.
+    expect(staff(`https://yayatoh.com.evil.example/scan#e=${EVENT}&k=${KEY}`)).toBeNull();
+    expect(staff(`https://evil.example@yayatoh.com/scan#e=${EVENT}&k=${KEY}`)).toBeNull();
+    // And the real one still does, with the key only in the params (never in the pathname).
+    const ok = staff(`https://app.yayatoh.com/scan#e=${EVENT}&k=${KEY}`);
+    expect(ok).toEqual({ pathname: ROUTES.enrol, params: { event: EVENT, key: KEY } });
+    expect(ok?.pathname).not.toContain(KEY);
+  });
+
+  it('a push payload cannot open anything but a ticket, an order or an event', () => {
+    for (const path of [
+      '/tickets/../orders/3f2b8c1e-5d4a-4e6b-9a7c-0d1e2f3a4b5c',
+      '/admin/users',
+      '/claim/abcdefgh1',
+      '//evil.example/tickets/3f2b8c1e-5d4a-4e6b-9a7c-0d1e2f3a4b5c',
+      'https://evil.example/tickets/3f2b8c1e-5d4a-4e6b-9a7c-0d1e2f3a4b5c',
+      '/tickets/3f2b8c1e-5d4a-4e6b-9a7c-0d1e2f3a4b5c?x=1',
+      '/tickets/not-a-uuid',
+      `/events/${'a'.repeat(300)}`,
+    ])
+      expect(routeForPush({ path })).toBeNull();
+  });
+});

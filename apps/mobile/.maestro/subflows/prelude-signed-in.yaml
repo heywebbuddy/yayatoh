@@ -1,0 +1,20 @@
+# Journey: (sub-flow) the shared start of the browse and buy flows: a fresh install, a new event and a new
+#   account signed in with a password. Nothing is bought.
+# Preconditions: an e2e build; a server with YAYATOH_DEV_AUTH, the fake providers and DEV_PERSONA_PASSWORD
+#   (passed with -e, or MAESTRO_DEV_PERSONA_PASSWORD in the environment).
+# Personas: a throwaway buyer; the event belongs to a throwaway organization (scripts/new-event.js).
+#   Leaves ${output.email}, ${output.password}, ${output.eventSlug}, ${output.eventName} and
+#   ${output.eventQuery} set for the caller.
+appId: com.yayatoh.yayatohapp.preview
+---
+- launchApp:
+    clearState: true
+- runScript:
+    file: ../scripts/new-event.js
+- runScript:
+    file: ../scripts/new-user.js
+- runFlow:
+    file: sign-in.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${output.password}

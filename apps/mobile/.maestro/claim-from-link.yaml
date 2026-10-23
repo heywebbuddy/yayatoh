@@ -1,23 +1,68 @@
-# M7.3b: a claim link opens the claim screen; a signed-out person signs in first and is brought back to it.
-# Written, not run in cloud sessions. Seed: CLAIM_TOKEN is the token of an open claim link (a plain
-# claim link made by the organizer, or a transfer to tess@example.test).
+# Journey: claim from a link — person A sends a ticket to person B's address; B opens the claim link signed
+#   out, signs in (the app brings B back to the claim), claims it, and the ticket opens.
+# Preconditions: as subflows/prelude-ticket.yaml; the dev mailbox holds A's transfer email so
+#   scripts/last-claim-link.js can read the claim token. One phone plays both people, one after the other.
+# Personas: A = throwaway buyer holding a free ticket; B = a second throwaway account whose address A sends to.
 appId: com.yayatoh.yayatohapp.preview
-env:
-  CLAIM_TOKEN: seeded-open-claim-token
-  EVENT: Summer Night
 ---
-- launchApp:
-    clearState: true
-- openLink: yayatoh-preview://claim/${CLAIM_TOKEN}
-- assertVisible: 'Sign in to claim this ticket'
+# B is made first: the transfer must go to B's verified address.
+- runScript:
+    file: scripts/new-user.js
+- evalScript: ${output.emailB = output.email; output.passwordB = output.password}
+- runFlow: subflows/prelude-ticket.yaml
+- tapOn:
+    text: 'Free entry for ${output.eventName}.*'
+- scrollUntilVisible:
+    element: 'Transfer ticket'
+- tapOn: 'Transfer ticket'
+- tapOn:
+    id: 'to-name'
+- inputText: 'Bea Claimer'
+- tapOn:
+    id: 'to-email'
+- inputText: ${output.emailB}
+- tapOn: 'Review transfer'
+- tapOn: 'Send transfer'
+- extendedWaitUntil:
+    visible: 'Transfer sent'
+    timeout: 20000
+- tapOn: 'Done'
+# A signs out; B opens the link from the email.
+- tapOn: 'Account, tab, 3 of 3'
+- scrollUntilVisible:
+    element:
+      id: 'account-sign-out'
+- tapOn:
+    id: 'account-sign-out'
+- tapOn:
+    id: 'account-sign-out-confirm'
+- extendedWaitUntil:
+    visible: 'Welcome to Yayatoh'
+    timeout: 20000
+- runScript:
+    file: scripts/last-claim-link.js
+    env:
+      EMAIL: ${output.emailB}
+- openLink: yayatoh-preview://claim/${output.claimToken}
+- extendedWaitUntil:
+    visible: 'Sign in to claim this ticket'
+    timeout: 20000
 - tapOn: 'Sign in'
-- runFlow: tickets-sign-in.yaml
+- runFlow:
+    file: subflows/sign-in.yaml
+    env:
+      EMAIL: ${output.emailB}
+      PASSWORD: ${output.passwordB}
 # Back on the claim screen after sign-in.
-- assertVisible: 'Claim your ticket'
+- extendedWaitUntil:
+    visible: 'Claim your ticket'
+    timeout: 20000
 - assertVisible:
-    text: '.*${EVENT}.*'
+    text: '.*${output.eventName}.*'
 - tapOn: 'Claim ticket'
-- assertVisible: 'The ticket is yours'
+- extendedWaitUntil:
+    visible: 'The ticket is yours'
+    timeout: 20000
 - tapOn: 'View ticket'
 - assertVisible:
-    text: 'Ticket QR code for ${EVENT}'
+    text: 'Ticket QR code for ${output.eventName}'

@@ -60,3 +60,6 @@ docs/ux/sweep/full/
 expo-env.d.ts
 apps/*/ios/
 apps/*/android/
+
+# Store screenshots are captured on the device pass and uploaded by hand (M7.5a)
+apps/*/store/screenshots/

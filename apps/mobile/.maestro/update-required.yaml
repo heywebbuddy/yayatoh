@@ -1,12 +1,17 @@
-# M7.1c: a build whose version is below the server's minimum shows the update screen and nothing
-# else. Written, not run in cloud sessions. The device pass runs it against a preview build pointed
-# (API_BASE_URL) at a server whose MOBILE_CONFIG_JSON sets apps."yayatoh-ios".minimumVersion above
-# the build's version, with IOS_ATTENDEE_STORE_URL set.
+# Journey: update required (426) — a build whose version is below the server's minimum shows the update
+#   screen and nothing else (no welcome screen behind it).
+# Preconditions: the build is pointed (API_BASE_URL) at a server whose MOBILE_CONFIG_JSON sets
+#   apps."yayatoh-ios".minimumVersion (or the Android key) above the build's version, with
+#   IOS_ATTENDEE_STORE_URL set. The shared e2e server is not configured that way, so this runs against a
+#   second configuration in the device pass.
+# Personas: none.
 appId: com.yayatoh.yayatohapp.preview
 ---
 - launchApp:
     clearState: true
-- assertVisible: 'Update required'
+- extendedWaitUntil:
+    visible: 'Update required'
+    timeout: 30000
 - assertVisible:
     text: 'Update Yayatoh'
 - assertNotVisible: 'Welcome to Yayatoh'

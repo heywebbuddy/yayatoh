@@ -177,6 +177,7 @@ export function GuestsScreen() {
       ) : (
         <>
           <Field
+            autoComplete="off"
             label={t('guests.searchLabel')}
             value={text}
             onChangeText={setText}

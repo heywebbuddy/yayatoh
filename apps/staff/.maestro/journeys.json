@@ -1,0 +1,346 @@
+{
+  "$comment": "Journey inventory for the Staff app (M7.x). tools/check-maestro checks this file against the flows in this directory and against docs/plans/mobile.md. Every key is explained in docs/specs/M7.X/maestro.md.",
+  "app": "staff",
+  "appId": "com.yayatoh.staff.preview",
+  "flows": {
+    "launch.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": []
+    },
+    "organizer-sign-in.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server"]
+    },
+    "organizer-event-day.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server"]
+    },
+    "exhibitor-sign-in.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server", "seeded-data"]
+    },
+    "leads-offline-sync.yaml": {
+      "kind": "flow",
+      "platforms": "android",
+      "clean": true,
+      "ci": true,
+      "needs": ["dev-server", "seeded-data"]
+    },
+    "enrol-by-link.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Needs an enrolled door device (ENROL_EVENT and ENROL_KEY); only the organizer console makes one, and no HTTP route does.",
+      "needs": ["door-device"]
+    },
+    "enrol-scan-screen.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Needs a camera: the iOS simulator has none, and the emulator's is a virtual scene.",
+      "needs": ["camera-hardware"]
+    },
+    "pick-checkpoint.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Needs an enrolled door device (ENROL_EVENT and ENROL_KEY); only the organizer console makes one, and no HTTP route does.",
+      "needs": ["door-device"]
+    },
+    "scan-admit-and-repeat.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Needs an enrolled door device (ENROL_EVENT and ENROL_KEY); only the organizer console makes one, and no HTTP route does.",
+      "needs": ["door-device"]
+    },
+    "scan-refusals.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Needs an enrolled door device (ENROL_EVENT and ENROL_KEY); only the organizer console makes one, and no HTTP route does.",
+      "needs": ["door-device"]
+    },
+    "scan-camera-denied.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Needs an enrolled door device (ENROL_EVENT and ENROL_KEY); only the organizer console makes one, and no HTTP route does.",
+      "needs": ["door-device"]
+    },
+    "scan-manual-validation.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Needs an enrolled door device (ENROL_EVENT and ENROL_KEY); only the organizer console makes one, and no HTTP route does.",
+      "needs": ["door-device"]
+    },
+    "offline-drill-phone-a.yaml": {
+      "kind": "flow",
+      "platforms": "android",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Two phones at once, each with its own door device; Needs an enrolled door device (ENROL_EVENT and ENROL_KEY); only the organizer console makes one, and no HTTP route does.",
+      "needs": ["door-device", "two-devices"],
+      "twoDevices": true
+    },
+    "offline-drill-phone-b.yaml": {
+      "kind": "flow",
+      "platforms": "android",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Two phones at once, each with its own door device; Needs an enrolled door device (ENROL_EVENT and ENROL_KEY); only the organizer console makes one, and no HTTP route does.",
+      "needs": ["door-device", "two-devices"],
+      "twoDevices": true
+    },
+    "door-manual-checkin.yaml": {
+      "kind": "flow",
+      "platforms": "android",
+      "clean": false,
+      "ci": false,
+      "ciReason": "Needs an enrolled door device (ENROL_EVENT and ENROL_KEY); only the organizer console makes one, and no HTTP route does.",
+      "needs": ["door-device"]
+    },
+    "lookup.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": false,
+      "ci": false,
+      "ciReason": "Needs an enrolled door device (ENROL_EVENT and ENROL_KEY); only the organizer console makes one, and no HTTP route does.",
+      "needs": ["door-device"]
+    },
+    "guest-list.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": false,
+      "ci": false,
+      "ciReason": "Needs an enrolled door device (ENROL_EVENT and ENROL_KEY); only the organizer console makes one, and no HTTP route does.",
+      "needs": ["door-device"]
+    },
+    "assistance-queue.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": false,
+      "ci": false,
+      "ciReason": "Needs an enrolled door device (ENROL_EVENT and ENROL_KEY); only the organizer console makes one, and no HTTP route does.",
+      "needs": ["door-device"]
+    },
+    "remote-wipe.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "An organizer must click Wipe in the console while the flow waits; Needs an enrolled door device (ENROL_EVENT and ENROL_KEY); only the organizer console makes one, and no HTTP route does.",
+      "needs": ["door-device", "console-actor"]
+    },
+    "revoke.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "An organizer must click Revoke in the console while the flow waits; Needs an enrolled door device (ENROL_EVENT and ENROL_KEY); only the organizer console makes one, and no HTTP route does.",
+      "needs": ["door-device", "console-actor"]
+    },
+    "update-required.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Needs a server whose minimum Staff version is above the build's; the shared e2e server is not.",
+      "needs": ["min-version-server"]
+    },
+    "update-required-in-event-window.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Needs a door device and a server whose minimum Staff version is above the build's; Needs an enrolled door device (ENROL_EVENT and ENROL_KEY); only the organizer console makes one, and no HTTP route does.",
+      "needs": ["door-device", "min-version-server"]
+    },
+    "arabic-rtl-smoke.yaml": {
+      "kind": "flow",
+      "platforms": "both",
+      "clean": true,
+      "ci": false,
+      "ciReason": "Needs the phone's language set to Arabic; Maestro can only try an iOS launch argument (unverified) and cannot change an emulator's language.",
+      "needs": ["device-locale"]
+    },
+    "scan-setup.yaml": {
+      "kind": "subflow",
+      "platforms": "both",
+      "clean": true,
+      "needs": ["door-device"]
+    }
+  },
+  "journeys": [
+    {
+      "id": "launch-smoke",
+      "title": "Launch: a fresh install opens on enrolment",
+      "platforms": "both",
+      "flows": ["launch.yaml"]
+    },
+    {
+      "id": "enrol-by-link",
+      "title": "Enrol a door device by opening the enrolment link",
+      "platforms": "both",
+      "flows": ["enrol-by-link.yaml"]
+    },
+    {
+      "id": "enrol-by-qr",
+      "title": "Enrol a door device by scanning the enrolment QR code",
+      "platforms": "both",
+      "flows": ["enrol-scan-screen.yaml"],
+      "manual": "Reading a QR code needs a camera, and the iOS simulator has none; the flow covers the scanner screen around the scan (hint, permission, \"enter the link instead\").",
+      "devicePass": ["Scan a real enrolment QR code from the console on an iPhone and an Android phone."]
+    },
+    {
+      "id": "pick-checkpoint",
+      "title": "Pick the entrance this device scans at",
+      "platforms": "both",
+      "flows": ["pick-checkpoint.yaml"]
+    },
+    {
+      "id": "scan-admit-and-duplicate",
+      "title": "Scan: admit once, then the repeat is flagged",
+      "platforms": "both",
+      "flows": ["scan-admit-and-repeat.yaml"],
+      "devicePass": [
+        "Scan real printed and on-screen QR codes, in daylight and dark with the torch.",
+        "Verdict time under 300 ms on a mid-range Android phone."
+      ]
+    },
+    {
+      "id": "scan-refusals",
+      "title": "Scan: unknown and refunded codes are refused",
+      "platforms": "both",
+      "flows": ["scan-refusals.yaml"]
+    },
+    {
+      "id": "scan-camera-denied",
+      "title": "Scan: camera denied still lets staff type a code",
+      "platforms": "both",
+      "flows": ["scan-camera-denied.yaml"]
+    },
+    {
+      "id": "scan-manual-validation",
+      "title": "Scan: typed-code validation",
+      "platforms": "both",
+      "flows": ["scan-manual-validation.yaml"]
+    },
+    {
+      "id": "offline-drill",
+      "title": "Offline drill (X): two phones admit the same ticket offline; the duplicate is flagged within 60 s",
+      "platforms": "both",
+      "flows": ["offline-drill-phone-a.yaml", "offline-drill-phone-b.yaml"],
+      "manualPlatforms": {
+        "ios": "Maestro's setAirplaneMode does not work on the iOS simulator, so the offline half is a device-pass step with airplane mode turned on by hand."
+      },
+      "devicePass": ["Run on two real phones at once."]
+    },
+    {
+      "id": "door-manual-checkin",
+      "title": "Door: find a guest and check them in by hand, with a reason, offline",
+      "platforms": "both",
+      "flows": ["door-manual-checkin.yaml"],
+      "manualPlatforms": {
+        "ios": "Maestro's setAirplaneMode does not work on the iOS simulator, so the offline half is a device-pass step with airplane mode turned on by hand."
+      }
+    },
+    {
+      "id": "guest-list",
+      "title": "Door: guest list check-in",
+      "platforms": "both",
+      "flows": ["guest-list.yaml"]
+    },
+    {
+      "id": "assistance-queue",
+      "title": "Door: help requests (raise, take, start, resolve)",
+      "platforms": "both",
+      "flows": ["assistance-queue.yaml"]
+    },
+    {
+      "id": "lookup",
+      "title": "Door: lookup by name, phone or email",
+      "platforms": "both",
+      "flows": ["lookup.yaml"]
+    },
+    {
+      "id": "lead-retrieval-offline-sync",
+      "title": "Leads: capture offline, then sync (shared fields only)",
+      "platforms": "both",
+      "flows": ["leads-offline-sync.yaml"],
+      "manualPlatforms": {
+        "ios": "Maestro's setAirplaneMode does not work on the iOS simulator, so the offline half is a device-pass step with airplane mode turned on by hand."
+      },
+      "devicePass": ["Scan a real badge with the camera."]
+    },
+    {
+      "id": "organizer-sign-in-totp",
+      "title": "Organizer sign-in with the authenticator code",
+      "platforms": "both",
+      "flows": ["organizer-sign-in.yaml"]
+    },
+    {
+      "id": "organizer-event-day",
+      "title": "Organizer event-day view (read only)",
+      "platforms": "both",
+      "flows": ["organizer-event-day.yaml"]
+    },
+    {
+      "id": "exhibitor-sign-in",
+      "title": "Exhibitor sign-in by invitation link and emailed code",
+      "platforms": "both",
+      "flows": ["exhibitor-sign-in.yaml"]
+    },
+    {
+      "id": "remote-wipe",
+      "title": "Remote wipe erases the device within a heartbeat",
+      "platforms": "both",
+      "flows": ["remote-wipe.yaml"]
+    },
+    {
+      "id": "revoke",
+      "title": "Revoke returns the device to enrolment within a heartbeat",
+      "platforms": "both",
+      "flows": ["revoke.yaml"]
+    },
+    {
+      "id": "update-required-outside-event-window",
+      "title": "Update required (426) outside an event window",
+      "platforms": "both",
+      "flows": ["update-required.yaml"]
+    },
+    {
+      "id": "update-required-inside-event-window",
+      "title": "No update screen inside an event window",
+      "platforms": "both",
+      "flows": ["update-required-in-event-window.yaml"]
+    },
+    {
+      "id": "arabic-rtl-smoke",
+      "title": "Arabic right-to-left smoke",
+      "platforms": "both",
+      "flows": ["arabic-rtl-smoke.yaml"],
+      "devicePass": ["Layout direction, VoiceOver and TalkBack in Arabic."]
+    }
+  ]
+}

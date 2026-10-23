@@ -1,10 +1,17 @@
-# M7.1c: the Staff app below the server's minimum shows the update screen, except during an event
-# window (then only a nudge). Written, not run in cloud sessions. Device pass: a preview build whose
-# server sets apps."yayatoh-staff-ios".minimumVersion above the build's version and no active event.
+# Journey: update required, outside an event window — a Staff build below the server's minimum shows the
+#   update screen and nothing else (an app with no event to work has no door to protect).
+# Preconditions: an e2e build pointed (API_BASE_URL) at a server whose MOBILE_CONFIG_JSON sets
+#   apps."yayatoh-staff-ios".minimumVersion (or the Android key) above the build's version, and no enrolled
+#   device. The shared e2e server is not configured that way, so this runs against a second configuration
+#   in the device pass.
+# Personas: none.
 appId: com.yayatoh.staff.preview
 ---
 - launchApp:
     clearState: true
-- assertVisible: 'Update required'
+- extendedWaitUntil:
+    visible: 'Update required'
+    timeout: 30000
 - assertVisible:
     text: 'Update Yayatoh Staff'
+- assertNotVisible: 'Enrol this device'

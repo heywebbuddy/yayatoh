@@ -20,6 +20,8 @@
 3. Run `bash zap/run-baseline.sh https://<staging>` and the k6 smoke profile
    (`k6 run -e BASE_URL=https://<staging> -e PEAK_VUS=5 k6/checkout.js`) for releases that touch
    checkout, scanning, auth or headers.
+   For releases that touch the mobile apps' `/v1` routes also run `k6/me-tickets.js`, `k6/app-checkout.js`,
+   `k6/scan-batch-peak.js` and `k6/staff-heartbeat.js` (same flags; k6/README.md).
 4. **(production, owner)** Run migrations on production (`migrator`, direct connection,
    `lock_timeout` set in each migration) — before promoting the app when migrations are expand-only.
 5. **(production, owner)** Promote the deployment in Vercel. The worker (Fly) deploys with

@@ -1,0 +1,26 @@
+# Journey: guest list — search the guest list by name or party, check a guest in, and see the arrival; a
+#   guest already checked in earlier is marked, and the screen names how many check-ins wait to send.
+# Preconditions: an enrolled device (enrol-by-link.yaml) at an event that has a guest list, and a seeded guest
+#   passed as -e GUEST_QUERY=<part of their name> -e GUEST_NAME=<their name>, not checked in yet.
+# Personas: none (a door device); the guest is a seeded RSVP guest.
+appId: com.yayatoh.staff.preview
+env:
+  GUEST_QUERY: ''
+  GUEST_NAME: ''
+---
+- openLink: yayatoh-staff-preview://tools/guests
+- extendedWaitUntil:
+    visible: 'Search for a guest to check them in.'
+    timeout: 30000
+- tapOn:
+    id: guests-query
+- inputText: ${GUEST_QUERY}
+- extendedWaitUntil:
+    visible: '.*${GUEST_NAME}.*'
+    timeout: 30000
+- tapOn: 'Check in ${GUEST_NAME}'
+- extendedWaitUntil:
+    visible: 'Arrived at .*|Checked in, waiting to send'
+    timeout: 30000
+# The same guest searched again shows the arrival, not a second check-in.
+- assertNotVisible: 'Check in ${GUEST_NAME}'

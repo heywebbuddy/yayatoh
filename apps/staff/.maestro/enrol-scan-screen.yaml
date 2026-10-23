@@ -1,0 +1,19 @@
+# Journey: enrol by QR code — the enrolment scanner asks for the camera, shows its hint, and offers "Enter
+#   the link instead". Reading a real QR code needs a camera, so the scan itself is a device-pass step
+#   (manual); this flow covers the screen around it.
+# Preconditions: an e2e build on a phone or an emulator with a camera (the iOS simulator has none, and
+#   shows the camera-unavailable state instead of the hint).
+# Personas: none.
+appId: com.yayatoh.staff.preview
+---
+- launchApp:
+    clearState: true
+    permissions:
+      camera: allow
+- tapOn: 'Scan the enrolment QR code'
+- extendedWaitUntil:
+    visible: 'Scan the enrolment code'
+    timeout: 20000
+- assertVisible: 'Point the camera at the QR code on the organizer.s screen.'
+- tapOn: 'Enter the link instead'
+- assertVisible: 'Enrol this device'

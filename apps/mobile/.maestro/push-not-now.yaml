@@ -1,22 +1,47 @@
-# Device pass. "Not now" shows no sheet; tickets do not ask again; the next purchase does.
-appId: ${APP_ID}
-env:
-  EVENT_SLUG: summit
+# Journey: push prompt "Not now" — answering Not now shows no phone sheet; opening a ticket does not ask
+#   again; the next purchase asks again.
+# Preconditions: as push-prompt-after-purchase.yaml.
+# Personas: a throwaway buyer.
+appId: com.yayatoh.yayatohapp.preview
 ---
 - launchApp:
     clearState: true
-    permissions: { notifications: unset }
-- runFlow: sign-in-seeded.yaml
-- runFlow: buy-ticket.yaml
-- assertVisible: "Get updates about your tickets?"
-- tapOn: "Not now"
-- assertNotVisible: "Get updates about your tickets?"
+    permissions:
+      notifications: unset
+- runScript:
+    file: scripts/new-event.js
+- runScript:
+    file: scripts/new-user.js
+- runFlow:
+    file: subflows/sign-in.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${output.password}
+- runFlow:
+    file: subflows/acquire-ticket.yaml
+    env:
+      EVENT_QUERY: ${output.eventQuery}
+      EVENT_NAME: ${output.eventName}
+      PUSH: leave
+- extendedWaitUntil:
+    visible: 'Get updates about your tickets?'
+    timeout: 20000
+- tapOn: 'Not now'
+- assertNotVisible: 'Get updates about your tickets?'
 # The phone was never asked, and opening a ticket does not ask.
-- tapOn: "Tickets"
+- tapOn: 'View my tickets'
 - tapOn:
-    index: 0
-- assertNotVisible: "Get updates about your tickets?"
+    text: 'Free entry for ${output.eventName}.*'
+- assertNotVisible: 'Get updates about your tickets?'
 # A later purchase asks again.
-- runFlow: buy-ticket.yaml
-- assertVisible: "Get updates about your tickets?"
-- tapOn: "Not now"
+- back
+- runFlow:
+    file: subflows/acquire-ticket.yaml
+    env:
+      EVENT_QUERY: ${output.eventQuery}
+      EVENT_NAME: ${output.eventName}
+      PUSH: leave
+- extendedWaitUntil:
+    visible: 'Get updates about your tickets?'
+    timeout: 20000
+- tapOn: 'Not now'

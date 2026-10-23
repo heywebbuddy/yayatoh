@@ -1,0 +1,257 @@
+{
+  "$comment": "Privacy labels as data (M7.5a). Derived from the SDKs and permissions the app ships; `pnpm --filter @yayatoh/mobile privacy:check` fails when the dependency or permission lists stop matching. Copy these answers into App Store Connect (App Privacy) and Play Console (Data safety) by hand; see docs/runbooks/mobile-release.md.",
+  "app": "mobile",
+  "reviewedOn": "2026-10-15",
+  "tracking": false,
+  "dataTypes": {
+    "name": {
+      "apple": "Contact Info / Name",
+      "play": "Personal info / Name",
+      "linkedToUser": true,
+      "optional": false,
+      "purposes": ["app_functionality", "account_management"],
+      "via": ["first-party"],
+      "why": "The name on the account and on orders, tickets and transfers."
+    },
+    "email": {
+      "apple": "Contact Info / Email Address",
+      "play": "Personal info / Email address",
+      "linkedToUser": true,
+      "optional": false,
+      "purposes": ["app_functionality", "account_management"],
+      "via": ["first-party"],
+      "why": "Sign-in codes, order confirmations and tickets are sent to it."
+    },
+    "user_id": {
+      "apple": "Identifiers / User ID",
+      "play": "Personal info / User IDs",
+      "linkedToUser": true,
+      "optional": false,
+      "purposes": ["app_functionality", "account_management"],
+      "via": ["first-party"],
+      "why": "The account id that links the signed-in person to orders and tickets."
+    },
+    "device_id": {
+      "apple": "Identifiers / Device ID",
+      "play": "Device or other IDs / Device or other IDs",
+      "linkedToUser": true,
+      "optional": true,
+      "purposes": ["app_functionality"],
+      "via": ["first-party", "expo-notifications"],
+      "why": "The push token of this phone, stored only after the person allows notifications, so ticket and order messages reach it. Deleted at sign-out and when the provider rejects it."
+    },
+    "purchase_history": {
+      "apple": "Purchases / Purchase History",
+      "play": "Financial info / Purchase history",
+      "linkedToUser": true,
+      "optional": false,
+      "purposes": ["app_functionality"],
+      "via": ["first-party"],
+      "why": "Orders and tickets bought through Yayatoh, shown in My tickets and Orders. Card details are entered on the payment provider's page and never reach the app."
+    },
+    "location_coarse": {
+      "apple": "Location / Coarse Location",
+      "play": "Location / Approximate location",
+      "linkedToUser": false,
+      "optional": true,
+      "purposes": ["app_functionality"],
+      "via": ["first-party", "expo-location"],
+      "why": "Only after the person taps \"Near me\": approximate coordinates (rounded) sent with the public event search, not tied to an account, not stored."
+    },
+    "crash_data": {
+      "apple": "Diagnostics / Crash Data",
+      "play": "App info and performance / Crash logs",
+      "linkedToUser": false,
+      "optional": true,
+      "purposes": ["diagnostics"],
+      "via": ["@sentry/react-native"],
+      "why": "Scrubbed crash reports to Sentry (a processor acting for Yayatoh); no user id, name, email, ticket code or token."
+    }
+  },
+  "dependencies": {
+    "@noble/ciphers": {
+      "collects": [],
+      "why": "Encrypts the cache, tickets and guest list on the phone. Local only."
+    },
+    "@noble/hashes": {
+      "collects": [],
+      "why": "Hashing and key derivation on the phone. Local only."
+    },
+    "@sentry/react-native": {
+      "collects": ["crash_data"],
+      "why": "Crash reports, scrubbed of names, emails, codes and tokens before they leave the phone. Off unless a DSN is configured. No screenshots, no view hierarchy, no performance traces (tracesSampleRate 0)."
+    },
+    "@tanstack/react-query": {
+      "collects": [],
+      "why": "In-memory server-state cache. Local only."
+    },
+    "@tanstack/react-query-persist-client": {
+      "collects": [],
+      "why": "Persists the cache as one encrypted file on the phone. Local only."
+    },
+    "expo": {
+      "collects": [],
+      "why": "Runtime and module loader. No data of its own."
+    },
+    "expo-apple-authentication": {
+      "collects": [],
+      "why": "Sign in with Apple: the identity token goes to Yayatoh's API, which is first-party (email and name labels)."
+    },
+    "expo-application": {
+      "collects": [],
+      "why": "Reads the app version and install identifiers for the version check; not sent as an identifier."
+    },
+    "expo-auth-session": {
+      "collects": [],
+      "why": "Google sign-in in the system browser with PKCE; the id token goes to Yayatoh's API (first-party)."
+    },
+    "expo-brightness": {
+      "collects": [],
+      "why": "Raises the screen brightness while a ticket QR code is shown. Local only."
+    },
+    "expo-build-properties": {
+      "collects": [],
+      "why": "Build-time configuration only."
+    },
+    "expo-calendar": {
+      "collects": [],
+      "why": "Write-only: adds an event the person chose. Nothing is read or sent."
+    },
+    "expo-constants": {
+      "collects": [],
+      "why": "Reads build configuration. Local only."
+    },
+    "expo-crypto": {
+      "collects": [],
+      "why": "Random numbers and hashes on the phone. Local only."
+    },
+    "expo-dev-client": {
+      "collects": [],
+      "why": "Development builds only; not in a store build."
+    },
+    "expo-file-system": {
+      "collects": [],
+      "why": "Stores the encrypted cache on the phone. Local only."
+    },
+    "expo-linking": {
+      "collects": [],
+      "why": "Opens universal links and the app scheme. Local only."
+    },
+    "expo-localization": {
+      "collects": [],
+      "why": "Reads the phone language to pick a catalog. Local only."
+    },
+    "expo-location": {
+      "collects": ["location_coarse"],
+      "why": "Coarse, while-in-use location, only after the person taps \"Near me\". Rounded to about 1 km and sent with the public event search, which is not signed in."
+    },
+    "expo-network": {
+      "collects": [],
+      "why": "Reads connectivity state for the offline banner. Local only."
+    },
+    "expo-notifications": {
+      "collects": ["device_id"],
+      "why": "Gets the APNs or FCM push token after the person allows notifications. Yayatoh's API stores it per phone and per organization to send the person's own ticket and order messages."
+    },
+    "expo-router": {
+      "collects": [],
+      "why": "Navigation. Local only."
+    },
+    "expo-secure-store": {
+      "collects": [],
+      "why": "Keeps tokens and keys in the Keychain or Keystore. Local only."
+    },
+    "expo-splash-screen": {
+      "collects": [],
+      "why": "Splash screen. Local only."
+    },
+    "expo-status-bar": {
+      "collects": [],
+      "why": "Status bar style. Local only."
+    },
+    "expo-system-ui": {
+      "collects": [],
+      "why": "Root view colours. Local only."
+    },
+    "expo-updates": {
+      "collects": [],
+      "why": "EAS Update checks for JavaScript fixes. The request carries the platform, runtime version and update id, and no user or device identifier."
+    },
+    "expo-web-browser": {
+      "collects": [],
+      "why": "Opens the secure checkout and sign-in pages in the system browser session."
+    },
+    "openapi-fetch": {
+      "collects": [],
+      "why": "HTTP client for Yayatoh's API (first-party)."
+    },
+    "qrcode": {
+      "collects": [],
+      "why": "Draws the ticket QR code on the phone. Local only."
+    },
+    "react": {
+      "collects": [],
+      "why": "UI runtime. No data."
+    },
+    "react-native": {
+      "collects": [],
+      "why": "UI runtime. No data."
+    },
+    "react-native-gesture-handler": {
+      "collects": [],
+      "why": "Touch handling. Local only."
+    },
+    "react-native-reanimated": {
+      "collects": [],
+      "why": "Animation. Local only."
+    },
+    "react-native-safe-area-context": {
+      "collects": [],
+      "why": "Screen insets. Local only."
+    },
+    "react-native-screens": {
+      "collects": [],
+      "why": "Native screens. Local only."
+    },
+    "react-native-svg": {
+      "collects": [],
+      "why": "Draws icons and QR codes. Local only."
+    },
+    "react-native-worklets": {
+      "collects": [],
+      "why": "Animation runtime. Local only."
+    },
+    "use-intl": {
+      "collects": [],
+      "why": "Translations. Local only."
+    }
+  },
+  "permissions": {
+    "ios:NSLocationWhenInUseUsageDescription": {
+      "dataTypes": ["location_coarse"],
+      "why": "\"Near me\" on Discover, once per tap."
+    },
+    "ios:NSCalendarsWriteOnlyAccessUsageDescription": {
+      "dataTypes": [],
+      "why": "Add to calendar, write-only."
+    },
+    "android:android.permission.ACCESS_COARSE_LOCATION": {
+      "dataTypes": ["location_coarse"],
+      "why": "\"Near me\" on Discover. Fine and background location are blocked."
+    },
+    "android:android.permission.POST_NOTIFICATIONS": {
+      "dataTypes": ["device_id"],
+      "why": "Android 13+ notification permission, asked after a first purchase or first opened ticket."
+    }
+  },
+  "play": {
+    "encryptedInTransit": true,
+    "deletionPath": "Account > Delete account (in the app); also at ${STORE_ACCOUNT_DELETION_URL}",
+    "processors": [
+      "Sentry (crash reports)",
+      "Expo (EAS Update, JavaScript fixes)",
+      "Apple and Google (push delivery)",
+      "Stripe (checkout page, attendee app only)"
+    ]
+  }
+}

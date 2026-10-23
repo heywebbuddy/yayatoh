@@ -1,0 +1,32 @@
+# Journey: orders list / detail — the order screen shows the lines, subtotal, fees and total, when it was
+#   ordered and paid, and where a refund request stands; it leads to the event and to My tickets.
+#   Known gap: the orders list (/orders) has no entry point in the app yet (no tab, Account row or link
+#   opens it; only the "still confirming" screen links to it), so the list is a device-pass step and only
+#   the detail is exercised here.
+# Preconditions: as search-and-buy.yaml (a paid purchase on the fake provider).
+# Personas: a throwaway buyer holding one Supporter ticket (bought by the flow).
+appId: com.yayatoh.yayatohapp.preview
+---
+- runFlow: subflows/prelude-signed-in.yaml
+- runFlow:
+    file: subflows/acquire-ticket.yaml
+    env:
+      EVENT_QUERY: ${output.eventQuery}
+      EVENT_NAME: ${output.eventName}
+      TICKET_TYPE: Supporter
+# The confirmation is the order screen.
+- assertVisible: 'Tickets'
+- assertVisible: '1 × Supporter'
+- assertVisible: 'Subtotal'
+- assertVisible: 'Fees'
+- assertVisible: 'Total'
+- assertVisible: 'Ordered .*'
+- scrollUntilVisible:
+    element: 'Refunds'
+- assertVisible: 'No refund requested.'
+- scrollUntilVisible:
+    element: 'View the event'
+- tapOn: 'View the event'
+- extendedWaitUntil:
+    visible: '.*${output.eventName}.*'
+    timeout: 30000

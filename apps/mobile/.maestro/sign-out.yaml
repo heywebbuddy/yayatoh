@@ -1,0 +1,40 @@
+# Journey: sign out — Account asks first, signing out returns to the welcome screen and a restart
+#   stays signed out; "Sign out everywhere" asks first too and backing out signs nobody out.
+# Preconditions: as password-two-factor.yaml (a server with YAYATOH_DEV_AUTH, DEV_PERSONA_PASSWORD passed).
+# Personas: a throwaway account (scripts/new-user.js).
+appId: com.yayatoh.yayatohapp.preview
+---
+- launchApp:
+    clearState: true
+- runScript:
+    file: scripts/new-user.js
+- runFlow:
+    file: subflows/sign-in.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${output.password}
+- tapOn: 'Account, tab, 3 of 3'
+- scrollUntilVisible:
+    element:
+      id: 'account-sign-out-everywhere'
+- tapOn:
+    id: 'account-sign-out-everywhere'
+# It asks first; backing out signs nobody out.
+- assertVisible: 'This signs you out of Yayatoh on every phone and browser.*'
+- tapOn:
+    id: 'account-everywhere-cancel'
+- scrollUntilVisible:
+    element:
+      id: 'account-sign-out'
+- tapOn:
+    id: 'account-sign-out'
+- assertVisible: 'Sign out of Yayatoh on this phone?'
+- tapOn:
+    id: 'account-sign-out-confirm'
+- extendedWaitUntil:
+    visible: 'Welcome to Yayatoh'
+    timeout: 20000
+# Signed out stays signed out after a restart.
+- stopApp
+- launchApp
+- assertVisible: 'Welcome to Yayatoh'

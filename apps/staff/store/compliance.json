@@ -1,0 +1,71 @@
+{
+  "app": "staff",
+  "reviewedOn": "2026-10-15",
+  "exportCompliance": {
+    "usesEncryption": true,
+    "usesNonExemptEncryption": true,
+    "algorithms": "standard-only",
+    "inApp": [
+      "TLS to the Yayatoh API and the payment page, from the operating system",
+      "Ed25519 signature verification of ticket codes (ticket-crypto) so the door can admit offline",
+      "SQLCipher (AES-256) for the encrypted guest list (expo-sqlite)",
+      "XChaCha20-Poly1305 for the cache, the outbox and the vault files",
+      "Keys kept in the iOS Keychain and Android Keystore (expo-secure-store)"
+    ],
+    "classification": "Mass-market encryption item, ECCN 5D992.c, self-classified (EAR 740.17(b)(1)) because the apps use standard algorithms for data protection beyond the operating system. Standard algorithms only, no proprietary cryptography, no encryption for third parties.",
+    "annualReport": "A self-classification report to BIS and the ENC Encryption Request Coordinator is due each year by 1 February for items exported in the year before.",
+    "france": "Apple handles the French declaration with the documents uploaded in App Store Connect; nothing is added to the app.",
+    "owner": "pending owner and counsel: confirm the classification, upload the documents in App Store Connect, then set IOS_ENCRYPTION_COMPLIANCE_CODE in the EAS environment. Until then each upload asks the export question once per build."
+  },
+  "contentRating": {
+    "apple": {
+      "expected": "4+",
+      "why": "A work tool for event teams with no user-generated public content, no web access and no sensitive themes.",
+      "capabilities": {
+        "unrestrictedWebAccess": false,
+        "userGeneratedContent": false,
+        "messaging": false,
+        "advertising": false,
+        "ageAssurance": false,
+        "gambling": false,
+        "lootBoxes": false
+      },
+      "answers": "mirrors apple.advisory in store.config.json"
+    },
+    "play": {
+      "category": "Utility, Productivity, Communication or other",
+      "answers": {
+        "violence": "No",
+        "sexualContent": "No",
+        "language": "No",
+        "controlledSubstances": "No",
+        "gambling": "No",
+        "usersCanInteract": "No",
+        "sharesLocation": "No",
+        "digitalPurchases": "No",
+        "webBrowser": "No"
+      },
+      "expected": "Everyone / PEGI 3 (the IARC result decides)"
+    }
+  },
+  "guidelines": {
+    "2.1": {
+      "answer": "Demo access: a door-device enrolment link and a ticket code, with steps in the review notes. Organizer and exhibitor accounts need an invitation, which the review contact sends on request.",
+      "where": "Review notes"
+    },
+    "5.1.1": {
+      "answer": "The camera is used only to read QR codes; no images are stored or sent. A door device has no personal account.",
+      "where": "Scan tickets; Enrol this device"
+    },
+    "3.1.1": {
+      "answer": "The app sells nothing and has no in-app purchase.",
+      "where": "Whole app"
+    }
+  },
+  "play": {
+    "accountDeletionUrl": "${STORE_ACCOUNT_DELETION_URL}",
+    "targetAudience": "18 and over (event staff); not designed for children",
+    "adsDeclaration": "No ads",
+    "financialFeatures": "None"
+  }
+}

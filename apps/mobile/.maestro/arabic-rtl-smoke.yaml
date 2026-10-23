@@ -1,0 +1,36 @@
+# Journey: Arabic right-to-left smoke — choosing Arabic in Account > Language switches the app to Arabic and
+#   right-to-left (the app reloads itself): the welcome screen and the tab names are in Arabic, and
+#   choosing "Same as this phone" returns to English. The layout direction itself is checked in the
+#   device pass with VoiceOver / TalkBack; here the Arabic strings prove the catalog and the reload ran.
+# Preconditions: as subflows/prelude-signed-in.yaml (a server with YAYATOH_DEV_AUTH and DEV_PERSONA_PASSWORD).
+# Personas: a throwaway account (scripts/new-user.js).
+appId: com.yayatoh.yayatohapp.preview
+---
+- launchApp:
+    clearState: true
+- runScript:
+    file: scripts/new-user.js
+- runFlow:
+    file: subflows/sign-in.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${output.password}
+- tapOn: 'Account, tab, 3 of 3'
+- tapOn:
+    id: 'account-language'
+- tapOn:
+    id: 'language-ar'
+# The app reloads for the new direction; the Arabic tab names come up.
+- extendedWaitUntil:
+    visible: '.*الحساب.*'
+    timeout: 60000
+- assertVisible: '.*التذاكر.*'
+- assertVisible: '.*استكشاف.*'
+# Back to the phone's language so the next flow starts in English.
+- tapOn:
+    id: 'account-language'
+- tapOn:
+    id: 'language-system'
+- extendedWaitUntil:
+    visible: 'Account, tab, 3 of 3'
+    timeout: 60000

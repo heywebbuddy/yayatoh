@@ -1,27 +1,56 @@
-# Device pass. Refusing the phone's sheet blocks no purchase, ticket or sign-in, and is not asked again.
-appId: ${APP_ID}
-env:
-  EVENT_SLUG: summit
+# Journey: push denied blocks nothing — refusing the phone's sheet leaves the order, the ticket and Account
+#   working, the app does not ask again at the next purchase, and Notification settings explains and links
+#   to the phone's settings.
+# Preconditions: as push-prompt-after-purchase.yaml. The refusal button is "Don't Allow" on iOS and
+#   "Don't allow" on Android 13+.
+# Personas: a throwaway buyer.
+appId: com.yayatoh.yayatohapp.preview
 ---
 - launchApp:
     clearState: true
-    permissions: { notifications: unset }
-- runFlow: sign-in-seeded.yaml
-- runFlow: buy-ticket.yaml
-- assertVisible: "Get updates about your tickets?"
-- tapOn: "Turn on notifications"
-- tapOn: "Don’t Allow"
+    permissions:
+      notifications: unset
+- runScript:
+    file: scripts/new-event.js
+- runScript:
+    file: scripts/new-user.js
+- runFlow:
+    file: subflows/sign-in.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${output.password}
+- runFlow:
+    file: subflows/acquire-ticket.yaml
+    env:
+      EVENT_QUERY: ${output.eventQuery}
+      EVENT_NAME: ${output.eventName}
+      PUSH: leave
+- extendedWaitUntil:
+    visible: 'Get updates about your tickets?'
+    timeout: 20000
+- tapOn: 'Turn on notifications'
+- tapOn: 'Don.t [Aa]llow'
 # Everything still works: the order, the ticket and the account.
-- assertVisible: "Order confirmed"
-- tapOn: "Tickets"
+- assertVisible: "You're going!"
+- tapOn: 'View my tickets'
 - tapOn:
-    index: 0
-- assertVisible: "Ticket QR code"
-- runFlow: buy-ticket.yaml
-- assertNotVisible: "Get updates about your tickets?"
-# The Notifications screen explains and links to the phone's settings.
-- tapOn: "Account"
-- tapOn: "Notifications"
-- assertVisible: "Notifications are off"
-- assertVisible: "Tickets, orders and sign-in work the same with them off."
-- tapOn: "Open phone settings"
+    text: 'Free entry for ${output.eventName}.*'
+- assertVisible: 'Ticket QR code for .*'
+- back
+# The phone has decided, so a later purchase does not ask.
+- runFlow:
+    file: subflows/acquire-ticket.yaml
+    env:
+      EVENT_QUERY: ${output.eventQuery}
+      EVENT_NAME: ${output.eventName}
+      PUSH: leave
+- assertNotVisible: 'Get updates about your tickets?'
+# Notification settings explains and links to the phone's settings.
+- tapOn: 'Account, tab, 3 of 3'
+- tapOn:
+    id: 'account-notifications'
+- extendedWaitUntil:
+    visible: 'Notifications are off'
+    timeout: 20000
+- assertVisible: 'Notifications are optional. Tickets, orders and sign-in work the same with them off.'
+- assertVisible: 'Open phone settings'

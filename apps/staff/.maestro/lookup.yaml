@@ -1,0 +1,33 @@
+# Journey: lookup — find a guest by name, phone or email: at least two letters are needed, a match shows only
+#   name, pass type, short code and status, no-one found says so with a hint, and a voided pass is marked.
+# Preconditions: an enrolled device (enrol-by-link.yaml) with a downloaded guest list, and a seeded guest
+#   passed as -e GUEST_QUERY='ada love' -e GUEST_NAME='Ada Lovelace'.
+# Personas: none (a door device); the guest is a seeded attendee.
+appId: com.yayatoh.staff.preview
+env:
+  GUEST_QUERY: 'ada love'
+  GUEST_NAME: 'Ada Lovelace'
+---
+- openLink: yayatoh-staff-preview://tools/lookup
+- assertVisible: 'Name, phone or email'
+# One letter is not enough.
+- tapOn:
+    id: lookup-query
+- inputText: 'a'
+- tapOn:
+    id: lookup-search
+- assertVisible: 'Type at least two letters.'
+- eraseText: 5
+- inputText: ${GUEST_QUERY}
+- tapOn:
+    id: lookup-search
+- assertVisible: ${GUEST_NAME}
+- assertVisible: '.*Code .*'
+# No private field: the result never shows an email address or a hash.
+- assertNotVisible: '.*@.*'
+- eraseText: 40
+- inputText: 'zzzz nobody'
+- tapOn:
+    id: lookup-search
+- assertVisible: 'No one found'
+- assertVisible: 'Check the spelling, or try their email or phone number.'

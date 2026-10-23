@@ -88,6 +88,12 @@ export interface V1Deps {
   readonly portalMail?: PortalMailer;
   /** M7.2e: the M1.14 limiter behind the portal sign-in (default: Upstash when configured, else Postgres counters). */
   readonly portalLimiter?: PlatformRateLimiter;
+  /**
+   * M7.x: the M1.14 limiter behind the sign-in codes and challenges (`appEmailCode`,
+   * `appSignInVerify`, `appStepUpMail`), counted in the shared store so every server instance sees
+   * the same attempts (default as `portalLimiter`). The in-memory limits above still apply per instance.
+   */
+  readonly authLimiter?: PlatformRateLimiter;
   /** M7.2f: the M1.14 limiter behind the apps' checkout, the web's `checkoutStart` policy (default as `portalLimiter`). */
   readonly checkoutLimiter?: PlatformRateLimiter;
 }

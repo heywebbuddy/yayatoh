@@ -54,6 +54,7 @@ export function LookupScreen() {
   return (
     <Screen testID="lookup-screen">
       <Field
+        autoComplete="off"
         label={t('lookup.queryLabel')}
         hint={t('lookup.queryHint')}
         value={text}

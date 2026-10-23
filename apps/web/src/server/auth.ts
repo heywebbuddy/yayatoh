@@ -4,6 +4,7 @@ import {
   consoleMailer,
   createAuth,
   devPersonaReplayExempt,
+  reviewerFixedCodes,
   type SecretSealer,
   type TwoFactorService,
   twoFactorService,
@@ -137,6 +138,8 @@ export const authMailer: AuthMailer = {
 
 /** TOTP replay protection skips only the seeded dev personas' derived secrets, with dev auth on. */
 const totpReplayExempt = devPersonaReplayExempt();
+/** The store reviewer demo's fixed sign-in code: non-production only, and only when both values are set (M7.5a). */
+const fixedEmailCodes = reviewerFixedCodes();
 
 /** Better Auth for this host, created on first use (the build never needs the secret). */
 export function getAuth(): Auth {
@@ -149,6 +152,7 @@ export function getAuth(): Auth {
       mailer: authMailer,
       sealer,
       ...(totpReplayExempt ? { totpReplayExempt } : {}),
+      ...(fixedEmailCodes ? { fixedEmailCodes } : {}),
       // Someone whose address was erased signs up again (M1.14e): account mail reaches them again;
       // org marketing still needs a new consent from them.
       onUserCreated: async (user) => {

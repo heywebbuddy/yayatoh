@@ -1,21 +1,36 @@
-# Device pass. Account → Notifications in each permission state.
-appId: ${APP_ID}
+# Journey: notification settings — Account > Notification settings in each permission state: not set up (with
+#   what is sent and the News and offers line), then on after allowing.
+# Preconditions: as push-prompt-after-purchase.yaml (the permission starts unset).
+# Personas: a throwaway buyer; no purchase is made (the settings screen asks through the same explanation).
+appId: com.yayatoh.yayatohapp.preview
 ---
 - launchApp:
     clearState: true
-    permissions: { notifications: unset }
-- runFlow: sign-in-seeded.yaml
-- tapOn: "Account"
-- tapOn: "Notifications"
-- assertVisible: "Notifications are not set up yet"
-- assertVisible: "Orders and tickets"
-- assertVisible: "Reminders"
-- assertVisible: "Event changes"
-- assertVisible: "News and offers"
-- assertVisible: "Off. We only send these if you choose to receive them."
-- tapOn: "Turn on notifications"
-- assertVisible: "Get updates about your tickets?"
-- tapOn: "Turn on notifications"
-- tapOn: "Allow"
-- assertVisible: "Notifications are on"
-- tapOn: "Open phone settings"
+    permissions:
+      notifications: unset
+- runScript:
+    file: scripts/new-user.js
+- runFlow:
+    file: subflows/sign-in.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${output.password}
+- tapOn: 'Account, tab, 3 of 3'
+- tapOn:
+    id: 'account-notifications'
+- extendedWaitUntil:
+    visible: 'Notifications are not set up yet'
+    timeout: 20000
+- assertVisible: 'Orders and tickets'
+- assertVisible: 'Reminders'
+- assertVisible: 'Event changes'
+- assertVisible: 'News and offers'
+- assertVisible: 'Off. We only send these if you choose to receive them.'
+- tapOn: 'Turn on notifications'
+- assertVisible: 'Get updates about your tickets?'
+- tapOn: 'Turn on notifications'
+- tapOn: 'Allow'
+- extendedWaitUntil:
+    visible: 'Notifications are on'
+    timeout: 20000
+- assertVisible: 'Open phone settings'

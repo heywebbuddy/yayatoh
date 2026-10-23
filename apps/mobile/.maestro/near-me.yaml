@@ -1,15 +1,22 @@
-# "Near me" asks for the location only when tapped, then sorts nearest first.
-appId: com.yayatoh.yayatohapp.dev
-env:
-  EMAIL: nia@newcomer.test
-  PASSWORD: persona-dev-password
+# Journey: near me — "Near me" asks for the location only when tapped (nothing at launch), then lists nearest
+#   first; tapping again turns it off.
+# Preconditions: as subflows/prelude-signed-in.yaml. The location permission starts unset. A simulator or
+#   emulator needs a location set (Features > Location on iOS; the emulator's extended controls on Android).
+# Personas: a throwaway buyer.
+appId: com.yayatoh.yayatohapp.preview
 ---
 - launchApp:
     clearState: true
     permissions:
       location: unset
-- runFlow: subflows/sign-in.yaml
-- tapOn: 'Discover'
+- runScript:
+    file: scripts/new-user.js
+- runFlow:
+    file: subflows/sign-in.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${output.password}
+- tapOn: 'Discover, tab, 2 of 3'
 - assertVisible: 'Find events'
 # Nothing has asked for the location yet: no system dialog.
 - assertNotVisible: 'Allow.*'
@@ -24,8 +31,8 @@ env:
       platform: Android
     commands:
       - tapOn: 'While using the app'
-- assertVisible:
-    text: 'Nearest first'
+- extendedWaitUntil:
+    visible: 'Nearest first'
     timeout: 20000
 # Tapping again turns it off.
 - tapOn: 'Near me'

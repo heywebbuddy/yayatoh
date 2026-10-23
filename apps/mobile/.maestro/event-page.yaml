@@ -1,0 +1,25 @@
+# Journey: event page — the page shows the event's name, organizer, when (in the event's time zone), where,
+#   and the passes with all-in prices; the paid pass shows a price and the free one says Free.
+# Preconditions: as subflows/prelude-signed-in.yaml.
+# Personas: a throwaway buyer; the event has a free pass "Free entry" and a paid pass "Supporter".
+appId: com.yayatoh.yayatohapp.preview
+---
+- runFlow: subflows/prelude-signed-in.yaml
+- openLink: yayatoh-preview://events/${output.eventSlug}
+- extendedWaitUntil:
+    visible: '.*${output.eventName}.*'
+    timeout: 30000
+- assertVisible: 'When'
+- assertVisible: 'Times are in the event.s time zone.*'
+- assertVisible: 'Where'
+- scrollUntilVisible:
+    element: 'Tickets'
+- scrollUntilVisible:
+    element: 'Add one Free entry'
+- assertVisible: 'Add one Supporter'
+- assertVisible: 'fees included'
+# Nothing is selected yet, so there is no way to check out.
+- assertNotVisible: 'Continue to checkout'
+- tapOn: 'Add one Free entry'
+- assertVisible: '1 ticket.*'
+- assertVisible: 'Continue to checkout'

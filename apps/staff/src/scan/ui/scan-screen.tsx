@@ -138,12 +138,14 @@ export function ScanView({
             >
               <Button
                 label={t('direction.in')}
+                role="radio"
                 selected={direction === 'in'}
                 onPress={() => setDirection('in')}
                 testID="direction-in"
               />
               <Button
                 label={t('direction.out')}
+                role="radio"
                 selected={direction === 'out'}
                 onPress={() => setDirection('out')}
                 testID="direction-out"

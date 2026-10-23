@@ -515,7 +515,7 @@ export async function dispatchDueTx(
       });
       if (provider && row.channel !== 'push') health.push({ provider, kind: 'send' });
       // Usage metering (M3.5a): SMS by segment, everything else by message.
-      await gate.meter(tx, row.channel as QuotaChannel, segments ?? 1);
+      gate.meter(row.channel as QuotaChannel, segments ?? 1);
       // The billing meters (M6.6b, P6-7/D16) count paid channels from this outbox event; push is free.
       if (row.channel !== 'push')
         await emitEvents(
@@ -569,6 +569,7 @@ export async function dispatchDueTx(
       } else result.held += 1;
     }
   }
+  await gate.flush(tx);
   return result;
 }
 

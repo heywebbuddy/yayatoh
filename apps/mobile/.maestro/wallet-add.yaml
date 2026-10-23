@@ -1,0 +1,28 @@
+# Journey: wallet add — the ticket offers "Add to Apple Wallet" on iOS and "Save to Google Wallet" on Android,
+#   and with the fake pass provider tapping it ends without the app's failure message.
+# Preconditions: as subflows/prelude-ticket.yaml; fake wallet provider (the real Apple and Google adapters
+#   wait for the owner's Pass Type ID and issuer account). The system's Wallet sheet is outside the app, so a
+#   real add is a device-pass step.
+# Personas: a throwaway buyer holding one free ticket.
+appId: com.yayatoh.yayatohapp.preview
+---
+- runFlow: subflows/prelude-ticket.yaml
+- tapOn:
+    text: 'Free entry for ${output.eventName}.*'
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - scrollUntilVisible:
+          element: 'Add to Apple Wallet'
+      - tapOn: 'Add to Apple Wallet'
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - scrollUntilVisible:
+          element: 'Save to Google Wallet'
+      - tapOn: 'Save to Google Wallet'
+# The fake provider answers with a link; the app must not show its failure or "not available" messages.
+- assertNotVisible: 'We couldn’t add this ticket to your wallet.*'
+- assertNotVisible: 'This wallet isn’t available for this ticket.'

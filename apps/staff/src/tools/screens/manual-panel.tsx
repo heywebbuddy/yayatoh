@@ -112,6 +112,7 @@ export function ManualCheckInPanel({
         ))}
       </Row>
       <Field
+        autoComplete="off"
         label={t('manual.noteLabel')}
         hint={t('manual.noteHint')}
         value={note}

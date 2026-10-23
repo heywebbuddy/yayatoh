@@ -118,6 +118,16 @@ export function apnsEnvironment(appEnv: AppEnv): 'sandbox' | 'production' {
   return appEnv === 'development' ? 'sandbox' : 'production';
 }
 
+/**
+ * Export compliance (M7.5a, `apps/<app>/store/compliance.json`). Both apps use standard, published
+ * algorithms in app code besides the operating system's TLS: Ed25519 to verify tickets, and
+ * XChaCha20-Poly1305 or SQLCipher (AES-256) to keep tickets, the guest list and the cache encrypted
+ * on the phone. That is more than the operating system's own encryption, so Apple's answer is
+ * `ITSAppUsesNonExemptEncryption = true` (mass-market, standard encryption only), not the exempt
+ * `false`. The owner and counsel confirm (docs/owner-inbox.md); changing this is this one value.
+ */
+export const USES_NON_EXEMPT_ENCRYPTION = true;
+
 export type EnvVars = Readonly<Record<string, string | undefined>>;
 
 /** `123-abc.apps.googleusercontent.com` -> `com.googleusercontent.apps.123-abc` (Google's iOS redirect scheme). */
@@ -285,10 +295,16 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
     ios: {
       bundleIdentifier: iosBundleId,
       supportsTablet: true,
+      config: { usesNonExemptEncryption: USES_NON_EXEMPT_ENCRYPTION },
       ...(id.appleSignIn ? { usesAppleSignIn: true } : {}),
       associatedDomains: associatedDomains(env),
       infoPlist: {
         CFBundleAllowMixedLocalizations: true,
+        // The code Apple gives the owner after the export-compliance documents are accepted; with
+        // it, TestFlight and store uploads skip the per-build question (runbook, first submission).
+        ...(clean(env.IOS_ENCRYPTION_COMPLIANCE_CODE)
+          ? { ITSEncryptionExportComplianceCode: clean(env.IOS_ENCRYPTION_COMPLIANCE_CODE) }
+          : {}),
         ...(id.camera ? { NSCameraUsageDescription: STAFF_CAMERA_USAGE } : {}),
         ...(id.location ? { NSLocationWhenInUseUsageDescription: NEAR_ME_USAGE } : {}),
         ...(appEnv === 'development' ? { NSAppTransportSecurity: { NSAllowsLocalNetworking: true } } : {}),
@@ -296,6 +312,9 @@ export function buildExpoConfig(opts: BuildOptions): ExpoConfig {
     },
     android: {
       package: androidPackage,
+      // Tokens, the ticket cache and the door's guest list never go to a cloud backup or a device-to-
+      // device transfer: the keys that open them stay on the phone (M7.x security review).
+      allowBackup: false,
       adaptiveIcon: {
         foregroundImage: opts.assets.adaptiveForeground,
         backgroundColor: opts.adaptiveBackground,

@@ -216,6 +216,7 @@ function RaiseForm() {
       </Row>
       {problem ? <Notice tone="stop">{t('assistance.raise.reasonMissing')}</Notice> : null}
       <Field
+        autoComplete="off"
         label={t('assistance.raise.noteLabel')}
         value={note}
         onChangeText={setNote}

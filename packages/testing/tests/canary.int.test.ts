@@ -99,7 +99,10 @@ describe('canaryOrg (roadmap §9 canary fixture)', () => {
 
   it('leaves the other orgs alone', async () => {
     const [row] = await admin.unsafe<{ n: number }[]>(
-      `select count(*)::int as n from orders.orders where org_id <> $1 and buyer_email like '__canary_%'`,
+      // Other canary orgs (the Phase 7 leak test makes its own) are filled on purpose.
+      `select count(*)::int as n from orders.orders o
+       join tenancy.organizations g on g.id = o.org_id
+       where o.org_id <> $1 and g.slug not like 'canary-%' and o.buyer_email like '__canary_%'`,
       [canary.orgId],
     );
     expect(row?.n).toBe(0);

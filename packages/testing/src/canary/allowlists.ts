@@ -68,6 +68,59 @@ export const DOOR_ALLOW: readonly ColumnId[] = [
   'checkin.checkpoints.name',
 ];
 
+/**
+ * The signed-in person's own identity on `/v1/auth/*`, `/v1/me` and `/v1/me/organizations` (M7.x):
+ * their account email. The canary attendee signs in with the address of a canary order's buyer, so
+ * that column's canary is their own email there, and only there.
+ */
+export const ME_IDENTITY_ALLOW: readonly ColumnId[] = ['orders.orders.buyer_email'];
+
+/**
+ * The Staff app's door device on `/v1/staff/*` and the shared scanner routes (M7.x): what the door
+ * manifest shows, plus what the Scan PWA's own door screens show a device (`/api/scan/*`): the
+ * device board's labels, the guest list's names, party labels, tables and sub-event names (M4.4b:
+ * "no contact detail, meal or private answer"), and the help queue's free text.
+ */
+export const DEVICE_API_ALLOW: readonly ColumnId[] = [
+  ...DOOR_ALLOW,
+  'checkin.devices.label',
+  'guests.parties.name',
+  'guests.parties.tags',
+  'guests.guests.first_name',
+  'guests.guests.last_name',
+  'guests.sub_events.name',
+  'assistance.requests.note',
+  'assistance.requests.location',
+  'assistance.activity.body',
+];
+
+/**
+ * An exhibitor rep on `/v1/portal/*` (M7.x): their own address and their exhibitor's qualifier
+ * labels (the setup), and their leads: name, job title and company, the email only with the
+ * attendee's consent (a CHECK keeps `leads.leads.email` empty without it, P5-8), and the rep's own
+ * qualifiers and notes. Never the attendee's order, phone, answers or any other tenant column.
+ */
+export const PORTAL_API_ALLOW: readonly ColumnId[] = [
+  'events.portal_accounts.email',
+  'leads.exhibitor_settings.qualifiers',
+  'leads.leads.name',
+  'leads.leads.job_title',
+  'leads.leads.company',
+  'leads.leads.email',
+  'leads.leads.qualifiers',
+  'leads.leads.notes',
+];
+
+/**
+ * An organizer's session on the event-day view (M7.x): the same entrance names and device board
+ * (label, app version) the web Command Center shows its members.
+ */
+export const OPS_ALLOW: readonly ColumnId[] = [
+  'checkin.checkpoints.name',
+  'checkin.devices.label',
+  'checkin.devices.app_version',
+];
+
 /** Export files (owners, admins and the roles the console lets download them). */
 export const EXPORT_ALLOW = {
   attendees: [...ATTENDEE, 'ticketing.tickets.short_code'],

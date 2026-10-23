@@ -20,6 +20,7 @@ approved by the owner step by step.
 | [legacy-migration.md](legacy-migration.md) | Migrating a legacy instance's data (ELT, rehearsals) |
 | [cutover.md](cutover.md) | Moving an instance to the new platform (M2.5 tooling), the read-only freeze, and the rollback before PONR |
 | [evidence-production.md](evidence-production.md) | SOC 2 evidence: download the weekly bundle, quarterly access reviews, production audit samples (owner) |
+| [mobile-release.md](mobile-release.md) | Building, submitting, releasing, updating over the air and rolling back the Yayatoh and Yayatoh Staff apps; the first-submission checklist for the store accounts (M7.5a) |
 | [connectors.md](connectors.md) | Switching a connector (or all of them) on or off, and what leaves the platform (M6.x) |
 
 **Conventions**

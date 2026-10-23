@@ -152,6 +152,7 @@ export function LeadsScreen() {
             {t(`scope.${list.data.scope}`)}
           </Body>
           <Field
+            autoComplete="off"
             label={t('searchLabel')}
             value={query}
             onChangeText={setQuery}
@@ -304,6 +305,7 @@ export function LeadScanScreen() {
           </Notice>
         )}
         <Field
+          autoComplete="off"
           label={t('scanner.manualLabel')}
           hint={t('scanner.manualHint')}
           value={typed}
@@ -356,6 +358,7 @@ export function LeadScanScreen() {
         </Row>
       )}
       <Field
+        autoComplete="off"
         label={t('capture.notes')}
         value={notes}
         onChangeText={setNotes}
@@ -535,6 +538,7 @@ export function LeadDetailScreen({ leadId }: { leadId: string }) {
         ))}
       </Row>
       <Field
+        autoComplete="off"
         label={t('capture.notes')}
         value={form.notes}
         onChangeText={(v) => setEdit({ ...form, notes: v })}
