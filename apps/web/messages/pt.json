@@ -7247,7 +7247,8 @@
     "placement": {
       "home": "Página inicial: por que a Yayatoh",
       "features": "Página de recursos",
-      "contact": "Página de contato"
+      "contact": "Página de contato",
+      "testimonials": "Início: depoimentos"
     },
     "fields": {
       "placement": "Página",
@@ -19977,5 +19978,89 @@
     "link": "Reservar lugar em várias datas de uma vez",
     "unavailableTitle": "Os lugares por data não estão disponíveis",
     "unavailableDescription": "São necessárias pelo menos duas datas futuras, cada uma com a sua planta. Escolha antes uma data na página do evento."
+  },
+  "homeSections": {
+    "blog": {
+      "title": "Novidades do blog",
+      "all": "Todas as publicações"
+    },
+    "testimonials": {
+      "title": "O que os organizadores dizem"
+    },
+    "how": {
+      "title": "Como funciona",
+      "s1": {
+        "title": "Crie seu evento",
+        "desc": "Adicione detalhes, datas e tipos de ingresso, ou deixe a IA propor um rascunho para você revisar."
+      },
+      "s2": {
+        "title": "Publique e venda",
+        "desc": "Compartilhe um link. Os compradores veem o preço completo, com taxas incluídas, desde a primeira tela."
+      },
+      "s3": {
+        "title": "Receba seus convidados",
+        "desc": "Acomode-os, envie mensagens e leia os ingressos na porta."
+      },
+      "s4": {
+        "title": "Aprenda com os números",
+        "desc": "Acompanhe vendas e presença ao vivo e veja o que funcionou."
+      }
+    },
+    "features": {
+      "title": "Tudo para realizar eventos ao vivo",
+      "ticketing": {
+        "title": "Venda de ingressos",
+        "desc": "Ingressos gratuitos e pagos, códigos promocionais, preços antecipados e taxas à vista."
+      },
+      "seating": {
+        "title": "Assentos",
+        "desc": "Plantas, mesas e mapas de assentos que os convidados escolhem ou encontram no dia."
+      },
+      "checkin": {
+        "title": "Check-in",
+        "desc": "Leia ingressos na porta com chegadas ao vivo e uma fila de ajuda."
+      },
+      "networking": {
+        "title": "Networking",
+        "desc": "Perfis de participantes, reuniões e chat para conferências e comunidades."
+      },
+      "ai": {
+        "title": "Assistência de IA",
+        "desc": "Crie um evento a partir de uma frase e deixe um assistente responder aos participantes."
+      },
+      "sponsors": {
+        "title": "Patrocinadores e expositores",
+        "desc": "Pacotes, logotipos, estandes e os contatos que coletam."
+      },
+      "analytics": {
+        "title": "Análises",
+        "desc": "Relatórios de vendas, presença e campanhas em um só lugar."
+      }
+    },
+    "stats": {
+      "events": "Eventos publicados",
+      "organizers": "Organizadores"
+    },
+    "trusted": {
+      "title": "Organizadores que confiam em nós"
+    },
+    "faq": {
+      "title": "Perguntas e respostas",
+      "q1": "Quanto custa o Yayatoh?",
+      "a1": "No momento não há taxa de plataforma por ingresso nem assinatura. Veja a página de preços.",
+      "q2": "Os compradores veem o preço completo?",
+      "a2": "Sim. Os preços incluem todas as taxas, da primeira tela ao pagamento.",
+      "q3": "Posso fazer casamentos e conferências?",
+      "a3": "Sim. Cada tipo de evento começa com as ferramentas de que precisa: listas de convidados e confirmações, ou inscrição, sessões e crachás.",
+      "q4": "Como os convidados entram?",
+      "a4": "Os ingressos chegam por e-mail com um código. A equipe os lê com o app, mesmo com conexão fraca.",
+      "q5": "Posso testar antes?",
+      "a5": "Crie uma conta e monte um rascunho. Nada é publicado até você decidir."
+    },
+    "cta": {
+      "title": "Pronto para o seu próximo evento?",
+      "lede": "Crie seu evento hoje e venda o primeiro ingresso em minutos.",
+      "button": "Criar um evento"
+    }
   }
 }

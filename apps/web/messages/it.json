@@ -7247,7 +7247,8 @@
     "placement": {
       "home": "Home page: perché Yayatoh",
       "features": "Pagina delle funzionalità",
-      "contact": "Pagina contatti"
+      "contact": "Pagina contatti",
+      "testimonials": "Home: testimonianze"
     },
     "fields": {
       "placement": "Pagina",
@@ -19977,5 +19978,89 @@
     "link": "Prenota un posto su più date insieme",
     "unavailableTitle": "I posti per data non sono disponibili",
     "unavailableDescription": "Servono almeno due date future, ciascuna con la propria mappa dei posti. Scegli invece una sola data nella pagina dell’evento."
+  },
+  "homeSections": {
+    "blog": {
+      "title": "Ultime dal blog",
+      "all": "Tutti gli articoli"
+    },
+    "testimonials": {
+      "title": "Cosa dicono gli organizzatori"
+    },
+    "how": {
+      "title": "Come funziona",
+      "s1": {
+        "title": "Crea il tuo evento",
+        "desc": "Aggiungi dettagli, date e tipi di biglietto, oppure lascia che l’IA prepari una bozza da rivedere."
+      },
+      "s2": {
+        "title": "Pubblica e vendi",
+        "desc": "Condividi un solo link. Chi acquista vede il prezzo completo, commissioni incluse, dalla prima schermata."
+      },
+      "s3": {
+        "title": "Accogli gli ospiti",
+        "desc": "Assegna i posti, scrivi loro e scansiona i biglietti all’ingresso."
+      },
+      "s4": {
+        "title": "Impara dai numeri",
+        "desc": "Segui vendite e presenze in tempo reale e scopri cosa ha funzionato."
+      }
+    },
+    "features": {
+      "title": "Tutto ciò che serve per gestire eventi dal vivo",
+      "ticketing": {
+        "title": "Biglietteria",
+        "desc": "Biglietti gratuiti e a pagamento, codici promozionali, prezzi early bird e commissioni in chiaro."
+      },
+      "seating": {
+        "title": "Posti a sedere",
+        "desc": "Piante, tavoli e mappe dei posti che gli ospiti scelgono o trovano il giorno stesso."
+      },
+      "checkin": {
+        "title": "Check-in",
+        "desc": "Scansiona i biglietti all’ingresso con arrivi in tempo reale e una coda di assistenza."
+      },
+      "networking": {
+        "title": "Networking",
+        "desc": "Profili dei partecipanti, incontri e chat per conferenze e community."
+      },
+      "ai": {
+        "title": "Assistenza IA",
+        "desc": "Crea un evento da una frase e lascia che un assistente risponda ai partecipanti."
+      },
+      "sponsors": {
+        "title": "Sponsor ed espositori",
+        "desc": "Pacchetti, loghi, stand e i contatti che raccolgono."
+      },
+      "analytics": {
+        "title": "Analisi",
+        "desc": "Report di vendite, presenze e campagne in un unico posto."
+      }
+    },
+    "stats": {
+      "events": "Eventi pubblicati",
+      "organizers": "Organizzatori"
+    },
+    "trusted": {
+      "title": "Scelto dagli organizzatori"
+    },
+    "faq": {
+      "title": "Domande e risposte",
+      "q1": "Quanto costa Yayatoh?",
+      "a1": "Al momento non ci sono commissioni di piattaforma per biglietto né abbonamento. Vedi la pagina dei prezzi.",
+      "q2": "Gli acquirenti vedono il prezzo completo?",
+      "a2": "Sì. I prezzi includono tutte le commissioni, dalla prima schermata al pagamento.",
+      "q3": "Posso gestire matrimoni e conferenze?",
+      "a3": "Sì. Ogni tipo di evento parte con gli strumenti necessari: liste ospiti e conferme, oppure iscrizioni, sessioni e badge.",
+      "q4": "Come entrano gli ospiti?",
+      "a4": "I biglietti arrivano via e-mail con un codice. Il personale li scansiona con l’app, anche con connessione debole.",
+      "q5": "Posso provarlo prima?",
+      "a5": "Crea un account e prepara una bozza. Nulla viene pubblicato finché non lo decidi."
+    },
+    "cta": {
+      "title": "Pronto per il tuo prossimo evento?",
+      "lede": "Crea il tuo evento oggi e vendi il primo biglietto in pochi minuti.",
+      "button": "Crea un evento"
+    }
   }
 }

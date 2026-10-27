@@ -7247,7 +7247,8 @@
     "placement": {
       "home": "Homepage: waarom Yayatoh",
       "features": "Functiepagina",
-      "contact": "Contactpagina"
+      "contact": "Contactpagina",
+      "testimonials": "Startpagina: ervaringen"
     },
     "fields": {
       "placement": "Pagina",
@@ -19977,5 +19978,89 @@
     "link": "Plaatsen voor meerdere data tegelijk boeken",
     "unavailableTitle": "Plaatsen per datum zijn niet beschikbaar",
     "unavailableDescription": "Hiervoor zijn minstens twee komende data nodig met elk een eigen zaalplan. Kies in plaats daarvan één datum op de evenementpagina."
+  },
+  "homeSections": {
+    "blog": {
+      "title": "Het laatste van de blog",
+      "all": "Alle berichten"
+    },
+    "testimonials": {
+      "title": "Wat organisatoren zeggen"
+    },
+    "how": {
+      "title": "Zo werkt het",
+      "s1": {
+        "title": "Maak je evenement",
+        "desc": "Voeg details, data en tickettypen toe, of laat AI een concept maken dat je controleert."
+      },
+      "s2": {
+        "title": "Publiceer en verkoop",
+        "desc": "Deel één link. Kopers zien de volledige prijs, kosten inbegrepen, vanaf het eerste scherm."
+      },
+      "s3": {
+        "title": "Ontvang je gasten",
+        "desc": "Plaats ze, stuur ze berichten en scan tickets bij de deur."
+      },
+      "s4": {
+        "title": "Leer van de cijfers",
+        "desc": "Volg verkoop en opkomst live en zie wat werkte."
+      }
+    },
+    "features": {
+      "title": "Alles om live evenementen te organiseren",
+      "ticketing": {
+        "title": "Ticketverkoop",
+        "desc": "Gratis en betaalde tickets, kortingscodes, vroegboekprijzen en kosten vooraf zichtbaar."
+      },
+      "seating": {
+        "title": "Zitplaatsen",
+        "desc": "Plattegronden, tafels en zitplaatskaarten waaruit gasten kiezen of waarop ze hun plek vinden."
+      },
+      "checkin": {
+        "title": "Check-in",
+        "desc": "Scan tickets bij de deur met live aankomsten en een hulpwachtrij."
+      },
+      "networking": {
+        "title": "Netwerken",
+        "desc": "Deelnemersprofielen, afspraken en chat voor conferenties en gemeenschappen."
+      },
+      "ai": {
+        "title": "AI-hulp",
+        "desc": "Maak een evenement uit één zin en laat een assistent vragen van deelnemers beantwoorden."
+      },
+      "sponsors": {
+        "title": "Sponsors en exposanten",
+        "desc": "Pakketten, logo’s, stands en de leads die ze verzamelen."
+      },
+      "analytics": {
+        "title": "Analyses",
+        "desc": "Rapporten over verkoop, opkomst en campagnes op één plek."
+      }
+    },
+    "stats": {
+      "events": "Evenementen",
+      "organizers": "Organisatoren"
+    },
+    "trusted": {
+      "title": "Organisatoren vertrouwen ons"
+    },
+    "faq": {
+      "title": "Vragen en antwoorden",
+      "q1": "Wat kost Yayatoh?",
+      "a1": "Er zijn nu geen platformkosten per ticket en geen abonnement. Zie de prijspagina.",
+      "q2": "Zien kopers de volledige prijs?",
+      "a2": "Ja. Prijzen bevatten alle kosten, van het eerste scherm tot het afrekenen.",
+      "q3": "Kan ik er bruiloften en conferenties mee doen?",
+      "a3": "Ja. Elk soort evenement start met de tools die het nodig heeft: gastenlijsten en aanmeldingen, of inschrijving, sessies en badges.",
+      "q4": "Hoe komen gasten binnen?",
+      "a4": "Tickets komen per e-mail met een code. Deurpersoneel scant ze met de scanner-app, ook bij zwakke verbinding.",
+      "q5": "Kan ik het eerst proberen?",
+      "a5": "Maak een account en een concept. Er wordt niets gepubliceerd voordat jij dat wilt."
+    },
+    "cta": {
+      "title": "Klaar voor je volgende evenement?",
+      "lede": "Maak je evenement vandaag nog en verkoop binnen minuten je eerste ticket.",
+      "button": "Evenement maken"
+    }
   }
 }

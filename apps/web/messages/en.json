@@ -7247,7 +7247,8 @@
     "placement": {
       "home": "Home page: why Yayatoh",
       "features": "Features page",
-      "contact": "Contact page"
+      "contact": "Contact page",
+      "testimonials": "Home page: testimonials"
     },
     "fields": {
       "placement": "Page",
@@ -19977,5 +19978,89 @@
     "link": "Book a seat on several dates at once",
     "unavailableTitle": "Seats per date aren’t available",
     "unavailableDescription": "This needs at least two upcoming dates that each have their own seat map. Choose one date on the event page instead."
+  },
+  "homeSections": {
+    "blog": {
+      "title": "Latest from the blog",
+      "all": "All posts"
+    },
+    "testimonials": {
+      "title": "What organizers say"
+    },
+    "how": {
+      "title": "How it works",
+      "s1": {
+        "title": "Create your event",
+        "desc": "Add the details, dates and ticket types, or let AI draft them for you to review."
+      },
+      "s2": {
+        "title": "Publish and sell",
+        "desc": "Share one link. Buyers see the full price, fees included, from the first screen."
+      },
+      "s3": {
+        "title": "Welcome your guests",
+        "desc": "Seat them, message them and scan tickets at the door."
+      },
+      "s4": {
+        "title": "Learn from the numbers",
+        "desc": "Follow sales and attendance live, then see what worked."
+      }
+    },
+    "features": {
+      "title": "Everything you need to run live events",
+      "ticketing": {
+        "title": "Ticketing",
+        "desc": "Free and paid tickets, promo codes, early-bird prices and fees shown up front."
+      },
+      "seating": {
+        "title": "Seating",
+        "desc": "Floor plans, tables and seat maps that guests choose from or find on the day."
+      },
+      "checkin": {
+        "title": "Check-in",
+        "desc": "Scan tickets at the door with live arrival counts and a help queue."
+      },
+      "networking": {
+        "title": "Networking",
+        "desc": "Attendee profiles, meetings and chat for conferences and communities."
+      },
+      "ai": {
+        "title": "AI assistance",
+        "desc": "Draft an event from a sentence and let an assistant answer attendee questions."
+      },
+      "sponsors": {
+        "title": "Sponsors and exhibitors",
+        "desc": "Packages, logos, booths and the leads they collect."
+      },
+      "analytics": {
+        "title": "Analytics",
+        "desc": "Sales, attendance and campaign reports in one place."
+      }
+    },
+    "stats": {
+      "events": "Events listed",
+      "organizers": "Organizers"
+    },
+    "trusted": {
+      "title": "Trusted by organizers"
+    },
+    "faq": {
+      "title": "Questions, answered",
+      "q1": "What does Yayatoh cost?",
+      "a1": "There is no platform fee per ticket right now, and no subscription. See the pricing page for the current numbers.",
+      "q2": "Do buyers see the full price?",
+      "a2": "Yes. Prices include all fees from the first screen to checkout.",
+      "q3": "Can I run weddings and conferences on it?",
+      "a3": "Yes. Each event type starts with the tools it needs: guest lists and RSVPs, or registration, sessions and badges.",
+      "q4": "How do guests get in?",
+      "a4": "Tickets are emailed with a code. Door staff scan them with the scanner app, even with a weak connection.",
+      "q5": "Can I try it first?",
+      "a5": "Create an account and set up a draft event. Nothing is published until you say so."
+    },
+    "cta": {
+      "title": "Ready to host your next event?",
+      "lede": "Create your event today and sell your first ticket in minutes.",
+      "button": "Create an event"
+    }
   }
 }
