@@ -778,7 +778,9 @@
       "next": "Nächstes Foto",
       "counter": "Foto {n} von {total}",
       "thumbnails": "Alle Fotos"
-    }
+    },
+    "shareWhatsApp": "Über WhatsApp teilen",
+    "shareMessage": "{name} – hol dir deine Tickets: {url}"
   },
   "portal": {
     "day": "Tag {day} · {date}",
@@ -1633,7 +1635,9 @@
     "linkLabel": "Übernahme-Link",
     "open": "Ein Übernahme-Link wartet darauf, verwendet zu werden.",
     "openTo": "Ein Übernahme-Link wurde an {email} gesendet.",
-    "revoke": "Link widerrufen"
+    "revoke": "Link widerrufen",
+    "shareWhatsApp": "Über WhatsApp teilen",
+    "whatsappMessage": "Hier ist dein Ticket: {url}"
   },
   "claim": {
     "eyebrow": "Ein Ticket für dich",

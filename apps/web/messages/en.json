@@ -778,7 +778,9 @@
       "next": "Next photo",
       "counter": "Photo {n} of {total}",
       "thumbnails": "All photos"
-    }
+    },
+    "shareWhatsApp": "Share on WhatsApp",
+    "shareMessage": "{name} — get your tickets: {url}"
   },
   "portal": {
     "day": "Day {day} · {date}",
@@ -1633,7 +1635,9 @@
     "linkLabel": "Claim link",
     "open": "A claim link is waiting to be used.",
     "openTo": "A claim link was sent to {email}.",
-    "revoke": "Revoke link"
+    "revoke": "Revoke link",
+    "shareWhatsApp": "Share on WhatsApp",
+    "whatsappMessage": "Here is your ticket: {url}"
   },
   "claim": {
     "eyebrow": "A ticket for you",

@@ -778,7 +778,9 @@
       "next": "Foto siguiente",
       "counter": "Foto {n} de {total}",
       "thumbnails": "Todas las fotos"
-    }
+    },
+    "shareWhatsApp": "Compartir por WhatsApp",
+    "shareMessage": "{name}: consigue tus entradas: {url}"
   },
   "portal": {
     "day": "Día {day} · {date}",
@@ -1633,7 +1635,9 @@
     "linkLabel": "Enlace para reclamar",
     "open": "Hay un enlace para reclamar pendiente de uso.",
     "openTo": "Se envió un enlace para reclamar a {email}.",
-    "revoke": "Revocar enlace"
+    "revoke": "Revocar enlace",
+    "shareWhatsApp": "Compartir por WhatsApp",
+    "whatsappMessage": "Aquí tienes tu entrada: {url}"
   },
   "claim": {
     "eyebrow": "Una entrada para ti",

@@ -778,7 +778,9 @@
       "next": "次の写真",
       "counter": "写真 {n}/{total}",
       "thumbnails": "すべての写真"
-    }
+    },
+    "shareWhatsApp": "WhatsAppで共有",
+    "shareMessage": "{name} — チケットはこちら: {url}"
   },
   "portal": {
     "day": "{day}日目 · {date}",
@@ -1633,7 +1635,9 @@
     "linkLabel": "受け取りリンク",
     "open": "受け取りリンクがまだ使用されていません。",
     "openTo": "{email} に受け取りリンクを送信しました。",
-    "revoke": "リンクを取り消す"
+    "revoke": "リンクを取り消す",
+    "shareWhatsApp": "WhatsAppで共有",
+    "whatsappMessage": "チケットはこちら: {url}"
   },
   "claim": {
     "eyebrow": "あなたへのチケット",

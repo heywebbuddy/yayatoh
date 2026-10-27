@@ -778,7 +778,9 @@
       "next": "Foto successiva",
       "counter": "Foto {n} di {total}",
       "thumbnails": "Tutte le foto"
-    }
+    },
+    "shareWhatsApp": "Condividi su WhatsApp",
+    "shareMessage": "{name} — prendi i tuoi biglietti: {url}"
   },
   "portal": {
     "day": "Giorno {day} · {date}",
@@ -1633,7 +1635,9 @@
     "linkLabel": "Link di riscatto",
     "open": "Un link di riscatto è in attesa di essere usato.",
     "openTo": "Un link di riscatto è stato inviato a {email}.",
-    "revoke": "Revoca link"
+    "revoke": "Revoca link",
+    "shareWhatsApp": "Condividi su WhatsApp",
+    "whatsappMessage": "Ecco il tuo biglietto: {url}"
   },
   "claim": {
     "eyebrow": "Un biglietto per te",

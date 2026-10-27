@@ -778,7 +778,9 @@
       "next": "Photo suivante",
       "counter": "Photo {n} sur {total}",
       "thumbnails": "Toutes les photos"
-    }
+    },
+    "shareWhatsApp": "Partager sur WhatsApp",
+    "shareMessage": "{name} — réservez vos billets : {url}"
   },
   "portal": {
     "day": "Jour {day} · {date}",
@@ -1633,7 +1635,9 @@
     "linkLabel": "Lien de récupération",
     "open": "Un lien de récupération attend d’être utilisé.",
     "openTo": "Un lien de récupération a été envoyé à {email}.",
-    "revoke": "Révoquer le lien"
+    "revoke": "Révoquer le lien",
+    "shareWhatsApp": "Partager sur WhatsApp",
+    "whatsappMessage": "Voici votre billet : {url}"
   },
   "claim": {
     "eyebrow": "Un billet pour vous",

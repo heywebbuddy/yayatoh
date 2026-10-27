@@ -778,7 +778,9 @@
       "next": "下一張",
       "counter": "第 {n} 張，共 {total} 張",
       "thumbnails": "所有照片"
-    }
+    },
+    "shareWhatsApp": "透過 WhatsApp 分享",
+    "shareMessage": "{name} — 立即購票：{url}"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -1633,7 +1635,9 @@
     "linkLabel": "領取連結",
     "open": "有一個領取連結尚未使用。",
     "openTo": "已將領取連結寄至 {email}。",
-    "revoke": "撤銷連結"
+    "revoke": "撤銷連結",
+    "shareWhatsApp": "透過 WhatsApp 分享",
+    "whatsappMessage": "這是您的票券：{url}"
   },
   "claim": {
     "eyebrow": "給你的一張票",

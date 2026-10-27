@@ -778,7 +778,9 @@
       "next": "Próxima foto",
       "counter": "Foto {n} de {total}",
       "thumbnails": "Todas as fotos"
-    }
+    },
+    "shareWhatsApp": "Partilhar no WhatsApp",
+    "shareMessage": "{name} — garanta os seus bilhetes: {url}"
   },
   "portal": {
     "day": "Dia {day} · {date}",
@@ -1633,7 +1635,9 @@
     "linkLabel": "Link de resgate",
     "open": "Há um link de resgate aguardando uso.",
     "openTo": "Um link de resgate foi enviado para {email}.",
-    "revoke": "Revogar link"
+    "revoke": "Revogar link",
+    "shareWhatsApp": "Partilhar no WhatsApp",
+    "whatsappMessage": "Aqui está o seu bilhete: {url}"
   },
   "claim": {
     "eyebrow": "Um ingresso para você",

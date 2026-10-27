@@ -778,7 +778,9 @@
       "next": "الصورة التالية",
       "counter": "الصورة {n} من {total}",
       "thumbnails": "كل الصور"
-    }
+    },
+    "shareWhatsApp": "مشاركة عبر واتساب",
+    "shareMessage": "{name} — احصل على تذاكرك: {url}"
   },
   "portal": {
     "day": "اليوم {day} · {date}",
@@ -1633,7 +1635,9 @@
     "linkLabel": "رابط الاستلام",
     "open": "هناك رابط استلام بانتظار استخدامه.",
     "openTo": "أُرسل رابط استلام إلى {email}.",
-    "revoke": "إلغاء الرابط"
+    "revoke": "إلغاء الرابط",
+    "shareWhatsApp": "مشاركة عبر واتساب",
+    "whatsappMessage": "تذكرتك هنا: {url}"
   },
   "claim": {
     "eyebrow": "تذكرة لك",

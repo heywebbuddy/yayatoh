@@ -778,7 +778,9 @@
       "next": "Volgende foto",
       "counter": "Foto {n} van {total}",
       "thumbnails": "Alle foto’s"
-    }
+    },
+    "shareWhatsApp": "Delen via WhatsApp",
+    "shareMessage": "{name} — haal je tickets: {url}"
   },
   "portal": {
     "day": "Dag {day} · {date}",
@@ -1633,7 +1635,9 @@
     "linkLabel": "Claimlink",
     "open": "Er staat een claimlink klaar om gebruikt te worden.",
     "openTo": "Er is een claimlink verstuurd naar {email}.",
-    "revoke": "Link intrekken"
+    "revoke": "Link intrekken",
+    "shareWhatsApp": "Delen via WhatsApp",
+    "whatsappMessage": "Hier is je ticket: {url}"
   },
   "claim": {
     "eyebrow": "Een ticket voor jou",

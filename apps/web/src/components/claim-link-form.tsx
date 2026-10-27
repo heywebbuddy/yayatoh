@@ -4,6 +4,7 @@ import { Alert, Button } from '@yayatoh/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
+import { whatsappHref } from '@/lib/share.ts';
 
 export type ClaimLinkState =
   | { readonly kind: 'idle' }
@@ -64,6 +65,15 @@ export function ClaimLinkForm({
               data-testid="claim-link"
               className="field w-full font-mono text-caption"
             />
+            <a
+              href={whatsappHref(t('whatsappMessage', { url: url(state.token) }))}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="self-start text-caption font-bold text-primary-ink underline underline-offset-2"
+            >
+              {t('shareWhatsApp')}
+              <span className="sr-only"> ({tt('widget.newTab')})</span>
+            </a>
           </div>
         ) : state.kind === 'error' ? (
           <Alert title={tt(errorMessageKey(state.code))} />

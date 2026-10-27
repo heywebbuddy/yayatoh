@@ -778,7 +778,9 @@
       "next": "Следующее фото",
       "counter": "Фото {n} из {total}",
       "thumbnails": "Все фото"
-    }
+    },
+    "shareWhatsApp": "Поделиться в WhatsApp",
+    "shareMessage": "{name} — билеты здесь: {url}"
   },
   "portal": {
     "day": "День {day} · {date}",
@@ -1633,7 +1635,9 @@
     "linkLabel": "Ссылка для получения",
     "open": "Ссылка для получения ещё не использована.",
     "openTo": "Ссылка для получения отправлена на {email}.",
-    "revoke": "Отозвать ссылку"
+    "revoke": "Отозвать ссылку",
+    "shareWhatsApp": "Поделиться в WhatsApp",
+    "whatsappMessage": "Вот ваш билет: {url}"
   },
   "claim": {
     "eyebrow": "Билет для вас",

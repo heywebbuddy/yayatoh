@@ -778,7 +778,9 @@
       "next": "अगली फ़ोटो",
       "counter": "{total} में से फ़ोटो {n}",
       "thumbnails": "सभी फ़ोटो"
-    }
+    },
+    "shareWhatsApp": "WhatsApp पर साझा करें",
+    "shareMessage": "{name} — अपने टिकट यहाँ लें: {url}"
   },
   "portal": {
     "day": "दिन {day} · {date}",
@@ -1633,7 +1635,9 @@
     "linkLabel": "क्लेम लिंक",
     "open": "एक क्लेम लिंक इस्तेमाल होने का इंतज़ार कर रहा है।",
     "openTo": "{email} पर एक क्लेम लिंक भेजा गया।",
-    "revoke": "लिंक रद्द करें"
+    "revoke": "लिंक रद्द करें",
+    "shareWhatsApp": "WhatsApp पर साझा करें",
+    "whatsappMessage": "यह रहा आपका टिकट: {url}"
   },
   "claim": {
     "eyebrow": "आपके लिए एक टिकट",

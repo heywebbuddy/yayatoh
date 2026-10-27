@@ -778,7 +778,9 @@
       "next": "下一张",
       "counter": "第 {n} 张，共 {total} 张",
       "thumbnails": "全部照片"
-    }
+    },
+    "shareWhatsApp": "通过 WhatsApp 分享",
+    "shareMessage": "{name} — 立即购票：{url}"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -1633,7 +1635,9 @@
     "linkLabel": "领取链接",
     "open": "有一个领取链接尚未使用。",
     "openTo": "已向 {email} 发送领取链接。",
-    "revoke": "撤销链接"
+    "revoke": "撤销链接",
+    "shareWhatsApp": "通过 WhatsApp 分享",
+    "whatsappMessage": "这是您的门票：{url}"
   },
   "claim": {
     "eyebrow": "给你的一张票",
