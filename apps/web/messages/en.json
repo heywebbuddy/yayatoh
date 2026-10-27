@@ -1030,7 +1030,8 @@
     "manageCategories": "Manage categories (opens a new tab)",
     "refreshCategories": "Refresh category list",
     "refreshingCategories": "Refreshing…",
-    "withAi": "Create with AI"
+    "withAi": "Create with AI",
+    "endsHint": "Required. Filled in two hours after the start; change it if the event runs longer."
   },
   "tickets": {
     "subtitle": "Ticket types, prices and inventory. Every price buyers see includes fees.",
@@ -5161,7 +5162,8 @@
       "title": "New venue",
       "save": "Save and select venue",
       "cancel": "Cancel"
-    }
+    },
+    "endsHint": "Required. Filled in two hours after the start; change it if the event runs longer."
   },
   "eventMedia": {
     "title": "Images",

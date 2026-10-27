@@ -1030,7 +1030,8 @@
     "manageCategories": "Gestionar categorías (se abre en una pestaña nueva)",
     "refreshCategories": "Actualizar lista de categorías",
     "refreshingCategories": "Actualizando…",
-    "withAi": "Crear con IA"
+    "withAi": "Crear con IA",
+    "endsHint": "Obligatorio. Se rellena dos horas después del inicio; cámbialo si el evento dura más."
   },
   "tickets": {
     "subtitle": "Tipos de entrada, precios e inventario. Todos los precios que ven los compradores incluyen las tarifas.",
@@ -5161,7 +5162,8 @@
       "title": "Recinto nuevo",
       "save": "Guardar y seleccionar recinto",
       "cancel": "Cancelar"
-    }
+    },
+    "endsHint": "Obligatorio. Se rellena dos horas después del inicio; cámbialo si el evento dura más."
   },
   "eventMedia": {
     "title": "Imágenes",

@@ -1030,7 +1030,8 @@
     "manageCategories": "Gérer les catégories (s’ouvre dans un nouvel onglet)",
     "refreshCategories": "Actualiser la liste des catégories",
     "refreshingCategories": "Actualisation…",
-    "withAi": "Créer avec l’IA"
+    "withAi": "Créer avec l’IA",
+    "endsHint": "Obligatoire. Rempli deux heures après le début ; modifiez-le si l’événement dure plus longtemps."
   },
   "tickets": {
     "subtitle": "Types de billets, prix et stock. Tous les prix affichés aux acheteurs incluent les frais.",
@@ -5161,7 +5162,8 @@
       "title": "Nouveau lieu",
       "save": "Enregistrer et sélectionner le lieu",
       "cancel": "Annuler"
-    }
+    },
+    "endsHint": "Obligatoire. Rempli deux heures après le début ; modifiez-le si l’événement dure plus longtemps."
   },
   "eventMedia": {
     "title": "Images",

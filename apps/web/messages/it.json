@@ -1030,7 +1030,8 @@
     "manageCategories": "Gestisci categorie (si apre in una nuova scheda)",
     "refreshCategories": "Aggiorna elenco categorie",
     "refreshingCategories": "Aggiornamento…",
-    "withAi": "Crea con l’IA"
+    "withAi": "Crea con l’IA",
+    "endsHint": "Obbligatorio. Compilato due ore dopo l’inizio; modificalo se l’evento dura di più."
   },
   "tickets": {
     "subtitle": "Tipi di biglietto, prezzi e disponibilità. Ogni prezzo mostrato agli acquirenti include le commissioni.",
@@ -5161,7 +5162,8 @@
       "title": "Nuova sede",
       "save": "Salva e seleziona la sede",
       "cancel": "Annulla"
-    }
+    },
+    "endsHint": "Obbligatorio. Compilato due ore dopo l’inizio; modificalo se l’evento dura di più."
   },
   "eventMedia": {
     "title": "Immagini",

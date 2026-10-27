@@ -1030,7 +1030,8 @@
     "manageCategories": "管理分類（在新分頁中開啟）",
     "refreshCategories": "重新整理分類清單",
     "refreshingCategories": "重新整理中…",
-    "withAi": "用 AI 建立"
+    "withAi": "用 AI 建立",
+    "endsHint": "必填。預設為開始後兩小時；若活動時間更長請修改。"
   },
   "tickets": {
     "subtitle": "管理票種、價格與庫存。買家看到的所有價格皆已包含費用。",
@@ -5161,7 +5162,8 @@
       "title": "新場地",
       "save": "儲存並選擇場地",
       "cancel": "取消"
-    }
+    },
+    "endsHint": "必填。預設為開始後兩小時；若活動時間更長請修改。"
   },
   "eventMedia": {
     "title": "圖片",

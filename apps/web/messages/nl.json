@@ -1030,7 +1030,8 @@
     "manageCategories": "Categorieën beheren (opent in een nieuw tabblad)",
     "refreshCategories": "Categorielijst vernieuwen",
     "refreshingCategories": "Vernieuwen…",
-    "withAi": "Maken met AI"
+    "withAi": "Maken met AI",
+    "endsHint": "Verplicht. Wordt twee uur na het begin ingevuld; pas het aan als het evenement langer duurt."
   },
   "tickets": {
     "subtitle": "Tickettypes, prijzen en voorraad. Elke prijs die kopers zien is inclusief kosten.",
@@ -5161,7 +5162,8 @@
       "title": "Nieuwe locatie",
       "save": "Locatie opslaan en kiezen",
       "cancel": "Annuleren"
-    }
+    },
+    "endsHint": "Verplicht. Wordt twee uur na het begin ingevuld; pas het aan als het evenement langer duurt."
   },
   "eventMedia": {
     "title": "Afbeeldingen",

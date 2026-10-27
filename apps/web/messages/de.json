@@ -1030,7 +1030,8 @@
     "manageCategories": "Kategorien verwalten (öffnet einen neuen Tab)",
     "refreshCategories": "Kategorieliste aktualisieren",
     "refreshingCategories": "Wird aktualisiert …",
-    "withAi": "Mit KI erstellen"
+    "withAi": "Mit KI erstellen",
+    "endsHint": "Pflichtfeld. Wird zwei Stunden nach dem Beginn vorbelegt; ändere es, wenn das Event länger dauert."
   },
   "tickets": {
     "subtitle": "Ticketarten, Preise und Kontingente. Alle Preise, die Käufer sehen, enthalten die Gebühren.",
@@ -5161,7 +5162,8 @@
       "title": "Neuer Veranstaltungsort",
       "save": "Speichern und auswählen",
       "cancel": "Abbrechen"
-    }
+    },
+    "endsHint": "Pflichtfeld. Wird zwei Stunden nach dem Beginn vorbelegt; ändere es, wenn das Event länger dauert."
   },
   "eventMedia": {
     "title": "Bilder",

@@ -18,6 +18,7 @@ import type { InlineVenueResult } from '@/app/[locale]/o/[org]/(org)/venues/acti
 import { errorMessageKey } from '@/lib/errors.ts';
 import { readinessRules } from '@/lib/readiness.ts';
 import { type EventCategoryChoice, EventCategoryField } from './event-category-field.tsx';
+import { defaultEnd } from './event-times.ts';
 import { InlineVenueForm, type InlineVenueInput } from './inline-venue-form.tsx';
 import { type PickerProfile, ProfilePicker } from './profile-picker.tsx';
 import { seriesErrorKey } from './series-errors.ts';
@@ -337,10 +338,13 @@ export function EventWizard({
               id="wizard-starts"
               name="startsAt"
               required
-              label={t('startsAt')}
+              label={`${t('startsAt')} *`}
               hint={t('localTimeHint')}
               value={v.startsAt}
-              onValueChange={setTo('startsAt')}
+              onValueChange={(next) => {
+                setTo('startsAt')(next);
+                if (!v.endsAt || v.endsAt <= next) setTo('endsAt')(defaultEnd(next, v.endsAt));
+              }}
               timeZone={v.timezone}
               error={err('startsAt')}
             />
@@ -348,7 +352,8 @@ export function EventWizard({
               id="wizard-ends"
               name="endsAt"
               required
-              label={t('endsAt')}
+              label={`${t('endsAt')} *`}
+              hint={t('endsHint')}
               value={v.endsAt}
               onValueChange={setTo('endsAt')}
               timeZone={v.timezone}

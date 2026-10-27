@@ -1030,7 +1030,8 @@
     "manageCategories": "管理分类（在新标签页中打开）",
     "refreshCategories": "刷新分类列表",
     "refreshingCategories": "正在刷新…",
-    "withAi": "用 AI 创建"
+    "withAi": "用 AI 创建",
+    "endsHint": "必填。默认填为开始后两小时；如果活动时间更长请修改。"
   },
   "tickets": {
     "subtitle": "管理票种、价格和库存。买家看到的所有价格均已包含费用。",
@@ -5161,7 +5162,8 @@
       "title": "新场地",
       "save": "保存并选择场地",
       "cancel": "取消"
-    }
+    },
+    "endsHint": "必填。默认填为开始后两小时；如果活动时间更长请修改。"
   },
   "eventMedia": {
     "title": "图片",
