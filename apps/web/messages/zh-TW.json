@@ -19985,7 +19985,8 @@
       "all": "全部文章"
     },
     "testimonials": {
-      "title": "主辦單位怎麼說"
+      "title": "主辦單位怎麼說",
+      "rating": "評分 {count}/5"
     },
     "how": {
       "title": "運作方式",
@@ -20095,5 +20096,14 @@
       "events": "瀏覽活動",
       "help": "說明中心"
     }
+  },
+  "platformBlog": {
+    "title": "部落格",
+    "description": "來自 Yayatoh 的新聞、指南和故事。",
+    "posts": "部落格文章",
+    "emptyTitle": "尚無文章",
+    "emptyDescription": "請稍後再來。",
+    "all": "全部文章",
+    "by": "作者:{name}"
   }
 }

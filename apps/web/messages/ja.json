@@ -19985,7 +19985,8 @@
       "all": "すべての記事"
     },
     "testimonials": {
-      "title": "主催者の声"
+      "title": "主催者の声",
+      "rating": "5段階中{count}の評価"
     },
     "how": {
       "title": "使い方",
@@ -20095,5 +20096,14 @@
       "events": "イベントを探す",
       "help": "ヘルプセンター"
     }
+  },
+  "platformBlog": {
+    "title": "ブログ",
+    "description": "Yayatoh からのお知らせ、ガイド、ストーリー。",
+    "posts": "ブログ記事",
+    "emptyTitle": "記事はまだありません",
+    "emptyDescription": "また後でご確認ください。",
+    "all": "すべての記事",
+    "by": "{name} 著"
   }
 }

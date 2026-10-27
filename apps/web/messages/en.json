@@ -19985,7 +19985,8 @@
       "all": "All posts"
     },
     "testimonials": {
-      "title": "What organizers say"
+      "title": "What organizers say",
+      "rating": "Rated {count} out of 5"
     },
     "how": {
       "title": "How it works",
@@ -20095,5 +20096,14 @@
       "events": "Browse events",
       "help": "Help center"
     }
+  },
+  "platformBlog": {
+    "title": "Blog",
+    "description": "News, guides and stories from Yayatoh.",
+    "posts": "Blog posts",
+    "emptyTitle": "No posts yet",
+    "emptyDescription": "Check back soon.",
+    "all": "All posts",
+    "by": "By {name}"
   }
 }

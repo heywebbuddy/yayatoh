@@ -19985,7 +19985,8 @@
       "all": "Tutti gli articoli"
     },
     "testimonials": {
-      "title": "Cosa dicono gli organizzatori"
+      "title": "Cosa dicono gli organizzatori",
+      "rating": "Valutato {count} su 5"
     },
     "how": {
       "title": "Come funziona",
@@ -20095,5 +20096,14 @@
       "events": "Sfoglia gli eventi",
       "help": "Centro assistenza"
     }
+  },
+  "platformBlog": {
+    "title": "Blog",
+    "description": "Notizie, guide e storie da Yayatoh.",
+    "posts": "Articoli del blog",
+    "emptyTitle": "Ancora nessun articolo",
+    "emptyDescription": "Torna presto.",
+    "all": "Tutti gli articoli",
+    "by": "Di {name}"
   }
 }

@@ -19985,7 +19985,8 @@
       "all": "Alle Beiträge"
     },
     "testimonials": {
-      "title": "Das sagen Veranstalter"
+      "title": "Das sagen Veranstalter",
+      "rating": "Bewertet mit {count} von 5"
     },
     "how": {
       "title": "So funktioniert es",
@@ -20095,5 +20096,14 @@
       "events": "Events entdecken",
       "help": "Hilfe-Center"
     }
+  },
+  "platformBlog": {
+    "title": "Blog",
+    "description": "Neuigkeiten, Anleitungen und Geschichten von Yayatoh.",
+    "posts": "Blogbeiträge",
+    "emptyTitle": "Noch keine Beiträge",
+    "emptyDescription": "Schau bald wieder vorbei.",
+    "all": "Alle Beiträge",
+    "by": "Von {name}"
   }
 }

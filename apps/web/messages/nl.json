@@ -19985,7 +19985,8 @@
       "all": "Alle berichten"
     },
     "testimonials": {
-      "title": "Wat organisatoren zeggen"
+      "title": "Wat organisatoren zeggen",
+      "rating": "Beoordeeld met {count} van 5"
     },
     "how": {
       "title": "Zo werkt het",
@@ -20095,5 +20096,14 @@
       "events": "Evenementen bekijken",
       "help": "Helpcentrum"
     }
+  },
+  "platformBlog": {
+    "title": "Blog",
+    "description": "Nieuws, gidsen en verhalen van Yayatoh.",
+    "posts": "Blogberichten",
+    "emptyTitle": "Nog geen berichten",
+    "emptyDescription": "Kom snel terug.",
+    "all": "Alle berichten",
+    "by": "Door {name}"
   }
 }

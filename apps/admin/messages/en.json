@@ -225,7 +225,8 @@
     "menu": "Open menu",
     "closeMenu": "Close menu",
     "categories": "Event categories",
-    "listings": "Marketplace listings"
+    "listings": "Marketplace listings",
+    "content": "Site content"
   },
   "tenants": {
     "add": "Add organization",
@@ -1465,6 +1466,100 @@
       "two_factor_method": "Your account has no password or authenticator to confirm it's you. Set a password first.",
       "two_factor_signed_out": "Your session ended. Sign in again.",
       "internal": "Something went wrong. Try again."
+    }
+  },
+  "platformContent": {
+    "title": "Site content",
+    "description": "What yayatoh.com shows: blog posts, testimonials and the home hero. Changes go live straight away and are recorded in the access log.",
+    "tabs": {
+      "label": "Site content areas",
+      "blog": "Blog",
+      "testimonials": "Testimonials",
+      "hero": "Home hero"
+    },
+    "done": {
+      "saved": "Saved.",
+      "published": "Published. It is live on the site.",
+      "unpublished": "Unpublished. It is a draft again.",
+      "deleted": "Deleted."
+    },
+    "error": {
+      "invalid": "Check the fields: a required value is missing or too long.",
+      "slug": "That address is already used by another post.",
+      "type": "That file is not an accepted image or video.",
+      "too_large": "That file is too large (images 5 MB, videos 25 MB).",
+      "empty": "Choose a file first.",
+      "not_image": "Choose an image (JPEG, PNG or WebP).",
+      "not_video": "Choose a video (MP4 or WebM)."
+    },
+    "blog": {
+      "new": "New post",
+      "back": "All posts",
+      "emptyTitle": "No posts yet",
+      "emptyDescription": "Write the first post: it appears on /blogs and in the home \"Latest from the blog\" section once published.",
+      "updated": "updated {when}",
+      "status": {
+        "draft": "Draft",
+        "published": "Published"
+      },
+      "liveAt": "Live at {path}",
+      "draftHint": "Drafts are not shown on the site.",
+      "fields": {
+        "title": "Title",
+        "slug": "Address (slug)",
+        "slugHint": "Lowercase letters, digits and hyphens. Left empty, it is made from the title.",
+        "excerpt": "Excerpt (shown on cards and in search results)",
+        "body": "Body (Markdown)",
+        "bodyHint": "Supports **bold**, *italic*, ## headings, - lists and [links](https://…). Raw HTML is shown as text.",
+        "cover": "Cover image",
+        "coverAlt": "Current cover image",
+        "coverHint": "JPEG, PNG or WebP, up to 5 MB.",
+        "removeCover": "Remove the cover image",
+        "seoTitle": "SEO title (up to 70 characters)",
+        "seoDescription": "SEO description (up to 200 characters)",
+        "authorName": "Author name"
+      },
+      "publish": "Publish",
+      "saveLive": "Save changes",
+      "saveDraft": "Save as draft",
+      "unpublish": "Unpublish",
+      "delete": "Delete post"
+    },
+    "testimonials": {
+      "add": "Add a testimonial",
+      "quote": "Quote",
+      "name": "Name",
+      "role": "Role and company",
+      "rating": "Rating",
+      "noRating": "No rating",
+      "position": "Order (lowest first)",
+      "photo": "Photo",
+      "removePhoto": "Remove the photo",
+      "published": "Show on the home page",
+      "save": "Save testimonial",
+      "edit": "Edit",
+      "delete": "Delete",
+      "live": "Shown",
+      "hidden": "Hidden",
+      "emptyTitle": "No testimonials yet",
+      "emptyDescription": "Add one above. Published testimonials appear on the home page."
+    },
+    "hero": {
+      "explain": "Empty fields keep the built-in text. With an image or a video, the home hero shows it behind the headline.",
+      "headline": "Headline",
+      "subtitle": "Subtitle",
+      "image": "Hero image",
+      "imageHint": "JPEG, PNG or WebP, up to 5 MB. Also the poster while a video loads.",
+      "removeImage": "Remove the image",
+      "video": "Hero video (upload)",
+      "videoHint": "MP4 or WebM, up to 25 MB. Plays muted and looped.",
+      "removeVideo": "Remove the video",
+      "videoUrl": "Or a YouTube / Vimeo link",
+      "videoUrlHint": "Used when no video file is uploaded.",
+      "ctaLabel": "Button text",
+      "ctaHref": "Button link",
+      "ctaHint": "A path on this site (/events) or an https:// link. Text and link go together.",
+      "save": "Save hero"
     }
   }
 }
