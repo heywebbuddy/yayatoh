@@ -19146,5 +19146,256 @@
     "description": "Gib diesem Event eine eigene Akzentfarbe auf seiner öffentlichen Eventseite. Lass das Feld leer, um unten die Markenfarbe deiner Organisation zu verwenden.",
     "color": "Eventfarbe",
     "usesOrg": "Dieses Event verwendet die Markenfarbe der Organisation."
+  },
+  "showcase": {
+    "wordmark": "Yayatoh",
+    "searchLabel": "Events suchen",
+    "searchPlaceholder": "Events suchen",
+    "siteNav": "Website",
+    "events": "Events",
+    "solutionsLabel": "Lösungen",
+    "pricing": "Preise",
+    "myTickets": "Meine Tickets",
+    "signIn": "Anmelden",
+    "signUp": "Registrieren",
+    "dashboard": "Dashboard",
+    "menu": "Menü",
+    "categoriesLabel": "Event-Kategorien",
+    "viewAll": "Alle ansehen",
+    "prev": "Zurück",
+    "next": "Weiter",
+    "featured": "Empfohlene Events",
+    "price": {
+      "free": "Kostenlos",
+      "soon": "Tickets bald",
+      "fromTo": "Ab {min} – {max}",
+      "fromOnly": "{min}",
+      "postponed": "Verschoben"
+    },
+    "hero": {
+      "title": "Live-Events, alles an einem Ort",
+      "lede": "Konzerte, Galas, Konferenzen und Community-Events, alle Gebühren im Preis enthalten.",
+      "cta": "Alle Events ansehen"
+    },
+    "creators": {
+      "title": "Beliebte Veranstalter",
+      "lede": "Die Menschen und Teams hinter den Events, über die alle sprechen.",
+      "all": "Events entdecken",
+      "events": "{count, plural, one {# Event} other {# Events}}"
+    },
+    "organizerCta": {
+      "title": "Verdiene mehr mit jedem Event",
+      "lede": "Verkaufe Tickets und nimm Spenden an, mit einem Checkout, dem deine Gäste vertrauen, und führe das ganze Event an einem Ort.",
+      "points": {
+        "one": "Gebühren sofort sichtbar, keine Überraschungen an der Kasse",
+        "two": "Check-in, Sitzplätze und Berichte inklusive",
+        "three": "Deine eigene Eventseite mit Branding"
+      },
+      "cta": "Event erstellen"
+    },
+    "footer": {
+      "tagline": "Live-Events entdecken, verkaufen und durchführen.",
+      "soon": "Demnächst",
+      "appStore": "App Store",
+      "googlePlay": "Google Play",
+      "menu": "Menü",
+      "venues": "Veranstaltungsorte",
+      "series": "Reihen",
+      "features": "Alle Funktionen",
+      "resources": "Ressourcen",
+      "help": "Hilfecenter"
+    },
+    "solutions": {
+      "createEvent": "Event erstellen",
+      "seeFeatures": "Alle Funktionen ansehen",
+      "featuresTitle": "Das bekommst du",
+      "stepsTitle": "So funktioniert es",
+      "ctaTitle": "Bereit zum Gastgeben?",
+      "ctaLede": "Erstelle dein Konto und starte dein erstes Event.",
+      "organizations": {
+        "name": "Organisationen",
+        "metaTitle": "Eventsoftware für Organisationen",
+        "title": "Alle Events deiner Organisation im Griff",
+        "lede": "Vereine, Verbände, Hilfsorganisationen und Gemeinschaften: ein Konto für alle Events, mit Ticketing, Anmeldung, Nachrichten und Spendensammlung.",
+        "features": {
+          "events": {
+            "title": "Alle Events an einem Ort",
+            "desc": "Erstelle einmalige und wiederkehrende Events unter deiner Organisation, mit eigener öffentlicher Seite."
+          },
+          "tickets": {
+            "title": "Ticketing mit sichtbaren Gebühren",
+            "desc": "Kostenlose und bezahlte Tickets, Promo-Codes und ein Checkout, der den vollen Preis zeigt."
+          },
+          "registration": {
+            "title": "Anmeldeformulare",
+            "desc": "Erfasse bei der Anmeldung genau die Angaben, die du von Mitgliedern und Gästen brauchst."
+          },
+          "messages": {
+            "title": "Nachrichten an deine Mitglieder",
+            "desc": "Sende Ankündigungen und Erinnerungen an alle, die sich angemeldet haben."
+          },
+          "donations": {
+            "title": "Spenden",
+            "desc": "Nimm Spenden zusätzlich zu Tickets an und sieh, was jedes Event eingebracht hat."
+          },
+          "reports": {
+            "title": "Berichte",
+            "desc": "Verfolge Verkäufe, Anmeldungen und Teilnahme über alle Events hinweg."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Organisation einrichten",
+            "desc": "Erstelle dein Konto, ergänze Namen und Branding und öffne deine öffentliche Seite."
+          },
+          "two": {
+            "title": "Events veröffentlichen",
+            "desc": "Füge Tickets oder ein Anmeldeformular hinzu und teile den Event-Link."
+          },
+          "three": {
+            "title": "Gäste willkommen heißen",
+            "desc": "Checke Mitglieder am Eingang ein und sieh danach die Zahlen."
+          }
+        }
+      },
+      "weddings": {
+        "name": "Hochzeiten",
+        "metaTitle": "Hochzeitsplanung und Gästeverwaltung",
+        "title": "Deine Hochzeit, wunderschön gestaltet",
+        "lede": "Lade Gäste ein, sammle Zusagen, plane die Sitzordnung und teile eine Gäste-Website, alles an einem ruhigen Ort.",
+        "features": {
+          "guests": {
+            "title": "Gästeliste",
+            "desc": "Füge Gäste und Gruppen hinzu und sieh auf einen Blick, wer eingeladen ist."
+          },
+          "rsvp": {
+            "title": "Zu- und Absagen",
+            "desc": "Gäste antworten online, und du siehst, wer kommt."
+          },
+          "seating": {
+            "title": "Sitzplan",
+            "desc": "Ordne Tische an und setze deine Gäste auf einem Raumplan."
+          },
+          "seatFinder": {
+            "title": "Platzfinder",
+            "desc": "Am Tag selbst suchen Gäste ihren Namen und finden ihren Tisch."
+          },
+          "website": {
+            "title": "Gäste-Website",
+            "desc": "Eine Seite zum Tag mit Ablauf, Ort und Details für deine Gäste."
+          },
+          "gallery": {
+            "title": "Fotogalerie",
+            "desc": "Gäste teilen ihre Fotos vom Tag in einer gemeinsamen Galerie."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Gäste hinzufügen",
+            "desc": "Tippe deine Gästeliste ein oder importiere sie und verschicke die Einladungen."
+          },
+          "two": {
+            "title": "Antworten sammeln",
+            "desc": "Verfolge die Zusagen und plane die Sitzordnung, während Antworten eintreffen."
+          },
+          "three": {
+            "title": "Den Tag genießen",
+            "desc": "Begrüße Gäste mit Platzfinder und Check-in und sammle die Fotos."
+          }
+        }
+      },
+      "galas": {
+        "name": "Galas",
+        "metaTitle": "Ticketing und Spendensammlung für Galas",
+        "title": "Ein Galaabend, an den man sich erinnert",
+        "lede": "Verkaufe Tickets und Tische, setze deine Gäste, nimm Spenden an und sorge für einen reibungslosen Einlass.",
+        "features": {
+          "tickets": {
+            "title": "Tickets und Tische",
+            "desc": "Verkaufe einzelne Plätze oder ganze Tische zu klaren Preisen."
+          },
+          "tables": {
+            "title": "Gastgeber-Tische und Sitzplätze",
+            "desc": "Platziere Gäste auf einem Raumplan und nenne die Sponsoren, die Tische ausrichten."
+          },
+          "donations": {
+            "title": "Spenden",
+            "desc": "Bitte an der Kasse um Spenden und behalte im Blick, was du einnimmst."
+          },
+          "guests": {
+            "title": "Gästeliste",
+            "desc": "Sieh jeden Gast, sein Ticket und seine Angaben in einer Liste."
+          },
+          "marketing": {
+            "title": "Einladungen und Kampagnen",
+            "desc": "Erreiche deine Unterstützer mit E-Mail-Kampagnen und teilbaren Links."
+          },
+          "door": {
+            "title": "Reibungsloser Check-in",
+            "desc": "Scanne Tickets am Eingang und sieh Ankünfte live."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Ticketverkauf starten",
+            "desc": "Lege Preise, Tische und eine Spendenbitte fest und veröffentliche."
+          },
+          "two": {
+            "title": "Gäste platzieren",
+            "desc": "Weise Gäste Tischen zu, sobald Verkäufe eingehen."
+          },
+          "three": {
+            "title": "Den Abend leiten",
+            "desc": "Checke Gäste ein und verfolge den Abend live."
+          }
+        }
+      },
+      "conferences": {
+        "name": "Konferenzen",
+        "metaTitle": "Software für Konferenzanmeldung und Programm",
+        "title": "Konferenzen, die fast von selbst laufen",
+        "lede": "Anmeldung, Programm, Referenten, Aussteller und Badges, mit Online-Sessions für Hybrid-Events.",
+        "features": {
+          "registration": {
+            "title": "Anmeldung",
+            "desc": "Anmeldeformulare, Tickettypen und Gruppenbuchungen für Teilnehmende."
+          },
+          "sessions": {
+            "title": "Programm und Sessions",
+            "desc": "Erstelle die Agenda mit Sessions, Räumen und Zeiten."
+          },
+          "speakers": {
+            "title": "Referenten",
+            "desc": "Gib jedem Referenten ein Profil und verknüpfe es mit seinen Sessions."
+          },
+          "exhibitors": {
+            "title": "Aussteller und Sponsoren",
+            "desc": "Liste Aussteller und Sponsoren auf und gib ihnen einen Platz auf der Eventseite."
+          },
+          "badges": {
+            "title": "Badges",
+            "desc": "Gestalte Badges und drucke sie vor dem Einlass im Stapel."
+          },
+          "virtual": {
+            "title": "Online- und Hybrid-Sessions",
+            "desc": "Streame Sessions für Teilnehmende vor Ort und online und stelle CE-Zertifikate aus."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Anmeldung öffnen",
+            "desc": "Lege Tickettypen und das Anmeldeformular an und veröffentliche."
+          },
+          "two": {
+            "title": "Programm aufbauen",
+            "desc": "Füge Sessions, Referenten, Aussteller und Sponsoren hinzu."
+          },
+          "three": {
+            "title": "Event durchführen",
+            "desc": "Drucke Badges, checke Gäste ein und lies die Berichte."
+          }
+        }
+      }
+    }
   }
 }

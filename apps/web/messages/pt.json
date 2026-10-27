@@ -19146,5 +19146,256 @@
     "description": "Dê a este evento uma cor de destaque própria na página pública dele. Deixe em branco para usar a cor da marca da sua organização, abaixo.",
     "color": "Cor do evento",
     "usesOrg": "Este evento usa a cor da marca da organização."
+  },
+  "showcase": {
+    "wordmark": "Yayatoh",
+    "searchLabel": "Pesquisar eventos",
+    "searchPlaceholder": "Pesquisar eventos",
+    "siteNav": "Site",
+    "events": "Eventos",
+    "solutionsLabel": "Soluções",
+    "pricing": "Preços",
+    "myTickets": "Meus ingressos",
+    "signIn": "Entrar",
+    "signUp": "Cadastrar-se",
+    "dashboard": "Painel",
+    "menu": "Menu",
+    "categoriesLabel": "Categorias de eventos",
+    "viewAll": "Ver tudo",
+    "prev": "Anterior",
+    "next": "Próximo",
+    "featured": "Eventos em destaque",
+    "price": {
+      "free": "Grátis",
+      "soon": "Ingressos em breve",
+      "fromTo": "A partir de {min} – {max}",
+      "fromOnly": "{min}",
+      "postponed": "Adiado"
+    },
+    "hero": {
+      "title": "Eventos ao vivo, tudo em um só lugar",
+      "lede": "Shows, galas, conferências e eventos comunitários, com todas as taxas incluídas no preço.",
+      "cta": "Ver todos os eventos"
+    },
+    "creators": {
+      "title": "Organizadores populares",
+      "lede": "As pessoas e equipes por trás dos eventos de que todo mundo fala.",
+      "all": "Descobrir eventos",
+      "events": "{count, plural, one {# evento} other {# eventos}}"
+    },
+    "organizerCta": {
+      "title": "Ganhe mais com cada evento",
+      "lede": "Venda ingressos e receba doações com um checkout em que seus convidados confiam, e gerencie todo o evento em um só lugar.",
+      "points": {
+        "one": "Taxas à vista, sem surpresas no pagamento",
+        "two": "Check-in, assentos e relatórios incluídos",
+        "three": "Sua própria página de evento com a sua marca"
+      },
+      "cta": "Criar evento"
+    },
+    "footer": {
+      "tagline": "Descubra, venda e gerencie eventos ao vivo.",
+      "soon": "Em breve",
+      "appStore": "App Store",
+      "googlePlay": "Google Play",
+      "menu": "Menu",
+      "venues": "Locais",
+      "series": "Séries",
+      "features": "Todos os recursos",
+      "resources": "Recursos",
+      "help": "Central de ajuda"
+    },
+    "solutions": {
+      "createEvent": "Criar um evento",
+      "seeFeatures": "Ver todos os recursos",
+      "featuresTitle": "O que você recebe",
+      "stepsTitle": "Como funciona",
+      "ctaTitle": "Pronto para organizar?",
+      "ctaLede": "Crie sua conta e comece o seu primeiro evento.",
+      "organizations": {
+        "name": "Organizações",
+        "metaTitle": "Software de eventos para organizações",
+        "title": "Gerencie todos os eventos da sua organização",
+        "lede": "Clubes, associações, instituições de caridade e comunidades: uma conta para todos os seus eventos, com venda de ingressos, inscrição, mensagens e arrecadação.",
+        "features": {
+          "events": {
+            "title": "Todos os seus eventos em um só lugar",
+            "desc": "Crie eventos únicos e recorrentes na sua organização, com página pública própria."
+          },
+          "tickets": {
+            "title": "Ingressos com taxas à vista",
+            "desc": "Ingressos gratuitos e pagos, códigos promocionais e um checkout que mostra o preço total."
+          },
+          "registration": {
+            "title": "Formulários de inscrição",
+            "desc": "Colete os dados de que você precisa de membros e convidados na inscrição."
+          },
+          "messages": {
+            "title": "Mensagens para seus membros",
+            "desc": "Envie avisos e lembretes para quem se inscreveu."
+          },
+          "donations": {
+            "title": "Doações",
+            "desc": "Aceite doações junto com os ingressos e veja quanto cada evento arrecadou."
+          },
+          "reports": {
+            "title": "Relatórios",
+            "desc": "Acompanhe vendas, inscrições e presença em todos os seus eventos."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Configure sua organização",
+            "desc": "Crie sua conta, adicione nome e marca e abra sua página pública."
+          },
+          "two": {
+            "title": "Publique seus eventos",
+            "desc": "Adicione ingressos ou um formulário de inscrição e compartilhe o link do evento."
+          },
+          "three": {
+            "title": "Receba as pessoas",
+            "desc": "Faça o check-in dos membros na porta e veja os números depois."
+          }
+        }
+      },
+      "weddings": {
+        "name": "Casamentos",
+        "metaTitle": "Planejamento de casamento e gestão de convidados",
+        "title": "Seu casamento, organizado com carinho",
+        "lede": "Convide pessoas, colete confirmações, planeje os lugares e compartilhe um site para os convidados, tudo em um só lugar tranquilo.",
+        "features": {
+          "guests": {
+            "title": "Lista de convidados",
+            "desc": "Adicione convidados e grupos e veja num relance quem foi convidado."
+          },
+          "rsvp": {
+            "title": "Confirmações",
+            "desc": "Os convidados respondem online e você vê quem vem."
+          },
+          "seating": {
+            "title": "Mapa de mesas",
+            "desc": "Organize as mesas e acomode os convidados em uma planta."
+          },
+          "seatFinder": {
+            "title": "Localizador de lugar",
+            "desc": "No dia, os convidados procuram o nome e encontram a mesa."
+          },
+          "website": {
+            "title": "Site para convidados",
+            "desc": "Uma página para o grande dia com programação, local e detalhes."
+          },
+          "gallery": {
+            "title": "Galeria de fotos",
+            "desc": "Os convidados compartilham as fotos do dia em uma só galeria."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Adicione seus convidados",
+            "desc": "Digite ou importe a lista de convidados e envie os convites."
+          },
+          "two": {
+            "title": "Colete as respostas",
+            "desc": "Acompanhe as confirmações e planeje os lugares conforme elas chegam."
+          },
+          "three": {
+            "title": "Aproveite o dia",
+            "desc": "Receba os convidados com o localizador de lugar e o check-in e reúna as fotos."
+          }
+        }
+      },
+      "galas": {
+        "name": "Galas",
+        "metaTitle": "Venda de ingressos e arrecadação para galas",
+        "title": "Uma noite de gala para lembrar",
+        "lede": "Venda ingressos e mesas, acomode os convidados, receba doações e tenha uma entrada tranquila.",
+        "features": {
+          "tickets": {
+            "title": "Ingressos e mesas",
+            "desc": "Venda lugares individuais ou mesas inteiras com preços claros."
+          },
+          "tables": {
+            "title": "Mesas anfitriãs e lugares",
+            "desc": "Posicione os convidados em uma planta e cite os patrocinadores que recebem mesas."
+          },
+          "donations": {
+            "title": "Doações",
+            "desc": "Peça doações no checkout e acompanhe o que você arrecada."
+          },
+          "guests": {
+            "title": "Lista de convidados",
+            "desc": "Veja cada convidado, o ingresso e os dados em uma só lista."
+          },
+          "marketing": {
+            "title": "Convites e campanhas",
+            "desc": "Alcance seus apoiadores com campanhas de e-mail e links compartilháveis."
+          },
+          "door": {
+            "title": "Check-in sem filas",
+            "desc": "Leia os ingressos na porta e veja as chegadas ao vivo."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Abra a venda de ingressos",
+            "desc": "Defina preços, mesas e um pedido de doação e publique."
+          },
+          "two": {
+            "title": "Acomode os convidados",
+            "desc": "Atribua convidados às mesas conforme as vendas chegam."
+          },
+          "three": {
+            "title": "Conduza a noite",
+            "desc": "Faça o check-in dos convidados e acompanhe a noite ao vivo."
+          }
+        }
+      },
+      "conferences": {
+        "name": "Conferências",
+        "metaTitle": "Software de inscrição e programação para conferências",
+        "title": "Conferências que funcionam sozinhas",
+        "lede": "Inscrição, programação, palestrantes, expositores e crachás, com sessões online para eventos híbridos.",
+        "features": {
+          "registration": {
+            "title": "Inscrição",
+            "desc": "Formulários de inscrição, tipos de ingresso e vendas para grupos."
+          },
+          "sessions": {
+            "title": "Programação e sessões",
+            "desc": "Monte a agenda com sessões, salas e horários."
+          },
+          "speakers": {
+            "title": "Palestrantes",
+            "desc": "Dê um perfil a cada palestrante e vincule-o às suas sessões."
+          },
+          "exhibitors": {
+            "title": "Expositores e patrocinadores",
+            "desc": "Mostre expositores e patrocinadores na página do evento."
+          },
+          "badges": {
+            "title": "Crachás",
+            "desc": "Crie crachás e imprima em lotes antes de abrir as portas."
+          },
+          "virtual": {
+            "title": "Sessões online e híbridas",
+            "desc": "Transmita sessões para participantes remotos e emita certificados de créditos CE."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Abra as inscrições",
+            "desc": "Crie os tipos de ingresso e o formulário de inscrição e publique."
+          },
+          "two": {
+            "title": "Monte a programação",
+            "desc": "Adicione sessões, palestrantes, expositores e patrocinadores."
+          },
+          "three": {
+            "title": "Conduza o evento",
+            "desc": "Imprima crachás, faça o check-in e leia os relatórios."
+          }
+        }
+      }
+    }
   }
 }

@@ -61,6 +61,13 @@
   --color-scrim: rgba(22, 19, 29, 0.45);
   --color-white: #ffffff;
   --color-black: #000000;
+  /* Showcase accents (the public marketplace look): glow outlines, gradient stops. */
+  --color-ember: #ff3150;
+  --color-flame: #ff7a1a;
+  --color-rose: #ff3d86;
+  --color-grape: #a35bff;
+  --color-ocean: #3d9bff;
+  --color-lime: #3be6a4;
 
   --radius-tag: 8px;
   --radius-control: 14px;
@@ -77,6 +84,11 @@
     var(--font-arabic, "IBM Plex Sans Arabic"), var(--font-devanagari, "Noto Sans Devanagari"), "Noto Sans JP",
     "Noto Sans SC", "Noto Sans TC", "Hiragino Sans", "Yu Gothic UI", "PingFang SC", "Microsoft YaHei", "PingFang TC",
     "Microsoft JhengHei", system-ui, sans-serif;
+  /* Extended, extra-bold display face for the showcase headlines (self-hosted Unbounded). */
+  --font-display:
+    var(--font-unbounded, "Unbounded"), var(--font-manrope, "Manrope"),
+    var(--font-arabic, "IBM Plex Sans Arabic"), "Noto Sans JP", "Noto Sans SC", "Noto Sans TC", system-ui,
+    sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, monospace;
 
   --text-display: 56px;
@@ -317,6 +329,117 @@
 /* A themed subtree (the style guide, printed posters) takes its own text colour. */
 [data-theme] {
   color: var(--color-ink);
+}
+
+/*
+ * Showcase surface: the public marketplace look (near-black canvas, hot red to orange to pink
+ * accents). It is a subtree scope, not a mode: put `data-surface="showcase"` on a wrapper and
+ * every role below re-points, so the shared components restyle themselves. The console keeps
+ * light and dark. An organizer's event page can choose it too (event branding, "Showcase").
+ */
+[data-surface="showcase"] {
+  --color-canvas: #0a0a0a;
+  --color-surface: #141414;
+  --color-surface-solid: #141414;
+  --color-surface-2: #1b1b1b;
+  --color-surface-3: #262626;
+  --color-line: rgba(255, 255, 255, 0.1);
+  --color-line-strong: #6e6e6e;
+  --color-ink: #ffffff;
+  --color-ink-2: #bdbdbd;
+  --color-ink-3: #8c8c8c;
+  --color-primary: #ff3150;
+  --color-primary-hover: #ff4d68;
+  --color-primary-pressed: #e61f40;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #ff8a9b;
+  --color-primary-soft: rgba(255, 49, 80, 0.18);
+  --color-brand: #ff3d86;
+  --color-brand-strong: #ff3d86;
+  --color-brand-ink: #ff7eaf;
+  --color-brand-soft: rgba(255, 61, 134, 0.16);
+  --color-success: #4be9ac;
+  --color-success-soft: rgba(59, 230, 164, 0.14);
+  --color-success-dot: #3be6a4;
+  --color-warning: #ffc56e;
+  --color-warning-soft: rgba(255, 197, 110, 0.14);
+  --color-warning-dot: #ffb84d;
+  --color-danger: #ff8798;
+  --color-danger-soft: rgba(255, 122, 140, 0.15);
+  --color-danger-dot: #ff6b81;
+  --color-tag: rgba(255, 255, 255, 0.1);
+  --color-tag-ink: #ffffff;
+  --color-focus: #ff8a9b;
+  --color-scrim: rgba(0, 0, 0, 0.7);
+  --gradient-page: radial-gradient(60% 40% at 50% -10%, rgba(255, 49, 80, 0.28), rgba(255, 49, 80, 0) 70%);
+  --gradient-ember: linear-gradient(100deg, #ff2d3d 0%, #ff6a2b 52%, #ff3d86 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #ff2d3d 0%, #ff4d6d 55%, #ff7a8c 100%);
+  --elevation-card: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 24px 48px rgba(0, 0, 0, 0.5);
+  --elevation-pop: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 24px 64px rgba(0, 0, 0, 0.7);
+  --elevation-primary: 0 8px 28px rgba(255, 49, 80, 0.45);
+  color-scheme: dark;
+  color: var(--color-ink);
+  background-color: var(--color-canvas);
+}
+
+@utility bg-ember {
+  background-image: var(--gradient-ember, linear-gradient(100deg, #ff2d3d 0%, #ff6a2b 52%, #ff3d86 100%));
+}
+@utility bg-ember-soft {
+  background-image: var(--gradient-ember-soft, linear-gradient(135deg, #ff2d3d, #ff7a8c));
+}
+@utility text-ember {
+  background-image: var(--gradient-ember, linear-gradient(100deg, #ff2d3d 0%, #ff6a2b 52%, #ff3d86 100%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+/* A coloured glowing outline (the category pills). */
+@utility glow-ember {
+  border-color: var(--color-ember);
+  box-shadow: 0 0 18px -2px color-mix(in srgb, var(--color-ember) 60%, transparent);
+}
+@utility glow-flame {
+  border-color: var(--color-flame);
+  box-shadow: 0 0 18px -2px color-mix(in srgb, var(--color-flame) 60%, transparent);
+}
+@utility glow-rose {
+  border-color: var(--color-rose);
+  box-shadow: 0 0 18px -2px color-mix(in srgb, var(--color-rose) 60%, transparent);
+}
+@utility glow-grape {
+  border-color: var(--color-grape);
+  box-shadow: 0 0 18px -2px color-mix(in srgb, var(--color-grape) 60%, transparent);
+}
+@utility glow-ocean {
+  border-color: var(--color-ocean);
+  box-shadow: 0 0 18px -2px color-mix(in srgb, var(--color-ocean) 60%, transparent);
+}
+@utility glow-lime {
+  border-color: var(--color-lime);
+  box-shadow: 0 0 18px -2px color-mix(in srgb, var(--color-lime) 60%, transparent);
+}
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+@keyframes showcase-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes showcase-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+@utility animate-ring {
+  animation: showcase-spin 60s linear infinite;
+}
+@utility animate-glow {
+  animation: showcase-pulse 6s ease-in-out infinite;
 }
 
 /* `dark:` targets dark mode, whether chosen or followed from the system. */

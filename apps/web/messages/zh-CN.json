@@ -19146,5 +19146,256 @@
     "description": "为此活动在其公开活动页面上设置专属强调色。留空则使用下方你所在组织的品牌颜色。",
     "color": "活动颜色",
     "usesOrg": "此活动使用组织的品牌颜色。"
+  },
+  "showcase": {
+    "wordmark": "Yayatoh",
+    "searchLabel": "搜索活动",
+    "searchPlaceholder": "搜索活动",
+    "siteNav": "站点",
+    "events": "活动",
+    "solutionsLabel": "解决方案",
+    "pricing": "价格",
+    "myTickets": "我的票",
+    "signIn": "登录",
+    "signUp": "注册",
+    "dashboard": "控制台",
+    "menu": "菜单",
+    "categoriesLabel": "活动分类",
+    "viewAll": "查看全部",
+    "prev": "上一个",
+    "next": "下一个",
+    "featured": "精选活动",
+    "price": {
+      "free": "免费",
+      "soon": "即将开售",
+      "fromTo": "{min} – {max} 起",
+      "fromOnly": "{min}",
+      "postponed": "已延期"
+    },
+    "hero": {
+      "title": "现场活动，尽在一处",
+      "lede": "演唱会、晚宴、会议和社区活动，所有费用已含在价格中。",
+      "cta": "查看所有活动"
+    },
+    "creators": {
+      "title": "热门主办方",
+      "lede": "那些人人都在谈论的活动背后的人和团队。",
+      "all": "发现活动",
+      "events": "{count, plural, other {# 场活动}}"
+    },
+    "organizerCta": {
+      "title": "每场活动，赚得更多",
+      "lede": "用宾客信任的结账方式售票并接受捐款，在一个地方管理整场活动。",
+      "points": {
+        "one": "费用一目了然，结账时没有意外",
+        "two": "签到、座位和报表均已包含",
+        "three": "属于你的活动页面和品牌"
+      },
+      "cta": "创建活动"
+    },
+    "footer": {
+      "tagline": "发现、销售并举办现场活动。",
+      "soon": "即将推出",
+      "appStore": "App Store",
+      "googlePlay": "Google Play",
+      "menu": "菜单",
+      "venues": "场地",
+      "series": "系列活动",
+      "features": "全部功能",
+      "resources": "资源",
+      "help": "帮助中心"
+    },
+    "solutions": {
+      "createEvent": "创建活动",
+      "seeFeatures": "查看全部功能",
+      "featuresTitle": "你将获得",
+      "stepsTitle": "如何运作",
+      "ctaTitle": "准备好举办了吗？",
+      "ctaLede": "创建账号，开始你的第一场活动。",
+      "organizations": {
+        "name": "组织",
+        "metaTitle": "面向组织的活动软件",
+        "title": "管理你的组织举办的每一场活动",
+        "lede": "俱乐部、协会、慈善机构和社区：一个账号管理所有活动，内置售票、报名、消息和筹款。",
+        "features": {
+          "events": {
+            "title": "所有活动集中一处",
+            "desc": "在你的组织下创建单次和重复活动，并拥有专属公开页面。"
+          },
+          "tickets": {
+            "title": "费用透明的售票",
+            "desc": "免费和付费票、优惠码，以及显示完整价格的结账。"
+          },
+          "registration": {
+            "title": "报名表单",
+            "desc": "成员和宾客报名时，收集你需要的信息。"
+          },
+          "messages": {
+            "title": "向成员发送消息",
+            "desc": "向已报名的人发送公告和提醒。"
+          },
+          "donations": {
+            "title": "捐款",
+            "desc": "在售票之外接受捐款，并查看每场活动筹得的金额。"
+          },
+          "reports": {
+            "title": "报表",
+            "desc": "跟踪所有活动的销售、报名和出席情况。"
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "设置你的组织",
+            "desc": "创建账号，添加名称和品牌，并开通公开页面。"
+          },
+          "two": {
+            "title": "发布你的活动",
+            "desc": "添加门票或报名表单，并分享活动链接。"
+          },
+          "three": {
+            "title": "迎接来宾",
+            "desc": "在门口为成员签到，之后查看数据。"
+          }
+        }
+      },
+      "weddings": {
+        "name": "婚礼",
+        "metaTitle": "婚礼筹备与宾客管理",
+        "title": "让你的婚礼从容而美好",
+        "lede": "邀请宾客、收集回复、安排座位并分享宾客网站，一切都在一个安心的地方。",
+        "features": {
+          "guests": {
+            "title": "宾客名单",
+            "desc": "添加宾客和分组，一眼看清谁受到了邀请。"
+          },
+          "rsvp": {
+            "title": "回复确认",
+            "desc": "宾客在线回复，你可以看到谁会来。"
+          },
+          "seating": {
+            "title": "座位安排",
+            "desc": "布置桌子，并在平面图上为宾客安排座位。"
+          },
+          "seatFinder": {
+            "title": "座位查询",
+            "desc": "当天宾客查找自己的名字，就能找到自己的桌子。"
+          },
+          "website": {
+            "title": "宾客网站",
+            "desc": "为当天准备的页面，包含日程、场地和详情。"
+          },
+          "gallery": {
+            "title": "照片墙",
+            "desc": "宾客把当天的照片分享到同一个相册。"
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "添加宾客",
+            "desc": "输入或导入宾客名单，并发送邀请。"
+          },
+          "two": {
+            "title": "收集回复",
+            "desc": "跟踪回复情况，并随着回复安排座位。"
+          },
+          "three": {
+            "title": "享受这一天",
+            "desc": "用座位查询和签到迎接宾客，并收集照片。"
+          }
+        }
+      },
+      "galas": {
+        "name": "晚宴",
+        "metaTitle": "晚宴售票与筹款",
+        "title": "一场令人难忘的晚宴",
+        "lede": "销售门票和整桌席位，安排宾客座位，接受捐款，并让入场顺畅无阻。",
+        "features": {
+          "tickets": {
+            "title": "门票和整桌席位",
+            "desc": "以清晰的价格销售单个座位或整张桌子。"
+          },
+          "tables": {
+            "title": "主办桌与座位",
+            "desc": "在平面图上安排宾客，并标注赞助整桌的赞助商。"
+          },
+          "donations": {
+            "title": "捐款",
+            "desc": "在结账时发起捐款请求，并掌握筹款进度。"
+          },
+          "guests": {
+            "title": "宾客名单",
+            "desc": "在一份名单中查看每位宾客、其门票和资料。"
+          },
+          "marketing": {
+            "title": "邀请与推广",
+            "desc": "通过邮件活动和可分享的链接触达你的支持者。"
+          },
+          "door": {
+            "title": "顺畅签到",
+            "desc": "在门口扫描门票，实时查看到场情况。"
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "开始售票",
+            "desc": "设置价格、桌位和捐款请求，然后发布。"
+          },
+          "two": {
+            "title": "安排宾客座位",
+            "desc": "随着销售进展把宾客分配到各桌。"
+          },
+          "three": {
+            "title": "主持晚宴",
+            "desc": "为宾客签到，并实时关注晚宴进程。"
+          }
+        }
+      },
+      "conferences": {
+        "name": "会议",
+        "metaTitle": "会议报名与日程软件",
+        "title": "自己就能运转的会议",
+        "lede": "报名、日程、演讲嘉宾、展商和证件，并为混合式活动提供线上场次。",
+        "features": {
+          "registration": {
+            "title": "报名",
+            "desc": "面向参会者的报名表单、票种和团体购票。"
+          },
+          "sessions": {
+            "title": "日程与场次",
+            "desc": "用场次、会议室和时间搭建议程。"
+          },
+          "speakers": {
+            "title": "演讲嘉宾",
+            "desc": "为每位嘉宾建立资料页，并关联其场次。"
+          },
+          "exhibitors": {
+            "title": "展商与赞助商",
+            "desc": "在活动页面展示你的展商和赞助商。"
+          },
+          "badges": {
+            "title": "证件",
+            "desc": "设计证件，并在开门前批量打印。"
+          },
+          "virtual": {
+            "title": "线上与混合场次",
+            "desc": "向远程参会者直播场次，并颁发继续教育学分证书。"
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "开放报名",
+            "desc": "创建票种和报名表单，然后发布。"
+          },
+          "two": {
+            "title": "搭建日程",
+            "desc": "添加场次、嘉宾、展商和赞助商。"
+          },
+          "three": {
+            "title": "举办活动",
+            "desc": "打印证件、为参会者签到并查看报表。"
+          }
+        }
+      }
+    }
   }
 }

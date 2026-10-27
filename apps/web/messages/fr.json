@@ -19146,5 +19146,256 @@
     "description": "Donnez à cet événement sa propre couleur d’accent sur sa page publique. Laissez vide pour utiliser la couleur de marque de votre organisation ci-dessous.",
     "color": "Couleur de l’événement",
     "usesOrg": "Cet événement utilise la couleur de marque de l’organisation."
+  },
+  "showcase": {
+    "wordmark": "Yayatoh",
+    "searchLabel": "Rechercher des événements",
+    "searchPlaceholder": "Rechercher des événements",
+    "siteNav": "Site",
+    "events": "Événements",
+    "solutionsLabel": "Solutions",
+    "pricing": "Tarifs",
+    "myTickets": "Mes billets",
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "dashboard": "Tableau de bord",
+    "menu": "Menu",
+    "categoriesLabel": "Catégories d'événements",
+    "viewAll": "Tout voir",
+    "prev": "Précédent",
+    "next": "Suivant",
+    "featured": "Événements à la une",
+    "price": {
+      "free": "Gratuit",
+      "soon": "Billets bientôt",
+      "fromTo": "À partir de {min} – {max}",
+      "fromOnly": "{min}",
+      "postponed": "Reporté"
+    },
+    "hero": {
+      "title": "Des événements en direct, au même endroit",
+      "lede": "Concerts, galas, conférences et événements locaux, tous frais compris dans le prix.",
+      "cta": "Voir tous les événements"
+    },
+    "creators": {
+      "title": "Organisateurs populaires",
+      "lede": "Les personnes et les équipes derrière les événements dont tout le monde parle.",
+      "all": "Découvrir les événements",
+      "events": "{count, plural, one {# événement} other {# événements}}"
+    },
+    "organizerCta": {
+      "title": "Gagnez plus à chaque événement",
+      "lede": "Vendez des billets et recevez des dons avec un paiement auquel vos invités font confiance, et gérez tout votre événement au même endroit.",
+      "points": {
+        "one": "Frais affichés dès le départ, sans surprise au paiement",
+        "two": "Contrôle des entrées, placement et rapports inclus",
+        "three": "Votre propre page événement à vos couleurs"
+      },
+      "cta": "Créer un événement"
+    },
+    "footer": {
+      "tagline": "Découvrez, vendez et gérez des événements en direct.",
+      "soon": "Bientôt disponible",
+      "appStore": "App Store",
+      "googlePlay": "Google Play",
+      "menu": "Menu",
+      "venues": "Lieux",
+      "series": "Séries",
+      "features": "Toutes les fonctionnalités",
+      "resources": "Ressources",
+      "help": "Centre d'aide"
+    },
+    "solutions": {
+      "createEvent": "Créer un événement",
+      "seeFeatures": "Voir toutes les fonctionnalités",
+      "featuresTitle": "Ce que vous obtenez",
+      "stepsTitle": "Comment ça marche",
+      "ctaTitle": "Prêt à organiser ?",
+      "ctaLede": "Créez votre compte et lancez votre premier événement.",
+      "organizations": {
+        "name": "Organisations",
+        "metaTitle": "Logiciel événementiel pour les organisations",
+        "title": "Gérez tous les événements de votre organisation",
+        "lede": "Clubs, associations, organismes caritatifs et communautés : un seul compte pour tous vos événements, avec billetterie, inscriptions, messages et collecte de dons.",
+        "features": {
+          "events": {
+            "title": "Tous vos événements au même endroit",
+            "desc": "Créez des événements ponctuels et récurrents au sein de votre organisation, avec sa propre page publique."
+          },
+          "tickets": {
+            "title": "Billetterie aux frais affichés",
+            "desc": "Billets gratuits et payants, codes promo et un paiement qui affiche le prix complet."
+          },
+          "registration": {
+            "title": "Formulaires d'inscription",
+            "desc": "Recueillez les informations dont vous avez besoin auprès des membres et des invités lors de l'inscription."
+          },
+          "messages": {
+            "title": "Messages à vos membres",
+            "desc": "Envoyez annonces et rappels aux personnes inscrites."
+          },
+          "donations": {
+            "title": "Dons",
+            "desc": "Acceptez des dons en plus des billets et voyez ce que chaque événement a collecté."
+          },
+          "reports": {
+            "title": "Rapports",
+            "desc": "Suivez les ventes, les inscriptions et la fréquentation de tous vos événements."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Configurez votre organisation",
+            "desc": "Créez votre compte, ajoutez votre nom et votre identité visuelle, et ouvrez votre page publique."
+          },
+          "two": {
+            "title": "Publiez vos événements",
+            "desc": "Ajoutez des billets ou un formulaire d'inscription et partagez le lien de l'événement."
+          },
+          "three": {
+            "title": "Accueillez les participants",
+            "desc": "Enregistrez les membres à l'entrée et consultez les chiffres ensuite."
+          }
+        }
+      },
+      "weddings": {
+        "name": "Mariages",
+        "metaTitle": "Organisation de mariage et gestion des invités",
+        "title": "Votre mariage, magnifiquement orchestré",
+        "lede": "Invitez vos proches, recueillez les réponses, organisez le plan de table et partagez un site pour les invités, le tout dans un espace serein.",
+        "features": {
+          "guests": {
+            "title": "Liste des invités",
+            "desc": "Ajoutez vos invités et leurs groupes, et voyez d'un coup d'œil qui est invité."
+          },
+          "rsvp": {
+            "title": "Réponses",
+            "desc": "Les invités répondent en ligne, et vous voyez qui vient."
+          },
+          "seating": {
+            "title": "Plan de table",
+            "desc": "Disposez les tables et placez vos invités sur un plan de salle."
+          },
+          "seatFinder": {
+            "title": "Recherche de place",
+            "desc": "Le jour J, les invités cherchent leur nom et trouvent leur table."
+          },
+          "website": {
+            "title": "Site pour les invités",
+            "desc": "Une page pour le grand jour avec le programme, le lieu et les détails."
+          },
+          "gallery": {
+            "title": "Galerie photo",
+            "desc": "Les invités partagent leurs photos de la journée dans une seule galerie."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Ajoutez vos invités",
+            "desc": "Saisissez ou importez votre liste et envoyez les invitations."
+          },
+          "two": {
+            "title": "Recueillez les réponses",
+            "desc": "Suivez les réponses et organisez le placement au fil des retours."
+          },
+          "three": {
+            "title": "Profitez de la journée",
+            "desc": "Accueillez les invités avec la recherche de place et le pointage, et rassemblez les photos."
+          }
+        }
+      },
+      "galas": {
+        "name": "Galas",
+        "metaTitle": "Billetterie et collecte de fonds pour galas",
+        "title": "Une soirée de gala dont on se souvient",
+        "lede": "Vendez des billets et des tables, placez vos invités, recevez des dons et fluidifiez l'entrée.",
+        "features": {
+          "tickets": {
+            "title": "Billets et tables",
+            "desc": "Vendez des places individuelles ou des tables entières à des prix clairs."
+          },
+          "tables": {
+            "title": "Tables parrainées et placement",
+            "desc": "Placez les invités sur un plan et nommez les sponsors qui parrainent des tables."
+          },
+          "donations": {
+            "title": "Dons",
+            "desc": "Demandez des dons au paiement et suivez ce que vous collectez."
+          },
+          "guests": {
+            "title": "Liste des invités",
+            "desc": "Voyez chaque invité, son billet et ses informations dans une seule liste."
+          },
+          "marketing": {
+            "title": "Invitations et campagnes",
+            "desc": "Touchez vos soutiens avec des campagnes e-mail et des liens à partager."
+          },
+          "door": {
+            "title": "Contrôle d'entrée fluide",
+            "desc": "Scannez les billets à l'entrée et suivez les arrivées en direct."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Ouvrez la billetterie",
+            "desc": "Fixez vos prix, vos tables et une demande de don, puis publiez."
+          },
+          "two": {
+            "title": "Placez vos invités",
+            "desc": "Attribuez les invités aux tables au fil des ventes."
+          },
+          "three": {
+            "title": "Menez la soirée",
+            "desc": "Enregistrez les invités et suivez la soirée en direct."
+          }
+        }
+      },
+      "conferences": {
+        "name": "Conférences",
+        "metaTitle": "Logiciel d'inscription et de programme pour conférences",
+        "title": "Des conférences qui tournent toutes seules",
+        "lede": "Inscriptions, programme, intervenants, exposants et badges, avec des sessions en ligne pour les événements hybrides.",
+        "features": {
+          "registration": {
+            "title": "Inscriptions",
+            "desc": "Formulaires d'inscription, types de billets et ventes de groupe pour les participants."
+          },
+          "sessions": {
+            "title": "Programme et sessions",
+            "desc": "Construisez le programme avec sessions, salles et horaires."
+          },
+          "speakers": {
+            "title": "Intervenants",
+            "desc": "Donnez à chaque intervenant un profil lié à ses sessions."
+          },
+          "exhibitors": {
+            "title": "Exposants et sponsors",
+            "desc": "Présentez vos exposants et sponsors sur la page de l'événement."
+          },
+          "badges": {
+            "title": "Badges",
+            "desc": "Concevez des badges et imprimez-les par lots avant l'ouverture des portes."
+          },
+          "virtual": {
+            "title": "Sessions en ligne et hybrides",
+            "desc": "Diffusez les sessions aux participants à distance et délivrez des certificats de crédits de formation continue."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Ouvrez les inscriptions",
+            "desc": "Créez les types de billets et le formulaire d'inscription, puis publiez."
+          },
+          "two": {
+            "title": "Construisez le programme",
+            "desc": "Ajoutez sessions, intervenants, exposants et sponsors."
+          },
+          "three": {
+            "title": "Menez l'événement",
+            "desc": "Imprimez les badges, enregistrez les participants et consultez les rapports."
+          }
+        }
+      }
+    }
   }
 }

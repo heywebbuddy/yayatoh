@@ -90,7 +90,27 @@ export const devanagari = localFont({
   ],
 });
 
+/**
+ * Unbounded (SIL OFL, from @fontsource-variable): the extended, extra-bold display face of the
+ * showcase headlines. Latin only; every other script falls back to the sans stack. Preloaded off,
+ * so pages that never use `font-display` do not pay for it.
+ */
+export const unbounded = localFont({
+  src: '../../node_modules/@fontsource-variable/unbounded/files/unbounded-latin-wght-normal.woff2',
+  variable: '--font-unbounded',
+  weight: '200 900',
+  display: 'swap',
+  preload: false,
+  declarations: [
+    {
+      prop: 'unicode-range',
+      value:
+        'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD',
+    },
+  ],
+});
+
 /** Every font variable, for the root <html> class. */
-export const fontVariables = [manrope, manropeExt, manropeCyrillic, arabic, devanagari]
+export const fontVariables = [manrope, manropeExt, manropeCyrillic, arabic, devanagari, unbounded]
   .map((f) => f.variable)
   .join(' ');

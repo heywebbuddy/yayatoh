@@ -4,9 +4,18 @@ import { cx } from '../cx.ts';
 /**
  * ADR 0022 actions. One `primary` per screen (top right in the PageHeader); `secondary` for the
  * rest; `dark` for strong neutral actions; `ghost` inside toolbars and rows; `danger` for
- * destructive actions (always confirmed); `inverse` on the violet hero and dark promo cards.
+ * destructive actions (always confirmed); `inverse` on the violet hero and dark promo cards;
+ * `ember` is the showcase's red-to-pink gradient call to action and `white` its quiet pill.
  */
-export type ButtonVariant = 'primary' | 'secondary' | 'dark' | 'ghost' | 'danger' | 'inverse';
+export type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'dark'
+  | 'ghost'
+  | 'danger'
+  | 'inverse'
+  | 'ember'
+  | 'white';
 /** 36 / 44 / 54 px. Every size is above the 24 px minimum; 44 is the touch default. */
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
@@ -17,6 +26,9 @@ const VARIANT: Record<ButtonVariant, string> = {
   dark: 'bg-tag text-tag-ink hover:opacity-90 active:opacity-80',
   ghost: 'bg-transparent text-ink hover:bg-surface-3 active:bg-line',
   danger: 'border border-danger/40 bg-danger-soft text-danger hover:border-danger active:opacity-85',
+  ember:
+    'rounded-pill bg-ember text-white elevation-primary hover:brightness-110 active:brightness-95',
+  white: 'rounded-pill bg-white text-black hover:bg-white/90 active:bg-white/80',
   inverse: 'border border-white/30 bg-white/15 text-white backdrop-blur hover:bg-white/25 active:bg-white/30',
 };
 

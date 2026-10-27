@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { dark, gradient, light, radius, shadow } from '../src/tokens.ts';
+import { dark, gradient, light, radius, shadow, showcase } from '../src/tokens.ts';
 
 const css = readFileSync(new URL('../src/styles.css', import.meta.url), 'utf8');
 
@@ -76,5 +76,18 @@ describe('tokens.ts ↔ styles.css', () => {
 
   it('gives both modes the same roles', () => {
     expect(Object.keys(dark).sort()).toEqual(Object.keys(light).sort());
+  });
+
+  it('declares the showcase surface with the same values', () => {
+    const src = block('[data-surface="showcase"] {');
+    expect(norm(value(src, '--color-canvas'))).toBe(norm(showcase.canvas));
+    expect(norm(value(src, '--color-surface'))).toBe(norm(showcase.surface));
+    expect(norm(value(src, '--color-ink'))).toBe(norm(showcase.ink));
+    expect(norm(value(src, '--color-primary'))).toBe(norm(showcase.primary));
+    expect(norm(value(src, '--gradient-ember'))).toBe(
+      norm(
+        `linear-gradient(100deg, ${showcase.ember[0]} 0%, ${showcase.ember[1]} 52%, ${showcase.ember[2]} 100%)`,
+      ),
+    );
   });
 });

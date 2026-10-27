@@ -19146,5 +19146,256 @@
     "description": "Give this event its own accent colour on its public event page. Leave it empty to use your organization’s brand colour below.",
     "color": "Event colour",
     "usesOrg": "This event uses the organization’s brand colour."
+  },
+  "showcase": {
+    "wordmark": "Yayatoh",
+    "searchLabel": "Search events",
+    "searchPlaceholder": "Search events",
+    "siteNav": "Site",
+    "events": "Events",
+    "solutionsLabel": "Solutions",
+    "pricing": "Pricing",
+    "myTickets": "My tickets",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "dashboard": "Dashboard",
+    "menu": "Menu",
+    "categoriesLabel": "Event categories",
+    "viewAll": "View all",
+    "prev": "Previous",
+    "next": "Next",
+    "featured": "Featured events",
+    "price": {
+      "free": "Free",
+      "soon": "Tickets soon",
+      "fromTo": "From {min} – {max}",
+      "fromOnly": "{min}",
+      "postponed": "Postponed"
+    },
+    "hero": {
+      "title": "Live events, all in one place",
+      "lede": "Concerts, galas, conferences and community events, with every fee included in the price.",
+      "cta": "View all events"
+    },
+    "creators": {
+      "title": "Popular organizers",
+      "lede": "The people and teams behind the events everyone is talking about.",
+      "all": "Discover events",
+      "events": "{count, plural, one {# event} other {# events}}"
+    },
+    "organizerCta": {
+      "title": "Earn more from every event",
+      "lede": "Sell tickets and take donations with a checkout your guests trust, and run the whole event from one place.",
+      "points": {
+        "one": "Fees shown up front, no surprises at checkout",
+        "two": "Check-in, seating and reports included",
+        "three": "Your own event page and branding"
+      },
+      "cta": "Create event"
+    },
+    "footer": {
+      "tagline": "Discover, sell and run live events.",
+      "soon": "Coming soon",
+      "appStore": "App Store",
+      "googlePlay": "Google Play",
+      "menu": "Menu",
+      "venues": "Venues",
+      "series": "Series",
+      "features": "All features",
+      "resources": "Resources",
+      "help": "Help centre"
+    },
+    "solutions": {
+      "createEvent": "Create an event",
+      "seeFeatures": "See all features",
+      "featuresTitle": "What you get",
+      "stepsTitle": "How it works",
+      "ctaTitle": "Ready to host?",
+      "ctaLede": "Create your account and start on your first event.",
+      "organizations": {
+        "name": "Organizations",
+        "metaTitle": "Event software for organizations",
+        "title": "Run every event your organization hosts",
+        "lede": "Clubs, associations, charities and communities: one account for all your events, with ticketing, registration, messages and fundraising built in.",
+        "features": {
+          "events": {
+            "title": "All your events in one place",
+            "desc": "Create one-off and repeating events under your organization, with its own public page."
+          },
+          "tickets": {
+            "title": "Ticketing with fees shown up front",
+            "desc": "Free and paid tickets, promo codes and a checkout that shows the full price."
+          },
+          "registration": {
+            "title": "Registration forms",
+            "desc": "Collect the details you need from members and guests when they sign up."
+          },
+          "messages": {
+            "title": "Messages to your members",
+            "desc": "Send announcements and reminders to the people who registered."
+          },
+          "donations": {
+            "title": "Donations",
+            "desc": "Accept gifts alongside tickets and see what each event raised."
+          },
+          "reports": {
+            "title": "Reports",
+            "desc": "Track sales, registrations and attendance across your events."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Set up your organization",
+            "desc": "Create your account, add your name and brand, and open your public page."
+          },
+          "two": {
+            "title": "Publish your events",
+            "desc": "Add tickets or a registration form and share the event link."
+          },
+          "three": {
+            "title": "Welcome people in",
+            "desc": "Check members in at the door and see the numbers afterwards."
+          }
+        }
+      },
+      "weddings": {
+        "name": "Weddings",
+        "metaTitle": "Wedding planning and guest management",
+        "title": "Your wedding, hosted beautifully",
+        "lede": "Invite guests, collect RSVPs, plan the seating and share a guest website, all in one calm place.",
+        "features": {
+          "guests": {
+            "title": "Guest list",
+            "desc": "Add your guests and groups, and see who is invited at a glance."
+          },
+          "rsvp": {
+            "title": "RSVPs",
+            "desc": "Guests answer online, and you see who is coming."
+          },
+          "seating": {
+            "title": "Seating plan",
+            "desc": "Arrange tables and seat your guests on a floor plan."
+          },
+          "seatFinder": {
+            "title": "Seat finder",
+            "desc": "On the day, guests look up their name and find their table."
+          },
+          "website": {
+            "title": "Guest website",
+            "desc": "A page for the day with the schedule, venue and details for your guests."
+          },
+          "gallery": {
+            "title": "Photo gallery",
+            "desc": "Guests share their photos of the day in one gallery."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Add your guests",
+            "desc": "Type or import your guest list and send the invitations."
+          },
+          "two": {
+            "title": "Collect answers",
+            "desc": "Track RSVPs and plan the seating as replies arrive."
+          },
+          "three": {
+            "title": "Enjoy the day",
+            "desc": "Greet guests with the seat finder and check-in, and gather the photos."
+          }
+        }
+      },
+      "galas": {
+        "name": "Galas",
+        "metaTitle": "Ticketing and fundraising for galas",
+        "title": "A gala night people remember",
+        "lede": "Sell tickets and tables, seat your guests, take donations and run a smooth door.",
+        "features": {
+          "tickets": {
+            "title": "Tickets and tables",
+            "desc": "Sell single seats or whole tables with clear pricing."
+          },
+          "tables": {
+            "title": "Hosted tables and seating",
+            "desc": "Place guests on a floor plan and name the sponsors who host tables."
+          },
+          "donations": {
+            "title": "Donations",
+            "desc": "Ask for gifts at checkout and keep track of what you raise."
+          },
+          "guests": {
+            "title": "Guest list",
+            "desc": "See every guest, their ticket and their details in one list."
+          },
+          "marketing": {
+            "title": "Invitations and campaigns",
+            "desc": "Reach your supporters with email campaigns and shareable links."
+          },
+          "door": {
+            "title": "Smooth check-in",
+            "desc": "Scan tickets at the door and see arrivals live."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Open ticket sales",
+            "desc": "Set your prices, tables and a donation ask, then publish."
+          },
+          "two": {
+            "title": "Seat your guests",
+            "desc": "Assign guests to tables as sales come in."
+          },
+          "three": {
+            "title": "Run the evening",
+            "desc": "Check guests in and follow the night as it happens."
+          }
+        }
+      },
+      "conferences": {
+        "name": "Conferences",
+        "metaTitle": "Conference registration and programme software",
+        "title": "Conferences that run themselves",
+        "lede": "Registration, programme, speakers, exhibitors and badges, with online sessions for hybrid events.",
+        "features": {
+          "registration": {
+            "title": "Registration",
+            "desc": "Registration forms, ticket types and group sales for attendees."
+          },
+          "sessions": {
+            "title": "Programme and sessions",
+            "desc": "Build the agenda with sessions, rooms and times."
+          },
+          "speakers": {
+            "title": "Speakers",
+            "desc": "Give each speaker a profile and link them to their sessions."
+          },
+          "exhibitors": {
+            "title": "Exhibitors and sponsors",
+            "desc": "List your exhibitors and sponsors and give them a place on the event page."
+          },
+          "badges": {
+            "title": "Badges",
+            "desc": "Design badges and print them in batches before the doors open."
+          },
+          "virtual": {
+            "title": "Online and hybrid sessions",
+            "desc": "Stream sessions to remote attendees and issue CE credit certificates."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Open registration",
+            "desc": "Create ticket types and the registration form, then publish."
+          },
+          "two": {
+            "title": "Build the programme",
+            "desc": "Add sessions, speakers, exhibitors and sponsors."
+          },
+          "three": {
+            "title": "Run the event",
+            "desc": "Print badges, check people in and read the reports."
+          }
+        }
+      }
+    }
   }
 }

@@ -2,7 +2,9 @@ import { parseSearchParams } from '@yayatoh/marketplace';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { MarketplaceResults } from '@/components/marketplace/results.tsx';
-import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
+import { CategoryRail } from '@/components/showcase/category-rail.tsx';
+import { PILL_CATEGORIES } from '@/components/showcase/home-data.ts';
+import { ShowcaseShell } from '@/components/showcase/shell.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { requestHost } from '@/server/request-origin.ts';
@@ -14,12 +16,21 @@ type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
+/** A platform category key from `?topic=`, or undefined (anything else is dropped). */
+const topicOf = (sp: Record<string, string | string[] | undefined>): string | undefined => {
+  const v = Array.isArray(sp.topic) ? sp.topic[0] : sp.topic;
+  return v && (PILL_CATEGORIES as readonly string[]).includes(v) ? v : undefined;
+};
+
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const sp = parseSearchParams(await searchParams);
+  const raw = await searchParams;
+  const sp = parseSearchParams(raw);
   const t = await getTranslations({ locale, namespace: 'market' });
   const req = await requestHost();
-  const filtered = Boolean(sp.q || sp.city || sp.category || sp.price || sp.from || sp.to || sp.page > 1);
+  const filtered = Boolean(
+    sp.q || sp.city || sp.category || sp.price || sp.from || sp.to || sp.page > 1 || topicOf(raw),
+  );
   return publicMetadata({
     req,
     locale,
@@ -33,28 +44,30 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   });
 }
 
-/** All upcoming marketplace events with search, filters and pagination (legacy `/events`). */
+/** All upcoming marketplace events with search, filters and pagination, as poster cards. */
 export default async function EventsPage({ params, searchParams }: Props) {
   const { locale } = await params;
   pageLocale(locale);
   const t = await getTranslations('market');
-  const sp = parseSearchParams(await searchParams);
+  const raw = await searchParams;
+  const sp = parseSearchParams(raw);
+  const topic = topicOf(raw);
   return (
-    <div className="min-h-dvh bg-surface">
-      <SiteHeader />
-      <main id="main" className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 pb-8 md:px-6">
-        <h1 className="pt-6 text-[40px] leading-none font-extrabold tracking-[-0.045em]">
-          {t('events.title')}
-        </h1>
-        {/* M6.14a: search v2 (facets, geo, recommendations) when an index is configured. */}
-        {searchConfigured() && (await requestHost()).kind === 'marketplace' ? (
-          <Link href="/search" className="inline-flex min-h-6 items-center self-start text-body underline">
-            {t('search.openSearch')}
-          </Link>
-        ) : null}
-        <MarketplaceResults locale={locale} params={sp} path="/events" />
-      </main>
-      <SiteFooter />
-    </div>
+    <ShowcaseShell>
+      <h1 className="pt-10 font-display text-[clamp(34px,6vw,72px)] leading-none font-black tracking-[-0.04em] uppercase">
+        {t('events.title')}
+      </h1>
+      <CategoryRail keys={PILL_CATEGORIES} active={topic} />
+      {/* M6.14a: search v2 (facets, geo, recommendations) when an index is configured. */}
+      {searchConfigured() && (await requestHost()).kind === 'marketplace' ? (
+        <Link
+          href="/search"
+          className="-mt-8 inline-flex min-h-6 items-center self-start text-body underline"
+        >
+          {t('search.openSearch')}
+        </Link>
+      ) : null}
+      <MarketplaceResults locale={locale} params={sp} path="/events" topic={topic} />
+    </ShowcaseShell>
   );
 }

@@ -19146,5 +19146,256 @@
     "description": "Geef dit evenement een eigen accentkleur op de openbare evenementpagina. Laat leeg om hieronder de huisstijlkleur van je organisatie te gebruiken.",
     "color": "Evenementkleur",
     "usesOrg": "Dit evenement gebruikt de huisstijlkleur van de organisatie."
+  },
+  "showcase": {
+    "wordmark": "Yayatoh",
+    "searchLabel": "Zoek evenementen",
+    "searchPlaceholder": "Zoek evenementen",
+    "siteNav": "Site",
+    "events": "Evenementen",
+    "solutionsLabel": "Oplossingen",
+    "pricing": "Prijzen",
+    "myTickets": "Mijn tickets",
+    "signIn": "Inloggen",
+    "signUp": "Aanmelden",
+    "dashboard": "Dashboard",
+    "menu": "Menu",
+    "categoriesLabel": "Evenementcategorieën",
+    "viewAll": "Alles bekijken",
+    "prev": "Vorige",
+    "next": "Volgende",
+    "featured": "Uitgelichte evenementen",
+    "price": {
+      "free": "Gratis",
+      "soon": "Tickets binnenkort",
+      "fromTo": "Vanaf {min} – {max}",
+      "fromOnly": "{min}",
+      "postponed": "Uitgesteld"
+    },
+    "hero": {
+      "title": "Live evenementen, alles op één plek",
+      "lede": "Concerten, gala’s, conferenties en buurtevenementen, met alle kosten in de prijs inbegrepen.",
+      "cta": "Alle evenementen bekijken"
+    },
+    "creators": {
+      "title": "Populaire organisatoren",
+      "lede": "De mensen en teams achter de evenementen waar iedereen over praat.",
+      "all": "Evenementen ontdekken",
+      "events": "{count, plural, one {# evenement} other {# evenementen}}"
+    },
+    "organizerCta": {
+      "title": "Verdien meer aan elk evenement",
+      "lede": "Verkoop tickets en ontvang donaties met een kassa die je gasten vertrouwen, en beheer het hele evenement op één plek.",
+      "points": {
+        "one": "Kosten vooraf zichtbaar, geen verrassingen bij het afrekenen",
+        "two": "Check-in, zitplaatsen en rapporten inbegrepen",
+        "three": "Je eigen evenementpagina in je eigen stijl"
+      },
+      "cta": "Evenement maken"
+    },
+    "footer": {
+      "tagline": "Ontdek, verkoop en beheer live evenementen.",
+      "soon": "Binnenkort",
+      "appStore": "App Store",
+      "googlePlay": "Google Play",
+      "menu": "Menu",
+      "venues": "Locaties",
+      "series": "Reeksen",
+      "features": "Alle functies",
+      "resources": "Bronnen",
+      "help": "Helpcentrum"
+    },
+    "solutions": {
+      "createEvent": "Een evenement maken",
+      "seeFeatures": "Alle functies bekijken",
+      "featuresTitle": "Wat je krijgt",
+      "stepsTitle": "Zo werkt het",
+      "ctaTitle": "Klaar om te organiseren?",
+      "ctaLede": "Maak je account aan en begin aan je eerste evenement.",
+      "organizations": {
+        "name": "Organisaties",
+        "metaTitle": "Evenementsoftware voor organisaties",
+        "title": "Beheer alle evenementen van je organisatie",
+        "lede": "Clubs, verenigingen, goede doelen en gemeenschappen: één account voor al je evenementen, met ticketverkoop, inschrijving, berichten en fondsenwerving.",
+        "features": {
+          "events": {
+            "title": "Al je evenementen op één plek",
+            "desc": "Maak eenmalige en terugkerende evenementen onder je organisatie, met een eigen openbare pagina."
+          },
+          "tickets": {
+            "title": "Ticketverkoop met zichtbare kosten",
+            "desc": "Gratis en betaalde tickets, kortingscodes en een kassa die de volledige prijs toont."
+          },
+          "registration": {
+            "title": "Inschrijfformulieren",
+            "desc": "Verzamel de gegevens die je nodig hebt van leden en gasten bij hun inschrijving."
+          },
+          "messages": {
+            "title": "Berichten aan je leden",
+            "desc": "Stuur aankondigingen en herinneringen naar wie zich heeft ingeschreven."
+          },
+          "donations": {
+            "title": "Donaties",
+            "desc": "Ontvang giften naast tickets en zie wat elk evenement heeft opgebracht."
+          },
+          "reports": {
+            "title": "Rapporten",
+            "desc": "Volg verkoop, inschrijvingen en opkomst over al je evenementen."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Richt je organisatie in",
+            "desc": "Maak je account aan, voeg je naam en huisstijl toe en open je openbare pagina."
+          },
+          "two": {
+            "title": "Publiceer je evenementen",
+            "desc": "Voeg tickets of een inschrijfformulier toe en deel de link."
+          },
+          "three": {
+            "title": "Verwelkom de gasten",
+            "desc": "Check leden in bij de deur en bekijk daarna de cijfers."
+          }
+        }
+      },
+      "weddings": {
+        "name": "Bruiloften",
+        "metaTitle": "Bruiloftsplanning en gastenbeheer",
+        "title": "Jouw bruiloft, prachtig georganiseerd",
+        "lede": "Nodig gasten uit, verzamel aanmeldingen, plan de zitplaatsen en deel een gastenwebsite, alles op één rustige plek.",
+        "features": {
+          "guests": {
+            "title": "Gastenlijst",
+            "desc": "Voeg gasten en groepen toe en zie in één oogopslag wie is uitgenodigd."
+          },
+          "rsvp": {
+            "title": "Aanmeldingen",
+            "desc": "Gasten reageren online en jij ziet wie er komt."
+          },
+          "seating": {
+            "title": "Tafelschikking",
+            "desc": "Rangschik tafels en plaats je gasten op een plattegrond."
+          },
+          "seatFinder": {
+            "title": "Plaatszoeker",
+            "desc": "Op de dag zelf zoeken gasten hun naam op en vinden hun tafel."
+          },
+          "website": {
+            "title": "Gastenwebsite",
+            "desc": "Een pagina voor de dag met programma, locatie en praktische details."
+          },
+          "gallery": {
+            "title": "Fotogalerij",
+            "desc": "Gasten delen hun foto’s van de dag in één galerij."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Voeg je gasten toe",
+            "desc": "Typ of importeer je gastenlijst en verstuur de uitnodigingen."
+          },
+          "two": {
+            "title": "Verzamel reacties",
+            "desc": "Volg de aanmeldingen en plan de zitplaatsen terwijl er antwoorden binnenkomen."
+          },
+          "three": {
+            "title": "Geniet van de dag",
+            "desc": "Verwelkom gasten met de plaatszoeker en check-in en verzamel de foto’s."
+          }
+        }
+      },
+      "galas": {
+        "name": "Gala’s",
+        "metaTitle": "Ticketverkoop en fondsenwerving voor gala’s",
+        "title": "Een galaavond om te onthouden",
+        "lede": "Verkoop tickets en tafels, plaats je gasten, ontvang donaties en zorg voor een vlotte ingang.",
+        "features": {
+          "tickets": {
+            "title": "Tickets en tafels",
+            "desc": "Verkoop losse plaatsen of hele tafels tegen duidelijke prijzen."
+          },
+          "tables": {
+            "title": "Gastheertafels en zitplaatsen",
+            "desc": "Plaats gasten op een plattegrond en noem de sponsors die tafels aanbieden."
+          },
+          "donations": {
+            "title": "Donaties",
+            "desc": "Vraag om giften bij het afrekenen en houd bij wat je ophaalt."
+          },
+          "guests": {
+            "title": "Gastenlijst",
+            "desc": "Zie elke gast, zijn ticket en zijn gegevens in één lijst."
+          },
+          "marketing": {
+            "title": "Uitnodigingen en campagnes",
+            "desc": "Bereik je supporters met e-mailcampagnes en deelbare links."
+          },
+          "door": {
+            "title": "Vlotte check-in",
+            "desc": "Scan tickets bij de deur en zie aankomsten live."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Open de ticketverkoop",
+            "desc": "Stel prijzen, tafels en een donatieverzoek in en publiceer."
+          },
+          "two": {
+            "title": "Plaats je gasten",
+            "desc": "Wijs gasten aan tafels toe naarmate de verkoop binnenkomt."
+          },
+          "three": {
+            "title": "Leid de avond",
+            "desc": "Check gasten in en volg de avond live."
+          }
+        }
+      },
+      "conferences": {
+        "name": "Conferenties",
+        "metaTitle": "Software voor conferentie-inschrijving en programma",
+        "title": "Conferenties die vanzelf lopen",
+        "lede": "Inschrijving, programma, sprekers, exposanten en badges, met onlinesessies voor hybride evenementen.",
+        "features": {
+          "registration": {
+            "title": "Inschrijving",
+            "desc": "Inschrijfformulieren, tickettypen en groepsverkoop voor deelnemers."
+          },
+          "sessions": {
+            "title": "Programma en sessies",
+            "desc": "Bouw de agenda met sessies, zalen en tijden."
+          },
+          "speakers": {
+            "title": "Sprekers",
+            "desc": "Geef elke spreker een profiel en koppel het aan zijn sessies."
+          },
+          "exhibitors": {
+            "title": "Exposanten en sponsors",
+            "desc": "Toon je exposanten en sponsors op de evenementpagina."
+          },
+          "badges": {
+            "title": "Badges",
+            "desc": "Ontwerp badges en print ze in bulk voordat de deuren opengaan."
+          },
+          "virtual": {
+            "title": "Online en hybride sessies",
+            "desc": "Stream sessies naar deelnemers op afstand en geef CE-certificaten uit."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Open de inschrijving",
+            "desc": "Maak tickettypen en het inschrijfformulier en publiceer."
+          },
+          "two": {
+            "title": "Bouw het programma",
+            "desc": "Voeg sessies, sprekers, exposanten en sponsors toe."
+          },
+          "three": {
+            "title": "Leid het evenement",
+            "desc": "Print badges, check mensen in en lees de rapporten."
+          }
+        }
+      }
+    }
   }
 }
