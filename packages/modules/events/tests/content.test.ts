@@ -29,7 +29,7 @@ describe('section text formats (M1.4d)', () => {
       { time: '09:00', title: 'Doors', detail: null },
       { time: '18:30', title: 'Dinner', detail: 'Main hall' },
     ]);
-    expect(parseScheduleText(formatScheduleText({ items }))).toEqual(items);
+    expect(parseScheduleText(formatScheduleText({ items: items.map((i) => ({ ...i, day: null })) }))).toEqual(items);
     expect(() => parseScheduleText('25:00 | Late')).toThrow(
       expect.objectContaining({ reason: 'schedule_time', line: 1 }),
     );
