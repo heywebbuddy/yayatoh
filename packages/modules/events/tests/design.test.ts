@@ -15,9 +15,9 @@ describe('event design options', () => {
   });
 
   it('keeps a valid design and fills what is missing', () => {
-    const d = parseEventDesign({ theme: 'showcase', heroLayout: 'circle' });
+    const d = parseEventDesign({ theme: 'classic', heroLayout: 'circle' });
     expect(d).toEqual({
-      theme: 'showcase',
+      theme: 'classic',
       headingFont: 'modern',
       heroLayout: 'circle',
       heroVideoUrl: null,
@@ -39,6 +39,6 @@ describe('event design options', () => {
 
   it('knows the default, so it is stored as null', () => {
     expect(isDefaultDesign(DEFAULT_EVENT_DESIGN)).toBe(true);
-    expect(isDefaultDesign({ ...DEFAULT_EVENT_DESIGN, theme: 'showcase' })).toBe(false);
+    expect(isDefaultDesign({ ...DEFAULT_EVENT_DESIGN, theme: 'classic' })).toBe(false);
   });
 });

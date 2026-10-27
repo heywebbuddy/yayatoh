@@ -152,6 +152,8 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
   });
   const forwarded = new Headers(req.headers);
   forwarded.set('x-nonce', nonce);
+  // The locale-free path, so the root layout can give public pages the showcase look.
+  forwarded.set('x-yy-path', stripLocale(path, routing.locales));
   // Marks a front-door request for the not-found page's 404 beacon; a client never sets it.
   forwarded.delete(FRONT_DOOR_ROUTE_HEADER);
   if (door) forwarded.set(FRONT_DOOR_ROUTE_HEADER, door.route);

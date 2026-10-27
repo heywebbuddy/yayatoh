@@ -522,7 +522,7 @@ export async function PublicEventView({
     <div
       className={cx('min-h-dvh', showcase && 'bg-page')}
       data-heading={ev.design.headingFont}
-      {...(showcase ? { 'data-surface': 'showcase' } : {})}
+      {...(showcase ? { 'data-surface': 'showcase' } : { 'data-theme': 'light' })}
     >
       {ev.visibility === 'public' ? (
         <script

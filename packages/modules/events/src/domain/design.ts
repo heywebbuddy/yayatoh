@@ -16,7 +16,7 @@ export const HeroVideoUrl = z
   .regex(/^https:\/\/\S+$/, 'A https link');
 
 export const EventDesign = z.object({
-  theme: z.enum(EVENT_THEMES).default('classic'),
+  theme: z.enum(EVENT_THEMES).default('showcase'),
   headingFont: z.enum(HEADING_FONTS).default('modern'),
   heroLayout: z.enum(HERO_LAYOUTS).default('full'),
   /** The hero background video (layout `video`); the cover image stays its poster and fallback. */
@@ -27,7 +27,7 @@ export const EventDesign = z.object({
 export type EventDesign = z.infer<typeof EventDesign>;
 
 export const DEFAULT_EVENT_DESIGN: EventDesign = {
-  theme: 'classic',
+  theme: 'showcase',
   headingFont: 'modern',
   heroLayout: 'full',
   heroVideoUrl: null,
@@ -50,7 +50,7 @@ function safeJson(s: string): unknown {
 
 /** Whether a design is the default (so nothing needs storing). */
 export const isDefaultDesign = (d: EventDesign): boolean =>
-  d.theme === 'classic' &&
+  d.theme === 'showcase' &&
   d.headingFont === 'modern' &&
   d.heroLayout === 'full' &&
   d.heroVideoUrl === null &&
