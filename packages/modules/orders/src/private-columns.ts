@@ -20,6 +20,8 @@ export const privateColumns = columnPrivacy('orders', {
     // Set exactly for direct charges (CHECK).
     connected_account_id: secret(undefined, { where: "funds_flow = 'organizer_mor'" }),
     fee_schedule: internal(),
+    // One seat per date: seat and date ids only, no person.
+    seat_legs: internal(),
     provider: 'vocab',
     provider_payment_id: secret(),
     manage_token_hash: secret(),
