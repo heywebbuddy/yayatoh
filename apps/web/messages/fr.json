@@ -780,7 +780,39 @@
       "thumbnails": "Toutes les photos"
     },
     "shareWhatsApp": "Partager sur WhatsApp",
-    "shareMessage": "{name} — réservez vos billets : {url}"
+    "shareMessage": "{name} — réservez vos billets : {url}",
+    "speakerRoles": {
+      "keynote": "Intervenant principal",
+      "speaker": "Intervenant",
+      "panelist": "Panéliste",
+      "moderator": "Modérateur",
+      "host": "Animateur / MC",
+      "dj": "DJ",
+      "artist": "Artiste / performeur",
+      "influencer": "Influenceur",
+      "special_guest": "Invité spécial"
+    },
+    "speakerRolesPlural": {
+      "keynote": "Intervenants principaux",
+      "speaker": "Intervenants",
+      "panelist": "Panélistes",
+      "moderator": "Modérateurs",
+      "host": "Animateurs / MC",
+      "dj": "DJ",
+      "artist": "Artistes / performeurs",
+      "influencer": "Influenceurs",
+      "special_guest": "Invités spéciaux"
+    },
+    "featuredBadge": "À l’affiche",
+    "sponsorPageTitle": "Sponsor",
+    "exhibitorPageTitle": "Exposant",
+    "sponsorTier": "Sponsor {tier}",
+    "video": "Vidéo",
+    "videoTitle": "Vidéo de {name}",
+    "contact": "Contact",
+    "brochures": "Brochures et téléchargements",
+    "teamAtEvent": "Équipe sur l’événement",
+    "going": "{count, plural, one {# participant} other {# participants}}"
   },
   "portal": {
     "day": "Jour {day} · {date}",
@@ -3744,7 +3776,9 @@
       "longitude": "Indiquez la latitude et la longitude ensemble ; la longitude doit être comprise entre -180 et 180.",
       "timezone": "Choisissez un fuseau horaire.",
       "capacity": "La capacité doit être un nombre entier d’au moins 1.",
-      "mapUrl": "Utilisez un lien qui commence par https://."
+      "mapUrl": "Utilisez un lien qui commence par https://.",
+      "contactEmail": "Saisissez une adresse e-mail valide.",
+      "websiteUrl": "Saisissez un lien commençant par http:// ou https://."
     },
     "quotes": {
       "title": "Demandes de devis",
@@ -3775,7 +3809,12 @@
       "details": "Informations"
     },
     "detailsTitle": "Informations",
-    "photo": "Photo"
+    "photo": "Photo",
+    "contactEmail": "E-mail de contact",
+    "contactPhone": "Téléphone de contact",
+    "websiteUrl": "Site web",
+    "description": "Description",
+    "descriptionHint": "Affiché sur la page publique du lieu. Markdown pris en charge."
   },
   "details": {
     "title": "Détails de l’événement",
@@ -3838,7 +3877,18 @@
     "currencySave": "Enregistrer la devise",
     "hiddenCategory": "{name} (masquée)",
     "categoryHiddenHint": "Cette catégorie est masquée : l’événement la garde, mais elle n’est plus proposée pour d’autres événements.",
-    "manageCategories": "Gérer les catégories"
+    "manageCategories": "Gérer les catégories",
+    "seo": {
+      "title": "SEO et partage",
+      "subtitle": "Ce que les moteurs de recherche et les aperçus de liens affichent pour cet événement, et son adresse web."
+    },
+    "previewPortal": "Aperçu du portail participant",
+    "attendeeCount": {
+      "title": "Nombre de participants",
+      "label": "Afficher sur la page de l’événement le nombre de participants",
+      "hint": "Désactivé par défaut. Affiche un nombre comme « 689 participants » près de la date.",
+      "save": "Enregistrer"
+    }
   },
   "directory": {
     "title": "Annuaire des lieux",
@@ -3861,7 +3911,9 @@
     "noEventsDescription": "Revenez plus tard ou demandez un devis pour votre propre événement.",
     "quoteTitle": "Demander un devis",
     "quoteDescription": "Présentez votre événement à {org}, qui vous répondra par e-mail.",
-    "photos": "Photos"
+    "photos": "Photos",
+    "contact": "Contact",
+    "website": "Site web"
   },
   "quote": {
     "name": "Votre nom",
@@ -3906,7 +3958,8 @@
       "faq": "FAQ",
       "schedule": "Programme",
       "location": "Localisation",
-      "links": "Liens"
+      "links": "Liens",
+      "video": "Vidéo"
     },
     "sectionTitle": "Titre de la section",
     "titleInvalid": "Saisissez un titre de 120 caractères au maximum.",
@@ -3918,14 +3971,18 @@
       "links": "Liens",
       "address": "Adresse",
       "directions": "Itinéraire",
-      "mapUrl": "Lien vers la carte"
+      "mapUrl": "Lien vers la carte",
+      "videoUrl": "Lien de la vidéo",
+      "videoCaption": "Légende (facultatif)"
     },
     "hints": {
       "markdown": "Prend en charge **gras**, *italique*, ## titres, - listes et [liens](https://…).",
       "faq": "Séparez chaque question par une ligne vide. La première ligne est la question ; les lignes suivantes sont la réponse.",
       "schedule": "Un élément par ligne : 18:00 | Ouverture des portes | détail facultatif",
       "links": "Un lien par ligne : Libellé | https://…",
-      "address": "Affichée telle quelle, ligne par ligne."
+      "address": "Affichée telle quelle, ligne par ligne.",
+      "videoUrl": "Collez un lien YouTube ou Vimeo. Il est lu sur la page de l’événement dans un lecteur respectueux de la vie privée.",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=…"
     },
     "textErrors": {
       "faq_answer_missing": "La question {line} n’a pas de réponse : ajoutez la réponse sur les lignes suivantes.",
@@ -3946,7 +4003,43 @@
     "taglineHint": "Une courte ligne affichée sous le nom de l'événement (280 caractères maximum). Laissez vide pour la retirer.",
     "saveTagline": "Enregistrer l'accroche",
     "taglineSaved": "Accroche enregistrée.",
-    "taglineInvalid": "L'accroche doit faire 280 caractères au maximum."
+    "taglineInvalid": "L'accroche doit faire 280 caractères au maximum.",
+    "editor": {
+      "toolbar": "Mise en forme du texte",
+      "bold": "Gras",
+      "italic": "Italique",
+      "heading": "Titre",
+      "list": "Liste à puces",
+      "link": "Lien",
+      "listItem": "Élément de liste",
+      "linkText": "texte du lien",
+      "boldText": "texte en gras",
+      "italicText": "texte en italique",
+      "rowUp": "Monter {label}",
+      "rowDown": "Descendre {label}",
+      "rowRemove": "Supprimer {label}",
+      "question": "Question {n}",
+      "answer": "Réponse",
+      "addQuestion": "Ajouter une question",
+      "scheduleHint": "Une ligne par élément. L’heure est facultative. Ajoutez un titre de jour pour regrouper les lignes suivantes (événements sur plusieurs jours).",
+      "dayN": "Titre de jour {n}",
+      "itemN": "Élément {n}",
+      "dayHeading": "Titre de jour",
+      "dayPlaceholder": "Jour 1 : vendredi 12 juin",
+      "time": "Heure (facultatif)",
+      "itemTitle": "Titre",
+      "detail": "Détail (facultatif)",
+      "addItem": "Ajouter un élément",
+      "addDay": "Ajouter un titre de jour",
+      "linkLabel": "Libellé",
+      "linkUrl": "Lien (https://…)",
+      "linkN": "Lien {n}",
+      "addLink": "Ajouter un lien",
+      "preview": "Aperçu en direct",
+      "previewEmpty": "Rien à afficher pour l’instant.",
+      "untitled": "Section sans titre",
+      "httpsPlaceholder": "https://"
+    }
   },
   "dates": {
     "title": "Dates",
@@ -4901,7 +4994,11 @@
       "position": "Saisissez un ordre de 1 à 99.",
       "tier": "Choisissez un niveau.",
       "tierInUse": "Déplacez ou supprimez d'abord les sponsors de ce niveau.",
-      "capacityBelowEnrolled": "Plus de personnes ont déjà une place. Retirez d'abord des inscriptions ou gardez une capacité plus élevée."
+      "capacityBelowEnrolled": "Plus de personnes ont déjà une place. Retirez d'abord des inscriptions ou gardez une capacité plus élevée.",
+      "contactEmail": "Saisissez une adresse e-mail valide.",
+      "videoUrl": "Utilisez un lien YouTube ou Vimeo.",
+      "team": "Vérifiez les lignes de l’équipe : chacune doit avoir un nom.",
+      "unknownAccount": "L’un des e-mails du portail n’est pas un compte de ce sponsor."
     },
     "warnings": {
       "room_overlap": "{room} est aussi réservée pour « {other} » à ce moment-là.",
@@ -4930,7 +5027,20 @@
       "added": "{count, plural, one {# session ajoutée} other {# sessions ajoutées}} au programme.",
       "discard": "Ignorer",
       "discarded": "Propositions ignorées. Rien n'a été ajouté."
-    }
+    },
+    "speakerRole": "Rôle",
+    "featured": "À l’affiche",
+    "featuredHint": "Afficher en premier dans son rôle, avec une carte plus grande",
+    "contactEmail": "E-mail de contact public",
+    "contactPhone": "Téléphone de contact public",
+    "longDescription": "Description longue (page de détail)",
+    "longDescriptionHint": "Affichée sur la page du sponsor. Texte avec **gras**, *italique*, listes et liens.",
+    "videoUrl": "Lien vidéo (YouTube ou Vimeo)",
+    "videoUrlHint": "Lue sur la page de détail dans un lecteur respectueux de la vie privée.",
+    "team": "Équipe sur l’événement",
+    "teamHint": "Une personne par ligne : Nom | Titre | e-mail du compte du portail (facultatif, relie la personne au compte du portail du sponsor).",
+    "saveTeam": "Enregistrer l’équipe",
+    "teamSaved": "Équipe enregistrée."
   },
   "aiDraft": {
     "title": "Rédiger avec l'IA",
@@ -5028,7 +5138,13 @@
       "generic": "Vérifiez ce champ."
     },
     "currency": "Devise",
-    "currencyHint": "Les billets, le paiement et les rapports l'utilisent. Modifiable jusqu'à la première commande."
+    "currencyHint": "Les billets, le paiement et les rapports l'utilisent. Modifiable jusqu'à la première commande.",
+    "newVenue": {
+      "add": "+ Ajouter un nouveau lieu",
+      "title": "Nouveau lieu",
+      "save": "Enregistrer et sélectionner le lieu",
+      "cancel": "Annuler"
+    }
   },
   "eventMedia": {
     "title": "Images",
@@ -5043,7 +5159,8 @@
       "speaker": "Photo de l’intervenant",
       "exhibitor": "Logo de l’exposant",
       "sponsor": "Logo du sponsor",
-      "library": "Importer dans la médiathèque"
+      "library": "Importer dans la médiathèque",
+      "social": "Image de partage social"
     },
     "hint": {
       "cover": "Affichée en haut de la page de l'événement, sur les cartes d'événements et dans les aperçus de liens.",
@@ -5053,7 +5170,8 @@
       "speaker": "Affichée sur la page de l’événement, la page de l’intervenant et à côté de ses sessions dans le programme.",
       "exhibitor": "Affiché avec l’exposant sur la page de l’événement. Les logos SVG restent nets à toutes les tailles.",
       "sponsor": "Affiché dans le niveau du sponsor sur la page de l’événement (les niveaux supérieurs ont des logos plus grands). Les logos SVG restent nets.",
-      "library": "Les images importées ici peuvent servir pour les événements, les lieux, les intervenants et votre logo sans être importées à nouveau."
+      "library": "Les images importées ici peuvent servir pour les événements, les lieux, les intervenants et votre logo sans être importées à nouveau.",
+      "social": "Utilisée pour les aperçus de liens sur les réseaux sociaux et les messageries. À défaut, l’image de couverture, puis une carte générée. 1200 × 630 px convient le mieux."
     },
     "empty": {
       "cover": "Pas encore d’image de couverture.",
@@ -5063,7 +5181,8 @@
       "speaker": "Pas encore de photo.",
       "exhibitor": "Pas encore de logo.",
       "sponsor": "Pas encore de logo.",
-      "library": "Aucune image dans la médiathèque pour l’instant."
+      "library": "Aucune image dans la médiathèque pour l’instant.",
+      "social": "Pas encore d’image de partage social."
     },
     "count": "{count, plural, one {# image} other {# images}} sur {max}",
     "listLabel": "Images actuelles",
@@ -14656,7 +14775,8 @@
       "connections": "Contacts",
       "meetings": "Rendez-vous",
       "profile": "Mon profil",
-      "chats": "Messages"
+      "chats": "Messages",
+      "lobby": "Salon"
     },
     "signIn": {
       "intro": "Voyez qui d’autre vient, échangez vos contacts et réservez de courts rendez-vous. Seules les personnes qui choisissent d’y participer apparaissent ici.",
@@ -14861,7 +14981,9 @@
       "past": "Ce créneau a déjà commencé. Choisissez-en un plus tard.",
       "unknown": "Ce choix n’est plus disponible. Rechargez la page.",
       "in_use": "Des rendez-vous l’utilisent encore. Annulez-les d’abord.",
-      "resolved": "Ce signalement a déjà été traité."
+      "resolved": "Ce signalement a déjà été traité.",
+      "lobby_off": "Le salon est fermé.",
+      "already_reported": "Vous avez déjà signalé ce message."
     },
     "console": {
       "link": "Networking",
@@ -14989,6 +15111,30 @@
         "restore": "Lever la suspension",
         "restoreName": "Lever la suspension de la messagerie du stand de {name}",
         "restored": "{name} peut de nouveau recevoir des messages."
+      },
+      "lobby": {
+        "heading": "Salon de l’événement",
+        "on": "Le salon est activé : les participants au réseau peuvent discuter dans un salon commun.",
+        "off": "Le salon est désactivé (par défaut). Activez-le pour offrir un salon commun aux participants.",
+        "needsChat": "Le salon ne fonctionne que si le réseau et les discussions sont activés.",
+        "turnOn": "Activer le salon",
+        "turnOff": "Désactiver le salon",
+        "turnedOn": "Salon activé.",
+        "turnedOff": "Salon désactivé.",
+        "stats": {
+          "messages": "Messages",
+          "today": "24 dernières heures",
+          "reports": "Signalements ouverts"
+        },
+        "noReports": "Aucun signalement ouvert.",
+        "reportTitle": "{reporter} a signalé {reported}",
+        "removedMessage": "Supprimé",
+        "remove": "Supprimer le message",
+        "removed": "Message supprimé.",
+        "hide": "Masquer la personne",
+        "hidden": "Personne masquée et messages supprimés.",
+        "dismiss": "Rejeter le signalement",
+        "dismissed": "Signalement rejeté."
       }
     },
     "unreadChats": "{count, plural, one {# discussion avec des messages non lus} many {# discussions avec des messages non lus} other {# discussions avec des messages non lus}}",
@@ -15009,6 +15155,27 @@
       "listLabel": "Personnes suggérées",
       "score": "{score} % de correspondance",
       "shared": "Vous aimez tous les deux : {interests}"
+    },
+    "lobby": {
+      "title": "Salon de l’événement",
+      "description": "Un salon de discussion pour tous ceux qui ont rejoint le réseau de cet événement.",
+      "rules": "Tous les membres du salon peuvent lire ce que vous écrivez. Soyez aimable ; vous pouvez signaler un message, ce qui bloque aussi son auteur pour vous.",
+      "emptyTitle": "Pas encore de messages",
+      "emptyDescription": "Dites bonjour pour lancer la conversation.",
+      "messages": "Messages du salon",
+      "you": "Vous",
+      "removed": "Ce message a été supprimé par un organisateur.",
+      "report": "Signaler ce message",
+      "reportReason": "Motif",
+      "reportDetails": "Détails (facultatif)",
+      "reportSubmit": "Envoyer le signalement",
+      "reported": "Signalé. L’auteur est maintenant bloqué pour vous.",
+      "write": "Votre message",
+      "send": "Envoyer",
+      "sent": "Envoyé.",
+      "tooFast": "Vous envoyez trop vite. Patientez un instant.",
+      "tooLong": "Limitez le message à 2000 caractères.",
+      "required": "Écrivez d’abord un message."
     }
   },
   "chat": {
@@ -19129,7 +19296,8 @@
       "schedule": "Mon programme",
       "profile": "Profil",
       "notifications": "Notifications",
-      "settings": "Paramètres du compte"
+      "settings": "Paramètres du compte",
+      "networking": "Réseau"
     },
     "descriptions": {
       "overview": "Vos réservations, vos prochains événements et votre compte, réunis.",
@@ -19138,7 +19306,8 @@
       "schedule": "Vos réservations de sessions et programmes personnels pour les événements qui les proposent.",
       "profile": "Gérez le nom et la photo de votre compte.",
       "notifications": "Choisissez ce que vous recevez de chaque organisateur.",
-      "settings": "Gérez la connexion, la sécurité et vos données personnelles."
+      "settings": "Gérez la connexion, la sécurité et vos données personnelles.",
+      "networking": "Rencontrez d’autres participants, discutez et réservez des rendez-vous à vos événements."
     },
     "signInTitle": "Vos événements commencent ici",
     "signInHint": "Connectez-vous à votre compte pour voir les achats effectués avec son e-mail vérifié. Vous pouvez aussi vérifier ci-dessous l’e-mail d’un billet pour voir ses réservations.",
@@ -19193,7 +19362,21 @@
     "attendeeSignUpDescription": "Vérifiez votre e-mail pour créer un compte et retrouver vos événements et billets au même endroit.",
     "organizationAccessRequired": "Ce compte n’a pas d’accès organisation. Utilisez un compte organisateur ou continuez vers votre tableau de bord participant.",
     "useAnotherAccount": "Utiliser un autre compte",
-    "openReceipt": "Voir le reçu"
+    "openReceipt": "Voir le reçu",
+    "networking": {
+      "emptyTitle": "Pas encore de réseau",
+      "emptyHint": "Lorsqu’un organisateur ouvre le réseau pour l’un de vos prochains événements, il apparaît ici.",
+      "optInHint": "Le réseau est ouvert. Participez pour afficher un profil et rencontrer des gens.",
+      "optIn": "Rejoindre le réseau",
+      "unread": "{count} en attente",
+      "links": {
+        "people": "Personnes",
+        "connections": "Relations",
+        "meetings": "Rendez-vous",
+        "chats": "Discussions",
+        "lobby": "Salon"
+      }
+    }
   },
   "eventBranding": {
     "title": "Couleur de cet événement",
@@ -19245,5 +19428,50 @@
     "sameHolder": "Cette personne détient déjà ce billet.",
     "notAllowed": "Ce billet ne peut pas être envoyé à quelqu’un d’autre (transferts clos ou non autorisés).",
     "done": "C’est fait. Chaque personne a reçu son billet par e-mail."
+  },
+  "programDocs": {
+    "title": "Brochures (PDF)",
+    "remove": "Supprimer {name}",
+    "titleLabel": "Titre (affiché sur la page publique)",
+    "file": "Fichier PDF",
+    "upload": "Téléverser la brochure",
+    "uploading": "Téléversement…",
+    "none": "Aucune brochure pour l’instant.",
+    "fileHint": "PDF uniquement, jusqu’à 10 Mo, 5 maximum par sponsor ou exposant.",
+    "uploaded": "Brochure téléversée.",
+    "errors": {
+      "generic": "Le téléversement a échoué. Réessayez.",
+      "no_file": "Choisissez un fichier PDF.",
+      "too_large": "Le fichier dépasse 10 Mo.",
+      "unsupported_type": "Seuls les fichiers PDF sont acceptés.",
+      "too_many": "La limite de 5 brochures est atteinte."
+    }
+  },
+  "seoPanel": {
+    "title": "Paramètres SEO",
+    "seoTitle": "Titre SEO",
+    "seoTitleHint": "Affiché dans les résultats de recherche et les aperçus de liens. Laissez vide pour utiliser le nom de l’événement. {count} sur {max} caractères.",
+    "seoDescription": "Méta-description",
+    "seoDescriptionHint": "Un court résumé pour les résultats de recherche. Laissez vide pour utiliser le slogan. {count} sur {max} caractères.",
+    "slug": "Adresse web de l’événement",
+    "slugHint": "Minuscules, chiffres et tirets. Si vous le changez, l’ancienne adresse continue de rediriger.",
+    "slugRedirect": "Les visiteurs de /events/{slug} seront redirigés vers la nouvelle adresse.",
+    "previousSlugs": "Anciennes adresses qui redirigent ici : {slugs}",
+    "preview": "Aperçu du résultat de recherche",
+    "save": "Enregistrer les paramètres SEO",
+    "saved": "Paramètres SEO enregistrés.",
+    "errors": {
+      "seoTitle": "Le titre SEO doit faire {max} caractères ou moins.",
+      "slug": "Utilisez uniquement des minuscules, des chiffres et des tirets (pas au début ni à la fin).",
+      "slugTaken": "Cette adresse web est déjà prise."
+    }
+  },
+  "attendeePreview": {
+    "banner": "Aperçu : un participant fictif, pas une vraie personne.",
+    "bannerDetail": "Rien ici n’est réel : aucune commande n’est créée ni donnée lue. Les liens sont inactifs.",
+    "title": "Aperçu du portail participant",
+    "description": "Ce que voit un participant pour cet événement.",
+    "sections": "Sections du portail",
+    "sampleStatus": "Payé"
   }
 }

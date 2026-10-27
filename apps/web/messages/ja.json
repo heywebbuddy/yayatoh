@@ -780,7 +780,39 @@
       "thumbnails": "すべての写真"
     },
     "shareWhatsApp": "WhatsAppで共有",
-    "shareMessage": "{name} — チケットはこちら: {url}"
+    "shareMessage": "{name} — チケットはこちら: {url}",
+    "speakerRoles": {
+      "keynote": "基調講演者",
+      "speaker": "登壇者",
+      "panelist": "パネリスト",
+      "moderator": "モデレーター",
+      "host": "司会",
+      "dj": "DJ",
+      "artist": "アーティスト / パフォーマー",
+      "influencer": "インフルエンサー",
+      "special_guest": "スペシャルゲスト"
+    },
+    "speakerRolesPlural": {
+      "keynote": "基調講演者",
+      "speaker": "登壇者",
+      "panelist": "パネリスト",
+      "moderator": "モデレーター",
+      "host": "司会",
+      "dj": "DJ",
+      "artist": "アーティスト / パフォーマー",
+      "influencer": "インフルエンサー",
+      "special_guest": "スペシャルゲスト"
+    },
+    "featuredBadge": "注目",
+    "sponsorPageTitle": "スポンサー",
+    "exhibitorPageTitle": "出展者",
+    "sponsorTier": "{tier}スポンサー",
+    "video": "動画",
+    "videoTitle": "{name} の動画",
+    "contact": "連絡先",
+    "brochures": "パンフレットとダウンロード",
+    "teamAtEvent": "イベントのチーム",
+    "going": "{count, plural, other {#人が参加予定}}"
   },
   "portal": {
     "day": "{day}日目 · {date}",
@@ -3744,7 +3776,9 @@
       "longitude": "緯度と経度はあわせて入力してください。経度は -180〜180 の範囲で指定してください。",
       "timezone": "タイムゾーンを選択してください。",
       "capacity": "収容人数は1以上の整数で入力してください。",
-      "mapUrl": "https:// で始まるリンクを使用してください。"
+      "mapUrl": "https:// で始まるリンクを使用してください。",
+      "contactEmail": "有効なメールアドレスを入力してください。",
+      "websiteUrl": "http:// または https:// で始まるリンクを入力してください。"
     },
     "quotes": {
       "title": "見積もり依頼",
@@ -3775,7 +3809,12 @@
       "details": "詳細"
     },
     "detailsTitle": "詳細",
-    "photo": "写真"
+    "photo": "写真",
+    "contactEmail": "連絡先メール",
+    "contactPhone": "連絡先電話番号",
+    "websiteUrl": "ウェブサイト",
+    "description": "説明",
+    "descriptionHint": "公開の会場ページに表示されます。Markdown に対応しています。"
   },
   "details": {
     "title": "イベントの詳細",
@@ -3838,7 +3877,18 @@
     "currencySave": "通貨を保存",
     "hiddenCategory": "{name}（非表示）",
     "categoryHiddenHint": "このカテゴリは非表示です。このイベントには残りますが、ほかのイベントでは選べません。",
-    "manageCategories": "カテゴリを管理"
+    "manageCategories": "カテゴリを管理",
+    "seo": {
+      "title": "SEO と共有",
+      "subtitle": "このイベントについて検索エンジンやリンクプレビューに表示される内容と、イベントのWebアドレス。"
+    },
+    "previewPortal": "参加者ポータルをプレビュー",
+    "attendeeCount": {
+      "title": "参加者数",
+      "label": "イベントページに参加者数を表示する",
+      "hint": "既定ではオフ。日付の横に「689人が参加予定」のように表示します。",
+      "save": "保存"
+    }
   },
   "directory": {
     "title": "会場ディレクトリ",
@@ -3861,7 +3911,9 @@
     "noEventsDescription": "後でもう一度ご確認いただくか、ご自身のイベントの見積もりを依頼してください。",
     "quoteTitle": "見積もりを依頼",
     "quoteDescription": "イベントについて {org} にお伝えください。メールで返信が届きます。",
-    "photos": "写真"
+    "photos": "写真",
+    "contact": "連絡先",
+    "website": "ウェブサイト"
   },
   "quote": {
     "name": "お名前",
@@ -3906,7 +3958,8 @@
       "faq": "よくある質問",
       "schedule": "スケジュール",
       "location": "所在地",
-      "links": "リンク"
+      "links": "リンク",
+      "video": "動画"
     },
     "sectionTitle": "セクションのタイトル",
     "titleInvalid": "120文字以内のタイトルを入力してください。",
@@ -3918,14 +3971,18 @@
       "links": "リンク",
       "address": "住所",
       "directions": "道順",
-      "mapUrl": "地図のリンク"
+      "mapUrl": "地図のリンク",
+      "videoUrl": "動画のリンク",
+      "videoCaption": "キャプション(任意)"
     },
     "hints": {
       "markdown": "**太字**、*斜体*、## 見出し、- リスト、[リンク](https://…) に対応しています。",
       "faq": "質問ごとに空行で区切ります。最初の行が質問、その下の行が回答です。",
       "schedule": "1行に1項目: 18:00 | 開場 | 詳細（任意）",
       "links": "1行に1リンク: ラベル | https://…",
-      "address": "入力したとおり、1行ずつ表示されます。"
+      "address": "入力したとおり、1行ずつ表示されます。",
+      "videoUrl": "YouTube または Vimeo のリンクを貼り付けます。イベントページのプライバシーに配慮したプレーヤーで再生されます。",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=…"
     },
     "textErrors": {
       "faq_answer_missing": "質問 {line} に回答がありません。その下の行に回答を追加してください。",
@@ -3946,7 +4003,43 @@
     "taglineHint": "イベント名の下に表示される短い1行（280文字まで）。空欄にすると削除されます。",
     "saveTagline": "キャッチコピーを保存",
     "taglineSaved": "キャッチコピーを保存しました。",
-    "taglineInvalid": "キャッチコピーは280文字以内にしてください。"
+    "taglineInvalid": "キャッチコピーは280文字以内にしてください。",
+    "editor": {
+      "toolbar": "テキストの書式",
+      "bold": "太字",
+      "italic": "斜体",
+      "heading": "見出し",
+      "list": "箇条書き",
+      "link": "リンク",
+      "listItem": "リスト項目",
+      "linkText": "リンクテキスト",
+      "boldText": "太字のテキスト",
+      "italicText": "斜体のテキスト",
+      "rowUp": "{label} を上へ",
+      "rowDown": "{label} を下へ",
+      "rowRemove": "{label} を削除",
+      "question": "質問 {n}",
+      "answer": "回答",
+      "addQuestion": "質問を追加",
+      "scheduleHint": "1項目につき1行。時刻は任意です。複数日のイベントでは、日の見出しを追加して下の行をまとめられます。",
+      "dayN": "日の見出し {n}",
+      "itemN": "項目 {n}",
+      "dayHeading": "日の見出し",
+      "dayPlaceholder": "1日目:6月12日(金)",
+      "time": "時刻(任意)",
+      "itemTitle": "タイトル",
+      "detail": "詳細(任意)",
+      "addItem": "項目を追加",
+      "addDay": "日の見出しを追加",
+      "linkLabel": "ラベル",
+      "linkUrl": "リンク(https://…)",
+      "linkN": "リンク {n}",
+      "addLink": "リンクを追加",
+      "preview": "ライブプレビュー",
+      "previewEmpty": "プレビューする内容がまだありません。",
+      "untitled": "無題のセクション",
+      "httpsPlaceholder": "https://"
+    }
   },
   "dates": {
     "title": "日程",
@@ -4901,7 +4994,11 @@
       "position": "1〜99の表示順を入力してください。",
       "tier": "ランクを選んでください。",
       "tierInUse": "先にこのランクのスポンサーを移動または削除してください。",
-      "capacityBelowEnrolled": "すでにそれ以上の人が席を確保しています。先に登録を取り消すか、定員を高いままにしてください。"
+      "capacityBelowEnrolled": "すでにそれ以上の人が席を確保しています。先に登録を取り消すか、定員を高いままにしてください。",
+      "contactEmail": "有効なメールアドレスを入力してください。",
+      "videoUrl": "YouTube または Vimeo のリンクを使ってください。",
+      "team": "チームの行を確認してください。各行に名前が必要です。",
+      "unknownAccount": "ポータルのメールのうち1件はこのスポンサーのアカウントではありません。"
     },
     "warnings": {
       "room_overlap": "{room}はこの時間「{other}」にも使われています。",
@@ -4930,7 +5027,20 @@
       "added": "{count, plural, other {#件のセッション}}をプログラムに追加しました。",
       "discard": "破棄",
       "discarded": "提案を破棄しました。何も追加されていません。"
-    }
+    },
+    "speakerRole": "役割",
+    "featured": "注目",
+    "featuredHint": "役割内で最初に、大きなカードで表示",
+    "contactEmail": "公開用連絡先メール",
+    "contactPhone": "公開用連絡先電話番号",
+    "longDescription": "詳しい説明(詳細ページ)",
+    "longDescriptionHint": "スポンサー専用ページに表示されます。**太字**、*斜体*、リスト、リンクが使えます。",
+    "videoUrl": "動画リンク(YouTube または Vimeo)",
+    "videoUrlHint": "詳細ページのプライバシーに配慮したプレーヤーで再生されます。",
+    "team": "イベントのチーム",
+    "teamHint": "1行に1人: 名前 | 肩書 | ポータルアカウントのメール(任意。スポンサーのポータルアカウントと紐付けます)。",
+    "saveTeam": "チームを保存",
+    "teamSaved": "チームを保存しました。"
   },
   "aiDraft": {
     "title": "AIで下書き",
@@ -5028,7 +5138,13 @@
       "generic": "この項目を確認してください。"
     },
     "currency": "通貨",
-    "currencyHint": "チケット、決済、レポートで使われます。最初の注文までは変更できます。"
+    "currencyHint": "チケット、決済、レポートで使われます。最初の注文までは変更できます。",
+    "newVenue": {
+      "add": "+ 新しい会場を追加",
+      "title": "新しい会場",
+      "save": "保存して会場を選択",
+      "cancel": "キャンセル"
+    }
   },
   "eventMedia": {
     "title": "画像",
@@ -5043,7 +5159,8 @@
       "speaker": "スピーカーの写真",
       "exhibitor": "出展者のロゴ",
       "sponsor": "スポンサーのロゴ",
-      "library": "ライブラリにアップロード"
+      "library": "ライブラリにアップロード",
+      "social": "SNS共有用画像"
     },
     "hint": {
       "cover": "イベントページの上部、イベントカード、リンクのプレビューに表示されます。",
@@ -5053,7 +5170,8 @@
       "speaker": "イベントページ、スピーカーのページ、アジェンダのセッション横に表示されます。",
       "exhibitor": "イベントページで出展者と一緒に表示されます。SVG ロゴはどのサイズでも鮮明です。",
       "sponsor": "イベントページのスポンサーのランクに表示されます（上位ランクほどロゴが大きくなります）。SVG ロゴは鮮明に表示されます。",
-      "library": "ここにアップロードした画像は、イベント、会場、スピーカー、ロゴに再アップロードなしで使えます。"
+      "library": "ここにアップロードした画像は、イベント、会場、スピーカー、ロゴに再アップロードなしで使えます。",
+      "social": "SNSやメッセージアプリのリンクプレビューに使われます。未設定の場合はカバー画像、次に自動生成カードを使います。1200 × 630 px が最適です。"
     },
     "empty": {
       "cover": "カバー画像はまだありません。",
@@ -5063,7 +5181,8 @@
       "speaker": "写真はまだありません。",
       "exhibitor": "ロゴはまだありません。",
       "sponsor": "ロゴはまだありません。",
-      "library": "ライブラリにはまだ画像がありません。"
+      "library": "ライブラリにはまだ画像がありません。",
+      "social": "SNS共有用画像はまだありません。"
     },
     "count": "{count, plural, other {#枚}}／{max}枚",
     "listLabel": "現在の画像",
@@ -14656,7 +14775,8 @@
       "connections": "つながり",
       "meetings": "ミーティング",
       "profile": "マイプロフィール",
-      "chats": "チャット"
+      "chats": "チャット",
+      "lobby": "ロビー"
     },
     "signIn": {
       "intro": "ほかに誰が来るかを見て、つながり、短いミーティングを予約できます。ここに表示されるのは参加を選んだ人だけです。",
@@ -14861,7 +14981,9 @@
       "past": "その時間枠はすでに始まっています。後の時間枠を選んでください。",
       "unknown": "その選択肢はもう利用できません。ページを再読み込みしてください。",
       "in_use": "まだミーティングで使われています。先にキャンセルしてください。",
-      "resolved": "この報告はすでに対応済みです。"
+      "resolved": "この報告はすでに対応済みです。",
+      "lobby_off": "ロビーは閉じています。",
+      "already_reported": "このメッセージはすでに報告済みです。"
     },
     "console": {
       "link": "ネットワーキング",
@@ -14989,6 +15111,30 @@
         "restore": "停止を解除",
         "restoreName": "{name} のブースチャットの停止を解除",
         "restored": "{name} は再びチャットを受け付けられます。"
+      },
+      "lobby": {
+        "heading": "イベントロビー",
+        "on": "ロビーはオンです。ネットワーキング参加者が1つの部屋でチャットできます。",
+        "off": "ロビーはオフです(既定)。オンにすると参加者が共通のチャットルームを使えます。",
+        "needsChat": "ロビーはネットワーキングとチャットの両方がオンのときだけ使えます。",
+        "turnOn": "ロビーをオンにする",
+        "turnOff": "ロビーをオフにする",
+        "turnedOn": "ロビーをオンにしました。",
+        "turnedOff": "ロビーをオフにしました。",
+        "stats": {
+          "messages": "メッセージ",
+          "today": "過去24時間",
+          "reports": "未処理の報告"
+        },
+        "noReports": "未処理の報告はありません。",
+        "reportTitle": "{reporter} さんが {reported} さんを報告",
+        "removedMessage": "削除済み",
+        "remove": "メッセージを削除",
+        "removed": "メッセージを削除しました。",
+        "hide": "この人を非表示",
+        "hidden": "この人を非表示にし、メッセージを削除しました。",
+        "dismiss": "報告を却下",
+        "dismissed": "報告を却下しました。"
       }
     },
     "unreadChats": "{count, plural, other {未読メッセージのあるチャット # 件}}",
@@ -15009,6 +15155,27 @@
       "listLabel": "おすすめの人",
       "score": "一致度 {score}%",
       "shared": "共通の関心:{interests}"
+    },
+    "lobby": {
+      "title": "イベントロビー",
+      "description": "このイベントのネットワーキングに参加した全員が使えるチャットルームです。",
+      "rules": "ロビーにいる全員があなたの書き込みを読めます。思いやりを持ってください。メッセージを報告すると、その投稿者もブロックされます。",
+      "emptyTitle": "メッセージはまだありません",
+      "emptyDescription": "あいさつして会話を始めましょう。",
+      "messages": "ロビーのメッセージ",
+      "you": "あなた",
+      "removed": "このメッセージは主催者により削除されました。",
+      "report": "このメッセージを報告",
+      "reportReason": "理由",
+      "reportDetails": "詳細(任意)",
+      "reportSubmit": "報告を送信",
+      "reported": "報告しました。投稿者をブロックしました。",
+      "write": "メッセージ",
+      "send": "送信",
+      "sent": "送信しました。",
+      "tooFast": "送信が速すぎます。少し待ってください。",
+      "tooLong": "メッセージは2000文字以内にしてください。",
+      "required": "先にメッセージを入力してください。"
     }
   },
   "chat": {
@@ -19129,7 +19296,8 @@
       "schedule": "マイスケジュール",
       "profile": "プロフィール",
       "notifications": "通知",
-      "settings": "アカウント設定"
+      "settings": "アカウント設定",
+      "networking": "ネットワーキング"
     },
     "descriptions": {
       "overview": "予約、今後のイベント、アカウントをまとめて確認できます。",
@@ -19138,7 +19306,8 @@
       "schedule": "セッションの予約と、対応イベントの個人スケジュールです。",
       "profile": "アカウント名と写真を管理します。",
       "notifications": "主催者ごとに受け取る内容を選べます。",
-      "settings": "サインイン、セキュリティ、個人データを管理します。"
+      "settings": "サインイン、セキュリティ、個人データを管理します。",
+      "networking": "参加者と交流し、チャットし、ミーティングを予約しましょう。"
     },
     "signInTitle": "イベントはここから",
     "signInHint": "アカウントにサインインすると、確認済みメールアドレスで購入した内容を確認できます。下でチケットのメールアドレスを確認して、その予約を表示することもできます。",
@@ -19193,7 +19362,21 @@
     "attendeeSignUpDescription": "メールアドレスを確認してアカウントを作成し、イベントとチケットをまとめて管理しましょう。",
     "organizationAccessRequired": "このアカウントには組織へのアクセス権がありません。主催者アカウントを使用するか、参加者ダッシュボードに進んでください。",
     "useAnotherAccount": "別のアカウントを使用",
-    "openReceipt": "領収書を見る"
+    "openReceipt": "領収書を見る",
+    "networking": {
+      "emptyTitle": "ネットワーキングはまだありません",
+      "emptyHint": "主催者があなたの今後のイベントでネットワーキングを開くと、ここに表示されます。",
+      "optInHint": "ネットワーキングが開かれています。参加してプロフィールを公開し、人と出会いましょう。",
+      "optIn": "ネットワーキングに参加",
+      "unread": "{count}件待ち",
+      "links": {
+        "people": "参加者",
+        "connections": "つながり",
+        "meetings": "ミーティング",
+        "chats": "チャット",
+        "lobby": "ロビー"
+      }
+    }
   },
   "eventBranding": {
     "title": "このイベントの色",
@@ -19245,5 +19428,50 @@
     "sameHolder": "この方はすでにこのチケットを持っています。",
     "notAllowed": "このチケットは他の方に送信できません（譲渡が締め切られているか、許可されていません）。",
     "done": "完了しました。全員にチケットをメールで送信しました。"
+  },
+  "programDocs": {
+    "title": "パンフレット(PDF)",
+    "remove": "{name} を削除",
+    "titleLabel": "タイトル(公開ページに表示)",
+    "file": "PDF ファイル",
+    "upload": "パンフレットをアップロード",
+    "uploading": "アップロード中…",
+    "none": "パンフレットはまだありません。",
+    "fileHint": "PDF のみ、10 MB まで、スポンサーまたは出展者ごとに最大5件。",
+    "uploaded": "パンフレットをアップロードしました。",
+    "errors": {
+      "generic": "アップロードに失敗しました。もう一度お試しください。",
+      "no_file": "PDF ファイルを選択してください。",
+      "too_large": "ファイルが 10 MB を超えています。",
+      "unsupported_type": "PDF ファイルのみ使用できます。",
+      "too_many": "パンフレットの上限(5件)に達しました。"
+    }
+  },
+  "seoPanel": {
+    "title": "SEO 設定",
+    "seoTitle": "SEO タイトル",
+    "seoTitleHint": "検索結果とリンクプレビューに表示されます。空欄の場合はイベント名を使います。{max}文字中{count}文字。",
+    "seoDescription": "メタディスクリプション",
+    "seoDescriptionHint": "検索結果用の短い要約。空欄の場合はキャッチコピーを使います。{max}文字中{count}文字。",
+    "slug": "イベントのWebアドレス",
+    "slugHint": "小文字、数字、ハイフン。変更しても、古いアドレスはリダイレクトとして使えます。",
+    "slugRedirect": "/events/{slug} にアクセスした人は新しいアドレスに転送されます。",
+    "previousSlugs": "ここに転送される古いアドレス: {slugs}",
+    "preview": "検索結果のプレビュー",
+    "save": "SEO 設定を保存",
+    "saved": "SEO 設定を保存しました。",
+    "errors": {
+      "seoTitle": "SEO タイトルは{max}文字以内にしてください。",
+      "slug": "小文字、数字、ハイフンのみ使えます(先頭と末尾を除く)。",
+      "slugTaken": "このWebアドレスはすでに使われています。"
+    }
+  },
+  "attendeePreview": {
+    "banner": "プレビュー: これはサンプルの参加者で、実在の人物ではありません。",
+    "bannerDetail": "ここにあるものはすべてサンプルです。注文は作成されず、参加者データも読み込まれません。リンクは無効です。",
+    "title": "参加者ポータルのプレビュー",
+    "description": "この イベントで参加者に表示される内容です。",
+    "sections": "ポータルのセクション",
+    "sampleStatus": "支払い済み"
   }
 }

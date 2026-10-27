@@ -8,7 +8,17 @@ import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 import { keepValues } from '@/lib/keep-values.ts';
 
-const FIELD_ERRORS = ['name', 'country', 'latitude', 'longitude', 'timezone', 'capacity', 'mapUrl'] as const;
+const FIELD_ERRORS = [
+  'name',
+  'country',
+  'latitude',
+  'longitude',
+  'timezone',
+  'capacity',
+  'mapUrl',
+  'contactEmail',
+  'websiteUrl',
+] as const;
 
 /**
  * Create or edit an org venue (M1.4c). Server-side validation errors land on their fields.
@@ -150,6 +160,45 @@ export function VenueForm({
               defaultValue={venue?.longitude ?? undefined}
               error={err('longitude')}
             />
+            <Input
+              name="contactEmail"
+              type="email"
+              maxLength={254}
+              autoComplete="off"
+              label={t('contactEmail')}
+              defaultValue={venue?.contactEmail ?? undefined}
+              error={err('contactEmail')}
+            />
+            <Input
+              name="contactPhone"
+              type="tel"
+              maxLength={40}
+              autoComplete="off"
+              label={t('contactPhone')}
+              defaultValue={venue?.contactPhone ?? undefined}
+            />
+            <Input
+              name="websiteUrl"
+              type="url"
+              maxLength={500}
+              label={t('websiteUrl')}
+              defaultValue={venue?.websiteUrl ?? undefined}
+              error={err('websiteUrl')}
+            />
+            <div className="flex flex-col gap-1.5 md:col-span-2">
+              <label htmlFor="venue-description" className="text-[13px] font-bold text-ink">
+                {t('description')}
+              </label>
+              <textarea
+                id="venue-description"
+                name="description"
+                rows={6}
+                maxLength={10000}
+                defaultValue={venue?.description ?? ''}
+                className="rounded-card border border-line bg-surface px-4 py-2 text-body"
+              />
+              <p className="m-0 text-caption text-ink-2">{t('descriptionHint')}</p>
+            </div>
             <div className="flex flex-col gap-1.5 md:col-span-2">
               <label htmlFor="accessibilityNotes" className="text-[13px] font-bold text-ink">
                 {t('accessibilityNotes')}

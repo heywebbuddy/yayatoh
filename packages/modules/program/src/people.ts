@@ -1,9 +1,10 @@
 import { isUniqueViolation, type TenantTx } from '@yayatoh/db';
-import { safeHref, sanitizeMarkdown } from '@yayatoh/events';
+import { parseVideoUrl, safeHref, sanitizeMarkdown } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand } from '@yayatoh/platform';
 import { and, asc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { SPEAKER_ROLES } from './domain/speaker-roles.ts';
 import { ExhibitorDto, SpeakerDto, SponsorDto, SponsorTierDto } from './dto.ts';
 import { endExhibitorRolesTx } from './exhibitor-portal.ts';
 import { exhibitors, speakers, sponsors, sponsorTiers } from './schema.ts';
@@ -35,6 +36,20 @@ const WebUrl = z
   .trim()
   .max(500)
   .refine((v) => /^https?:\/\//i.test(v) && safeHref(v) !== null, 'must be an http(s) link');
+/** A YouTube or Vimeo link (the only videos that are embedded), or nothing. */
+const OptionalVideo = z
+  .string()
+  .trim()
+  .max(500)
+  .nullable()
+  .default(null)
+  .transform((v) => (v ? v : null))
+  .refine((v) => v === null || parseVideoUrl(v) !== null, 'must be a YouTube or Vimeo link');
+const OptionalEmail = z
+  .union([z.email().max(254), z.literal('')])
+  .nullable()
+  .default(null)
+  .transform((v) => (v ? v : null));
 const OptionalUrl = z
   .union([WebUrl, z.literal('')])
   .nullable()
@@ -65,6 +80,8 @@ const SpeakerFields = z.object({
     .array(z.object({ label: z.string().trim().min(1).max(120), url: WebUrl }))
     .max(10)
     .default([]),
+  role: z.enum(SPEAKER_ROLES).default('speaker'),
+  featured: z.boolean().default(false),
 });
 export const SpeakerInput = SpeakerFields.extend({ eventId: z.uuid() });
 export type SpeakerInput = z.input<typeof SpeakerInput>;
@@ -159,6 +176,9 @@ const ExhibitorFields = z.object({
   description: Markdown(3000),
   boothLabel: Text(40),
   websiteUrl: OptionalUrl,
+  contactEmail: OptionalEmail,
+  contactPhone: Text(40),
+  videoUrl: OptionalVideo,
 });
 export const ExhibitorInput = ExhibitorFields.extend({ eventId: z.uuid() });
 export type ExhibitorInput = z.input<typeof ExhibitorInput>;
@@ -335,6 +355,10 @@ const SponsorFields = z.object({
   name: z.string().trim().min(1).max(120),
   description: Markdown(3000),
   websiteUrl: OptionalUrl,
+  longDescription: Markdown(10_000),
+  contactEmail: OptionalEmail,
+  contactPhone: Text(40),
+  videoUrl: OptionalVideo,
 });
 export const SponsorInput = SponsorFields.extend({ eventId: z.uuid() });
 export type SponsorInput = z.input<typeof SponsorInput>;

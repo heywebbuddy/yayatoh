@@ -19,4 +19,5 @@ export {
   scheduleWarnings,
   warningsFor,
 } from './domain/schedule.ts';
+export { groupByRole, SPEAKER_ROLES, type SpeakerRole, speakerRoleRank } from './domain/speaker-roles.ts';
 export { WARNING_KINDS } from './dto.ts';

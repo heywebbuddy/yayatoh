@@ -43,6 +43,11 @@ export const venues = tenantTable(
     capacity: integer('capacity'),
     accessibilityNotes: text('accessibility_notes'),
     mapUrl: text('map_url'),
+    /** Markdown, like other descriptions. */
+    description: text('description'),
+    contactEmail: text('contact_email'),
+    contactPhone: text('contact_phone'),
+    websiteUrl: text('website_url'),
     directoryListed: boolean('directory_listed').notNull().default(false),
     archivedAt: ts('archived_at'),
   },
@@ -57,6 +62,7 @@ export const venues = tenantTable(
       sql`(latitude is null) = (longitude is null) and (latitude is null or (latitude between -90 and 90 and longitude between -180 and 180))`,
     ),
     check('venues_map_url_check', sql`map_url is null or map_url ~ '^https://'`),
+    check('venues_website_url_check', sql`website_url is null or website_url ~ '^https?://'`),
   ],
 );
 

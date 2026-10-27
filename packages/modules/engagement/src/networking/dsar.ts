@@ -4,6 +4,8 @@ import {
   chatConversations,
   chatMessages,
   chatReports,
+  lobbyMessages,
+  lobbyReports,
   meetings,
   networkConnections,
   networkEmbeddings,
@@ -81,6 +83,8 @@ export async function networkingDsarTx(tx: TenantTx, contactIds: readonly string
       reports: [],
       chatMessages: [],
       chatReports: [],
+      lobbyMessages: [],
+      lobbyReports: [],
     };
   const requests = await tx
     .select()
@@ -107,7 +111,29 @@ export async function networkingDsarTx(tx: TenantTx, contactIds: readonly string
     .from(chatReports)
     .where(filedByProfiles(ids))
     .orderBy(asc(chatReports.createdAt));
+  const lobbySent = await tx
+    .select()
+    .from(lobbyMessages)
+    .where(inArray(lobbyMessages.profileId, ids))
+    .orderBy(asc(lobbyMessages.createdAt));
+  const lobbyFiled = await tx
+    .select()
+    .from(lobbyReports)
+    .where(inArray(lobbyReports.reporterId, ids))
+    .orderBy(asc(lobbyReports.createdAt));
   return {
+    lobbyMessages: lobbySent.map((m) => ({
+      eventId: m.eventId,
+      body: m.body,
+      removed: m.removedAt !== null,
+      createdAt: m.createdAt,
+    })),
+    lobbyReports: lobbyFiled.map((r) => ({
+      eventId: r.eventId,
+      reason: r.reason,
+      details: r.details,
+      createdAt: r.createdAt,
+    })),
     profiles: profiles.map((p) => ({
       eventId: p.eventId,
       optedIn: p.optedIn,
@@ -163,7 +189,16 @@ export async function eraseNetworkingDsarTx(tx: TenantTx, contactIds: readonly s
   const profiles = await profilesOfTx(tx, contactIds);
   const ids = profiles.map((p) => p.id);
   if (ids.length === 0)
-    return { profiles: 0, connections: 0, meetings: 0, reports: 0, chatReports: 0, chatMessages: 0 };
+    return {
+      profiles: 0,
+      connections: 0,
+      meetings: 0,
+      reports: 0,
+      chatReports: 0,
+      chatMessages: 0,
+      lobbyMessages: 0,
+      lobbyReports: 0,
+    };
   await tx
     .update(networkProfiles)
     .set({
@@ -199,7 +234,18 @@ export async function eraseNetworkingDsarTx(tx: TenantTx, contactIds: readonly s
     .where(and(filedByProfiles(ids), sql`${chatReports.details} is not null`))
     .returning({ id: chatReports.id });
   const deleted = await tx.delete(chatMessages).where(sentByProfiles(ids)).returning({ id: chatMessages.id });
+  const lobbyFiled = await tx
+    .update(lobbyReports)
+    .set({ details: null })
+    .where(and(inArray(lobbyReports.reporterId, ids), sql`${lobbyReports.details} is not null`))
+    .returning({ id: lobbyReports.id });
+  const lobbyDeleted = await tx
+    .delete(lobbyMessages)
+    .where(inArray(lobbyMessages.profileId, ids))
+    .returning({ id: lobbyMessages.id });
   return {
+    lobbyMessages: lobbyDeleted.length,
+    lobbyReports: lobbyFiled.length,
     profiles: ids.length,
     connections: connections.length,
     meetings: asked.length,

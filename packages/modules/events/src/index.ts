@@ -166,6 +166,7 @@ export {
   type VanityProblem,
   vanityProblem,
 } from './domain/short-code.ts';
+export { parseVideoUrl, videoEmbedUrl } from './domain/video.ts';
 export * from './dto.ts';
 export * from './dto-content.ts';
 // M6.4d: events for marketing-tool syncs (HubSpot marketing events).
@@ -271,6 +272,18 @@ export {
   EVENT_VISIBILITIES,
   OCCURRENCE_STATUSES,
 } from './schema.ts';
+export {
+  currentSlugFor,
+  EventSeoDto,
+  eventDisplayQuery,
+  eventSeoQuery,
+  publicEventSeo,
+  publicShowsAttendeeCount,
+  SEO_DESCRIPTION_MAX,
+  SEO_TITLE_MAX,
+  setEventSeoCommand,
+  setShowAttendeeCountCommand,
+} from './seo.ts';
 export {
   createSeriesCommand,
   deleteSeriesCommand,

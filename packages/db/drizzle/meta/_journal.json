@@ -1240,6 +1240,48 @@
       "when": 1793096574775,
       "tag": "0176_condemned_arclight",
       "breakpoints": true
+    },
+    {
+      "idx": 177,
+      "version": "7",
+      "when": 1793094903359,
+      "tag": "0177_deep_doctor_faustus",
+      "breakpoints": true
+    },
+    {
+      "idx": 178,
+      "version": "7",
+      "when": 1793095436438,
+      "tag": "0178_odd_thing",
+      "breakpoints": true
+    },
+    {
+      "idx": 179,
+      "version": "7",
+      "when": 1793095643353,
+      "tag": "0179_omniscient_jubilee",
+      "breakpoints": true
+    },
+    {
+      "idx": 180,
+      "version": "7",
+      "when": 1793096100938,
+      "tag": "0180_jittery_firestar",
+      "breakpoints": true
+    },
+    {
+      "idx": 181,
+      "version": "7",
+      "when": 1793096756469,
+      "tag": "0181_quick_surge",
+      "breakpoints": true
+    },
+    {
+      "idx": 182,
+      "version": "7",
+      "when": 1793097832438,
+      "tag": "0182_lyrical_brood",
+      "breakpoints": true
     }
   ]
 }

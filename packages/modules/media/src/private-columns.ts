@@ -26,6 +26,16 @@ export const privateColumns = columnPrivacy('media', {
     sha256: internal('none', { why: HASH_NAMED }),
     created_by: internal(),
   },
+  // Public PDF attachments of sponsors and exhibitors (title and file name show on their pages).
+  program_documents: {
+    owner_type: 'vocab',
+    title: 'public',
+    file_name: 'public',
+    storage_key: internal('none', {
+      why: 'an `{org}/{doc}/f-{hash}.pdf` key; read only through media.program_document_target',
+    }),
+    sha256: internal('none', { why: HASH_NAMED }),
+  },
   // The dev/CI media store (production uses R2 and leaves it empty).
   blobs: {
     key: internal('none', {

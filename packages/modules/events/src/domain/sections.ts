@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { SectionKind } from './content-kinds.ts';
 import { safeHref, sanitizeMarkdown } from './markdown.ts';
+import { parseVideoUrl } from './video.ts';
 
 const Markdown = (max: number) =>
   z
@@ -25,9 +26,16 @@ export const ScheduleContent = z.object({
   items: z
     .array(
       z.object({
-        time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
+        /** Optional: an untimed row ("Doors open all day") is fine. */
+        time: z
+          .string()
+          .regex(/^([01]\d|2[0-3]):[0-5]\d$/)
+          .nullable()
+          .default(null),
         title: Line(200),
         detail: z.string().trim().max(500).nullable().default(null),
+        /** Day heading the row sits under (multi-day events); consecutive rows share one heading. */
+        day: z.string().trim().min(1).max(120).nullable().default(null),
       }),
     )
     .min(1)
@@ -51,12 +59,19 @@ export const LinksContent = z.object({
     .max(30),
 });
 
+export const VideoContent = z.object({
+  /** A YouTube or Vimeo link; shown as an embedded player on the event page. */
+  url: SafeUrl.refine((v) => parseVideoUrl(v) !== null, 'must be a YouTube or Vimeo link'),
+  caption: z.string().trim().max(200).nullable().default(null),
+});
+
 export const SECTION_CONTENT = {
   text: TextContent,
   faq: FaqContent,
   schedule: ScheduleContent,
   location: LocationContent,
   links: LinksContent,
+  video: VideoContent,
 } as const satisfies Record<SectionKind, z.ZodType>;
 
 export type SectionContent = {
@@ -65,6 +80,7 @@ export type SectionContent = {
   schedule: z.infer<typeof ScheduleContent>;
   location: z.infer<typeof LocationContent>;
   links: z.infer<typeof LinksContent>;
+  video: z.infer<typeof VideoContent>;
 };
 
 /** A section as stored: kind + validated content (discriminated). */
@@ -74,6 +90,7 @@ export const SectionBody = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('schedule'), content: ScheduleContent }),
   z.object({ kind: z.literal('location'), content: LocationContent }),
   z.object({ kind: z.literal('links'), content: LinksContent }),
+  z.object({ kind: z.literal('video'), content: VideoContent }),
 ]);
 export type SectionBody = z.infer<typeof SectionBody>;
 
@@ -157,6 +174,6 @@ export function parseLinksText(src: string): { label: string; url: string }[] {
 export const formatFaqText = (c: SectionContent['faq']) =>
   c.items.map((i) => `${i.question}\n${i.answer}`).join('\n\n');
 export const formatScheduleText = (c: SectionContent['schedule']) =>
-  c.items.map((i) => [i.time, i.title, ...(i.detail ? [i.detail] : [])].join(' | ')).join('\n');
+  c.items.map((i) => [i.time ?? '', i.title, ...(i.detail ? [i.detail] : [])].join(' | ')).join('\n');
 export const formatLinksText = (c: SectionContent['links']) =>
   c.items.map((i) => `${i.label} | ${i.url}`).join('\n');

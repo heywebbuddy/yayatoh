@@ -1,6 +1,7 @@
 'use server';
 
 import { executeCommand } from '@yayatoh/kernel';
+import { deleteProgramDocumentCommand } from '@yayatoh/media';
 import { createExhibitorCommand, deleteExhibitorCommand, updateExhibitorCommand } from '@yayatoh/program';
 import { revalidatePath } from 'next/cache';
 import type { ProgramFormState } from '@/components/program-form.tsx';
@@ -16,6 +17,9 @@ const fields = (form: FormData) => ({
   boothLabel: textOrNull(form, 'boothLabel'),
   websiteUrl: textOrNull(form, 'websiteUrl'),
   description: String(form.get('description') ?? ''),
+  contactEmail: textOrNull(form, 'contactEmail'),
+  contactPhone: textOrNull(form, 'contactPhone'),
+  videoUrl: textOrNull(form, 'videoUrl'),
 });
 
 export async function createExhibitorAction(
@@ -61,5 +65,15 @@ export async function deleteExhibitorAction(org: string, event: string, exhibito
   await executeCommand(deleteExhibitorCommand, { eventId: ev.id, exhibitorId }, data.ctx, ports);
   // M1.4h: the photo/logo goes with it (media's subscriber to the deletion event).
   await purgeDeletedProgramMedia(data.org.id);
+  done(org, event);
+}
+
+export async function deleteExhibitorDocumentAction(
+  org: string,
+  event: string,
+  documentId: string,
+): Promise<void> {
+  const { data } = await loadEvent(org, event, 'exhibitors');
+  await executeCommand(deleteProgramDocumentCommand, { documentId }, data.ctx, ports);
   done(org, event);
 }

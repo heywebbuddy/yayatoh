@@ -1,16 +1,33 @@
-import { eventDetailsQuery, orgCategoriesQuery, orgTagsQuery, shortLinksQuery } from '@yayatoh/events';
+import {
+  eventDetailsQuery,
+  eventDisplayQuery,
+  eventSeoQuery,
+  orgCategoriesQuery,
+  orgTagsQuery,
+  shortLinksQuery,
+} from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { listOrdersQuery } from '@yayatoh/orders';
-import { Button, Card, PageHeader } from '@yayatoh/ui';
+import { Button, buttonClass, Card, PageHeader } from '@yayatoh/ui';
 import { listVenuesQuery } from '@yayatoh/venues';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { EventCurrencyForm, EventDetailsForm, VanityForm } from '@/components/event-details-form.tsx';
+import { EventSeoForm } from '@/components/event-seo-form.tsx';
 import { HowItWorks } from '@/components/how-it-works.tsx';
+import { MediaUploader } from '@/components/media-uploader.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { categoryLabels } from '@/server/event-categories.ts';
+import { mediaPanel } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
-import { ensureShortLinkAction, saveDetailsAction, setCurrencyAction, setVanityAction } from './actions.ts';
+import {
+  ensureShortLinkAction,
+  saveDetailsAction,
+  saveSeoAction,
+  setAttendeeCountAction,
+  setCurrencyAction,
+  setVanityAction,
+} from './actions.ts';
 
 export default async function EventDetailsPage({
   params,
@@ -22,12 +39,15 @@ export default async function EventDetailsPage({
   const { data, event: ev, can } = await loadEvent(org, event, 'details');
   const t = await getTranslations('details');
   const canWrite = can('events:write');
-  const [details, venues, links, categories, tags] = await Promise.all([
+  const [details, venues, links, categories, tags, seo, social, display] = await Promise.all([
     executeQuery(eventDetailsQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(listVenuesQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(shortLinksQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(orgCategoriesQuery, { includeHidden: true, eventId: ev.id }, data.ctx, ports),
     executeQuery(orgTagsQuery, { eventId: ev.id }, data.ctx, ports),
+    executeQuery(eventSeoQuery, { eventId: ev.id }, data.ctx, ports),
+    mediaPanel(data, 'event', ev.id, 'social'),
+    executeQuery(eventDisplayQuery, { eventId: ev.id }, data.ctx, ports),
   ]);
   // U8: hidden categories leave the picker, except the one this event already has.
   const te = await getTranslations();
@@ -51,7 +71,15 @@ export default async function EventDetailsPage({
   const live = ['published', 'postponed', 'cancelled', 'completed'].includes(ev.status);
   return (
     <>
-      <PageHeader title={t('title')} description={t('subtitle')} />
+      <PageHeader
+        title={t('title')}
+        description={t('subtitle')}
+        actions={
+          <Link href={`/o/${org}/e/${event}/attendee-preview`} className={buttonClass('secondary')}>
+            {t('previewPortal')}
+          </Link>
+        }
+      />
       <HowItWorks topic="eventType" />
       {canWrite ? null : <p className="text-body text-ink-2">{t('viewerNotice')}</p>}
       <Card size="panel">
@@ -124,6 +152,41 @@ export default async function EventDetailsPage({
           ) : null}
         </Card>
       </section>
+      <Card size="panel" className="flex flex-col gap-4">
+        <h2 className="m-0 text-section">{t('seo.title')}</h2>
+        <p className="m-0 text-body text-ink-2">{t('seo.subtitle')}</p>
+        <EventSeoForm
+          action={saveSeoAction.bind(null, org, event)}
+          seo={seo}
+          fallbackTitle={`${ev.name} · ${data.org.name}`}
+          fallbackDescription={ev.tagline ?? ''}
+          origin={origin}
+          disabled={!canWrite}
+        />
+        <MediaUploader org={org} slot="social" headingLevel={3} ticket={social.ticket} items={social.items} />
+      </Card>
+      <Card size="panel" className="flex flex-col gap-3">
+        <h2 className="m-0 text-section">{t('attendeeCount.title')}</h2>
+        <form action={setAttendeeCountAction.bind(null, org, event)} className="flex flex-col gap-3">
+          <label className="flex min-h-6 items-center gap-2 text-body">
+            <input
+              type="checkbox"
+              name="show"
+              value="1"
+              defaultChecked={display.showAttendeeCount}
+              disabled={!canWrite}
+              className="size-5"
+            />
+            {t('attendeeCount.label')}
+          </label>
+          <p className="m-0 text-caption text-ink-2">{t('attendeeCount.hint')}</p>
+          {canWrite ? (
+            <Button type="submit" className="self-start">
+              {t('attendeeCount.save')}
+            </Button>
+          ) : null}
+        </form>
+      </Card>
     </>
   );
 }

@@ -1,12 +1,5 @@
 import { creditBalanceQuery, TAGLINE_MAX } from '@yayatoh/ai';
-import {
-  announcementsQuery,
-  type EventSectionDto,
-  eventSectionsQuery,
-  formatFaqText,
-  formatLinksText,
-  formatScheduleText,
-} from '@yayatoh/events';
+import { announcementsQuery, type EventSectionDto, eventSectionsQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
 import { Button, buttonClass, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
@@ -37,21 +30,28 @@ import {
 } from './actions.ts';
 
 function valuesOf(s: EventSectionDto): SectionValues {
-  const fields: Record<string, string> =
-    s.kind === 'text'
-      ? { markdown: s.content.markdown }
-      : s.kind === 'faq'
-        ? { faq: formatFaqText(s.content) }
-        : s.kind === 'schedule'
-          ? { schedule: formatScheduleText(s.content) }
-          : s.kind === 'links'
-            ? { links: formatLinksText(s.content) }
-            : {
-                address: s.content.address,
-                directions: s.content.directions,
-                mapUrl: s.content.mapUrl ?? '',
-              };
-  return { title: s.title, visible: s.visible, fields };
+  const base = { title: s.title, visible: s.visible };
+  switch (s.kind) {
+    case 'text':
+      return { ...base, fields: { markdown: s.content.markdown } };
+    case 'faq':
+      return { ...base, fields: {}, faq: s.content.items };
+    case 'schedule':
+      return { ...base, fields: {}, schedule: s.content.items };
+    case 'links':
+      return { ...base, fields: {}, links: s.content.items };
+    case 'video':
+      return { ...base, fields: {}, video: s.content };
+    case 'location':
+      return {
+        ...base,
+        fields: {
+          address: s.content.address,
+          directions: s.content.directions,
+          mapUrl: s.content.mapUrl ?? '',
+        },
+      };
+  }
 }
 
 export default async function ContentPage({

@@ -58,6 +58,8 @@ export const engagementDataSubjects = defineDataSubjectContributor({
     'engagement.network_reports': REDACT,
     'engagement.chat_reports': REDACT,
     'engagement.chat_messages': DELETE,
+    'engagement.lobby_reports': REDACT,
+    'engagement.lobby_messages': DELETE,
   },
   async export(tx, s) {
     const rows = await questionRowsTx(tx, s);
@@ -70,6 +72,8 @@ export const engagementDataSubjects = defineDataSubjectContributor({
         networkReports: net.reports,
         chatMessages: net.chatMessages,
         chatReports: net.chatReports,
+        lobbyMessages: net.lobbyMessages,
+        lobbyReports: net.lobbyReports,
         questions: rows.map((q) => ({
           eventId: q.eventId,
           sessionId: q.sessionId,
@@ -92,6 +96,8 @@ export const engagementDataSubjects = defineDataSubjectContributor({
       'engagement.network_reports': n.reports,
       'engagement.chat_reports': n.chatReports,
       'engagement.chat_messages': n.chatMessages,
+      'engagement.lobby_reports': n.lobbyReports,
+      'engagement.lobby_messages': n.lobbyMessages,
     };
     const ids = (await questionRowsTx(tx, s)).map((q) => q.id);
     if (ids.length === 0) return { erased: { 'engagement.questions': 0, ...net } };

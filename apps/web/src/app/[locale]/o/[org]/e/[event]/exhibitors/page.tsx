@@ -1,15 +1,24 @@
+import { executeQuery } from '@yayatoh/kernel';
+import { programDocumentsQuery } from '@yayatoh/media';
 import type { ExhibitorDto } from '@yayatoh/program';
 import { Button, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
 import { MediaUploader } from '@/components/media-uploader.tsx';
+import { ProgramDocumentsAdmin } from '@/components/program-documents-admin.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { ProgramThumb } from '@/components/program-thumb.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { defaultProgramAlt } from '@/lib/program-media.ts';
 import { programMediaPanels } from '@/server/media.ts';
+import { ports } from '@/server/ports.ts';
 import { loadProgramPage } from '@/server/program.ts';
-import { createExhibitorAction, deleteExhibitorAction, updateExhibitorAction } from './actions.ts';
+import {
+  createExhibitorAction,
+  deleteExhibitorAction,
+  deleteExhibitorDocumentAction,
+  updateExhibitorAction,
+} from './actions.ts';
 
 /** Exhibitors (M1.4f): name, booth label, website and description; public on the event page. */
 export default async function ExhibitorsPage({
@@ -26,12 +35,20 @@ export default async function ExhibitorsPage({
     'exhibitor',
     program.exhibitors.map((x) => x.id),
   );
+  const docs = await executeQuery(
+    programDocumentsQuery,
+    { ownerType: 'exhibitor', ownerIds: program.exhibitors.map((x) => x.id) },
+    data.ctx,
+    ports,
+  );
   const t = await getTranslations();
   const tp = await getTranslations('program');
   const tx = await getTranslations('exhibitorAdmin');
   const errors = {
     name: tp('errors.name'),
     websiteUrl: tp('errors.website'),
+    contactEmail: tp('errors.contactEmail'),
+    videoUrl: tp('errors.videoUrl'),
     too_many: tp('errors.too_many'),
   };
   const fields = (x?: ExhibitorDto): FieldSpec[] => [
@@ -58,6 +75,26 @@ export default async function ExhibitorsPage({
       label: tp('description'),
       hint: tp('markdownHint'),
       defaultValue: x?.description,
+    },
+    {
+      kind: 'text',
+      name: 'contactEmail',
+      label: tp('contactEmail'),
+      defaultValue: x?.contactEmail ?? undefined,
+    },
+    {
+      kind: 'text',
+      name: 'contactPhone',
+      label: tp('contactPhone'),
+      maxLength: 40,
+      defaultValue: x?.contactPhone ?? undefined,
+    },
+    {
+      kind: 'url',
+      name: 'videoUrl',
+      label: tp('videoUrl'),
+      hint: tp('videoUrlHint'),
+      defaultValue: x?.videoUrl ?? undefined,
     },
   ];
   return (
@@ -132,6 +169,15 @@ export default async function ExhibitorsPage({
                           submitLabel={tp('save')}
                           successLabel={tp('saved')}
                           errors={errors}
+                        />
+                        <ProgramDocumentsAdmin
+                          orgId={data.org.id}
+                          ownerType="exhibitor"
+                          ownerId={x.id}
+                          docs={docs.filter((d) => d.ownerId === x.id)}
+                          canWrite={canWrite}
+                          remove={deleteExhibitorDocumentAction.bind(null, org, event)}
+                          idPrefix={`exhibitor-docs-${x.id}`}
                         />
                         <MediaUploader
                           org={org}

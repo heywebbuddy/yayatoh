@@ -1,4 +1,5 @@
-import type { TenantTx } from '@yayatoh/db';
+import { type TenantTx, withTenant } from '@yayatoh/db';
+import { createCtx } from '@yayatoh/kernel';
 import { and, asc, eq, inArray, sql } from 'drizzle-orm';
 import { attendees } from './schema.ts';
 
@@ -46,4 +47,15 @@ export async function activeEventContactsTx(
       ),
     );
   return new Set(rows.map((r) => r.contactId));
+}
+
+/** How many people hold an active place at the event (the public "N going" count). */
+export async function activeAttendeeCount(target: { orgId: string; eventId: string }): Promise<number> {
+  return withTenant(createCtx({ orgId: target.orgId }), async (tx) => {
+    const [row] = await tx
+      .select({ n: sql<number>`count(distinct ${attendees.contactId})::int` })
+      .from(attendees)
+      .where(and(eq(attendees.eventId, target.eventId), eq(attendees.status, 'active')));
+    return row?.n ?? 0;
+  });
 }

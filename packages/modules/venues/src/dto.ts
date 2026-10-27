@@ -17,6 +17,19 @@ export const HttpsUrl = z
     }
   }, 'must be an https:// link');
 
+/** `http(s)://` website of the venue; shown as an outbound link. */
+export const WebUrl = z
+  .string()
+  .trim()
+  .max(500)
+  .refine((v) => {
+    try {
+      return ['http:', 'https:'].includes(new URL(v).protocol);
+    } catch {
+      return false;
+    }
+  }, 'must be an http(s):// link');
+
 export const VenueDto = z.object({
   id: z.uuid(),
   slug: z.string(),
@@ -33,6 +46,10 @@ export const VenueDto = z.object({
   capacity: z.number().int().nullable(),
   accessibilityNotes: z.string().nullable(),
   mapUrl: z.string().nullable(),
+  description: z.string().nullable(),
+  contactEmail: z.string().nullable(),
+  contactPhone: z.string().nullable(),
+  websiteUrl: z.string().nullable(),
   directoryListed: z.boolean(),
   archivedAt: z.date().nullable(),
 });
@@ -57,6 +74,10 @@ const VenueFields = z.object({
   capacity: z.number().int().min(1).max(1_000_000).nullable().default(null),
   accessibilityNotes: text(2000),
   mapUrl: HttpsUrl.nullable().default(null),
+  description: text(10_000),
+  contactEmail: z.email().trim().max(254).nullable().default(null),
+  contactPhone: text(40),
+  websiteUrl: WebUrl.nullable().default(null),
   directoryListed: z.boolean().default(false),
 });
 
@@ -87,6 +108,10 @@ export const PublicVenueDto = z.object({
   capacity: z.number().int().nullable(),
   accessibilityNotes: z.string().nullable(),
   mapUrl: z.string().nullable(),
+  description: z.string().nullable(),
+  contactEmail: z.string().nullable(),
+  contactPhone: z.string().nullable(),
+  websiteUrl: z.string().nullable(),
   organizerName: z.string(),
 });
 export type PublicVenueDto = z.infer<typeof PublicVenueDto>;

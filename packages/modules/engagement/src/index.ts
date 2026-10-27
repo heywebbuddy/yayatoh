@@ -32,6 +32,22 @@ export {
   reportVisitorCommand,
   setBoothChatCommand,
 } from './chat/exhibitor.ts';
+export {
+  LOBBY_PAGE,
+  LobbyConsoleDto,
+  LobbyDto,
+  LobbyMessageDto,
+  LobbyReportDto,
+  lobbyConsoleQuery,
+  lobbyMessagesTx,
+  lobbyQuery,
+  lobbyUnreadTx,
+  markLobbyReadCommand,
+  moderateLobbyReportCommand,
+  reportLobbyMessageCommand,
+  sendLobbyMessageCommand,
+  setLobbyEnabledCommand,
+} from './chat/lobby.ts';
 export { BOOTH_CHAT_CHANNEL, CHAT_CHANNEL, CHAT_REALTIME_CHANNELS } from './chat/realtime.ts';
 export { chatReportsForReviewTx, chatRetentionCommand, reviewChatReportCommand } from './chat/review.ts';
 export { attendeeChatChannel, chatAttachAllowed, exhibitorChatChannel } from './chat/stream.ts';

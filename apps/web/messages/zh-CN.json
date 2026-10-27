@@ -780,7 +780,39 @@
       "thumbnails": "全部照片"
     },
     "shareWhatsApp": "通过 WhatsApp 分享",
-    "shareMessage": "{name} — 立即购票：{url}"
+    "shareMessage": "{name} — 立即购票：{url}",
+    "speakerRoles": {
+      "keynote": "主旨演讲嘉宾",
+      "speaker": "演讲嘉宾",
+      "panelist": "圆桌嘉宾",
+      "moderator": "主持人",
+      "host": "主持 / MC",
+      "dj": "DJ",
+      "artist": "艺术家 / 表演者",
+      "influencer": "网红 / 影响者",
+      "special_guest": "特邀嘉宾"
+    },
+    "speakerRolesPlural": {
+      "keynote": "主旨演讲嘉宾",
+      "speaker": "演讲嘉宾",
+      "panelist": "圆桌嘉宾",
+      "moderator": "主持人",
+      "host": "主持 / MC",
+      "dj": "DJ",
+      "artist": "艺术家 / 表演者",
+      "influencer": "网红 / 影响者",
+      "special_guest": "特邀嘉宾"
+    },
+    "featuredBadge": "重点推荐",
+    "sponsorPageTitle": "赞助商",
+    "exhibitorPageTitle": "参展商",
+    "sponsorTier": "{tier}赞助商",
+    "video": "视频",
+    "videoTitle": "{name} 的视频",
+    "contact": "联系方式",
+    "brochures": "宣传册与下载",
+    "teamAtEvent": "活动现场团队",
+    "going": "{count, plural, other {# 人参加}}"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -3744,7 +3776,9 @@
       "longitude": "请同时填写纬度和经度；经度必须介于 -180 到 180 之间。",
       "timezone": "请选择时区。",
       "capacity": "容纳人数必须是不小于 1 的整数。",
-      "mapUrl": "请使用以 https:// 开头的链接。"
+      "mapUrl": "请使用以 https:// 开头的链接。",
+      "contactEmail": "请输入有效的邮箱地址。",
+      "websiteUrl": "请输入以 http:// 或 https:// 开头的链接。"
     },
     "quotes": {
       "title": "询价请求",
@@ -3775,7 +3809,12 @@
       "details": "信息"
     },
     "detailsTitle": "信息",
-    "photo": "照片"
+    "photo": "照片",
+    "contactEmail": "联系邮箱",
+    "contactPhone": "联系电话",
+    "websiteUrl": "网站",
+    "description": "简介",
+    "descriptionHint": "显示在公开的场地页面上。支持 Markdown。"
   },
   "details": {
     "title": "活动详情",
@@ -3838,7 +3877,18 @@
     "currencySave": "保存货币",
     "hiddenCategory": "{name}（已隐藏）",
     "categoryHiddenHint": "此分类已隐藏：本活动保留它，但其他活动不能再选择它。",
-    "manageCategories": "管理分类"
+    "manageCategories": "管理分类",
+    "seo": {
+      "title": "SEO 与分享",
+      "subtitle": "搜索引擎和链接预览中显示的活动信息,以及活动的网址。"
+    },
+    "previewPortal": "预览参与者门户",
+    "attendeeCount": {
+      "title": "参与人数",
+      "label": "在活动页面显示参与人数",
+      "hint": "默认关闭。在日期旁显示“689 人参加”之类的人数。",
+      "save": "保存"
+    }
   },
   "directory": {
     "title": "场地目录",
@@ -3861,7 +3911,9 @@
     "noEventsDescription": "请稍后再来查看，或为你自己的活动发起询价。",
     "quoteTitle": "发起询价",
     "quoteDescription": "向 {org} 介绍你的活动，对方会通过电子邮件回复你。",
-    "photos": "照片"
+    "photos": "照片",
+    "contact": "联系方式",
+    "website": "网站"
   },
   "quote": {
     "name": "你的姓名",
@@ -3906,7 +3958,8 @@
       "faq": "常见问题",
       "schedule": "日程",
       "location": "地点",
-      "links": "链接"
+      "links": "链接",
+      "video": "视频"
     },
     "sectionTitle": "板块标题",
     "titleInvalid": "请输入不超过 120 个字符的标题。",
@@ -3918,14 +3971,18 @@
       "links": "链接",
       "address": "地址",
       "directions": "交通指引",
-      "mapUrl": "地图链接"
+      "mapUrl": "地图链接",
+      "videoUrl": "视频链接",
+      "videoCaption": "说明文字(可选)"
     },
     "hints": {
       "markdown": "支持 **粗体**、*斜体*、## 标题、- 列表和 [链接](https://…)。",
       "faq": "每个问题之间用空行分隔。第一行是问题，下面的行是解答。",
       "schedule": "每行一项：18:00 | 开始入场 | 可选说明",
       "links": "每行一个链接：名称 | https://…",
-      "address": "按输入原样显示，每行一行。"
+      "address": "按输入原样显示，每行一行。",
+      "videoUrl": "粘贴 YouTube 或 Vimeo 链接。它将在活动页面中以注重隐私的播放器播放。",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=…"
     },
     "textErrors": {
       "faq_answer_missing": "问题 {line} 没有解答：请在其下方的行中添加解答。",
@@ -3946,7 +4003,43 @@
     "taglineHint": "显示在活动名称下方的一行短文字（最多 280 个字符）。留空即可删除。",
     "saveTagline": "保存标语",
     "taglineSaved": "标语已保存。",
-    "taglineInvalid": "标语不能超过 280 个字符。"
+    "taglineInvalid": "标语不能超过 280 个字符。",
+    "editor": {
+      "toolbar": "文本格式",
+      "bold": "加粗",
+      "italic": "斜体",
+      "heading": "标题",
+      "list": "项目列表",
+      "link": "链接",
+      "listItem": "列表项",
+      "linkText": "链接文字",
+      "boldText": "加粗文字",
+      "italicText": "斜体文字",
+      "rowUp": "上移{label}",
+      "rowDown": "下移{label}",
+      "rowRemove": "删除{label}",
+      "question": "问题 {n}",
+      "answer": "回答",
+      "addQuestion": "添加问题",
+      "scheduleHint": "每项一行。时间可不填。添加“日期标题”可将其下的行归为一组(适用于多日活动)。",
+      "dayN": "日期标题 {n}",
+      "itemN": "第 {n} 项",
+      "dayHeading": "日期标题",
+      "dayPlaceholder": "第 1 天:6 月 12 日(周五)",
+      "time": "时间(可选)",
+      "itemTitle": "标题",
+      "detail": "详情(可选)",
+      "addItem": "添加一项",
+      "addDay": "添加日期标题",
+      "linkLabel": "标签",
+      "linkUrl": "链接(https://…)",
+      "linkN": "链接 {n}",
+      "addLink": "添加链接",
+      "preview": "实时预览",
+      "previewEmpty": "暂无可预览的内容。",
+      "untitled": "未命名区块",
+      "httpsPlaceholder": "https://"
+    }
   },
   "dates": {
     "title": "场次",
@@ -4901,7 +4994,11 @@
       "position": "请输入 1 到 99 的顺序。",
       "tier": "请选择级别。",
       "tierInUse": "请先移动或删除此级别的赞助商。",
-      "capacityBelowEnrolled": "已有更多人占用名额。请先移除报名，或保持更高的容量。"
+      "capacityBelowEnrolled": "已有更多人占用名额。请先移除报名，或保持更高的容量。",
+      "contactEmail": "请输入有效的邮箱地址。",
+      "videoUrl": "请使用 YouTube 或 Vimeo 链接。",
+      "team": "请检查团队行:每行都需要姓名。",
+      "unknownAccount": "其中一个门户邮箱不是该赞助商的账号。"
     },
     "warnings": {
       "room_overlap": "{room} 在此时间也被“{other}”占用。",
@@ -4930,7 +5027,20 @@
       "added": "已将 {count, plural, other {# 个场次}}添加到议程。",
       "discard": "放弃",
       "discarded": "已放弃建议,未添加任何内容。"
-    }
+    },
+    "speakerRole": "角色",
+    "featured": "重点推荐",
+    "featuredHint": "在其角色中优先显示,并使用更大的卡片",
+    "contactEmail": "公开联系邮箱",
+    "contactPhone": "公开联系电话",
+    "longDescription": "详细介绍(详情页)",
+    "longDescriptionHint": "显示在赞助商自己的页面上。支持 **加粗**、*斜体*、列表和链接。",
+    "videoUrl": "视频链接(YouTube 或 Vimeo)",
+    "videoUrlHint": "在详情页以注重隐私的播放器播放。",
+    "team": "活动现场团队",
+    "teamHint": "每行一人:姓名 | 职位 | 门户账号邮箱(可选,将此人关联到赞助商的门户账号)。",
+    "saveTeam": "保存团队",
+    "teamSaved": "团队已保存。"
   },
   "aiDraft": {
     "title": "用 AI 起草",
@@ -5028,7 +5138,13 @@
       "generic": "请检查此字段。"
     },
     "currency": "货币",
-    "currencyHint": "门票、结账和报表都使用该货币。在第一笔订单之前可以更改。"
+    "currencyHint": "门票、结账和报表都使用该货币。在第一笔订单之前可以更改。",
+    "newVenue": {
+      "add": "+ 添加新场地",
+      "title": "新场地",
+      "save": "保存并选择场地",
+      "cancel": "取消"
+    }
   },
   "eventMedia": {
     "title": "图片",
@@ -5043,7 +5159,8 @@
       "speaker": "演讲者照片",
       "exhibitor": "参展商标志",
       "sponsor": "赞助商标志",
-      "library": "上传到媒体库"
+      "library": "上传到媒体库",
+      "social": "社交分享图片"
     },
     "hint": {
       "cover": "显示在活动页面顶部、活动卡片和链接预览中。",
@@ -5053,7 +5170,8 @@
       "speaker": "显示在活动页面、演讲者页面以及议程中其场次旁边。",
       "exhibitor": "在活动页面上与参展商一起显示。SVG 标志在任何尺寸下都保持清晰。",
       "sponsor": "显示在活动页面上赞助商所在的级别中（级别越高标志越大）。SVG 标志保持清晰。",
-      "library": "在这里上传的图片可用于活动、场地、演讲者和你的标志，无需再次上传。"
+      "library": "在这里上传的图片可用于活动、场地、演讲者和你的标志，无需再次上传。",
+      "social": "用于社交网络和即时通讯应用中的链接预览。未设置时依次使用封面图和自动生成的卡片。建议尺寸 1200 × 630 像素。"
     },
     "empty": {
       "cover": "还没有封面图片。",
@@ -5063,7 +5181,8 @@
       "speaker": "还没有照片。",
       "exhibitor": "还没有标志。",
       "sponsor": "还没有标志。",
-      "library": "媒体库中还没有图片。"
+      "library": "媒体库中还没有图片。",
+      "social": "暂无社交分享图片。"
     },
     "count": "{count, plural, other {# 张}}，共 {max} 张",
     "listLabel": "当前图片",
@@ -14656,7 +14775,8 @@
       "connections": "联系人",
       "meetings": "会面",
       "profile": "我的资料",
-      "chats": "聊天"
+      "chats": "聊天",
+      "lobby": "大厅"
     },
     "signIn": {
       "intro": "看看还有谁会来、建立联系并预约简短会面。这里只显示选择参与的人。",
@@ -14861,7 +14981,9 @@
       "past": "该时段已经开始。请选择更晚的时段。",
       "unknown": "该选项已不可用。请刷新页面。",
       "in_use": "仍有会面在使用。请先取消它们。",
-      "resolved": "此举报已处理。"
+      "resolved": "此举报已处理。",
+      "lobby_off": "大厅已关闭。",
+      "already_reported": "您已举报过此消息。"
     },
     "console": {
       "link": "社交",
@@ -14989,6 +15111,30 @@
         "restore": "解除暂停",
         "restoreName": "解除 {name} 展位聊天的暂停",
         "restored": "{name} 可以重新接受聊天了。"
+      },
+      "lobby": {
+        "heading": "活动大厅",
+        "on": "大厅已开启:加入人脉社交的参与者可在同一聊天室交流。",
+        "off": "大厅已关闭(默认)。开启后,参与者可使用共享聊天室。",
+        "needsChat": "仅当人脉社交和聊天均开启时,大厅才可使用。",
+        "turnOn": "开启大厅",
+        "turnOff": "关闭大厅",
+        "turnedOn": "大厅已开启。",
+        "turnedOff": "大厅已关闭。",
+        "stats": {
+          "messages": "消息",
+          "today": "最近 24 小时",
+          "reports": "待处理举报"
+        },
+        "noReports": "没有待处理的举报。",
+        "reportTitle": "{reporter} 举报了 {reported}",
+        "removedMessage": "已删除",
+        "remove": "删除消息",
+        "removed": "消息已删除。",
+        "hide": "隐藏此人",
+        "hidden": "已隐藏此人并删除其消息。",
+        "dismiss": "忽略举报",
+        "dismissed": "举报已忽略。"
       }
     },
     "unreadChats": "{count, plural, other {# 个聊天有未读消息}}",
@@ -15009,6 +15155,27 @@
       "listLabel": "推荐的人",
       "score": "匹配度 {score}%",
       "shared": "你们都喜欢:{interests}"
+    },
+    "lobby": {
+      "title": "活动大厅",
+      "description": "所有加入本活动人脉社交的人共用的聊天室。",
+      "rules": "大厅中的所有人都能看到您写的内容。请友善;您可以举报消息,同时会为您屏蔽其作者。",
+      "emptyTitle": "暂无消息",
+      "emptyDescription": "打个招呼,开始交流吧。",
+      "messages": "大厅消息",
+      "you": "我",
+      "removed": "此消息已被组织者删除。",
+      "report": "举报此消息",
+      "reportReason": "原因",
+      "reportDetails": "详情(可选)",
+      "reportSubmit": "提交举报",
+      "reported": "已举报,该作者已为您屏蔽。",
+      "write": "您的消息",
+      "send": "发送",
+      "sent": "已发送。",
+      "tooFast": "发送过快,请稍候。",
+      "tooLong": "消息请控制在 2000 个字符以内。",
+      "required": "请先输入消息。"
     }
   },
   "chat": {
@@ -19129,7 +19296,8 @@
       "schedule": "我的日程",
       "profile": "资料",
       "notifications": "通知",
-      "settings": "账户设置"
+      "settings": "账户设置",
+      "networking": "人脉社交"
     },
     "descriptions": {
       "overview": "你的预订、即将举行的活动和账户，一目了然。",
@@ -19138,7 +19306,8 @@
       "schedule": "你的场次预订，以及支持此功能的活动的个人日程。",
       "profile": "管理你的账户名称和照片。",
       "notifications": "选择要从每个主办方接收的内容。",
-      "settings": "管理登录、安全和个人数据。"
+      "settings": "管理登录、安全和个人数据。",
+      "networking": "在您的活动中结识其他参与者、聊天并预约会面。"
     },
     "signInTitle": "你的活动从这里开始",
     "signInHint": "登录账户即可查看使用其已验证邮箱完成的购买。你也可以在下方验证门票邮箱，查看该邮箱的预订。",
@@ -19193,7 +19362,21 @@
     "attendeeSignUpDescription": "验证邮箱即可创建账户，集中管理你的活动和门票。",
     "organizationAccessRequired": "此账户没有组织访问权限。请使用主办方账户，或继续前往你的参会者控制台。",
     "useAnotherAccount": "使用其他账户",
-    "openReceipt": "查看收据"
+    "openReceipt": "查看收据",
+    "networking": {
+      "emptyTitle": "暂无人脉社交",
+      "emptyHint": "当组织者为您即将参加的活动开放人脉社交后,会显示在这里。",
+      "optInHint": "人脉社交已开放。加入后即可展示资料并结识他人。",
+      "optIn": "加入人脉社交",
+      "unread": "{count} 条待处理",
+      "links": {
+        "people": "人员",
+        "connections": "联系人",
+        "meetings": "会面",
+        "chats": "聊天",
+        "lobby": "大厅"
+      }
+    }
   },
   "eventBranding": {
     "title": "此活动的颜色",
@@ -19245,5 +19428,50 @@
     "sameHolder": "该联系人已持有这张票。",
     "notAllowed": "这张票无法发给他人（转让已截止或不被允许）。",
     "done": "完成。每个人都已通过邮件收到自己的门票。"
+  },
+  "programDocs": {
+    "title": "宣传册(PDF)",
+    "remove": "删除 {name}",
+    "titleLabel": "标题(显示在公开页面上)",
+    "file": "PDF 文件",
+    "upload": "上传宣传册",
+    "uploading": "正在上传…",
+    "none": "暂无宣传册。",
+    "fileHint": "仅限 PDF,最大 10 MB,每个赞助商或参展商最多 5 个。",
+    "uploaded": "宣传册已上传。",
+    "errors": {
+      "generic": "上传失败,请重试。",
+      "no_file": "请选择 PDF 文件。",
+      "too_large": "文件超过 10 MB。",
+      "unsupported_type": "仅接受 PDF 文件。",
+      "too_many": "已达到 5 份宣传册的上限。"
+    }
+  },
+  "seoPanel": {
+    "title": "SEO 设置",
+    "seoTitle": "SEO 标题",
+    "seoTitleHint": "显示在搜索结果和链接预览中。留空则使用活动名称。已用 {count}/{max} 个字符。",
+    "seoDescription": "Meta 描述",
+    "seoDescriptionHint": "搜索结果中的简短摘要。留空则使用标语。已用 {count}/{max} 个字符。",
+    "slug": "活动网址",
+    "slugHint": "小写字母、数字和连字符。更改后,旧网址会自动重定向。",
+    "slugRedirect": "访问 /events/{slug} 的用户将被重定向到新网址。",
+    "previousSlugs": "重定向到此处的旧网址:{slugs}",
+    "preview": "搜索结果预览",
+    "save": "保存 SEO 设置",
+    "saved": "SEO 设置已保存。",
+    "errors": {
+      "seoTitle": "SEO 标题不得超过 {max} 个字符。",
+      "slug": "仅限小写字母、数字和连字符(不能在开头或结尾)。",
+      "slugTaken": "该网址已被占用。"
+    }
+  },
+  "attendeePreview": {
+    "banner": "预览:这是示例参与者,并非真实用户。",
+    "bannerDetail": "此处内容均为示例:不会创建订单,也不会读取任何参与者数据。链接不可点击。",
+    "title": "参与者门户预览",
+    "description": "参与者对此活动看到的内容。",
+    "sections": "门户栏目",
+    "sampleStatus": "已支付"
   }
 }

@@ -12,6 +12,7 @@ import { loadConsole } from '@/server/console.ts';
 import { categoryLabels } from '@/server/event-categories.ts';
 import { ports } from '@/server/ports.ts';
 import { pickerProfiles } from '@/server/profile-picker.ts';
+import { createVenueInlineAction } from '../../../venues/actions.ts';
 import { guidedCreateAction } from '../actions.ts';
 
 /** The three-step event wizard (M1.4f). The one-page form stays at `/events/new`. */
@@ -58,6 +59,7 @@ export default async function GuidedNewEventPage({
         }}
         series={series.map((s) => ({ id: s.id, name: s.name }))}
         venues={venues.map((v) => ({ id: v.id, name: v.name, city: v.city }))}
+        createVenue={createVenueInlineAction.bind(null, org)}
         currency={data.org.currency}
         ticketing={data.modules.has('ticketing')}
         profiles={await pickerProfiles(data.modules)}

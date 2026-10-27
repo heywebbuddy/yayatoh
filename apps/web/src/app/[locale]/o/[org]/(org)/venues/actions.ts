@@ -30,6 +30,10 @@ function venueFields(form: FormData) {
     capacity: numberOrNull(form, 'capacity'),
     accessibilityNotes: textOrNull(form, 'accessibilityNotes'),
     mapUrl: textOrNull(form, 'mapUrl'),
+    description: textOrNull(form, 'description'),
+    contactEmail: textOrNull(form, 'contactEmail'),
+    contactPhone: textOrNull(form, 'contactPhone'),
+    websiteUrl: textOrNull(form, 'websiteUrl'),
     directoryListed: form.get('directoryListed') === '1',
   };
 }
@@ -77,4 +81,40 @@ export async function setQuoteStatusAction(
   const data = await loadConsole(org);
   await executeCommand(setQuoteRequestStatusCommand, { quoteRequestId, status }, data.ctx, ports);
   revalidatePath(`/o/${org}/venues/${venueId}`);
+}
+
+export type InlineVenueResult =
+  | { ok: true; venue: { id: string; name: string; city: string | null } }
+  | { ok: false; fields: readonly string[] };
+
+/** The event wizard's "Add a new venue": creates the saved venue and returns it to be selected. */
+export async function createVenueInlineAction(
+  org: string,
+  input: Record<string, string>,
+): Promise<InlineVenueResult> {
+  const data = await loadConsole(org);
+  const text = (k: string) => (input[k]?.trim() ? input[k].trim() : null);
+  const capacity = input.capacity?.trim() ? Number(input.capacity) : null;
+  try {
+    const row = await executeCommand(
+      createVenueCommand,
+      {
+        name: (input.name ?? '').trim(),
+        addressLine1: text('addressLine1'),
+        city: text('city'),
+        country: (input.country ?? '').trim(),
+        timezone: (input.timezone ?? '').trim(),
+        capacity: capacity !== null && Number.isFinite(capacity) ? capacity : null,
+        contactEmail: text('contactEmail'),
+        contactPhone: text('contactPhone'),
+        websiteUrl: text('websiteUrl'),
+      },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/venues`);
+    return { ok: true, venue: { id: row.id, name: row.name, city: row.city } };
+  } catch (err) {
+    return { ok: false, fields: failure(err).fields ?? [] };
+  }
 }

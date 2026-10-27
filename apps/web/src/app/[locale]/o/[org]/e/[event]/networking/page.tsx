@@ -31,6 +31,7 @@ import {
   settingsAction,
 } from './actions.ts';
 import { ChatConsole } from './chat-console.tsx';
+import { LobbyConsole } from './lobby-console.tsx';
 
 type Params = { params: Promise<{ locale: string; org: string; event: string }> };
 
@@ -432,6 +433,10 @@ export default async function NetworkingConsolePage({ params }: Params) {
           locale={locale}
           timeZone={tz}
         />
+      ) : null}
+
+      {c.settings.enabled && c.settings.chatEnabled ? (
+        <LobbyConsole org={org} event={event} eventId={ev.id} ctx={data.ctx} canWrite={canWrite} />
       ) : null}
 
       <section aria-labelledby="net-hidden" className="flex flex-col gap-3">

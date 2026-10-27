@@ -20,7 +20,7 @@ export const mediaSchema = pgSchema('media');
 export const OWNER_TYPES = ['event', 'venue', 'org', 'speaker', 'exhibitor', 'sponsor', 'library'] as const;
 export type OwnerType = (typeof OWNER_TYPES)[number];
 /** `floorplan`: an event's floor plan images, drawn under its seating plans (M1.7g). */
-export const SLOTS = ['cover', 'gallery', 'photo', 'logo', 'floorplan', 'library'] as const;
+export const SLOTS = ['cover', 'gallery', 'photo', 'logo', 'floorplan', 'library', 'social'] as const;
 export type Slot = (typeof SLOTS)[number];
 
 const list = (col: string, values: readonly string[]) =>
@@ -66,14 +66,14 @@ export const assets = tenantTable(
     index('assets_org_owner_idx').on(t.orgId, t.ownerType, t.ownerId, t.slot, t.position),
     uniqueIndex('assets_org_single_slot_key')
       .on(t.orgId, t.ownerType, t.ownerId, t.slot)
-      .where(sql`slot in ('cover', 'logo')`),
+      .where(sql`slot in ('cover', 'logo', 'social')`),
     // M1.4h: a speaker has one photo (venues keep several).
     uniqueIndex('assets_org_speaker_photo_key').on(t.orgId, t.ownerId).where(sql`owner_type = 'speaker'`),
     check('assets_owner_type_check', list('owner_type', OWNER_TYPES)),
     check('assets_slot_check', list('slot', SLOTS)),
     check(
       'assets_owner_slot_check',
-      sql`(owner_type = 'event' and slot in ('cover', 'gallery', 'floorplan')) or (owner_type = 'venue' and slot = 'photo') or (owner_type = 'org' and slot = 'logo' and owner_id = org_id) or (owner_type = 'speaker' and slot = 'photo') or (owner_type in ('exhibitor', 'sponsor') and slot = 'logo') or (owner_type = 'library' and slot = 'library' and owner_id = org_id)`,
+      sql`(owner_type = 'event' and slot in ('cover', 'gallery', 'floorplan', 'social')) or (owner_type = 'venue' and slot = 'photo') or (owner_type = 'org' and slot = 'logo' and owner_id = org_id) or (owner_type = 'speaker' and slot = 'photo') or (owner_type in ('exhibitor', 'sponsor') and slot = 'logo') or (owner_type = 'library' and slot = 'library' and owner_id = org_id)`,
     ),
     check('assets_source_type_check', sql`source_type in ('jpeg', 'png', 'gif', 'webp', 'avif', 'svg')`),
     check('assets_dimensions_check', sql`width > 0 and height > 0`),

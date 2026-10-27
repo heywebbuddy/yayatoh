@@ -26,5 +26,9 @@ export const privateColumns = columnPrivacy('venues', {
     timezone: 'vocab',
     accessibility_notes: 'public',
     map_url: 'public',
+    description: 'public',
+    contact_email: 'public',
+    contact_phone: 'public',
+    website_url: 'public',
   },
 });

@@ -1,11 +1,13 @@
 'use server';
 
 import { executeCommand } from '@yayatoh/kernel';
+import { deleteProgramDocumentCommand } from '@yayatoh/media';
 import {
   createSponsorCommand,
   createSponsorTierCommand,
   deleteSponsorCommand,
   deleteSponsorTierCommand,
+  setSponsorTeamCommand,
   updateSponsorCommand,
 } from '@yayatoh/program';
 import { revalidatePath } from 'next/cache';
@@ -22,6 +24,10 @@ const fields = (form: FormData) => ({
   name: String(form.get('name') ?? ''),
   websiteUrl: textOrNull(form, 'websiteUrl'),
   description: String(form.get('description') ?? ''),
+  longDescription: String(form.get('longDescription') ?? ''),
+  contactEmail: textOrNull(form, 'contactEmail'),
+  contactPhone: textOrNull(form, 'contactPhone'),
+  videoUrl: textOrNull(form, 'videoUrl'),
 });
 
 export async function createTierAction(
@@ -109,5 +115,41 @@ export async function deleteSponsorAction(org: string, event: string, sponsorId:
   await executeCommand(deleteSponsorCommand, { eventId: ev.id, sponsorId }, data.ctx, ports);
   // M1.4h: the photo/logo goes with it (media's subscriber to the deletion event).
   await purgeDeletedProgramMedia(data.org.id);
+  done(org, event);
+}
+
+/** The sponsor's team at the event: one line per person, `Name | Title | portal account email`. */
+export async function setSponsorTeamAction(
+  org: string,
+  event: string,
+  sponsorId: string,
+  _prev: ProgramFormState,
+  form: FormData,
+): Promise<ProgramFormState> {
+  const { data, event: ev } = await loadEvent(org, event, 'sponsors');
+  const members = String(form.get('team') ?? '')
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [name = '', title = '', accountEmail = ''] = line.split('|').map((p) => p.trim());
+      return { name, title: title || null, accountEmail: accountEmail || null };
+    });
+  try {
+    await executeCommand(setSponsorTeamCommand, { eventId: ev.id, sponsorId, members }, data.ctx, ports);
+  } catch (err) {
+    return failure(err);
+  }
+  done(org, event);
+  return success();
+}
+
+export async function deleteSponsorDocumentAction(
+  org: string,
+  event: string,
+  documentId: string,
+): Promise<void> {
+  const { data } = await loadEvent(org, event, 'sponsors');
+  await executeCommand(deleteProgramDocumentCommand, { documentId }, data.ctx, ports);
   done(org, event);
 }

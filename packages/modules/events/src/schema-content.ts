@@ -167,3 +167,22 @@ export const shortLinks = tenantTable(
     check('short_links_code_check', sql`code ~ '^[a-z0-9](?:[a-z0-9-]{1,38}[a-z0-9])$'`),
   ],
 );
+
+/**
+ * Old addresses of events whose slug changed: `/events/{old}` redirects to the event's current
+ * address. Old addresses are global (like slugs), so one can't be reused while it redirects.
+ */
+export const eventSlugRedirects = tenantTable(
+  eventsSchema,
+  'event_slug_redirects',
+  {
+    eventId: uuid('event_id').notNull(),
+    oldSlug: text('old_slug').notNull(),
+  },
+  (t) => [
+    uniqueIndex('event_slug_redirects_old_slug_key').on(t.oldSlug),
+    index('event_slug_redirects_org_event_idx').on(t.orgId, t.eventId),
+    eventFk('event_slug_redirects_event_fk', t),
+    check('event_slug_redirects_format_check', sql`old_slug ~ '^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$'`),
+  ],
+);

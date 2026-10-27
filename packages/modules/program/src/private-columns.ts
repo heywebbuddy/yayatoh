@@ -6,10 +6,25 @@ import { columnPrivacy, holder, internal, personal } from '@yayatoh/db';
  * the event's public agenda (publicProgram / publicSpeaker allowlists): no private columns yet.
  */
 export const privateColumns = columnPrivacy('program', {
-  exhibitors: { name: 'public', description: 'public', booth_label: 'public', website_url: 'public' },
+  exhibitors: {
+    name: 'public',
+    description: 'public',
+    booth_label: 'public',
+    website_url: 'public',
+    contact_email: 'public',
+    contact_phone: 'public',
+    video_url: 'public',
+  },
   rooms: { name: 'public' },
   sessions: { title: 'public', description: 'public' },
-  speakers: { name: 'public', title: 'public', company: 'public', bio: 'public', links: 'public' },
+  speakers: {
+    name: 'public',
+    title: 'public',
+    company: 'public',
+    bio: 'public',
+    links: 'public',
+    role: 'vocab',
+  },
   sponsor_tiers: { name: 'public' },
   // M5.3a speaker portal: proposals are unpublished until approved (then they land in the public
   // columns above); task answers and notes are between the organizer and the speaker.
@@ -29,7 +44,16 @@ export const privateColumns = columnPrivacy('program', {
     created_by: internal(),
   },
   portal_task_assignees: { status: 'vocab', file_name: personal() },
-  sponsors: { name: 'public', description: 'public', website_url: 'public' },
+  sponsors: {
+    name: 'public',
+    description: 'public',
+    website_url: 'public',
+    long_description: 'public',
+    contact_email: 'public',
+    contact_phone: 'public',
+    video_url: 'public',
+  },
+  sponsor_team_members: { name: 'public', title: 'public' },
   tracks: { name: 'public' },
   // M5.2a: agenda model v2.
   session_types: { name: 'public' },

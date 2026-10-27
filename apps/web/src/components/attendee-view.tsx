@@ -5,12 +5,14 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { signOutAttendee } from '@/app/[locale]/attendee/actions.ts';
 import { signInAction } from '@/app/[locale]/my-tickets/actions.ts';
 import { AccountSecurityView } from '@/components/account-security-view.tsx';
+import { AttendeeNetworking } from '@/components/attendee-networking.tsx';
 import { AttendeeProfile } from '@/components/attendee-profile.tsx';
 import { SignInForm } from '@/components/my-tickets-forms.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { type AttendeeSection, attendeeEvents, upcomingOrders } from '@/lib/attendee.ts';
 import { formatEventDateRange } from '@/lib/format.ts';
 import { attendeePreferences, loadAttendee } from '@/server/attendee.ts';
+import { loadAttendeeNetworking } from '@/server/attendee-networking.ts';
 import { scheduleSummary } from '@/server/schedule.ts';
 
 async function BookingCard({
@@ -233,6 +235,13 @@ export async function AttendeeView({ locale, section }: { locale: string; sectio
       </>
     );
   }
+  if (section === 'networking')
+    return (
+      <>
+        {heading}
+        <AttendeeNetworking events={await loadAttendeeNetworking(data.orders, identity.email)} />
+      </>
+    );
   if (section === 'tickets')
     return (
       <>

@@ -1,3 +1,4 @@
+import { activeAttendeeCount } from '@yayatoh/attendees';
 import { publicGiving, publicTaxNotices, taxNoticeText } from '@yayatoh/donations';
 import { liveSessionIds, networkingOpen } from '@yayatoh/engagement';
 import {
@@ -9,6 +10,7 @@ import {
   publicEventContent,
   publicEventSeries,
   publicOccurrences,
+  publicShowsAttendeeCount,
 } from '@yayatoh/events';
 import { publicForm } from '@yayatoh/forms';
 import { formatMoney, money } from '@yayatoh/kernel';
@@ -463,6 +465,9 @@ export async function PublicEventView({
   }
   const listing = await listingBySlug(slug);
   const req = await requestHost();
+  // "N going": only when the organizer turned it on (off by default).
+  const goingCount =
+    target && (await publicShowsAttendeeCount(target)) ? await activeAttendeeCount(target) : 0;
   // M1.4g: holders' reviews (visible only); the rating reaches JSON-LD from MIN_REVIEWS_FOR_RATING.
   const reviews = target ? await cachedReviews(target.orgId, target.eventId) : null;
   const rating = reviews ? aggregateRatingJsonLd(reviews, MIN_REVIEWS_FOR_RATING) : null;
@@ -614,6 +619,7 @@ export async function PublicEventView({
                 </li>
               ) : null}
               {ev.category ? <li className={chip}>{platformLabel(ev.category)}</li> : null}
+              {goingCount ? <li className={chip}>{t('publicEvent.going', { count: goingCount })}</li> : null}
               {partOf ? (
                 <li>
                   <Link

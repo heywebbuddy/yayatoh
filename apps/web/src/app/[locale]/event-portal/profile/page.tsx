@@ -34,6 +34,7 @@ export default async function SpeakerProfilePage({ params }: { params: Promise<{
   const { data } = portal;
   const t = await getTranslations('speakerPortal');
   const tp = await getTranslations('program');
+  const tr = await getTranslations('publicEvent');
   const s = data.speaker;
   const errors = {
     name: tp('errors.name'),
@@ -61,6 +62,7 @@ export default async function SpeakerProfilePage({ params }: { params: Promise<{
             <Avatar initials={initialsOf(s.name)} label={s.name} size={48} decorative />
             <div className="flex min-w-0 flex-col gap-0.5">
               <p className="m-0 text-card text-ink">{s.name}</p>
+              <p className="m-0 text-caption text-ink-2">{tr(`speakerRoles.${s.role}`)}</p>
               {s.title || s.company ? (
                 <p className="m-0 text-body text-ink-2">{[s.title, s.company].filter(Boolean).join(' · ')}</p>
               ) : null}

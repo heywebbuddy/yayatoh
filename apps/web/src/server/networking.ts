@@ -1,6 +1,7 @@
 import 'server-only';
 import {
   chatInboxQuery,
+  lobbyQuery,
   myConnectionsQuery,
   myMeetingsQuery,
   type NetworkHomeDto,
@@ -67,7 +68,13 @@ export type NetworkPage =
       readonly at: { readonly eventId: string; readonly email: string };
       readonly ctx: Ctx;
       /** Requests waiting for this person's answer, and unread chats (the tab counts). */
-      readonly waiting: { readonly connections: number; readonly meetings: number; readonly chats: number };
+      readonly waiting: {
+        readonly connections: number;
+        readonly meetings: number;
+        readonly chats: number;
+        /** Unread lobby messages; undefined when the lobby is off. */
+        readonly lobby?: number;
+      };
     };
 
 /**
@@ -90,10 +97,11 @@ export async function loadNetworkPage(slug: string): Promise<NetworkPage | null>
     throw err;
   }
   if (!home.profile?.optedIn || home.profile.hidden) return { kind: 'opt_in', target, home };
-  const [c, m, chats] = await Promise.all([
+  const [c, m, chats, lobby] = await Promise.all([
     executeQuery(myConnectionsQuery, at, ctx, ports),
     executeQuery(myMeetingsQuery, at, ctx, ports),
     executeQuery(chatInboxQuery, at, ctx, ports),
+    executeQuery(lobbyQuery, at, ctx, ports),
   ]);
   return {
     kind: 'member',
@@ -105,6 +113,7 @@ export async function loadNetworkPage(slug: string): Promise<NetworkPage | null>
       connections: c.incoming.length,
       meetings: m.incoming.length,
       chats: chats.conversations.filter((x) => x.unread > 0).length,
+      ...(lobby.enabled ? { lobby: lobby.unread } : {}),
     },
   };
 }

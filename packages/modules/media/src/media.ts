@@ -34,6 +34,7 @@ import {
 } from './dto.ts';
 import { variantFileName } from './pipeline/plan.ts';
 import { MediaRejected, processImage } from './pipeline/process.ts';
+import { purgeOwnerDocumentsTx } from './program-docs.ts';
 import { assets, OWNER_TYPES, type OwnerType, quotas, SLOTS, type Slot, variants } from './schema.ts';
 import { mediaStore } from './storage/config.ts';
 import { storageKey } from './storage/port.ts';
@@ -45,9 +46,9 @@ export const MAX_PER_SLOT = 20;
 /** U10: images uploaded straight to the media library (reuses don't count; they hold no files). */
 export const MAX_LIBRARY_IMAGES = 1000;
 const maxFor = (ownerType: OwnerType) => (ownerType === 'library' ? MAX_LIBRARY_IMAGES : MAX_PER_SLOT);
-const SINGLE_SLOTS: readonly Slot[] = ['cover', 'logo'];
+const SINGLE_SLOTS: readonly Slot[] = ['cover', 'logo', 'social'];
 const OWNER_SLOTS: Readonly<Record<OwnerType, readonly Slot[]>> = {
-  event: ['cover', 'gallery', 'floorplan'],
+  event: ['cover', 'gallery', 'floorplan', 'social'],
   venue: ['photo'],
   org: ['logo'],
   speaker: ['photo'],
@@ -729,6 +730,10 @@ export function programMediaCleaner(): Subscriber {
       const purge: string[] = [];
       for (const row of rows) if ((await releaseTx(tx, event.orgId, row)).purge) purge.push(row.id);
       for (const id of purge) await mediaStore().deleteAsset(event.orgId, id);
+      // Brochures of a sponsor or an exhibitor go with it.
+      if (p.kind !== 'speaker')
+        for (const id of await purgeOwnerDocumentsTx(tx, p.kind, p.id))
+          await mediaStore().deleteAsset(event.orgId, id);
     },
   });
 }

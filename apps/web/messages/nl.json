@@ -780,7 +780,39 @@
       "thumbnails": "Alle foto’s"
     },
     "shareWhatsApp": "Delen via WhatsApp",
-    "shareMessage": "{name} — haal je tickets: {url}"
+    "shareMessage": "{name} — haal je tickets: {url}",
+    "speakerRoles": {
+      "keynote": "Keynotespreker",
+      "speaker": "Spreker",
+      "panelist": "Panellid",
+      "moderator": "Moderator",
+      "host": "Host / MC",
+      "dj": "DJ",
+      "artist": "Artiest / performer",
+      "influencer": "Influencer",
+      "special_guest": "Speciale gast"
+    },
+    "speakerRolesPlural": {
+      "keynote": "Keynotesprekers",
+      "speaker": "Sprekers",
+      "panelist": "Panelleden",
+      "moderator": "Moderators",
+      "host": "Hosts / MC’s",
+      "dj": "DJ’s",
+      "artist": "Artiesten / performers",
+      "influencer": "Influencers",
+      "special_guest": "Speciale gasten"
+    },
+    "featuredBadge": "Uitgelicht",
+    "sponsorPageTitle": "Sponsor",
+    "exhibitorPageTitle": "Exposant",
+    "sponsorTier": "{tier}-sponsor",
+    "video": "Video",
+    "videoTitle": "Video van {name}",
+    "contact": "Contact",
+    "brochures": "Brochures en downloads",
+    "teamAtEvent": "Team op het evenement",
+    "going": "{count, plural, one {# gaat} other {# gaan}}"
   },
   "portal": {
     "day": "Dag {day} · {date}",
@@ -3744,7 +3776,9 @@
       "longitude": "Vul breedtegraad en lengtegraad samen in; de lengtegraad moet tussen -180 en 180 liggen.",
       "timezone": "Kies een tijdzone.",
       "capacity": "De capaciteit moet een geheel getal van minstens 1 zijn.",
-      "mapUrl": "Gebruik een link die begint met https://."
+      "mapUrl": "Gebruik een link die begint met https://.",
+      "contactEmail": "Voer een geldig e-mailadres in.",
+      "websiteUrl": "Voer een link in die begint met http:// of https://."
     },
     "quotes": {
       "title": "Offerteaanvragen",
@@ -3775,7 +3809,12 @@
       "details": "Gegevens"
     },
     "detailsTitle": "Gegevens",
-    "photo": "Foto"
+    "photo": "Foto",
+    "contactEmail": "Contact-e-mail",
+    "contactPhone": "Contacttelefoon",
+    "websiteUrl": "Website",
+    "description": "Beschrijving",
+    "descriptionHint": "Getoond op de openbare locatiepagina. Markdown wordt ondersteund."
   },
   "details": {
     "title": "Evenementdetails",
@@ -3838,7 +3877,18 @@
     "currencySave": "Valuta opslaan",
     "hiddenCategory": "{name} (verborgen)",
     "categoryHiddenHint": "Deze categorie is verborgen: het evenement houdt haar, maar ze wordt niet meer aangeboden voor andere evenementen.",
-    "manageCategories": "Categorieën beheren"
+    "manageCategories": "Categorieën beheren",
+    "seo": {
+      "title": "SEO en delen",
+      "subtitle": "Wat zoekmachines en linkvoorbeelden voor dit evenement tonen, en het webadres van het evenement."
+    },
+    "previewPortal": "Deelnemersportaal bekijken",
+    "attendeeCount": {
+      "title": "Aantal deelnemers",
+      "label": "Toon op de evenementpagina hoeveel mensen gaan",
+      "hint": "Standaard uit. Toont een aantal zoals \"689 gaan\" naast de datum.",
+      "save": "Opslaan"
+    }
   },
   "directory": {
     "title": "Locatiegids",
@@ -3861,7 +3911,9 @@
     "noEventsDescription": "Kom later terug of vraag een offerte aan voor je eigen evenement.",
     "quoteTitle": "Offerte aanvragen",
     "quoteDescription": "Vertel {org} over je evenement, dan krijg je per e-mail antwoord.",
-    "photos": "Foto's"
+    "photos": "Foto's",
+    "contact": "Contact",
+    "website": "Website"
   },
   "quote": {
     "name": "Je naam",
@@ -3906,7 +3958,8 @@
       "faq": "Veelgestelde vragen",
       "schedule": "Programma",
       "location": "Locatie",
-      "links": "Links"
+      "links": "Links",
+      "video": "Video"
     },
     "sectionTitle": "Titel van de sectie",
     "titleInvalid": "Vul een titel in van maximaal 120 tekens.",
@@ -3918,14 +3971,18 @@
       "links": "Links",
       "address": "Adres",
       "directions": "Routebeschrijving",
-      "mapUrl": "Kaartlink"
+      "mapUrl": "Kaartlink",
+      "videoUrl": "Videolink",
+      "videoCaption": "Onderschrift (optioneel)"
     },
     "hints": {
       "markdown": "Ondersteunt **vet**, *cursief*, ## koppen, - lijsten en [links](https://…).",
       "faq": "Scheid de vragen met een lege regel. De eerste regel is de vraag; de regels eronder zijn het antwoord.",
       "schedule": "Eén onderdeel per regel: 18:00 | Deuren open | optionele toelichting",
       "links": "Eén link per regel: Label | https://…",
-      "address": "Wordt getoond zoals geschreven, regel voor regel."
+      "address": "Wordt getoond zoals geschreven, regel voor regel.",
+      "videoUrl": "Plak een YouTube- of Vimeo-link. Hij wordt op de evenementpagina afgespeeld in een privacyvriendelijke speler.",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=…"
     },
     "textErrors": {
       "faq_answer_missing": "Vraag {line} heeft geen antwoord: zet het antwoord op de regels eronder.",
@@ -3946,7 +4003,43 @@
     "taglineHint": "Eén korte regel onder de naam van het evenement (maximaal 280 tekens). Laat leeg om hem te verwijderen.",
     "saveTagline": "Slogan opslaan",
     "taglineSaved": "Slogan opgeslagen.",
-    "taglineInvalid": "De slogan mag maximaal 280 tekens zijn."
+    "taglineInvalid": "De slogan mag maximaal 280 tekens zijn.",
+    "editor": {
+      "toolbar": "Tekstopmaak",
+      "bold": "Vet",
+      "italic": "Cursief",
+      "heading": "Kop",
+      "list": "Opsomming",
+      "link": "Link",
+      "listItem": "Lijstitem",
+      "linkText": "linktekst",
+      "boldText": "vette tekst",
+      "italicText": "cursieve tekst",
+      "rowUp": "{label} omhoog",
+      "rowDown": "{label} omlaag",
+      "rowRemove": "{label} verwijderen",
+      "question": "Vraag {n}",
+      "answer": "Antwoord",
+      "addQuestion": "Vraag toevoegen",
+      "scheduleHint": "Eén rij per onderdeel. De tijd is optioneel. Voeg een dagkop toe om de rijen eronder te groeperen (voor meerdaagse evenementen).",
+      "dayN": "Dagkop {n}",
+      "itemN": "Onderdeel {n}",
+      "dayHeading": "Dagkop",
+      "dayPlaceholder": "Dag 1: vrijdag 12 juni",
+      "time": "Tijd (optioneel)",
+      "itemTitle": "Titel",
+      "detail": "Details (optioneel)",
+      "addItem": "Onderdeel toevoegen",
+      "addDay": "Dagkop toevoegen",
+      "linkLabel": "Label",
+      "linkUrl": "Link (https://…)",
+      "linkN": "Link {n}",
+      "addLink": "Link toevoegen",
+      "preview": "Live voorbeeld",
+      "previewEmpty": "Nog niets om te tonen.",
+      "untitled": "Sectie zonder titel",
+      "httpsPlaceholder": "https://"
+    }
   },
   "dates": {
     "title": "Data",
@@ -4901,7 +4994,11 @@
       "position": "Vul een volgorde van 1 tot 99 in.",
       "tier": "Kies een niveau.",
       "tierInUse": "Verplaats of verwijder eerst de sponsors van dit niveau.",
-      "capacityBelowEnrolled": "Er hebben meer mensen een plek. Haal eerst inschrijvingen weg of houd een hogere capaciteit."
+      "capacityBelowEnrolled": "Er hebben meer mensen een plek. Haal eerst inschrijvingen weg of houd een hogere capaciteit.",
+      "contactEmail": "Voer een geldig e-mailadres in.",
+      "videoUrl": "Gebruik een YouTube- of Vimeo-link.",
+      "team": "Controleer de teamregels: elke regel heeft een naam nodig.",
+      "unknownAccount": "Een van de portaal-e-mails is geen account van deze sponsor."
     },
     "warnings": {
       "room_overlap": "{room} is op dit tijdstip ook geboekt voor ‘{other}’.",
@@ -4930,7 +5027,20 @@
       "added": "{count, plural, one {# sessie} other {# sessies}} toegevoegd aan het programma.",
       "discard": "Weggooien",
       "discarded": "Voorstellen weggegooid. Er is niets toegevoegd."
-    }
+    },
+    "speakerRole": "Rol",
+    "featured": "Uitgelicht",
+    "featuredHint": "Eerst tonen binnen de rol, met een grotere kaart",
+    "contactEmail": "Openbaar contact-e-mail",
+    "contactPhone": "Openbaar contacttelefoonnummer",
+    "longDescription": "Uitgebreide beschrijving (detailpagina)",
+    "longDescriptionHint": "Getoond op de eigen pagina van de sponsor. Tekst met **vet**, *cursief*, lijsten en links.",
+    "videoUrl": "Videolink (YouTube of Vimeo)",
+    "videoUrlHint": "Wordt op de detailpagina afgespeeld in een privacyvriendelijke speler.",
+    "team": "Team op het evenement",
+    "teamHint": "Eén persoon per regel: Naam | Functie | e-mail van het portaalaccount (optioneel, koppelt de persoon aan het portaalaccount van de sponsor).",
+    "saveTeam": "Team opslaan",
+    "teamSaved": "Team opgeslagen."
   },
   "aiDraft": {
     "title": "Schrijven met AI",
@@ -5028,7 +5138,13 @@
       "generic": "Controleer dit veld."
     },
     "currency": "Valuta",
-    "currencyHint": "Tickets, afrekenen en rapporten gebruiken deze. Wijzigen kan tot de eerste bestelling."
+    "currencyHint": "Tickets, afrekenen en rapporten gebruiken deze. Wijzigen kan tot de eerste bestelling.",
+    "newVenue": {
+      "add": "+ Nieuwe locatie toevoegen",
+      "title": "Nieuwe locatie",
+      "save": "Locatie opslaan en kiezen",
+      "cancel": "Annuleren"
+    }
   },
   "eventMedia": {
     "title": "Afbeeldingen",
@@ -5043,7 +5159,8 @@
       "speaker": "Foto van de spreker",
       "exhibitor": "Logo van de exposant",
       "sponsor": "Logo van de sponsor",
-      "library": "Uploaden naar de bibliotheek"
+      "library": "Uploaden naar de bibliotheek",
+      "social": "Afbeelding voor delen op sociale media"
     },
     "hint": {
       "cover": "Bovenaan de evenementpagina, op evenementkaarten en in linkvoorbeelden.",
@@ -5053,7 +5170,8 @@
       "speaker": "Getoond op de evenementpagina, de eigen pagina van de spreker en naast hun sessies in het programma.",
       "exhibitor": "Getoond bij de exposant op de evenementpagina. SVG-logo’s blijven op elk formaat scherp.",
       "sponsor": "Getoond in het niveau van de sponsor op de evenementpagina (hogere niveaus tonen grotere logo’s). SVG-logo’s blijven scherp.",
-      "library": "Afbeeldingen die je hier uploadt, kun je gebruiken voor evenementen, locaties, sprekers en je logo zonder ze opnieuw te uploaden."
+      "library": "Afbeeldingen die je hier uploadt, kun je gebruiken voor evenementen, locaties, sprekers en je logo zonder ze opnieuw te uploaden.",
+      "social": "Gebruikt voor linkvoorbeelden op sociale netwerken en berichten-apps. Valt terug op de omslagafbeelding, daarna op een gegenereerde kaart. 1200 × 630 px werkt het best."
     },
     "empty": {
       "cover": "Nog geen omslagafbeelding.",
@@ -5063,7 +5181,8 @@
       "speaker": "Nog geen foto.",
       "exhibitor": "Nog geen logo.",
       "sponsor": "Nog geen logo.",
-      "library": "Nog geen afbeeldingen in de bibliotheek."
+      "library": "Nog geen afbeeldingen in de bibliotheek.",
+      "social": "Nog geen afbeelding voor sociale media."
     },
     "count": "{count, plural, one {# afbeelding} other {# afbeeldingen}} van {max}",
     "listLabel": "Huidige afbeeldingen",
@@ -14656,7 +14775,8 @@
       "connections": "Connecties",
       "meetings": "Afspraken",
       "profile": "Mijn profiel",
-      "chats": "Chats"
+      "chats": "Chats",
+      "lobby": "Lobby"
     },
     "signIn": {
       "intro": "Zie wie er nog meer komt, maak connecties en boek korte afspraken. Alleen wie zelf meedoet, verschijnt hier.",
@@ -14861,7 +14981,9 @@
       "past": "Dit tijdslot is al begonnen. Kies een later slot.",
       "unknown": "Die keuze is niet meer beschikbaar. Laad de pagina opnieuw.",
       "in_use": "Afspraken gebruiken dit nog. Annuleer ze eerst.",
-      "resolved": "Deze melding is al afgehandeld."
+      "resolved": "Deze melding is al afgehandeld.",
+      "lobby_off": "De lobby is gesloten.",
+      "already_reported": "Je hebt dit bericht al gemeld."
     },
     "console": {
       "link": "Netwerken",
@@ -14989,6 +15111,30 @@
         "restore": "Schorsing opheffen",
         "restoreName": "De schorsing van de standchat van {name} opheffen",
         "restored": "{name} kan weer chats aannemen."
+      },
+      "lobby": {
+        "heading": "Evenementlobby",
+        "on": "De lobby staat aan: deelnemers aan netwerken kunnen in één ruimte chatten.",
+        "off": "De lobby staat uit (standaard). Zet hem aan om deelnemers een gedeelde chatroom te geven.",
+        "needsChat": "De lobby werkt alleen als netwerken en chat allebei aan staan.",
+        "turnOn": "Lobby aanzetten",
+        "turnOff": "Lobby uitzetten",
+        "turnedOn": "Lobby aangezet.",
+        "turnedOff": "Lobby uitgezet.",
+        "stats": {
+          "messages": "Berichten",
+          "today": "Laatste 24 uur",
+          "reports": "Open meldingen"
+        },
+        "noReports": "Geen open meldingen.",
+        "reportTitle": "{reporter} meldde {reported}",
+        "removedMessage": "Verwijderd",
+        "remove": "Bericht verwijderen",
+        "removed": "Bericht verwijderd.",
+        "hide": "Persoon verbergen",
+        "hidden": "Persoon verborgen en berichten verwijderd.",
+        "dismiss": "Melding afwijzen",
+        "dismissed": "Melding afgewezen."
       }
     },
     "unreadChats": "{count, plural, one {# chat met ongelezen berichten} other {# chats met ongelezen berichten}}",
@@ -15009,6 +15155,27 @@
       "listLabel": "Voorgestelde personen",
       "score": "{score}% overeenkomst",
       "shared": "Jullie houden allebei van: {interests}"
+    },
+    "lobby": {
+      "title": "Evenementlobby",
+      "description": "Eén chatroom voor iedereen die meedoet met netwerken bij dit evenement.",
+      "rules": "Iedereen in de lobby kan lezen wat je schrijft. Wees aardig; je kunt een bericht melden, waarmee je de afzender ook blokkeert.",
+      "emptyTitle": "Nog geen berichten",
+      "emptyDescription": "Zeg hallo om het gesprek te starten.",
+      "messages": "Lobbyberichten",
+      "you": "Jij",
+      "removed": "Dit bericht is door een organisator verwijderd.",
+      "report": "Dit bericht melden",
+      "reportReason": "Reden",
+      "reportDetails": "Details (optioneel)",
+      "reportSubmit": "Melding versturen",
+      "reported": "Gemeld. De afzender is nu voor jou geblokkeerd.",
+      "write": "Je bericht",
+      "send": "Versturen",
+      "sent": "Verstuurd.",
+      "tooFast": "Je verstuurt te snel berichten. Wacht even.",
+      "tooLong": "Houd het bericht op 2000 tekens.",
+      "required": "Schrijf eerst een bericht."
     }
   },
   "chat": {
@@ -19129,7 +19296,8 @@
       "schedule": "Mijn programma",
       "profile": "Profiel",
       "notifications": "Meldingen",
-      "settings": "Accountinstellingen"
+      "settings": "Accountinstellingen",
+      "networking": "Netwerken"
     },
     "descriptions": {
       "overview": "Je boekingen, aankomende evenementen en account op één plek.",
@@ -19138,7 +19306,8 @@
       "schedule": "Je sessieboekingen en persoonlijke programma's voor evenementen die dat ondersteunen.",
       "profile": "Beheer je accountnaam en foto.",
       "notifications": "Kies wat je van elke organisator ontvangt.",
-      "settings": "Beheer inloggen, beveiliging en je persoonsgegevens."
+      "settings": "Beheer inloggen, beveiliging en je persoonsgegevens.",
+      "networking": "Ontmoet andere deelnemers, chat en boek afspraken bij je evenementen."
     },
     "signInTitle": "Je evenementen beginnen hier",
     "signInHint": "Log in op je account om aankopen te zien die met het geverifieerde e-mailadres zijn gedaan. Je kunt hieronder ook een ticket-e-mailadres verifiëren om de bijbehorende boekingen te bekijken.",
@@ -19193,7 +19362,21 @@
     "attendeeSignUpDescription": "Verifieer je e-mailadres om een account aan te maken en je evenementen en tickets bij elkaar te houden.",
     "organizationAccessRequired": "Dit account heeft geen toegang tot een organisatie. Gebruik een organisatoraccount of ga verder naar je deelnemersdashboard.",
     "useAnotherAccount": "Een ander account gebruiken",
-    "openReceipt": "Betalingsbewijs bekijken"
+    "openReceipt": "Betalingsbewijs bekijken",
+    "networking": {
+      "emptyTitle": "Nog geen netwerken",
+      "emptyHint": "Zodra een organisator netwerken opent voor een van je komende evenementen, verschijnt het hier.",
+      "optInHint": "Netwerken is open. Doe mee om een profiel te tonen en mensen te ontmoeten.",
+      "optIn": "Meedoen met netwerken",
+      "unread": "{count} wachtend",
+      "links": {
+        "people": "Mensen",
+        "connections": "Connecties",
+        "meetings": "Afspraken",
+        "chats": "Chat",
+        "lobby": "Lobby"
+      }
+    }
   },
   "eventBranding": {
     "title": "Kleur van dit evenement",
@@ -19245,5 +19428,50 @@
     "sameHolder": "Deze persoon heeft dit ticket al.",
     "notAllowed": "Dit ticket kan niet naar iemand anders worden gestuurd (overdracht is gesloten of niet toegestaan).",
     "done": "Klaar. Iedereen heeft zijn ticket per e-mail ontvangen."
+  },
+  "programDocs": {
+    "title": "Brochures (PDF)",
+    "remove": "{name} verwijderen",
+    "titleLabel": "Titel (getoond op de openbare pagina)",
+    "file": "PDF-bestand",
+    "upload": "Brochure uploaden",
+    "uploading": "Uploaden…",
+    "none": "Nog geen brochures.",
+    "fileHint": "Alleen PDF, tot 10 MB, maximaal 5 per sponsor of exposant.",
+    "uploaded": "Brochure geüpload.",
+    "errors": {
+      "generic": "Uploaden mislukt. Probeer het opnieuw.",
+      "no_file": "Kies een PDF-bestand.",
+      "too_large": "Het bestand is groter dan 10 MB.",
+      "unsupported_type": "Alleen PDF-bestanden worden geaccepteerd.",
+      "too_many": "De limiet van 5 brochures is bereikt."
+    }
+  },
+  "seoPanel": {
+    "title": "SEO-instellingen",
+    "seoTitle": "SEO-titel",
+    "seoTitleHint": "Getoond in zoekresultaten en linkvoorbeelden. Laat leeg om de naam van het evenement te gebruiken. {count} van {max} tekens.",
+    "seoDescription": "Metabeschrijving",
+    "seoDescriptionHint": "Een korte samenvatting voor zoekresultaten. Laat leeg om de tagline te gebruiken. {count} van {max} tekens.",
+    "slug": "Webadres van het evenement",
+    "slugHint": "Kleine letters, cijfers en streepjes. Bij een wijziging blijft het oude adres als doorverwijzing werken.",
+    "slugRedirect": "Bezoekers van /events/{slug} worden doorgestuurd naar het nieuwe adres.",
+    "previousSlugs": "Oude adressen die hierheen doorverwijzen: {slugs}",
+    "preview": "Voorbeeld van het zoekresultaat",
+    "save": "SEO-instellingen opslaan",
+    "saved": "SEO-instellingen opgeslagen.",
+    "errors": {
+      "seoTitle": "Houd de SEO-titel op maximaal {max} tekens.",
+      "slug": "Gebruik alleen kleine letters, cijfers en streepjes (niet aan het begin of einde).",
+      "slugTaken": "Dit webadres is al in gebruik."
+    }
+  },
+  "attendeePreview": {
+    "banner": "Voorbeeld: dit is een voorbeelddeelnemer, geen echt persoon.",
+    "bannerDetail": "Niets hier is echt: er wordt geen bestelling aangemaakt en geen deelnemersdata gelezen. Links zijn inactief.",
+    "title": "Voorbeeld van het deelnemersportaal",
+    "description": "Wat een deelnemer voor dit evenement ziet.",
+    "sections": "Portaalsecties",
+    "sampleStatus": "Betaald"
   }
 }
