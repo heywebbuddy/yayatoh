@@ -34,7 +34,6 @@ export const privateColumns = columnPrivacy('ticketing', {
     access_dates: 'public',
   },
   // M3.10c transfers: both parties' names and emails are theirs.
-  event_limits: { max_attendees: 'public' },
   ticket_transfers: {
     status: 'vocab',
     initiated_by: 'vocab',
