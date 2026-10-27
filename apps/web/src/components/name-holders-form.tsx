@@ -85,7 +85,12 @@ export function NameHoldersForm({
                     {t('sentTo', { name: offer.toName, email: offer.toEmail })}
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    <Button type="button" size="sm" variant="secondary" onClick={() => copy(offer.claimToken)}>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => copy(offer.claimToken)}
+                    >
                       {copied === offer.claimToken ? t('copied') : t('copyLink')}
                     </Button>
                     <a
