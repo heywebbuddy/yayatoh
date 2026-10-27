@@ -100,8 +100,8 @@ describe('the no-provider fallback reads the sentence', () => {
     expect(draft.venueName).toBe('Goa');
     // Two days: the end is on the day after the start.
     expect(draft.endsLocal.slice(0, 10) > draft.startsLocal.slice(0, 10)).toBe(true);
-    expect(draft.name).toBe('Two-Day Wedding in Goa');
-    expect(draft.description).not.toContain('Two-day wedding in Goa.');
+    expect(draft.name).toBe('Goa Wedding');
+    expect(draft.name).not.toContain('Two');
     expect(draft.tickets[0]?.price).toBe(0);
     expect(draft.agenda.length).toBeGreaterThan(2);
     expect(draft.faqs.some((f) => /RSVP/i.test(f.question))).toBe(true);
@@ -114,6 +114,7 @@ describe('the no-provider fallback reads the sentence', () => {
       { ...bounds, profiles },
     );
     expect(conf.profile).toBe('conference');
+    expect(conf.name).toBe('Pune Developer Conference');
     expect(conf.tickets.map((t) => t.name)).toEqual(['Early bird', 'Standard', 'Student']);
     const gala = cleanEventSetupDraft(
       await fakeDrafter.compose({ ...request, brief: 'Charity gala dinner for the library', profiles }),
