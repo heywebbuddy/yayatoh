@@ -2,7 +2,7 @@ import type { TenantTx } from '@yayatoh/db';
 import { findEventTx } from '@yayatoh/events';
 import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand, tenantQuery } from '@yayatoh/platform';
-import { and, eq, isNull, or, sql } from 'drizzle-orm';
+import { and, eq, isNull, lte, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { REENTRY_MAX_HOURS, REENTRY_MIN_HOURS } from './domain/reentry.ts';
 import { admissions, reentrySettings } from './schema.ts';
@@ -36,8 +36,8 @@ export async function reenterTx(
         eq(admissions.id, admissionId),
         isNull(admissions.undoneAt),
         or(
-          and(isNull(admissions.lastEntryAt), sql`${admissions.admittedAt} <= ${cutoff}`),
-          sql`${admissions.lastEntryAt} <= ${cutoff}`,
+          and(isNull(admissions.lastEntryAt), lte(admissions.admittedAt, cutoff)),
+          lte(admissions.lastEntryAt, cutoff),
         ),
       ),
     )

@@ -215,16 +215,6 @@ export const scanTicketCommand = tenantCommand({
         if (live && hours !== null && (await reenterTx(tx, live.id, ctx.now, hours))) {
           result = 'admitted';
           firstAdmittedAt = null;
-          await publishRealtimeTx(tx, orgId, CHECKINS_CHANNEL, {
-            eventId: event.id,
-            event: 'admission',
-            data: {
-              change: 'reentry',
-              checkpointId: checkpoint?.id ?? null,
-              count: 0,
-              at: ctx.now.toISOString(),
-            },
-          });
         }
         // Admitted at one entrance, shown at another minutes later: a pass being handed back.
         else if (

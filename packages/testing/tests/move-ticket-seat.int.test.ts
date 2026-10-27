@@ -68,7 +68,7 @@ beforeAll(async () => {
     await executeCommand(
       createEventCommand,
       {
-        name: 'Seated concert',
+        name: 'Seat mover concert',
         timezone: 'UTC',
         startsAt: '2028-09-01T18:00:00Z',
         endsAt: '2028-09-01T22:00:00Z',
