@@ -2,6 +2,7 @@ import { buttonClass, cx } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { artGlow, GLOW } from './categories.ts';
+import { Reveal } from './reveal.tsx';
 
 export interface OrganizerTile {
   readonly slug: string;
@@ -46,7 +47,7 @@ export async function OrganizersPanel({ organizers }: { organizers: readonly Org
       </div>
       <ul className="m-0 list-none columns-2 gap-3 p-0 md:columns-3">
         {organizers.map((o, i) => (
-          <li key={o.slug} className="mb-3 break-inside-avoid">
+          <Reveal as="li" delay={i % 6} className="mb-3 break-inside-avoid">
             <Link
               href={o.href}
               className={cx(
@@ -65,7 +66,7 @@ export async function OrganizersPanel({ organizers }: { organizers: readonly Org
               <span className="relative text-[15px] leading-tight font-extrabold">{o.name}</span>
               <span className="relative text-caption text-white/80">{t('events', { count: o.events })}</span>
             </Link>
-          </li>
+          </Reveal>
         ))}
       </ul>
     </section>

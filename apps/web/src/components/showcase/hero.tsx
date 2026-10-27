@@ -18,7 +18,7 @@ export function JaggedCircle({
   children?: React.ReactNode;
 }) {
   return (
-    <div className={cx('relative aspect-square', className)}>
+    <div className={cx('animate-breathe relative aspect-square', className)}>
       <svg width="0" height="0" className="absolute" aria-hidden="true" focusable="false">
         <defs>
           <clipPath id="yy-jag" clipPathUnits="objectBoundingBox">
@@ -44,7 +44,7 @@ export function JaggedCircle({
             <div className="size-full bg-linear-to-br from-white/30 via-transparent to-black/40" />
           </div>
         )}
-        <div className="absolute inset-0 bg-linear-to-t from-black/45 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-black/30 bg-linear-to-t from-black/50 via-transparent to-transparent" />
       </div>
       {children}
     </div>
@@ -69,13 +69,15 @@ export async function ShowcaseHero({
         <JaggedCircle cover={cover} className="w-[min(78vw,560px)]" />
         <h1
           id="hero-title"
-          className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 px-2 font-display text-[clamp(34px,8.4vw,112px)] leading-[0.95] font-black tracking-[-0.04em] text-balance text-white uppercase [text-shadow:0_4px_40px_var(--color-scrim)]"
+          className="animate-rise pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 px-2 font-display text-[clamp(34px,8.4vw,112px)] leading-[0.95] font-black tracking-[-0.04em] text-balance text-white uppercase [text-shadow:0_4px_40px_var(--color-scrim)]"
         >
           {t('title')}
         </h1>
       </div>
-      <p className="max-w-xl text-[16px] text-ink-2 md:text-[18px]">{t('lede')}</p>
-      <div className="flex flex-wrap items-center justify-center gap-3">
+      <p className="animate-rise max-w-xl text-[16px] text-ink-2 [animation-delay:200ms] md:text-[18px]">
+        {t('lede')}
+      </p>
+      <div className="animate-rise flex flex-wrap items-center justify-center gap-3 [animation-delay:350ms]">
         <Link href="/events" className={buttonClass('white', 'lg', 'px-8')}>
           {t('cta')}
         </Link>

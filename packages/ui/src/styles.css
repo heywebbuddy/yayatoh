@@ -396,6 +396,14 @@
   font-weight: 700;
 }
 
+/* Auth pages: the form headings take the display face too. */
+[data-auth] h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+}
+
 @utility bg-ember {
   background-image: var(--gradient-ember, linear-gradient(100deg, #ff2d3d 0%, #ff6a2b 52%, #ff3d86 100%));
 }
@@ -448,6 +456,60 @@
   50% {
     opacity: 0.55;
   }
+}
+@keyframes showcase-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes showcase-rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+}
+@keyframes showcase-breathe {
+  50% {
+    transform: scale(1.035) rotate(1.5deg);
+  }
+}
+@keyframes showcase-glow-text {
+  50% {
+    filter: drop-shadow(0 0 70px var(--color-ember)) brightness(1.12);
+  }
+}
+/* Pills drift sideways forever, one row each way; right-to-left pages run the other way round. */
+@utility animate-marquee {
+  animation: showcase-marquee 55s linear infinite;
+  [dir="rtl"] & {
+    animation-direction: reverse;
+  }
+}
+@utility animate-marquee-rev {
+  animation: showcase-marquee 65s linear infinite reverse;
+  [dir="rtl"] & {
+    animation-direction: normal;
+  }
+}
+/* The headline, lede and call to action fade and rise in on load. */
+@utility animate-rise {
+  animation: showcase-rise 0.8s var(--ease-out) both;
+}
+@utility animate-breathe {
+  animation: showcase-breathe 9s ease-in-out infinite;
+}
+@utility animate-glow-text {
+  animation: showcase-glow-text 4.5s ease-in-out infinite;
+}
+/* Sections and tiles fade in as they scroll into view (Reveal adds and removes these two). */
+@utility reveal-pending {
+  opacity: 0;
+  transform: translateY(32px);
+}
+@utility reveal-in {
+  transition:
+    opacity 0.7s var(--ease-out),
+    transform 0.7s var(--ease-out);
 }
 @utility animate-ring {
   animation: showcase-spin 60s linear infinite;

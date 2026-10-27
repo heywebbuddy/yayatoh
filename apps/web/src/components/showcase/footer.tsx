@@ -110,7 +110,7 @@ export async function ShowcaseFooter({ children }: { children?: ReactNode }) {
       {/* The huge glowing wordmark. Decorative: the real one is in the column above. */}
       <p
         aria-hidden="true"
-        className="animate-glow pointer-events-none mt-6 -mb-[0.16em] text-center font-display text-[15.5vw] leading-none font-black tracking-[-0.05em] text-ember uppercase select-none drop-shadow-[0_0_40px_var(--color-ember)]"
+        className="animate-glow-text pointer-events-none mt-6 -mb-[0.16em] text-center font-display text-[15.5vw] leading-none font-black tracking-[-0.05em] text-ember uppercase select-none drop-shadow-[0_0_40px_var(--color-ember)]"
       >
         {t('wordmark')}
       </p>
