@@ -120,3 +120,12 @@ export {
   type UploadTicket,
   verifyUploadTicket,
 } from './ticket.ts';
+export {
+  POSTER_MAX_BYTES,
+  readVideoObject,
+  type StoredVideo,
+  sniffVideo,
+  storeVideo,
+  type VideoUploadError,
+  videoMaxBytes,
+} from './video.ts';

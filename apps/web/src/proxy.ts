@@ -341,5 +341,5 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
 
 // `/media/…` (M1.4e) sets its own headers: images are not pages (no nonce, no page CSP).
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|media/).*)'],
+  matcher: ['/((?!api|_next|_vercel|media/|video/).*)'],
 };

@@ -175,7 +175,14 @@ export {
   type VanityProblem,
   vanityProblem,
 } from './domain/short-code.ts';
-export { parseVideoUrl, videoEmbedUrl } from './domain/video.ts';
+export {
+  isUploadedPoster,
+  isUploadedVideo,
+  parseVideoUrl,
+  UPLOADED_POSTER_PATH,
+  UPLOADED_VIDEO_PATH,
+  videoEmbedUrl,
+} from './domain/video.ts';
 export * from './dto.ts';
 export * from './dto-content.ts';
 // M6.4d: events for marketing-tool syncs (HubSpot marketing events).

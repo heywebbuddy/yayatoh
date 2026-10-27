@@ -47,3 +47,16 @@ export function videoEmbedUrl(ref: VideoRef): string {
 
 /** Origins a page needs in `frame-src` to play the embeds above. */
 export const VIDEO_FRAME_ORIGINS = ['https://www.youtube-nocookie.com', 'https://player.vimeo.com'] as const;
+
+/**
+ * A video the organizer uploaded to our own storage, as stored in a design or a section: the app's
+ * own `/video/{org}/{id}/v-{hash}.mp4|webm` path (and `p-{hash}.jpg|png|webp` for its poster).
+ */
+const UPLOADED =
+  '/video/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/';
+export const UPLOADED_VIDEO_PATH = new RegExp(`^${UPLOADED}v-[0-9a-f]{32}\\.(mp4|webm)$`);
+export const UPLOADED_POSTER_PATH = new RegExp(`^${UPLOADED}p-[0-9a-f]{32}\\.(jpg|png|webp)$`);
+export const isUploadedVideo = (v: string | null | undefined): v is string =>
+  typeof v === 'string' && UPLOADED_VIDEO_PATH.test(v);
+export const isUploadedPoster = (v: string | null | undefined): v is string =>
+  typeof v === 'string' && UPLOADED_POSTER_PATH.test(v);
