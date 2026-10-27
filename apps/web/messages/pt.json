@@ -20105,5 +20105,27 @@
     "emptyDescription": "Volte em breve.",
     "all": "Todos os artigos",
     "by": "Por {name}"
+  },
+  "videoField": {
+    "modeLink": "Link do YouTube ou Vimeo",
+    "modeUpload": "Enviar um vídeo",
+    "file": "Arquivo de vídeo (MP4 ou WebM)",
+    "poster": "Imagem de pôster (JPEG, PNG ou WebP)",
+    "limits": "MP4 ou WebM, até {mb} MB. O pôster aparece antes de o vídeo tocar e quando o movimento é reduzido.",
+    "upload": "Enviar",
+    "uploading": "Enviando…",
+    "uploaded": "Vídeo enviado. Salve para usá-lo.",
+    "remove": "Remover",
+    "chooseFile": "Escolha primeiro um arquivo de vídeo.",
+    "error": {
+      "unsupported": "Use um vídeo MP4 ou WebM.",
+      "too_large": "Esse vídeo é maior que {mb} MB.",
+      "poster_required": "Adicione uma imagem de pôster para o vídeo.",
+      "bad_poster": "O pôster deve ser uma imagem JPEG, PNG ou WebP com menos de 5 MB.",
+      "failed": "O envio falhou. Tente novamente.",
+      "unauthorized": "Entre novamente para enviar.",
+      "not_found": "Você não pode enviar arquivos para esta organização.",
+      "invalid": "Não foi possível ler o envio."
+    }
   }
 }

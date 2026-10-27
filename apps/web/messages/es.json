@@ -20105,5 +20105,27 @@
     "emptyDescription": "Vuelve pronto.",
     "all": "Todas las entradas",
     "by": "Por {name}"
+  },
+  "videoField": {
+    "modeLink": "Enlace de YouTube o Vimeo",
+    "modeUpload": "Subir un vídeo",
+    "file": "Archivo de vídeo (MP4 o WebM)",
+    "poster": "Imagen de póster (JPEG, PNG o WebP)",
+    "limits": "MP4 o WebM, hasta {mb} MB. El póster se muestra antes de reproducir el vídeo y cuando se reduce el movimiento.",
+    "upload": "Subir",
+    "uploading": "Subiendo…",
+    "uploaded": "Vídeo subido. Guarda para usarlo.",
+    "remove": "Quitar",
+    "chooseFile": "Elige primero un archivo de vídeo.",
+    "error": {
+      "unsupported": "Usa un vídeo MP4 o WebM.",
+      "too_large": "Ese vídeo supera los {mb} MB.",
+      "poster_required": "Añade una imagen de póster para el vídeo.",
+      "bad_poster": "El póster debe ser una imagen JPEG, PNG o WebP de menos de 5 MB.",
+      "failed": "La subida falló. Inténtalo de nuevo.",
+      "unauthorized": "Inicia sesión de nuevo para subir.",
+      "not_found": "No puedes subir archivos para esta organización.",
+      "invalid": "No se pudo leer la subida."
+    }
   }
 }

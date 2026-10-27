@@ -10,6 +10,7 @@ import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 import { keepValues } from '@/lib/keep-values.ts';
 import { MarkdownField } from './markdown-field.tsx';
 import { SectionBodyView } from './section-body.tsx';
+import { VideoField } from './video-field.tsx';
 
 export interface SectionValues {
   readonly title: string;
@@ -26,7 +27,7 @@ export interface SectionValues {
   readonly faq?: readonly { question: string; answer: string }[];
   readonly links?: readonly { label: string; url: string }[];
   /** Video: the pasted link and an optional caption. */
-  readonly video?: { url: string; caption: string | null };
+  readonly video?: { url: string; poster?: string | null; caption: string | null };
 }
 
 type ScheduleRow = { key: number; heading: boolean; time: string; title: string; detail: string };
@@ -127,11 +128,16 @@ export function SectionForm({
   kind: fixedKind,
   values,
   idPrefix,
+  org,
+  maxVideoBytes,
 }: {
   action: (prev: FormState, form: FormData) => Promise<FormState>;
   kind?: SectionKind;
   values?: SectionValues;
   idPrefix: string;
+  /** The organization's slug and the upload limit: with them a video section can upload a file. */
+  org?: string;
+  maxVideoBytes?: number;
 }) {
   const t = useTranslations('content');
   const te = useTranslations();
@@ -161,6 +167,7 @@ export function SectionForm({
     (values?.links ?? []).map((l) => ({ key: nextKey(), label: l.label, url: l.url })),
   );
   const [videoUrl, setVideoUrl] = useState(values?.video?.url ?? '');
+  const [videoPoster, setVideoPoster] = useState<string | null>(values?.video?.poster ?? null);
   const [videoCaption, setVideoCaption] = useState(values?.video?.caption ?? '');
 
   // The list kinds start with one empty row so there is something to type into.
@@ -192,7 +199,7 @@ export function SectionForm({
         : kind === 'links'
           ? { items: linksOut }
           : kind === 'video'
-            ? { url: videoUrl.trim(), caption: videoCaption.trim() || null }
+            ? { url: videoUrl.trim(), poster: videoPoster, caption: videoCaption.trim() || null }
             : null;
 
   const preview: SectionBody | null =
@@ -467,17 +474,33 @@ export function SectionForm({
 
           {kind === 'video' ? (
             <>
-              <Input
-                id={`${idPrefix}-videoUrl`}
-                type="url"
-                label={t('fields.videoUrl')}
-                hint={t('hints.videoUrl')}
-                placeholder={t('hints.videoPlaceholder')}
-                maxLength={500}
-                value={videoUrl}
-                onChange={(e) => setVideoUrl(e.target.value)}
-                error={contentError}
-              />
+              {org && maxVideoBytes ? (
+                <VideoField
+                  name={`${idPrefix}-video`}
+                  org={org}
+                  initial={{ url: values?.video?.url ?? null, poster: values?.video?.poster ?? null }}
+                  maxBytes={maxVideoBytes}
+                  label={t('fields.videoUrl')}
+                  hint={t('hints.videoUrl')}
+                  linkPlaceholder={t('hints.videoPlaceholder')}
+                  onChange={(v) => {
+                    setVideoUrl(v.url ?? '');
+                    setVideoPoster(v.poster);
+                  }}
+                />
+              ) : (
+                <Input
+                  id={`${idPrefix}-videoUrl`}
+                  type="url"
+                  label={t('fields.videoUrl')}
+                  hint={t('hints.videoUrl')}
+                  placeholder={t('hints.videoPlaceholder')}
+                  maxLength={500}
+                  value={videoUrl}
+                  onChange={(e) => setVideoUrl(e.target.value)}
+                  error={contentError}
+                />
+              )}
               <Input
                 id={`${idPrefix}-videoCaption`}
                 label={t('fields.videoCaption')}

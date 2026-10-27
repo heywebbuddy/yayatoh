@@ -20105,5 +20105,27 @@
     "emptyDescription": "Schau bald wieder vorbei.",
     "all": "Alle Beiträge",
     "by": "Von {name}"
+  },
+  "videoField": {
+    "modeLink": "YouTube- oder Vimeo-Link",
+    "modeUpload": "Video hochladen",
+    "file": "Videodatei (MP4 oder WebM)",
+    "poster": "Posterbild (JPEG, PNG oder WebP)",
+    "limits": "MP4 oder WebM, bis {mb} MB. Das Poster erscheint vor dem Abspielen und bei reduzierter Bewegung.",
+    "upload": "Hochladen",
+    "uploading": "Wird hochgeladen…",
+    "uploaded": "Video hochgeladen. Speichern, um es zu verwenden.",
+    "remove": "Entfernen",
+    "chooseFile": "Wähle zuerst eine Videodatei.",
+    "error": {
+      "unsupported": "Verwende ein MP4- oder WebM-Video.",
+      "too_large": "Das Video ist größer als {mb} MB.",
+      "poster_required": "Füge ein Posterbild für das Video hinzu.",
+      "bad_poster": "Das Poster muss ein JPEG-, PNG- oder WebP-Bild unter 5 MB sein.",
+      "failed": "Der Upload ist fehlgeschlagen. Versuche es erneut.",
+      "unauthorized": "Melde dich erneut an, um hochzuladen.",
+      "not_found": "Du kannst für diese Organisation nichts hochladen.",
+      "invalid": "Der Upload konnte nicht gelesen werden."
+    }
   }
 }

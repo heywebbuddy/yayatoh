@@ -1,4 +1,4 @@
-import { parseVideoUrl, type SectionBody, videoEmbedUrl } from '@yayatoh/events/ui';
+import { isUploadedVideo, parseVideoUrl, type SectionBody, videoEmbedUrl } from '@yayatoh/events/ui';
 import { Markdown } from './markdown.tsx';
 
 /** Schedule rows grouped under their day heading (consecutive rows with the same `day`). */
@@ -81,6 +81,25 @@ export function SectionBodyView({
         ) : null}
       </div>
     );
+  if (section.kind === 'video' && isUploadedVideo(section.content.url)) {
+    return (
+      <figure className="m-0 flex flex-col gap-2">
+        {/* biome-ignore lint/a11y/useMediaCaption: the organizer's own upload; the caption below describes it */}
+        <video
+          controls
+          preload="metadata"
+          playsInline
+          src={section.content.url}
+          poster={section.content.poster ?? undefined}
+          aria-label={section.content.caption ?? title}
+          className="aspect-video w-full rounded-card border border-line bg-black object-contain"
+        />
+        {section.content.caption ? (
+          <figcaption className="text-caption text-ink-2">{section.content.caption}</figcaption>
+        ) : null}
+      </figure>
+    );
+  }
   if (section.kind === 'video') {
     const ref = parseVideoUrl(section.content.url);
     if (!ref) return null;

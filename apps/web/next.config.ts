@@ -45,10 +45,19 @@ const notLegacyHost = legacyHosts.length
   : undefined;
 
 const maxBodyBytes = Number(process.env.FRONT_DOOR_MAX_BODY);
-const frontDoorMaxBody =
+const videoMax = Number(process.env.MEDIA_VIDEO_MAX_BYTES);
+// Large enough for the biggest accepted video upload (default 200 MB, plus its poster).
+const uploadHeadroom =
+  (Number.isFinite(videoMax) && videoMax >= 1024 * 1024 && videoMax <= 1024 * 1024 * 1024
+    ? videoMax
+    : 200 * 1024 * 1024) +
+  6 * 1024 * 1024;
+const frontDoorMaxBody = Math.max(
   Number.isFinite(maxBodyBytes) && maxBodyBytes >= 1024 * 1024 && maxBodyBytes <= 256 * 1024 * 1024
     ? maxBodyBytes
-    : 64 * 1024 * 1024;
+    : 64 * 1024 * 1024,
+  uploadHeadroom,
+);
 
 const config: NextConfig = {
   poweredByHeader: false,

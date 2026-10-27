@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { SectionKind } from './content-kinds.ts';
 import { safeHref, sanitizeMarkdown } from './markdown.ts';
-import { parseVideoUrl } from './video.ts';
+import { isUploadedVideo, parseVideoUrl, UPLOADED_POSTER_PATH } from './video.ts';
 
 const Markdown = (max: number) =>
   z
@@ -60,8 +60,17 @@ export const LinksContent = z.object({
 });
 
 export const VideoContent = z.object({
-  /** A YouTube or Vimeo link; shown as an embedded player on the event page. */
-  url: SafeUrl.refine((v) => parseVideoUrl(v) !== null, 'must be a YouTube or Vimeo link'),
+  /** A YouTube or Vimeo link (an embedded player), or a video uploaded to our own storage (a `<video>`). */
+  url: z
+    .string()
+    .trim()
+    .max(500)
+    .refine(
+      (v) => isUploadedVideo(v) || (SafeUrl.safeParse(v).success && parseVideoUrl(v) !== null),
+      'must be a YouTube or Vimeo link or an uploaded video',
+    ),
+  /** The poster image of an uploaded video (its own storage path); null for a link. */
+  poster: z.string().regex(UPLOADED_POSTER_PATH).nullable().default(null),
   caption: z.string().trim().max(200).nullable().default(null),
 });
 

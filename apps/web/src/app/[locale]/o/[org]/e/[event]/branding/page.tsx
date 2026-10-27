@@ -1,5 +1,6 @@
 import { eventDetailsQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
+import { videoMaxBytes } from '@yayatoh/media';
 import { roleCan } from '@yayatoh/tenancy';
 import { buttonClass, Card, EmptyState, light, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -68,7 +69,12 @@ export default async function EventBrandingPage({
         <p className="text-body text-ink-2">{t('eventDesign.description')}</p>
         <Card>
           {canEditEvent ? (
-            <EventDesignForm action={eventDesignAction.bind(null, org, event)} initial={details.design} />
+            <EventDesignForm
+              action={eventDesignAction.bind(null, org, event)}
+              initial={details.design}
+              org={org}
+              maxVideoBytes={videoMaxBytes()}
+            />
           ) : (
             <p className="text-body text-ink-2">
               {t(`eventDesign.theme.${details.design.theme}.title`)} ·{' '}

@@ -20105,5 +20105,27 @@
     "emptyDescription": "請稍後再來。",
     "all": "全部文章",
     "by": "作者:{name}"
+  },
+  "videoField": {
+    "modeLink": "YouTube 或 Vimeo 連結",
+    "modeUpload": "上傳影片",
+    "file": "影片檔案（MP4 或 WebM）",
+    "poster": "封面圖片（JPEG、PNG 或 WebP）",
+    "limits": "MP4 或 WebM，最大 {mb} MB。封面會在影片播放前以及減少動態效果時顯示。",
+    "upload": "上傳",
+    "uploading": "上傳中…",
+    "uploaded": "影片已上傳。儲存後生效。",
+    "remove": "移除",
+    "chooseFile": "請先選擇影片檔案。",
+    "error": {
+      "unsupported": "請使用 MP4 或 WebM 影片。",
+      "too_large": "該影片超過 {mb} MB。",
+      "poster_required": "請為影片加入封面圖片。",
+      "bad_poster": "封面必須是小於 5 MB 的 JPEG、PNG 或 WebP 圖片。",
+      "failed": "上傳失敗，請再試一次。",
+      "unauthorized": "請重新登入後再上傳。",
+      "not_found": "你無法為此組織上傳。",
+      "invalid": "無法讀取所上傳的內容。"
+    }
   }
 }

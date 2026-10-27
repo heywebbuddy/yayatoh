@@ -20105,5 +20105,27 @@
     "emptyDescription": "请稍后再来。",
     "all": "全部文章",
     "by": "作者:{name}"
+  },
+  "videoField": {
+    "modeLink": "YouTube 或 Vimeo 链接",
+    "modeUpload": "上传视频",
+    "file": "视频文件（MP4 或 WebM）",
+    "poster": "封面图片（JPEG、PNG 或 WebP）",
+    "limits": "MP4 或 WebM，最大 {mb} MB。封面会在视频播放前以及减少动态效果时显示。",
+    "upload": "上传",
+    "uploading": "正在上传…",
+    "uploaded": "视频已上传。保存后生效。",
+    "remove": "移除",
+    "chooseFile": "请先选择视频文件。",
+    "error": {
+      "unsupported": "请使用 MP4 或 WebM 视频。",
+      "too_large": "该视频超过 {mb} MB。",
+      "poster_required": "请为视频添加封面图片。",
+      "bad_poster": "封面必须是小于 5 MB 的 JPEG、PNG 或 WebP 图片。",
+      "failed": "上传失败，请重试。",
+      "unauthorized": "请重新登录后再上传。",
+      "not_found": "你无法为该组织上传。",
+      "invalid": "无法读取所上传的内容。"
+    }
   }
 }
