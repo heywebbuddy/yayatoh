@@ -10,7 +10,7 @@ import { currentGuestSession } from '@/server/guest.ts';
 import { SOLUTION_KEYS } from './solutions.ts';
 
 const link =
-  'inline-flex min-h-10 items-center rounded-pill px-3.5 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink aria-[current=page]:text-ink';
+  'inline-flex min-h-10 items-center whitespace-nowrap rounded-pill px-3.5 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink aria-[current=page]:text-ink';
 const summary = `${link} cursor-pointer list-none [&::-webkit-details-marker]:hidden`;
 const popover =
   'absolute end-0 top-full z-10 m-0 mt-2 flex list-none flex-col gap-0.5 rounded-card border border-line bg-surface-solid p-2 elevation-pop';

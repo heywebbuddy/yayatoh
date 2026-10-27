@@ -28,13 +28,13 @@ export async function OrganizersPanel({ organizers }: { organizers: readonly Org
   return (
     <section
       aria-labelledby="creators-title"
-      className="grid gap-8 rounded-[36px] bg-ember-soft p-6 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:p-10"
+      className="grid gap-8 rounded-[36px] bg-ember-soft p-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:p-10"
     >
       <div className="flex flex-col justify-between gap-6 text-white">
         <div className="flex flex-col gap-4">
           <h2
             id="creators-title"
-            className="font-display text-[30px] leading-[1.02] font-black tracking-[-0.03em] uppercase md:text-[40px]"
+            className="font-display text-[30px] leading-[1.02] font-black tracking-[-0.03em] uppercase md:text-[32px] [overflow-wrap:anywhere]"
           >
             {t('title')}
           </h2>
