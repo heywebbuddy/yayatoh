@@ -15185,7 +15185,9 @@
       "sent": "Enviado.",
       "tooFast": "Estás enviando mensajes demasiado rápido. Espera un momento.",
       "tooLong": "Limita el mensaje a 2000 caracteres.",
-      "required": "Escribe primero un mensaje."
+      "required": "Escribe primero un mensaje.",
+      "closedTitle": "El lobby no está abierto",
+      "closedDescription": "El organizador no ha activado el lobby para este evento. Los chats con tus conexiones siguen funcionando."
     }
   },
   "chat": {

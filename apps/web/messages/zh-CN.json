@@ -15185,7 +15185,9 @@
       "sent": "已发送。",
       "tooFast": "发送过快,请稍候。",
       "tooLong": "消息请控制在 2000 个字符以内。",
-      "required": "请先输入消息。"
+      "required": "请先输入消息。",
+      "closedTitle": "大厅尚未开放",
+      "closedDescription": "组织者尚未为本活动开启大厅。与联系人的聊天仍可使用。"
     }
   },
   "chat": {

@@ -15185,7 +15185,9 @@
       "sent": "Verstuurd.",
       "tooFast": "Je verstuurt te snel berichten. Wacht even.",
       "tooLong": "Houd het bericht op 2000 tekens.",
-      "required": "Schrijf eerst een bericht."
+      "required": "Schrijf eerst een bericht.",
+      "closedTitle": "De lobby is niet open",
+      "closedDescription": "De organisator heeft de lobby voor dit evenement niet aangezet. Chats met je connecties werken nog."
     }
   },
   "chat": {

@@ -23,6 +23,7 @@ import {
   respondConnectionCommand,
   respondMeetingCommand,
   saveMeetingLocationCommand,
+  setLobbyEnabledCommand,
   updateSettingsCommand as updateLiveSettingsCommand,
   updateNetworkSettingsCommand,
   voteCommand,
@@ -627,8 +628,11 @@ async function networking(
   sessions: { id: string; title: string; startsAt: Date; endsAt: Date }[],
 ) {
   const ctx = () => owner(d);
-  const on = await step(`${b.slug} networking`, () =>
-    run(updateNetworkSettingsCommand, { eventId: b.id, enabled: true, meetingsEnabled: true }, ctx()),
+  const on = await step(
+    `${b.slug} networking`,
+    () => run(updateNetworkSettingsCommand, { eventId: b.id, enabled: true, meetingsEnabled: true }, ctx()),
+    // The event lobby (one chat room for everyone who joined networking) is on in the demo.
+    run(setLobbyEnabledCommand, { eventId: b.id, enabled: true }, ctx()),
   );
   if (!on) return;
   const loc = await step(`${b.slug} meeting point`, () =>

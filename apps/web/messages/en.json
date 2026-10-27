@@ -15185,7 +15185,9 @@
       "sent": "Sent.",
       "tooFast": "You are sending messages too fast. Wait a moment.",
       "tooLong": "Keep the message to 2000 characters.",
-      "required": "Write a message first."
+      "required": "Write a message first.",
+      "closedTitle": "The lobby is not open",
+      "closedDescription": "The organizer has not turned the lobby on for this event. Chats with your connections still work."
     }
   },
   "chat": {

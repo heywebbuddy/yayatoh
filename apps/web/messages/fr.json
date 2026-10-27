@@ -15185,7 +15185,9 @@
       "sent": "Envoyé.",
       "tooFast": "Vous envoyez trop vite. Patientez un instant.",
       "tooLong": "Limitez le message à 2000 caractères.",
-      "required": "Écrivez d’abord un message."
+      "required": "Écrivez d’abord un message.",
+      "closedTitle": "Le salon n’est pas ouvert",
+      "closedDescription": "L’organisateur n’a pas activé le salon pour cet événement. Les discussions avec vos relations restent disponibles."
     }
   },
   "chat": {

@@ -15185,7 +15185,9 @@
       "sent": "Gesendet.",
       "tooFast": "Du sendest zu schnell. Warte einen Moment.",
       "tooLong": "Halte die Nachricht auf 2000 Zeichen.",
-      "required": "Schreibe zuerst eine Nachricht."
+      "required": "Schreibe zuerst eine Nachricht.",
+      "closedTitle": "Die Lobby ist nicht geöffnet",
+      "closedDescription": "Der Veranstalter hat die Lobby für diese Veranstaltung nicht eingeschaltet. Chats mit deinen Kontakten funktionieren weiterhin."
     }
   },
   "chat": {

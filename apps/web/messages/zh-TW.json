@@ -15185,7 +15185,9 @@
       "sent": "已傳送。",
       "tooFast": "傳送過快,請稍候。",
       "tooLong": "訊息請控制在 2000 個字元以內。",
-      "required": "請先輸入訊息。"
+      "required": "請先輸入訊息。",
+      "closedTitle": "大廳尚未開放",
+      "closedDescription": "主辦單位尚未為本活動開啟大廳。與聯絡人的聊天仍可使用。"
     }
   },
   "chat": {
