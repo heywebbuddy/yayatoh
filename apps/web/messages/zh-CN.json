@@ -1191,10 +1191,13 @@
       "free": "免费",
       "note": "这是最终价格，将在下一步付款，目前不会扣款。",
       "promoInvalid": "该优惠码不适用于这些门票。",
-      "unavailable": "选择有效后将显示总价。"
+      "unavailable": "选择有效后将显示总价。",
+      "noteFree": "此订单免费，无需付款。"
     },
     "accountHint": "无需注册账号。我们可能会向您发送6位验证码以核实邮箱。",
-    "eventFull": "抱歉，活动已满员，剩余名额不足以完成此订单。"
+    "eventFull": "抱歉，活动已满员，剩余名额不足以完成此订单。",
+    "getTickets": "获取门票",
+    "confirmRegistration": "确认报名"
   },
   "fakePay": {
     "eyebrow": "测试付款",
@@ -11770,7 +11773,8 @@
       "needHelpHint": "关于座位、无障碍、身体不适或物品遗失，都可以向活动工作人员求助。",
       "askButton": "请求帮助",
       "ticketLink": "在活动现场：查找座位或请求帮助",
-      "ticketLinkLabel": "在活动现场查找座位或请求帮助（门票 {serial}）"
+      "ticketLinkLabel": "在活动现场查找座位或请求帮助（门票 {serial}）",
+      "ticketLinkHelp": "活动现场：寻求帮助"
     },
     "where": "位置：{place}",
     "atEntrance": "在 {name}",

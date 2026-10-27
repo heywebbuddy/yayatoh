@@ -336,7 +336,11 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
                       className="text-caption underline underline-offset-2"
                       aria-label={t('assistance.guest.ticketLinkLabel', { serial: tk.serial })}
                     >
-                      {t('assistance.guest.ticketLink')}
+                      {t(
+                        tk.seatLabel || tk.tableNo
+                          ? 'assistance.guest.ticketLink'
+                          : 'assistance.guest.ticketLinkHelp',
+                      )}
                     </Link>
                   ) : null}
                 </Card>

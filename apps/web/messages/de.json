@@ -1191,10 +1191,13 @@
       "free": "Kostenlos",
       "note": "Das ist der Endpreis. Du zahlst im nächsten Schritt; bisher wird nichts abgebucht.",
       "promoInvalid": "Dieser Promo-Code gilt nicht für diese Tickets.",
-      "unavailable": "Der Gesamtbetrag erscheint, sobald deine Auswahl gültig ist."
+      "unavailable": "Der Gesamtbetrag erscheint, sobald deine Auswahl gültig ist.",
+      "noteFree": "Diese Bestellung ist kostenlos: Es ist nichts zu zahlen."
     },
     "accountHint": "Kein Konto nötig. Eventuell mailen wir dir einen 6-stelligen Code, um deine Adresse zu prüfen.",
-    "eventFull": "Leider ist die Veranstaltung ausgebucht. Für diese Bestellung sind nicht genug Plätze übrig."
+    "eventFull": "Leider ist die Veranstaltung ausgebucht. Für diese Bestellung sind nicht genug Plätze übrig.",
+    "getTickets": "Tickets holen",
+    "confirmRegistration": "Anmeldung bestätigen"
   },
   "fakePay": {
     "eyebrow": "Testzahlung",
@@ -11770,7 +11773,8 @@
       "needHelpHint": "Bitte das Personal um Hilfe mit deinem Platz, bei Barrierefreiheit, einem medizinischen Problem oder einem verlorenen Gegenstand.",
       "askButton": "Um Hilfe bitten",
       "ticketLink": "Bei der Veranstaltung: Platz finden oder um Hilfe bitten",
-      "ticketLinkLabel": "Bei der Veranstaltung den Platz finden oder um Hilfe bitten (Ticket {serial})"
+      "ticketLinkLabel": "Bei der Veranstaltung den Platz finden oder um Hilfe bitten (Ticket {serial})",
+      "ticketLinkHelp": "Vor Ort: Hilfe anfragen"
     },
     "where": "Wo: {place}",
     "atEntrance": "Am {name}",

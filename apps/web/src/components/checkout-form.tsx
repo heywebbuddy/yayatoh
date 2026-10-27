@@ -2,7 +2,7 @@
 
 import { Alert, Button, buttonClass, Card, cx, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { type FormEvent, startTransition, useActionState, useState } from 'react';
+import { type FormEvent, startTransition, useActionState, useEffect, useRef, useState } from 'react';
 import type {
   CheckoutState,
   OrderPreviewInput,
@@ -103,12 +103,19 @@ export function CheckoutForm({
   };
   // M1.5f: the email step, until the buyer changes the address it was sent to.
   const [typedEmail, setTypedEmail] = useState<string | null>(null);
+  // A free cart is not "payment": the button says what it does.
+  const [free, setFree] = useState(false);
+  const verifyPanel = useRef<HTMLDivElement>(null);
   const verify =
     state.code === 'verify_email' && state.verify
       ? typedEmail === null || typedEmail.trim().toLowerCase() === state.verify.email.toLowerCase()
         ? state.verify
         : null
       : null;
+  // The code panel appears right under the buyer's details: bring it into view.
+  useEffect(() => {
+    if (verify) verifyPanel.current?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }, [verify?.token]);
   const buyable = passes.some((p) => p.id && p.availability === 'available');
   const seatedTypes = new Set(seatMap?.seats.map((s) => s.ticketTypeId) ?? []);
   const prices = Object.fromEntries(passes.flatMap((p) => (p.id ? [[p.id, p.priceLabel]] : [])));
@@ -325,7 +332,7 @@ export function CheckoutForm({
           <CheckoutQuestions questions={questions} invalidKey={state.field} />
         </Card>
       ) : null}
-      {buyable && preview ? <OrderSummary preview={preview} /> : null}
+      {buyable && preview ? <OrderSummary preview={preview} onFree={setFree} /> : null}
       {buyable ? (
         <Card tone="muted" className="flex flex-col gap-4">
           <div className="flex flex-col gap-4 @3xl:flex-row @3xl:items-end">
@@ -361,7 +368,9 @@ export function CheckoutForm({
                 ref={brandButton}
                 className="@max-3xl:w-full"
               >
-                {t('checkout.continue')}
+                {free
+                  ? t(questions.length > 0 ? 'checkout.confirmRegistration' : 'checkout.getTickets')
+                  : t('checkout.continue')}
               </Button>
             </div>
           </div>
@@ -391,25 +400,27 @@ export function CheckoutForm({
         </Card>
       ) : null}
       {buyable && verify ? (
-        <Card tone="muted">
-          <section aria-labelledby="verify-email-title" className="flex flex-col gap-3">
-            <h2 id="verify-email-title" className="text-section">
-              {t('guestVerify.title')}
-            </h2>
-            {verify.token ? <input type="hidden" name="verifyToken" value={verify.token} /> : null}
-            <GuestCodeFields
-              email={verify.email}
-              status={verify.status}
-              attemptsLeft={verify.attemptsLeft}
-              resendAt={verify.resendAt}
-              submitLabel={t('guestVerify.submit')}
-              pending={pending}
-              idPrefix="checkout-verify"
-            />
-            <p className="text-body text-ink-2">{t('guestVerify.noAccount')}</p>
-            <p className="text-caption text-ink-2">{t('guestVerify.changeEmail')}</p>
-          </section>
-        </Card>
+        <div ref={verifyPanel}>
+          <Card tone="muted">
+            <section aria-labelledby="verify-email-title" className="flex flex-col gap-3">
+              <h2 id="verify-email-title" className="text-section">
+                {t('guestVerify.title')}
+              </h2>
+              {verify.token ? <input type="hidden" name="verifyToken" value={verify.token} /> : null}
+              <GuestCodeFields
+                email={verify.email}
+                status={verify.status}
+                attemptsLeft={verify.attemptsLeft}
+                resendAt={verify.resendAt}
+                submitLabel={t('guestVerify.submit')}
+                pending={pending}
+                idPrefix="checkout-verify"
+              />
+              <p className="text-body text-ink-2">{t('guestVerify.noAccount')}</p>
+              <p className="text-caption text-ink-2">{t('guestVerify.changeEmail')}</p>
+            </section>
+          </Card>
+        </div>
       ) : null}
       <div aria-live="assertive">{error ? <Alert title={error} /> : null}</div>
     </form>

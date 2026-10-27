@@ -1191,10 +1191,13 @@
       "free": "Gratuit",
       "note": "Voici le prix final. Vous le réglez à l’étape suivante ; rien n’est encore débité.",
       "promoInvalid": "Ce code promo n’est pas valable pour ces billets.",
-      "unavailable": "Le total s’affichera dès que votre choix sera valide."
+      "unavailable": "Le total s’affichera dès que votre choix sera valide.",
+      "noteFree": "Cette commande est gratuite : rien à payer."
     },
     "accountHint": "Aucun compte requis. Nous pouvons vous envoyer un code à 6 chiffres pour vérifier votre adresse.",
-    "eventFull": "Désolé : l’événement est complet. Il ne reste pas assez de places pour cette commande."
+    "eventFull": "Désolé : l’événement est complet. Il ne reste pas assez de places pour cette commande.",
+    "getTickets": "Obtenir les billets",
+    "confirmRegistration": "Confirmer l’inscription"
   },
   "fakePay": {
     "eyebrow": "Paiement test",
@@ -11770,7 +11773,8 @@
       "needHelpHint": "Demandez de l’aide au personnel pour votre place, l’accessibilité, un problème médical ou un objet perdu.",
       "askButton": "Demander de l’aide",
       "ticketLink": "Sur place : trouver votre place ou demander de l’aide",
-      "ticketLinkLabel": "Trouver votre place ou demander de l’aide sur place (billet {serial})"
+      "ticketLinkLabel": "Trouver votre place ou demander de l’aide sur place (billet {serial})",
+      "ticketLinkHelp": "Sur place : demander de l’aide"
     },
     "where": "Où : {place}",
     "atEntrance": "À {name}",

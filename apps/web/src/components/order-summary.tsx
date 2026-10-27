@@ -34,8 +34,11 @@ function readCart(form: HTMLFormElement): OrderPreviewInput {
  */
 export function OrderSummary({
   preview,
+  onFree,
 }: {
   preview: (input: OrderPreviewInput) => Promise<OrderPreviewState>;
+  /** Tells the form whether the priced cart is free (the button then says "Get tickets"). */
+  onFree?: (free: boolean) => void;
 }) {
   const t = useTranslations('checkout.summary');
   const anchor = useRef<HTMLDivElement>(null);
@@ -59,6 +62,7 @@ export function OrderSummary({
       if (cart.items.length === 0 && cart.seats.length === 0 && !cart.seatHold) {
         seq++;
         setState(null);
+        onFree?.(false);
         setBusy(false);
         return;
       }
@@ -67,7 +71,10 @@ export function OrderSummary({
         const mine = ++seq;
         preview(cart)
           .then((r) => {
-            if (mine === seq) setState(r);
+            if (mine === seq) {
+              setState(r);
+              onFree?.(r.ok && r.free);
+            }
           })
           .catch(() => {
             if (mine === seq) setState({ ok: false, reason: 'error' });
@@ -87,7 +94,7 @@ export function OrderSummary({
       form.removeEventListener('input', check);
       form.removeEventListener('change', check);
     };
-  }, [preview]);
+  }, [preview, onFree]);
 
   return (
     <div ref={anchor} aria-live="polite" aria-busy={busy}>
@@ -133,7 +140,7 @@ export function OrderSummary({
                   <dd className="m-0 tabular-nums">{state.free ? t('free') : state.total}</dd>
                 </div>
               </dl>
-              <p className="m-0 text-caption text-ink-2">{t('note')}</p>
+              <p className="m-0 text-caption text-ink-2">{state.free ? t('noteFree') : t('note')}</p>
             </section>
           ) : state.reason === 'promo_invalid' ? (
             <p className="m-0 text-caption text-danger">{t('promoInvalid')}</p>

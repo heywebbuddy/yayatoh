@@ -1191,10 +1191,13 @@
       "free": "免費",
       "note": "這是最終價格，將在下一步付款，目前不會扣款。",
       "promoInvalid": "該優惠碼不適用於這些票券。",
-      "unavailable": "選擇有效後將顯示總價。"
+      "unavailable": "選擇有效後將顯示總價。",
+      "noteFree": "此訂單免費，無需付款。"
     },
     "accountHint": "無需註冊帳號。我們可能會寄送6位數驗證碼以核實信箱。",
-    "eventFull": "抱歉，活動已額滿，剩餘名額不足以完成此訂單。"
+    "eventFull": "抱歉，活動已額滿，剩餘名額不足以完成此訂單。",
+    "getTickets": "取得票券",
+    "confirmRegistration": "確認報名"
   },
   "fakePay": {
     "eyebrow": "測試付款",
@@ -11770,7 +11773,8 @@
       "needHelpHint": "關於座位、無障礙、身體不適或物品遺失，都可以向活動工作人員求助。",
       "askButton": "請求協助",
       "ticketLink": "在活動現場：查詢座位或請求協助",
-      "ticketLinkLabel": "在活動現場查詢座位或請求協助（票券 {serial}）"
+      "ticketLinkLabel": "在活動現場查詢座位或請求協助（票券 {serial}）",
+      "ticketLinkHelp": "活動現場：尋求協助"
     },
     "where": "位置：{place}",
     "atEntrance": "在 {name}",

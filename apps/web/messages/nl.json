@@ -1191,10 +1191,13 @@
       "free": "Gratis",
       "note": "Dit is de eindprijs. Je betaalt in de volgende stap; er wordt nog niets afgeschreven.",
       "promoInvalid": "Die promocode is niet geldig voor deze tickets.",
-      "unavailable": "Het totaal verschijnt zodra je keuze geldig is."
+      "unavailable": "Het totaal verschijnt zodra je keuze geldig is.",
+      "noteFree": "Deze bestelling is gratis: er is niets te betalen."
     },
     "accountHint": "Geen account nodig. Mogelijk mailen we je een code van 6 cijfers om je adres te controleren.",
-    "eventFull": "Sorry, het evenement zit vol. Er zijn niet genoeg plaatsen over voor deze bestelling."
+    "eventFull": "Sorry, het evenement zit vol. Er zijn niet genoeg plaatsen over voor deze bestelling.",
+    "getTickets": "Tickets aanvragen",
+    "confirmRegistration": "Registratie bevestigen"
   },
   "fakePay": {
     "eyebrow": "Testbetaling",
@@ -11770,7 +11773,8 @@
       "needHelpHint": "Vraag het personeel om hulp met je plaats, toegankelijkheid, een medisch probleem of een verloren voorwerp.",
       "askButton": "Om hulp vragen",
       "ticketLink": "Op het evenement: vind je plaats of vraag om hulp",
-      "ticketLinkLabel": "Vind je plaats of vraag om hulp op het evenement (ticket {serial})"
+      "ticketLinkLabel": "Vind je plaats of vraag om hulp op het evenement (ticket {serial})",
+      "ticketLinkHelp": "Op het evenement: hulp vragen"
     },
     "where": "Waar: {place}",
     "atEntrance": "Bij {name}",
