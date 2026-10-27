@@ -2342,7 +2342,8 @@
         "cancelled": "Deze persoon komt niet meer.",
         "forbidden": "Je kunt de zaalindeling bekijken, maar niet wijzigen.",
         "dropMiss": "Zet namen neer op een tafel, een rij of een plaats.",
-        "adaEnforced": "Die plaats wordt vrijgehouden voor gasten die een toegankelijke plaats nodig hebben. Vink ‘Deze gast heeft een toegankelijke plaats nodig’ aan om hem daar te plaatsen."
+        "adaEnforced": "Die plaats wordt vrijgehouden voor gasten die een toegankelijke plaats nodig hebben. Vink ‘Deze gast heeft een toegankelijke plaats nodig’ aan om hem daar te plaatsen.",
+        "noSeat": "Kies de plaats waar ze naartoe moeten."
       },
       "canvas": {
         "title": "Plattegrond",
@@ -2375,6 +2376,17 @@
         "title": "{name} verplaatsen",
         "submit": "Verplaatsen",
         "cancel": "Annuleren"
+      },
+      "ticketMove": {
+        "open": "Plaats wijzigen",
+        "label": "Plaats van {name} wijzigen",
+        "title": "Plaats van {name} wijzigen",
+        "hint": "Het ticket blijft geldig en houdt zijn code; alleen de afgedrukte plaats verandert. Kies een vrije plaats of wissel met een andere houder.",
+        "swapWith": "{label} — wisselen met {name}",
+        "submit": "Plaats verplaatsen",
+        "cancel": "Annuleren",
+        "done": "{name} heeft nu de nieuwe plaats. Het ticket blijft geldig.",
+        "swapped": "{name} heeft van plaats gewisseld met een andere houder. Beide tickets blijven geldig."
       }
     },
     "finder": {

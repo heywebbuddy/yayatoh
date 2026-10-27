@@ -22,6 +22,7 @@ import { seatingDates } from '@/server/seating-dates.ts';
 import {
   allocateGroupAction,
   assignSeatsAction,
+  moveTicketSeatAction,
   releaseGroupAction,
   seatGroupAction,
   unassignSeatAction,
@@ -90,6 +91,7 @@ export default async function AssignSeatsPage({
             canWrite={canWrite}
             assign={assignSeatsAction.bind(null, org, event, dateId)}
             unassign={unassignSeatAction.bind(null, org, event, dateId)}
+            moveTicket={moveTicketSeatAction.bind(null, org, event)}
             rules={rules}
             timeZone={ev.timezone}
             startsAt={date?.startsAt ?? ev.startsAt}

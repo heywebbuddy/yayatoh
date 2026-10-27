@@ -95,6 +95,7 @@ export {
   settleMassRefundItemCommand,
   startMassRefundCommand,
 } from './commands/mass-refunds.ts';
+export { moveTicketSeatCommand } from './commands/move-ticket-seat.ts';
 export { addOrderNoteCommand, OrderNoteDto, orderNotesQuery } from './commands/order-notes.ts';
 export {
   manageTokenOrg,

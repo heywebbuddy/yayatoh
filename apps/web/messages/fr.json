@@ -2342,7 +2342,8 @@
         "cancelled": "Cette personne ne participe plus.",
         "forbidden": "Vous pouvez voir le placement, mais pas le modifier.",
         "dropMiss": "Déposez les noms sur une table, une rangée ou une place.",
-        "adaEnforced": "Cette place est réservée aux personnes qui ont besoin d’une place accessible. Cochez « Cet invité a besoin d’une place accessible » pour l’y placer."
+        "adaEnforced": "Cette place est réservée aux personnes qui ont besoin d’une place accessible. Cochez « Cet invité a besoin d’une place accessible » pour l’y placer.",
+        "noSeat": "Choisissez la place où les déplacer."
       },
       "canvas": {
         "title": "Plan",
@@ -2375,6 +2376,17 @@
         "title": "Déplacer {name}",
         "submit": "Déplacer",
         "cancel": "Annuler"
+      },
+      "ticketMove": {
+        "open": "Changer de place",
+        "label": "Changer la place de {name}",
+        "title": "Changer la place de {name}",
+        "hint": "Le billet reste valable et garde son code ; seule la place imprimée change. Choisissez une place libre ou échangez avec un autre détenteur.",
+        "swapWith": "{label} — échanger avec {name}",
+        "submit": "Déplacer",
+        "cancel": "Annuler",
+        "done": "{name} a maintenant la nouvelle place. Le billet reste valable.",
+        "swapped": "{name} a échangé sa place avec un autre détenteur. Les deux billets restent valables."
       }
     },
     "finder": {

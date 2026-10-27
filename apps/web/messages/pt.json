@@ -2342,7 +2342,8 @@
         "cancelled": "Essa pessoa não vai mais participar.",
         "forbidden": "Você pode ver os lugares, mas não alterá-los.",
         "dropMiss": "Solte os nomes sobre uma mesa, uma fileira ou um lugar.",
-        "adaEnforced": "Esse assento está reservado para quem precisa de um assento acessível. Marque “Este convidado precisa de um assento acessível” para colocá-lo ali."
+        "adaEnforced": "Esse assento está reservado para quem precisa de um assento acessível. Marque “Este convidado precisa de um assento acessível” para colocá-lo ali.",
+        "noSeat": "Escolha o lugar para onde os mover."
       },
       "canvas": {
         "title": "Planta",
@@ -2375,6 +2376,17 @@
         "title": "Mover {name}",
         "submit": "Mover",
         "cancel": "Cancelar"
+      },
+      "ticketMove": {
+        "open": "Mudar de lugar",
+        "label": "Mudar o lugar de {name}",
+        "title": "Mudar o lugar de {name}",
+        "hint": "O bilhete continua válido e mantém o código; só muda o lugar impresso. Escolha um lugar livre ou troque com outro titular.",
+        "swapWith": "{label} — trocar com {name}",
+        "submit": "Mover lugar",
+        "cancel": "Cancelar",
+        "done": "{name} tem agora o novo lugar. O bilhete continua válido.",
+        "swapped": "{name} trocou de lugar com outro titular. Ambos os bilhetes continuam válidos."
       }
     },
     "finder": {

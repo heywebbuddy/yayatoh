@@ -2342,7 +2342,8 @@
         "cancelled": "Diese Person nimmt nicht mehr teil.",
         "forbidden": "Sie können den Sitzplan ansehen, aber nicht ändern.",
         "dropMiss": "Legen Sie Namen auf einem Tisch, einer Reihe oder einem Platz ab.",
-        "adaEnforced": "Dieser Platz ist für Gäste reserviert, die einen barrierefreien Platz brauchen. Kreuze „Dieser Gast braucht einen barrierefreien Platz“ an, um ihn dort zu platzieren."
+        "adaEnforced": "Dieser Platz ist für Gäste reserviert, die einen barrierefreien Platz brauchen. Kreuze „Dieser Gast braucht einen barrierefreien Platz“ an, um ihn dort zu platzieren.",
+        "noSeat": "Wähle den Platz, auf den sie wechseln sollen."
       },
       "canvas": {
         "title": "Plan",
@@ -2375,6 +2376,17 @@
         "title": "{name} umsetzen",
         "submit": "Umsetzen",
         "cancel": "Abbrechen"
+      },
+      "ticketMove": {
+        "open": "Platz ändern",
+        "label": "Platz von {name} ändern",
+        "title": "Platz von {name} ändern",
+        "hint": "Das Ticket bleibt gültig und behält seinen Code; nur der aufgedruckte Platz ändert sich. Wähle einen freien Platz oder tausche mit einem anderen Ticketinhaber.",
+        "swapWith": "{label} – tauschen mit {name}",
+        "submit": "Platz wechseln",
+        "cancel": "Abbrechen",
+        "done": "{name} hat jetzt den neuen Platz. Das Ticket bleibt gültig.",
+        "swapped": "{name} hat den Platz mit einem anderen Ticketinhaber getauscht. Beide Tickets bleiben gültig."
       }
     },
     "finder": {

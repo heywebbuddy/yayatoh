@@ -2342,7 +2342,8 @@
         "cancelled": "That person is no longer attending.",
         "forbidden": "You can see the seating but not change it.",
         "dropMiss": "Drop names onto a table, a row or a seat.",
-        "adaEnforced": "That seat is kept for guests who need an accessible seat. Tick “This guest needs an accessible seat” to seat them there."
+        "adaEnforced": "That seat is kept for guests who need an accessible seat. Tick “This guest needs an accessible seat” to seat them there.",
+        "noSeat": "Choose the seat to move them to."
       },
       "canvas": {
         "title": "Plan",
@@ -2375,6 +2376,17 @@
         "title": "Move {name}",
         "submit": "Move",
         "cancel": "Cancel"
+      },
+      "ticketMove": {
+        "open": "Change seat",
+        "label": "Change the seat of {name}",
+        "title": "Change the seat of {name}",
+        "hint": "Their ticket stays valid and keeps its code; only the seat printed on it changes. Pick a free seat, or swap with another ticket holder.",
+        "swapWith": "{label} — swap with {name}",
+        "submit": "Move seat",
+        "cancel": "Cancel",
+        "done": "{name} now has the new seat. The ticket stays valid.",
+        "swapped": "{name} swapped seats with another ticket holder. Both tickets stay valid."
       }
     },
     "finder": {

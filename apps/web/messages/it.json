@@ -2342,7 +2342,8 @@
         "cancelled": "Quella persona non partecipa più.",
         "forbidden": "Puoi vedere i posti, ma non modificarli.",
         "dropMiss": "Rilascia i nomi su un tavolo, una fila o un posto.",
-        "adaEnforced": "Quel posto è riservato a chi ha bisogno di un posto accessibile. Seleziona «Questo ospite ha bisogno di un posto accessibile» per assegnarlo."
+        "adaEnforced": "Quel posto è riservato a chi ha bisogno di un posto accessibile. Seleziona «Questo ospite ha bisogno di un posto accessibile» per assegnarlo.",
+        "noSeat": "Scegli il posto in cui spostarli."
       },
       "canvas": {
         "title": "Piantina",
@@ -2375,6 +2376,17 @@
         "title": "Sposta {name}",
         "submit": "Sposta",
         "cancel": "Annulla"
+      },
+      "ticketMove": {
+        "open": "Cambia posto",
+        "label": "Cambia il posto di {name}",
+        "title": "Cambia il posto di {name}",
+        "hint": "Il biglietto resta valido e mantiene il suo codice; cambia solo il posto stampato. Scegli un posto libero o scambia con un altro titolare.",
+        "swapWith": "{label} — scambia con {name}",
+        "submit": "Sposta posto",
+        "cancel": "Annulla",
+        "done": "{name} ha ora il nuovo posto. Il biglietto resta valido.",
+        "swapped": "{name} ha scambiato il posto con un altro titolare. Entrambi i biglietti restano validi."
       }
     },
     "finder": {

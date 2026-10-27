@@ -2342,7 +2342,8 @@
         "cancelled": "Esa persona ya no asiste.",
         "forbidden": "Puedes ver los asientos, pero no cambiarlos.",
         "dropMiss": "Suelta los nombres sobre una mesa, una fila o un asiento.",
-        "adaEnforced": "Ese asiento está reservado para quienes necesitan un asiento accesible. Marca «Este invitado necesita un asiento accesible» para sentarlo allí."
+        "adaEnforced": "Ese asiento está reservado para quienes necesitan un asiento accesible. Marca «Este invitado necesita un asiento accesible» para sentarlo allí.",
+        "noSeat": "Elige el asiento al que moverlos."
       },
       "canvas": {
         "title": "Plano",
@@ -2375,6 +2376,17 @@
         "title": "Mover a {name}",
         "submit": "Mover",
         "cancel": "Cancelar"
+      },
+      "ticketMove": {
+        "open": "Cambiar asiento",
+        "label": "Cambiar el asiento de {name}",
+        "title": "Cambiar el asiento de {name}",
+        "hint": "La entrada sigue siendo válida y conserva su código; solo cambia el asiento impreso. Elige un asiento libre o intercámbialo con otro titular.",
+        "swapWith": "{label}: intercambiar con {name}",
+        "submit": "Mover asiento",
+        "cancel": "Cancelar",
+        "done": "{name} tiene ahora el nuevo asiento. La entrada sigue siendo válida.",
+        "swapped": "{name} intercambió el asiento con otro titular. Ambas entradas siguen siendo válidas."
       }
     },
     "finder": {
