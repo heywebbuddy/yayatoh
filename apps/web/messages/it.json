@@ -4997,7 +4997,13 @@
       "generic": "Controlla questo campo."
     },
     "currency": "Valuta",
-    "currencyHint": "La usano biglietti, pagamento e report. Puoi cambiarla fino al primo ordine."
+    "currencyHint": "La usano biglietti, pagamento e report. Puoi cambiarla fino al primo ordine.",
+    "newVenue": {
+      "add": "+ Aggiungi una nuova sede",
+      "title": "Nuova sede",
+      "save": "Salva e seleziona la sede",
+      "cancel": "Annulla"
+    }
   },
   "eventMedia": {
     "title": "Immagini",

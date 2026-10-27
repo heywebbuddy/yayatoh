@@ -4997,7 +4997,13 @@
       "generic": "Vérifiez ce champ."
     },
     "currency": "Devise",
-    "currencyHint": "Les billets, le paiement et les rapports l'utilisent. Modifiable jusqu'à la première commande."
+    "currencyHint": "Les billets, le paiement et les rapports l'utilisent. Modifiable jusqu'à la première commande.",
+    "newVenue": {
+      "add": "+ Ajouter un nouveau lieu",
+      "title": "Nouveau lieu",
+      "save": "Enregistrer et sélectionner le lieu",
+      "cancel": "Annuler"
+    }
   },
   "eventMedia": {
     "title": "Images",

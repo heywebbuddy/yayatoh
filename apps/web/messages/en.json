@@ -4997,7 +4997,13 @@
       "generic": "Check this field."
     },
     "currency": "Currency",
-    "currencyHint": "Tickets, checkout and reports use it. You can change it until the first order."
+    "currencyHint": "Tickets, checkout and reports use it. You can change it until the first order.",
+    "newVenue": {
+      "add": "+ Add a new venue",
+      "title": "New venue",
+      "save": "Save and select venue",
+      "cancel": "Cancel"
+    }
   },
   "eventMedia": {
     "title": "Images",

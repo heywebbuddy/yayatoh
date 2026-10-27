@@ -4997,7 +4997,13 @@
       "generic": "Controleer dit veld."
     },
     "currency": "Valuta",
-    "currencyHint": "Tickets, afrekenen en rapporten gebruiken deze. Wijzigen kan tot de eerste bestelling."
+    "currencyHint": "Tickets, afrekenen en rapporten gebruiken deze. Wijzigen kan tot de eerste bestelling.",
+    "newVenue": {
+      "add": "+ Nieuwe locatie toevoegen",
+      "title": "Nieuwe locatie",
+      "save": "Locatie opslaan en kiezen",
+      "cancel": "Annuleren"
+    }
   },
   "eventMedia": {
     "title": "Afbeeldingen",

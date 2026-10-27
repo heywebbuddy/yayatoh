@@ -4997,7 +4997,13 @@
       "generic": "Revisa este campo."
     },
     "currency": "Moneda",
-    "currencyHint": "La usan las entradas, el pago y los informes. Puedes cambiarla hasta el primer pedido."
+    "currencyHint": "La usan las entradas, el pago y los informes. Puedes cambiarla hasta el primer pedido.",
+    "newVenue": {
+      "add": "+ Añadir un recinto nuevo",
+      "title": "Recinto nuevo",
+      "save": "Guardar y seleccionar recinto",
+      "cancel": "Cancelar"
+    }
   },
   "eventMedia": {
     "title": "Imágenes",

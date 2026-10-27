@@ -14,9 +14,11 @@ import { Check } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef, useState } from 'react';
 import type { WizardState } from '@/app/[locale]/o/[org]/(org)/events/new/actions.ts';
+import type { InlineVenueResult } from '@/app/[locale]/o/[org]/(org)/venues/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { readinessRules } from '@/lib/readiness.ts';
 import { type EventCategoryChoice, EventCategoryField } from './event-category-field.tsx';
+import { InlineVenueForm, type InlineVenueInput } from './inline-venue-form.tsx';
 import { type PickerProfile, ProfilePicker } from './profile-picker.tsx';
 import { seriesErrorKey } from './series-errors.ts';
 import { NEW_SERIES, SeriesField } from './series-field.tsx';
@@ -92,7 +94,8 @@ function validate(step: number, v: Values): Partial<Record<Field, string>> {
 export function EventWizard({
   action,
   defaults,
-  venues,
+  venues: initialVenues,
+  createVenue,
   currency,
   ticketing,
   series = null,
@@ -108,6 +111,8 @@ export function EventWizard({
   categories: readonly EventCategoryChoice[];
   manageCategoriesHref?: string;
   venues: readonly { id: string; name: string; city: string | null }[];
+  /** Creates a saved venue from the wizard ("+ Add a new venue"). */
+  createVenue: (input: InlineVenueInput) => Promise<InlineVenueResult>;
   currency: string;
   /** Whether the org sells tickets (the first-pass fields and rule). */
   ticketing: boolean;
@@ -118,6 +123,8 @@ export function EventWizard({
   const tn = useTranslations();
   const [state, formAction, pending] = useActionState(action, { code: null });
   const [requestKey] = useState(() => crypto.randomUUID());
+  const [venues, setVenues] = useState(initialVenues);
+  const [addingVenue, setAddingVenue] = useState(false);
   const [step, setStep] = useState(0);
   const [reached, setReached] = useState(0);
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
@@ -362,26 +369,50 @@ export function EventWizard({
                 ))}
               </div>
             </fieldset>
-            {venues.length > 0 ? (
-              <div className="flex flex-col gap-1.5 sm:col-span-2">
-                <label htmlFor="wizard-venue" className="text-[13px] font-bold text-ink">
-                  {t('savedVenue')}
-                </label>
-                <Select
-                  id="wizard-venue"
-                  name="venueId"
-                  value={v.venueId}
-                  onValueChange={setTo('venueId')}
-                  className={selectClass}
+            <div className="flex flex-col gap-1.5 sm:col-span-2">
+              {venues.length > 0 ? (
+                <>
+                  <label htmlFor="wizard-venue" className="text-[13px] font-bold text-ink">
+                    {t('savedVenue')}
+                  </label>
+                  <Select
+                    id="wizard-venue"
+                    name="venueId"
+                    value={v.venueId}
+                    onValueChange={setTo('venueId')}
+                    className={selectClass}
+                  >
+                    <option value="">{t('noSavedVenue')}</option>
+                    {venues.map((x) => (
+                      <option key={x.id} value={x.id}>
+                        {[x.name, x.city].filter(Boolean).join(', ')}
+                      </option>
+                    ))}
+                  </Select>
+                </>
+              ) : null}
+              {addingVenue ? null : (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="self-start"
+                  onClick={() => setAddingVenue(true)}
                 >
-                  <option value="">{t('noSavedVenue')}</option>
-                  {venues.map((x) => (
-                    <option key={x.id} value={x.id}>
-                      {[x.name, x.city].filter(Boolean).join(', ')}
-                    </option>
-                  ))}
-                </Select>
-              </div>
+                  {t('newVenue.add')}
+                </Button>
+              )}
+            </div>
+            {addingVenue ? (
+              <InlineVenueForm
+                create={createVenue}
+                defaultTimezone={v.timezone}
+                onCancel={() => setAddingVenue(false)}
+                onCreated={(created) => {
+                  setVenues((p) => [...p, created]);
+                  setV((p) => ({ ...p, venueId: created.id, venueName: '', city: '' }));
+                  setAddingVenue(false);
+                }}
+              />
             ) : null}
             {v.venueId ? null : (
               <>

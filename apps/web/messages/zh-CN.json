@@ -4997,7 +4997,13 @@
       "generic": "请检查此字段。"
     },
     "currency": "货币",
-    "currencyHint": "门票、结账和报表都使用该货币。在第一笔订单之前可以更改。"
+    "currencyHint": "门票、结账和报表都使用该货币。在第一笔订单之前可以更改。",
+    "newVenue": {
+      "add": "+ 添加新场地",
+      "title": "新场地",
+      "save": "保存并选择场地",
+      "cancel": "取消"
+    }
   },
   "eventMedia": {
     "title": "图片",

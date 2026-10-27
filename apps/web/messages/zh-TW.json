@@ -4997,7 +4997,13 @@
       "generic": "請檢查此字段。"
     },
     "currency": "幣別",
-    "currencyHint": "票券、結帳和報表都會使用此幣別。在第一筆訂單之前可以更改。"
+    "currencyHint": "票券、結帳和報表都會使用此幣別。在第一筆訂單之前可以更改。",
+    "newVenue": {
+      "add": "+ 新增場地",
+      "title": "新場地",
+      "save": "儲存並選擇場地",
+      "cancel": "取消"
+    }
   },
   "eventMedia": {
     "title": "圖片",

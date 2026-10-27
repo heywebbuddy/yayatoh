@@ -4997,7 +4997,13 @@
       "generic": "Verifique este campo."
     },
     "currency": "Moeda",
-    "currencyHint": "Usada nos ingressos, no pagamento e nos relatórios. Pode ser alterada até o primeiro pedido."
+    "currencyHint": "Usada nos ingressos, no pagamento e nos relatórios. Pode ser alterada até o primeiro pedido.",
+    "newVenue": {
+      "add": "+ Adicionar um novo local",
+      "title": "Novo local",
+      "save": "Guardar e selecionar o local",
+      "cancel": "Cancelar"
+    }
   },
   "eventMedia": {
     "title": "Imagens",

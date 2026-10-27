@@ -4997,7 +4997,13 @@
       "generic": "Prüfe dieses Feld."
     },
     "currency": "Währung",
-    "currencyHint": "Tickets, Checkout und Berichte verwenden sie. Bis zur ersten Bestellung änderbar."
+    "currencyHint": "Tickets, Checkout und Berichte verwenden sie. Bis zur ersten Bestellung änderbar.",
+    "newVenue": {
+      "add": "+ Neuen Veranstaltungsort hinzufügen",
+      "title": "Neuer Veranstaltungsort",
+      "save": "Speichern und auswählen",
+      "cancel": "Abbrechen"
+    }
   },
   "eventMedia": {
     "title": "Bilder",
