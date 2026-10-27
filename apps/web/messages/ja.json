@@ -19176,12 +19176,37 @@
     "attendeeSignUpTitle": "新規登録",
     "attendeeSignUpDescription": "メールアドレスを確認してアカウントを作成し、イベントとチケットをまとめて管理しましょう。",
     "organizationAccessRequired": "このアカウントには組織へのアクセス権がありません。主催者アカウントを使用するか、参加者ダッシュボードに進んでください。",
-    "useAnotherAccount": "別のアカウントを使用"
+    "useAnotherAccount": "別のアカウントを使用",
+    "openReceipt": "領収書を見る"
   },
   "eventBranding": {
     "title": "このイベントの色",
     "description": "公開イベントページで、このイベント独自のアクセントカラーを使います。空欄にすると、下の組織のブランドカラーが使われます。",
     "color": "イベントカラー",
     "usesOrg": "このイベントは組織のブランドカラーを使用しています。"
+  },
+  "receipt": {
+    "eyebrow": "領収書",
+    "title": "領収書 {number}",
+    "number": "領収書番号",
+    "paidOn": "支払日",
+    "billedTo": "ご請求先",
+    "event": "イベント",
+    "soldBy": "販売元",
+    "status": "状態",
+    "item": "項目",
+    "quantity": "数量",
+    "unit": "単価",
+    "amount": "金額",
+    "tickets": "チケット",
+    "discount": "割引 {code}",
+    "feesIncluded": "サービス手数料（上記に含む）",
+    "totalPaid": "お支払い合計",
+    "payment": "お支払い",
+    "note": "この領収書はお支払いの確認です。記録として保管してください。チケットはご注文ページにあります。",
+    "footer": "{seller} 向けに発行された領収書。",
+    "downloadPdf": "領収書をダウンロード（PDF）",
+    "backToOrder": "ご注文に戻る",
+    "view": "領収書を見る"
   }
 }

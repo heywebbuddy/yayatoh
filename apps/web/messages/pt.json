@@ -19176,12 +19176,37 @@
     "attendeeSignUpTitle": "Criar conta",
     "attendeeSignUpDescription": "Verifique seu e-mail para criar uma conta e manter seus eventos e ingressos juntos.",
     "organizationAccessRequired": "Esta conta não tem acesso a uma organização. Use uma conta de organizador ou continue para o seu painel de participante.",
-    "useAnotherAccount": "Usar outra conta"
+    "useAnotherAccount": "Usar outra conta",
+    "openReceipt": "Ver recibo"
   },
   "eventBranding": {
     "title": "Cor deste evento",
     "description": "Dê a este evento uma cor de destaque própria na página pública dele. Deixe em branco para usar a cor da marca da sua organização, abaixo.",
     "color": "Cor do evento",
     "usesOrg": "Este evento usa a cor da marca da organização."
+  },
+  "receipt": {
+    "eyebrow": "Recibo",
+    "title": "Recibo {number}",
+    "number": "Número do recibo",
+    "paidOn": "Pago em",
+    "billedTo": "Faturado a",
+    "event": "Evento",
+    "soldBy": "Vendido por",
+    "status": "Estado",
+    "item": "Item",
+    "quantity": "Qtd.",
+    "unit": "Preço unitário",
+    "amount": "Valor",
+    "tickets": "Bilhetes",
+    "discount": "Desconto {code}",
+    "feesIncluded": "Taxas de serviço (incluídas acima)",
+    "totalPaid": "Total pago",
+    "payment": "Pagamento",
+    "note": "Este recibo confirma o seu pagamento. Guarde-o para os seus registos. Os seus bilhetes estão na página do pedido.",
+    "footer": "Recibo emitido para {seller}.",
+    "downloadPdf": "Descarregar recibo (PDF)",
+    "backToOrder": "Voltar ao meu pedido",
+    "view": "Ver recibo"
   }
 }

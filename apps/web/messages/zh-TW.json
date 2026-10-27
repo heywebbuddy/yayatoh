@@ -19176,12 +19176,37 @@
     "attendeeSignUpTitle": "註冊",
     "attendeeSignUpDescription": "驗證電子郵件即可建立帳戶，集中管理你的活動與票券。",
     "organizationAccessRequired": "此帳戶沒有組織存取權限。請使用主辦方帳戶，或繼續前往你的參加者控制台。",
-    "useAnotherAccount": "使用其他帳戶"
+    "useAnotherAccount": "使用其他帳戶",
+    "openReceipt": "查看收據"
   },
   "eventBranding": {
     "title": "此活動的顏色",
     "description": "為此活動在其公開活動頁面上設定專屬強調色。留空則使用下方你所屬組織的品牌顏色。",
     "color": "活動顏色",
     "usesOrg": "此活動使用組織的品牌顏色。"
+  },
+  "receipt": {
+    "eyebrow": "收據",
+    "title": "收據 {number}",
+    "number": "收據編號",
+    "paidOn": "付款時間",
+    "billedTo": "開票對象",
+    "event": "活動",
+    "soldBy": "銷售方",
+    "status": "狀態",
+    "item": "項目",
+    "quantity": "數量",
+    "unit": "單價",
+    "amount": "金額",
+    "tickets": "票券",
+    "discount": "折扣 {code}",
+    "feesIncluded": "服務費（已含於上方）",
+    "totalPaid": "實付總額",
+    "payment": "付款",
+    "note": "本收據確認您已付款，請妥善保存。您的票券在訂單頁面中。",
+    "footer": "為 {seller} 開立的收據。",
+    "downloadPdf": "下載收據（PDF）",
+    "backToOrder": "返回我的訂單",
+    "view": "查看收據"
   }
 }

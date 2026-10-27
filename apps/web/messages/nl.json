@@ -19176,12 +19176,37 @@
     "attendeeSignUpTitle": "Registreren",
     "attendeeSignUpDescription": "Verifieer je e-mailadres om een account aan te maken en je evenementen en tickets bij elkaar te houden.",
     "organizationAccessRequired": "Dit account heeft geen toegang tot een organisatie. Gebruik een organisatoraccount of ga verder naar je deelnemersdashboard.",
-    "useAnotherAccount": "Een ander account gebruiken"
+    "useAnotherAccount": "Een ander account gebruiken",
+    "openReceipt": "Betalingsbewijs bekijken"
   },
   "eventBranding": {
     "title": "Kleur van dit evenement",
     "description": "Geef dit evenement een eigen accentkleur op de openbare evenementpagina. Laat leeg om hieronder de huisstijlkleur van je organisatie te gebruiken.",
     "color": "Evenementkleur",
     "usesOrg": "Dit evenement gebruikt de huisstijlkleur van de organisatie."
+  },
+  "receipt": {
+    "eyebrow": "Betalingsbewijs",
+    "title": "Betalingsbewijs {number}",
+    "number": "Nummer",
+    "paidOn": "Betaald op",
+    "billedTo": "Gefactureerd aan",
+    "event": "Evenement",
+    "soldBy": "Verkocht door",
+    "status": "Status",
+    "item": "Onderdeel",
+    "quantity": "Aantal",
+    "unit": "Stukprijs",
+    "amount": "Bedrag",
+    "tickets": "Tickets",
+    "discount": "Korting {code}",
+    "feesIncluded": "Servicekosten (hierboven inbegrepen)",
+    "totalPaid": "Totaal betaald",
+    "payment": "Betaling",
+    "note": "Dit betalingsbewijs bevestigt je betaling. Bewaar het voor je administratie. Je tickets staan op je bestelpagina.",
+    "footer": "Betalingsbewijs uitgegeven voor {seller}.",
+    "downloadPdf": "Betalingsbewijs downloaden (PDF)",
+    "backToOrder": "Terug naar mijn bestelling",
+    "view": "Betalingsbewijs bekijken"
   }
 }

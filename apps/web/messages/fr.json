@@ -19176,12 +19176,37 @@
     "attendeeSignUpTitle": "S’inscrire",
     "attendeeSignUpDescription": "Vérifiez votre e-mail pour créer un compte et retrouver vos événements et billets au même endroit.",
     "organizationAccessRequired": "Ce compte n’a pas d’accès organisation. Utilisez un compte organisateur ou continuez vers votre tableau de bord participant.",
-    "useAnotherAccount": "Utiliser un autre compte"
+    "useAnotherAccount": "Utiliser un autre compte",
+    "openReceipt": "Voir le reçu"
   },
   "eventBranding": {
     "title": "Couleur de cet événement",
     "description": "Donnez à cet événement sa propre couleur d’accent sur sa page publique. Laissez vide pour utiliser la couleur de marque de votre organisation ci-dessous.",
     "color": "Couleur de l’événement",
     "usesOrg": "Cet événement utilise la couleur de marque de l’organisation."
+  },
+  "receipt": {
+    "eyebrow": "Reçu",
+    "title": "Reçu {number}",
+    "number": "Numéro de reçu",
+    "paidOn": "Payé le",
+    "billedTo": "Facturé à",
+    "event": "Événement",
+    "soldBy": "Vendu par",
+    "status": "Statut",
+    "item": "Article",
+    "quantity": "Qté",
+    "unit": "Prix unitaire",
+    "amount": "Montant",
+    "tickets": "Billets",
+    "discount": "Remise {code}",
+    "feesIncluded": "Frais de service (inclus ci-dessus)",
+    "totalPaid": "Total payé",
+    "payment": "Paiement",
+    "note": "Ce reçu confirme votre paiement. Conservez-le pour vos archives. Vos billets sont sur la page de votre commande.",
+    "footer": "Reçu émis pour {seller}.",
+    "downloadPdf": "Télécharger le reçu (PDF)",
+    "backToOrder": "Retour à ma commande",
+    "view": "Voir le reçu"
   }
 }

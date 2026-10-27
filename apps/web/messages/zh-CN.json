@@ -19176,12 +19176,37 @@
     "attendeeSignUpTitle": "注册",
     "attendeeSignUpDescription": "验证邮箱即可创建账户，集中管理你的活动和门票。",
     "organizationAccessRequired": "此账户没有组织访问权限。请使用主办方账户，或继续前往你的参会者控制台。",
-    "useAnotherAccount": "使用其他账户"
+    "useAnotherAccount": "使用其他账户",
+    "openReceipt": "查看收据"
   },
   "eventBranding": {
     "title": "此活动的颜色",
     "description": "为此活动在其公开活动页面上设置专属强调色。留空则使用下方你所在组织的品牌颜色。",
     "color": "活动颜色",
     "usesOrg": "此活动使用组织的品牌颜色。"
+  },
+  "receipt": {
+    "eyebrow": "收据",
+    "title": "收据 {number}",
+    "number": "收据编号",
+    "paidOn": "付款时间",
+    "billedTo": "开票对象",
+    "event": "活动",
+    "soldBy": "销售方",
+    "status": "状态",
+    "item": "项目",
+    "quantity": "数量",
+    "unit": "单价",
+    "amount": "金额",
+    "tickets": "门票",
+    "discount": "折扣 {code}",
+    "feesIncluded": "服务费（已含在上方）",
+    "totalPaid": "实付总额",
+    "payment": "付款",
+    "note": "本收据确认您已付款，请妥善保存。您的门票在订单页面中。",
+    "footer": "为 {seller} 开具的收据。",
+    "downloadPdf": "下载收据（PDF）",
+    "backToOrder": "返回我的订单",
+    "view": "查看收据"
   }
 }

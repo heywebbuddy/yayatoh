@@ -19176,12 +19176,37 @@
     "attendeeSignUpTitle": "Registrati",
     "attendeeSignUpDescription": "Verifica la tua email per creare un account e tenere insieme eventi e biglietti.",
     "organizationAccessRequired": "Questo account non ha accesso a un’organizzazione. Usa un account organizzatore o continua alla tua dashboard partecipante.",
-    "useAnotherAccount": "Usa un altro account"
+    "useAnotherAccount": "Usa un altro account",
+    "openReceipt": "Vedi ricevuta"
   },
   "eventBranding": {
     "title": "Colore di questo evento",
     "description": "Dai a questo evento un colore di accento proprio nella sua pagina pubblica. Lascia vuoto per usare il colore del brand della tua organizzazione indicato sotto.",
     "color": "Colore dell’evento",
     "usesOrg": "Questo evento usa il colore del brand dell’organizzazione."
+  },
+  "receipt": {
+    "eyebrow": "Ricevuta",
+    "title": "Ricevuta {number}",
+    "number": "Numero di ricevuta",
+    "paidOn": "Pagato il",
+    "billedTo": "Intestato a",
+    "event": "Evento",
+    "soldBy": "Venduto da",
+    "status": "Stato",
+    "item": "Voce",
+    "quantity": "Qtà",
+    "unit": "Prezzo unitario",
+    "amount": "Importo",
+    "tickets": "Biglietti",
+    "discount": "Sconto {code}",
+    "feesIncluded": "Commissioni di servizio (incluse sopra)",
+    "totalPaid": "Totale pagato",
+    "payment": "Pagamento",
+    "note": "Questa ricevuta conferma il tuo pagamento. Conservala per i tuoi archivi. I biglietti sono nella pagina del tuo ordine.",
+    "footer": "Ricevuta emessa per {seller}.",
+    "downloadPdf": "Scarica la ricevuta (PDF)",
+    "backToOrder": "Torna al mio ordine",
+    "view": "Vedi ricevuta"
   }
 }

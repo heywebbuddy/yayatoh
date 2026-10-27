@@ -20,6 +20,7 @@ import { helpLinksForOrder } from '@/server/assistance.ts';
 import { certificateLinksForOrder } from '@/server/ce.ts';
 import { hasConferenceHub } from '@/server/conference-hub.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
+import { receiptEligible } from '@/server/receipt.ts';
 import { scheduleSummary } from '@/server/schedule.ts';
 import { watchLinksForOrder } from '@/server/virtual.ts';
 import { webPushPublicKey } from '@/server/web-push.ts';
@@ -118,6 +119,14 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
       </Link>
       <Card size="panel" className="flex flex-col gap-4">
         <StatusDot status={DOT[order.status]} label={t(`order.status.${order.status}`)} />
+        {receiptEligible(order) ? (
+          <Link
+            href={`/orders/${token}/receipt`}
+            className="inline-flex min-h-8 items-center self-start text-body font-bold text-primary-ink underline-offset-2 hover:underline"
+          >
+            {t('receipt.view')}
+          </Link>
+        ) : null}
         {/* M5.1d: a pay-later order: its invoice (view, PDF, pay). */}
         {order.invoicePath ? (
           <Link

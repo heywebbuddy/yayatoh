@@ -19176,12 +19176,37 @@
     "attendeeSignUpTitle": "Registrieren",
     "attendeeSignUpDescription": "Bestätige deine E-Mail, um ein Konto zu erstellen und deine Events und Tickets an einem Ort zu haben.",
     "organizationAccessRequired": "Dieses Konto hat keinen Organisationszugriff. Verwende ein Veranstalterkonto oder wechsle zu deinem Teilnehmer-Dashboard.",
-    "useAnotherAccount": "Anderes Konto verwenden"
+    "useAnotherAccount": "Anderes Konto verwenden",
+    "openReceipt": "Beleg ansehen"
   },
   "eventBranding": {
     "title": "Farbe dieses Events",
     "description": "Gib diesem Event eine eigene Akzentfarbe auf seiner öffentlichen Eventseite. Lass das Feld leer, um unten die Markenfarbe deiner Organisation zu verwenden.",
     "color": "Eventfarbe",
     "usesOrg": "Dieses Event verwendet die Markenfarbe der Organisation."
+  },
+  "receipt": {
+    "eyebrow": "Beleg",
+    "title": "Beleg {number}",
+    "number": "Belegnummer",
+    "paidOn": "Bezahlt am",
+    "billedTo": "Rechnung an",
+    "event": "Veranstaltung",
+    "soldBy": "Verkauft von",
+    "status": "Status",
+    "item": "Position",
+    "quantity": "Menge",
+    "unit": "Einzelpreis",
+    "amount": "Betrag",
+    "tickets": "Tickets",
+    "discount": "Rabatt {code}",
+    "feesIncluded": "Servicegebühren (oben enthalten)",
+    "totalPaid": "Gesamt bezahlt",
+    "payment": "Zahlung",
+    "note": "Dieser Beleg bestätigt deine Zahlung. Bewahre ihn für deine Unterlagen auf. Deine Tickets findest du auf deiner Bestellseite.",
+    "footer": "Beleg ausgestellt für {seller}.",
+    "downloadPdf": "Beleg herunterladen (PDF)",
+    "backToOrder": "Zurück zu meiner Bestellung",
+    "view": "Beleg ansehen"
   }
 }

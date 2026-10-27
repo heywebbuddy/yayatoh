@@ -19176,12 +19176,37 @@
     "attendeeSignUpTitle": "Registrarse",
     "attendeeSignUpDescription": "Verifica tu correo para crear una cuenta y tener tus eventos y entradas en un mismo lugar.",
     "organizationAccessRequired": "Esta cuenta no tiene acceso a ninguna organización. Usa una cuenta de organizador o continúa a tu panel de asistente.",
-    "useAnotherAccount": "Usar otra cuenta"
+    "useAnotherAccount": "Usar otra cuenta",
+    "openReceipt": "Ver recibo"
   },
   "eventBranding": {
     "title": "Color de este evento",
     "description": "Dale a este evento su propio color de acento en su página pública. Déjalo vacío para usar el color de marca de tu organización que aparece abajo.",
     "color": "Color del evento",
     "usesOrg": "Este evento usa el color de marca de la organización."
+  },
+  "receipt": {
+    "eyebrow": "Recibo",
+    "title": "Recibo {number}",
+    "number": "Número de recibo",
+    "paidOn": "Pagado el",
+    "billedTo": "Facturado a",
+    "event": "Evento",
+    "soldBy": "Vendido por",
+    "status": "Estado",
+    "item": "Concepto",
+    "quantity": "Cant.",
+    "unit": "Precio unitario",
+    "amount": "Importe",
+    "tickets": "Entradas",
+    "discount": "Descuento {code}",
+    "feesIncluded": "Gastos de gestión (incluidos arriba)",
+    "totalPaid": "Total pagado",
+    "payment": "Pago",
+    "note": "Este recibo confirma tu pago. Guárdalo para tus registros. Tus entradas están en la página de tu pedido.",
+    "footer": "Recibo emitido para {seller}.",
+    "downloadPdf": "Descargar recibo (PDF)",
+    "backToOrder": "Volver a mi pedido",
+    "view": "Ver recibo"
   }
 }
