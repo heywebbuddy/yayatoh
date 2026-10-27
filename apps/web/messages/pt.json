@@ -791,7 +791,7 @@
       "speaker": "Orador",
       "panelist": "Painelista",
       "moderator": "Moderador",
-      "host": "Anfitrião / apresentador",
+      "host": "Anfitrião / MC",
       "dj": "DJ",
       "artist": "Artista / intérprete",
       "influencer": "Influenciador",
@@ -802,7 +802,7 @@
       "speaker": "Oradores",
       "panelist": "Painelistas",
       "moderator": "Moderadores",
-      "host": "Anfitriões / apresentadores",
+      "host": "Anfitriões / MC",
       "dj": "DJs",
       "artist": "Artistas / intérpretes",
       "influencer": "Influenciadores",
@@ -5144,7 +5144,8 @@
       "ticketName": "Dê um nome ao ingresso.",
       "ticketPrice": "Informe um preço como 25 ou 25.00.",
       "ticketQuantity": "Informe quantos estão à venda (pelo menos 1).",
-      "generic": "Verifique este campo."
+      "generic": "Verifique este campo.",
+      "profile": "Escolha primeiro o tipo de evento."
     },
     "currency": "Moeda",
     "currencyHint": "Usada nos ingressos, no pagamento e nos relatórios. Pode ser alterada até o primeiro pedido.",
@@ -18249,7 +18250,8 @@
       "agency": "Eventos que você organiza para clientes, com marketing e relatórios.",
       "other": "Ingressos, participantes e check-in para qualquer outra coisa.",
       "tour": "Saídas programadas, uma capacidade por saída e pontos de embarque à escolha."
-    }
+    },
+    "choose": "Escolha o tipo de evento…"
   },
   "seriesField": {
     "label": "Série (opcional)",

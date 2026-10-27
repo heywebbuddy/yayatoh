@@ -5144,7 +5144,8 @@
       "ticketName": "Dai un nome al biglietto.",
       "ticketPrice": "Inserisci un prezzo come 25 o 25.00.",
       "ticketQuantity": "Indica quanti sono in vendita (almeno 1).",
-      "generic": "Controlla questo campo."
+      "generic": "Controlla questo campo.",
+      "profile": "Scegli prima il tipo di evento."
     },
     "currency": "Valuta",
     "currencyHint": "La usano biglietti, pagamento e report. Puoi cambiarla fino al primo ordine.",
@@ -18249,7 +18250,8 @@
       "agency": "Eventi che gestisci per i clienti, con marketing e report.",
       "other": "Biglietti, partecipanti e check-in per tutto il resto.",
       "tour": "Partenze programmate, una capienza per ciascuna e punti di ritrovo a scelta."
-    }
+    },
+    "choose": "Scegli il tipo di evento…"
   },
   "seriesField": {
     "label": "Serie (facoltativo)",

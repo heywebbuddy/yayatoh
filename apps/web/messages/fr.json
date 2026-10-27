@@ -5144,7 +5144,8 @@
       "ticketName": "Donnez un nom au billet.",
       "ticketPrice": "Saisissez un prix comme 25 ou 25.00.",
       "ticketQuantity": "Indiquez combien sont en vente (au moins 1).",
-      "generic": "Vérifiez ce champ."
+      "generic": "Vérifiez ce champ.",
+      "profile": "Choisissez d’abord le type d’événement."
     },
     "currency": "Devise",
     "currencyHint": "Les billets, le paiement et les rapports l'utilisent. Modifiable jusqu'à la première commande.",
@@ -18249,7 +18250,8 @@
       "agency": "Des événements organisés pour vos clients, avec marketing et rapports.",
       "other": "Billets, participants et enregistrement pour tout le reste.",
       "tour": "Des départs planifiés, une capacité par départ et des points de prise en charge au choix."
-    }
+    },
+    "choose": "Choisissez le type d’événement…"
   },
   "seriesField": {
     "label": "Série (facultatif)",

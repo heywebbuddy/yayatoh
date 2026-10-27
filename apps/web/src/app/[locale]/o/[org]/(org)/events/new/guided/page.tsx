@@ -53,7 +53,7 @@ export default async function GuidedNewEventPage({
       <EventWizard
         action={guidedCreateAction.bind(null, org)}
         defaults={{
-          profile: data.profile,
+          profile: '',
           timezone: data.org.timezone,
           ...(preset ? { series: preset } : {}),
         }}

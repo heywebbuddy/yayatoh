@@ -5144,7 +5144,8 @@
       "ticketName": "Gib dem Ticket einen Namen.",
       "ticketPrice": "Gib einen Preis wie 25 oder 25.00 ein.",
       "ticketQuantity": "Gib an, wie viele verkauft werden (mindestens 1).",
-      "generic": "Prüfe dieses Feld."
+      "generic": "Prüfe dieses Feld.",
+      "profile": "Wähle zuerst die Art der Veranstaltung."
     },
     "currency": "Währung",
     "currencyHint": "Tickets, Checkout und Berichte verwenden sie. Bis zur ersten Bestellung änderbar.",
@@ -18249,7 +18250,8 @@
       "agency": "Veranstaltungen für Ihre Kunden, mit Marketing und Berichten.",
       "other": "Tickets, Teilnehmende und Check-in für alles andere.",
       "tour": "Abfahrten nach Zeitplan, eine Kapazität je Abfahrt und Abholpunkte zur Wahl."
-    }
+    },
+    "choose": "Art der Veranstaltung wählen …"
   },
   "seriesField": {
     "label": "Serie (optional)",

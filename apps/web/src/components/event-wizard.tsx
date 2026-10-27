@@ -30,6 +30,7 @@ const KNOWN_ERRORS = new Set([
   'name',
   'tagline',
   'slug',
+  'profile',
   'startsAt',
   'endsAt',
   'venueId',
@@ -66,6 +67,7 @@ type Field = keyof Values;
 function validate(step: number, v: Values): Partial<Record<Field, string>> {
   const e: Partial<Record<Field, string>> = {};
   if (step === 0) {
+    if (!v.profile) e.profile = 'profile';
     const n = v.name.trim().length;
     if (n < 2 || n > 160) e.name = 'name';
     if (v.tagline.trim().length > 280) e.tagline = 'tagline';
@@ -289,6 +291,7 @@ export function EventWizard({
               value={v.profile}
               onValueChange={setTo('profile')}
               className={selectClass}
+              error={err('profile')}
             />
             <EventCategoryField
               id="wizard-category"

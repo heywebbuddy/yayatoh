@@ -5144,7 +5144,8 @@
       "ticketName": "Give the pass a name.",
       "ticketPrice": "Enter a price like 25 or 25.00.",
       "ticketQuantity": "Enter how many are for sale (at least 1).",
-      "generic": "Check this field."
+      "generic": "Check this field.",
+      "profile": "Choose the type of event first."
     },
     "currency": "Currency",
     "currencyHint": "Tickets, checkout and reports use it. You can change it until the first order.",
@@ -18249,7 +18250,8 @@
       "agency": "Events you run for clients, with marketing and reports.",
       "other": "Tickets, attendees and check-in for anything else.",
       "tour": "Departures on a schedule, a capacity for each, and pickup points passengers choose."
-    }
+    },
+    "choose": "Choose the type of event…"
   },
   "seriesField": {
     "label": "Series (optional)",

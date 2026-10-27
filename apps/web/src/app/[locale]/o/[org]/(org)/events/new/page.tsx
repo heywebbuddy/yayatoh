@@ -58,7 +58,7 @@ export default async function NewEventPage({
       <CreateEventForm
         action={createEventAction.bind(null, org)}
         defaults={{
-          profile: data.profile,
+          profile: '',
           timezone: data.org.timezone,
           currency: data.org.currency,
           ...(preset ? { series: preset } : {}),

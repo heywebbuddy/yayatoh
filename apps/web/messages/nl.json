@@ -5144,7 +5144,8 @@
       "ticketName": "Geef het ticket een naam.",
       "ticketPrice": "Vul een prijs in zoals 25 of 25.00.",
       "ticketQuantity": "Vul in hoeveel er te koop zijn (minstens 1).",
-      "generic": "Controleer dit veld."
+      "generic": "Controleer dit veld.",
+      "profile": "Kies eerst het type evenement."
     },
     "currency": "Valuta",
     "currencyHint": "Tickets, afrekenen en rapporten gebruiken deze. Wijzigen kan tot de eerste bestelling.",
@@ -18249,7 +18250,8 @@
       "agency": "Evenementen die je voor klanten organiseert, met marketing en rapporten.",
       "other": "Tickets, deelnemers en inchecken voor al het andere.",
       "tour": "Vertrektijden volgens een schema, een capaciteit per vertrek en ophaalpunten om uit te kiezen."
-    }
+    },
+    "choose": "Kies het type evenement…"
   },
   "seriesField": {
     "label": "Reeks (optioneel)",
