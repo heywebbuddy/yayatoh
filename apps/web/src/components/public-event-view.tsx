@@ -65,7 +65,6 @@ import { localizedPath } from '@/lib/seo/urls.ts';
 import { whatsappHref } from '@/lib/share.ts';
 import { venueDisplayName } from '@/lib/venue-display.ts';
 import { hasAdvancedSeating } from '@/server/advanced-seating.ts';
-import { aiDrafter } from '@/server/ai.ts';
 import { publicDemoOverlay } from '@/server/demo.ts';
 import { categoryLabels } from '@/server/event-categories.ts';
 import { cachedExhibitorMap } from '@/server/exhibitor-map.ts';
@@ -811,7 +810,7 @@ export async function PublicEventView({
                 </section>
               ) : null}
 
-              {ev.design.assistant && aiDrafter() ? (
+              {ev.design.assistant ? (
                 <EventAssistant
                   slug={slug}
                   ask={askAssistantAction}
