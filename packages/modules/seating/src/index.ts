@@ -18,6 +18,7 @@ export {
   companionSeatsTx,
   companionSuggestions,
   HeldSeatDto,
+  heldTokenTicketTypesTx,
   holdBestAvailableCommand,
   holdBestAvailableStaffCommand,
   holdBestAvailableTx,
@@ -248,6 +249,7 @@ export {
   releaseSeatHoldTx,
   seatedTicketTypeIds,
   seatedTicketTypesTx,
+  seatTicketTypesTx,
   sellSeatsTx,
   voidSeatTx,
 } from './holds.ts';

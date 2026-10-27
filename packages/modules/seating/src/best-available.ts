@@ -618,6 +618,28 @@ export const releaseBestAvailableCommand = tenantCommand({
   }),
 });
 
+/** Price category counts of the seats a best-available hold keeps (the checkout preview). */
+export async function heldTokenTicketTypesTx(
+  tx: TenantTx,
+  token: string,
+  now: Date,
+): Promise<Map<string, number>> {
+  const counts = new Map<string, number>();
+  if (!HoldToken.safeParse(token).success) return counts;
+  const rows = await tx
+    .select({ ticketTypeId: eventSeats.ticketTypeId })
+    .from(eventSeats)
+    .where(
+      and(
+        eq(eventSeats.holdId, holdIdForToken(token)),
+        eq(eventSeats.status, 'held'),
+        gt(eventSeats.holdExpiresAt, now),
+      ),
+    );
+  for (const r of rows) if (r.ticketTypeId) counts.set(r.ticketTypeId, (counts.get(r.ticketTypeId) ?? 0) + 1);
+  return counts;
+}
+
 /**
  * An order takes over a best-available hold (checkout, the box office): the seats move to the
  * order's hold, until `expiresAt`. A lapsed or unknown token is refused (`seat_hold_expired`).

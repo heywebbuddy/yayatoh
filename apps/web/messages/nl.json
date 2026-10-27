@@ -1137,7 +1137,19 @@
     "channelInvalid": "Deze verkoopcode is niet geldig voor dit evenement. Open de evenementpagina opnieuw zonder code, of vraag het aan wie je de link gaf.",
     "channelNotice": "Je koopt via {name}: plaatsen die voor {name} gereserveerd zijn, staan ook voor jou open.",
     "channelLinkInvalid": "Deze verkooplink is niet geldig voor dit evenement. Je kunt nog steeds kiezen uit de plaatsen die voor iedereen openstaan.",
-    "couponBuyerLimit": "U hebt deze code al zo vaak gebruikt als is toegestaan."
+    "couponBuyerLimit": "U hebt deze code al zo vaak gebruikt als is toegestaan.",
+    "summary": {
+      "title": "Je bestelling",
+      "subtotal": "Tickets",
+      "discount": "Promokorting",
+      "fee": "Servicekosten",
+      "total": "Totaal te betalen",
+      "free": "Gratis",
+      "note": "Dit is de eindprijs. Je betaalt in de volgende stap; er wordt nog niets afgeschreven.",
+      "promoInvalid": "Die promocode is niet geldig voor deze tickets.",
+      "unavailable": "Het totaal verschijnt zodra je keuze geldig is."
+    },
+    "accountHint": "Geen account nodig. Mogelijk mailen we je een code van 6 cijfers om je adres te controleren."
   },
   "fakePay": {
     "eyebrow": "Testbetaling",
@@ -5503,7 +5515,7 @@
     }
   },
   "guestVerify": {
-    "title": "Bevestig je e-mail",
+    "title": "Snelle e-mailcontrole – geen account nodig",
     "sent": "We hebben een 6-cijferige code naar {email} gestuurd. Voer die in om je bestelling te plaatsen. De code werkt 10 minuten.",
     "codeLabel": "Verificatiecode",
     "submit": "Verifiëren en doorgaan",
@@ -5520,7 +5532,8 @@
     "settingOn": "Kopers bevestigen hun e-mail met een code voordat ze bestellen.",
     "settingOff": "Kopers bestellen zonder hun e-mail te bevestigen.",
     "resendIn": "{seconds, plural, one {Je kunt over # seconde een nieuwe code aanvragen.} other {Je kunt over # seconden een nieuwe code aanvragen.}}",
-    "wrong": "{count, plural, one {Die code klopt niet. Nog # poging.} other {Die code klopt niet. Nog # pogingen.}}"
+    "wrong": "{count, plural, one {Die code klopt niet. Nog # poging.} other {Die code klopt niet. Nog # pogingen.}}",
+    "noAccount": "Dit is geen inlog en we maken geen account voor je aan. We controleren alleen of je tickets bij je aankomen. Je besteloverzicht blijft hierboven staan; er wordt pas in de volgende stap betaald."
   },
   "attendeeSignIn": {
     "title": "Mijn tickets",

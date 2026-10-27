@@ -8,13 +8,21 @@ import {
   redeemAccessCodeCommand,
 } from '@yayatoh/events';
 import { publicForm } from '@yayatoh/forms';
-import { createCtx, executeCommand, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
+import {
+  createCtx,
+  executeCommand,
+  formatMoney,
+  isDomainError,
+  money,
+  moneyFromDecimal,
+} from '@yayatoh/kernel';
 import {
   attachPaymentCommand,
   type CheckoutResultDto,
   checkoutRiskSignals,
   checkoutVerificationRequired,
   GUEST_CODE_TTL_MS,
+  previewCheckout,
   recordCheckoutBlockCommand,
   requestGuestChallenge,
   startCheckoutCommand,
@@ -335,6 +343,92 @@ export async function checkoutAction(
     ports,
   );
   nextRedirect(payment.redirectUrl);
+}
+
+/** The order summary the buyer sees before continuing: prices already formatted for their locale. */
+export interface OrderPreviewInput {
+  readonly items: readonly {
+    readonly ticketTypeId: string;
+    readonly quantity: number;
+    readonly amount?: string;
+  }[];
+  readonly seats: readonly string[];
+  readonly seatHold?: string;
+  readonly promoCode?: string;
+  readonly occurrenceId?: string | null;
+}
+
+export type OrderPreviewState =
+  | {
+      readonly ok: true;
+      readonly lines: readonly {
+        readonly name: string;
+        readonly quantity: number;
+        readonly unit: string;
+        readonly total: string;
+      }[];
+      readonly subtotal: string;
+      readonly discount: string | null;
+      readonly fee: string | null;
+      readonly total: string;
+      readonly free: boolean;
+    }
+  | { readonly ok: false; readonly reason: string };
+
+/**
+ * Prices a cart with the same rules as checkout (live ticket types, fee schedule, promo code),
+ * holding nothing. The org and event come from the slug, never from the browser.
+ */
+export async function previewOrderAction(slug: string, input: OrderPreviewInput): Promise<OrderPreviewState> {
+  const limit = await limitAction('checkoutPreview');
+  if (!limit.allowed) return { ok: false, reason: 'rate_limited' };
+  const live = await accessTarget(slug);
+  const grant = live ? await currentAccess(live.orgId, live.eventId) : null;
+  const target = (await checkoutTarget(slug)) ?? (grant?.unlocksEvent && live ? live : null);
+  if (!target) return { ok: false, reason: 'not_found' };
+  const event = await publicEventBySlug(slug, { includePrivate: grant?.unlocksEvent === true });
+  if (!event) return { ok: false, reason: 'not_found' };
+  const locale = await getLocale();
+  let items: { ticketTypeId: string; quantity: number; amountMinor?: number }[];
+  try {
+    items = input.items.slice(0, 40).map((i) => {
+      const amount = String(i.amount ?? '').trim();
+      return {
+        ticketTypeId: String(i.ticketTypeId),
+        quantity: Math.max(0, Math.floor(Number(i.quantity))),
+        ...(amount ? { amountMinor: moneyFromDecimal(amount.replace(',', '.'), event.currency).amount } : {}),
+      };
+    });
+  } catch {
+    return { ok: false, reason: 'donation_amount' };
+  }
+  const preview = await previewCheckout(target.orgId, {
+    eventId: target.eventId,
+    items,
+    seats: input.seats.map(String).slice(0, 50),
+    seatHold: input.seatHold ? String(input.seatHold) : undefined,
+    promoCode: input.promoCode ? String(input.promoCode).slice(0, 32) : undefined,
+    occurrenceId: /^[0-9a-f-]{36}$/.test(String(input.occurrenceId ?? ''))
+      ? String(input.occurrenceId)
+      : null,
+    includeHidden: new Set(grant?.ticketTypeIds ?? []),
+  });
+  if (!preview.ok) return preview;
+  const fmt = (minor: number) => formatMoney(money(minor, preview.currency), locale);
+  return {
+    ok: true,
+    lines: preview.lines.map((l) => ({
+      name: l.name,
+      quantity: l.quantity,
+      unit: fmt(l.unitFaceMinor),
+      total: fmt(l.unitFaceMinor * l.quantity),
+    })),
+    subtotal: fmt(preview.listMinor),
+    discount: preview.discountMinor > 0 ? fmt(preview.discountMinor) : null,
+    fee: preview.feeMinor > 0 ? fmt(preview.feeMinor) : null,
+    total: fmt(preview.totalMinor),
+    free: preview.totalMinor === 0,
+  };
 }
 
 export type HolderLinkState = {

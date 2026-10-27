@@ -1137,7 +1137,19 @@
     "channelInvalid": "此销售码不适用于本活动。请不带销售码重新打开活动页面，或询问给你链接的人。",
     "channelNotice": "你正在通过 {name} 购买：为 {name} 保留的座位也向你开放。",
     "channelLinkInvalid": "此销售链接不适用于本活动。你仍可从向所有人开放的座位中选择。",
-    "couponBuyerLimit": "你使用此代码的次数已达上限。"
+    "couponBuyerLimit": "你使用此代码的次数已达上限。",
+    "summary": {
+      "title": "您的订单",
+      "subtotal": "门票",
+      "discount": "优惠码折扣",
+      "fee": "服务费",
+      "total": "应付总额",
+      "free": "免费",
+      "note": "这是最终价格，将在下一步付款，目前不会扣款。",
+      "promoInvalid": "该优惠码不适用于这些门票。",
+      "unavailable": "选择有效后将显示总价。"
+    },
+    "accountHint": "无需注册账号。我们可能会向您发送6位验证码以核实邮箱。"
   },
   "fakePay": {
     "eyebrow": "测试付款",
@@ -5503,7 +5515,7 @@
     }
   },
   "guestVerify": {
-    "title": "确认您的邮箱",
+    "title": "快速邮箱验证——无需注册账号",
     "sent": "我们已向 {email} 发送 6 位验证码。输入后即可下单。验证码 10 分钟内有效。",
     "codeLabel": "验证码",
     "submit": "验证并继续",
@@ -5520,7 +5532,8 @@
     "settingOn": "购票人在下单前用验证码确认邮箱。",
     "settingOff": "购票人无需确认邮箱即可下单。",
     "resendIn": "{seconds, plural, other {# 秒后可获取新验证码。}}",
-    "wrong": "{count, plural, other {验证码不正确。还可尝试 # 次。}}"
+    "wrong": "{count, plural, other {验证码不正确。还可尝试 # 次。}}",
+    "noAccount": "这不是登录，我们也不会为您创建账号，只是确认门票能送达您的邮箱。订单摘要仍显示在上方，进入下一步前不会扣款。"
   },
   "attendeeSignIn": {
     "title": "我的门票",

@@ -1137,7 +1137,19 @@
     "channelInvalid": "此銷售碼不適用於本活動。請不帶銷售碼重新開啟活動頁面，或詢問給你連結的人。",
     "channelNotice": "你正透過 {name} 購買：保留給 {name} 的座位也向你開放。",
     "channelLinkInvalid": "此銷售連結不適用於本活動。你仍可從向所有人開放的座位中選擇。",
-    "couponBuyerLimit": "你使用此代碼的次數已達上限。"
+    "couponBuyerLimit": "你使用此代碼的次數已達上限。",
+    "summary": {
+      "title": "您的訂單",
+      "subtotal": "票券",
+      "discount": "優惠碼折扣",
+      "fee": "服務費",
+      "total": "應付總額",
+      "free": "免費",
+      "note": "這是最終價格，將在下一步付款，目前不會扣款。",
+      "promoInvalid": "該優惠碼不適用於這些票券。",
+      "unavailable": "選擇有效後將顯示總價。"
+    },
+    "accountHint": "無需註冊帳號。我們可能會寄送6位數驗證碼以核實信箱。"
   },
   "fakePay": {
     "eyebrow": "測試付款",
@@ -5503,7 +5515,7 @@
     }
   },
   "guestVerify": {
-    "title": "確認您的電子郵件",
+    "title": "快速電子郵件驗證——無需註冊帳號",
     "sent": "我們已寄送 6 位數驗證碼至 {email}。輸入後即可下單。驗證碼 10 分鐘內有效。",
     "codeLabel": "驗證碼",
     "submit": "驗證並繼續",
@@ -5520,7 +5532,8 @@
     "settingOn": "購票人下單前以驗證碼確認電子郵件。",
     "settingOff": "購票人無需確認電子郵件即可下單。",
     "resendIn": "{seconds, plural, other {# 秒後可索取新驗證碼。}}",
-    "wrong": "{count, plural, other {驗證碼不正確。還可嘗試 # 次。}}"
+    "wrong": "{count, plural, other {驗證碼不正確。還可嘗試 # 次。}}",
+    "noAccount": "這不是登入，我們也不會為您建立帳號，只是確認票券能送達您的信箱。訂單摘要仍顯示在上方，進入下一步前不會扣款。"
   },
   "attendeeSignIn": {
     "title": "我的票券",

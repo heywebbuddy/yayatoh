@@ -1137,7 +1137,19 @@
     "channelInvalid": "Este código de venda não é válido para este evento. Abra a página do evento sem ele, ou pergunte a quem lhe deu o link.",
     "channelNotice": "Você está comprando por {name}: os lugares reservados para {name} também estão abertos para você.",
     "channelLinkInvalid": "Este link de venda não é válido para este evento. Você ainda pode escolher entre os lugares abertos a todos.",
-    "couponBuyerLimit": "Você já usou este código quantas vezes ele permite."
+    "couponBuyerLimit": "Você já usou este código quantas vezes ele permite.",
+    "summary": {
+      "title": "O seu pedido",
+      "subtotal": "Bilhetes",
+      "discount": "Desconto promocional",
+      "fee": "Taxa de serviço",
+      "total": "Total a pagar",
+      "free": "Grátis",
+      "note": "Este é o preço final. Paga no passo seguinte; ainda não é cobrado nada.",
+      "promoInvalid": "Esse código promocional não é válido para estes bilhetes.",
+      "unavailable": "O total aparece quando a sua escolha for válida."
+    },
+    "accountHint": "Não precisa de conta. Podemos enviar-lhe um código de 6 dígitos para verificar o seu e-mail."
   },
   "fakePay": {
     "eyebrow": "Pagamento de teste",
@@ -5503,7 +5515,7 @@
     }
   },
   "guestVerify": {
-    "title": "Confirme o seu e-mail",
+    "title": "Verificação rápida do e-mail: não precisa de conta",
     "sent": "Enviámos um código de 6 dígitos para {email}. Digite-o para fazer o pedido. Funciona durante 10 minutos.",
     "codeLabel": "Código de verificação",
     "submit": "Verificar e continuar",
@@ -5520,7 +5532,8 @@
     "settingOn": "Os compradores confirmam o e-mail com um código antes de encomendar.",
     "settingOff": "Os compradores encomendam sem confirmar o e-mail.",
     "resendIn": "{seconds, plural, one {Pode pedir um novo código dentro de # segundo.} other {Pode pedir um novo código dentro de # segundos.}}",
-    "wrong": "{count, plural, one {Esse código não está certo. Resta # tentativa.} other {Esse código não está certo. Restam # tentativas.}}"
+    "wrong": "{count, plural, one {Esse código não está certo. Resta # tentativa.} other {Esse código não está certo. Restam # tentativas.}}",
+    "noAccount": "Isto não é um início de sessão e não criamos nenhuma conta. Só verificamos que os bilhetes lhe chegam. O resumo do pedido fica acima; nada é cobrado até ao passo seguinte."
   },
   "attendeeSignIn": {
     "title": "Meus ingressos",

@@ -1137,7 +1137,19 @@
     "channelInvalid": "This sales code isn't valid for this event. Open the event page again without it, or ask whoever gave you the link.",
     "channelNotice": "You're buying through {name}: seats kept for {name} are open to you too.",
     "channelLinkInvalid": "This sales link isn't valid for this event. You can still choose from the seats open to everyone.",
-    "couponBuyerLimit": "You've already used this code as many times as it allows."
+    "couponBuyerLimit": "You've already used this code as many times as it allows.",
+    "summary": {
+      "title": "Your order",
+      "subtotal": "Tickets",
+      "discount": "Promo discount",
+      "fee": "Service fee",
+      "total": "Total to pay",
+      "free": "Free",
+      "note": "This is the final price. You pay it on the next step; nothing is charged yet.",
+      "promoInvalid": "That promo code isn’t valid for these tickets.",
+      "unavailable": "The total will be shown once your choice is valid."
+    },
+    "accountHint": "No account needed. We may email you a 6-digit code to check your address."
   },
   "fakePay": {
     "eyebrow": "Test payment",
@@ -5503,7 +5515,7 @@
     }
   },
   "guestVerify": {
-    "title": "Confirm your email",
+    "title": "Quick email check — no account needed",
     "sent": "We emailed a 6-digit code to {email}. Enter it to place your order. It works for 10 minutes.",
     "codeLabel": "Verification code",
     "submit": "Verify and continue",
@@ -5520,7 +5532,8 @@
     "settingOn": "Buyers confirm their email with a code before ordering.",
     "settingOff": "Buyers order without confirming their email.",
     "resendIn": "{seconds, plural, one {You can ask for a new code in # second.} other {You can ask for a new code in # seconds.}}",
-    "wrong": "{count, plural, one {That code isn't right. # try left.} other {That code isn't right. # tries left.}}"
+    "wrong": "{count, plural, one {That code isn't right. # try left.} other {That code isn't right. # tries left.}}",
+    "noAccount": "This is not a sign-in and we won’t create an account for you. We only check that your tickets will reach you. Your order summary stays above; nothing is charged until the next step."
   },
   "attendeeSignIn": {
     "title": "My tickets",

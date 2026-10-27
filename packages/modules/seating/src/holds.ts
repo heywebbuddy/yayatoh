@@ -188,6 +188,29 @@ export async function seatedTicketTypeIds(
   });
 }
 
+/** Price category (ticket type) of each of these seats, without holding them: the checkout preview. */
+export async function seatTicketTypesTx(
+  tx: TenantTx,
+  eventId: string,
+  occurrenceId: string | null,
+  seatUuids: readonly string[],
+): Promise<Map<string, number>> {
+  const ids = [...new Set(seatUuids)];
+  if (ids.length === 0) return new Map();
+  const key = await chartKeyTx(tx, eventId, occurrenceId);
+  const rows = await tx
+    .select({ ticketTypeId: eventSeats.ticketTypeId })
+    .from(eventSeats)
+    .where(and(onChart(eventSeats, eventId, key), inArray(eventSeats.seatUuid, ids)));
+  const counts = new Map<string, number>();
+  for (const r of rows) {
+    if (!r.ticketTypeId)
+      throw new DomainError('validation_failed', 'That seat is not on sale', { reason: 'seat_not_on_sale' });
+    counts.set(r.ticketTypeId, (counts.get(r.ticketTypeId) ?? 0) + 1);
+  }
+  return counts;
+}
+
 /** The seats a hold (an order) has, with their price category and label. */
 export async function heldSeatsTx(tx: TenantTx, holdId: string) {
   return tx

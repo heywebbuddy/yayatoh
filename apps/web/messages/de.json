@@ -1137,7 +1137,19 @@
     "channelInvalid": "Dieser Verkaufscode gilt nicht für diese Veranstaltung. Öffnen Sie die Veranstaltungsseite ohne den Code oder fragen Sie, wer Ihnen den Link gegeben hat.",
     "channelNotice": "Sie kaufen über {name}: Plätze, die für {name} reserviert sind, stehen Ihnen ebenfalls offen.",
     "channelLinkInvalid": "Dieser Verkaufslink gilt nicht für diese Veranstaltung. Sie können weiterhin aus den Plätzen wählen, die allen offenstehen.",
-    "couponBuyerLimit": "Sie haben diesen Code bereits so oft verwendet, wie er erlaubt."
+    "couponBuyerLimit": "Sie haben diesen Code bereits so oft verwendet, wie er erlaubt.",
+    "summary": {
+      "title": "Deine Bestellung",
+      "subtotal": "Tickets",
+      "discount": "Rabatt (Promo-Code)",
+      "fee": "Servicegebühr",
+      "total": "Gesamtbetrag",
+      "free": "Kostenlos",
+      "note": "Das ist der Endpreis. Du zahlst im nächsten Schritt; bisher wird nichts abgebucht.",
+      "promoInvalid": "Dieser Promo-Code gilt nicht für diese Tickets.",
+      "unavailable": "Der Gesamtbetrag erscheint, sobald deine Auswahl gültig ist."
+    },
+    "accountHint": "Kein Konto nötig. Eventuell mailen wir dir einen 6-stelligen Code, um deine Adresse zu prüfen."
   },
   "fakePay": {
     "eyebrow": "Testzahlung",
@@ -5503,7 +5515,7 @@
     }
   },
   "guestVerify": {
-    "title": "Bestätigen Sie Ihre E-Mail",
+    "title": "Kurzer E-Mail-Check – kein Konto nötig",
     "sent": "Wir haben einen 6-stelligen Code an {email} gesendet. Geben Sie ihn ein, um zu bestellen. Er gilt 10 Minuten.",
     "codeLabel": "Bestätigungscode",
     "submit": "Bestätigen und weiter",
@@ -5520,7 +5532,8 @@
     "settingOn": "Käufer bestätigen ihre E-Mail vor der Bestellung mit einem Code.",
     "settingOff": "Käufer bestellen, ohne ihre E-Mail zu bestätigen.",
     "resendIn": "{seconds, plural, one {Sie können in # Sekunde einen neuen Code anfordern.} other {Sie können in # Sekunden einen neuen Code anfordern.}}",
-    "wrong": "{count, plural, one {Dieser Code stimmt nicht. Noch # Versuch.} other {Dieser Code stimmt nicht. Noch # Versuche.}}"
+    "wrong": "{count, plural, one {Dieser Code stimmt nicht. Noch # Versuch.} other {Dieser Code stimmt nicht. Noch # Versuche.}}",
+    "noAccount": "Das ist keine Anmeldung, und wir legen kein Konto für dich an. Wir prüfen nur, dass deine Tickets dich erreichen. Deine Bestellübersicht bleibt oben stehen; abgebucht wird erst im nächsten Schritt."
   },
   "attendeeSignIn": {
     "title": "Meine Tickets",

@@ -29,6 +29,7 @@ import {
   checkoutAction,
   findBestSeatsAction,
   findChannelBestSeatsAction,
+  previewOrderAction,
   redeemAccessCodeAction,
   releaseBestSeatsAction,
   requestHolderLinkAction,
@@ -400,6 +401,7 @@ export async function PublicEventView({
               : null
           }
           action={checkoutAction.bind(null, slug)}
+          preview={previewOrderAction.bind(null, slug)}
         />
       )}
     </section>
