@@ -7,6 +7,7 @@ import { conference } from './demo/conference.ts';
 import { agency, community, other } from './demo/general.ts';
 import { type Demo, failures, log } from './demo/kit.ts';
 import { orgExtras, orgFeatures, orgLibrary } from './demo/org.ts';
+import { legsTrip } from './demo/legs.ts';
 import { concert, gala } from './demo/seated.ts';
 import { wedding } from './demo/wedding.ts';
 
@@ -630,6 +631,7 @@ for (const e of EVENTS) {
       break;
   }
 }
+if (!only || only.includes('legs')) await legsTrip(d);
 if (!only) {
   await orgFeatures(d);
   await orgExtras(d);
