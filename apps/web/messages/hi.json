@@ -1221,7 +1221,13 @@
     "emailSentAt": "{when} भेजा गया",
     "emailScheduled": "{when} के लिए निर्धारित",
     "emailQueued": "भेजा जा रहा है",
-    "viewInvoice": "अपना इनवॉइस देखें, डाउनलोड करें या भुगतान करें"
+    "viewInvoice": "अपना इनवॉइस देखें, डाउनलोड करें या भुगतान करें",
+    "tableNo": "टेबल {n}",
+    "table": "टेबल",
+    "purchaser": "खरीदार",
+    "group": "समूह",
+    "purchasedBy": "खरीदार: {name}",
+    "groupLabel": "समूह: {group}"
   },
   "orders": {
     "title": "हाल के ऑर्डर",

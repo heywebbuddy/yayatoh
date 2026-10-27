@@ -1,11 +1,12 @@
 import { KeysetAfter } from '@yayatoh/contracts';
 import { type TenantTx, withoutTenant, withTenant } from '@yayatoh/db';
 import { findEventTx, findOccurrenceTx } from '@yayatoh/events';
+import { partyNamesByTicketTx } from '@yayatoh/guests';
 import { createCtx, DomainError } from '@yayatoh/kernel';
 import { buyerOrderMessagesTx } from '@yayatoh/notifications';
 import { tenantQuery } from '@yayatoh/platform';
 import { organizationNameTx } from '@yayatoh/tenancy';
-import { ticketsForOrderTx } from '@yayatoh/ticketing';
+import { tableUnitsTx, ticketsForOrderTx } from '@yayatoh/ticketing';
 import { and, desc, eq, inArray, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { hashManageToken, loadOrderTx } from './commands/checkout.ts';
@@ -158,11 +159,18 @@ export async function orderByManageToken(token: string): Promise<PublicOrderDto 
         const occ = await findOccurrenceTx(tx, id);
         if (occ) dates.set(id, { startsAt: occ.startsAt, endsAt: occ.endsAt });
       }
+      const groups = await partyNamesByTicketTx(
+        tx,
+        mine.map((t) => t.id),
+      );
+      const tableNo = new Map((await tableUnitsTx(tx, { orderId: o.id })).map((u) => [u.id, u.unitNo]));
       return {
         ...o,
         tickets: mine.map((t) => ({
           ...t,
           date: t.occurrenceId ? (dates.get(t.occurrenceId) ?? null) : null,
+          groupLabel: groups.get(t.id) ?? null,
+          tableNo: t.tableUnitId ? (tableNo.get(t.tableUnitId) ?? null) : null,
         })),
         transferred: live.length - mine.length,
         event: { ...ev, organizerName: (await organizationNameTx(tx, ref.org_id)) ?? '' },

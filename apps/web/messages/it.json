@@ -1221,7 +1221,13 @@
     "emailSentAt": "Inviata {when}",
     "emailScheduled": "Programmata per {when}",
     "emailQueued": "In invio",
-    "viewInvoice": "Vedi, scarica o paga la fattura"
+    "viewInvoice": "Vedi, scarica o paga la fattura",
+    "tableNo": "Tavolo {n}",
+    "table": "Tavolo",
+    "purchaser": "Acquistato da",
+    "group": "Gruppo",
+    "purchasedBy": "Acquistato da {name}",
+    "groupLabel": "Gruppo: {group}"
   },
   "orders": {
     "title": "Ordini recenti",

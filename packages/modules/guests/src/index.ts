@@ -386,6 +386,7 @@ export {
 export {
   addTableGuestTx,
   guestsByTicketTx,
+  partyNamesByTicketTx,
   type TableSource,
   tablePartiesTx,
   tablePartyTx,

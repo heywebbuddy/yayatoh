@@ -14,6 +14,7 @@ import { OrderReview } from '@/components/reviews/order-review.tsx';
 import { TicketQr } from '@/components/ticket-qr.tsx';
 import { WebPushControl } from '@/components/web-push-control.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { formatEventDateTimeRange } from '@/lib/format.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { helpLinksForOrder } from '@/server/assistance.ts';
 import { certificateLinksForOrder } from '@/server/ce.ts';
@@ -99,6 +100,11 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
   const hub = await hasConferenceHub(token);
   // M4.2b: tables bought in this order, each with its claim link for naming the guests.
   const tables = await orderTablesByManageToken(token);
+  const eventWhen = formatEventDateTimeRange(
+    order.event.startsAt.toISOString(),
+    order.event.endsAt.toISOString(),
+    { locale, currency: order.currency, timeZone: order.event.timezone },
+  );
   const sinceFmt = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: order.event.timezone });
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-6 py-16">
@@ -258,11 +264,24 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
                     <p className="text-body font-medium">
                       {t('order.ticketDate', { date: dateFmt.format(tk.date.startsAt) })}
                     </p>
+                  ) : (
+                    <p className="text-body font-medium">{eventWhen}</p>
+                  )}
+                  {tk.tableNo ? (
+                    <p className="text-body font-medium">{t('order.tableNo', { n: tk.tableNo })}</p>
                   ) : null}
                   {tk.seatLabel ? (
                     <p className="text-body font-medium">{t('order.seatLabel', { seat: tk.seatLabel })}</p>
                   ) : null}
                   <p className="text-caption">{tk.holderName}</p>
+                  <p className="text-caption text-ink-2">
+                    {t('order.purchasedBy', { name: order.buyerName })}
+                  </p>
+                  {tk.groupLabel ? (
+                    <p className="text-caption text-ink-2">
+                      {t('order.groupLabel', { group: tk.groupLabel })}
+                    </p>
+                  ) : null}
                   {watchLinks.get(tk.id) ? (
                     <Link
                       href={watchLinks.get(tk.id) as string}

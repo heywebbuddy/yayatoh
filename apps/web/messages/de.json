@@ -1221,7 +1221,13 @@
     "emailSentAt": "Gesendet {when}",
     "emailScheduled": "Geplant für {when}",
     "emailQueued": "Wird gesendet",
-    "viewInvoice": "Rechnung ansehen, herunterladen oder bezahlen"
+    "viewInvoice": "Rechnung ansehen, herunterladen oder bezahlen",
+    "tableNo": "Tisch {n}",
+    "table": "Tisch",
+    "purchaser": "Gekauft von",
+    "group": "Gruppe",
+    "purchasedBy": "Gekauft von {name}",
+    "groupLabel": "Gruppe: {group}"
   },
   "orders": {
     "title": "Neueste Bestellungen",

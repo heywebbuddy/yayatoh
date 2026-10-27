@@ -1221,7 +1221,13 @@
     "emailSentAt": "已於 {when} 寄出",
     "emailScheduled": "預定於 {when} 寄出",
     "emailQueued": "傳送中",
-    "viewInvoice": "查看、下載或支付你的發票"
+    "viewInvoice": "查看、下載或支付你的發票",
+    "tableNo": "第 {n} 桌",
+    "table": "桌號",
+    "purchaser": "購買人",
+    "group": "團體",
+    "purchasedBy": "購買人：{name}",
+    "groupLabel": "團體：{group}"
   },
   "orders": {
     "title": "最近訂單",

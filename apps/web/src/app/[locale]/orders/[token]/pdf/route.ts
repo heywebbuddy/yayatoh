@@ -3,7 +3,7 @@ import { orderByManageToken } from '@yayatoh/orders';
 import { ticketsHtml } from '@yayatoh/pdf';
 import { getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing.ts';
-import { formatEventDateRange } from '@/lib/format.ts';
+import { formatEventDateTimeRange } from '@/lib/format.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
 
 /** The buyer's tickets as a tagged PDF, reached by the manage token (the credential). */
@@ -24,11 +24,15 @@ export async function GET(_req: Request, { params }: { params: Promise<{ locale:
         dir: RTL_LOCALES.has(locale) ? 'rtl' : 'ltr',
         eventName: ev.name,
         // Multi-date events: an order's tickets are for one date (M1.4b); print that date.
-        when: formatEventDateRange((date ?? ev).startsAt.toISOString(), (date ?? ev).endsAt.toISOString(), {
-          locale,
-          currency: order.currency,
-          timeZone: ev.timezone,
-        }),
+        when: formatEventDateTimeRange(
+          (date ?? ev).startsAt.toISOString(),
+          (date ?? ev).endsAt.toISOString(),
+          {
+            locale,
+            currency: order.currency,
+            timeZone: ev.timezone,
+          },
+        ),
         where: [ev.venueName, ev.city].filter(Boolean).join(', ') || null,
         organizer: ev.organizerName,
         tickets: order.tickets.map((tk) => ({
@@ -36,6 +40,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ locale:
           serialLabel: t('order.serial', { serial: tk.serial }),
           shortCode: tk.shortCode,
           holderName: tk.holderName,
+          purchaserName: order.buyerName,
+          groupLabel: tk.groupLabel,
+          tableLabel: tk.tableNo ? t('order.tableNo', { n: tk.tableNo }) : null,
           seatLabel: tk.seatLabel,
           code: tk.code,
           qrLabel: t('order.qrLabel', { serial: tk.serial }),
@@ -43,6 +50,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ locale:
         labels: {
           code: t('order.shortCode'),
           holder: t('order.holder'),
+          purchaser: t('order.purchaser'),
+          group: t('order.group'),
+          table: t('order.table'),
           seat: t('order.seat'),
           footer: t('order.ticketsHint'),
         },

@@ -1221,7 +1221,13 @@
     "emailSentAt": "{when} に送信",
     "emailScheduled": "{when} に送信予定",
     "emailQueued": "送信中",
-    "viewInvoice": "請求書を表示・ダウンロード・支払う"
+    "viewInvoice": "請求書を表示・ダウンロード・支払う",
+    "tableNo": "テーブル {n}",
+    "table": "テーブル",
+    "purchaser": "購入者",
+    "group": "グループ",
+    "purchasedBy": "購入者: {name}",
+    "groupLabel": "グループ: {group}"
   },
   "orders": {
     "title": "最近の注文",

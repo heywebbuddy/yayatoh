@@ -1221,7 +1221,13 @@
     "emailSentAt": "Отправлено {when}",
     "emailScheduled": "Запланировано на {when}",
     "emailQueued": "Отправляется",
-    "viewInvoice": "Посмотреть, скачать или оплатить счёт"
+    "viewInvoice": "Посмотреть, скачать или оплатить счёт",
+    "tableNo": "Стол {n}",
+    "table": "Стол",
+    "purchaser": "Покупатель",
+    "group": "Группа",
+    "purchasedBy": "Покупатель: {name}",
+    "groupLabel": "Группа: {group}"
   },
   "orders": {
     "title": "Последние заказы",

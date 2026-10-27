@@ -1221,7 +1221,13 @@
     "emailSentAt": "Verzonden {when}",
     "emailScheduled": "Gepland voor {when}",
     "emailQueued": "Wordt verzonden",
-    "viewInvoice": "Je factuur bekijken, downloaden of betalen"
+    "viewInvoice": "Je factuur bekijken, downloaden of betalen",
+    "tableNo": "Tafel {n}",
+    "table": "Tafel",
+    "purchaser": "Gekocht door",
+    "group": "Groep",
+    "purchasedBy": "Gekocht door {name}",
+    "groupLabel": "Groep: {group}"
   },
   "orders": {
     "title": "Recente bestellingen",

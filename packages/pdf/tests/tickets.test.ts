@@ -53,6 +53,33 @@ describe('ticket PDF template', () => {
     expect(out.match(/<dt>Seat<\/dt>/g)).toHaveLength(1);
   });
 
+  it('shows purchaser, group and table only when there are some, escaped', () => {
+    const [first, second] = input().tickets as [TicketRow, TicketRow];
+    const out = ticketsHtml(
+      input({
+        when: '14 Oct 2027, 6:00 – 10:00 PM',
+        tickets: [
+          { ...first, purchaserName: 'Bo <Buyer>', groupLabel: 'The Garcias', tableLabel: 'Table 4' },
+          second,
+        ],
+        labels: {
+          code: 'Code',
+          holder: 'Holder',
+          purchaser: 'Purchased by',
+          group: 'Group',
+          table: 'Table',
+          footer: 'Show at the door',
+        },
+      }),
+    );
+    expect(out).toContain('14 Oct 2027, 6:00 – 10:00 PM');
+    expect(out).toContain('<dt>Purchased by</dt><dd>Bo &lt;Buyer&gt;</dd>');
+    expect(out).toContain('<dt>Group</dt><dd>The Garcias</dd>');
+    expect(out).toContain('<dt>Table</dt><dd>Table 4</dd>');
+    expect(out.match(/<dt>Purchased by<\/dt>/g)).toHaveLength(1);
+    expect(out.match(/<dt>Group<\/dt>/g)).toHaveLength(1);
+  });
+
   it('escapes every value: no markup injection from event or holder names', () => {
     const out = ticketsHtml(
       input({

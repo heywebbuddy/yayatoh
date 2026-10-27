@@ -55,6 +55,10 @@ export const HolderTicketDto = z.object({
   code: z.string(),
   /** Multi-date events (M1.4b): the date this ticket admits; null = every date of the event. */
   date: z.object({ startsAt: z.date(), endsAt: z.date() }).nullable(),
+  /** The group (party) the holder belongs to, when the host or the table's buyer named one. */
+  groupLabel: z.string().nullable().default(null),
+  /** Gala tables (M4.2b): the number of the purchased table this ticket is a seat of. */
+  tableNo: z.int().nullable().default(null),
 });
 
 /** What a guest sees on the order page (reached by the manage token, which is the credential). */

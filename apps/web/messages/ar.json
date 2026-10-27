@@ -1221,7 +1221,13 @@
     "emailSentAt": "أُرسلت {when}",
     "emailScheduled": "مجدولة في {when}",
     "emailQueued": "قيد الإرسال",
-    "viewInvoice": "عرض فاتورتك أو تنزيلها أو دفعها"
+    "viewInvoice": "عرض فاتورتك أو تنزيلها أو دفعها",
+    "tableNo": "الطاولة {n}",
+    "table": "الطاولة",
+    "purchaser": "المشتري",
+    "group": "المجموعة",
+    "purchasedBy": "المشتري: {name}",
+    "groupLabel": "المجموعة: {group}"
   },
   "orders": {
     "title": "أحدث الطلبات",

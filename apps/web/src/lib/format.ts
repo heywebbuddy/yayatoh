@@ -30,6 +30,16 @@ export function formatEventDateRange(startIso: string, endIso: string, f: Format
   return fmt.formatRange(new Date(startIso), new Date(endIso));
 }
 
+/** "Jun 3, 2027, 6:00 – 10:00 PM": the event's date and time range, in its timezone. */
+export function formatEventDateTimeRange(startIso: string, endIso: string, f: FormatCtx): string {
+  const fmt = new Intl.DateTimeFormat(f.locale, {
+    timeZone: f.timeZone,
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
+  return fmt.formatRange(new Date(startIso), new Date(endIso));
+}
+
 export function formatDate(
   iso: string,
   f: FormatCtx,

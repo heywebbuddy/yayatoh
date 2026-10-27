@@ -1221,7 +1221,13 @@
     "emailSentAt": "已于 {when} 发送",
     "emailScheduled": "计划于 {when} 发送",
     "emailQueued": "发送中",
-    "viewInvoice": "查看、下载或支付你的发票"
+    "viewInvoice": "查看、下载或支付你的发票",
+    "tableNo": "第 {n} 桌",
+    "table": "桌号",
+    "purchaser": "购买人",
+    "group": "团体",
+    "purchasedBy": "购买人：{name}",
+    "groupLabel": "团体：{group}"
   },
   "orders": {
     "title": "最近订单",
