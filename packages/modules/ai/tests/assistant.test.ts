@@ -99,3 +99,14 @@ describe('attendee assistant', () => {
     expect(fit[0]?.id).toBe('s1');
   });
 });
+
+describe('two-part questions', () => {
+  it('answers each part from its own source', async () => {
+    const a = cleanAssistantAnswer(
+      await fakeDrafter.compose(ask('Is there parking and how much is a ticket?')),
+      sources,
+    );
+    expect(a.known).toBe(true);
+    expect(a.sourceIds).toEqual(expect.arrayContaining(['s2', 's3']));
+  });
+});
