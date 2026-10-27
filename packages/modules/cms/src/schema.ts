@@ -195,7 +195,7 @@ export const siteSections = tenantTable(
   (t) => [
     uniqueIndex('site_sections_org_placement_locale_slug_key').on(t.orgId, t.placement, t.locale, t.slug),
     index('site_sections_org_placement_status_idx').on(t.orgId, t.placement, t.status, t.position),
-    check('site_sections_placement_check', sql`placement in ('home', 'features', 'contact')`),
+    check('site_sections_placement_check', sql`placement in ('home', 'features', 'contact', 'testimonials')`),
     check('site_sections_locale_check', LOCALE_CHECK('locale')),
     check('site_sections_slug_check', SLUG_CHECK('slug')),
     check('site_sections_status_check', sql`status in ('draft', 'published', 'archived')`),

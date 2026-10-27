@@ -1,0 +1,2 @@
+ALTER TABLE "cms"."site_sections" DROP CONSTRAINT "site_sections_placement_check";--> statement-breakpoint
+ALTER TABLE "cms"."site_sections" ADD CONSTRAINT "site_sections_placement_check" CHECK (placement in ('home', 'features', 'contact', 'testimonials'));

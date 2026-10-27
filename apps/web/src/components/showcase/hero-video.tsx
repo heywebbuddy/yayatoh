@@ -29,7 +29,7 @@ export function HeroVideo({
   }, []);
   return (
     <>
-      <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
+      <div aria-hidden="true" className="[container-type:size] absolute inset-0 -z-10 overflow-hidden">
         {playing ? (
           <iframe
             src={src}
@@ -37,7 +37,7 @@ export function HeroVideo({
             tabIndex={-1}
             allow="autoplay; encrypted-media"
             referrerPolicy="strict-origin-when-cross-origin"
-            className="pointer-events-none absolute top-1/2 left-1/2 h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2 border-0"
+            className="pointer-events-none absolute top-1/2 left-1/2 h-[max(100cqh,56.25cqw)] w-[max(100cqw,177.78cqh)] -translate-x-1/2 -translate-y-1/2 border-0"
           />
         ) : null}
         <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/50 to-black/30" />

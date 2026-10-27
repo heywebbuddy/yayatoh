@@ -6,7 +6,7 @@
 export const HELP_AUDIENCES = ['organizers', 'buyers'] as const;
 export type HelpAudience = (typeof HELP_AUDIENCES)[number];
 
-export const SITE_PLACEMENTS = ['home', 'features', 'contact'] as const;
+export const SITE_PLACEMENTS = ['home', 'features', 'contact', 'testimonials'] as const;
 export type SitePlacement = (typeof SITE_PLACEMENTS)[number];
 
 export const CONTACT_TOPICS = ['sales', 'support', 'partnership', 'other'] as const;

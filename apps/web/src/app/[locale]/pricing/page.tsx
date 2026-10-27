@@ -1,10 +1,11 @@
 import { pricingCurrency, pricingExample, publicFeeSchedules } from '@yayatoh/billing';
 import { formatMoney, money, moneyFromDecimal } from '@yayatoh/kernel';
-import { buttonClass, Card, Label, PageHeader, Table } from '@yayatoh/ui';
+import { buttonClass, Card, Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
+import { PageCta, PageHero } from '@/components/showcase/page-hero.tsx';
 import { Link } from '@/i18n/navigation.ts';
 
 export async function generateMetadata({
@@ -63,12 +64,8 @@ export default async function PricingPage({
   return (
     <>
       <SiteHeader />
-      <main id="main" className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-4 py-10 md:px-6">
-        <PageHeader
-          eyebrow={<Label>{t('eyebrow')}</Label>}
-          title={t('title')}
-          description={t('description')}
-        />
+      <main id="main" className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 py-6 md:px-6">
+        <PageHero eyebrow={t('eyebrow')} title={t('title')} lede={t('description')} />
         {fees.length > 1 ? (
           <nav aria-label={t('currencies')}>
             <ul className="flex list-none flex-wrap gap-2 p-0">
@@ -145,6 +142,7 @@ export default async function PricingPage({
             {t('startCta')}
           </Link>
         </section>
+        <PageCta />
       </main>
       <SiteFooter />
     </>

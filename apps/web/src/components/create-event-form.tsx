@@ -6,6 +6,7 @@ import { useActionState, useState } from 'react';
 import type { CreateEventState } from '@/app/[locale]/o/[org]/(org)/events/new/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type EventCategoryChoice, EventCategoryField } from './event-category-field.tsx';
+import { defaultEnd } from './event-times.ts';
 import { type PickerProfile, ProfilePicker } from './profile-picker.tsx';
 import { seriesErrorKey } from './series-errors.ts';
 import { SeriesField } from './series-field.tsx';
@@ -33,6 +34,8 @@ export function CreateEventForm({
   // One key per form: a double submit returns the same event instead of "name already taken".
   const [requestKey] = useState(() => `create-event:${crypto.randomUUID()}`);
   const [category, setCategory] = useState('');
+  const [starts, setStarts] = useState('');
+  const [ends, setEnds] = useState('');
   const selectClass = 'field';
   return (
     <Card size="panel" className="max-w-2xl">
@@ -88,10 +91,22 @@ export function CreateEventForm({
           <DateTimePicker
             name="startsAt"
             required
-            label={t('newEvent.startsAt')}
+            label={`${t('newEvent.startsAt')} *`}
             hint={t('newEvent.localTimeHint')}
+            value={starts}
+            onValueChange={(v) => {
+              setStarts(v);
+              setEnds((e) => defaultEnd(v, e));
+            }}
           />
-          <DateTimePicker name="endsAt" required label={t('newEvent.endsAt')} />
+          <DateTimePicker
+            name="endsAt"
+            required
+            label={`${t('newEvent.endsAt')} *`}
+            hint={t('newEvent.endsHint')}
+            value={ends}
+            onValueChange={setEnds}
+          />
           <CurrencyPicker
             id="currency"
             name="currency"

@@ -1030,7 +1030,8 @@
     "manageCategories": "Kategorien verwalten (öffnet einen neuen Tab)",
     "refreshCategories": "Kategorieliste aktualisieren",
     "refreshingCategories": "Wird aktualisiert …",
-    "withAi": "Mit KI erstellen"
+    "withAi": "Mit KI erstellen",
+    "endsHint": "Pflichtfeld. Wird zwei Stunden nach dem Beginn vorbelegt; ändere es, wenn das Event länger dauert."
   },
   "tickets": {
     "subtitle": "Ticketarten, Preise und Kontingente. Alle Preise, die Käufer sehen, enthalten die Gebühren.",
@@ -5161,7 +5162,8 @@
       "title": "Neuer Veranstaltungsort",
       "save": "Speichern und auswählen",
       "cancel": "Abbrechen"
-    }
+    },
+    "endsHint": "Pflichtfeld. Wird zwei Stunden nach dem Beginn vorbelegt; ändere es, wenn das Event länger dauert."
   },
   "eventMedia": {
     "title": "Bilder",
@@ -7245,7 +7247,8 @@
     "placement": {
       "home": "Startseite: Warum Yayatoh",
       "features": "Funktionsseite",
-      "contact": "Kontaktseite"
+      "contact": "Kontaktseite",
+      "testimonials": "Startseite: Stimmen"
     },
     "fields": {
       "placement": "Seite",
@@ -19975,5 +19978,122 @@
     "link": "Plätze für mehrere Termine auf einmal buchen",
     "unavailableTitle": "Plätze pro Termin sind nicht verfügbar",
     "unavailableDescription": "Dafür braucht es mindestens zwei kommende Termine mit jeweils eigenem Sitzplan. Wähle stattdessen einen Termin auf der Veranstaltungsseite."
+  },
+  "homeSections": {
+    "blog": {
+      "title": "Neu im Blog",
+      "all": "Alle Beiträge"
+    },
+    "testimonials": {
+      "title": "Das sagen Veranstalter"
+    },
+    "how": {
+      "title": "So funktioniert es",
+      "s1": {
+        "title": "Event anlegen",
+        "desc": "Trage Details, Termine und Tickettypen ein, oder lass die KI einen Entwurf vorschlagen, den du prüfst."
+      },
+      "s2": {
+        "title": "Veröffentlichen und verkaufen",
+        "desc": "Teile einen Link. Käufer sehen den vollen Preis inklusive Gebühren vom ersten Bildschirm an."
+      },
+      "s3": {
+        "title": "Gäste empfangen",
+        "desc": "Platziere sie, schreibe ihnen und scanne Tickets am Eingang."
+      },
+      "s4": {
+        "title": "Aus Zahlen lernen",
+        "desc": "Verfolge Verkäufe und Besuch live und sieh, was funktioniert hat."
+      }
+    },
+    "features": {
+      "title": "Alles, was du für Live-Events brauchst",
+      "ticketing": {
+        "title": "Ticketing",
+        "desc": "Kostenlose und bezahlte Tickets, Promo-Codes, Frühbucherpreise und offen ausgewiesene Gebühren."
+      },
+      "seating": {
+        "title": "Sitzplätze",
+        "desc": "Raumpläne, Tische und Sitzpläne, aus denen Gäste wählen oder am Tag ihren Platz finden."
+      },
+      "checkin": {
+        "title": "Check-in",
+        "desc": "Tickets am Eingang scannen, mit Live-Zahlen zu Ankünften und einer Hilfe-Warteschlange."
+      },
+      "networking": {
+        "title": "Networking",
+        "desc": "Teilnehmerprofile, Meetings und Chat für Konferenzen und Communitys."
+      },
+      "ai": {
+        "title": "KI-Unterstützung",
+        "desc": "Entwirf ein Event aus einem Satz und lass einen Assistenten Fragen der Gäste beantworten."
+      },
+      "sponsors": {
+        "title": "Sponsoren und Aussteller",
+        "desc": "Pakete, Logos, Stände und die Leads, die sie sammeln."
+      },
+      "analytics": {
+        "title": "Analytics",
+        "desc": "Berichte zu Verkäufen, Besuch und Kampagnen an einem Ort."
+      }
+    },
+    "stats": {
+      "events": "Gelistete Events",
+      "organizers": "Veranstalter"
+    },
+    "trusted": {
+      "title": "Veranstalter vertrauen uns"
+    },
+    "faq": {
+      "title": "Fragen und Antworten",
+      "q1": "Was kostet Yayatoh?",
+      "a1": "Derzeit gibt es keine Plattformgebühr pro Ticket und kein Abo. Aktuelle Zahlen stehen auf der Preisseite.",
+      "q2": "Sehen Käufer den vollen Preis?",
+      "a2": "Ja. Die Preise enthalten alle Gebühren, vom ersten Bildschirm bis zur Kasse.",
+      "q3": "Kann ich Hochzeiten und Konferenzen damit durchführen?",
+      "a3": "Ja. Jede Eventart startet mit den nötigen Werkzeugen: Gästelisten und Zusagen oder Anmeldung, Sessions und Badges.",
+      "q4": "Wie kommen Gäste hinein?",
+      "a4": "Tickets kommen per E-Mail mit einem Code. Das Einlassteam scannt sie mit der Scanner-App, auch bei schwacher Verbindung.",
+      "q5": "Kann ich es zuerst ausprobieren?",
+      "a5": "Erstelle ein Konto und lege einen Event-Entwurf an. Nichts wird veröffentlicht, bevor du es willst."
+    },
+    "cta": {
+      "title": "Bereit für dein nächstes Event?",
+      "lede": "Lege dein Event noch heute an und verkaufe in Minuten das erste Ticket.",
+      "button": "Event erstellen"
+    }
+  },
+  "pages": {
+    "toc": "Auf dieser Seite",
+    "cta": {
+      "title": "Noch eine Frage?",
+      "lede": "Unser Team antwortet innerhalb eines Werktags.",
+      "button": "Kontakt aufnehmen"
+    },
+    "eyebrow": {
+      "help": "Hilfe-Center",
+      "contact": "Kontakt",
+      "features": "Funktionen",
+      "status": "Status",
+      "blog": "Blog"
+    },
+    "channel": {
+      "form": {
+        "title": "Schreib uns",
+        "desc": "Schick dem Team eine Nachricht, wir antworten per E-Mail."
+      },
+      "help": {
+        "title": "Hilfe-Center",
+        "desc": "Anleitungen für Veranstalter und Käufer, mit Suche."
+      },
+      "status": {
+        "title": "Systemstatus",
+        "desc": "Sieh, ob gerade alles läuft."
+      }
+    },
+    "notFound": {
+      "events": "Events entdecken",
+      "help": "Hilfe-Center"
+    }
   }
 }

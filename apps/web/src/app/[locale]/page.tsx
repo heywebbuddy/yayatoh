@@ -6,6 +6,16 @@ import { Carousel } from '@/components/showcase/carousel.tsx';
 import { CategoryRail } from '@/components/showcase/category-rail.tsx';
 import { ShowcaseHero } from '@/components/showcase/hero.tsx';
 import { loadShowcaseHome } from '@/components/showcase/home-data.ts';
+import {
+  BlogSection,
+  FeatureGrid,
+  FinalCta,
+  HomeFaq,
+  HowItWorks,
+  StatsBand,
+  TestimonialsSection,
+  TrustedBy,
+} from '@/components/showcase/home-sections.tsx';
 import { OrganizerCta } from '@/components/showcase/organizer-cta.tsx';
 import { OrganizersPanel } from '@/components/showcase/organizers-panel.tsx';
 import { PosterCard } from '@/components/showcase/poster-card.tsx';
@@ -13,6 +23,7 @@ import { railItems, sectionLabel } from '@/components/showcase/rail-items.ts';
 import { Reveal } from '@/components/showcase/reveal.tsx';
 import { ShowcaseShell } from '@/components/showcase/shell.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { cachedEntries } from '@/server/cms.ts';
 import { cachedSections, platformContentOrg } from '@/server/help.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { requestHost } from '@/server/request-origin.ts';
@@ -53,6 +64,8 @@ export default async function Home({ params }: Props) {
   // M3.11b: the organizer sections ("Why Yayatoh") come from the platform CMS.
   const content = await platformContentOrg(await requestHost());
   const sections = content ? await cachedSections(content.orgId, 'home', locale) : [];
+  const quotes = content ? await cachedSections(content.orgId, 'testimonials', locale) : [];
+  const posts = content ? (await cachedEntries(content.orgId, 'post', 1)).items : [];
   const first = data.featured[0];
   return (
     <ShowcaseShell>
@@ -119,8 +132,18 @@ export default async function Home({ params }: Props) {
         </section>
       ) : null}
       <Reveal>
+        <StatsBand events={data.events.length} organizers={new Set(data.events.map((e) => e.orgSlug)).size} />
+      </Reveal>
+      <HowItWorks />
+      <FeatureGrid />
+      <TestimonialsSection items={quotes} locale={locale} />
+      <BlogSection posts={posts} base="" locale={locale} />
+      <TrustedBy organizers={data.organizers} />
+      <HomeFaq />
+      <Reveal>
         <OrganizerCta events={data.featured} covers={data.covers} />
       </Reveal>
+      <FinalCta />
       {devAuthEnabled() ? (
         <Link className={buttonClass('secondary', 'md', 'self-center')} href="/dev/login">
           {tm('home.demoCta')}
