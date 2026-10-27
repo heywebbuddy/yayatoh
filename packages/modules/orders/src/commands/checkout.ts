@@ -1,7 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { contactIdByEmailTx, recordConsentTx, upsertContactTx } from '@yayatoh/crm';
 import { type TenantTx, withTenant } from '@yayatoh/db';
-import { accessGrantTx, findEventTx } from '@yayatoh/events';
+import { accessGrantTx, findEventTx, hasOccurrencesTx } from '@yayatoh/events';
 import { submitResponseTx } from '@yayatoh/forms';
 import { type Ctx, createCtx, DomainError, type DomainEvent, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import {
@@ -100,26 +100,42 @@ export async function issueFor(
     occurrenceId: order.occurrenceId,
   });
   if (order.seatUuids.length === 0) return issued;
+  // One seat per date: each held seat knows the date it is held for (the same seat id can be held on
+  // several dates' charts), and its ticket is for that date.
   const seats = await heldSeatsTx(tx, order.id);
-  const free = new Map<string, { seatUuid: string; label: string }[]>();
+  const free = new Map<string, { seatUuid: string; label: string; leg: string | null }[]>();
   for (const s of seats) {
     if (!s.ticketTypeId) continue;
-    free.set(s.ticketTypeId, [...(free.get(s.ticketTypeId) ?? []), { seatUuid: s.seatUuid, label: s.label }]);
+    free.set(s.ticketTypeId, [
+      ...(free.get(s.ticketTypeId) ?? []),
+      { seatUuid: s.seatUuid, label: s.label, leg: s.occurrenceId ?? order.occurrenceId },
+    ]);
   }
-  const pairs: { seatUuid: string; ticketId: string; seatLabel: string }[] = [];
+  const pairs: { seatUuid: string; ticketId: string; seatLabel: string; leg: string | null }[] = [];
   for (const t of issued) {
     const seat = free.get(t.ticketTypeId)?.shift();
-    if (seat) pairs.push({ seatUuid: seat.seatUuid, ticketId: t.id, seatLabel: seat.label });
+    if (seat) pairs.push({ seatUuid: seat.seatUuid, ticketId: t.id, seatLabel: seat.label, leg: seat.leg });
   }
   if (pairs.length !== order.seatUuids.length)
     throw new DomainError('conflict', 'The seat hold was lost', { reason: 'hold_lost' });
-  await sellSeatsTx(tx, ctx, {
-    eventId: order.eventId,
-    occurrenceId: order.occurrenceId,
-    holdId: order.id,
-    tickets: pairs,
-  });
-  await assignTicketSeatsTx(tx, ctx, pairs);
+  // Sold per chart: the seats of each date are sold on that date's chart.
+  for (const leg of new Set(pairs.map((p) => p.leg))) {
+    await sellSeatsTx(tx, ctx, {
+      eventId: order.eventId,
+      occurrenceId: leg,
+      holdId: order.id,
+      tickets: pairs.filter((p) => p.leg === leg),
+    });
+  }
+  await assignTicketSeatsTx(
+    tx,
+    ctx,
+    pairs.map((p) => ({
+      ticketId: p.ticketId,
+      seatLabel: p.seatLabel,
+      ...(order.seatLegs?.length ? { occurrenceId: p.leg } : {}),
+    })),
+  );
   return issued;
 }
 
@@ -193,11 +209,66 @@ export async function startCheckoutTx(
       reason: 'choose_seats',
     });
   let seatIds: readonly string[] = input.seats;
+  const legs = input.legs;
+  if (legs.length) {
+    if (
+      input.items.length ||
+      input.seats.length ||
+      input.seatHold ||
+      input.occurrenceId ||
+      input.waitlistToken
+    )
+      throw new DomainError('validation_failed', 'Choose seats per date, or one date, not both', {
+        reason: 'choose_seats',
+      });
+    if (new Set(legs.map((l) => l.occurrenceId)).size !== legs.length)
+      throw new DomainError('validation_failed', 'One seat choice per date', { reason: 'choose_seats' });
+    if (!(await hasOccurrencesTx(tx, event.id)))
+      throw new DomainError('validation_failed', 'This event has no dates', { reason: 'choose_seats' });
+  }
   // M6.11b: seats are sold online through the buyer's sales code, else the public channel.
   const channel =
-    input.seats.length || input.seatHold
+    input.seats.length || input.seatHold || legs.length
       ? await resolveSaleChannelTx(tx, event.id, { via: 'online', code: input.channelCode ?? null })
       : null;
+  if (legs.length) {
+    // One seat per date: each leg's seats are held on that date's chart under the order's hold,
+    // the date's own capacity is claimed, and the seating rules are checked per date.
+    const all: string[] = [];
+    for (const leg of legs) {
+      const held = await holdSeatsTx(tx, ctx, {
+        eventId: event.id,
+        occurrenceId: leg.occurrenceId,
+        seatUuids: leg.seats,
+        holdId: orderId,
+        expiresAt,
+        channelId: channel?.id ?? null,
+      });
+      for (const s of held) {
+        if (!s.ticketTypeId)
+          throw new DomainError('validation_failed', 'That seat is not on sale', {
+            reason: 'seat_not_on_sale',
+          });
+        seatItems.set(s.ticketTypeId, (seatItems.get(s.ticketTypeId) ?? 0) + 1);
+      }
+      await claimOccurrenceTx(tx, {
+        eventId: event.id,
+        occurrenceId: leg.occurrenceId,
+        quantity: held.length,
+        now: ctx.now,
+        waitlistReserve: true,
+      });
+      await checkSeatRulesTx(tx, ctx, {
+        eventId: event.id,
+        occurrenceId: leg.occurrenceId,
+        seatUuids: held.map((s) => s.seatUuid),
+        context: 'checkout',
+        accessibleNeed: input.accessibleNeed,
+      });
+      all.push(...held.map((s) => s.seatUuid));
+    }
+    seatIds = all;
+  }
   if (input.seats.length || input.seatHold) {
     // M6.11a: seats best available already holds for this buyer move to the order's hold.
     const held = input.seatHold
@@ -252,13 +323,16 @@ export async function startCheckoutTx(
         now: ctx.now,
       })
     : null;
-  const occurrenceId = await claimOccurrenceTx(tx, {
-    eventId: event.id,
-    occurrenceId: input.occurrenceId,
-    quantity: wanted.reduce((n, w) => n + w.quantity, 0),
-    now: ctx.now,
-    waitlistReserve: !offer,
-  });
+  // One-seat-per-date orders claimed each date above; the order carries the first date.
+  const occurrenceId = legs.length
+    ? (legs[0]?.occurrenceId ?? null)
+    : await claimOccurrenceTx(tx, {
+        eventId: event.id,
+        occurrenceId: input.occurrenceId,
+        quantity: wanted.reduce((n, w) => n + w.quantity, 0),
+        now: ctx.now,
+        waitlistReserve: !offer,
+      });
   const quote = await quoteTx(tx, event.id, wanted, {
     now: ctx.now,
     includeHidden: new Set([...(grant?.ticketTypeIds ?? []), ...(offer ? [offer.ticketTypeId] : [])]),
@@ -321,7 +395,10 @@ export async function startCheckoutTx(
       id: orderId,
       orgId,
       eventId: event.id,
-      seatUuids: [...new Set(seatIds)],
+      seatUuids: legs.length ? [...seatIds] : [...new Set(seatIds)],
+      seatLegs: legs.length
+        ? legs.map((l) => ({ occurrenceId: l.occurrenceId, seatUuids: [...l.seats] }))
+        : null,
       occurrenceId,
       status: 'reserved',
       buyerEmail: input.buyer.email,
@@ -624,11 +701,15 @@ export const applyProviderEventCommand = tenantCommand({
         // M3.10a: an offer order whose offer still holds the stock takes that stock back.
         if (!(await reclaimOfferHoldTx(tx, order.id, ctx.now))) await holdInventoryTx(tx, lines(order.items));
         stockHeld = true;
-        if (order.seatUuids.length)
+        for (const leg of order.seatLegs?.length
+          ? order.seatLegs
+          : order.seatUuids.length
+            ? [{ occurrenceId: order.occurrenceId, seatUuids: order.seatUuids }]
+            : [])
           await holdSeatsTx(tx, ctx, {
             eventId: order.eventId,
-            occurrenceId: order.occurrenceId,
-            seatUuids: order.seatUuids,
+            occurrenceId: leg.occurrenceId,
+            seatUuids: leg.seatUuids,
             holdId: order.id,
             expiresAt: new Date(ctx.now.getTime() + HOLD_MINUTES * 60_000),
             // M6.11b: through the channel the order was sold through.

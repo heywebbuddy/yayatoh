@@ -19957,5 +19957,14 @@
     "saved": "Limite salvato.",
     "invalid": "Inserisci un numero intero o lascia vuoto.",
     "belowSold": "È inferiore ai biglietti già venduti o trattenuti. Scegli un numero più alto."
+  },
+  "legs": {
+    "metaTitle": "Scegli un posto per ogni data",
+    "title": "Scegli un posto per ogni data",
+    "description": "Scegli i posti per le date a cui vuoi venire. Ogni data diventa un biglietto a sé con il suo posto; le date saltate non vengono prenotate.",
+    "back": "← Torna all’evento",
+    "link": "Prenota un posto su più date insieme",
+    "unavailableTitle": "I posti per data non sono disponibili",
+    "unavailableDescription": "Servono almeno due date future, ciascuna con la propria mappa dei posti. Scegli invece una sola data nella pagina dell’evento."
   }
 }

@@ -214,7 +214,15 @@ export async function seatTicketTypesTx(
 /** The seats a hold (an order) has, with their price category and label. */
 export async function heldSeatsTx(tx: TenantTx, holdId: string) {
   return tx
-    .select({ seatUuid: eventSeats.seatUuid, ticketTypeId: eventSeats.ticketTypeId, label: eventSeats.label })
+    .select({
+      seatUuid: eventSeats.seatUuid,
+      ticketTypeId: eventSeats.ticketTypeId,
+      label: eventSeats.label,
+      /** The date the seat is held for: its own chart's date, else the date held on the event plan. */
+      occurrenceId: sql<
+        string | null
+      >`coalesce(${eventSeats.occurrenceId}, ${eventSeats.heldForOccurrenceId})`,
+    })
     .from(eventSeats)
     .where(and(eq(eventSeats.holdId, holdId), eq(eventSeats.status, 'held')))
     .orderBy(eventSeats.label);

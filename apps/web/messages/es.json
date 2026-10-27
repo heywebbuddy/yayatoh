@@ -19957,5 +19957,14 @@
     "saved": "Límite guardado.",
     "invalid": "Introduce un número entero o déjalo vacío.",
     "belowSold": "Es menos de las entradas ya vendidas o reservadas. Elige un número mayor."
+  },
+  "legs": {
+    "metaTitle": "Elige un asiento en cada fecha",
+    "title": "Elige un asiento en cada fecha",
+    "description": "Elige asientos en las fechas a las que quieres ir. Cada fecha será una entrada propia con su asiento; las fechas que omitas no se reservan.",
+    "back": "← Volver al evento",
+    "link": "Reservar asiento en varias fechas a la vez",
+    "unavailableTitle": "Los asientos por fecha no están disponibles",
+    "unavailableDescription": "Hacen falta al menos dos fechas próximas con su propio plano de asientos. Elige una sola fecha en la página del evento."
   }
 }

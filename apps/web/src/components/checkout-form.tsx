@@ -13,6 +13,7 @@ import { CheckoutQuestions, type QuestionView } from '@/components/checkout-ques
 import { GuestCodeFields } from '@/components/guest-code-fields.tsx';
 import { OrderSummary } from '@/components/order-summary.tsx';
 import type { SeatMapView, SeatStreamSource } from '@/components/seat-picker.tsx';
+import { SeatPicker } from '@/components/seat-picker.tsx';
 import { SeatSelection } from '@/components/seat-selection.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { useCssomStyle } from '@/lib/cssom-style.ts';
@@ -58,7 +59,13 @@ export function CheckoutForm({
   advancedSeating = false,
   channel = null,
   preview = null,
+  legs = null,
 }: {
+  /**
+   * One seat per date ("airplane style"): the dates to choose seats on, each with its own seat map.
+   * The order then holds one seat (and one ticket) per chosen date.
+   */
+  legs?: readonly { id: string; label: string; map: SeatMapView }[] | null;
   /** Prices the cart on the server (same rules as checkout) for the order summary. */
   preview?: ((input: OrderPreviewInput) => Promise<OrderPreviewState>) | null;
   /** M4.8e: the event takes gifts tonight; offer to save a card for them after paying (P4-14). */
@@ -117,7 +124,9 @@ export function CheckoutForm({
     if (verify) verifyPanel.current?.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }, [verify?.token]);
   const buyable = passes.some((p) => p.id && p.availability === 'available');
-  const seatedTypes = new Set(seatMap?.seats.map((s) => s.ticketTypeId) ?? []);
+  const seatedTypes = new Set(
+    (seatMap ? seatMap.seats : (legs ?? []).flatMap((l) => l.map.seats)).map((s) => s.ticketTypeId),
+  );
   const prices = Object.fromEntries(passes.flatMap((p) => (p.id ? [[p.id, p.priceLabel]] : [])));
   const error =
     state.code === null || state.code === 'verify_email'
@@ -309,7 +318,20 @@ export function CheckoutForm({
           );
         })}
       </ul>
-      {buyable && seatMap ? (
+      {buyable && legs
+        ? legs.map((leg) => (
+            <Card tone="muted" key={leg.id}>
+              <h3 className="mb-2 text-section">{leg.label}</h3>
+              <SeatPicker
+                map={leg.map}
+                prices={prices}
+                fieldName={`legseat:${leg.id}`}
+                {...(timeZone ? { timeZone } : {})}
+              />
+            </Card>
+          ))
+        : null}
+      {buyable && seatMap && !legs ? (
         <Card tone="muted">
           <SeatSelection
             map={seatMap}

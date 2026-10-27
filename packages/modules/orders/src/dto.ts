@@ -182,6 +182,15 @@ export const StartCheckoutInput = z.object({
   /** M6.11a: the buyer says someone in the party needs a wheelchair-accessible seat. */
   accessibleNeed: z.boolean().default(false),
   /**
+   * One seat per date or leg ("airplane style", multi-date events whose dates have their own charts):
+   * the seats chosen on each date. Each seat becomes its own ticket for that date. Used instead of
+   * `occurrenceId`, `items`, `seats` and `seatHold`; absent for the ordinary one-date flow.
+   */
+  legs: z
+    .array(z.object({ occurrenceId: z.uuid(), seats: z.array(z.uuid()).min(1).max(20) }))
+    .max(8)
+    .default([]),
+  /**
    * M6.11b: a sponsor's or promoter's sales code (their link carries it): seated orders go through
    * that channel and may take its allotted seats. An unknown code is refused.
    */

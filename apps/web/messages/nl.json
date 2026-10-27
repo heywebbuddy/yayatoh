@@ -19957,5 +19957,14 @@
     "saved": "Limiet opgeslagen.",
     "invalid": "Voer een geheel getal in of laat leeg.",
     "belowSold": "Dat is minder dan het aantal al verkochte of vastgehouden tickets. Kies een hoger getal."
+  },
+  "legs": {
+    "metaTitle": "Kies een plaats voor elke datum",
+    "title": "Kies een plaats voor elke datum",
+    "description": "Kies plaatsen voor de data waarop je komt. Elke datum wordt een eigen ticket met eigen plaats; overgeslagen data worden niet geboekt.",
+    "back": "← Terug naar het evenement",
+    "link": "Plaatsen voor meerdere data tegelijk boeken",
+    "unavailableTitle": "Plaatsen per datum zijn niet beschikbaar",
+    "unavailableDescription": "Hiervoor zijn minstens twee komende data nodig met elk een eigen zaalplan. Kies in plaats daarvan één datum op de evenementpagina."
   }
 }

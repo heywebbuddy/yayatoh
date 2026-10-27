@@ -19957,5 +19957,14 @@
     "saved": "Limit saved.",
     "invalid": "Enter a whole number, or leave it empty.",
     "belowSold": "That is below the tickets already sold or held. Choose a higher number."
+  },
+  "legs": {
+    "metaTitle": "Choose a seat on each date",
+    "title": "Choose a seat on each date",
+    "description": "Pick seats on the dates you want to come to. Each date becomes its own ticket with its own seat; dates you skip are not booked.",
+    "back": "← Back to the event",
+    "link": "Book a seat on several dates at once",
+    "unavailableTitle": "Seats per date aren’t available",
+    "unavailableDescription": "This needs at least two upcoming dates that each have their own seat map. Choose one date on the event page instead."
   }
 }

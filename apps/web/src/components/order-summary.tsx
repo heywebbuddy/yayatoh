@@ -18,8 +18,13 @@ function readCart(form: HTMLFormElement): OrderPreviewInput {
   const seatHold = String(data.get('seatHold') ?? '').trim();
   const promoCode = String(data.get('promoCode') ?? '').trim();
   const occurrenceId = String(data.get('occurrenceId') ?? '').trim();
+  const legs = [...new Set([...data.keys()].filter((k) => k.startsWith('legseat:')))].map((k) => ({
+    occurrenceId: k.slice(8),
+    seats: data.getAll(k).map(String),
+  }));
   return {
     items,
+    ...(legs.length ? { legs } : {}),
     seats: seatHold ? [] : data.getAll('seat').map(String),
     ...(seatHold ? { seatHold } : {}),
     ...(promoCode ? { promoCode } : {}),
@@ -59,7 +64,7 @@ export function OrderSummary({
       if (key === last) return;
       last = key;
       clearTimeout(timer);
-      if (cart.items.length === 0 && cart.seats.length === 0 && !cart.seatHold) {
+      if (cart.items.length === 0 && cart.seats.length === 0 && !cart.seatHold && !cart.legs?.length) {
         seq++;
         setState(null);
         onFree?.(false);

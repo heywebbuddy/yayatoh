@@ -19957,5 +19957,14 @@
     "saved": "Limite enregistrée.",
     "invalid": "Saisissez un nombre entier ou laissez vide.",
     "belowSold": "C’est inférieur aux billets déjà vendus ou réservés. Choisissez un nombre plus élevé."
+  },
+  "legs": {
+    "metaTitle": "Choisir une place pour chaque date",
+    "title": "Choisir une place pour chaque date",
+    "description": "Choisissez des places pour les dates où vous venez. Chaque date devient un billet à part avec sa place ; les dates ignorées ne sont pas réservées.",
+    "back": "← Retour à l’événement",
+    "link": "Réserver une place sur plusieurs dates à la fois",
+    "unavailableTitle": "Les places par date ne sont pas disponibles",
+    "unavailableDescription": "Il faut au moins deux dates à venir ayant chacune son plan de salle. Choisissez plutôt une date sur la page de l’événement."
   }
 }

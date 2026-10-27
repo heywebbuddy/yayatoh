@@ -89,7 +89,10 @@ export function SeatPicker({
   timeZone,
   accessibleNeed = false,
   onChoice,
+  fieldName = 'seat',
 }: {
+  /** The form field chosen seats post as (one per date when booking several dates at once). */
+  fieldName?: string;
   map: SeatMapView;
   /** Ticket type id → its all-in price label. */
   prices: Readonly<Record<string, string>>;
@@ -370,6 +373,7 @@ export function SeatPicker({
               map={bySeat}
               prices={prices}
               keptNote={keptNote}
+              fieldName={fieldName}
               available={available}
               selected={selected}
               onToggle={onToggle}
@@ -408,7 +412,7 @@ export function SeatPicker({
                 ? group
                 : g.seats
                     .filter((id) => selected.has(id))
-                    .map((id) => <input key={id} type="hidden" name="seat" value={id} />)}
+                    .map((id) => <input key={id} type="hidden" name={fieldName} value={id} />)}
             </details>
           );
         })}
@@ -424,11 +428,13 @@ const SeatGroup = memo(
     map,
     prices,
     keptNote,
+    fieldName,
     available,
     selected,
     onToggle,
     onToggleTable,
   }: {
+    fieldName: string;
     group: Group;
     sig: string;
     map: ReadonlyMap<string, SeatMapView['seats'][number]>;
@@ -475,7 +481,7 @@ const SeatGroup = memo(
               >
                 <input
                   type="checkbox"
-                  name="seat"
+                  name={fieldName}
                   value={id}
                   className="size-5"
                   disabled={!free}

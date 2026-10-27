@@ -19957,5 +19957,14 @@
     "saved": "Limit gespeichert.",
     "invalid": "Gib eine ganze Zahl ein oder lass das Feld leer.",
     "belowSold": "Das liegt unter den bereits verkauften oder reservierten Tickets. Wähle eine höhere Zahl."
+  },
+  "legs": {
+    "metaTitle": "Platz für jeden Termin wählen",
+    "title": "Platz für jeden Termin wählen",
+    "description": "Wähle Plätze für die Termine, zu denen du kommen möchtest. Jeder Termin wird ein eigenes Ticket mit eigenem Platz; ausgelassene Termine werden nicht gebucht.",
+    "back": "← Zurück zur Veranstaltung",
+    "link": "Plätze für mehrere Termine auf einmal buchen",
+    "unavailableTitle": "Plätze pro Termin sind nicht verfügbar",
+    "unavailableDescription": "Dafür braucht es mindestens zwei kommende Termine mit jeweils eigenem Sitzplan. Wähle stattdessen einen Termin auf der Veranstaltungsseite."
   }
 }

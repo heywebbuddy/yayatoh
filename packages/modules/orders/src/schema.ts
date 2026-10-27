@@ -94,6 +94,11 @@ export const orders = tenantTable(
     chargeModel: text('charge_model'),
     /** Seated checkout: the chosen seats (held under the order's id until paid or expired). */
     seatUuids: uuid('seat_uuids').array().notNull().default(sql`'{}'::uuid[]`),
+    /**
+     * One seat per date ("airplane style"): the seats of each date/leg the order was placed for.
+     * Null for every ordinary order (one date, or none).
+     */
+    seatLegs: jsonb('seat_legs').$type<{ occurrenceId: string; seatUuids: string[] }[]>(),
     /** Multi-date events (M1.4b): the chosen date (`events.occurrences`, hand-written FK). */
     occurrenceId: uuid('occurrence_id'),
     /**

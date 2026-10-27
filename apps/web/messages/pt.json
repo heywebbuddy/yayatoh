@@ -19957,5 +19957,14 @@
     "saved": "Limite guardado.",
     "invalid": "Introduza um número inteiro ou deixe vazio.",
     "belowSold": "É inferior aos bilhetes já vendidos ou reservados. Escolha um número maior."
+  },
+  "legs": {
+    "metaTitle": "Escolha um lugar em cada data",
+    "title": "Escolha um lugar em cada data",
+    "description": "Escolha lugares nas datas a que quer ir. Cada data passa a ser um bilhete próprio com o seu lugar; as datas que ignorar não são reservadas.",
+    "back": "← Voltar ao evento",
+    "link": "Reservar lugar em várias datas de uma vez",
+    "unavailableTitle": "Os lugares por data não estão disponíveis",
+    "unavailableDescription": "São necessárias pelo menos duas datas futuras, cada uma com a sua planta. Escolha antes uma data na página do evento."
   }
 }
