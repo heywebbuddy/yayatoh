@@ -47,6 +47,7 @@ const d: Demo = {
 };
 
 const files = readdirSync(dir);
+const keyOf = (k: string) => (files.some((f) => f.startsWith(`${k}-cover-`)) ? k : (BORROW[k] ?? k));
 const file = (name: string) => (files.includes(name) ? new Uint8Array(readFileSync(join(dir, name))) : null);
 const gallery = (key: string) =>
   files
@@ -69,7 +70,15 @@ const KEYS: Record<string, { key: string; alt: string }> = {
   'demo-agency-partner-meet': { key: 'partner', alt: 'Partner awards on stage' },
   'demo-other-pottery-workshop': { key: 'pottery', alt: 'Hands shaping clay on a pottery wheel' },
   'demo-other-heritage-photo-walk': { key: 'photo', alt: 'A photo walk through Old Delhi' },
+  // The base seed's marketplace events, so every card on the home page has a real picture.
+  'harbor-spring-concert': { key: 'live1', alt: 'The open-air stage at sunset' },
+  'harbor-autumn-gala': { key: 'gala2', alt: 'Candlelit tables at the donors’ dinner' },
+  'harbor-film-night': { key: 'live2', alt: 'The stage lit for the film night' },
+  'harbor-winter-show': { key: 'nimbus', alt: 'The winter show stage' },
 };
+/** Events whose own pictures are not in the folder borrow the best-fitting set. */
+const BORROW: Record<string, string> = { pottery: 'food', photo: 'beach' };
+const HARBOR_WORKSHOP = /^harbor-workshop-/;
 /** Each demo venue gets the cover of the event it hosts. */
 const VENUE_IMAGE: Record<keyof typeof VENUES, string> = {
   palace: 'wed1',
@@ -88,10 +97,15 @@ const logoName = (company: string) =>
 
 const events = await read<
   { id: string; slug: string; name: string; profile: string } & Record<string, unknown>
->(d, sql`select id, slug, name, profile from events.events where slug like 'demo-%' order by starts_at`);
+>(
+  d,
+  sql`select id, slug, name, profile from events.events where slug like 'demo-%' or slug like 'harbor-%' order by starts_at`,
+);
 for (const ev of events) {
-  const k = KEYS[ev.slug];
-  if (!k) continue;
+  const base =
+    KEYS[ev.slug] ?? (HARBOR_WORKSHOP.test(ev.slug) ? { key: 'food', alt: 'A hands-on workshop' } : null);
+  if (!base) continue;
+  const k = { ...base, key: keyOf(base.key) };
   const cover = file(`${k.key}-cover-1.jpg`);
   if (cover)
     await step(`${ev.slug} cover`, () =>

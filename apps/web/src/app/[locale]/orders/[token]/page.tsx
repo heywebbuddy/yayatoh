@@ -11,6 +11,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BuyerRefundRequestForm } from '@/components/buyer-refund-request.tsx';
 import { HolderContent } from '@/components/holder-content.tsx';
 import { NameHoldersForm } from '@/components/name-holders-form.tsx';
+import { PickupInfo } from '@/components/pickup-info.tsx';
 import { OrderReview } from '@/components/reviews/order-review.tsx';
 import { TicketQr } from '@/components/ticket-qr.tsx';
 import { WebPushControl } from '@/components/web-push-control.tsx';
@@ -363,6 +364,9 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           locale={locale}
           timeZone={order.event.timezone}
         />
+      ) : null}
+      {holderTarget ? (
+        <PickupInfo orgId={holderTarget.orgId} eventId={holderTarget.eventId} orderId={order.id} />
       ) : null}
       {holderTarget ? (
         <HolderContent target={holderTarget} locale={locale} timeZone={order.event.timezone} />

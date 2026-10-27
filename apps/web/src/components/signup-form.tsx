@@ -8,7 +8,16 @@ import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { HumanCheckField, type HumanCheckWidget } from './human-check-field.tsx';
 
-const PROFILES = ['wedding', 'gala', 'concert', 'conference', 'community', 'agency', 'other'] as const;
+const PROFILES = [
+  'wedding',
+  'gala',
+  'concert',
+  'conference',
+  'community',
+  'tour',
+  'agency',
+  'other',
+] as const;
 
 const slugify = (s: string) =>
   s

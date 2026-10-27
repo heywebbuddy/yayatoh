@@ -45,7 +45,16 @@ const base = { locale: 'en', tone: 'friendly' as const, brand, orgName: 'Harbor 
 describe('purposes and tones (M6.12b)', () => {
   it('keeps the M1.4f draft kinds and adds the v2 purposes', () => {
     expect(DRAFT_KINDS).toEqual(['tagline', 'description', 'faq']);
-    expect(AI_PURPOSES).toEqual([...DRAFT_KINDS, 'campaign', 'page', 'agenda', 'audience', 'embedding']);
+    expect(AI_PURPOSES).toEqual([
+      ...DRAFT_KINDS,
+      'campaign',
+      'page',
+      'agenda',
+      'audience',
+      'event_setup',
+      'embedding',
+      'assistant',
+    ]);
     expect(TONES).toContain('formal');
   });
   it('embeds at the dimension the column stores', () => {

@@ -6,6 +6,7 @@ import {
   foreignKey,
   index,
   integer,
+  jsonb,
   pgSchema,
   text,
   timestamp,
@@ -31,6 +32,7 @@ export const EVENT_PROFILES = [
   'concert',
   'conference',
   'community',
+  'tour',
   'agency',
   'other',
 ] as const;
@@ -95,6 +97,11 @@ export const events = tenantTable(
     seoDescription: text('seo_description'),
     /** Show "N going" on the public page (off by default). */
     showAttendeeCount: boolean('show_attendee_count').notNull().default(false),
+    /**
+     * Organizer design options for the public page (theme, heading font, hero layout, hero video
+     * link); see `domain/design.ts`. Null: the classic default.
+     */
+    design: jsonb('design'),
   },
   (t) => [
     uniqueIndex('events_slug_key').on(t.slug),
@@ -103,6 +110,7 @@ export const events = tenantTable(
       'events_seo_description_check',
       sql`seo_description is null or char_length(seo_description) between 1 and 200`,
     ),
+    check('events_design_check', sql`design is null or jsonb_typeof(design) = 'object'`),
     check('events_brand_color_check', sql`brand_color is null or brand_color ~ '^#[0-9a-f]{6}$'`),
     index('events_org_id_starts_at_idx').on(t.orgId, t.startsAt),
     check('events_status_check', inList('status', EVENT_STATUSES)),

@@ -6,6 +6,7 @@ import {
   listingCities,
   orgListings,
   orgListingTags,
+  type PublicEventHit,
   popularListings,
   promotedPlacements,
   promotedPlacementsEnabled,
@@ -16,6 +17,7 @@ import {
   type SimilarDto,
   searchListings,
   searchMarketplace,
+  searchPublicEvents,
   similarListings,
 } from '@yayatoh/marketplace';
 import { type PublicReviewSummaryDto, publicReviews } from '@yayatoh/reviews';
@@ -152,4 +154,22 @@ export const cachedPromoted = (p: SearchV2Params) =>
         ? promotedPlacements(await requireIndex(), p, new Date(), { enabled: true })
         : [],
     (raw) => reviveItems(raw as Raw[]),
+  );
+
+/**
+ * The marketplace home's source of truth: the next upcoming public events (soonest first), each
+ * with its platform category. The home groups them into category sections and an organizer panel,
+ * so one cached read serves the whole page.
+ */
+export const cachedShowcaseEvents = (limit = 100, category?: string) =>
+  publicCached(
+    'marketplace',
+    ['showcase-events', limit, category ?? null],
+    async () => (await searchPublicEvents({ limit, ...(category ? { category } : {}) })).slice(0, limit),
+    (raw) =>
+      (raw as Raw[]).map((l) => ({
+        ...reviveListing(l),
+        category: l.category ?? null,
+        distanceKm: null,
+      })) as PublicEventHit[],
   );

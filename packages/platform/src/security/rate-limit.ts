@@ -378,6 +378,14 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 60, windowMs: 60 * MIN },
     ipCeiling: { limit: 300, windowMs: 10 * MIN },
   },
+  /** An attendee's question to an event's AI assistant: each one calls a paid model and spends the
+   * organizer's credits, so bursts are cut early (identity = the event). */
+  eventAssistant: {
+    device: { limit: 8, windowMs: 10 * MIN },
+    anonymousIp: { limit: 20, windowMs: 10 * MIN },
+    identity: { limit: 120, windowMs: 60 * MIN },
+    ipCeiling: { limit: 300, windowMs: 10 * MIN },
+  },
   /** Tracked-link clicks (M3.8a): over the limit, the visitor is still redirected but no click is
    * recorded (a flood must not inflate a link's figures). */
   trackedClick: {

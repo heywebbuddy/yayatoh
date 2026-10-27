@@ -17,6 +17,7 @@
   "dependencies": {
     "@fontsource-variable/manrope": "5.3.0",
     "@fontsource-variable/noto-sans-devanagari": "5.3.0",
+    "@fontsource-variable/unbounded": "5.3.0",
     "@fontsource/ibm-plex-sans-arabic": "5.3.0",
     "@yayatoh/agency": "workspace:*",
     "@yayatoh/agency-ops": "workspace:*",
@@ -75,6 +76,7 @@
     "@yayatoh/venues": "workspace:*",
     "@yayatoh/virtual": "workspace:*",
     "@yayatoh/webhooks": "workspace:*",
+    "framer-motion": "12.43.0",
     "geist": "1.7.2",
     "hono": "catalog:",
     "konva": "10.7.0",

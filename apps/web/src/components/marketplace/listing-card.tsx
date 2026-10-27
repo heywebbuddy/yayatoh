@@ -44,6 +44,7 @@ export async function ListingCard({
           <MediaPicture
             image={cover}
             sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+            eager
             className="aspect-video w-full bg-surface-2 object-cover"
           />
         </div>

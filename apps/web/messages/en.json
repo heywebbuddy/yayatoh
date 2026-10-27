@@ -49,7 +49,8 @@
       "template": "Template",
       "venue": "Venue",
       "coupon": "Coupon",
-      "page": "Page or blog post"
+      "page": "Page or blog post",
+      "eventAi": "Event with AI"
     },
     "help": "Help",
     "clientsSection": "Clients",
@@ -427,7 +428,8 @@
     "ceCredits": "CE credits",
     "brandKits": "Brand kits",
     "venuePortal": "Venue portal",
-    "promotions": "Promotions"
+    "promotions": "Promotions",
+    "pickups": "Pickup points"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -445,7 +447,9 @@
     "organizer": "Organizer",
     "organizers": "Organizers",
     "host": "Host",
-    "hosts": "Hosts"
+    "hosts": "Hosts",
+    "passenger": "Passenger",
+    "passengers": "Passengers"
   },
   "roles": {
     "owner": "Owner",
@@ -471,7 +475,8 @@
     "conference": "Conference",
     "community": "Community",
     "agency": "Agency",
-    "other": "Event"
+    "other": "Event",
+    "tour": "Tour"
   },
   "greeting": {
     "morning": "Good morning, {name}.",
@@ -1024,7 +1029,8 @@
     "categoryHint": "Helps you organize events and helps attendees find them. You can change it later in Event details.",
     "manageCategories": "Manage categories (opens a new tab)",
     "refreshCategories": "Refresh category list",
-    "refreshingCategories": "Refreshing…"
+    "refreshingCategories": "Refreshing…",
+    "withAi": "Create with AI"
   },
   "tickets": {
     "subtitle": "Ticket types, prices and inventory. Every price buyers see includes fees.",
@@ -1842,7 +1848,8 @@
       "conference": "Registration, sessions, speakers and badges.",
       "community": "Free sign-ups, meetups and simple ticketing.",
       "agency": "Run events for several clients from one account.",
-      "other": "Start simple and switch on what you need."
+      "other": "Start simple and switch on what you need.",
+      "tour": "Bus, boat and walking tours with repeating departures and pickup points."
     },
     "terms": "I agree to the <tos>Terms of Service</tos> and the <dpa>Data Processing Addendum</dpa> on behalf of this organization.",
     "submit": "Create organization",
@@ -4583,7 +4590,8 @@
       "community": "Community",
       "other": "Other",
       "wedding": "Wedding",
-      "agency": "Agency"
+      "agency": "Agency",
+      "tour": "Tour"
     },
     "filters": {
       "label": "Search events",
@@ -18234,7 +18242,8 @@
       "wedding": "Guests, RSVPs, seating and a guest website.",
       "community": "Members, sign-ups and messages for a group or a cause.",
       "agency": "Events you run for clients, with marketing and reports.",
-      "other": "Tickets, attendees and check-in for anything else."
+      "other": "Tickets, attendees and check-in for anything else.",
+      "tour": "Departures on a schedule, a capacity for each, and pickup points passengers choose."
     }
   },
   "seriesField": {
@@ -18325,7 +18334,8 @@
       "conference": "Registration, sessions, speakers, exhibitors, sponsors and badges.",
       "community": "Meetups and classes: free or paid sign-ups, recurring dates and check-in.",
       "agency": "Events you run for clients, with their branding and reports.",
-      "other": "A general event: tickets, attendees, a page and check-in."
+      "other": "A general event: tickets, attendees, a page and check-in.",
+      "tour": "Bus, boat or walking tours: repeating departures, capacity per departure and pickup points."
     },
     "name": "Template name",
     "nameInvalid": "Enter a name of 2 to 120 characters.",
@@ -19473,5 +19483,452 @@
     "description": "What an attendee sees for this event.",
     "sections": "Portal sections",
     "sampleStatus": "Paid"
+  },
+  "showcase": {
+    "wordmark": "Yayatoh",
+    "searchLabel": "Search events",
+    "searchPlaceholder": "Search events",
+    "siteNav": "Site",
+    "events": "Events",
+    "solutionsLabel": "Solutions",
+    "pricing": "Pricing",
+    "myTickets": "My tickets",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "dashboard": "Dashboard",
+    "menu": "Menu",
+    "categoriesLabel": "Event categories",
+    "viewAll": "View all",
+    "prev": "Previous",
+    "next": "Next",
+    "featured": "Featured events",
+    "price": {
+      "free": "Free",
+      "soon": "Tickets soon",
+      "fromTo": "From {min} – {max}",
+      "fromOnly": "{min}",
+      "postponed": "Postponed"
+    },
+    "hero": {
+      "title": "Live events, all in one place",
+      "lede": "Concerts, galas, conferences and community events, with every fee included in the price.",
+      "cta": "View all events"
+    },
+    "creators": {
+      "title": "Popular organizers",
+      "lede": "The people and teams behind the events everyone is talking about.",
+      "all": "Discover events",
+      "events": "{count, plural, one {# event} other {# events}}"
+    },
+    "organizerCta": {
+      "title": "Earn more from every event",
+      "lede": "Sell tickets and take donations with a checkout your guests trust, and run the whole event from one place.",
+      "points": {
+        "one": "Fees shown up front, no surprises at checkout",
+        "two": "Check-in, seating and reports included",
+        "three": "Your own event page and branding"
+      },
+      "cta": "Create event"
+    },
+    "footer": {
+      "tagline": "Discover, sell and run live events.",
+      "soon": "Coming soon",
+      "appStore": "App Store",
+      "googlePlay": "Google Play",
+      "menu": "Menu",
+      "venues": "Venues",
+      "series": "Series",
+      "features": "All features",
+      "resources": "Resources",
+      "help": "Help centre"
+    },
+    "solutions": {
+      "createEvent": "Create an event",
+      "seeFeatures": "See all features",
+      "featuresTitle": "What you get",
+      "stepsTitle": "How it works",
+      "ctaTitle": "Ready to host?",
+      "ctaLede": "Create your account and start on your first event.",
+      "organizations": {
+        "name": "Organizations",
+        "metaTitle": "Event software for organizations",
+        "title": "Run every event your organization hosts",
+        "lede": "Clubs, associations, charities and communities: one account for all your events, with ticketing, registration, messages and fundraising built in.",
+        "features": {
+          "events": {
+            "title": "All your events in one place",
+            "desc": "Create one-off and repeating events under your organization, with its own public page."
+          },
+          "tickets": {
+            "title": "Ticketing with fees shown up front",
+            "desc": "Free and paid tickets, promo codes and a checkout that shows the full price."
+          },
+          "registration": {
+            "title": "Registration forms",
+            "desc": "Collect the details you need from members and guests when they sign up."
+          },
+          "messages": {
+            "title": "Messages to your members",
+            "desc": "Send announcements and reminders to the people who registered."
+          },
+          "donations": {
+            "title": "Donations",
+            "desc": "Accept gifts alongside tickets and see what each event raised."
+          },
+          "reports": {
+            "title": "Reports",
+            "desc": "Track sales, registrations and attendance across your events."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Set up your organization",
+            "desc": "Create your account, add your name and brand, and open your public page."
+          },
+          "two": {
+            "title": "Publish your events",
+            "desc": "Add tickets or a registration form and share the event link."
+          },
+          "three": {
+            "title": "Welcome people in",
+            "desc": "Check members in at the door and see the numbers afterwards."
+          }
+        }
+      },
+      "weddings": {
+        "name": "Weddings",
+        "metaTitle": "Wedding planning and guest management",
+        "title": "Your wedding, hosted beautifully",
+        "lede": "Invite guests, collect RSVPs, plan the seating and share a guest website, all in one calm place.",
+        "features": {
+          "guests": {
+            "title": "Guest list",
+            "desc": "Add your guests and groups, and see who is invited at a glance."
+          },
+          "rsvp": {
+            "title": "RSVPs",
+            "desc": "Guests answer online, and you see who is coming."
+          },
+          "seating": {
+            "title": "Seating plan",
+            "desc": "Arrange tables and seat your guests on a floor plan."
+          },
+          "seatFinder": {
+            "title": "Seat finder",
+            "desc": "On the day, guests look up their name and find their table."
+          },
+          "website": {
+            "title": "Guest website",
+            "desc": "A page for the day with the schedule, venue and details for your guests."
+          },
+          "gallery": {
+            "title": "Photo gallery",
+            "desc": "Guests share their photos of the day in one gallery."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Add your guests",
+            "desc": "Type or import your guest list and send the invitations."
+          },
+          "two": {
+            "title": "Collect answers",
+            "desc": "Track RSVPs and plan the seating as replies arrive."
+          },
+          "three": {
+            "title": "Enjoy the day",
+            "desc": "Greet guests with the seat finder and check-in, and gather the photos."
+          }
+        }
+      },
+      "galas": {
+        "name": "Galas",
+        "metaTitle": "Ticketing and fundraising for galas",
+        "title": "A gala night people remember",
+        "lede": "Sell tickets and tables, seat your guests, take donations and run a smooth door.",
+        "features": {
+          "tickets": {
+            "title": "Tickets and tables",
+            "desc": "Sell single seats or whole tables with clear pricing."
+          },
+          "tables": {
+            "title": "Hosted tables and seating",
+            "desc": "Place guests on a floor plan and name the sponsors who host tables."
+          },
+          "donations": {
+            "title": "Donations",
+            "desc": "Ask for gifts at checkout and keep track of what you raise."
+          },
+          "guests": {
+            "title": "Guest list",
+            "desc": "See every guest, their ticket and their details in one list."
+          },
+          "marketing": {
+            "title": "Invitations and campaigns",
+            "desc": "Reach your supporters with email campaigns and shareable links."
+          },
+          "door": {
+            "title": "Smooth check-in",
+            "desc": "Scan tickets at the door and see arrivals live."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Open ticket sales",
+            "desc": "Set your prices, tables and a donation ask, then publish."
+          },
+          "two": {
+            "title": "Seat your guests",
+            "desc": "Assign guests to tables as sales come in."
+          },
+          "three": {
+            "title": "Run the evening",
+            "desc": "Check guests in and follow the night as it happens."
+          }
+        }
+      },
+      "conferences": {
+        "name": "Conferences",
+        "metaTitle": "Conference registration and programme software",
+        "title": "Conferences that run themselves",
+        "lede": "Registration, programme, speakers, exhibitors and badges, with online sessions for hybrid events.",
+        "features": {
+          "registration": {
+            "title": "Registration",
+            "desc": "Registration forms, ticket types and group sales for attendees."
+          },
+          "sessions": {
+            "title": "Programme and sessions",
+            "desc": "Build the agenda with sessions, rooms and times."
+          },
+          "speakers": {
+            "title": "Speakers",
+            "desc": "Give each speaker a profile and link them to their sessions."
+          },
+          "exhibitors": {
+            "title": "Exhibitors and sponsors",
+            "desc": "List your exhibitors and sponsors and give them a place on the event page."
+          },
+          "badges": {
+            "title": "Badges",
+            "desc": "Design badges and print them in batches before the doors open."
+          },
+          "virtual": {
+            "title": "Online and hybrid sessions",
+            "desc": "Stream sessions to remote attendees and issue CE credit certificates."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Open registration",
+            "desc": "Create ticket types and the registration form, then publish."
+          },
+          "two": {
+            "title": "Build the programme",
+            "desc": "Add sessions, speakers, exhibitors and sponsors."
+          },
+          "three": {
+            "title": "Run the event",
+            "desc": "Print badges, check people in and read the reports."
+          }
+        }
+      }
+    },
+    "event": {
+      "playVideo": "Play background video",
+      "pauseVideo": "Pause background video"
+    },
+    "types": {
+      "concert": "Music & concerts",
+      "conference": "Conferences",
+      "wedding": "Weddings",
+      "gala": "Galas",
+      "community": "Community",
+      "tour": "Tours",
+      "agency": "Corporate"
+    },
+    "matrix": {
+      "modules": {
+        "ticketing": "Ticket sales",
+        "registration": "Registration forms",
+        "seating": "Seating plans",
+        "donations": "Donations",
+        "guests": "Guest lists",
+        "rsvp": "RSVPs",
+        "sessions": "Sessions and agenda",
+        "speakers": "Speakers",
+        "exhibitors": "Exhibitors and sponsors",
+        "badges": "Badges",
+        "checkin": "Check-in at the door",
+        "marketing": "Marketing and campaigns",
+        "messaging": "Messages to attendees",
+        "gallery": "Photo gallery",
+        "website": "Guest website",
+        "virtual": "Online and hybrid sessions",
+        "reports": "Reports"
+      },
+      "title": "What each event type includes",
+      "lede": "Every event type starts with the tools it needs. You can switch more on later.",
+      "feature": "Feature",
+      "included": "Included",
+      "notIncluded": "Not included by default",
+      "demoTitle": "Events like this on Yayatoh"
+    }
+  },
+  "eventDesign": {
+    "title": "Page design",
+    "description": "Choose how this event’s public page looks: its theme, heading font and the hero at the top.",
+    "themeLabel": "Theme",
+    "theme": {
+      "classic": {
+        "title": "Classic light",
+        "hint": "The familiar light page."
+      },
+      "showcase": {
+        "title": "Showcase dark",
+        "hint": "Near-black with red-to-pink accents."
+      }
+    },
+    "fontLabel": "Heading font",
+    "font": {
+      "modern": {
+        "title": "Modern",
+        "hint": "Clean and friendly."
+      },
+      "extended": {
+        "title": "Extended",
+        "hint": "Wide, bold capitals for a poster look."
+      },
+      "classic": {
+        "title": "Classic serif",
+        "hint": "A traditional serif for formal events."
+      }
+    },
+    "layoutLabel": "Hero layout",
+    "layout": {
+      "full": {
+        "title": "Full-bleed image",
+        "hint": "The cover image fills the top."
+      },
+      "circle": {
+        "title": "Circle image",
+        "hint": "The cover image in a round frame beside the title."
+      },
+      "video": {
+        "title": "Video background",
+        "hint": "A muted, looping video behind the title."
+      }
+    },
+    "videoLabel": "Hero video link (YouTube or Vimeo)",
+    "videoHint": "Plays muted and looping behind the title, with a pause button. The cover image shows first, and if the video cannot play.",
+    "videoHintOff": "Used when the hero layout is Video background.",
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…",
+    "assistantLabel": "AI assistant for attendees",
+    "assistantHint": "Answers attendees’ questions from this event’s published details only (times, venue, FAQs, agenda, tickets, refund policy), shows what it used and offers to contact the team. Each answer uses one of your AI credits."
+  },
+  "aiSetup": {
+    "title": "Create with AI",
+    "description": "Describe your event in a sentence or two. AI proposes a draft that you review and edit. Nothing is created until you confirm.",
+    "manual": "Create manually",
+    "brief": "Describe your event",
+    "briefHint": "For example: a one-day open-source conference in Lisbon in May for 200 people, with talks and a workshop. Add dates, place and prices if you know them.",
+    "propose": "Propose an event",
+    "review": {
+      "title": "Review the proposal",
+      "hint": "AI wrote this from your description. Edit anything, remove what you do not want, then create a draft event. Check dates, prices and facts: AI can be wrong."
+    },
+    "fields": {
+      "name": "Event name",
+      "profile": "Event type",
+      "tagline": "Tagline",
+      "starts": "Starts",
+      "ends": "Ends",
+      "venue": "Venue",
+      "city": "City",
+      "description": "Description",
+      "descriptionHint": "Markdown: paragraphs, bold, italic and lists."
+    },
+    "tickets": {
+      "title": "Ticket types",
+      "none": "No ticket types proposed.",
+      "off": "Ticketing is not switched on for your organization, so tickets will not be added.",
+      "name": "Name",
+      "price": "Price ({currency})",
+      "quantity": "Quantity"
+    },
+    "agenda": {
+      "title": "Agenda outline",
+      "none": "No agenda proposed.",
+      "off": "Sessions are not switched on for your organization, so the agenda will not be added.",
+      "session": "Session",
+      "starts": "Starts"
+    },
+    "faqs": {
+      "title": "FAQs",
+      "none": "No FAQs proposed.",
+      "question": "Question",
+      "answer": "Answer"
+    },
+    "remove": "Remove",
+    "create": "Create draft event",
+    "creating": "Creating…",
+    "discard": "Discard",
+    "confirmNote": "This creates an unpublished draft. You can change everything later.",
+    "sections": {
+      "about": "About this event",
+      "faq": "FAQ"
+    }
+  },
+  "eventAssistant": {
+    "title": "Ask about this event",
+    "intro": "Get quick answers from this event’s published details.",
+    "question": "Your question",
+    "placeholder": "For example: What time do doors open?",
+    "ask": "Ask",
+    "thinking": "Thinking…",
+    "disclaimer": "Answers come only from this event’s published details and can contain mistakes. Check important details with the organizer.",
+    "sources": "Sources:",
+    "dontKnow": "I can’t find that in this event’s published details.",
+    "off": "The assistant is not available for this event right now.",
+    "unavailable": "The assistant is not available right now.",
+    "rateLimited": "That is a lot of questions. Try again in {minutes} min.",
+    "humanHelp": "Want a person to help?",
+    "humanHelpLink": "Ask the event team (you will need your ticket)",
+    "labels": {
+      "event": "The event",
+      "faq": "FAQ",
+      "announcement": "Announcement",
+      "agenda": "Agenda",
+      "ticket": "Ticket",
+      "refund": "Refund policy",
+      "free": "Free",
+      "allIn": "all fees included",
+      "availability": {
+        "available": "On sale",
+        "sold_out": "Sold out",
+        "not_yet_on_sale": "Not on sale yet",
+        "sales_ended": "Sales have ended"
+      }
+    }
+  },
+  "tourPickups": {
+    "title": "Pickup points",
+    "description": "Where passengers join each departure.",
+    "question": "Choose your pickup point",
+    "name": "Name",
+    "address": "Address",
+    "minutesBefore": "Minutes before departure",
+    "add": "Add pickup point",
+    "save": "Save",
+    "saved": "Saved.",
+    "remove": "Remove",
+    "removed": "Removed.",
+    "emptyTitle": "No pickup points yet",
+    "emptyDescription": "Add the places passengers can join. They choose one at checkout and see it on their order.",
+    "addTitle": "Add a pickup point",
+    "departuresHint": "Departures and their capacity are set on the Dates page: repeat the tour on a schedule and give each departure its own number of places.",
+    "beforeDeparture": "Be here {minutes, plural, one {# minute} other {# minutes}} before departure.",
+    "atDeparture": "Meet at the departure time.",
+    "yourPickup": "Your pickup point"
   }
 }

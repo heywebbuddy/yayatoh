@@ -11,6 +11,7 @@ import { MaintenanceBanner } from '@/components/maintenance-banner.tsx';
 import { routing } from '@/i18n/routing.ts';
 import { fontVariables } from '@/lib/fonts.ts';
 import { INTL_SCOPE_HEADER, scopedMessages } from '@/lib/intl-scope.ts';
+import { showcaseSurfaceFor } from '@/lib/showcase-routes.ts';
 import { currentTheme } from '@/server/theme.ts';
 import '../globals.css';
 
@@ -52,7 +53,10 @@ export default async function LocaleLayout({
   const uiStrings = Object.fromEntries(UI_STRING_KEYS.map((k) => [k, tf.raw(k) as string]));
   return (
     <html lang={locale} dir={dir} data-theme={theme} className={fontVariables}>
-      <body className="min-h-dvh bg-page text-ink antialiased">
+      <body
+        className="min-h-dvh bg-page text-ink antialiased"
+        {...(showcaseSurfaceFor((await headers()).get('x-yy-path')) ? { 'data-surface': 'showcase' } : {})}
+      >
         {/* Platform-wide read-only freeze (M2.5a): on every page, public ones included. */}
         <MaintenanceBanner locale={locale} />
         <NextIntlClientProvider {...(messages ? { messages } : {})}>

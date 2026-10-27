@@ -49,7 +49,8 @@
       "template": "範本",
       "venue": "場地",
       "coupon": "優惠券",
-      "page": "頁面或部落格文章"
+      "page": "頁面或部落格文章",
+      "eventAi": "用 AI 建立活動"
     },
     "help": "說明",
     "clientsSection": "客戶",
@@ -427,7 +428,8 @@
     "ceCredits": "繼續教育學分",
     "brandKits": "品牌套件",
     "venuePortal": "場地入口",
-    "promotions": "推廣"
+    "promotions": "推廣",
+    "pickups": "上車點"
   },
   "vocab": {
     "attendee": "參加者",
@@ -445,7 +447,9 @@
     "organizer": "主辦方",
     "organizers": "主辦方",
     "host": "主人",
-    "hosts": "主人"
+    "hosts": "主人",
+    "passenger": "乘客",
+    "passengers": "乘客"
   },
   "roles": {
     "owner": "擁有者",
@@ -471,7 +475,8 @@
     "conference": "研討會",
     "community": "社群",
     "agency": "代理商",
-    "other": "活動"
+    "other": "活動",
+    "tour": "導覽行程"
   },
   "greeting": {
     "morning": "早安，{name}。",
@@ -1024,7 +1029,8 @@
     "categoryHint": "方便你整理活動，也讓參加者更容易找到活動。之後可在「活動詳情」中修改。",
     "manageCategories": "管理分類（在新分頁中開啟）",
     "refreshCategories": "重新整理分類清單",
-    "refreshingCategories": "重新整理中…"
+    "refreshingCategories": "重新整理中…",
+    "withAi": "用 AI 建立"
   },
   "tickets": {
     "subtitle": "管理票種、價格與庫存。買家看到的所有價格皆已包含費用。",
@@ -1842,7 +1848,8 @@
       "conference": "報名、場次、講者和名牌。",
       "community": "免費報名、聚會和簡單的票務。",
       "agency": "用一個帳戶為多個客戶舉辦活動。",
-      "other": "從簡單開始，依需要開啟功能。"
+      "other": "從簡單開始，依需要開啟功能。",
+      "tour": "巴士、遊船與步行導覽，支援重複班次與上車點。"
     },
     "terms": "我代表本組織同意<tos>服務條款</tos>和<dpa>資料處理附錄</dpa>。",
     "submit": "建立組織",
@@ -4583,7 +4590,8 @@
       "community": "社群",
       "other": "其他",
       "wedding": "婚禮",
-      "agency": "代理商"
+      "agency": "代理商",
+      "tour": "導覽行程"
     },
     "filters": {
       "label": "搜尋活動",
@@ -18234,7 +18242,8 @@
       "wedding": "賓客、回覆、座位安排和賓客網站。",
       "community": "為團體或公益事業管理成員、報名和訊息。",
       "agency": "為客戶舉辦的活動，含行銷和報表。",
-      "other": "其他任何活動的門票、參與者和報到。"
+      "other": "其他任何活動的門票、參與者和報到。",
+      "tour": "依時程出發，每個班次有各自的名額，乘客可選擇上車點。"
     }
   },
   "seriesField": {
@@ -18325,7 +18334,8 @@
       "conference": "報名、議程、講者、展商、贊助商和名牌。",
       "community": "聚會和課程：免費或付費報名、重複日期和報到。",
       "agency": "為客戶舉辦的活動，使用客戶的品牌和報告。",
-      "other": "通用活動：門票、參與者、活動頁面和報到。"
+      "other": "通用活動：門票、參與者、活動頁面和報到。",
+      "tour": "巴士、遊船或步行導覽：重複班次、每班次名額與上車點。"
     },
     "name": "範本名稱",
     "nameInvalid": "請輸入 2 到 120 個字元的名稱。",
@@ -19473,5 +19483,452 @@
     "description": "參與者對此活動看到的內容。",
     "sections": "入口區段",
     "sampleStatus": "已付款"
+  },
+  "showcase": {
+    "wordmark": "Yayatoh",
+    "searchLabel": "搜尋活動",
+    "searchPlaceholder": "搜尋活動",
+    "siteNav": "網站",
+    "events": "活動",
+    "solutionsLabel": "解決方案",
+    "pricing": "價格",
+    "myTickets": "我的票券",
+    "signIn": "登入",
+    "signUp": "註冊",
+    "dashboard": "控制台",
+    "menu": "選單",
+    "categoriesLabel": "活動分類",
+    "viewAll": "查看全部",
+    "prev": "上一個",
+    "next": "下一個",
+    "featured": "精選活動",
+    "price": {
+      "free": "免費",
+      "soon": "即將開賣",
+      "fromTo": "{min} – {max} 起",
+      "fromOnly": "{min}",
+      "postponed": "已延期"
+    },
+    "hero": {
+      "title": "現場活動，盡在一處",
+      "lede": "演唱會、晚宴、研討會與社區活動，所有費用皆已含在價格中。",
+      "cta": "查看所有活動"
+    },
+    "creators": {
+      "title": "熱門主辦單位",
+      "lede": "那些人人都在談論的活動背後的人與團隊。",
+      "all": "探索活動",
+      "events": "{count, plural, other {# 場活動}}"
+    },
+    "organizerCta": {
+      "title": "每場活動，賺得更多",
+      "lede": "以賓客信任的結帳方式售票並接受捐款，在同一個地方管理整場活動。",
+      "points": {
+        "one": "費用一目瞭然，結帳時沒有意外",
+        "two": "報到、座位與報表皆已包含",
+        "three": "屬於你的活動頁面與品牌"
+      },
+      "cta": "建立活動"
+    },
+    "footer": {
+      "tagline": "探索、銷售並舉辦現場活動。",
+      "soon": "即將推出",
+      "appStore": "App Store",
+      "googlePlay": "Google Play",
+      "menu": "選單",
+      "venues": "場地",
+      "series": "系列活動",
+      "features": "全部功能",
+      "resources": "資源",
+      "help": "說明中心"
+    },
+    "solutions": {
+      "createEvent": "建立活動",
+      "seeFeatures": "查看全部功能",
+      "featuresTitle": "你將獲得",
+      "stepsTitle": "運作方式",
+      "ctaTitle": "準備好舉辦了嗎？",
+      "ctaLede": "建立帳號，開始你的第一場活動。",
+      "organizations": {
+        "name": "組織",
+        "metaTitle": "適用於組織的活動軟體",
+        "title": "管理你的組織舉辦的每一場活動",
+        "lede": "社團、協會、慈善機構與社群：一個帳號管理所有活動，內建售票、報名、訊息與募款。",
+        "features": {
+          "events": {
+            "title": "所有活動集中一處",
+            "desc": "在你的組織下建立單次與重複活動，並擁有專屬公開頁面。"
+          },
+          "tickets": {
+            "title": "費用透明的售票",
+            "desc": "免費與付費票券、優惠碼，以及顯示完整價格的結帳。"
+          },
+          "registration": {
+            "title": "報名表單",
+            "desc": "成員與賓客報名時，收集你需要的資料。"
+          },
+          "messages": {
+            "title": "傳送訊息給成員",
+            "desc": "向已報名的人傳送公告與提醒。"
+          },
+          "donations": {
+            "title": "捐款",
+            "desc": "在售票之外接受捐款，並查看每場活動募得的金額。"
+          },
+          "reports": {
+            "title": "報表",
+            "desc": "追蹤所有活動的銷售、報名與出席情況。"
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "設定你的組織",
+            "desc": "建立帳號，加入名稱與品牌，並開通公開頁面。"
+          },
+          "two": {
+            "title": "發布你的活動",
+            "desc": "加入票券或報名表單，並分享活動連結。"
+          },
+          "three": {
+            "title": "迎接來賓",
+            "desc": "在門口為成員報到，之後查看數據。"
+          }
+        }
+      },
+      "weddings": {
+        "name": "婚禮",
+        "metaTitle": "婚禮籌備與賓客管理",
+        "title": "讓你的婚禮從容而美好",
+        "lede": "邀請賓客、收集回覆、安排座位並分享賓客網站，一切都在一個安心的地方。",
+        "features": {
+          "guests": {
+            "title": "賓客名單",
+            "desc": "加入賓客與群組，一眼看清誰受到邀請。"
+          },
+          "rsvp": {
+            "title": "回覆確認",
+            "desc": "賓客線上回覆，你可以看到誰會來。"
+          },
+          "seating": {
+            "title": "座位安排",
+            "desc": "擺放桌子，並在平面圖上為賓客安排座位。"
+          },
+          "seatFinder": {
+            "title": "座位查詢",
+            "desc": "當天賓客查詢自己的名字，就能找到自己的桌子。"
+          },
+          "website": {
+            "title": "賓客網站",
+            "desc": "為當天準備的頁面，包含流程、場地與詳細資訊。"
+          },
+          "gallery": {
+            "title": "相片牆",
+            "desc": "賓客把當天的照片分享到同一個相簿。"
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "加入賓客",
+            "desc": "輸入或匯入賓客名單，並寄出邀請。"
+          },
+          "two": {
+            "title": "收集回覆",
+            "desc": "追蹤回覆情況，並隨著回覆安排座位。"
+          },
+          "three": {
+            "title": "享受這一天",
+            "desc": "用座位查詢與報到迎接賓客，並收集照片。"
+          }
+        }
+      },
+      "galas": {
+        "name": "晚宴",
+        "metaTitle": "晚宴售票與募款",
+        "title": "一場令人難忘的晚宴",
+        "lede": "銷售票券與整桌席位，安排賓客座位，接受捐款，讓入場順暢無阻。",
+        "features": {
+          "tickets": {
+            "title": "票券與整桌席位",
+            "desc": "以清楚的價格銷售單一座位或整張桌子。"
+          },
+          "tables": {
+            "title": "主辦桌與座位",
+            "desc": "在平面圖上安排賓客，並標示贊助整桌的贊助商。"
+          },
+          "donations": {
+            "title": "捐款",
+            "desc": "在結帳時發起捐款請求，並掌握募款進度。"
+          },
+          "guests": {
+            "title": "賓客名單",
+            "desc": "在一份名單中查看每位賓客、其票券與資料。"
+          },
+          "marketing": {
+            "title": "邀請與行銷活動",
+            "desc": "透過電子郵件活動與可分享的連結觸及你的支持者。"
+          },
+          "door": {
+            "title": "順暢報到",
+            "desc": "在門口掃描票券，即時查看到場情況。"
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "開始售票",
+            "desc": "設定價格、桌位與捐款請求，然後發布。"
+          },
+          "two": {
+            "title": "安排賓客座位",
+            "desc": "隨著銷售進展把賓客分配到各桌。"
+          },
+          "three": {
+            "title": "主持晚宴",
+            "desc": "為賓客報到，並即時掌握晚宴進程。"
+          }
+        }
+      },
+      "conferences": {
+        "name": "研討會",
+        "metaTitle": "研討會報名與議程軟體",
+        "title": "自己就能運轉的研討會",
+        "lede": "報名、議程、講者、參展商與識別證，並為混合式活動提供線上場次。",
+        "features": {
+          "registration": {
+            "title": "報名",
+            "desc": "提供參加者的報名表單、票種與團體購票。"
+          },
+          "sessions": {
+            "title": "議程與場次",
+            "desc": "以場次、會議室與時間建立議程。"
+          },
+          "speakers": {
+            "title": "講者",
+            "desc": "為每位講者建立檔案，並連結到其場次。"
+          },
+          "exhibitors": {
+            "title": "參展商與贊助商",
+            "desc": "在活動頁面展示你的參展商與贊助商。"
+          },
+          "badges": {
+            "title": "識別證",
+            "desc": "設計識別證，並在開門前批次列印。"
+          },
+          "virtual": {
+            "title": "線上與混合場次",
+            "desc": "向遠端參加者直播場次，並核發繼續教育學分證書。"
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "開放報名",
+            "desc": "建立票種與報名表單，然後發布。"
+          },
+          "two": {
+            "title": "建立議程",
+            "desc": "加入場次、講者、參展商與贊助商。"
+          },
+          "three": {
+            "title": "舉辦活動",
+            "desc": "列印識別證、為參加者報到並查看報表。"
+          }
+        }
+      }
+    },
+    "event": {
+      "playVideo": "播放背景影片",
+      "pauseVideo": "暫停背景影片"
+    },
+    "types": {
+      "concert": "音樂與演唱會",
+      "conference": "研討會",
+      "wedding": "婚禮",
+      "gala": "晚宴",
+      "community": "社群",
+      "tour": "導覽行程",
+      "agency": "企業"
+    },
+    "matrix": {
+      "modules": {
+        "ticketing": "售票",
+        "registration": "報名表單",
+        "seating": "座位圖",
+        "donations": "捐款",
+        "guests": "賓客名單",
+        "rsvp": "回覆確認",
+        "sessions": "場次與議程",
+        "speakers": "講者",
+        "exhibitors": "參展商與贊助商",
+        "badges": "識別證",
+        "checkin": "門口報到",
+        "marketing": "行銷與推廣",
+        "messaging": "給參加者的訊息",
+        "gallery": "相片牆",
+        "website": "賓客網站",
+        "virtual": "線上與混合場次",
+        "reports": "報表"
+      },
+      "title": "各活動類型包含的內容",
+      "lede": "每種活動類型都從所需的工具開始，之後可以開啟更多。",
+      "feature": "功能",
+      "included": "已包含",
+      "notIncluded": "預設不包含",
+      "demoTitle": "Yayatoh 上的同類活動"
+    }
+  },
+  "eventDesign": {
+    "title": "頁面設計",
+    "description": "選擇此活動公開頁面的外觀：主題、標題字體與頂部主視覺。",
+    "themeLabel": "主題",
+    "theme": {
+      "classic": {
+        "title": "經典淺色",
+        "hint": "大家熟悉的淺色頁面。"
+      },
+      "showcase": {
+        "title": "展示深色",
+        "hint": "近乎純黑，搭配紅到粉的點綴色。"
+      }
+    },
+    "fontLabel": "標題字體",
+    "font": {
+      "modern": {
+        "title": "現代",
+        "hint": "簡潔友善。"
+      },
+      "extended": {
+        "title": "加寬",
+        "hint": "寬幅粗體大寫字母，海報風格。"
+      },
+      "classic": {
+        "title": "經典襯線",
+        "hint": "適合正式活動的傳統襯線體。"
+      }
+    },
+    "layoutLabel": "主視覺版面",
+    "layout": {
+      "full": {
+        "title": "全寬圖片",
+        "hint": "封面圖佔滿頂部。"
+      },
+      "circle": {
+        "title": "圓形圖片",
+        "hint": "封面圖以圓形邊框顯示在標題旁。"
+      },
+      "video": {
+        "title": "影片背景",
+        "hint": "標題後方靜音循環播放的影片。"
+      }
+    },
+    "videoLabel": "主視覺影片連結（YouTube 或 Vimeo）",
+    "videoHint": "在標題後方靜音循環播放，並附有暫停按鈕。會先顯示封面圖，影片無法播放時也顯示封面圖。",
+    "videoHintOff": "主視覺版面為「影片背景」時使用。",
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…",
+    "assistantLabel": "參加者 AI 助理",
+    "assistantHint": "僅根據本活動已發布的資訊（時間、場地、常見問題、議程、票券、退款政策）回答參加者的問題，顯示所依據的內容，並可聯絡活動團隊。每次回答會消耗你的一個 AI 額度。"
+  },
+  "aiSetup": {
+    "title": "用 AI 建立",
+    "description": "用一兩句話描述你的活動。AI 會提出草稿，由你檢查與修改。在你確認之前不會建立任何內容。",
+    "manual": "手動建立",
+    "brief": "描述你的活動",
+    "briefHint": "例如：五月在里斯本舉辦的一日開源大會，約 200 人，有演講與一場工作坊。如果知道，請補充日期、地點與價格。",
+    "propose": "提出活動方案",
+    "review": {
+      "title": "檢查方案",
+      "hint": "AI 根據你的描述寫出了這些內容。隨意修改，刪除不需要的，然後建立活動草稿。請核對日期、價格與事實：AI 可能出錯。"
+    },
+    "fields": {
+      "name": "活動名稱",
+      "profile": "活動類型",
+      "tagline": "一句話簡介",
+      "starts": "開始",
+      "ends": "結束",
+      "venue": "場地",
+      "city": "城市",
+      "description": "說明",
+      "descriptionHint": "Markdown：段落、粗體、斜體與清單。"
+    },
+    "tickets": {
+      "title": "票種",
+      "none": "沒有建議的票種。",
+      "off": "你的組織未開啟售票功能，因此不會加入票種。",
+      "name": "名稱",
+      "price": "價格（{currency}）",
+      "quantity": "數量"
+    },
+    "agenda": {
+      "title": "議程大綱",
+      "none": "沒有建議的議程。",
+      "off": "你的組織未開啟場次功能，因此不會加入議程。",
+      "session": "場次",
+      "starts": "開始"
+    },
+    "faqs": {
+      "title": "常見問題",
+      "none": "沒有建議的常見問題。",
+      "question": "問題",
+      "answer": "回答"
+    },
+    "remove": "移除",
+    "create": "建立活動草稿",
+    "creating": "建立中…",
+    "discard": "捨棄",
+    "confirmNote": "這會建立一個未發布的草稿，之後可以隨時修改。",
+    "sections": {
+      "about": "關於本活動",
+      "faq": "常見問題"
+    }
+  },
+  "eventAssistant": {
+    "title": "詢問本活動",
+    "intro": "根據本活動已發布的資訊快速取得解答。",
+    "question": "你的問題",
+    "placeholder": "例如：幾點開門？",
+    "ask": "提問",
+    "thinking": "思考中…",
+    "disclaimer": "回答僅來自本活動已發布的資訊，可能有誤。重要細節請向主辦單位確認。",
+    "sources": "來源：",
+    "dontKnow": "我在本活動已發布的資訊中找不到這個內容。",
+    "off": "此活動的助理暫時無法使用。",
+    "unavailable": "助理暫時無法使用。",
+    "rateLimited": "問題有點多，請 {minutes} 分鐘後再試。",
+    "humanHelp": "想聯絡真人嗎？",
+    "humanHelpLink": "詢問活動團隊（需要你的票券）",
+    "labels": {
+      "event": "活動",
+      "faq": "常見問題",
+      "announcement": "公告",
+      "agenda": "議程",
+      "ticket": "票券",
+      "refund": "退款政策",
+      "free": "免費",
+      "allIn": "含所有費用",
+      "availability": {
+        "available": "販售中",
+        "sold_out": "已售完",
+        "not_yet_on_sale": "尚未開賣",
+        "sales_ended": "已停售"
+      }
+    }
+  },
+  "tourPickups": {
+    "title": "上車點",
+    "description": "乘客在每個班次的上車地點。",
+    "question": "選擇你的上車點",
+    "name": "名稱",
+    "address": "地址",
+    "minutesBefore": "發車前分鐘數",
+    "add": "新增上車點",
+    "save": "儲存",
+    "saved": "已儲存。",
+    "remove": "移除",
+    "removed": "已移除。",
+    "emptyTitle": "還沒有上車點",
+    "emptyDescription": "新增乘客可以上車的地點。他們在結帳時選擇一個，並在訂單中查看。",
+    "addTitle": "新增上車點",
+    "departuresHint": "班次及其名額在「日期」頁面設定：依時程重複行程，並為每個班次設定各自的名額。",
+    "beforeDeparture": "請在發車前 {minutes} 分鐘抵達。",
+    "atDeparture": "請在發車時間集合。",
+    "yourPickup": "你的上車點"
   }
 }

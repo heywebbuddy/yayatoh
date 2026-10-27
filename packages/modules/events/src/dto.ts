@@ -1,6 +1,7 @@
 import { CurrencyCode, defineSerializer, IanaTimezone, partialNoDefaults, Slug } from '@yayatoh/contracts';
 import { z } from 'zod';
 import { ATTENDANCE_MODES, EventCategoryKey } from './domain/categories.ts';
+import { DEFAULT_EVENT_DESIGN, EventDesign } from './domain/design.ts';
 import { EVENT_PROFILES, EVENT_ROLES, EVENT_STATUSES, EVENT_VISIBILITIES } from './schema.ts';
 
 export const EventDto = z.object({
@@ -47,6 +48,8 @@ export const PublicEventDto = z.object({
   visibility: z.enum(EVENT_VISIBILITIES),
   /** Per-event branding (agreement §3): the event's accent colour, or null for the org's. */
   brandColor: z.string().nullable().default(null),
+  /** Organizer design options for the page (theme, heading font, hero layout, hero video). */
+  design: EventDesign.default(DEFAULT_EVENT_DESIGN),
 });
 export type PublicEventDto = z.infer<typeof PublicEventDto>;
 export const publicEventSerializer = defineSerializer('events.publicEvent', PublicEventDto);

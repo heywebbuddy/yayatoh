@@ -4,6 +4,7 @@ import { roleCan } from '@yayatoh/tenancy';
 import { buttonClass, Card, EmptyState, light, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BrandColorField } from '@/components/brand-color-field.tsx';
+import { EventDesignForm } from '@/components/event-design-form.tsx';
 import { MediaUploader } from '@/components/media-uploader.tsx';
 import { SettingsForm } from '@/components/settings-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -11,7 +12,7 @@ import { loadEvent } from '@/server/console.ts';
 import { mediaPanel } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
 import { brandAction } from '../../../(org)/settings/actions.ts';
-import { eventBrandAction } from './actions.ts';
+import { eventBrandAction, eventDesignAction } from './actions.ts';
 
 /**
  * Event branding: this event's own accent colour (agreement §3: per-event branding), over the
@@ -56,6 +57,22 @@ export default async function EventBrandingPage({
           ) : (
             <p className="text-body text-ink-2">
               {details.brandColor ? details.brandColor : t('eventBranding.usesOrg')}
+            </p>
+          )}
+        </Card>
+      </section>
+      <section aria-labelledby="event-design-heading" className="flex flex-col gap-3">
+        <h2 id="event-design-heading" className="text-section">
+          {t('eventDesign.title')}
+        </h2>
+        <p className="text-body text-ink-2">{t('eventDesign.description')}</p>
+        <Card>
+          {canEditEvent ? (
+            <EventDesignForm action={eventDesignAction.bind(null, org, event)} initial={details.design} />
+          ) : (
+            <p className="text-body text-ink-2">
+              {t(`eventDesign.theme.${details.design.theme}.title`)} ·{' '}
+              {t(`eventDesign.layout.${details.design.heroLayout}.title`)}
             </p>
           )}
         </Card>

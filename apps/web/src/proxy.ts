@@ -21,6 +21,7 @@ import { routing } from './i18n/routing.ts';
 import { appLinksResponse, isAppLinksPath } from './lib/app-links.ts';
 import { captureLanding } from './lib/attribution-capture.ts';
 import { FRONT_DOOR_ROUTE_HEADER, frontDoor } from './lib/front-door/index.ts';
+import { HERO_VIDEO_FRAME_ORIGINS } from './lib/hero-video.ts';
 import { bareHost, classifyHost } from './lib/hosts.ts';
 import { INTL_SCOPE_HEADER, intlScopeOf } from './lib/intl-scope.ts';
 import { robotsHeader } from './lib/seo/robots.ts';
@@ -147,11 +148,15 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
         ...turnstile.frame,
         // Event-page video sections (YouTube no-cookie, Vimeo); the console previews them too.
         ...(pageType === 'public' || pageType === 'console' ? VIDEO_FRAME_ORIGINS : []),
+        // The event page's hero background video (YouTube no-cookie, Vimeo).
+        ...(pageType === 'public' ? HERO_VIDEO_FRAME_ORIGINS : []),
       ],
     },
   });
   const forwarded = new Headers(req.headers);
   forwarded.set('x-nonce', nonce);
+  // The locale-free path, so the root layout can give public pages the showcase look.
+  forwarded.set('x-yy-path', stripLocale(path, routing.locales));
   // Marks a front-door request for the not-found page's 404 beacon; a client never sets it.
   forwarded.delete(FRONT_DOOR_ROUTE_HEADER);
   if (door) forwarded.set(FRONT_DOOR_ROUTE_HEADER, door.route);

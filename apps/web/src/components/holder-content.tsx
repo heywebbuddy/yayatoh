@@ -2,6 +2,7 @@ import { type EventTarget, holderEventContent } from '@yayatoh/events';
 import { buttonClass, Card } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { Announcements } from './announcements.tsx';
+import { HolderAssistant } from './event-assistant-section.tsx';
 import { Markdown } from './markdown.tsx';
 
 /**
@@ -20,11 +21,12 @@ export async function HolderContent({
 }) {
   const content = await holderEventContent(target);
   if (!content) return null;
+  const assistant = await HolderAssistant({ target });
   const t = await getTranslations('holder');
   const when = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone });
   const online = content.attendanceMode !== 'in_person';
   const hasJoin = content.joinUrl || content.joinOpensAt || content.joinClosed;
-  if (!content.privateInfo && !hasJoin && content.announcements.length === 0) return null;
+  if (!content.privateInfo && !hasJoin && content.announcements.length === 0) return assistant;
   return (
     <>
       {online && hasJoin ? (
@@ -70,6 +72,7 @@ export async function HolderContent({
           <Announcements items={content.announcements} locale={locale} timeZone={timeZone} showAudience />
         </section>
       ) : null}
+      {assistant}
     </>
   );
 }

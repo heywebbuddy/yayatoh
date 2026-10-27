@@ -5,6 +5,7 @@ import { tenantQuery } from '@yayatoh/platform';
 import { and, asc, eq, gt, gte, inArray, isNull, lt, lte, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { tagKey } from './domain/categories.ts';
+import { parseEventDesign } from './domain/design.ts';
 import { EventDto, type PublicEventDto, publicEventSerializer } from './dto.ts';
 import { type EVENT_ROLES, eventRoleAssignments, events } from './schema.ts';
 import { eventTags } from './schema-content.ts';
@@ -90,6 +91,11 @@ export async function publicEventBySlug(
       sql`select events.public_event_brand_color(${slug}, ${opts.includePrivate === true}) as color`,
     ),
   );
+  const [dz] = await withoutTenant((tx) =>
+    tx.execute<{ design: unknown }>(
+      sql`select events.public_event_design(${slug}, ${opts.includePrivate === true}) as design`,
+    ),
+  );
   return publicEventSerializer.serialize({
     slug: r.slug,
     name: r.name,
@@ -109,6 +115,7 @@ export async function publicEventBySlug(
     venueSlug: r.venue_slug,
     visibility: r.visibility,
     brandColor: brand?.color ?? null,
+    design: parseEventDesign(dz?.design),
   });
 }
 

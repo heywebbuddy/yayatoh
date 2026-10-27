@@ -66,6 +66,7 @@ function createEntries(data: NonNullable<ConsoleData>, t: (key: string) => strin
   const can = (p: string) => roleCan(data.role, p);
   const entries: (CreateEntry & { ok: boolean })[] = [
     { key: 'event', icon: 'calendar', href: `${base}/events/new/guided`, ok: can('events:write') },
+    { key: 'eventAi', icon: 'sparkles', href: `${base}/events/new/ai`, ok: can('events:write') },
     { key: 'series', icon: 'layers', href: `${base}/series#new-series`, ok: can('events:write') },
     { key: 'template', icon: 'copy', href: `${base}/templates#new-template`, ok: can('events:write') },
     { key: 'venue', icon: 'building', href: `${base}/venues#new-venue`, ok: can('events:write') },

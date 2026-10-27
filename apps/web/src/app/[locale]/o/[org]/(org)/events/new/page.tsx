@@ -45,6 +45,9 @@ export default async function NewEventPage({
             >
               {t('guided')}
             </Link>
+            <Link href={`/o/${org}/events/new/ai`} className={buttonClass('secondary')}>
+              {t('withAi')}
+            </Link>
             <Link href={`/o/${org}/templates`} className={buttonClass('secondary')}>
               {t('fromTemplate')}
             </Link>

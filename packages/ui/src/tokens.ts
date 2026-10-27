@@ -332,3 +332,15 @@ export const email = {
 /** Minimum interactive target size (WCAG 2.2 AA, CLAUDE.md); 44 px on touch screens. */
 export const MIN_TARGET_PX = 24;
 export const TOUCH_TARGET_PX = 44;
+
+/**
+ * The showcase surface (the public marketplace look): the roles it re-points inside a
+ * `data-surface="showcase"` wrapper, and its accent stops. styles.css declares the same values.
+ */
+export const showcase = {
+  canvas: '#0A0A0A',
+  surface: '#141414',
+  ink: '#FFFFFF',
+  primary: '#FF3150',
+  ember: ['#FF2D3D', '#FF6A2B', '#FF3D86'],
+} as const;

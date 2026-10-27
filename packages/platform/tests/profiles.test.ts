@@ -131,3 +131,20 @@ describe('social profiles (M4.2a)', () => {
     expect(PROFILES.gala.checklist).toEqual(['tablesSponsors', 'floorPlanChosen']);
   });
 });
+
+describe('tour profile', () => {
+  it('lists departures and pickup points, and speaks of passengers', () => {
+    const keys = composeNav('tour', all).map((i) => i.key);
+    expect(keys).toEqual(expect.arrayContaining(['dates', 'pickups', 'ticketsOrders', 'attendees']));
+    const label = composeNav('tour', all)
+      .filter((i) => i.key === 'attendees')
+      .map((i) => navLabelKey('tour', i))[0];
+    expect(label).toBe('vocab.passengers');
+    expect(forbiddenTerms('tour')).toEqual(['attendee', 'attendees']);
+  });
+
+  it('opens its pickup page only where the events module is on', () => {
+    expect(navIncludes('tour', all, 'pickups')).toBe(true);
+    expect(navIncludes('tour', new Set(['core']), 'pickups')).toBe(false);
+  });
+});

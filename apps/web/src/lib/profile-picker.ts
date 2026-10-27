@@ -15,6 +15,7 @@ export const PICKER_ORDER: readonly ProfileKey[] = [
   'concert',
   'wedding',
   'community',
+  'tour',
   'agency',
   'other',
 ];

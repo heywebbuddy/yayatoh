@@ -49,7 +49,8 @@
       "template": "Vorlage",
       "venue": "Veranstaltungsort",
       "coupon": "Gutschein",
-      "page": "Seite oder Blogbeitrag"
+      "page": "Seite oder Blogbeitrag",
+      "eventAi": "Event mit KI"
     },
     "help": "Hilfe",
     "clientsSection": "Kunden",
@@ -427,7 +428,8 @@
     "ceCredits": "Fortbildungspunkte",
     "brandKits": "Marken-Kits",
     "venuePortal": "Veranstaltungsort-Portal",
-    "promotions": "Hervorhebungen"
+    "promotions": "Hervorhebungen",
+    "pickups": "Abholpunkte"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -445,7 +447,9 @@
     "organizer": "Veranstalter",
     "organizers": "Veranstalter",
     "host": "Gastgeber",
-    "hosts": "Gastgeber"
+    "hosts": "Gastgeber",
+    "passenger": "Fahrgast",
+    "passengers": "Fahrgäste"
   },
   "roles": {
     "owner": "Inhaber",
@@ -471,7 +475,8 @@
     "conference": "Konferenz",
     "community": "Community",
     "agency": "Agentur",
-    "other": "Event"
+    "other": "Event",
+    "tour": "Tour"
   },
   "greeting": {
     "morning": "Guten Morgen, {name}.",
@@ -1024,7 +1029,8 @@
     "categoryHint": "Hilft dir, Events zu organisieren, und Teilnehmenden, sie zu finden. Du kannst sie später in den Eventdetails ändern.",
     "manageCategories": "Kategorien verwalten (öffnet einen neuen Tab)",
     "refreshCategories": "Kategorieliste aktualisieren",
-    "refreshingCategories": "Wird aktualisiert …"
+    "refreshingCategories": "Wird aktualisiert …",
+    "withAi": "Mit KI erstellen"
   },
   "tickets": {
     "subtitle": "Ticketarten, Preise und Kontingente. Alle Preise, die Käufer sehen, enthalten die Gebühren.",
@@ -1842,7 +1848,8 @@
       "conference": "Anmeldung, Sessions, Speaker und Namensschilder.",
       "community": "Kostenlose Anmeldungen, Meetups und einfaches Ticketing.",
       "agency": "Veranstalte Events für mehrere Kunden über ein Konto.",
-      "other": "Starte einfach und schalte zu, was du brauchst."
+      "other": "Starte einfach und schalte zu, was du brauchst.",
+      "tour": "Bus-, Boots- und Stadtführungen mit wiederkehrenden Abfahrten und Abholpunkten."
     },
     "terms": "Ich stimme den <tos>Allgemeinen Geschäftsbedingungen</tos> und dem <dpa>Auftragsverarbeitungsvertrag</dpa> im Namen dieser Organisation zu.",
     "submit": "Organisation erstellen",
@@ -4583,7 +4590,8 @@
       "community": "Gemeinschaft",
       "other": "Sonstiges",
       "wedding": "Hochzeit",
-      "agency": "Agentur"
+      "agency": "Agentur",
+      "tour": "Tour"
     },
     "filters": {
       "label": "Veranstaltungen suchen",
@@ -18234,7 +18242,8 @@
       "wedding": "Gäste, Zusagen, Sitzordnung und eine Gäste-Website.",
       "community": "Mitglieder, Anmeldungen und Nachrichten für eine Gruppe oder ein Anliegen.",
       "agency": "Veranstaltungen für Ihre Kunden, mit Marketing und Berichten.",
-      "other": "Tickets, Teilnehmende und Check-in für alles andere."
+      "other": "Tickets, Teilnehmende und Check-in für alles andere.",
+      "tour": "Abfahrten nach Zeitplan, eine Kapazität je Abfahrt und Abholpunkte zur Wahl."
     }
   },
   "seriesField": {
@@ -18325,7 +18334,8 @@
       "conference": "Anmeldung, Sessions, Sprecher, Aussteller, Sponsoren und Namensschilder.",
       "community": "Treffen und Kurse: kostenlose oder bezahlte Anmeldungen, wiederkehrende Termine und Einlass.",
       "agency": "Veranstaltungen, die Sie für Kunden durchführen, mit deren Branding und Berichten.",
-      "other": "Eine allgemeine Veranstaltung: Tickets, Teilnehmende, eine Seite und Einlass."
+      "other": "Eine allgemeine Veranstaltung: Tickets, Teilnehmende, eine Seite und Einlass.",
+      "tour": "Bus-, Boots- oder Wandertouren: wiederkehrende Abfahrten, Kapazität je Abfahrt und Abholpunkte."
     },
     "name": "Name der Vorlage",
     "nameInvalid": "Geben Sie einen Namen mit 2 bis 120 Zeichen ein.",
@@ -19473,5 +19483,452 @@
     "description": "Was ein Teilnehmender für diese Veranstaltung sieht.",
     "sections": "Portalbereiche",
     "sampleStatus": "Bezahlt"
+  },
+  "showcase": {
+    "wordmark": "Yayatoh",
+    "searchLabel": "Events suchen",
+    "searchPlaceholder": "Events suchen",
+    "siteNav": "Website",
+    "events": "Events",
+    "solutionsLabel": "Lösungen",
+    "pricing": "Preise",
+    "myTickets": "Meine Tickets",
+    "signIn": "Anmelden",
+    "signUp": "Registrieren",
+    "dashboard": "Dashboard",
+    "menu": "Menü",
+    "categoriesLabel": "Event-Kategorien",
+    "viewAll": "Alle ansehen",
+    "prev": "Zurück",
+    "next": "Weiter",
+    "featured": "Empfohlene Events",
+    "price": {
+      "free": "Kostenlos",
+      "soon": "Tickets bald",
+      "fromTo": "Ab {min} – {max}",
+      "fromOnly": "{min}",
+      "postponed": "Verschoben"
+    },
+    "hero": {
+      "title": "Live-Events, alles an einem Ort",
+      "lede": "Konzerte, Galas, Konferenzen und Community-Events, alle Gebühren im Preis enthalten.",
+      "cta": "Alle Events ansehen"
+    },
+    "creators": {
+      "title": "Beliebte Veranstalter",
+      "lede": "Die Menschen und Teams hinter den Events, über die alle sprechen.",
+      "all": "Events entdecken",
+      "events": "{count, plural, one {# Event} other {# Events}}"
+    },
+    "organizerCta": {
+      "title": "Verdiene mehr mit jedem Event",
+      "lede": "Verkaufe Tickets und nimm Spenden an, mit einem Checkout, dem deine Gäste vertrauen, und führe das ganze Event an einem Ort.",
+      "points": {
+        "one": "Gebühren sofort sichtbar, keine Überraschungen an der Kasse",
+        "two": "Check-in, Sitzplätze und Berichte inklusive",
+        "three": "Deine eigene Eventseite mit Branding"
+      },
+      "cta": "Event erstellen"
+    },
+    "footer": {
+      "tagline": "Live-Events entdecken, verkaufen und durchführen.",
+      "soon": "Demnächst",
+      "appStore": "App Store",
+      "googlePlay": "Google Play",
+      "menu": "Menü",
+      "venues": "Veranstaltungsorte",
+      "series": "Reihen",
+      "features": "Alle Funktionen",
+      "resources": "Ressourcen",
+      "help": "Hilfecenter"
+    },
+    "solutions": {
+      "createEvent": "Event erstellen",
+      "seeFeatures": "Alle Funktionen ansehen",
+      "featuresTitle": "Das bekommst du",
+      "stepsTitle": "So funktioniert es",
+      "ctaTitle": "Bereit zum Gastgeben?",
+      "ctaLede": "Erstelle dein Konto und starte dein erstes Event.",
+      "organizations": {
+        "name": "Organisationen",
+        "metaTitle": "Eventsoftware für Organisationen",
+        "title": "Alle Events deiner Organisation im Griff",
+        "lede": "Vereine, Verbände, Hilfsorganisationen und Gemeinschaften: ein Konto für alle Events, mit Ticketing, Anmeldung, Nachrichten und Spendensammlung.",
+        "features": {
+          "events": {
+            "title": "Alle Events an einem Ort",
+            "desc": "Erstelle einmalige und wiederkehrende Events unter deiner Organisation, mit eigener öffentlicher Seite."
+          },
+          "tickets": {
+            "title": "Ticketing mit sichtbaren Gebühren",
+            "desc": "Kostenlose und bezahlte Tickets, Promo-Codes und ein Checkout, der den vollen Preis zeigt."
+          },
+          "registration": {
+            "title": "Anmeldeformulare",
+            "desc": "Erfasse bei der Anmeldung genau die Angaben, die du von Mitgliedern und Gästen brauchst."
+          },
+          "messages": {
+            "title": "Nachrichten an deine Mitglieder",
+            "desc": "Sende Ankündigungen und Erinnerungen an alle, die sich angemeldet haben."
+          },
+          "donations": {
+            "title": "Spenden",
+            "desc": "Nimm Spenden zusätzlich zu Tickets an und sieh, was jedes Event eingebracht hat."
+          },
+          "reports": {
+            "title": "Berichte",
+            "desc": "Verfolge Verkäufe, Anmeldungen und Teilnahme über alle Events hinweg."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Organisation einrichten",
+            "desc": "Erstelle dein Konto, ergänze Namen und Branding und öffne deine öffentliche Seite."
+          },
+          "two": {
+            "title": "Events veröffentlichen",
+            "desc": "Füge Tickets oder ein Anmeldeformular hinzu und teile den Event-Link."
+          },
+          "three": {
+            "title": "Gäste willkommen heißen",
+            "desc": "Checke Mitglieder am Eingang ein und sieh danach die Zahlen."
+          }
+        }
+      },
+      "weddings": {
+        "name": "Hochzeiten",
+        "metaTitle": "Hochzeitsplanung und Gästeverwaltung",
+        "title": "Deine Hochzeit, wunderschön gestaltet",
+        "lede": "Lade Gäste ein, sammle Zusagen, plane die Sitzordnung und teile eine Gäste-Website, alles an einem ruhigen Ort.",
+        "features": {
+          "guests": {
+            "title": "Gästeliste",
+            "desc": "Füge Gäste und Gruppen hinzu und sieh auf einen Blick, wer eingeladen ist."
+          },
+          "rsvp": {
+            "title": "Zu- und Absagen",
+            "desc": "Gäste antworten online, und du siehst, wer kommt."
+          },
+          "seating": {
+            "title": "Sitzplan",
+            "desc": "Ordne Tische an und setze deine Gäste auf einem Raumplan."
+          },
+          "seatFinder": {
+            "title": "Platzfinder",
+            "desc": "Am Tag selbst suchen Gäste ihren Namen und finden ihren Tisch."
+          },
+          "website": {
+            "title": "Gäste-Website",
+            "desc": "Eine Seite zum Tag mit Ablauf, Ort und Details für deine Gäste."
+          },
+          "gallery": {
+            "title": "Fotogalerie",
+            "desc": "Gäste teilen ihre Fotos vom Tag in einer gemeinsamen Galerie."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Gäste hinzufügen",
+            "desc": "Tippe deine Gästeliste ein oder importiere sie und verschicke die Einladungen."
+          },
+          "two": {
+            "title": "Antworten sammeln",
+            "desc": "Verfolge die Zusagen und plane die Sitzordnung, während Antworten eintreffen."
+          },
+          "three": {
+            "title": "Den Tag genießen",
+            "desc": "Begrüße Gäste mit Platzfinder und Check-in und sammle die Fotos."
+          }
+        }
+      },
+      "galas": {
+        "name": "Galas",
+        "metaTitle": "Ticketing und Spendensammlung für Galas",
+        "title": "Ein Galaabend, an den man sich erinnert",
+        "lede": "Verkaufe Tickets und Tische, setze deine Gäste, nimm Spenden an und sorge für einen reibungslosen Einlass.",
+        "features": {
+          "tickets": {
+            "title": "Tickets und Tische",
+            "desc": "Verkaufe einzelne Plätze oder ganze Tische zu klaren Preisen."
+          },
+          "tables": {
+            "title": "Gastgeber-Tische und Sitzplätze",
+            "desc": "Platziere Gäste auf einem Raumplan und nenne die Sponsoren, die Tische ausrichten."
+          },
+          "donations": {
+            "title": "Spenden",
+            "desc": "Bitte an der Kasse um Spenden und behalte im Blick, was du einnimmst."
+          },
+          "guests": {
+            "title": "Gästeliste",
+            "desc": "Sieh jeden Gast, sein Ticket und seine Angaben in einer Liste."
+          },
+          "marketing": {
+            "title": "Einladungen und Kampagnen",
+            "desc": "Erreiche deine Unterstützer mit E-Mail-Kampagnen und teilbaren Links."
+          },
+          "door": {
+            "title": "Reibungsloser Check-in",
+            "desc": "Scanne Tickets am Eingang und sieh Ankünfte live."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Ticketverkauf starten",
+            "desc": "Lege Preise, Tische und eine Spendenbitte fest und veröffentliche."
+          },
+          "two": {
+            "title": "Gäste platzieren",
+            "desc": "Weise Gäste Tischen zu, sobald Verkäufe eingehen."
+          },
+          "three": {
+            "title": "Den Abend leiten",
+            "desc": "Checke Gäste ein und verfolge den Abend live."
+          }
+        }
+      },
+      "conferences": {
+        "name": "Konferenzen",
+        "metaTitle": "Software für Konferenzanmeldung und Programm",
+        "title": "Konferenzen, die fast von selbst laufen",
+        "lede": "Anmeldung, Programm, Referenten, Aussteller und Badges, mit Online-Sessions für Hybrid-Events.",
+        "features": {
+          "registration": {
+            "title": "Anmeldung",
+            "desc": "Anmeldeformulare, Tickettypen und Gruppenbuchungen für Teilnehmende."
+          },
+          "sessions": {
+            "title": "Programm und Sessions",
+            "desc": "Erstelle die Agenda mit Sessions, Räumen und Zeiten."
+          },
+          "speakers": {
+            "title": "Referenten",
+            "desc": "Gib jedem Referenten ein Profil und verknüpfe es mit seinen Sessions."
+          },
+          "exhibitors": {
+            "title": "Aussteller und Sponsoren",
+            "desc": "Liste Aussteller und Sponsoren auf und gib ihnen einen Platz auf der Eventseite."
+          },
+          "badges": {
+            "title": "Badges",
+            "desc": "Gestalte Badges und drucke sie vor dem Einlass im Stapel."
+          },
+          "virtual": {
+            "title": "Online- und Hybrid-Sessions",
+            "desc": "Streame Sessions für Teilnehmende vor Ort und online und stelle CE-Zertifikate aus."
+          }
+        },
+        "steps": {
+          "one": {
+            "title": "Anmeldung öffnen",
+            "desc": "Lege Tickettypen und das Anmeldeformular an und veröffentliche."
+          },
+          "two": {
+            "title": "Programm aufbauen",
+            "desc": "Füge Sessions, Referenten, Aussteller und Sponsoren hinzu."
+          },
+          "three": {
+            "title": "Event durchführen",
+            "desc": "Drucke Badges, checke Gäste ein und lies die Berichte."
+          }
+        }
+      }
+    },
+    "event": {
+      "playVideo": "Hintergrundvideo abspielen",
+      "pauseVideo": "Hintergrundvideo anhalten"
+    },
+    "types": {
+      "concert": "Musik & Konzerte",
+      "conference": "Konferenzen",
+      "wedding": "Hochzeiten",
+      "gala": "Galas",
+      "community": "Community",
+      "tour": "Touren",
+      "agency": "Firmenevents"
+    },
+    "matrix": {
+      "modules": {
+        "ticketing": "Ticketverkauf",
+        "registration": "Anmeldeformulare",
+        "seating": "Sitzpläne",
+        "donations": "Spenden",
+        "guests": "Gästelisten",
+        "rsvp": "Zu- und Absagen",
+        "sessions": "Sessions und Programm",
+        "speakers": "Referenten",
+        "exhibitors": "Aussteller und Sponsoren",
+        "badges": "Badges",
+        "checkin": "Check-in am Eingang",
+        "marketing": "Marketing und Kampagnen",
+        "messaging": "Nachrichten an Teilnehmende",
+        "gallery": "Fotogalerie",
+        "website": "Gäste-Website",
+        "virtual": "Online- und Hybrid-Sessions",
+        "reports": "Berichte"
+      },
+      "title": "Was jede Eventart enthält",
+      "lede": "Jede Eventart startet mit den Werkzeugen, die sie braucht. Weitere schaltest du später dazu.",
+      "feature": "Funktion",
+      "included": "Enthalten",
+      "notIncluded": "Standardmäßig nicht enthalten",
+      "demoTitle": "Ähnliche Events auf Yayatoh"
+    }
+  },
+  "eventDesign": {
+    "title": "Seitendesign",
+    "description": "Lege fest, wie die öffentliche Seite dieses Events aussieht: Thema, Überschriftenschrift und der Kopfbereich.",
+    "themeLabel": "Thema",
+    "theme": {
+      "classic": {
+        "title": "Klassisch hell",
+        "hint": "Die vertraute helle Seite."
+      },
+      "showcase": {
+        "title": "Showcase dunkel",
+        "hint": "Fast schwarz mit rot-rosa Akzenten."
+      }
+    },
+    "fontLabel": "Überschriftenschrift",
+    "font": {
+      "modern": {
+        "title": "Modern",
+        "hint": "Klar und freundlich."
+      },
+      "extended": {
+        "title": "Breit",
+        "hint": "Breite, fette Großbuchstaben für den Plakatlook."
+      },
+      "classic": {
+        "title": "Klassische Serife",
+        "hint": "Eine traditionelle Serifenschrift für festliche Events."
+      }
+    },
+    "layoutLabel": "Kopfbereich-Layout",
+    "layout": {
+      "full": {
+        "title": "Vollflächiges Bild",
+        "hint": "Das Titelbild füllt den oberen Bereich."
+      },
+      "circle": {
+        "title": "Rundes Bild",
+        "hint": "Das Titelbild in rundem Rahmen neben dem Titel."
+      },
+      "video": {
+        "title": "Videohintergrund",
+        "hint": "Ein stummes, sich wiederholendes Video hinter dem Titel."
+      }
+    },
+    "videoLabel": "Link zum Kopfbereich-Video (YouTube oder Vimeo)",
+    "videoHint": "Läuft stumm und in Schleife hinter dem Titel, mit Pause-Taste. Zuerst und bei Wiedergabefehlern erscheint das Titelbild.",
+    "videoHintOff": "Wird genutzt, wenn das Layout Videohintergrund ist.",
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…",
+    "assistantLabel": "KI-Assistent für Gäste",
+    "assistantHint": "Beantwortet Fragen der Gäste ausschließlich aus den veröffentlichten Angaben zu diesem Event (Zeiten, Ort, FAQs, Programm, Tickets, Erstattungsrichtlinie), zeigt seine Quellen und bietet den Kontakt zum Team an. Jede Antwort verbraucht einen deiner KI-Credits."
+  },
+  "aiSetup": {
+    "title": "Mit KI erstellen",
+    "description": "Beschreibe dein Event in ein bis zwei Sätzen. Die KI schlägt einen Entwurf vor, den du prüfst und bearbeitest. Erst nach deiner Bestätigung wird etwas angelegt.",
+    "manual": "Manuell erstellen",
+    "brief": "Beschreibe dein Event",
+    "briefHint": "Zum Beispiel: eine eintägige Open-Source-Konferenz in Lissabon im Mai für 200 Personen, mit Vorträgen und einem Workshop. Nenne Datum, Ort und Preise, wenn du sie kennst.",
+    "propose": "Event vorschlagen",
+    "review": {
+      "title": "Vorschlag prüfen",
+      "hint": "Die KI hat das aus deiner Beschreibung geschrieben. Bearbeite alles, entferne, was du nicht willst, und lege dann einen Event-Entwurf an. Prüfe Daten, Preise und Fakten: Die KI kann sich irren."
+    },
+    "fields": {
+      "name": "Eventname",
+      "profile": "Eventtyp",
+      "tagline": "Slogan",
+      "starts": "Beginn",
+      "ends": "Ende",
+      "venue": "Veranstaltungsort",
+      "city": "Stadt",
+      "description": "Beschreibung",
+      "descriptionHint": "Markdown: Absätze, fett, kursiv und Listen."
+    },
+    "tickets": {
+      "title": "Tickettypen",
+      "none": "Keine Tickettypen vorgeschlagen.",
+      "off": "Ticketing ist für deine Organisation nicht aktiviert, daher werden keine Tickets angelegt.",
+      "name": "Name",
+      "price": "Preis ({currency})",
+      "quantity": "Anzahl"
+    },
+    "agenda": {
+      "title": "Programmentwurf",
+      "none": "Kein Programm vorgeschlagen.",
+      "off": "Sessions sind für deine Organisation nicht aktiviert, daher wird das Programm nicht angelegt.",
+      "session": "Session",
+      "starts": "Beginn"
+    },
+    "faqs": {
+      "title": "FAQs",
+      "none": "Keine FAQs vorgeschlagen.",
+      "question": "Frage",
+      "answer": "Antwort"
+    },
+    "remove": "Entfernen",
+    "create": "Event-Entwurf anlegen",
+    "creating": "Wird angelegt …",
+    "discard": "Verwerfen",
+    "confirmNote": "Das legt einen unveröffentlichten Entwurf an. Du kannst später alles ändern.",
+    "sections": {
+      "about": "Über dieses Event",
+      "faq": "FAQ"
+    }
+  },
+  "eventAssistant": {
+    "title": "Frag zum Event",
+    "intro": "Schnelle Antworten aus den veröffentlichten Angaben zu diesem Event.",
+    "question": "Deine Frage",
+    "placeholder": "Zum Beispiel: Wann ist Einlass?",
+    "ask": "Fragen",
+    "thinking": "Denkt nach …",
+    "disclaimer": "Antworten stammen nur aus den veröffentlichten Angaben zu diesem Event und können Fehler enthalten. Wichtige Details bitte beim Veranstalter prüfen.",
+    "sources": "Quellen:",
+    "dontKnow": "Das finde ich in den veröffentlichten Angaben zu diesem Event nicht.",
+    "off": "Der Assistent ist für dieses Event gerade nicht verfügbar.",
+    "unavailable": "Der Assistent ist gerade nicht verfügbar.",
+    "rateLimited": "Das sind viele Fragen. Versuche es in {minutes} Min. erneut.",
+    "humanHelp": "Möchtest du mit einer Person sprechen?",
+    "humanHelpLink": "Das Event-Team fragen (du brauchst dein Ticket)",
+    "labels": {
+      "event": "Das Event",
+      "faq": "FAQ",
+      "announcement": "Ankündigung",
+      "agenda": "Programm",
+      "ticket": "Ticket",
+      "refund": "Erstattungsrichtlinie",
+      "free": "Kostenlos",
+      "allIn": "alle Gebühren inklusive",
+      "availability": {
+        "available": "Im Verkauf",
+        "sold_out": "Ausverkauft",
+        "not_yet_on_sale": "Noch nicht im Verkauf",
+        "sales_ended": "Verkauf beendet"
+      }
+    }
+  },
+  "tourPickups": {
+    "title": "Abholpunkte",
+    "description": "Wo Fahrgäste bei jeder Abfahrt zusteigen.",
+    "question": "Abholpunkt wählen",
+    "name": "Name",
+    "address": "Adresse",
+    "minutesBefore": "Minuten vor Abfahrt",
+    "add": "Abholpunkt hinzufügen",
+    "save": "Speichern",
+    "saved": "Gespeichert.",
+    "remove": "Entfernen",
+    "removed": "Entfernt.",
+    "emptyTitle": "Noch keine Abholpunkte",
+    "emptyDescription": "Füge die Orte hinzu, an denen Fahrgäste zusteigen können. Sie wählen beim Bezahlen einen aus und sehen ihn in ihrer Bestellung.",
+    "addTitle": "Abholpunkt hinzufügen",
+    "departuresHint": "Abfahrten und ihre Kapazität legst du auf der Seite Termine fest: Wiederhole die Tour nach Zeitplan und gib jeder Abfahrt eine eigene Platzzahl.",
+    "beforeDeparture": "Bitte {minutes, plural, one {# Minute} other {# Minuten}} vor der Abfahrt da sein.",
+    "atDeparture": "Treffpunkt zur Abfahrtszeit.",
+    "yourPickup": "Dein Abholpunkt"
   }
 }

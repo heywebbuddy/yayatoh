@@ -83,7 +83,15 @@ export interface WidgetMeta {
 }
 
 const ALL_MODES: readonly EventMode[] = ['planning', 'pre_show', 'live', 'wrap'];
-const SELLING: readonly ProfileKey[] = ['gala', 'concert', 'conference', 'community', 'agency', 'other'];
+const SELLING: readonly ProfileKey[] = [
+  'gala',
+  'concert',
+  'conference',
+  'community',
+  'tour',
+  'agency',
+  'other',
+];
 const CONFERENCE: readonly ProfileKey[] = ['conference'];
 /** M4.6a: the profiles with a guest list (parties, RSVP, guest seating). */
 const SOCIAL: readonly ProfileKey[] = ['wedding', 'gala'];

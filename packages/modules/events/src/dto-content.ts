@@ -2,6 +2,7 @@ import { defineSerializer } from '@yayatoh/contracts';
 import { z } from 'zod';
 import { ATTENDANCE_MODES, EventCategoryKey } from './domain/categories.ts';
 import { ANNOUNCEMENT_AUDIENCES, SECTION_KINDS, SHORT_LINK_KINDS } from './domain/content-kinds.ts';
+import { EventDesign } from './domain/design.ts';
 import { SectionBody } from './domain/sections.ts';
 
 export const EventDetailsDto = z.object({
@@ -20,6 +21,8 @@ export const EventDetailsDto = z.object({
   categoryHidden: z.boolean(),
   /** Per-event branding: the event's accent colour (#rrggbb), or null for the org's. */
   brandColor: z.string().nullable(),
+  /** The public page's design options (theme, heading font, hero layout and video). */
+  design: EventDesign,
 });
 export type EventDetailsDto = z.infer<typeof EventDetailsDto>;
 
@@ -37,6 +40,8 @@ export const SetEventDetailsInput = z.object({
     .regex(/^#[0-9a-fA-F]{6}$/)
     .nullable()
     .optional(),
+  /** Design options for the public page; null restores the classic default. */
+  design: EventDesign.nullable().optional(),
 });
 
 export const EventSectionDto = z.intersection(
