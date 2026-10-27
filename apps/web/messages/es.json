@@ -2138,7 +2138,7 @@
   },
   "boxOffice": {
     "title": "Taquilla",
-    "description": "Registra las entradas que vendiste tú mismo: en efectivo en la puerta, por Zelle o con tu propio lector de tarjetas. Las entradas se emiten y se envían por correo electrónico al instante.",
+    "description": "Registra las entradas que vendiste tú mismo: en efectivo en la puerta, por Zelle o con tu propio lector de tarjetas. Las entradas se emiten y se envían por correo electrónico al instante. Para entregar un bloque de entradas a una persona (una empresa, el responsable de un grupo), registra toda la cantidad con su correo: recibirá un correo con la página de su pedido, donde podrá enviar a cada invitado su propia entrada.",
     "tickets": "Entradas",
     "name": "Nombre del comprador",
     "email": "Correo del comprador (las entradas se envían aquí)",

@@ -2138,7 +2138,7 @@
   },
   "boxOffice": {
     "title": "Box office",
-    "description": "Record tickets you sold yourself — cash at the door, Zelle, or your own card reader. Tickets are issued and emailed at once.",
+    "description": "Record tickets you sold yourself — cash at the door, Zelle, or your own card reader. Tickets are issued and emailed at once. To hand a block of tickets to one person (a company, a group leader), record the whole quantity with their email: they get one email with their order page, where they can send each guest their own ticket.",
     "tickets": "Tickets",
     "name": "Buyer's name",
     "email": "Buyer's email (tickets are sent here)",

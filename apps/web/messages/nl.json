@@ -2138,7 +2138,7 @@
   },
   "boxOffice": {
     "title": "Kassa",
-    "description": "Registreer tickets die je zelf hebt verkocht: contant aan de deur, via Zelle of met je eigen kaartlezer. De tickets worden direct uitgegeven en gemaild.",
+    "description": "Registreer tickets die je zelf hebt verkocht: contant aan de deur, via Zelle of met je eigen kaartlezer. De tickets worden direct uitgegeven en gemaild. Wil je een blok tickets aan één persoon geven (een bedrijf, een groepsleider), registreer dan de hele hoeveelheid met zijn of haar e-mailadres: die persoon krijgt één e-mail met de bestelpagina, waar elke gast zijn eigen ticket kan worden gestuurd.",
     "tickets": "Tickets",
     "name": "Naam van de koper",
     "email": "E-mailadres van de koper (de tickets worden hierheen gestuurd)",

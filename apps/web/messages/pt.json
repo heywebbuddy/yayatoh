@@ -2138,7 +2138,7 @@
   },
   "boxOffice": {
     "title": "Bilheteria",
-    "description": "Registre os ingressos que você mesmo vendeu: em dinheiro na entrada, por Zelle ou na sua própria maquininha de cartão. Os ingressos são emitidos e enviados por e-mail na hora.",
+    "description": "Registre os ingressos que você mesmo vendeu: em dinheiro na entrada, por Zelle ou na sua própria maquininha de cartão. Os ingressos são emitidos e enviados por e-mail na hora. Para entregar um bloco de bilhetes a uma pessoa (uma empresa, o responsável de um grupo), registe toda a quantidade com o e-mail dela: recebe um e-mail com a página do pedido, onde pode enviar a cada convidado o seu próprio bilhete.",
     "tickets": "Ingressos",
     "name": "Nome do comprador",
     "email": "E-mail do comprador (os ingressos são enviados para ele)",

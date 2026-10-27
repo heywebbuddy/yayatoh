@@ -2138,7 +2138,7 @@
   },
   "boxOffice": {
     "title": "Abendkasse",
-    "description": "Erfasse Tickets, die du selbst verkauft hast – bar an der Tür, per Zelle oder über dein eigenes Kartenlesegerät. Die Tickets werden sofort ausgestellt und per E-Mail verschickt.",
+    "description": "Erfasse Tickets, die du selbst verkauft hast – bar an der Tür, per Zelle oder über dein eigenes Kartenlesegerät. Die Tickets werden sofort ausgestellt und per E-Mail verschickt. Um einer Person (Firma, Gruppenleiter) einen ganzen Block Tickets zu übergeben, erfasse die gesamte Menge mit ihrer E-Mail-Adresse: Sie erhält eine E-Mail mit ihrer Bestellseite, auf der sie jedem Gast sein eigenes Ticket schicken kann.",
     "tickets": "Tickets",
     "name": "Name des Käufers",
     "email": "E-Mail des Käufers (die Tickets werden hierhin geschickt)",

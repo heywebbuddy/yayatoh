@@ -2138,7 +2138,7 @@
   },
   "boxOffice": {
     "title": "Botteghino",
-    "description": "Registra i biglietti che hai venduto tu: in contanti all’ingresso, con Zelle o con il tuo lettore di carte. I biglietti vengono emessi e inviati subito via email.",
+    "description": "Registra i biglietti che hai venduto tu: in contanti all’ingresso, con Zelle o con il tuo lettore di carte. I biglietti vengono emessi e inviati subito via email. Per consegnare un blocco di biglietti a una persona (un’azienda, il responsabile di un gruppo), registra l’intera quantità con la sua e-mail: riceverà un’e-mail con la pagina del suo ordine, dove potrà inviare a ogni ospite il proprio biglietto.",
     "tickets": "Biglietti",
     "name": "Nome dell’acquirente",
     "email": "Email dell’acquirente (i biglietti vengono inviati qui)",

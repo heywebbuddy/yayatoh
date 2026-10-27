@@ -2138,7 +2138,7 @@
   },
   "boxOffice": {
     "title": "Billetterie sur place",
-    "description": "Enregistrez les billets que vous avez vendus vous-même : en espèces à l’entrée, par Zelle ou avec votre propre terminal de paiement. Les billets sont émis et envoyés par e-mail immédiatement.",
+    "description": "Enregistrez les billets que vous avez vendus vous-même : en espèces à l’entrée, par Zelle ou avec votre propre terminal de paiement. Les billets sont émis et envoyés par e-mail immédiatement. Pour confier un lot de billets à une personne (une entreprise, un responsable de groupe), enregistrez toute la quantité avec son e-mail : elle reçoit un e-mail avec la page de sa commande, où elle peut envoyer à chaque invité son propre billet.",
     "tickets": "Billets",
     "name": "Nom de l’acheteur",
     "email": "E-mail de l’acheteur (les billets y sont envoyés)",
