@@ -1,5 +1,7 @@
 import {
   Briefcase,
+  Building2,
+  Bus,
   Cpu,
   Drama,
   GraduationCap,
@@ -15,6 +17,7 @@ import {
   Trophy,
   Users,
   UtensilsCrossed,
+  Wine,
 } from 'lucide-react';
 
 export type Glow = 'ember' | 'flame' | 'rose' | 'grape' | 'ocean' | 'lime';
@@ -56,6 +59,20 @@ const LOOKS: Record<string, CategoryLook> = {
   travel_leisure: { icon: Plane, glow: 'flame' },
   other: { icon: Sparkles, glow: 'grape' },
 };
+
+/** Our event types (profiles) as pills and sections of the marketplace home. */
+export const TYPE_KEYS = ['concert', 'conference', 'wedding', 'gala', 'community', 'tour', 'agency'] as const;
+export type TypeKey = (typeof TYPE_KEYS)[number];
+const TYPE_LOOKS: Record<TypeKey, CategoryLook> = {
+  concert: { icon: Music, glow: 'ember' },
+  conference: { icon: Briefcase, glow: 'ocean' },
+  wedding: { icon: HeartHandshake, glow: 'rose' },
+  gala: { icon: Wine, glow: 'flame' },
+  community: { icon: Users, glow: 'lime' },
+  tour: { icon: Bus, glow: 'grape' },
+  agency: { icon: Building2, glow: 'ocean' },
+};
+export const typeLook = (key: string): CategoryLook => TYPE_LOOKS[key as TypeKey] ?? categoryLook(key);
 
 const ORDER: Glow[] = ['ember', 'flame', 'rose', 'grape', 'ocean', 'lime'];
 

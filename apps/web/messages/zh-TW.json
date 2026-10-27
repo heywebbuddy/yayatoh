@@ -19410,6 +19410,42 @@
     "event": {
       "playVideo": "播放背景影片",
       "pauseVideo": "暫停背景影片"
+    },
+    "types": {
+      "concert": "音樂與演唱會",
+      "conference": "研討會",
+      "wedding": "婚禮",
+      "gala": "晚宴",
+      "community": "社群",
+      "tour": "導覽行程",
+      "agency": "企業"
+    },
+    "matrix": {
+      "modules": {
+        "ticketing": "售票",
+        "registration": "報名表單",
+        "seating": "座位圖",
+        "donations": "捐款",
+        "guests": "賓客名單",
+        "rsvp": "回覆確認",
+        "sessions": "場次與議程",
+        "speakers": "講者",
+        "exhibitors": "參展商與贊助商",
+        "badges": "識別證",
+        "checkin": "門口報到",
+        "marketing": "行銷與推廣",
+        "messaging": "給參加者的訊息",
+        "gallery": "相片牆",
+        "website": "賓客網站",
+        "virtual": "線上與混合場次",
+        "reports": "報表"
+      },
+      "title": "各活動類型包含的內容",
+      "lede": "每種活動類型都從所需的工具開始，之後可以開啟更多。",
+      "feature": "功能",
+      "included": "已包含",
+      "notIncluded": "預設不包含",
+      "demoTitle": "Yayatoh 上的同類活動"
     }
   },
   "eventDesign": {

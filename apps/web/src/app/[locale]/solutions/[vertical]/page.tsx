@@ -1,14 +1,20 @@
+import { publicCovers } from '@yayatoh/media';
 import { buttonClass } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { SiteSections } from '@/components/marketing/site-sections.tsx';
+import { Carousel } from '@/components/showcase/carousel.tsx';
 import { JaggedCircle } from '@/components/showcase/hero.tsx';
+import { PosterCard } from '@/components/showcase/poster-card.tsx';
+import { Reveal } from '@/components/showcase/reveal.tsx';
 import { ShowcaseShell } from '@/components/showcase/shell.tsx';
+import { SolutionMatrix } from '@/components/showcase/solution-matrix.tsx';
 import { isSolutionKey, SOLUTION_KEYS, SOLUTIONS } from '@/components/showcase/solutions.ts';
 import { Link } from '@/i18n/navigation.ts';
 import { cachedSections, platformContentOrg } from '@/server/help.ts';
 import { pageLocale } from '@/server/locale.ts';
+import { cachedShowcaseEvents } from '@/server/public-data.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { apexOrigin, publicMetadata } from '@/server/seo.ts';
 
@@ -47,7 +53,11 @@ export default async function SolutionPage({ params }: Props) {
   const solution = SOLUTIONS[vertical];
   const t = await getTranslations('showcase.solutions');
   const ts = await getTranslations('showcase');
+  const tm = await getTranslations('showcase.matrix');
   const Icon = solution.icon;
+  // This type's demo and live events (weddings are private, so none are listed).
+  const demo = (await cachedShowcaseEvents(100)).filter((e) => e.profile === solution.profile).slice(0, 10);
+  const demoCovers = await publicCovers(demo.map((e) => e.slug));
   const content = await platformContentOrg(await requestHost());
   const cms = content
     ? (await cachedSections(content.orgId, 'features', locale)).filter((s) =>
@@ -133,6 +143,31 @@ export default async function SolutionPage({ params }: Props) {
           ))}
         </ol>
       </section>
+
+      <Reveal>
+        <SolutionMatrix current={vertical} />
+      </Reveal>
+
+      {demo.length > 0 ? (
+        <Reveal>
+          <Carousel
+            id="solution-events"
+            title={tm('demoTitle')}
+            viewAllHref={`/events?type=${solution.profile}`}
+          >
+            {demo.map((l, i) => (
+              <li key={l.slug} className="snap-start">
+                <PosterCard
+                  listing={l}
+                  cover={demoCovers.get(l.slug) ?? null}
+                  locale={locale}
+                  eager={i < 5}
+                />
+              </li>
+            ))}
+          </Carousel>
+        </Reveal>
+      ) : null}
 
       {cms.length > 0 ? <SiteSections sections={cms} layout="stack" locale={locale} /> : null}
 

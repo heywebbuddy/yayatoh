@@ -16,6 +16,7 @@ export async function MarketplaceResults({
   path,
   limit,
   topic,
+  type,
 }: {
   locale: string;
   params: SearchParams;
@@ -24,19 +25,23 @@ export async function MarketplaceResults({
   /** Show only the first N and a "see all" link. */
   limit?: number;
   topic?: string | undefined;
+  /** An event type (profile) key: lists that type's next events. */
+  type?: string | undefined;
 }) {
   const t = await getTranslations('market');
   const tc = await getTranslations('categories');
+  const tt = await getTranslations('showcase.types');
   const [results, cities, topical] = await Promise.all([
     cachedMarketplace(params),
     cachedCities(),
-    topic ? cachedShowcaseEvents(60, topic) : Promise.resolve(null),
+    topic || type ? cachedShowcaseEvents(topic ? 60 : 100, topic) : Promise.resolve(null),
   ]);
   const filtered = Boolean(
-    topic || params.q || params.city || params.category || params.price || params.from || params.to,
+    topic || type || params.q || params.city || params.category || params.price || params.from || params.to,
   );
   const q = params.q?.toLowerCase();
-  const topicItems = topical?.filter((e) => !q || e.name.toLowerCase().includes(q)) ?? null;
+  const topicItems =
+    topical?.filter((e) => (!type || e.profile === type) && (!q || e.name.toLowerCase().includes(q))) ?? null;
   const all = topicItems ?? results.items;
   const items = limit ? all.slice(0, limit) : all;
   const total = topicItems ? topicItems.length : results.total;
@@ -48,7 +53,13 @@ export async function MarketplaceResults({
     from: params.from,
     to: params.to,
   };
-  const heading = topic ? tc(topic as never) : filtered ? t('results') : t('upcoming');
+  const heading = topic
+    ? tc(topic as never)
+    : type
+      ? tt(type as 'concert')
+      : filtered
+        ? t('results')
+        : t('upcoming');
   return (
     <div className="flex flex-col gap-8">
       <SearchForm action={path} locale={locale} params={params} cities={cities} />

@@ -19410,6 +19410,42 @@
     "event": {
       "playVideo": "播放背景视频",
       "pauseVideo": "暂停背景视频"
+    },
+    "types": {
+      "concert": "音乐与演唱会",
+      "conference": "会议",
+      "wedding": "婚礼",
+      "gala": "晚宴",
+      "community": "社区",
+      "tour": "游览",
+      "agency": "企业"
+    },
+    "matrix": {
+      "modules": {
+        "ticketing": "售票",
+        "registration": "报名表单",
+        "seating": "座位图",
+        "donations": "捐款",
+        "guests": "宾客名单",
+        "rsvp": "回复确认",
+        "sessions": "场次与日程",
+        "speakers": "演讲嘉宾",
+        "exhibitors": "展商与赞助商",
+        "badges": "证件",
+        "checkin": "门口签到",
+        "marketing": "营销与推广",
+        "messaging": "给参会者的消息",
+        "gallery": "照片墙",
+        "website": "宾客网站",
+        "virtual": "线上与混合场次",
+        "reports": "报表"
+      },
+      "title": "各活动类型包含的内容",
+      "lede": "每种活动类型都从所需的工具开始，之后可以开启更多。",
+      "feature": "功能",
+      "included": "已包含",
+      "notIncluded": "默认不包含",
+      "demoTitle": "Yayatoh 上的同类活动"
     }
   },
   "eventDesign": {

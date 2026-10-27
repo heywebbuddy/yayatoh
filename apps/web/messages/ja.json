@@ -19410,6 +19410,42 @@
     "event": {
       "playVideo": "背景動画を再生",
       "pauseVideo": "背景動画を一時停止"
+    },
+    "types": {
+      "concert": "音楽・コンサート",
+      "conference": "カンファレンス",
+      "wedding": "結婚式",
+      "gala": "ガラ",
+      "community": "コミュニティ",
+      "tour": "ツアー",
+      "agency": "法人"
+    },
+    "matrix": {
+      "modules": {
+        "ticketing": "チケット販売",
+        "registration": "登録フォーム",
+        "seating": "座席表",
+        "donations": "寄付",
+        "guests": "ゲストリスト",
+        "rsvp": "出欠確認",
+        "sessions": "セッションとプログラム",
+        "speakers": "登壇者",
+        "exhibitors": "出展者とスポンサー",
+        "badges": "名札",
+        "checkin": "入口でのチェックイン",
+        "marketing": "マーケティングとキャンペーン",
+        "messaging": "参加者へのメッセージ",
+        "gallery": "フォトギャラリー",
+        "website": "ゲスト用サイト",
+        "virtual": "オンライン・ハイブリッドセッション",
+        "reports": "レポート"
+      },
+      "title": "イベントの種類ごとに含まれるもの",
+      "lede": "どの種類も必要な機能から始まります。あとから追加できます。",
+      "feature": "機能",
+      "included": "含まれる",
+      "notIncluded": "標準では含まれない",
+      "demoTitle": "Yayatohのこんなイベント"
     }
   },
   "eventDesign": {

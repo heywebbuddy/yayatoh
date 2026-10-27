@@ -24,9 +24,15 @@ export async function PosterGrid({
       aria-label={label}
       className="m-0 grid list-none grid-cols-2 gap-x-4 gap-y-8 p-0 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
     >
-      {items.map((l) => (
+      {items.map((l, i) => (
         <li key={l.slug}>
-          <PosterCard listing={l} cover={covers.get(l.slug) ?? null} locale={locale} className="w-full" />
+          <PosterCard
+            listing={l}
+            cover={covers.get(l.slug) ?? null}
+            locale={locale}
+            className="w-full"
+            eager={i < 10}
+          />
         </li>
       ))}
     </ul>

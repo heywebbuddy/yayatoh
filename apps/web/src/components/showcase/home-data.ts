@@ -8,7 +8,11 @@ import type { OrganizerTile } from './organizers-panel.tsx';
 /** The category pills: every platform category except the catch-all, in the taxonomy's order. */
 export const PILL_CATEGORIES = EVENT_CATEGORIES.filter((c) => c !== 'other');
 
+/** Our event types as sections and pills, in the order the home shows them (weddings are never listed). */
+export const SECTION_TYPES = ['concert', 'conference', 'gala', 'community', 'tour', 'agency'] as const;
+
 export interface CategorySection {
+  /** `type:concert` or `topic:music`. */
   readonly key: string;
   readonly events: readonly PublicEventHit[];
 }
@@ -18,7 +22,7 @@ export interface CategorySection {
  * the featured row (events with a picture first, then the soonest), the busiest categories as
  * rows of their own, and the organizers behind the events.
  */
-export async function loadShowcaseHome(sectionCount = 3) {
+export async function loadShowcaseHome(topicSections = 2) {
   const events = await cachedShowcaseEvents(100);
   const covers = await publicCovers(events.map((e) => e.slug));
   const withCover = events.filter((e) => covers.has(e.slug));
@@ -28,10 +32,17 @@ export async function loadShowcaseHome(sectionCount = 3) {
     if (!e.category || e.category === 'other') continue;
     byCategory.set(e.category, [...(byCategory.get(e.category) ?? []), e]);
   }
-  const sections: CategorySection[] = [...byCategory.entries()]
-    .sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]))
-    .slice(0, sectionCount)
-    .map(([key, list]) => ({ key, events: list.slice(0, 10) }));
+  const typeSections: CategorySection[] = SECTION_TYPES.flatMap((type) => {
+    const list = events.filter((e) => e.profile === type);
+    return list.length > 0 ? [{ key: `type:${type}`, events: list.slice(0, 10) }] : [];
+  });
+  const sections: CategorySection[] = [
+    ...typeSections,
+    ...[...byCategory.entries()]
+      .sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]))
+      .slice(0, topicSections)
+      .map(([key, list]) => ({ key: `topic:${key}`, events: list.slice(0, 10) })),
+  ];
   const req = await requestHost();
   const organizerHref = (slug: string) => (req.kind === 'marketplace' ? `/o/${slug}` : `/organizers/${slug}`);
   const counts = new Map<string, OrganizerTile>();

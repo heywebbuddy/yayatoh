@@ -31,11 +31,14 @@ export async function PosterCard({
   cover = null,
   locale,
   className,
+  eager = false,
 }: {
   listing: ListingDto;
   cover?: PublicMediaDto | null;
   locale: string;
   className?: string;
+  /** Load the picture at once: the first cards of a row, which lazy loading may leave blank in a scroller. */
+  eager?: boolean;
 }) {
   const t = await getTranslations('showcase.price');
   const date = new Intl.DateTimeFormat(locale, {
@@ -53,6 +56,7 @@ export async function PosterCard({
           <MediaPicture
             image={cover}
             sizes="270px"
+            eager={eager}
             className="size-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
           />
         ) : (

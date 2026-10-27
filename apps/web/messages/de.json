@@ -19410,6 +19410,42 @@
     "event": {
       "playVideo": "Hintergrundvideo abspielen",
       "pauseVideo": "Hintergrundvideo anhalten"
+    },
+    "types": {
+      "concert": "Musik & Konzerte",
+      "conference": "Konferenzen",
+      "wedding": "Hochzeiten",
+      "gala": "Galas",
+      "community": "Community",
+      "tour": "Touren",
+      "agency": "Firmenevents"
+    },
+    "matrix": {
+      "modules": {
+        "ticketing": "Ticketverkauf",
+        "registration": "Anmeldeformulare",
+        "seating": "Sitzpläne",
+        "donations": "Spenden",
+        "guests": "Gästelisten",
+        "rsvp": "Zu- und Absagen",
+        "sessions": "Sessions und Programm",
+        "speakers": "Referenten",
+        "exhibitors": "Aussteller und Sponsoren",
+        "badges": "Badges",
+        "checkin": "Check-in am Eingang",
+        "marketing": "Marketing und Kampagnen",
+        "messaging": "Nachrichten an Teilnehmende",
+        "gallery": "Fotogalerie",
+        "website": "Gäste-Website",
+        "virtual": "Online- und Hybrid-Sessions",
+        "reports": "Berichte"
+      },
+      "title": "Was jede Eventart enthält",
+      "lede": "Jede Eventart startet mit den Werkzeugen, die sie braucht. Weitere schaltest du später dazu.",
+      "feature": "Funktion",
+      "included": "Enthalten",
+      "notIncluded": "Standardmäßig nicht enthalten",
+      "demoTitle": "Ähnliche Events auf Yayatoh"
     }
   },
   "eventDesign": {

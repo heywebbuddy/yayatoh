@@ -19410,6 +19410,42 @@
     "event": {
       "playVideo": "Play background video",
       "pauseVideo": "Pause background video"
+    },
+    "types": {
+      "concert": "Music & concerts",
+      "conference": "Conferences",
+      "wedding": "Weddings",
+      "gala": "Galas",
+      "community": "Community",
+      "tour": "Tours",
+      "agency": "Corporate"
+    },
+    "matrix": {
+      "modules": {
+        "ticketing": "Ticket sales",
+        "registration": "Registration forms",
+        "seating": "Seating plans",
+        "donations": "Donations",
+        "guests": "Guest lists",
+        "rsvp": "RSVPs",
+        "sessions": "Sessions and agenda",
+        "speakers": "Speakers",
+        "exhibitors": "Exhibitors and sponsors",
+        "badges": "Badges",
+        "checkin": "Check-in at the door",
+        "marketing": "Marketing and campaigns",
+        "messaging": "Messages to attendees",
+        "gallery": "Photo gallery",
+        "website": "Guest website",
+        "virtual": "Online and hybrid sessions",
+        "reports": "Reports"
+      },
+      "title": "What each event type includes",
+      "lede": "Every event type starts with the tools it needs. You can switch more on later.",
+      "feature": "Feature",
+      "included": "Included",
+      "notIncluded": "Not included by default",
+      "demoTitle": "Events like this on Yayatoh"
     }
   },
   "eventDesign": {

@@ -19410,6 +19410,42 @@
     "event": {
       "playVideo": "Riproduci il video di sfondo",
       "pauseVideo": "Metti in pausa il video di sfondo"
+    },
+    "types": {
+      "concert": "Musica e concerti",
+      "conference": "Conferenze",
+      "wedding": "Matrimoni",
+      "gala": "Gala",
+      "community": "Comunità",
+      "tour": "Tour",
+      "agency": "Aziendale"
+    },
+    "matrix": {
+      "modules": {
+        "ticketing": "Vendita biglietti",
+        "registration": "Moduli di iscrizione",
+        "seating": "Piante dei posti",
+        "donations": "Donazioni",
+        "guests": "Liste degli ospiti",
+        "rsvp": "Conferme (RSVP)",
+        "sessions": "Sessioni e programma",
+        "speakers": "Relatori",
+        "exhibitors": "Espositori e sponsor",
+        "badges": "Badge",
+        "checkin": "Check-in all’ingresso",
+        "marketing": "Marketing e campagne",
+        "messaging": "Messaggi ai partecipanti",
+        "gallery": "Galleria fotografica",
+        "website": "Sito per gli ospiti",
+        "virtual": "Sessioni online e ibride",
+        "reports": "Report"
+      },
+      "title": "Cosa include ogni tipo di evento",
+      "lede": "Ogni tipo di evento parte con gli strumenti che gli servono. Puoi attivarne altri più tardi.",
+      "feature": "Funzione",
+      "included": "Incluso",
+      "notIncluded": "Non incluso di default",
+      "demoTitle": "Eventi come questo su Yayatoh"
     }
   },
   "eventDesign": {

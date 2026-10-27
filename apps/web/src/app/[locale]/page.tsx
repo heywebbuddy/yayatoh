@@ -5,10 +5,12 @@ import { SiteSections } from '@/components/marketing/site-sections.tsx';
 import { Carousel } from '@/components/showcase/carousel.tsx';
 import { CategoryRail } from '@/components/showcase/category-rail.tsx';
 import { ShowcaseHero } from '@/components/showcase/hero.tsx';
-import { loadShowcaseHome, PILL_CATEGORIES } from '@/components/showcase/home-data.ts';
+import { loadShowcaseHome } from '@/components/showcase/home-data.ts';
 import { OrganizerCta } from '@/components/showcase/organizer-cta.tsx';
 import { OrganizersPanel } from '@/components/showcase/organizers-panel.tsx';
 import { PosterCard } from '@/components/showcase/poster-card.tsx';
+import { railItems, sectionLabel } from '@/components/showcase/rail-items.ts';
+import { Reveal } from '@/components/showcase/reveal.tsx';
 import { ShowcaseShell } from '@/components/showcase/shell.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { cachedSections, platformContentOrg } from '@/server/help.ts';
@@ -46,7 +48,6 @@ export default async function Home({ params }: Props) {
   const { locale } = await params;
   pageLocale(locale);
   const t = await getTranslations('showcase');
-  const tc = await getTranslations('categories');
   const tm = await getTranslations('market');
   const data = await loadShowcaseHome();
   // M3.11b: the organizer sections ("Why Yayatoh") come from the platform CMS.
@@ -59,12 +60,12 @@ export default async function Home({ params }: Props) {
         cover={data.heroCover}
         featured={first ? { name: first.name, href: `/events/${first.slug}` } : null}
       />
-      <CategoryRail keys={PILL_CATEGORIES} />
+      <CategoryRail items={await railItems()} />
       {data.featured.length > 0 ? (
         <Carousel id="featured" title={t('featured')} viewAllHref="/events">
-          {data.featured.map((l) => (
+          {data.featured.map((l, i) => (
             <li key={l.slug} className="snap-start">
-              <PosterCard listing={l} cover={data.covers.get(l.slug) ?? null} locale={locale} />
+              <PosterCard listing={l} cover={data.covers.get(l.slug) ?? null} locale={locale} eager={i < 5} />
             </li>
           ))}
         </Carousel>
@@ -74,16 +75,33 @@ export default async function Home({ params }: Props) {
           <p className="max-w-md text-ink-2">{tm('empty.description')}</p>
         </section>
       )}
-      {data.sections.map((s) => (
-        <Carousel key={s.key} id={`cat-${s.key}`} title={tc(s.key)} viewAllHref={`/events?topic=${s.key}`}>
-          {s.events.map((l) => (
-            <li key={l.slug} className="snap-start">
-              <PosterCard listing={l} cover={data.covers.get(l.slug) ?? null} locale={locale} />
-            </li>
-          ))}
-        </Carousel>
-      ))}
-      <OrganizersPanel organizers={data.organizers} />
+      {
+        await Promise.all(
+          data.sections.map(async (s) => (
+            <Reveal key={s.key}>
+              <Carousel
+                id={`cat-${s.key.replace(':', '-')}`}
+                title={await sectionLabel(s.key)}
+                viewAllHref={`/events?${s.key.replace(':', '=')}`}
+              >
+                {s.events.map((l, i) => (
+                  <li key={l.slug} className="snap-start">
+                    <PosterCard
+                      listing={l}
+                      cover={data.covers.get(l.slug) ?? null}
+                      locale={locale}
+                      eager={i < 5}
+                    />
+                  </li>
+                ))}
+              </Carousel>
+            </Reveal>
+          )),
+        )
+      }
+      <Reveal>
+        <OrganizersPanel organizers={data.organizers} />
+      </Reveal>
       {sections.length > 0 ? (
         <section aria-labelledby="home-organizers" className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
@@ -100,7 +118,9 @@ export default async function Home({ params }: Props) {
           <SiteSections sections={sections} layout="grid" locale={locale} headingLevel={3} />
         </section>
       ) : null}
-      <OrganizerCta events={data.featured} covers={data.covers} />
+      <Reveal>
+        <OrganizerCta events={data.featured} covers={data.covers} />
+      </Reveal>
       {devAuthEnabled() ? (
         <Link className={buttonClass('secondary', 'md', 'self-center')} href="/dev/login">
           {tm('home.demoCta')}

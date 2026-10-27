@@ -19410,6 +19410,42 @@
     "event": {
       "playVideo": "Achtergrondvideo afspelen",
       "pauseVideo": "Achtergrondvideo pauzeren"
+    },
+    "types": {
+      "concert": "Muziek & concerten",
+      "conference": "Conferenties",
+      "wedding": "Bruiloften",
+      "gala": "Gala’s",
+      "community": "Gemeenschap",
+      "tour": "Tours",
+      "agency": "Zakelijk"
+    },
+    "matrix": {
+      "modules": {
+        "ticketing": "Ticketverkoop",
+        "registration": "Inschrijfformulieren",
+        "seating": "Zaalplattegronden",
+        "donations": "Donaties",
+        "guests": "Gastenlijsten",
+        "rsvp": "Aanmeldingen (RSVP)",
+        "sessions": "Sessies en programma",
+        "speakers": "Sprekers",
+        "exhibitors": "Exposanten en sponsors",
+        "badges": "Badges",
+        "checkin": "Check-in bij de deur",
+        "marketing": "Marketing en campagnes",
+        "messaging": "Berichten aan deelnemers",
+        "gallery": "Fotogalerij",
+        "website": "Gastenwebsite",
+        "virtual": "Online en hybride sessies",
+        "reports": "Rapporten"
+      },
+      "title": "Wat elk soort evenement bevat",
+      "lede": "Elk soort evenement start met de tools die het nodig heeft. Later zet je er meer bij aan.",
+      "feature": "Functie",
+      "included": "Inbegrepen",
+      "notIncluded": "Standaard niet inbegrepen",
+      "demoTitle": "Evenementen zoals dit op Yayatoh"
     }
   },
   "eventDesign": {
