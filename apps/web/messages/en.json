@@ -1269,7 +1269,9 @@
     "purchasedBy": "Purchased by {name}",
     "groupLabel": "Group: {group}",
     "downloadTicket": "Download this ticket (PDF)",
-    "downloadTicketLabel": "Download ticket {serial} as a PDF"
+    "downloadTicketLabel": "Download ticket {serial} as a PDF",
+    "downloadZip": "Download all tickets (ZIP, one file each)",
+    "downloadCombined": "or as one PDF"
   },
   "orders": {
     "title": "Recent orders",

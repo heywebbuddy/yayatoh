@@ -1269,7 +1269,9 @@
     "purchasedBy": "購入者: {name}",
     "groupLabel": "グループ: {group}",
     "downloadTicket": "このチケットをダウンロード（PDF）",
-    "downloadTicketLabel": "チケット{serial}をPDFでダウンロード"
+    "downloadTicketLabel": "チケット{serial}をPDFでダウンロード",
+    "downloadZip": "すべてのチケットをダウンロード（ZIP、1枚ずつ別ファイル）",
+    "downloadCombined": "または1つのPDFで"
   },
   "orders": {
     "title": "最近の注文",

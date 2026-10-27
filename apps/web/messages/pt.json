@@ -1269,7 +1269,9 @@
     "purchasedBy": "Comprado por {name}",
     "groupLabel": "Grupo: {group}",
     "downloadTicket": "Descarregar este bilhete (PDF)",
-    "downloadTicketLabel": "Descarregar o bilhete {serial} em PDF"
+    "downloadTicketLabel": "Descarregar o bilhete {serial} em PDF",
+    "downloadZip": "Descarregar todos os bilhetes (ZIP, um ficheiro cada)",
+    "downloadCombined": "ou num só PDF"
   },
   "orders": {
     "title": "Pedidos recentes",

@@ -248,12 +248,20 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           <p className="text-caption text-ink-2">{t('order.ticketsHint')}</p>
           {getPdfRenderer() ? (
             // A plain link: the PDF route is not a page, so it bypasses client navigation.
-            <a
-              href={`${locale === 'en' ? '' : `/${locale}`}/orders/${token}/pdf`}
-              className={buttonClass('secondary', 'md', 'self-start')}
-            >
-              {t('order.downloadPdf')}
-            </a>
+            <div className="flex flex-wrap gap-2">
+              <a
+                href={`${locale === 'en' ? '' : `/${locale}`}/orders/${token}/pdf`}
+                className={buttonClass('secondary', 'md')}
+              >
+                {t('order.downloadZip')}
+              </a>
+              <a
+                href={`${locale === 'en' ? '' : `/${locale}`}/orders/${token}/pdf?format=pdf`}
+                className={buttonClass('ghost', 'md')}
+              >
+                {t('order.downloadCombined')}
+              </a>
+            </div>
           ) : null}
           <ul className="flex list-none flex-col gap-4 p-0">
             {order.tickets.map((tk) => (

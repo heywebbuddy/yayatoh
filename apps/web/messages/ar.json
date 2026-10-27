@@ -1269,7 +1269,9 @@
     "purchasedBy": "المشتري: {name}",
     "groupLabel": "المجموعة: {group}",
     "downloadTicket": "تنزيل هذه التذكرة (PDF)",
-    "downloadTicketLabel": "تنزيل التذكرة {serial} بصيغة PDF"
+    "downloadTicketLabel": "تنزيل التذكرة {serial} بصيغة PDF",
+    "downloadZip": "تنزيل كل التذاكر (ZIP، ملف لكل تذكرة)",
+    "downloadCombined": "أو كملف PDF واحد"
   },
   "orders": {
     "title": "أحدث الطلبات",

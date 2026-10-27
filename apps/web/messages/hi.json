@@ -1269,7 +1269,9 @@
     "purchasedBy": "खरीदार: {name}",
     "groupLabel": "समूह: {group}",
     "downloadTicket": "यह टिकट डाउनलोड करें (PDF)",
-    "downloadTicketLabel": "टिकट {serial} को PDF में डाउनलोड करें"
+    "downloadTicketLabel": "टिकट {serial} को PDF में डाउनलोड करें",
+    "downloadZip": "सभी टिकट डाउनलोड करें (ZIP, हर टिकट की अलग फ़ाइल)",
+    "downloadCombined": "या एक ही PDF में"
   },
   "orders": {
     "title": "हाल के ऑर्डर",

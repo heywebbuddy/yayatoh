@@ -1269,7 +1269,9 @@
     "purchasedBy": "Покупатель: {name}",
     "groupLabel": "Группа: {group}",
     "downloadTicket": "Скачать этот билет (PDF)",
-    "downloadTicketLabel": "Скачать билет {serial} в PDF"
+    "downloadTicketLabel": "Скачать билет {serial} в PDF",
+    "downloadZip": "Скачать все билеты (ZIP, по файлу на билет)",
+    "downloadCombined": "или одним PDF-файлом"
   },
   "orders": {
     "title": "Последние заказы",

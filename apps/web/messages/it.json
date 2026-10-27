@@ -1269,7 +1269,9 @@
     "purchasedBy": "Acquistato da {name}",
     "groupLabel": "Gruppo: {group}",
     "downloadTicket": "Scarica questo biglietto (PDF)",
-    "downloadTicketLabel": "Scarica il biglietto {serial} in PDF"
+    "downloadTicketLabel": "Scarica il biglietto {serial} in PDF",
+    "downloadZip": "Scarica tutti i biglietti (ZIP, un file ciascuno)",
+    "downloadCombined": "oppure in un unico PDF"
   },
   "orders": {
     "title": "Ordini recenti",

@@ -1269,7 +1269,9 @@
     "purchasedBy": "Gekocht door {name}",
     "groupLabel": "Groep: {group}",
     "downloadTicket": "Dit ticket downloaden (PDF)",
-    "downloadTicketLabel": "Ticket {serial} downloaden als PDF"
+    "downloadTicketLabel": "Ticket {serial} downloaden als PDF",
+    "downloadZip": "Alle tickets downloaden (ZIP, elk een bestand)",
+    "downloadCombined": "of als één pdf"
   },
   "orders": {
     "title": "Recente bestellingen",

@@ -1269,7 +1269,9 @@
     "purchasedBy": "購買人：{name}",
     "groupLabel": "團體：{group}",
     "downloadTicket": "下載此票（PDF）",
-    "downloadTicketLabel": "以 PDF 下載第 {serial} 號票"
+    "downloadTicketLabel": "以 PDF 下載第 {serial} 號票",
+    "downloadZip": "下載全部票券（ZIP，每張一個檔案）",
+    "downloadCombined": "或合併為一個 PDF"
   },
   "orders": {
     "title": "最近訂單",
