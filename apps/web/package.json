@@ -76,7 +76,6 @@
     "@yayatoh/venues": "workspace:*",
     "@yayatoh/virtual": "workspace:*",
     "@yayatoh/webhooks": "workspace:*",
-    "framer-motion": "12.43.0",
     "geist": "1.7.2",
     "hono": "catalog:",
     "konva": "10.7.0",
