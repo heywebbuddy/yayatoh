@@ -5700,7 +5700,9 @@
     "settingOff": "Les acheteurs commandent sans confirmer leur e-mail.",
     "resendIn": "{seconds, plural, one {Vous pourrez demander un nouveau code dans # seconde.} other {Vous pourrez demander un nouveau code dans # secondes.}}",
     "wrong": "{count, plural, one {Ce code n'est pas bon. Il reste # essai.} other {Ce code n'est pas bon. Il reste # essais.}}",
-    "noAccount": "Ce n’est pas une connexion et nous ne créons aucun compte. Nous vérifions simplement que vos billets vous parviendront. Le récapitulatif reste au-dessus ; rien n’est débité avant l’étape suivante."
+    "noAccount": "Ce n’est pas une connexion et nous ne créons aucun compte. Nous vérifions simplement que vos billets vous parviendront. Le récapitulatif reste au-dessus ; rien n’est débité avant l’étape suivante.",
+    "sentSignIn": "Nous avons envoyé un code à 6 chiffres à {email}. Saisissez-le pour vous connecter. Il est valable 10 minutes.",
+    "sentRegistration": "Nous avons envoyé un code à 6 chiffres à {email}. Saisissez-le pour confirmer votre inscription. Il est valable 10 minutes."
   },
   "attendeeSignIn": {
     "title": "Mes billets",

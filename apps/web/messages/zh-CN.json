@@ -5700,7 +5700,9 @@
     "settingOff": "购票人无需确认邮箱即可下单。",
     "resendIn": "{seconds, plural, other {# 秒后可获取新验证码。}}",
     "wrong": "{count, plural, other {验证码不正确。还可尝试 # 次。}}",
-    "noAccount": "这不是登录，我们也不会为您创建账号，只是确认门票能送达您的邮箱。订单摘要仍显示在上方，进入下一步前不会扣款。"
+    "noAccount": "这不是登录，我们也不会为您创建账号，只是确认门票能送达您的邮箱。订单摘要仍显示在上方，进入下一步前不会扣款。",
+    "sentSignIn": "我们已向 {email} 发送 6 位验证码。输入验证码即可登录,有效期 10 分钟。",
+    "sentRegistration": "我们已向 {email} 发送 6 位验证码。输入验证码以确认注册,有效期 10 分钟。"
   },
   "attendeeSignIn": {
     "title": "我的门票",

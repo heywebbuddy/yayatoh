@@ -5700,7 +5700,9 @@
     "settingOff": "Kopers bestellen zonder hun e-mail te bevestigen.",
     "resendIn": "{seconds, plural, one {Je kunt over # seconde een nieuwe code aanvragen.} other {Je kunt over # seconden een nieuwe code aanvragen.}}",
     "wrong": "{count, plural, one {Die code klopt niet. Nog # poging.} other {Die code klopt niet. Nog # pogingen.}}",
-    "noAccount": "Dit is geen inlog en we maken geen account voor je aan. We controleren alleen of je tickets bij je aankomen. Je besteloverzicht blijft hierboven staan; er wordt pas in de volgende stap betaald."
+    "noAccount": "Dit is geen inlog en we maken geen account voor je aan. We controleren alleen of je tickets bij je aankomen. Je besteloverzicht blijft hierboven staan; er wordt pas in de volgende stap betaald.",
+    "sentSignIn": "We hebben een code van 6 cijfers naar {email} gestuurd. Voer hem in om in te loggen. Hij werkt 10 minuten.",
+    "sentRegistration": "We hebben een code van 6 cijfers naar {email} gestuurd. Voer hem in om je registratie te bevestigen. Hij werkt 10 minuten."
   },
   "attendeeSignIn": {
     "title": "Mijn tickets",

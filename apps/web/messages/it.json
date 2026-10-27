@@ -5700,7 +5700,9 @@
     "settingOff": "Gli acquirenti ordinano senza confermare l'email.",
     "resendIn": "{seconds, plural, one {Potrai chiedere un nuovo codice tra # secondo.} other {Potrai chiedere un nuovo codice tra # secondi.}}",
     "wrong": "{count, plural, one {Il codice non è corretto. Resta # tentativo.} other {Il codice non è corretto. Restano # tentativi.}}",
-    "noAccount": "Non è un accesso e non creeremo alcun account. Verifichiamo solo che i biglietti ti arrivino. Il riepilogo resta qui sopra; non viene addebitato nulla fino al passaggio successivo."
+    "noAccount": "Non è un accesso e non creeremo alcun account. Verifichiamo solo che i biglietti ti arrivino. Il riepilogo resta qui sopra; non viene addebitato nulla fino al passaggio successivo.",
+    "sentSignIn": "Abbiamo inviato un codice di 6 cifre a {email}. Inseriscilo per accedere. Vale 10 minuti.",
+    "sentRegistration": "Abbiamo inviato un codice di 6 cifre a {email}. Inseriscilo per confermare la registrazione. Vale 10 minuti."
   },
   "attendeeSignIn": {
     "title": "I miei biglietti",

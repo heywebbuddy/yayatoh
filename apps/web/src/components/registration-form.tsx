@@ -342,6 +342,7 @@ export function RegistrationForm({ find, register }: { find: Action; register: A
                   submitLabel={t('verifyAndContinue')}
                   pending={pending}
                   idPrefix="registration-verify"
+                  purpose="registration"
                 />
               </section>
             </Card>

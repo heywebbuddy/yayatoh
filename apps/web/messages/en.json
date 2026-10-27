@@ -5700,7 +5700,9 @@
     "settingOff": "Buyers order without confirming their email.",
     "resendIn": "{seconds, plural, one {You can ask for a new code in # second.} other {You can ask for a new code in # seconds.}}",
     "wrong": "{count, plural, one {That code isn't right. # try left.} other {That code isn't right. # tries left.}}",
-    "noAccount": "This is not a sign-in and we won’t create an account for you. We only check that your tickets will reach you. Your order summary stays above; nothing is charged until the next step."
+    "noAccount": "This is not a sign-in and we won’t create an account for you. We only check that your tickets will reach you. Your order summary stays above; nothing is charged until the next step.",
+    "sentSignIn": "We emailed a 6-digit code to {email}. Enter it to sign in. It works for 10 minutes.",
+    "sentRegistration": "We emailed a 6-digit code to {email}. Enter it to confirm your registration. It works for 10 minutes."
   },
   "attendeeSignIn": {
     "title": "My tickets",

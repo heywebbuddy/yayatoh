@@ -5700,7 +5700,9 @@
     "settingOff": "Käufer bestellen, ohne ihre E-Mail zu bestätigen.",
     "resendIn": "{seconds, plural, one {Sie können in # Sekunde einen neuen Code anfordern.} other {Sie können in # Sekunden einen neuen Code anfordern.}}",
     "wrong": "{count, plural, one {Dieser Code stimmt nicht. Noch # Versuch.} other {Dieser Code stimmt nicht. Noch # Versuche.}}",
-    "noAccount": "Das ist keine Anmeldung, und wir legen kein Konto für dich an. Wir prüfen nur, dass deine Tickets dich erreichen. Deine Bestellübersicht bleibt oben stehen; abgebucht wird erst im nächsten Schritt."
+    "noAccount": "Das ist keine Anmeldung, und wir legen kein Konto für dich an. Wir prüfen nur, dass deine Tickets dich erreichen. Deine Bestellübersicht bleibt oben stehen; abgebucht wird erst im nächsten Schritt.",
+    "sentSignIn": "Wir haben einen 6-stelligen Code an {email} gesendet. Gib ihn ein, um dich anzumelden. Er gilt 10 Minuten.",
+    "sentRegistration": "Wir haben einen 6-stelligen Code an {email} gesendet. Gib ihn ein, um deine Anmeldung zu bestätigen. Er gilt 10 Minuten."
   },
   "attendeeSignIn": {
     "title": "Meine Tickets",

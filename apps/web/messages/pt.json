@@ -5700,7 +5700,9 @@
     "settingOff": "Os compradores encomendam sem confirmar o e-mail.",
     "resendIn": "{seconds, plural, one {Pode pedir um novo código dentro de # segundo.} other {Pode pedir um novo código dentro de # segundos.}}",
     "wrong": "{count, plural, one {Esse código não está certo. Resta # tentativa.} other {Esse código não está certo. Restam # tentativas.}}",
-    "noAccount": "Isto não é um início de sessão e não criamos nenhuma conta. Só verificamos que os bilhetes lhe chegam. O resumo do pedido fica acima; nada é cobrado até ao passo seguinte."
+    "noAccount": "Isto não é um início de sessão e não criamos nenhuma conta. Só verificamos que os bilhetes lhe chegam. O resumo do pedido fica acima; nada é cobrado até ao passo seguinte.",
+    "sentSignIn": "Enviámos um código de 6 dígitos para {email}. Introduza-o para iniciar sessão. É válido durante 10 minutos.",
+    "sentRegistration": "Enviámos um código de 6 dígitos para {email}. Introduza-o para confirmar o seu registo. É válido durante 10 minutos."
   },
   "attendeeSignIn": {
     "title": "Meus ingressos",

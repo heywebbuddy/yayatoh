@@ -62,6 +62,7 @@ export function PortalSignInForm({
             submitLabel={t('portalSignIn.signIn')}
             pending={pending || Boolean(state.done)}
             idPrefix="portal-sign-in"
+            purpose="signIn"
           />
           <p className="text-caption text-ink-2">{t('portalSignIn.orLink')}</p>
         </>

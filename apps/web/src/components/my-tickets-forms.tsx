@@ -32,15 +32,23 @@ function errorText(t: ReturnType<typeof useTranslations>, code: string | null, r
 /** Email → code (or the emailed link) → signed in. */
 export function SignInForm({
   action,
+  next,
 }: {
   action: (prev: SignInState, form: FormData) => Promise<SignInState>;
+  /** A path on this site to come back to after signing in (also by the emailed link). */
+  next?: string;
 }) {
   const t = useTranslations();
   const [state, formAction, pending] = useActionState(action, { step: 'email', code: null });
   const onSubmit = useKeepValues(formAction);
   const error = errorText(t, state.code, state.retryMinutes);
+  // Signed in: load the page again from the server so it shows the signed-in view.
+  useEffect(() => {
+    if (state.done) window.location.assign(state.done);
+  }, [state.done]);
   return (
     <form action={formAction} onSubmit={onSubmit} className="flex flex-col gap-4">
+      {next ? <input type="hidden" name="next" value={next} /> : null}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
         <div className="flex-1">
           <Input
@@ -68,6 +76,7 @@ export function SignInForm({
             submitLabel={t('attendeeSignIn.signIn')}
             pending={pending}
             idPrefix="sign-in"
+            purpose="signIn"
           />
           <p className="text-caption text-ink-2">{t('attendeeSignIn.orLink')}</p>
         </>
