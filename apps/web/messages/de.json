@@ -49,7 +49,8 @@
       "template": "Vorlage",
       "venue": "Veranstaltungsort",
       "coupon": "Gutschein",
-      "page": "Seite oder Blogbeitrag"
+      "page": "Seite oder Blogbeitrag",
+      "eventAi": "Event mit KI"
     },
     "help": "Hilfe",
     "clientsSection": "Kunden",
@@ -990,7 +991,8 @@
     "categoryHint": "Hilft dir, Events zu organisieren, und Teilnehmenden, sie zu finden. Du kannst sie später in den Eventdetails ändern.",
     "manageCategories": "Kategorien verwalten (öffnet einen neuen Tab)",
     "refreshCategories": "Kategorieliste aktualisieren",
-    "refreshingCategories": "Wird aktualisiert …"
+    "refreshingCategories": "Wird aktualisiert …",
+    "withAi": "Mit KI erstellen"
   },
   "tickets": {
     "subtitle": "Ticketarten, Preise und Kontingente. Alle Preise, die Käufer sehen, enthalten die Gebühren.",
@@ -19449,6 +19451,93 @@
     "videoLabel": "Link zum Kopfbereich-Video (YouTube oder Vimeo)",
     "videoHint": "Läuft stumm und in Schleife hinter dem Titel, mit Pause-Taste. Zuerst und bei Wiedergabefehlern erscheint das Titelbild.",
     "videoHintOff": "Wird genutzt, wenn das Layout Videohintergrund ist.",
-    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…",
+    "assistantLabel": "KI-Assistent für Gäste",
+    "assistantHint": "Beantwortet Fragen der Gäste ausschließlich aus den veröffentlichten Angaben zu diesem Event (Zeiten, Ort, FAQs, Programm, Tickets, Erstattungsrichtlinie), zeigt seine Quellen und bietet den Kontakt zum Team an. Jede Antwort verbraucht einen deiner KI-Credits."
+  },
+  "aiSetup": {
+    "title": "Mit KI erstellen",
+    "description": "Beschreibe dein Event in ein bis zwei Sätzen. Die KI schlägt einen Entwurf vor, den du prüfst und bearbeitest. Erst nach deiner Bestätigung wird etwas angelegt.",
+    "manual": "Manuell erstellen",
+    "brief": "Beschreibe dein Event",
+    "briefHint": "Zum Beispiel: eine eintägige Open-Source-Konferenz in Lissabon im Mai für 200 Personen, mit Vorträgen und einem Workshop. Nenne Datum, Ort und Preise, wenn du sie kennst.",
+    "propose": "Event vorschlagen",
+    "review": {
+      "title": "Vorschlag prüfen",
+      "hint": "Die KI hat das aus deiner Beschreibung geschrieben. Bearbeite alles, entferne, was du nicht willst, und lege dann einen Event-Entwurf an. Prüfe Daten, Preise und Fakten: Die KI kann sich irren."
+    },
+    "fields": {
+      "name": "Eventname",
+      "profile": "Eventtyp",
+      "tagline": "Slogan",
+      "starts": "Beginn",
+      "ends": "Ende",
+      "venue": "Veranstaltungsort",
+      "city": "Stadt",
+      "description": "Beschreibung",
+      "descriptionHint": "Markdown: Absätze, fett, kursiv und Listen."
+    },
+    "tickets": {
+      "title": "Tickettypen",
+      "none": "Keine Tickettypen vorgeschlagen.",
+      "off": "Ticketing ist für deine Organisation nicht aktiviert, daher werden keine Tickets angelegt.",
+      "name": "Name",
+      "price": "Preis ({currency})",
+      "quantity": "Anzahl"
+    },
+    "agenda": {
+      "title": "Programmentwurf",
+      "none": "Kein Programm vorgeschlagen.",
+      "off": "Sessions sind für deine Organisation nicht aktiviert, daher wird das Programm nicht angelegt.",
+      "session": "Session",
+      "starts": "Beginn"
+    },
+    "faqs": {
+      "title": "FAQs",
+      "none": "Keine FAQs vorgeschlagen.",
+      "question": "Frage",
+      "answer": "Antwort"
+    },
+    "remove": "Entfernen",
+    "create": "Event-Entwurf anlegen",
+    "creating": "Wird angelegt …",
+    "discard": "Verwerfen",
+    "confirmNote": "Das legt einen unveröffentlichten Entwurf an. Du kannst später alles ändern.",
+    "sections": {
+      "about": "Über dieses Event",
+      "faq": "FAQ"
+    }
+  },
+  "eventAssistant": {
+    "title": "Frag zum Event",
+    "intro": "Schnelle Antworten aus den veröffentlichten Angaben zu diesem Event.",
+    "question": "Deine Frage",
+    "placeholder": "Zum Beispiel: Wann ist Einlass?",
+    "ask": "Fragen",
+    "thinking": "Denkt nach …",
+    "disclaimer": "Antworten stammen nur aus den veröffentlichten Angaben zu diesem Event und können Fehler enthalten. Wichtige Details bitte beim Veranstalter prüfen.",
+    "sources": "Quellen:",
+    "dontKnow": "Das finde ich in den veröffentlichten Angaben zu diesem Event nicht.",
+    "off": "Der Assistent ist für dieses Event gerade nicht verfügbar.",
+    "unavailable": "Der Assistent ist gerade nicht verfügbar.",
+    "rateLimited": "Das sind viele Fragen. Versuche es in {minutes} Min. erneut.",
+    "humanHelp": "Möchtest du mit einer Person sprechen?",
+    "humanHelpLink": "Das Event-Team fragen (du brauchst dein Ticket)",
+    "labels": {
+      "event": "Das Event",
+      "faq": "FAQ",
+      "announcement": "Ankündigung",
+      "agenda": "Programm",
+      "ticket": "Ticket",
+      "refund": "Erstattungsrichtlinie",
+      "free": "Kostenlos",
+      "allIn": "alle Gebühren inklusive",
+      "availability": {
+        "available": "Im Verkauf",
+        "sold_out": "Ausverkauft",
+        "not_yet_on_sale": "Noch nicht im Verkauf",
+        "sales_ended": "Verkauf beendet"
+      }
+    }
   }
 }

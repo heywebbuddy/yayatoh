@@ -1,0 +1,2 @@
+ALTER TABLE "ai"."credit_ledger" DROP CONSTRAINT "credit_ledger_draft_kind_check";--> statement-breakpoint
+ALTER TABLE "ai"."credit_ledger" ADD CONSTRAINT "credit_ledger_draft_kind_check" CHECK (draft_kind is null or draft_kind in ('tagline', 'description', 'faq', 'campaign', 'page', 'agenda', 'audience', 'event_setup', 'embedding', 'assistant'));

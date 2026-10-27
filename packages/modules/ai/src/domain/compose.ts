@@ -1,6 +1,7 @@
 import { SegmentDefinition } from '@yayatoh/crm/client';
 import { markdownToPlainText, sanitizeMarkdown } from '@yayatoh/events';
 import { z } from 'zod';
+import type { AssistantSource } from './assistant.ts';
 import { type DraftFacts, dataBlock } from './drafts.ts';
 import type { ComposeTask } from './ledger.ts';
 import { AGENDA_MAX_SESSIONS, MAX_BRIEF_LENGTH, TONES, type Tone } from './tones.ts';
@@ -31,10 +32,26 @@ export interface AudienceEventRef {
   readonly startsLocal: string;
 }
 
+/** Every task the prompt builder knows: the organizer drafts and the attendee assistant. */
+export type PromptTask = ComposeTask | 'assistant';
+
 export type ComposeRequest =
   | (ComposeBase & { readonly task: 'campaign'; readonly event: DraftFacts | null })
   | (ComposeBase & { readonly task: 'page'; readonly event: DraftFacts | null })
   | (ComposeBase & { readonly task: 'agenda'; readonly event: DraftFacts; readonly sessions: number })
+  | (ComposeBase & {
+      readonly task: 'assistant';
+      readonly eventName: string;
+      /** The event's published facts, numbered; the only thing the answer may rest on. */
+      readonly sources: readonly AssistantSource[];
+    })
+  | (ComposeBase & {
+      readonly task: 'event_setup';
+      readonly today: string;
+      readonly timezone: string;
+      readonly currency: string;
+      readonly profiles: readonly string[];
+    })
   | (ComposeBase & {
       readonly task: 'audience';
       readonly events: readonly AudienceEventRef[];
@@ -42,7 +59,7 @@ export type ComposeRequest =
     });
 
 interface ComposeBase {
-  readonly task: ComposeTask;
+  readonly task: PromptTask;
   /** The organizer's UI locale: the draft is written in it. */
   readonly locale: string;
   readonly tone: Tone;
@@ -60,12 +77,16 @@ const TONE_GUIDE: Readonly<Record<Tone, string>> = {
   inspiring: 'uplifting, focused on what people will gain',
 };
 
-const TASKS: Readonly<Record<ComposeTask, string>> = {
+const TASKS: Readonly<Record<PromptTask, string>> = {
+  assistant:
+    'Answer the attendee\'s question (the brief) using ONLY the numbered sources in the data, in the language of the tag below. Reply with JSON {"known": boolean, "answer": plain text ≤ 600 chars, "sources": [ids of the sources you used]}. If the sources do not contain the answer, reply {"known": false, "answer": "", "sources": []}. Never use outside knowledge, never guess times, prices, places or policies, and never include a link that is not in a source.',
   campaign:
     'Write a marketing email. Reply with JSON {"subject": string ≤ 120 chars, "preheader": string ≤ 140, "heading": string ≤ 120, "paragraphs": 1 to 4 strings of plain text, "buttonLabel": string ≤ 40 or null}.',
   page: 'Write a page for the organizer\'s website. Reply with JSON {"title": string ≤ 120 chars, "excerpt": string ≤ 280, "body": Markdown with paragraphs, **bold**, *italic*, lists and https links only (no headings, HTML or images)}.',
   agenda:
     'Propose sessions for the event agenda inside the event\'s start and end. Reply with JSON {"sessions": [{"title": string ≤ 120, "description": plain text ≤ 600, "startsLocal": "YYYY-MM-DD HH:MM" in the event time zone, "minutes": 10 to 240}]} with at most the requested number of sessions, in time order, without overlaps.',
+  event_setup:
+    'Propose a complete draft event from the organizer\'s description. Reply with JSON {"name": string ≤ 160, "tagline": string ≤ 280, "profile": one of the listed profiles, "startsLocal": "YYYY-MM-DD HH:MM" in the listed time zone, not before today, "endsLocal": "YYYY-MM-DD HH:MM", "venueName": string or "", "city": string or "", "description": Markdown with paragraphs, **bold**, *italic* and lists (no headings, HTML or images), "tickets": [{"name", "description", "price": a number in the listed currency, "quantity": whole number}] (1 to 4), "agenda": [{"title", "description", "startsLocal", "minutes"}] (0 to 8, inside the event\'s dates), "faqs": [{"question", "answer"}] (3 to 6)}. Use dates, places and prices from the data when given; otherwise choose sensible, modest values and say nothing false about real people or sponsors.',
   audience:
     'Suggest an audience segment. Reply with JSON {"explanation": one sentence ≤ 200 chars, "definition": a segment definition in the platform DSL (version 1, a root group of conditions)}. Only reference event ids listed in the data. Prefer simple definitions with at most 4 conditions.',
 };

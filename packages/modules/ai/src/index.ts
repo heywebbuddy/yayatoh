@@ -1,4 +1,10 @@
 // M6.12b: AI v2 — drafting with a tone and a brand kit, audience suggestions, matchmaking.
+
+export {
+  AskAssistantInput,
+  AssistantResultDto,
+  askEventAssistant,
+} from './assistant.ts';
 export {
   BrandKitDto,
   brandVoiceTx,
@@ -19,8 +25,11 @@ export {
   draftAgenda,
   draftCampaign,
   draftPage,
+  EventSetupResultDto,
   eventFacts,
   PageDraftResultDto,
+  ProposeEventSetupInput,
+  proposeEventSetup,
   SuggestAudienceInput,
   suggestAudience,
 } from './compose.ts';
@@ -37,6 +46,13 @@ export {
   draftEventCopy,
   refundDraftCreditCommand,
 } from './credits.ts';
+export {
+  ASSISTANT_QUESTION_MAX,
+  AssistantAnswerDto,
+  AssistantSource,
+  cleanAssistantAnswer,
+  fitSources,
+} from './domain/assistant.ts';
 export {
   AGENDA_MAX_SESSIONS,
   AiOutputError,
@@ -74,8 +90,19 @@ export {
   validEmbedding,
 } from './domain/embed.ts';
 export {
+  cleanEventSetupDraft,
+  EventSetupDraftDto,
+  SETUP_MAX_AGENDA,
+  SETUP_MAX_FAQS,
+  SETUP_MAX_TICKETS,
+  type SetupAgendaItemDto,
+  type SetupFaqDto,
+  type SetupTicketDto,
+} from './domain/event-setup.ts';
+export {
   AI_PURPOSES,
   type AiPurpose,
+  ASSISTANT_PURPOSE,
   COMPOSE_TASKS,
   type ComposeTask,
   type CreditState,
@@ -102,4 +129,11 @@ export {
 } from './drafter.ts';
 export { MAX_REFRESH_CALLS, RefreshMatchmakingDto, refreshMatchmaking } from './matchmaking.ts';
 export { privateColumns } from './private-columns.ts';
-export { AI_CALL_TIMEOUT_MS, chargedCall, contentCredits, eventCredits, messagingCredits } from './spend.ts';
+export {
+  AI_CALL_TIMEOUT_MS,
+  assistantCredits,
+  chargedCall,
+  contentCredits,
+  eventCredits,
+  messagingCredits,
+} from './spend.ts';

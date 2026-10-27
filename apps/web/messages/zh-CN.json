@@ -49,7 +49,8 @@
       "template": "模板",
       "venue": "场地",
       "coupon": "优惠券",
-      "page": "页面或博客文章"
+      "page": "页面或博客文章",
+      "eventAi": "用 AI 创建活动"
     },
     "help": "帮助",
     "clientsSection": "客户",
@@ -990,7 +991,8 @@
     "categoryHint": "便于你整理活动，也方便参会者找到活动。之后可在“活动详情”中修改。",
     "manageCategories": "管理分类（在新标签页中打开）",
     "refreshCategories": "刷新分类列表",
-    "refreshingCategories": "正在刷新…"
+    "refreshingCategories": "正在刷新…",
+    "withAi": "用 AI 创建"
   },
   "tickets": {
     "subtitle": "管理票种、价格和库存。买家看到的所有价格均已包含费用。",
@@ -19449,6 +19451,93 @@
     "videoLabel": "主视觉视频链接（YouTube 或 Vimeo）",
     "videoHint": "在标题后方静音循环播放，并带有暂停按钮。会先显示封面图，视频无法播放时也显示封面图。",
     "videoHintOff": "主视觉布局为“视频背景”时使用。",
-    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…",
+    "assistantLabel": "参会者 AI 助手",
+    "assistantHint": "仅根据本活动已发布的信息（时间、场地、常见问题、日程、门票、退款政策）回答参会者的问题，显示所依据的内容，并可联系活动团队。每次回答会消耗你的一个 AI 额度。"
+  },
+  "aiSetup": {
+    "title": "用 AI 创建",
+    "description": "用一两句话描述你的活动。AI 会提出草稿，由你检查和修改。在你确认之前不会创建任何内容。",
+    "manual": "手动创建",
+    "brief": "描述你的活动",
+    "briefHint": "例如：五月在里斯本举办的一日开源大会，约 200 人，有演讲和一场工作坊。如果知道，请补充日期、地点和价格。",
+    "propose": "提出活动方案",
+    "review": {
+      "title": "检查方案",
+      "hint": "AI 根据你的描述写出了这些内容。随意修改，删除不需要的，然后创建活动草稿。请核对日期、价格和事实：AI 可能出错。"
+    },
+    "fields": {
+      "name": "活动名称",
+      "profile": "活动类型",
+      "tagline": "一句话简介",
+      "starts": "开始",
+      "ends": "结束",
+      "venue": "场地",
+      "city": "城市",
+      "description": "描述",
+      "descriptionHint": "Markdown：段落、粗体、斜体和列表。"
+    },
+    "tickets": {
+      "title": "票种",
+      "none": "没有建议的票种。",
+      "off": "你的组织未开启售票功能，因此不会添加票种。",
+      "name": "名称",
+      "price": "价格（{currency}）",
+      "quantity": "数量"
+    },
+    "agenda": {
+      "title": "日程大纲",
+      "none": "没有建议的日程。",
+      "off": "你的组织未开启场次功能，因此不会添加日程。",
+      "session": "场次",
+      "starts": "开始"
+    },
+    "faqs": {
+      "title": "常见问题",
+      "none": "没有建议的常见问题。",
+      "question": "问题",
+      "answer": "回答"
+    },
+    "remove": "移除",
+    "create": "创建活动草稿",
+    "creating": "正在创建…",
+    "discard": "放弃",
+    "confirmNote": "这将创建一个未发布的草稿，之后可以随时修改。",
+    "sections": {
+      "about": "关于本活动",
+      "faq": "常见问题"
+    }
+  },
+  "eventAssistant": {
+    "title": "咨询本活动",
+    "intro": "根据本活动已发布的信息快速获得解答。",
+    "question": "你的问题",
+    "placeholder": "例如：几点开门？",
+    "ask": "提问",
+    "thinking": "思考中…",
+    "disclaimer": "回答仅来自本活动已发布的信息，可能有误。重要细节请向主办方确认。",
+    "sources": "来源：",
+    "dontKnow": "我在本活动已发布的信息中找不到这个内容。",
+    "off": "此活动的助手暂时不可用。",
+    "unavailable": "助手暂时不可用。",
+    "rateLimited": "问题有点多，请 {minutes} 分钟后再试。",
+    "humanHelp": "想联系真人吗？",
+    "humanHelpLink": "询问活动团队（需要你的门票）",
+    "labels": {
+      "event": "活动",
+      "faq": "常见问题",
+      "announcement": "公告",
+      "agenda": "日程",
+      "ticket": "门票",
+      "refund": "退款政策",
+      "free": "免费",
+      "allIn": "含所有费用",
+      "availability": {
+        "available": "在售",
+        "sold_out": "已售罄",
+        "not_yet_on_sale": "尚未开售",
+        "sales_ended": "已停售"
+      }
+    }
   }
 }

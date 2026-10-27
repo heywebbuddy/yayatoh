@@ -49,7 +49,8 @@
       "template": "テンプレート",
       "venue": "会場",
       "coupon": "クーポン",
-      "page": "ページまたはブログ記事"
+      "page": "ページまたはブログ記事",
+      "eventAi": "AIでイベント"
     },
     "help": "ヘルプ",
     "clientsSection": "クライアント",
@@ -990,7 +991,8 @@
     "categoryHint": "イベントの整理に役立ち、参加者がイベントを見つけやすくなります。あとから「イベントの詳細」で変更できます。",
     "manageCategories": "カテゴリを管理（新しいタブで開きます）",
     "refreshCategories": "カテゴリ一覧を更新",
-    "refreshingCategories": "更新中…"
+    "refreshingCategories": "更新中…",
+    "withAi": "AIで作成"
   },
   "tickets": {
     "subtitle": "チケット種別、価格、在庫を管理します。購入者に表示される価格はすべて手数料込みです。",
@@ -19449,6 +19451,93 @@
     "videoLabel": "ヒーロー動画のリンク（YouTube または Vimeo）",
     "videoHint": "タイトルの後ろで音なし・ループ再生され、一時停止ボタンが付きます。最初と、動画を再生できないときはカバー画像が表示されます。",
     "videoHintOff": "ヒーローのレイアウトが「動画の背景」のときに使われます。",
-    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…",
+    "assistantLabel": "参加者向けAIアシスタント",
+    "assistantHint": "参加者の質問に、このイベントの公開情報（時間、会場、よくある質問、プログラム、チケット、返金ポリシー）だけをもとに回答し、使った情報源を示し、運営チームへの連絡も案内します。回答のたびにAIクレジットを1つ使います。"
+  },
+  "aiSetup": {
+    "title": "AIで作成",
+    "description": "イベントを1〜2文で説明してください。AIが下書きを提案し、確認と編集ができます。確定するまで何も作成されません。",
+    "manual": "手動で作成",
+    "brief": "イベントの説明",
+    "briefHint": "例：5月にリスボンで開催する、200人規模の1日のオープンソースカンファレンス。講演とワークショップあり。日程、場所、価格が分かれば追加してください。",
+    "propose": "イベントを提案",
+    "review": {
+      "title": "提案内容を確認",
+      "hint": "AIがあなたの説明から作成しました。自由に編集し、不要なものを削除してから、イベントの下書きを作成してください。日付、価格、事実関係を確認してください。AIは間違えることがあります。"
+    },
+    "fields": {
+      "name": "イベント名",
+      "profile": "イベントの種類",
+      "tagline": "キャッチコピー",
+      "starts": "開始",
+      "ends": "終了",
+      "venue": "会場",
+      "city": "都市",
+      "description": "説明",
+      "descriptionHint": "Markdown：段落、太字、斜体、リスト。"
+    },
+    "tickets": {
+      "title": "チケットの種類",
+      "none": "チケットの種類は提案されていません。",
+      "off": "この団体ではチケット販売が有効でないため、チケットは追加されません。",
+      "name": "名前",
+      "price": "価格（{currency}）",
+      "quantity": "数量"
+    },
+    "agenda": {
+      "title": "プログラム案",
+      "none": "プログラムは提案されていません。",
+      "off": "この団体ではセッションが有効でないため、プログラムは追加されません。",
+      "session": "セッション",
+      "starts": "開始"
+    },
+    "faqs": {
+      "title": "よくある質問",
+      "none": "よくある質問は提案されていません。",
+      "question": "質問",
+      "answer": "回答"
+    },
+    "remove": "削除",
+    "create": "イベントの下書きを作成",
+    "creating": "作成中…",
+    "discard": "破棄",
+    "confirmNote": "未公開の下書きが作成されます。後からすべて変更できます。",
+    "sections": {
+      "about": "このイベントについて",
+      "faq": "よくある質問"
+    }
+  },
+  "eventAssistant": {
+    "title": "このイベントについて質問",
+    "intro": "このイベントの公開情報からすぐに回答します。",
+    "question": "質問",
+    "placeholder": "例：開場は何時ですか？",
+    "ask": "質問する",
+    "thinking": "考え中…",
+    "disclaimer": "回答はこのイベントの公開情報のみに基づき、誤りを含む場合があります。重要な内容は主催者にご確認ください。",
+    "sources": "情報源：",
+    "dontKnow": "このイベントの公開情報では見つかりませんでした。",
+    "off": "このイベントでは、現在アシスタントを利用できません。",
+    "unavailable": "現在アシスタントを利用できません。",
+    "rateLimited": "質問が多すぎます。{minutes}分後にもう一度お試しください。",
+    "humanHelp": "担当者に相談しますか？",
+    "humanHelpLink": "イベント運営チームに質問する（チケットが必要です）",
+    "labels": {
+      "event": "イベント",
+      "faq": "よくある質問",
+      "announcement": "お知らせ",
+      "agenda": "プログラム",
+      "ticket": "チケット",
+      "refund": "返金ポリシー",
+      "free": "無料",
+      "allIn": "手数料込み",
+      "availability": {
+        "available": "販売中",
+        "sold_out": "完売",
+        "not_yet_on_sale": "販売開始前",
+        "sales_ended": "販売終了"
+      }
+    }
   }
 }

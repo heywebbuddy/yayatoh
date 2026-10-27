@@ -76,14 +76,25 @@ export const contentCredits = spendPair({
   permission: 'marketing:write',
   purposes: ['page'] as const,
 });
-/** Agenda drafts and matchmaking embeddings for an event: whoever may edit the event. */
+/** Agenda drafts, matchmaking embeddings and whole-event setup drafts: whoever may edit events. */
 export const eventCredits = spendPair({
   key: 'EventCredit',
   permission: 'events:write',
-  purposes: ['agenda', 'embedding'] as const,
+  purposes: ['agenda', 'embedding', 'event_setup'] as const,
 });
 
-type Pair = typeof messagingCredits | typeof contentCredits | typeof eventCredits;
+/**
+ * An attendee's question to an event's assistant: charged to the organizer's credits. The asker is
+ * not a member, so the permission is a `public:` one; the web action rate limits first and checks
+ * that the organizer turned the assistant on for the event.
+ */
+export const assistantCredits = spendPair({
+  key: 'AssistantCredit',
+  permission: 'public:ai.assistant',
+  purposes: ['assistant'] as const,
+});
+
+type Pair = typeof messagingCredits | typeof contentCredits | typeof eventCredits | typeof assistantCredits;
 
 export const AI_CALL_TIMEOUT_MS = 30_000;
 

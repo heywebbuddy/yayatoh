@@ -49,7 +49,8 @@
       "template": "Plantilla",
       "venue": "Lugar",
       "coupon": "Cupón",
-      "page": "Página o entrada de blog"
+      "page": "Página o entrada de blog",
+      "eventAi": "Evento con IA"
     },
     "help": "Ayuda",
     "clientsSection": "Clientes",
@@ -990,7 +991,8 @@
     "categoryHint": "Te ayuda a organizar tus eventos y a que los asistentes los encuentren. Puedes cambiarla más adelante en los detalles del evento.",
     "manageCategories": "Gestionar categorías (se abre en una pestaña nueva)",
     "refreshCategories": "Actualizar lista de categorías",
-    "refreshingCategories": "Actualizando…"
+    "refreshingCategories": "Actualizando…",
+    "withAi": "Crear con IA"
   },
   "tickets": {
     "subtitle": "Tipos de entrada, precios e inventario. Todos los precios que ven los compradores incluyen las tarifas.",
@@ -19449,6 +19451,93 @@
     "videoLabel": "Enlace del vídeo de cabecera (YouTube o Vimeo)",
     "videoHint": "Se reproduce sin sonido y en bucle detrás del título, con un botón de pausa. Se muestra antes la imagen de portada, y también si el vídeo no puede reproducirse.",
     "videoHintOff": "Se usa cuando el diseño de la cabecera es Vídeo de fondo.",
-    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…",
+    "assistantLabel": "Asistente de IA para asistentes",
+    "assistantHint": "Responde a las preguntas de los asistentes solo con los datos publicados de este evento (horarios, lugar, preguntas frecuentes, agenda, entradas, política de reembolsos), muestra qué ha usado y ofrece contactar con el equipo. Cada respuesta usa uno de tus créditos de IA."
+  },
+  "aiSetup": {
+    "title": "Crear con IA",
+    "description": "Describe tu evento en una o dos frases. La IA propone un borrador que revisas y editas. No se crea nada hasta que lo confirmes.",
+    "manual": "Crear manualmente",
+    "brief": "Describe tu evento",
+    "briefHint": "Por ejemplo: un congreso de código abierto de un día en Lisboa en mayo para 200 personas, con charlas y un taller. Añade fechas, lugar y precios si los conoces.",
+    "propose": "Proponer un evento",
+    "review": {
+      "title": "Revisa la propuesta",
+      "hint": "La IA escribió esto a partir de tu descripción. Edita lo que quieras, quita lo que no, y crea un borrador de evento. Comprueba fechas, precios y datos: la IA puede equivocarse."
+    },
+    "fields": {
+      "name": "Nombre del evento",
+      "profile": "Tipo de evento",
+      "tagline": "Eslogan",
+      "starts": "Empieza",
+      "ends": "Termina",
+      "venue": "Recinto",
+      "city": "Ciudad",
+      "description": "Descripción",
+      "descriptionHint": "Markdown: párrafos, negrita, cursiva y listas."
+    },
+    "tickets": {
+      "title": "Tipos de entrada",
+      "none": "No se propusieron tipos de entrada.",
+      "off": "La venta de entradas no está activada en tu organización, así que no se añadirán entradas.",
+      "name": "Nombre",
+      "price": "Precio ({currency})",
+      "quantity": "Cantidad"
+    },
+    "agenda": {
+      "title": "Esquema de la agenda",
+      "none": "No se propuso agenda.",
+      "off": "Las sesiones no están activadas en tu organización, así que no se añadirá la agenda.",
+      "session": "Sesión",
+      "starts": "Empieza"
+    },
+    "faqs": {
+      "title": "Preguntas frecuentes",
+      "none": "No se propusieron preguntas frecuentes.",
+      "question": "Pregunta",
+      "answer": "Respuesta"
+    },
+    "remove": "Quitar",
+    "create": "Crear borrador de evento",
+    "creating": "Creando…",
+    "discard": "Descartar",
+    "confirmNote": "Esto crea un borrador sin publicar. Podrás cambiarlo todo después.",
+    "sections": {
+      "about": "Sobre este evento",
+      "faq": "Preguntas frecuentes"
+    }
+  },
+  "eventAssistant": {
+    "title": "Pregunta sobre este evento",
+    "intro": "Obtén respuestas rápidas con los datos publicados de este evento.",
+    "question": "Tu pregunta",
+    "placeholder": "Por ejemplo: ¿A qué hora abren las puertas?",
+    "ask": "Preguntar",
+    "thinking": "Pensando…",
+    "disclaimer": "Las respuestas salen solo de los datos publicados de este evento y pueden contener errores. Confirma los detalles importantes con el organizador.",
+    "sources": "Fuentes:",
+    "dontKnow": "No encuentro eso en los datos publicados de este evento.",
+    "off": "El asistente no está disponible para este evento ahora mismo.",
+    "unavailable": "El asistente no está disponible ahora mismo.",
+    "rateLimited": "Son muchas preguntas. Inténtalo de nuevo en {minutes} min.",
+    "humanHelp": "¿Quieres que te ayude una persona?",
+    "humanHelpLink": "Preguntar al equipo del evento (necesitarás tu entrada)",
+    "labels": {
+      "event": "El evento",
+      "faq": "Preguntas frecuentes",
+      "announcement": "Anuncio",
+      "agenda": "Agenda",
+      "ticket": "Entrada",
+      "refund": "Política de reembolsos",
+      "free": "Gratis",
+      "allIn": "todas las tarifas incluidas",
+      "availability": {
+        "available": "A la venta",
+        "sold_out": "Agotadas",
+        "not_yet_on_sale": "Aún no está a la venta",
+        "sales_ended": "Venta finalizada"
+      }
+    }
   }
 }

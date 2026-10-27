@@ -49,7 +49,8 @@
       "template": "範本",
       "venue": "場地",
       "coupon": "優惠券",
-      "page": "頁面或部落格文章"
+      "page": "頁面或部落格文章",
+      "eventAi": "用 AI 建立活動"
     },
     "help": "說明",
     "clientsSection": "客戶",
@@ -990,7 +991,8 @@
     "categoryHint": "方便你整理活動，也讓參加者更容易找到活動。之後可在「活動詳情」中修改。",
     "manageCategories": "管理分類（在新分頁中開啟）",
     "refreshCategories": "重新整理分類清單",
-    "refreshingCategories": "重新整理中…"
+    "refreshingCategories": "重新整理中…",
+    "withAi": "用 AI 建立"
   },
   "tickets": {
     "subtitle": "管理票種、價格與庫存。買家看到的所有價格皆已包含費用。",
@@ -19449,6 +19451,93 @@
     "videoLabel": "主視覺影片連結（YouTube 或 Vimeo）",
     "videoHint": "在標題後方靜音循環播放，並附有暫停按鈕。會先顯示封面圖，影片無法播放時也顯示封面圖。",
     "videoHintOff": "主視覺版面為「影片背景」時使用。",
-    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…",
+    "assistantLabel": "參加者 AI 助理",
+    "assistantHint": "僅根據本活動已發布的資訊（時間、場地、常見問題、議程、票券、退款政策）回答參加者的問題，顯示所依據的內容，並可聯絡活動團隊。每次回答會消耗你的一個 AI 額度。"
+  },
+  "aiSetup": {
+    "title": "用 AI 建立",
+    "description": "用一兩句話描述你的活動。AI 會提出草稿，由你檢查與修改。在你確認之前不會建立任何內容。",
+    "manual": "手動建立",
+    "brief": "描述你的活動",
+    "briefHint": "例如：五月在里斯本舉辦的一日開源大會，約 200 人，有演講與一場工作坊。如果知道，請補充日期、地點與價格。",
+    "propose": "提出活動方案",
+    "review": {
+      "title": "檢查方案",
+      "hint": "AI 根據你的描述寫出了這些內容。隨意修改，刪除不需要的，然後建立活動草稿。請核對日期、價格與事實：AI 可能出錯。"
+    },
+    "fields": {
+      "name": "活動名稱",
+      "profile": "活動類型",
+      "tagline": "一句話簡介",
+      "starts": "開始",
+      "ends": "結束",
+      "venue": "場地",
+      "city": "城市",
+      "description": "說明",
+      "descriptionHint": "Markdown：段落、粗體、斜體與清單。"
+    },
+    "tickets": {
+      "title": "票種",
+      "none": "沒有建議的票種。",
+      "off": "你的組織未開啟售票功能，因此不會加入票種。",
+      "name": "名稱",
+      "price": "價格（{currency}）",
+      "quantity": "數量"
+    },
+    "agenda": {
+      "title": "議程大綱",
+      "none": "沒有建議的議程。",
+      "off": "你的組織未開啟場次功能，因此不會加入議程。",
+      "session": "場次",
+      "starts": "開始"
+    },
+    "faqs": {
+      "title": "常見問題",
+      "none": "沒有建議的常見問題。",
+      "question": "問題",
+      "answer": "回答"
+    },
+    "remove": "移除",
+    "create": "建立活動草稿",
+    "creating": "建立中…",
+    "discard": "捨棄",
+    "confirmNote": "這會建立一個未發布的草稿，之後可以隨時修改。",
+    "sections": {
+      "about": "關於本活動",
+      "faq": "常見問題"
+    }
+  },
+  "eventAssistant": {
+    "title": "詢問本活動",
+    "intro": "根據本活動已發布的資訊快速取得解答。",
+    "question": "你的問題",
+    "placeholder": "例如：幾點開門？",
+    "ask": "提問",
+    "thinking": "思考中…",
+    "disclaimer": "回答僅來自本活動已發布的資訊，可能有誤。重要細節請向主辦單位確認。",
+    "sources": "來源：",
+    "dontKnow": "我在本活動已發布的資訊中找不到這個內容。",
+    "off": "此活動的助理暫時無法使用。",
+    "unavailable": "助理暫時無法使用。",
+    "rateLimited": "問題有點多，請 {minutes} 分鐘後再試。",
+    "humanHelp": "想聯絡真人嗎？",
+    "humanHelpLink": "詢問活動團隊（需要你的票券）",
+    "labels": {
+      "event": "活動",
+      "faq": "常見問題",
+      "announcement": "公告",
+      "agenda": "議程",
+      "ticket": "票券",
+      "refund": "退款政策",
+      "free": "免費",
+      "allIn": "含所有費用",
+      "availability": {
+        "available": "販售中",
+        "sold_out": "已售完",
+        "not_yet_on_sale": "尚未開賣",
+        "sales_ended": "已停售"
+      }
+    }
   }
 }

@@ -16,7 +16,13 @@ describe('event design options', () => {
 
   it('keeps a valid design and fills what is missing', () => {
     const d = parseEventDesign({ theme: 'showcase', heroLayout: 'circle' });
-    expect(d).toEqual({ theme: 'showcase', headingFont: 'modern', heroLayout: 'circle', heroVideoUrl: null });
+    expect(d).toEqual({
+      theme: 'showcase',
+      headingFont: 'modern',
+      heroLayout: 'circle',
+      heroVideoUrl: null,
+      assistant: false,
+    });
     expect(parseEventDesign(JSON.stringify(d))).toEqual(d);
   });
 

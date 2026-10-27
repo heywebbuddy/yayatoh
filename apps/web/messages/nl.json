@@ -49,7 +49,8 @@
       "template": "Sjabloon",
       "venue": "Locatie",
       "coupon": "Kortingscode",
-      "page": "Pagina of blogbericht"
+      "page": "Pagina of blogbericht",
+      "eventAi": "Evenement met AI"
     },
     "help": "Help",
     "clientsSection": "Klanten",
@@ -990,7 +991,8 @@
     "categoryHint": "Helpt je evenementen te ordenen en helpt deelnemers ze te vinden. Je kunt dit later wijzigen bij Evenementgegevens.",
     "manageCategories": "Categorieën beheren (opent in een nieuw tabblad)",
     "refreshCategories": "Categorielijst vernieuwen",
-    "refreshingCategories": "Vernieuwen…"
+    "refreshingCategories": "Vernieuwen…",
+    "withAi": "Maken met AI"
   },
   "tickets": {
     "subtitle": "Tickettypes, prijzen en voorraad. Elke prijs die kopers zien is inclusief kosten.",
@@ -19449,6 +19451,93 @@
     "videoLabel": "Link naar headervideo (YouTube of Vimeo)",
     "videoHint": "Speelt zonder geluid en in een lus achter de titel, met een pauzeknop. Eerst verschijnt de omslagfoto, en ook als de video niet kan afspelen.",
     "videoHintOff": "Wordt gebruikt als de headerindeling Videoachtergrond is.",
-    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…",
+    "assistantLabel": "AI-assistent voor bezoekers",
+    "assistantHint": "Beantwoordt vragen van bezoekers alleen met de gepubliceerde gegevens van dit evenement (tijden, locatie, veelgestelde vragen, programma, tickets, restitutiebeleid), toont de bronnen en biedt contact met het team aan. Elk antwoord gebruikt een van je AI-credits."
+  },
+  "aiSetup": {
+    "title": "Maken met AI",
+    "description": "Beschrijf je evenement in een of twee zinnen. AI stelt een concept voor dat je bekijkt en aanpast. Er wordt niets aangemaakt tot je bevestigt.",
+    "manual": "Handmatig maken",
+    "brief": "Beschrijf je evenement",
+    "briefHint": "Bijvoorbeeld: een eendaagse open-sourceconferentie in Lissabon in mei voor 200 mensen, met lezingen en een workshop. Voeg data, plaats en prijzen toe als je ze weet.",
+    "propose": "Evenement voorstellen",
+    "review": {
+      "title": "Bekijk het voorstel",
+      "hint": "AI schreef dit op basis van je beschrijving. Pas alles aan, verwijder wat je niet wilt en maak dan een evenementconcept aan. Controleer data, prijzen en feiten: AI kan zich vergissen."
+    },
+    "fields": {
+      "name": "Naam van het evenement",
+      "profile": "Soort evenement",
+      "tagline": "Slogan",
+      "starts": "Begint",
+      "ends": "Eindigt",
+      "venue": "Locatie",
+      "city": "Plaats",
+      "description": "Beschrijving",
+      "descriptionHint": "Markdown: alinea’s, vet, cursief en lijsten."
+    },
+    "tickets": {
+      "title": "Tickettypen",
+      "none": "Geen tickettypen voorgesteld.",
+      "off": "Ticketverkoop staat niet aan voor je organisatie, dus er worden geen tickets toegevoegd.",
+      "name": "Naam",
+      "price": "Prijs ({currency})",
+      "quantity": "Aantal"
+    },
+    "agenda": {
+      "title": "Programmaschets",
+      "none": "Geen programma voorgesteld.",
+      "off": "Sessies staan niet aan voor je organisatie, dus het programma wordt niet toegevoegd.",
+      "session": "Sessie",
+      "starts": "Begint"
+    },
+    "faqs": {
+      "title": "Veelgestelde vragen",
+      "none": "Geen veelgestelde vragen voorgesteld.",
+      "question": "Vraag",
+      "answer": "Antwoord"
+    },
+    "remove": "Verwijderen",
+    "create": "Conceptevenement maken",
+    "creating": "Bezig met maken…",
+    "discard": "Weggooien",
+    "confirmNote": "Dit maakt een niet-gepubliceerd concept. Je kunt later alles wijzigen.",
+    "sections": {
+      "about": "Over dit evenement",
+      "faq": "Veelgestelde vragen"
+    }
+  },
+  "eventAssistant": {
+    "title": "Stel een vraag over dit evenement",
+    "intro": "Krijg snel antwoord uit de gepubliceerde gegevens van dit evenement.",
+    "question": "Je vraag",
+    "placeholder": "Bijvoorbeeld: Hoe laat gaan de deuren open?",
+    "ask": "Vraag",
+    "thinking": "Aan het denken…",
+    "disclaimer": "Antwoorden komen alleen uit de gepubliceerde gegevens van dit evenement en kunnen fouten bevatten. Controleer belangrijke details bij de organisator.",
+    "sources": "Bronnen:",
+    "dontKnow": "Dat vind ik niet in de gepubliceerde gegevens van dit evenement.",
+    "off": "De assistent is op dit moment niet beschikbaar voor dit evenement.",
+    "unavailable": "De assistent is op dit moment niet beschikbaar.",
+    "rateLimited": "Dat zijn veel vragen. Probeer het over {minutes} min. opnieuw.",
+    "humanHelp": "Liever een persoon spreken?",
+    "humanHelpLink": "Vraag het aan het evenementteam (je hebt je ticket nodig)",
+    "labels": {
+      "event": "Het evenement",
+      "faq": "Veelgestelde vragen",
+      "announcement": "Aankondiging",
+      "agenda": "Programma",
+      "ticket": "Ticket",
+      "refund": "Restitutiebeleid",
+      "free": "Gratis",
+      "allIn": "alle kosten inbegrepen",
+      "availability": {
+        "available": "In de verkoop",
+        "sold_out": "Uitverkocht",
+        "not_yet_on_sale": "Nog niet in de verkoop",
+        "sales_ended": "Verkoop gesloten"
+      }
+    }
   }
 }

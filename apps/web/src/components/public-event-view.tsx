@@ -33,11 +33,13 @@ import {
   releaseBestSeatsAction,
   requestHolderLinkAction,
 } from '@/app/[locale]/events/[slug]/actions.ts';
+import { askAssistantAction } from '@/app/[locale]/events/[slug]/assistant-actions.ts';
 import { AccessCodeEntry } from '@/components/access-code-entry.tsx';
 import { Announcements } from '@/components/announcements.tsx';
 import { BrandLink } from '@/components/brand-styled.tsx';
 import { CheckoutForm } from '@/components/checkout-form.tsx';
 import { DatePicker } from '@/components/date-picker.tsx';
+import { EventAssistant } from '@/components/event-assistant.tsx';
 import { EventSections } from '@/components/event-sections.tsx';
 import { GalleryLightbox } from '@/components/gallery-lightbox.tsx';
 import { HolderLinkForm } from '@/components/holder-link-form.tsx';
@@ -59,6 +61,7 @@ import { aggregateRatingJsonLd, eventJsonLd, jsonLdScript } from '@/lib/seo/json
 import { localizedPath } from '@/lib/seo/urls.ts';
 import { venueDisplayName } from '@/lib/venue-display.ts';
 import { hasAdvancedSeating } from '@/server/advanced-seating.ts';
+import { aiDrafter } from '@/server/ai.ts';
 import { publicDemoOverlay } from '@/server/demo.ts';
 import { categoryLabels } from '@/server/event-categories.ts';
 import { cachedExhibitorMap } from '@/server/exhibitor-map.ts';
@@ -788,6 +791,14 @@ export async function PublicEventView({
                     ))}
                   </ul>
                 </section>
+              ) : null}
+
+              {ev.design.assistant && aiDrafter() ? (
+                <EventAssistant
+                  slug={slug}
+                  ask={askAssistantAction}
+                  helpHref={`/events/${slug}/seat-finder`}
+                />
               ) : null}
 
               {reviews ? (

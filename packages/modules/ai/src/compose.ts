@@ -26,6 +26,7 @@ import {
   PageDraftDto,
 } from './domain/compose.ts';
 import type { DraftFacts } from './domain/drafts.ts';
+import { cleanEventSetupDraft, EventSetupDraftDto } from './domain/event-setup.ts';
 import { TONES } from './domain/tones.ts';
 import type { AiDrafter } from './drafter.ts';
 import { chargedCall, contentCredits, eventCredits, messagingCredits, withTimeout } from './spend.ts';
@@ -246,6 +247,67 @@ export async function draftAgenda(
     timezone: event.timezone,
     balance,
   };
+}
+
+export const ProposeEventSetupInput = z.object({
+  brief: z.string().trim().min(10).max(MAX_BRIEF_LENGTH),
+  tone: z.enum(TONES).default('friendly'),
+  locale: z.string().max(20).default('en'),
+  /** The organizer's time zone and currency (the event defaults), and the event types they may pick. */
+  timezone: z.string().min(1).max(64),
+  currency: z.string().regex(/^[A-Z]{3}$/),
+  profiles: z.array(z.string().max(30)).min(1).max(30),
+});
+export type ProposeEventSetupInput = z.input<typeof ProposeEventSetupInput>;
+export const EventSetupResultDto = z.object({
+  draft: EventSetupDraftDto,
+  timezone: z.string(),
+  currency: z.string(),
+  balance: z.number().int(),
+});
+export type EventSetupResultDto = z.infer<typeof EventSetupResultDto>;
+
+/**
+ * "Create with AI": propose a whole draft event (name, profile, dates, venue text, description,
+ * ticket types with prices, agenda outline, FAQs) from a sentence or two. One credit, refunded on
+ * failure. **Nothing is created**: the organizer edits the proposal and the web app creates the
+ * draft event through the normal commands only after they confirm.
+ */
+export async function proposeEventSetup(
+  ctx: Ctx,
+  ports: CommandPorts<TenantTx>,
+  drafter: AiDrafter | null,
+  raw: ProposeEventSetupInput,
+): Promise<EventSetupResultDto> {
+  const input = parse(ProposeEventSetupInput, raw);
+  const ai = requireDrafter(drafter);
+  const { orgName } = await orgAndBrand(ctx, null);
+  const today = ctx.now.toISOString().slice(0, 10);
+  const { value, balance } = await chargedCall(
+    ctx,
+    ports,
+    eventCredits,
+    { purpose: 'event_setup', eventId: null },
+    async () =>
+      cleanEventSetupDraft(
+        await withTimeout(
+          ai.compose({
+            task: 'event_setup',
+            locale: input.locale,
+            tone: input.tone,
+            brand: null,
+            orgName,
+            brief: input.brief,
+            today,
+            timezone: input.timezone,
+            currency: input.currency,
+            profiles: input.profiles,
+          }),
+        ),
+        { today, profiles: input.profiles },
+      ),
+  );
+  return { draft: value, timezone: input.timezone, currency: input.currency, balance };
 }
 
 /** Events an audience suggestion may reference: the org's 30 latest. */

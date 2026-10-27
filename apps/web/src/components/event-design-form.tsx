@@ -11,6 +11,7 @@ type Design = {
   headingFont: 'modern' | 'extended' | 'classic';
   heroLayout: 'full' | 'circle' | 'video';
   heroVideoUrl: string | null;
+  assistant: boolean;
 };
 
 const THEMES = ['classic', 'showcase'] as const;
@@ -135,6 +136,13 @@ export function EventDesignForm({
           {layout === 'video' ? t('videoHint') : t('videoHintOff')}
         </p>
       </div>
+      <label className="flex items-start gap-3 rounded-tile border border-line bg-surface p-3.5">
+        <input type="checkbox" name="assistant" defaultChecked={initial.assistant} className="mt-0.5" />
+        <span className="flex flex-col gap-0.5">
+          <span className="text-body font-extrabold">{t('assistantLabel')}</span>
+          <span className="text-caption text-ink-2">{t('assistantHint')}</span>
+        </span>
+      </label>
     </SettingsForm>
   );
 }

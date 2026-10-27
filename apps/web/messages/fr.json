@@ -49,7 +49,8 @@
       "template": "Modèle",
       "venue": "Lieu",
       "coupon": "Coupon",
-      "page": "Page ou article de blog"
+      "page": "Page ou article de blog",
+      "eventAi": "Événement avec IA"
     },
     "help": "Aide",
     "clientsSection": "Clients",
@@ -990,7 +991,8 @@
     "categoryHint": "Vous aide à organiser vos événements et aide les participants à les trouver. Vous pourrez la modifier plus tard dans les détails de l’événement.",
     "manageCategories": "Gérer les catégories (s’ouvre dans un nouvel onglet)",
     "refreshCategories": "Actualiser la liste des catégories",
-    "refreshingCategories": "Actualisation…"
+    "refreshingCategories": "Actualisation…",
+    "withAi": "Créer avec l’IA"
   },
   "tickets": {
     "subtitle": "Types de billets, prix et stock. Tous les prix affichés aux acheteurs incluent les frais.",
@@ -19449,6 +19451,93 @@
     "videoLabel": "Lien de la vidéo d’en-tête (YouTube ou Vimeo)",
     "videoHint": "Lue sans son et en boucle derrière le titre, avec un bouton pause. L’image de couverture s’affiche d’abord, et si la vidéo ne peut pas être lue.",
     "videoHintOff": "Utilisé lorsque la disposition de l’en-tête est Vidéo en arrière-plan.",
-    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…",
+    "assistantLabel": "Assistant IA pour les participants",
+    "assistantHint": "Répond aux questions des participants uniquement à partir des informations publiées de cet événement (horaires, lieu, FAQ, programme, billets, politique de remboursement), montre ses sources et propose de contacter l’équipe. Chaque réponse utilise un de vos crédits IA."
+  },
+  "aiSetup": {
+    "title": "Créer avec l’IA",
+    "description": "Décrivez votre événement en une ou deux phrases. L’IA propose un brouillon que vous relisez et modifiez. Rien n’est créé tant que vous ne confirmez pas.",
+    "manual": "Créer manuellement",
+    "brief": "Décrivez votre événement",
+    "briefHint": "Par exemple : une conférence open source d’une journée à Lisbonne en mai, pour 200 personnes, avec des exposés et un atelier. Ajoutez dates, lieu et prix si vous les connaissez.",
+    "propose": "Proposer un événement",
+    "review": {
+      "title": "Relire la proposition",
+      "hint": "L’IA a écrit ceci à partir de votre description. Modifiez ce que vous voulez, retirez le reste, puis créez un brouillon d’événement. Vérifiez dates, prix et faits : l’IA peut se tromper."
+    },
+    "fields": {
+      "name": "Nom de l’événement",
+      "profile": "Type d’événement",
+      "tagline": "Accroche",
+      "starts": "Début",
+      "ends": "Fin",
+      "venue": "Lieu",
+      "city": "Ville",
+      "description": "Description",
+      "descriptionHint": "Markdown : paragraphes, gras, italique et listes."
+    },
+    "tickets": {
+      "title": "Types de billets",
+      "none": "Aucun type de billet proposé.",
+      "off": "La billetterie n’est pas activée pour votre organisation : les billets ne seront pas ajoutés.",
+      "name": "Nom",
+      "price": "Prix ({currency})",
+      "quantity": "Quantité"
+    },
+    "agenda": {
+      "title": "Plan du programme",
+      "none": "Aucun programme proposé.",
+      "off": "Les sessions ne sont pas activées pour votre organisation : le programme ne sera pas ajouté.",
+      "session": "Session",
+      "starts": "Début"
+    },
+    "faqs": {
+      "title": "FAQ",
+      "none": "Aucune FAQ proposée.",
+      "question": "Question",
+      "answer": "Réponse"
+    },
+    "remove": "Retirer",
+    "create": "Créer le brouillon",
+    "creating": "Création…",
+    "discard": "Abandonner",
+    "confirmNote": "Cela crée un brouillon non publié. Vous pourrez tout modifier ensuite.",
+    "sections": {
+      "about": "À propos de cet événement",
+      "faq": "FAQ"
+    }
+  },
+  "eventAssistant": {
+    "title": "Posez une question sur cet événement",
+    "intro": "Obtenez des réponses rapides à partir des informations publiées de cet événement.",
+    "question": "Votre question",
+    "placeholder": "Par exemple : À quelle heure ouvrent les portes ?",
+    "ask": "Demander",
+    "thinking": "Réflexion…",
+    "disclaimer": "Les réponses viennent uniquement des informations publiées de cet événement et peuvent contenir des erreurs. Vérifiez les détails importants auprès de l’organisateur.",
+    "sources": "Sources :",
+    "dontKnow": "Je ne trouve pas cela dans les informations publiées de cet événement.",
+    "off": "L’assistant n’est pas disponible pour cet événement pour le moment.",
+    "unavailable": "L’assistant n’est pas disponible pour le moment.",
+    "rateLimited": "Cela fait beaucoup de questions. Réessayez dans {minutes} min.",
+    "humanHelp": "Vous préférez parler à une personne ?",
+    "humanHelpLink": "Demander à l’équipe de l’événement (votre billet sera nécessaire)",
+    "labels": {
+      "event": "L’événement",
+      "faq": "FAQ",
+      "announcement": "Annonce",
+      "agenda": "Programme",
+      "ticket": "Billet",
+      "refund": "Politique de remboursement",
+      "free": "Gratuit",
+      "allIn": "tous frais inclus",
+      "availability": {
+        "available": "En vente",
+        "sold_out": "Complet",
+        "not_yet_on_sale": "Pas encore en vente",
+        "sales_ended": "Vente terminée"
+      }
+    }
   }
 }

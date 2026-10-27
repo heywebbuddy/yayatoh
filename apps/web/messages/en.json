@@ -49,7 +49,8 @@
       "template": "Template",
       "venue": "Venue",
       "coupon": "Coupon",
-      "page": "Page or blog post"
+      "page": "Page or blog post",
+      "eventAi": "Event with AI"
     },
     "help": "Help",
     "clientsSection": "Clients",
@@ -990,7 +991,8 @@
     "categoryHint": "Helps you organize events and helps attendees find them. You can change it later in Event details.",
     "manageCategories": "Manage categories (opens a new tab)",
     "refreshCategories": "Refresh category list",
-    "refreshingCategories": "Refreshing…"
+    "refreshingCategories": "Refreshing…",
+    "withAi": "Create with AI"
   },
   "tickets": {
     "subtitle": "Ticket types, prices and inventory. Every price buyers see includes fees.",
@@ -19449,6 +19451,93 @@
     "videoLabel": "Hero video link (YouTube or Vimeo)",
     "videoHint": "Plays muted and looping behind the title, with a pause button. The cover image shows first, and if the video cannot play.",
     "videoHintOff": "Used when the hero layout is Video background.",
-    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…",
+    "assistantLabel": "AI assistant for attendees",
+    "assistantHint": "Answers attendees’ questions from this event’s published details only (times, venue, FAQs, agenda, tickets, refund policy), shows what it used and offers to contact the team. Each answer uses one of your AI credits."
+  },
+  "aiSetup": {
+    "title": "Create with AI",
+    "description": "Describe your event in a sentence or two. AI proposes a draft that you review and edit. Nothing is created until you confirm.",
+    "manual": "Create manually",
+    "brief": "Describe your event",
+    "briefHint": "For example: a one-day open-source conference in Lisbon in May for 200 people, with talks and a workshop. Add dates, place and prices if you know them.",
+    "propose": "Propose an event",
+    "review": {
+      "title": "Review the proposal",
+      "hint": "AI wrote this from your description. Edit anything, remove what you do not want, then create a draft event. Check dates, prices and facts: AI can be wrong."
+    },
+    "fields": {
+      "name": "Event name",
+      "profile": "Event type",
+      "tagline": "Tagline",
+      "starts": "Starts",
+      "ends": "Ends",
+      "venue": "Venue",
+      "city": "City",
+      "description": "Description",
+      "descriptionHint": "Markdown: paragraphs, bold, italic and lists."
+    },
+    "tickets": {
+      "title": "Ticket types",
+      "none": "No ticket types proposed.",
+      "off": "Ticketing is not switched on for your organization, so tickets will not be added.",
+      "name": "Name",
+      "price": "Price ({currency})",
+      "quantity": "Quantity"
+    },
+    "agenda": {
+      "title": "Agenda outline",
+      "none": "No agenda proposed.",
+      "off": "Sessions are not switched on for your organization, so the agenda will not be added.",
+      "session": "Session",
+      "starts": "Starts"
+    },
+    "faqs": {
+      "title": "FAQs",
+      "none": "No FAQs proposed.",
+      "question": "Question",
+      "answer": "Answer"
+    },
+    "remove": "Remove",
+    "create": "Create draft event",
+    "creating": "Creating…",
+    "discard": "Discard",
+    "confirmNote": "This creates an unpublished draft. You can change everything later.",
+    "sections": {
+      "about": "About this event",
+      "faq": "FAQ"
+    }
+  },
+  "eventAssistant": {
+    "title": "Ask about this event",
+    "intro": "Get quick answers from this event’s published details.",
+    "question": "Your question",
+    "placeholder": "For example: What time do doors open?",
+    "ask": "Ask",
+    "thinking": "Thinking…",
+    "disclaimer": "Answers come only from this event’s published details and can contain mistakes. Check important details with the organizer.",
+    "sources": "Sources:",
+    "dontKnow": "I can’t find that in this event’s published details.",
+    "off": "The assistant is not available for this event right now.",
+    "unavailable": "The assistant is not available right now.",
+    "rateLimited": "That is a lot of questions. Try again in {minutes} min.",
+    "humanHelp": "Want a person to help?",
+    "humanHelpLink": "Ask the event team (you will need your ticket)",
+    "labels": {
+      "event": "The event",
+      "faq": "FAQ",
+      "announcement": "Announcement",
+      "agenda": "Agenda",
+      "ticket": "Ticket",
+      "refund": "Refund policy",
+      "free": "Free",
+      "allIn": "all fees included",
+      "availability": {
+        "available": "On sale",
+        "sold_out": "Sold out",
+        "not_yet_on_sale": "Not on sale yet",
+        "sales_ended": "Sales have ended"
+      }
+    }
   }
 }

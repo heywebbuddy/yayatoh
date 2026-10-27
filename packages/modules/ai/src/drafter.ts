@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { rankSources } from './domain/assistant.ts';
 import { AiOutputError, addMinutesLocal, buildComposePrompt, type ComposeRequest } from './domain/compose.ts';
 import { buildPrompt, DraftOutputError, type DraftRequest } from './domain/drafts.ts';
 import { fakeEmbedding } from './domain/embed.ts';
@@ -127,6 +128,59 @@ function fakeCompose(req: ComposeRequest): unknown {
         at = addMinutesLocal(at, 60) ?? at;
       }
       return { sessions };
+    }
+    case 'assistant': {
+      const best = rankSources(req.brief, req.sources)[0];
+      return best
+        ? { known: true, answer: cutWords(best.text, 300), sources: [best.id] }
+        : { known: false, answer: '', sources: [] };
+    }
+    case 'event_setup': {
+      const words = brief.split(' ').filter(Boolean);
+      const name = cutWords(words.slice(0, 6).join(' ') || 'New event', 80);
+      const day = req.today;
+      const start = addMinutesLocal(`${day} 18:00`, 7 * 24 * 60) ?? `${day} 18:00`;
+      const withProfile = req.profiles.includes('conference') && /conference|summit|congress/i.test(brief);
+      return {
+        name,
+        tagline: `${opener}: ${cutWords(brief || name, 120)}`,
+        profile: withProfile ? 'conference' : 'other',
+        startsLocal: start,
+        endsLocal: addMinutesLocal(start, 180) ?? start,
+        venueName: '',
+        city: '',
+        description: [
+          `**${name}**`,
+          brief ? `What to expect: ${brief}` : 'More details soon.',
+          '- Doors open 30 minutes before the start',
+        ].join('\n\n'),
+        tickets: [
+          { name: 'General admission', description: 'Entry to the event.', price: 25, quantity: 100 },
+          { name: 'Early bird', description: 'A limited number at a lower price.', price: 15, quantity: 30 },
+        ],
+        agenda: [
+          {
+            title: 'Doors open',
+            description: 'Check in and find your seat.',
+            startsLocal: start,
+            minutes: 30,
+          },
+          {
+            title: name,
+            description: 'The main programme.',
+            startsLocal: addMinutesLocal(start, 30) ?? start,
+            minutes: 120,
+          },
+        ],
+        faqs: [
+          {
+            question: 'Where do I get my ticket?',
+            answer: 'Your ticket is emailed to you right after checkout.',
+          },
+          { question: 'Can I get a refund?', answer: 'See the event refund policy before you buy.' },
+          { question: 'When do doors open?', answer: 'Thirty minutes before the start.' },
+        ],
+      };
     }
     case 'audience': {
       const lower = brief.toLowerCase();

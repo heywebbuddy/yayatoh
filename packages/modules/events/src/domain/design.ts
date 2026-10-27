@@ -21,6 +21,8 @@ export const EventDesign = z.object({
   heroLayout: z.enum(HERO_LAYOUTS).default('full'),
   /** The hero background video (layout `video`); the cover image stays its poster and fallback. */
   heroVideoUrl: HeroVideoUrl.nullable().default(null),
+  /** Show the AI assistant that answers attendees from this event's published details (off by default). */
+  assistant: z.boolean().default(false),
 });
 export type EventDesign = z.infer<typeof EventDesign>;
 
@@ -29,6 +31,7 @@ export const DEFAULT_EVENT_DESIGN: EventDesign = {
   headingFont: 'modern',
   heroLayout: 'full',
   heroVideoUrl: null,
+  assistant: false,
 };
 
 /** The stored value, read leniently: anything unreadable is the default design. */
@@ -47,4 +50,8 @@ function safeJson(s: string): unknown {
 
 /** Whether a design is the default (so nothing needs storing). */
 export const isDefaultDesign = (d: EventDesign): boolean =>
-  d.theme === 'classic' && d.headingFont === 'modern' && d.heroLayout === 'full' && d.heroVideoUrl === null;
+  d.theme === 'classic' &&
+  d.headingFont === 'modern' &&
+  d.heroLayout === 'full' &&
+  d.heroVideoUrl === null &&
+  !d.assistant;

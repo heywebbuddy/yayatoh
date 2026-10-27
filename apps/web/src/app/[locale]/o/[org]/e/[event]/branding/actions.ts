@@ -46,6 +46,7 @@ export async function eventDesignAction(
     headingFont: form.get('headingFont') ?? undefined,
     heroLayout: form.get('heroLayout') ?? undefined,
     heroVideoUrl: video || null,
+    assistant: form.get('assistant') === 'on',
   });
   // A link the page cannot embed would silently show the cover: refuse it instead.
   if (!parsed.success || (video && !parseHeroVideo(video))) return { ok: false, code: 'validation_failed' };
