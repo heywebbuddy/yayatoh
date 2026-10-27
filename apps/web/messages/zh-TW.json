@@ -19909,7 +19909,9 @@
         "not_yet_on_sale": "尚未開賣",
         "sales_ended": "已停售"
       }
-    }
+    },
+    "searchNote": "AI 已關閉，以下是本活動已發布資訊中最接近的內容。",
+    "aiOff": "AI 已關閉，在本活動已發布的資訊中沒有找到相關內容。"
   },
   "tourPickups": {
     "title": "上車點",

@@ -19909,7 +19909,9 @@
         "not_yet_on_sale": "Pas encore en vente",
         "sales_ended": "Vente terminée"
       }
-    }
+    },
+    "searchNote": "L’IA est désactivée : voici la correspondance la plus proche dans les informations publiées de l’événement.",
+    "aiOff": "L’IA est désactivée et je n’ai rien trouvé à ce sujet dans les informations publiées de l’événement."
   },
   "tourPickups": {
     "title": "Points de prise en charge",

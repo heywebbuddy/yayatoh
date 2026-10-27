@@ -19909,7 +19909,9 @@
         "not_yet_on_sale": "Non ancora in vendita",
         "sales_ended": "Vendita terminata"
       }
-    }
+    },
+    "searchNote": "L’IA è disattivata, quindi questo è il risultato più vicino nei dettagli pubblicati dell’evento.",
+    "aiOff": "L’IA è disattivata e non ho trovato nulla in merito nei dettagli pubblicati dell’evento."
   },
   "tourPickups": {
     "title": "Punti di ritrovo",
