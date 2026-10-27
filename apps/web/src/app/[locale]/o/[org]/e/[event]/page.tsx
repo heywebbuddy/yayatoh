@@ -37,7 +37,8 @@ export default async function EventDashboard({
   const demo = demoOverlay(org, event);
   const t = await getTranslations();
   const f: FormatCtx = { locale, currency: ev.currency, timeZone: ev.timezone };
-  const firstName = data.session.name.split(' ')[0] ?? data.session.name;
+  // An account without a name is greeted by the part of its email before the @.
+  const firstName = data.session.name.trim().split(' ')[0] || data.session.email.split('@')[0] || '';
   // Showcase events keep their demo checklist; real events get readiness v1 with deep links.
   // M4.2a: people who can't open the setup guide (planners) don't get its checklist either.
   const guide = opens('setupGuide');

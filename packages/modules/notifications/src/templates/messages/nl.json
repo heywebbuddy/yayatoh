@@ -1,7 +1,7 @@
 {
   "common": {
     "greeting": "Hoi {name},",
-    "greetingNoName": "Hallo,",
+    "greetingNoName": "Hallo!",
     "sentBy": "Verzonden door {org} met Yayatoh.",
     "poweredBy": "Mogelijk gemaakt door Yayatoh",
     "linkFallback": "Werkt de knop niet? Kopieer deze link naar je browser:",

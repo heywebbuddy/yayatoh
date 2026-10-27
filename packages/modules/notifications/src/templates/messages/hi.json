@@ -1,7 +1,7 @@
 {
   "common": {
     "greeting": "नमस्ते {name},",
-    "greetingNoName": "नमस्ते,",
+    "greetingNoName": "नमस्ते!",
     "sentBy": "{org} ने Yayatoh से भेजा।",
     "poweredBy": "Yayatoh द्वारा संचालित",
     "linkFallback": "अगर बटन काम न करे, तो यह लिंक अपने ब्राउज़र में कॉपी करें:",

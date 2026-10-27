@@ -135,7 +135,7 @@ export async function ensureVenues(d: Demo): Promise<Record<VenueKey, string>> {
       {
         ...fields,
         country: 'IN',
-        timezone: d.timezone,
+        timezone: 'Asia/Kolkata',
         mapUrl: `https://www.openstreetmap.org/?mlat=${v.latitude}&mlon=${v.longitude}`,
         directoryListed: true,
       },

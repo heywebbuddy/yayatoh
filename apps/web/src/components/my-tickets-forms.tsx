@@ -47,7 +47,7 @@ export function SignInForm({
     if (state.done) window.location.assign(state.done);
   }, [state.done]);
   return (
-    <form action={formAction} onSubmit={onSubmit} className="flex flex-col gap-4">
+    <form action={formAction} onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
       {next ? <input type="hidden" name="next" value={next} /> : null}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
         <div className="flex-1">
@@ -55,7 +55,8 @@ export function SignInForm({
             id="sign-in-email"
             name="email"
             type="email"
-            required
+            required={state.step === 'email'}
+            defaultValue={state.email}
             autoComplete="email"
             label={t('attendeeSignIn.email')}
           />
