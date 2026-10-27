@@ -78,7 +78,7 @@ export async function POST(req: Request): Promise<Response> {
               {
                 ownerType: owner,
                 ownerId: ticket.ownerId,
-                slot: ticket.slot as 'cover' | 'gallery' | 'photo' | 'floorplan' | 'library',
+                slot: ticket.slot as 'cover' | 'gallery' | 'photo' | 'floorplan' | 'library' | 'social',
                 alt,
                 decorative,
                 file: bytes,

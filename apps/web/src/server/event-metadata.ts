@@ -1,5 +1,5 @@
 import 'server-only';
-import { pageTarget, publicEventBySlug } from '@yayatoh/events';
+import { pageTarget, publicEventBySlug, publicEventSeo } from '@yayatoh/events';
 import { listingBySlug } from '@yayatoh/marketplace';
 import { publicMedia } from '@yayatoh/media';
 import type { Metadata } from 'next';
@@ -15,17 +15,18 @@ export async function eventMetadata(locale: string, slug: string): Promise<Metad
   const req = await requestHost();
   // The organizer's cover (its PNG/JPEG fallback, absolute) when there is one, else the generated card.
   const target = await pageTarget(slug);
-  const cover = target
-    ? (await publicMedia('event', target.eventId)).find((m) => m.slot === 'cover')
-    : undefined;
+  const images = target ? await publicMedia('event', target.eventId) : [];
+  // The organizer's SEO settings win: a dedicated social image, then the cover, then the generated card.
+  const seo = target ? await publicEventSeo(target) : { seoTitle: null, seoDescription: null };
+  const cover = images.find((m) => m.slot === 'social') ?? images.find((m) => m.slot === 'cover');
   const fallback = cover?.variants.find((v) => v.fallback);
   return publicMetadata({
     req,
     locale,
     canonicalOrigin: eventOrigin(req, listing?.canonicalHost ?? null),
     path: `/events/${slug}`,
-    title: `${pub.name} · ${pub.organizerName}`,
-    description: pub.tagline,
+    title: seo.seoTitle ?? `${pub.name} · ${pub.organizerName}`,
+    description: seo.seoDescription ?? pub.tagline,
     image:
       cover && fallback
         ? {

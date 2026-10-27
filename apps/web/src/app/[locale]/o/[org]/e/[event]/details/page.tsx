@@ -1,16 +1,31 @@
-import { eventDetailsQuery, orgCategoriesQuery, orgTagsQuery, shortLinksQuery } from '@yayatoh/events';
+import {
+  eventDetailsQuery,
+  eventSeoQuery,
+  orgCategoriesQuery,
+  orgTagsQuery,
+  shortLinksQuery,
+} from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { listOrdersQuery } from '@yayatoh/orders';
 import { Button, Card, PageHeader } from '@yayatoh/ui';
 import { listVenuesQuery } from '@yayatoh/venues';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { EventCurrencyForm, EventDetailsForm, VanityForm } from '@/components/event-details-form.tsx';
+import { EventSeoForm } from '@/components/event-seo-form.tsx';
 import { HowItWorks } from '@/components/how-it-works.tsx';
+import { MediaUploader } from '@/components/media-uploader.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { categoryLabels } from '@/server/event-categories.ts';
+import { mediaPanel } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
-import { ensureShortLinkAction, saveDetailsAction, setCurrencyAction, setVanityAction } from './actions.ts';
+import {
+  ensureShortLinkAction,
+  saveDetailsAction,
+  saveSeoAction,
+  setCurrencyAction,
+  setVanityAction,
+} from './actions.ts';
 
 export default async function EventDetailsPage({
   params,
@@ -22,12 +37,14 @@ export default async function EventDetailsPage({
   const { data, event: ev, can } = await loadEvent(org, event, 'details');
   const t = await getTranslations('details');
   const canWrite = can('events:write');
-  const [details, venues, links, categories, tags] = await Promise.all([
+  const [details, venues, links, categories, tags, seo, social] = await Promise.all([
     executeQuery(eventDetailsQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(listVenuesQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(shortLinksQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(orgCategoriesQuery, { includeHidden: true, eventId: ev.id }, data.ctx, ports),
     executeQuery(orgTagsQuery, { eventId: ev.id }, data.ctx, ports),
+    executeQuery(eventSeoQuery, { eventId: ev.id }, data.ctx, ports),
+    mediaPanel(data, 'event', ev.id, 'social'),
   ]);
   // U8: hidden categories leave the picker, except the one this event already has.
   const te = await getTranslations();
@@ -124,6 +141,19 @@ export default async function EventDetailsPage({
           ) : null}
         </Card>
       </section>
+      <Card size="panel" className="flex flex-col gap-4">
+        <h2 className="m-0 text-section">{t('seo.title')}</h2>
+        <p className="m-0 text-body text-ink-2">{t('seo.subtitle')}</p>
+        <EventSeoForm
+          action={saveSeoAction.bind(null, org, event)}
+          seo={seo}
+          fallbackTitle={`${ev.name} · ${data.org.name}`}
+          fallbackDescription={ev.tagline ?? ''}
+          origin={origin}
+          disabled={!canWrite}
+        />
+        <MediaUploader org={org} slot="social" headingLevel={3} ticket={social.ticket} items={social.items} />
+      </Card>
     </>
   );
 }

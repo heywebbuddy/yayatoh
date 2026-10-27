@@ -90,9 +90,17 @@ export const events = tenantTable(
      * pages, over the org's brand kit. Null: the org's colour.
      */
     brandColor: text('brand_color'),
+    /** SEO title / meta description for search results and link previews (null: the defaults). */
+    seoTitle: text('seo_title'),
+    seoDescription: text('seo_description'),
   },
   (t) => [
     uniqueIndex('events_slug_key').on(t.slug),
+    check('events_seo_title_check', sql`seo_title is null or char_length(seo_title) between 1 and 70`),
+    check(
+      'events_seo_description_check',
+      sql`seo_description is null or char_length(seo_description) between 1 and 200`,
+    ),
     check('events_brand_color_check', sql`brand_color is null or brand_color ~ '^#[0-9a-f]{6}$'`),
     index('events_org_id_starts_at_idx').on(t.orgId, t.startsAt),
     check('events_status_check', inList('status', EVENT_STATUSES)),

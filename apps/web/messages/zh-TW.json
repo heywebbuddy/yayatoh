@@ -3836,7 +3836,11 @@
     "currencySave": "儲存幣別",
     "hiddenCategory": "{name}（已隱藏）",
     "categoryHiddenHint": "此分類已隱藏：本活動保留它，但其他活動不能再選擇它。",
-    "manageCategories": "管理分類"
+    "manageCategories": "管理分類",
+    "seo": {
+      "title": "SEO 與分享",
+      "subtitle": "搜尋引擎和連結預覽中顯示的活動資訊,以及活動的網址。"
+    }
   },
   "directory": {
     "title": "場地目錄",
@@ -5107,7 +5111,8 @@
       "speaker": "講者照片",
       "exhibitor": "參展商標誌",
       "sponsor": "贊助商標誌",
-      "library": "上傳到媒體庫"
+      "library": "上傳到媒體庫",
+      "social": "社群分享圖片"
     },
     "hint": {
       "cover": "顯示在活動頁面頂端、活動卡片和連結預覽中。",
@@ -5117,7 +5122,8 @@
       "speaker": "顯示在活動頁面、講者頁面以及議程中其場次旁邊。",
       "exhibitor": "在活動頁面上與參展商一起顯示。SVG 標誌在任何尺寸下都保持清晰。",
       "sponsor": "顯示在活動頁面上贊助商所在的級別中（級別越高標誌越大）。SVG 標誌保持清晰。",
-      "library": "在這裡上傳的圖片可用於活動、場地、講者和你的標誌，不必再次上傳。"
+      "library": "在這裡上傳的圖片可用於活動、場地、講者和你的標誌，不必再次上傳。",
+      "social": "用於社群網路和通訊軟體中的連結預覽。未設定時依序使用封面圖和自動產生的卡片。建議尺寸 1200 × 630 像素。"
     },
     "empty": {
       "cover": "還沒有封面圖片。",
@@ -5127,7 +5133,8 @@
       "speaker": "尚無照片。",
       "exhibitor": "尚無標誌。",
       "sponsor": "尚無標誌。",
-      "library": "媒體庫中還沒有圖片。"
+      "library": "媒體庫中還沒有圖片。",
+      "social": "尚無社群分享圖片。"
     },
     "count": "{count, plural, other {# 張}}，共 {max} 張",
     "listLabel": "目前的圖片",
@@ -19267,6 +19274,25 @@
       "too_large": "檔案超過 10 MB。",
       "unsupported_type": "僅接受 PDF 檔案。",
       "too_many": "已達到 5 份宣傳冊的上限。"
+    }
+  },
+  "seoPanel": {
+    "title": "SEO 設定",
+    "seoTitle": "SEO 標題",
+    "seoTitleHint": "顯示在搜尋結果和連結預覽中。留空則使用活動名稱。已用 {count}/{max} 個字元。",
+    "seoDescription": "Meta 描述",
+    "seoDescriptionHint": "搜尋結果中的簡短摘要。留空則使用標語。已用 {count}/{max} 個字元。",
+    "slug": "活動網址",
+    "slugHint": "小寫字母、數字和連字號。更改後,舊網址會自動重新導向。",
+    "slugRedirect": "造訪 /events/{slug} 的使用者將被重新導向到新網址。",
+    "previousSlugs": "重新導向到此處的舊網址:{slugs}",
+    "preview": "搜尋結果預覽",
+    "save": "儲存 SEO 設定",
+    "saved": "SEO 設定已儲存。",
+    "errors": {
+      "seoTitle": "SEO 標題不得超過 {max} 個字元。",
+      "slug": "僅限小寫字母、數字和連字號(不能在開頭或結尾)。",
+      "slugTaken": "該網址已被使用。"
     }
   }
 }

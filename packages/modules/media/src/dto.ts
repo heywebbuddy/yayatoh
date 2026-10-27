@@ -82,7 +82,7 @@ export const UploadMediaInput = UploadFields.extend({
   /** U10: `library` (owner id = the org, slot `library`) uploads straight to the media library. */
   ownerType: z.enum(['event', 'venue', 'library']),
   ownerId: z.uuid(),
-  slot: z.enum(['cover', 'gallery', 'photo', 'floorplan', 'library']),
+  slot: z.enum(['cover', 'gallery', 'photo', 'floorplan', 'library', 'social']),
 }).refine(altRequired, altIssue);
 export type UploadMediaInput = z.input<typeof UploadMediaInput>;
 

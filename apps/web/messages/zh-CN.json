@@ -3836,7 +3836,11 @@
     "currencySave": "保存货币",
     "hiddenCategory": "{name}（已隐藏）",
     "categoryHiddenHint": "此分类已隐藏：本活动保留它，但其他活动不能再选择它。",
-    "manageCategories": "管理分类"
+    "manageCategories": "管理分类",
+    "seo": {
+      "title": "SEO 与分享",
+      "subtitle": "搜索引擎和链接预览中显示的活动信息,以及活动的网址。"
+    }
   },
   "directory": {
     "title": "场地目录",
@@ -5107,7 +5111,8 @@
       "speaker": "演讲者照片",
       "exhibitor": "参展商标志",
       "sponsor": "赞助商标志",
-      "library": "上传到媒体库"
+      "library": "上传到媒体库",
+      "social": "社交分享图片"
     },
     "hint": {
       "cover": "显示在活动页面顶部、活动卡片和链接预览中。",
@@ -5117,7 +5122,8 @@
       "speaker": "显示在活动页面、演讲者页面以及议程中其场次旁边。",
       "exhibitor": "在活动页面上与参展商一起显示。SVG 标志在任何尺寸下都保持清晰。",
       "sponsor": "显示在活动页面上赞助商所在的级别中（级别越高标志越大）。SVG 标志保持清晰。",
-      "library": "在这里上传的图片可用于活动、场地、演讲者和你的标志，无需再次上传。"
+      "library": "在这里上传的图片可用于活动、场地、演讲者和你的标志，无需再次上传。",
+      "social": "用于社交网络和即时通讯应用中的链接预览。未设置时依次使用封面图和自动生成的卡片。建议尺寸 1200 × 630 像素。"
     },
     "empty": {
       "cover": "还没有封面图片。",
@@ -5127,7 +5133,8 @@
       "speaker": "还没有照片。",
       "exhibitor": "还没有标志。",
       "sponsor": "还没有标志。",
-      "library": "媒体库中还没有图片。"
+      "library": "媒体库中还没有图片。",
+      "social": "暂无社交分享图片。"
     },
     "count": "{count, plural, other {# 张}}，共 {max} 张",
     "listLabel": "当前图片",
@@ -19267,6 +19274,25 @@
       "too_large": "文件超过 10 MB。",
       "unsupported_type": "仅接受 PDF 文件。",
       "too_many": "已达到 5 份宣传册的上限。"
+    }
+  },
+  "seoPanel": {
+    "title": "SEO 设置",
+    "seoTitle": "SEO 标题",
+    "seoTitleHint": "显示在搜索结果和链接预览中。留空则使用活动名称。已用 {count}/{max} 个字符。",
+    "seoDescription": "Meta 描述",
+    "seoDescriptionHint": "搜索结果中的简短摘要。留空则使用标语。已用 {count}/{max} 个字符。",
+    "slug": "活动网址",
+    "slugHint": "小写字母、数字和连字符。更改后,旧网址会自动重定向。",
+    "slugRedirect": "访问 /events/{slug} 的用户将被重定向到新网址。",
+    "previousSlugs": "重定向到此处的旧网址:{slugs}",
+    "preview": "搜索结果预览",
+    "save": "保存 SEO 设置",
+    "saved": "SEO 设置已保存。",
+    "errors": {
+      "seoTitle": "SEO 标题不得超过 {max} 个字符。",
+      "slug": "仅限小写字母、数字和连字符(不能在开头或结尾)。",
+      "slugTaken": "该网址已被占用。"
     }
   }
 }

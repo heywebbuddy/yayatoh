@@ -3836,7 +3836,11 @@
     "currencySave": "Salva valuta",
     "hiddenCategory": "{name} (nascosta)",
     "categoryHiddenHint": "Questa categoria è nascosta: l’evento la mantiene, ma non viene più proposta per altri eventi.",
-    "manageCategories": "Gestisci categorie"
+    "manageCategories": "Gestisci categorie",
+    "seo": {
+      "title": "SEO e condivisione",
+      "subtitle": "Cosa mostrano motori di ricerca e anteprime dei link per questo evento, e l’indirizzo web dell’evento."
+    }
   },
   "directory": {
     "title": "Directory delle location",
@@ -5107,7 +5111,8 @@
       "speaker": "Foto del relatore",
       "exhibitor": "Logo dell’espositore",
       "sponsor": "Logo dello sponsor",
-      "library": "Carica nella libreria"
+      "library": "Carica nella libreria",
+      "social": "Immagine per la condivisione social"
     },
     "hint": {
       "cover": "Mostrata in cima alla pagina dell'evento, nelle schede degli eventi e nelle anteprime dei link.",
@@ -5117,7 +5122,8 @@
       "speaker": "Mostrata nella pagina dell’evento, nella pagina del relatore e accanto alle sue sessioni nel programma.",
       "exhibitor": "Mostrato con l’espositore nella pagina dell’evento. I loghi SVG restano nitidi a ogni dimensione.",
       "sponsor": "Mostrato nel livello dello sponsor nella pagina dell’evento (i livelli più alti hanno loghi più grandi). I loghi SVG restano nitidi.",
-      "library": "Le immagini caricate qui si possono usare per eventi, sedi, relatori e il tuo logo senza caricarle di nuovo."
+      "library": "Le immagini caricate qui si possono usare per eventi, sedi, relatori e il tuo logo senza caricarle di nuovo.",
+      "social": "Usata per le anteprime dei link su social e app di messaggistica. In mancanza, l’immagine di copertina e poi una scheda generata. 1200 × 630 px funziona meglio."
     },
     "empty": {
       "cover": "Ancora nessuna immagine di copertina.",
@@ -5127,7 +5133,8 @@
       "speaker": "Nessuna foto.",
       "exhibitor": "Nessun logo.",
       "sponsor": "Nessun logo.",
-      "library": "Ancora nessuna immagine nella libreria."
+      "library": "Ancora nessuna immagine nella libreria.",
+      "social": "Nessuna immagine per la condivisione social."
     },
     "count": "{count, plural, one {# immagine} other {# immagini}} su {max}",
     "listLabel": "Immagini attuali",
@@ -19267,6 +19274,25 @@
       "too_large": "Il file supera i 10 MB.",
       "unsupported_type": "Sono accettati solo file PDF.",
       "too_many": "Raggiunto il limite di 5 brochure."
+    }
+  },
+  "seoPanel": {
+    "title": "Impostazioni SEO",
+    "seoTitle": "Titolo SEO",
+    "seoTitleHint": "Mostrato nei risultati di ricerca e nelle anteprime dei link. Lascia vuoto per usare il nome dell’evento. {count} di {max} caratteri.",
+    "seoDescription": "Meta description",
+    "seoDescriptionHint": "Un breve riassunto per i risultati di ricerca. Lascia vuoto per usare lo slogan. {count} di {max} caratteri.",
+    "slug": "Indirizzo web dell’evento",
+    "slugHint": "Lettere minuscole, cifre e trattini. Se lo cambi, il vecchio indirizzo continua a funzionare come reindirizzamento.",
+    "slugRedirect": "I visitatori di /events/{slug} saranno reindirizzati al nuovo indirizzo.",
+    "previousSlugs": "Vecchi indirizzi che reindirizzano qui: {slugs}",
+    "preview": "Anteprima del risultato di ricerca",
+    "save": "Salva le impostazioni SEO",
+    "saved": "Impostazioni SEO salvate.",
+    "errors": {
+      "seoTitle": "Il titolo SEO deve avere al massimo {max} caratteri.",
+      "slug": "Usa solo lettere minuscole, cifre e trattini (non all’inizio o alla fine).",
+      "slugTaken": "Questo indirizzo web è già in uso."
     }
   }
 }

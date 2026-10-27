@@ -3836,7 +3836,11 @@
     "currencySave": "Save currency",
     "hiddenCategory": "{name} (hidden)",
     "categoryHiddenHint": "This category is hidden: the event keeps it, but it is no longer offered for other events.",
-    "manageCategories": "Manage categories"
+    "manageCategories": "Manage categories",
+    "seo": {
+      "title": "SEO and sharing",
+      "subtitle": "What search engines and link previews show for this event, and the event’s web address."
+    }
   },
   "directory": {
     "title": "Venue directory",
@@ -5107,7 +5111,8 @@
       "speaker": "Speaker photo",
       "exhibitor": "Exhibitor logo",
       "sponsor": "Sponsor logo",
-      "library": "Upload to the library"
+      "library": "Upload to the library",
+      "social": "Social share image"
     },
     "hint": {
       "cover": "Shown at the top of the event page, on listing cards and in link previews.",
@@ -5117,7 +5122,8 @@
       "speaker": "Shown on the event page, the speaker's own page and next to their sessions in the agenda.",
       "exhibitor": "Shown with the exhibitor on the event page. SVG logos stay sharp at any size.",
       "sponsor": "Shown in the sponsor's tier on the event page (higher tiers show bigger logos). SVG logos stay sharp.",
-      "library": "Images you upload here can be used for events, venues, speakers and your logo without uploading them again."
+      "library": "Images you upload here can be used for events, venues, speakers and your logo without uploading them again.",
+      "social": "Used for link previews on social networks and messaging apps. Falls back to the cover image, then to a generated card. 1200 × 630 px works best."
     },
     "empty": {
       "cover": "No cover image yet.",
@@ -5127,7 +5133,8 @@
       "speaker": "No photo yet.",
       "exhibitor": "No logo yet.",
       "sponsor": "No logo yet.",
-      "library": "No images in the library yet."
+      "library": "No images in the library yet.",
+      "social": "No social share image yet."
     },
     "count": "{count, plural, one {# image} other {# images}} of {max}",
     "listLabel": "Current images",
@@ -19267,6 +19274,25 @@
       "too_large": "The file is larger than 10 MB.",
       "unsupported_type": "Only PDF files are accepted.",
       "too_many": "The limit of 5 brochures is reached."
+    }
+  },
+  "seoPanel": {
+    "title": "SEO settings",
+    "seoTitle": "SEO title",
+    "seoTitleHint": "Shown in search results and link previews. Leave empty to use the event name. {count} of {max} characters.",
+    "seoDescription": "Meta description",
+    "seoDescriptionHint": "A short summary for search results. Leave empty to use the tagline. {count} of {max} characters.",
+    "slug": "Event web address",
+    "slugHint": "Lowercase letters, digits and hyphens. Changing it keeps the old address working as a redirect.",
+    "slugRedirect": "Visitors of /events/{slug} will be redirected to the new address.",
+    "previousSlugs": "Old addresses that redirect here: {slugs}",
+    "preview": "Search result preview",
+    "save": "Save SEO settings",
+    "saved": "SEO settings saved.",
+    "errors": {
+      "seoTitle": "Keep the SEO title to {max} characters or fewer.",
+      "slug": "Use lowercase letters, digits and hyphens only (not at the start or end).",
+      "slugTaken": "That web address is already taken."
     }
   }
 }

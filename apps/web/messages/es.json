@@ -3836,7 +3836,11 @@
     "currencySave": "Guardar moneda",
     "hiddenCategory": "{name} (oculta)",
     "categoryHiddenHint": "Esta categoría está oculta: el evento la conserva, pero ya no se ofrece para otros eventos.",
-    "manageCategories": "Gestionar categorías"
+    "manageCategories": "Gestionar categorías",
+    "seo": {
+      "title": "SEO y compartir",
+      "subtitle": "Lo que muestran los buscadores y las vistas previas de enlaces para este evento, y la dirección web del evento."
+    }
   },
   "directory": {
     "title": "Directorio de recintos",
@@ -5107,7 +5111,8 @@
       "speaker": "Foto del ponente",
       "exhibitor": "Logotipo del expositor",
       "sponsor": "Logotipo del patrocinador",
-      "library": "Subir a la biblioteca"
+      "library": "Subir a la biblioteca",
+      "social": "Imagen para compartir en redes"
     },
     "hint": {
       "cover": "Se muestra arriba en la página del evento, en las tarjetas de eventos y en las vistas previas de enlaces.",
@@ -5117,7 +5122,8 @@
       "speaker": "Se muestra en la página del evento, en la página del ponente y junto a sus sesiones en la agenda.",
       "exhibitor": "Se muestra con el expositor en la página del evento. Los logotipos SVG se ven nítidos a cualquier tamaño.",
       "sponsor": "Se muestra en el nivel del patrocinador en la página del evento (los niveles superiores muestran logotipos más grandes). Los logotipos SVG se ven nítidos.",
-      "library": "Las imágenes que subas aquí se pueden usar en eventos, recintos, ponentes y tu logotipo sin volver a subirlas."
+      "library": "Las imágenes que subas aquí se pueden usar en eventos, recintos, ponentes y tu logotipo sin volver a subirlas.",
+      "social": "Se usa en las vistas previas de enlaces en redes sociales y mensajería. Si falta, se usa la portada y después una tarjeta generada. 1200 × 630 px funciona mejor."
     },
     "empty": {
       "cover": "Todavía no hay imagen de portada.",
@@ -5127,7 +5133,8 @@
       "speaker": "Aún no hay foto.",
       "exhibitor": "Aún no hay logotipo.",
       "sponsor": "Aún no hay logotipo.",
-      "library": "Aún no hay imágenes en la biblioteca."
+      "library": "Aún no hay imágenes en la biblioteca.",
+      "social": "Aún no hay imagen para compartir en redes."
     },
     "count": "{count, plural, one {# imagen} other {# imágenes}} de {max}",
     "listLabel": "Imágenes actuales",
@@ -19267,6 +19274,25 @@
       "too_large": "El archivo supera los 10 MB.",
       "unsupported_type": "Solo se aceptan archivos PDF.",
       "too_many": "Se alcanzó el límite de 5 folletos."
+    }
+  },
+  "seoPanel": {
+    "title": "Ajustes de SEO",
+    "seoTitle": "Título SEO",
+    "seoTitleHint": "Se muestra en los resultados de búsqueda y las vistas previas de enlaces. Déjalo vacío para usar el nombre del evento. {count} de {max} caracteres.",
+    "seoDescription": "Meta descripción",
+    "seoDescriptionHint": "Un resumen breve para los resultados de búsqueda. Déjalo vacío para usar el eslogan. {count} de {max} caracteres.",
+    "slug": "Dirección web del evento",
+    "slugHint": "Minúsculas, dígitos y guiones. Si lo cambias, la dirección anterior sigue funcionando como redirección.",
+    "slugRedirect": "Quienes visiten /events/{slug} serán redirigidos a la nueva dirección.",
+    "previousSlugs": "Direcciones anteriores que redirigen aquí: {slugs}",
+    "preview": "Vista previa del resultado de búsqueda",
+    "save": "Guardar ajustes de SEO",
+    "saved": "Ajustes de SEO guardados.",
+    "errors": {
+      "seoTitle": "El título SEO debe tener {max} caracteres o menos.",
+      "slug": "Usa solo minúsculas, dígitos y guiones (no al principio ni al final).",
+      "slugTaken": "Esa dirección web ya está en uso."
     }
   }
 }

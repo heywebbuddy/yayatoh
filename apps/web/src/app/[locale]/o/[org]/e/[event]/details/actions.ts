@@ -5,6 +5,7 @@ import {
   ensureShortLinkCommand,
   setEventCurrencyCommand,
   setEventDetailsCommand,
+  setEventSeoCommand,
   setVanityShortLinkCommand,
   updateEventCommand,
 } from '@yayatoh/events';
@@ -96,5 +97,41 @@ export async function setCurrencyAction(
     return failure(err);
   }
   revalidatePath(`/o/${org}/e/${event}`, 'layout');
+  return success();
+}
+
+/** The SEO panel: title, meta description and the event's address (the old one redirects). */
+export async function saveSeoAction(
+  org: string,
+  event: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const { data, event: ev } = await loadEvent(org, event, 'details');
+  const text = (k: string) => {
+    const v = String(form.get(k) ?? '').trim();
+    return v === '' ? null : v;
+  };
+  let slug: string;
+  try {
+    ({ slug } = await executeCommand(
+      setEventSeoCommand,
+      {
+        eventId: ev.id,
+        seoTitle: text('seoTitle'),
+        seoDescription: text('seoDescription'),
+        slug: String(form.get('slug') ?? ev.slug)
+          .trim()
+          .toLowerCase(),
+      },
+      data.ctx,
+      ports,
+    ));
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/o/${org}/e/${event}`, 'layout');
+  revalidatePath(`/events/${ev.slug}`);
+  if (slug !== ev.slug) revalidatePath(`/events/${slug}`);
   return success();
 }

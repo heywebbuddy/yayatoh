@@ -273,6 +273,15 @@ export {
   OCCURRENCE_STATUSES,
 } from './schema.ts';
 export {
+  currentSlugFor,
+  EventSeoDto,
+  eventSeoQuery,
+  publicEventSeo,
+  SEO_DESCRIPTION_MAX,
+  SEO_TITLE_MAX,
+  setEventSeoCommand,
+} from './seo.ts';
+export {
   createSeriesCommand,
   deleteSeriesCommand,
   eventIdsStartingBetweenTx,

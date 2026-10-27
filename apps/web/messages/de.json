@@ -3836,7 +3836,11 @@
     "currencySave": "Währung speichern",
     "hiddenCategory": "{name} (ausgeblendet)",
     "categoryHiddenHint": "Diese Kategorie ist ausgeblendet: Die Veranstaltung behält sie, für andere Veranstaltungen wird sie nicht mehr angeboten.",
-    "manageCategories": "Kategorien verwalten"
+    "manageCategories": "Kategorien verwalten",
+    "seo": {
+      "title": "SEO und Teilen",
+      "subtitle": "Was Suchmaschinen und Link-Vorschauen für diese Veranstaltung zeigen, und die Webadresse der Veranstaltung."
+    }
   },
   "directory": {
     "title": "Verzeichnis der Veranstaltungsorte",
@@ -5107,7 +5111,8 @@
       "speaker": "Foto der sprechenden Person",
       "exhibitor": "Logo des Ausstellers",
       "sponsor": "Logo des Sponsors",
-      "library": "In die Mediathek hochladen"
+      "library": "In die Mediathek hochladen",
+      "social": "Bild für soziale Netzwerke"
     },
     "hint": {
       "cover": "Erscheint oben auf der Veranstaltungsseite, auf Veranstaltungskarten und in Linkvorschauen.",
@@ -5117,7 +5122,8 @@
       "speaker": "Wird auf der Veranstaltungsseite, der eigenen Seite und neben den Sessions im Programm angezeigt.",
       "exhibitor": "Wird beim Aussteller auf der Veranstaltungsseite angezeigt. SVG-Logos bleiben in jeder Größe scharf.",
       "sponsor": "Wird in der Stufe des Sponsors auf der Veranstaltungsseite angezeigt (höhere Stufen zeigen größere Logos). SVG-Logos bleiben scharf.",
-      "library": "Hier hochgeladene Bilder können Sie für Veranstaltungen, Orte, Sprecher und Ihr Logo verwenden, ohne sie erneut hochzuladen."
+      "library": "Hier hochgeladene Bilder können Sie für Veranstaltungen, Orte, Sprecher und Ihr Logo verwenden, ohne sie erneut hochzuladen.",
+      "social": "Wird für Link-Vorschauen in sozialen Netzwerken und Messengern verwendet. Ersatz: das Titelbild, dann eine generierte Karte. 1200 × 630 px funktioniert am besten."
     },
     "empty": {
       "cover": "Noch kein Titelbild.",
@@ -5127,7 +5133,8 @@
       "speaker": "Noch kein Foto.",
       "exhibitor": "Noch kein Logo.",
       "sponsor": "Noch kein Logo.",
-      "library": "Noch keine Bilder in der Mediathek."
+      "library": "Noch keine Bilder in der Mediathek.",
+      "social": "Noch kein Bild für soziale Netzwerke."
     },
     "count": "{count, plural, one {# Bild} other {# Bilder}} von {max}",
     "listLabel": "Aktuelle Bilder",
@@ -19267,6 +19274,25 @@
       "too_large": "Die Datei ist größer als 10 MB.",
       "unsupported_type": "Es werden nur PDF-Dateien akzeptiert.",
       "too_many": "Das Limit von 5 Broschüren ist erreicht."
+    }
+  },
+  "seoPanel": {
+    "title": "SEO-Einstellungen",
+    "seoTitle": "SEO-Titel",
+    "seoTitleHint": "Wird in Suchergebnissen und Link-Vorschauen angezeigt. Leer lassen, um den Veranstaltungsnamen zu verwenden. {count} von {max} Zeichen.",
+    "seoDescription": "Meta-Beschreibung",
+    "seoDescriptionHint": "Eine kurze Zusammenfassung für Suchergebnisse. Leer lassen, um den Slogan zu verwenden. {count} von {max} Zeichen.",
+    "slug": "Webadresse der Veranstaltung",
+    "slugHint": "Kleinbuchstaben, Ziffern und Bindestriche. Bei einer Änderung leitet die alte Adresse weiter.",
+    "slugRedirect": "Besucher von /events/{slug} werden auf die neue Adresse weitergeleitet.",
+    "previousSlugs": "Alte Adressen, die hierher weiterleiten: {slugs}",
+    "preview": "Vorschau des Suchergebnisses",
+    "save": "SEO-Einstellungen speichern",
+    "saved": "SEO-Einstellungen gespeichert.",
+    "errors": {
+      "seoTitle": "Der SEO-Titel darf höchstens {max} Zeichen lang sein.",
+      "slug": "Verwende nur Kleinbuchstaben, Ziffern und Bindestriche (nicht am Anfang oder Ende).",
+      "slugTaken": "Diese Webadresse ist bereits vergeben."
     }
   }
 }

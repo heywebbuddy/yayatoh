@@ -17,7 +17,7 @@ import {
 import type { MediaItem } from '@/server/media.ts';
 
 /** U10: `library` uploads straight to the org's media library (its page lists the images). */
-type Slot = 'cover' | 'gallery' | 'photo' | 'logo' | 'library';
+type Slot = 'cover' | 'gallery' | 'photo' | 'logo' | 'library' | 'social';
 /** M1.4h: a program row's single image (speaker photo, exhibitor or sponsor logo). */
 type ProgramKind = 'speaker' | 'exhibitor' | 'sponsor';
 type Family = 'content' | 'logo' | ProgramKind;

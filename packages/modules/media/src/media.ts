@@ -46,9 +46,9 @@ export const MAX_PER_SLOT = 20;
 /** U10: images uploaded straight to the media library (reuses don't count; they hold no files). */
 export const MAX_LIBRARY_IMAGES = 1000;
 const maxFor = (ownerType: OwnerType) => (ownerType === 'library' ? MAX_LIBRARY_IMAGES : MAX_PER_SLOT);
-const SINGLE_SLOTS: readonly Slot[] = ['cover', 'logo'];
+const SINGLE_SLOTS: readonly Slot[] = ['cover', 'logo', 'social'];
 const OWNER_SLOTS: Readonly<Record<OwnerType, readonly Slot[]>> = {
-  event: ['cover', 'gallery', 'floorplan'],
+  event: ['cover', 'gallery', 'floorplan', 'social'],
   venue: ['photo'],
   org: ['logo'],
   speaker: ['photo'],

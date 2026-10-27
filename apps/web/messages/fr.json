@@ -3836,7 +3836,11 @@
     "currencySave": "Enregistrer la devise",
     "hiddenCategory": "{name} (masquée)",
     "categoryHiddenHint": "Cette catégorie est masquée : l’événement la garde, mais elle n’est plus proposée pour d’autres événements.",
-    "manageCategories": "Gérer les catégories"
+    "manageCategories": "Gérer les catégories",
+    "seo": {
+      "title": "SEO et partage",
+      "subtitle": "Ce que les moteurs de recherche et les aperçus de liens affichent pour cet événement, et son adresse web."
+    }
   },
   "directory": {
     "title": "Annuaire des lieux",
@@ -5107,7 +5111,8 @@
       "speaker": "Photo de l’intervenant",
       "exhibitor": "Logo de l’exposant",
       "sponsor": "Logo du sponsor",
-      "library": "Importer dans la médiathèque"
+      "library": "Importer dans la médiathèque",
+      "social": "Image de partage social"
     },
     "hint": {
       "cover": "Affichée en haut de la page de l'événement, sur les cartes d'événements et dans les aperçus de liens.",
@@ -5117,7 +5122,8 @@
       "speaker": "Affichée sur la page de l’événement, la page de l’intervenant et à côté de ses sessions dans le programme.",
       "exhibitor": "Affiché avec l’exposant sur la page de l’événement. Les logos SVG restent nets à toutes les tailles.",
       "sponsor": "Affiché dans le niveau du sponsor sur la page de l’événement (les niveaux supérieurs ont des logos plus grands). Les logos SVG restent nets.",
-      "library": "Les images importées ici peuvent servir pour les événements, les lieux, les intervenants et votre logo sans être importées à nouveau."
+      "library": "Les images importées ici peuvent servir pour les événements, les lieux, les intervenants et votre logo sans être importées à nouveau.",
+      "social": "Utilisée pour les aperçus de liens sur les réseaux sociaux et les messageries. À défaut, l’image de couverture, puis une carte générée. 1200 × 630 px convient le mieux."
     },
     "empty": {
       "cover": "Pas encore d’image de couverture.",
@@ -5127,7 +5133,8 @@
       "speaker": "Pas encore de photo.",
       "exhibitor": "Pas encore de logo.",
       "sponsor": "Pas encore de logo.",
-      "library": "Aucune image dans la médiathèque pour l’instant."
+      "library": "Aucune image dans la médiathèque pour l’instant.",
+      "social": "Pas encore d’image de partage social."
     },
     "count": "{count, plural, one {# image} other {# images}} sur {max}",
     "listLabel": "Images actuelles",
@@ -19267,6 +19274,25 @@
       "too_large": "Le fichier dépasse 10 Mo.",
       "unsupported_type": "Seuls les fichiers PDF sont acceptés.",
       "too_many": "La limite de 5 brochures est atteinte."
+    }
+  },
+  "seoPanel": {
+    "title": "Paramètres SEO",
+    "seoTitle": "Titre SEO",
+    "seoTitleHint": "Affiché dans les résultats de recherche et les aperçus de liens. Laissez vide pour utiliser le nom de l’événement. {count} sur {max} caractères.",
+    "seoDescription": "Méta-description",
+    "seoDescriptionHint": "Un court résumé pour les résultats de recherche. Laissez vide pour utiliser le slogan. {count} sur {max} caractères.",
+    "slug": "Adresse web de l’événement",
+    "slugHint": "Minuscules, chiffres et tirets. Si vous le changez, l’ancienne adresse continue de rediriger.",
+    "slugRedirect": "Les visiteurs de /events/{slug} seront redirigés vers la nouvelle adresse.",
+    "previousSlugs": "Anciennes adresses qui redirigent ici : {slugs}",
+    "preview": "Aperçu du résultat de recherche",
+    "save": "Enregistrer les paramètres SEO",
+    "saved": "Paramètres SEO enregistrés.",
+    "errors": {
+      "seoTitle": "Le titre SEO doit faire {max} caractères ou moins.",
+      "slug": "Utilisez uniquement des minuscules, des chiffres et des tirets (pas au début ni à la fin).",
+      "slugTaken": "Cette adresse web est déjà prise."
     }
   }
 }

@@ -3836,7 +3836,11 @@
     "currencySave": "Valuta opslaan",
     "hiddenCategory": "{name} (verborgen)",
     "categoryHiddenHint": "Deze categorie is verborgen: het evenement houdt haar, maar ze wordt niet meer aangeboden voor andere evenementen.",
-    "manageCategories": "Categorieën beheren"
+    "manageCategories": "Categorieën beheren",
+    "seo": {
+      "title": "SEO en delen",
+      "subtitle": "Wat zoekmachines en linkvoorbeelden voor dit evenement tonen, en het webadres van het evenement."
+    }
   },
   "directory": {
     "title": "Locatiegids",
@@ -5107,7 +5111,8 @@
       "speaker": "Foto van de spreker",
       "exhibitor": "Logo van de exposant",
       "sponsor": "Logo van de sponsor",
-      "library": "Uploaden naar de bibliotheek"
+      "library": "Uploaden naar de bibliotheek",
+      "social": "Afbeelding voor delen op sociale media"
     },
     "hint": {
       "cover": "Bovenaan de evenementpagina, op evenementkaarten en in linkvoorbeelden.",
@@ -5117,7 +5122,8 @@
       "speaker": "Getoond op de evenementpagina, de eigen pagina van de spreker en naast hun sessies in het programma.",
       "exhibitor": "Getoond bij de exposant op de evenementpagina. SVG-logo’s blijven op elk formaat scherp.",
       "sponsor": "Getoond in het niveau van de sponsor op de evenementpagina (hogere niveaus tonen grotere logo’s). SVG-logo’s blijven scherp.",
-      "library": "Afbeeldingen die je hier uploadt, kun je gebruiken voor evenementen, locaties, sprekers en je logo zonder ze opnieuw te uploaden."
+      "library": "Afbeeldingen die je hier uploadt, kun je gebruiken voor evenementen, locaties, sprekers en je logo zonder ze opnieuw te uploaden.",
+      "social": "Gebruikt voor linkvoorbeelden op sociale netwerken en berichten-apps. Valt terug op de omslagafbeelding, daarna op een gegenereerde kaart. 1200 × 630 px werkt het best."
     },
     "empty": {
       "cover": "Nog geen omslagafbeelding.",
@@ -5127,7 +5133,8 @@
       "speaker": "Nog geen foto.",
       "exhibitor": "Nog geen logo.",
       "sponsor": "Nog geen logo.",
-      "library": "Nog geen afbeeldingen in de bibliotheek."
+      "library": "Nog geen afbeeldingen in de bibliotheek.",
+      "social": "Nog geen afbeelding voor sociale media."
     },
     "count": "{count, plural, one {# afbeelding} other {# afbeeldingen}} van {max}",
     "listLabel": "Huidige afbeeldingen",
@@ -19267,6 +19274,25 @@
       "too_large": "Het bestand is groter dan 10 MB.",
       "unsupported_type": "Alleen PDF-bestanden worden geaccepteerd.",
       "too_many": "De limiet van 5 brochures is bereikt."
+    }
+  },
+  "seoPanel": {
+    "title": "SEO-instellingen",
+    "seoTitle": "SEO-titel",
+    "seoTitleHint": "Getoond in zoekresultaten en linkvoorbeelden. Laat leeg om de naam van het evenement te gebruiken. {count} van {max} tekens.",
+    "seoDescription": "Metabeschrijving",
+    "seoDescriptionHint": "Een korte samenvatting voor zoekresultaten. Laat leeg om de tagline te gebruiken. {count} van {max} tekens.",
+    "slug": "Webadres van het evenement",
+    "slugHint": "Kleine letters, cijfers en streepjes. Bij een wijziging blijft het oude adres als doorverwijzing werken.",
+    "slugRedirect": "Bezoekers van /events/{slug} worden doorgestuurd naar het nieuwe adres.",
+    "previousSlugs": "Oude adressen die hierheen doorverwijzen: {slugs}",
+    "preview": "Voorbeeld van het zoekresultaat",
+    "save": "SEO-instellingen opslaan",
+    "saved": "SEO-instellingen opgeslagen.",
+    "errors": {
+      "seoTitle": "Houd de SEO-titel op maximaal {max} tekens.",
+      "slug": "Gebruik alleen kleine letters, cijfers en streepjes (niet aan het begin of einde).",
+      "slugTaken": "Dit webadres is al in gebruik."
     }
   }
 }
