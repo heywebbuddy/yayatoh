@@ -3,6 +3,7 @@ import { buttonClass, cx } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { MediaPicture } from '../media-picture.tsx';
+import { HeroOrb } from './hero-orb.tsx';
 import { jaggedCirclePath } from './jagged.ts';
 
 const JAG = jaggedCirclePath();
@@ -65,15 +66,14 @@ export async function ShowcaseHero({
       aria-labelledby="hero-title"
       className="relative flex flex-col items-center gap-8 pt-10 text-center md:pt-16"
     >
-      <div className="relative flex w-full flex-col items-center">
-        <JaggedCircle cover={cover} className="w-[min(78vw,560px)]" />
+      <HeroOrb cover={cover ?? null} className="w-[min(86vw,620px)]">
         <h1
           id="hero-title"
-          className="animate-rise pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 px-2 font-display text-[clamp(34px,8.4vw,112px)] leading-[0.95] font-black tracking-[-0.04em] text-balance text-white uppercase [text-shadow:0_4px_40px_var(--color-scrim)]"
+          className="animate-rise pointer-events-none absolute inset-x-[-12%] top-1/2 -translate-y-1/2 px-2 font-display text-[clamp(32px,8vw,104px)] leading-[0.95] font-black tracking-[-0.04em] text-balance text-white uppercase [text-shadow:0_4px_40px_var(--color-scrim)]"
         >
           {t('title')}
         </h1>
-      </div>
+      </HeroOrb>
       <p className="animate-rise max-w-xl text-[16px] text-ink-2 [animation-delay:200ms] md:text-[18px]">
         {t('lede')}
       </p>

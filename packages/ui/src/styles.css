@@ -511,6 +511,32 @@
     opacity 0.7s var(--ease-out),
     transform 0.7s var(--ease-out);
 }
+@keyframes showcase-eq {
+  0%,
+  100% {
+    scale: var(--lo, 0.15) 1;
+  }
+  50% {
+    scale: var(--hi, 0.9) 1;
+  }
+}
+@keyframes showcase-ring-pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+/* An equalizer bar: each sets its own --lo, --hi, --dur and --delay from script (CSSOM). */
+@utility animate-eq {
+  animation: showcase-eq var(--dur, 0.9s) ease-in-out var(--delay, 0s) infinite;
+}
+@utility animate-ring-pulse {
+  animation: showcase-ring-pulse 6s ease-out infinite;
+}
 @utility animate-ring {
   animation: showcase-spin 60s linear infinite;
 }
