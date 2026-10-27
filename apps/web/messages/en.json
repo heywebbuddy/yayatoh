@@ -3704,7 +3704,9 @@
       "longitude": "Give latitude and longitude together; longitude must be between -180 and 180.",
       "timezone": "Choose a time zone.",
       "capacity": "Capacity must be a whole number of at least 1.",
-      "mapUrl": "Use a link that starts with https://."
+      "mapUrl": "Use a link that starts with https://.",
+      "contactEmail": "Enter a valid email address.",
+      "websiteUrl": "Enter a link starting with http:// or https://."
     },
     "quotes": {
       "title": "Quote requests",
@@ -3735,7 +3737,12 @@
       "details": "Details"
     },
     "detailsTitle": "Details",
-    "photo": "Photo"
+    "photo": "Photo",
+    "contactEmail": "Contact email",
+    "contactPhone": "Contact phone",
+    "websiteUrl": "Website",
+    "description": "Description",
+    "descriptionHint": "Shown on the public venue page. Markdown is supported."
   },
   "details": {
     "title": "Event details",
@@ -3821,7 +3828,9 @@
     "noEventsDescription": "Check back later, or request a quote for your own event.",
     "quoteTitle": "Request a quote",
     "quoteDescription": "Tell {org} about your event and they'll get back to you by email.",
-    "photos": "Photos"
+    "photos": "Photos",
+    "contact": "Contact",
+    "website": "Website"
   },
   "quote": {
     "name": "Your name",

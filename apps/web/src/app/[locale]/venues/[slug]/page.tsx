@@ -2,10 +2,21 @@ import { publicEventsAtVenue } from '@yayatoh/events';
 import { publicMedia } from '@yayatoh/media';
 import { buttonClass, Card, EmptyState } from '@yayatoh/ui';
 import { publicVenue, quoteTarget } from '@yayatoh/venues';
-import { Accessibility, ArrowUpRight, CalendarDays, Clock3, MapPin, UsersRound } from 'lucide-react';
+import {
+  Accessibility,
+  ArrowUpRight,
+  CalendarDays,
+  Clock3,
+  Globe,
+  Mail,
+  MapPin,
+  Phone,
+  UsersRound,
+} from 'lucide-react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Markdown } from '@/components/markdown.tsx';
 import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
 import { MediaPicture } from '@/components/media-picture.tsx';
 import { QuoteForm } from '@/components/quote-form.tsx';
@@ -112,6 +123,11 @@ export default async function PublicVenuePage({
           <h2 id="venue-about" className="text-section">
             {t('about')}
           </h2>
+          {venue.description ? (
+            <Card size="panel">
+              <Markdown source={venue.description} />
+            </Card>
+          ) : null}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <Card size="panel" className="flex flex-col gap-4">
               <div className="flex items-center gap-2 text-caption font-bold uppercase tracking-wide text-ink-2">
@@ -142,6 +158,46 @@ export default async function PublicVenuePage({
                   {t('openMap')}
                   <ArrowUpRight aria-hidden="true" className="size-4" />
                 </a>
+              ) : null}
+              {venue.contactEmail || venue.contactPhone || venue.websiteUrl ? (
+                <div className="flex flex-col gap-2 border-t border-line pt-4">
+                  <h3 className="m-0 text-caption font-bold uppercase tracking-wide text-ink-2">
+                    {t('contact')}
+                  </h3>
+                  <ul className="m-0 flex list-none flex-col gap-2 p-0 text-body">
+                    {venue.contactEmail ? (
+                      <li className="flex items-center gap-2">
+                        <Mail aria-hidden="true" className="size-4 text-primary-ink" />
+                        <a href={`mailto:${venue.contactEmail}`} className="underline underline-offset-2">
+                          {venue.contactEmail}
+                        </a>
+                      </li>
+                    ) : null}
+                    {venue.contactPhone ? (
+                      <li className="flex items-center gap-2">
+                        <Phone aria-hidden="true" className="size-4 text-primary-ink" />
+                        <a
+                          href={`tel:${venue.contactPhone.replace(/[^+\d]/g, '')}`}
+                          className="underline underline-offset-2"
+                        >
+                          {venue.contactPhone}
+                        </a>
+                      </li>
+                    ) : null}
+                    {venue.websiteUrl ? (
+                      <li className="flex items-center gap-2">
+                        <Globe aria-hidden="true" className="size-4 text-primary-ink" />
+                        <a
+                          href={venue.websiteUrl}
+                          rel="noopener noreferrer nofollow"
+                          className="break-all underline underline-offset-2"
+                        >
+                          {venue.websiteUrl}
+                        </a>
+                      </li>
+                    ) : null}
+                  </ul>
+                </div>
               ) : null}
             </Card>
             <Card size="panel" className="flex flex-col gap-4">

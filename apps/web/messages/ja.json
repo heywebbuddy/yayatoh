@@ -3704,7 +3704,9 @@
       "longitude": "緯度と経度はあわせて入力してください。経度は -180〜180 の範囲で指定してください。",
       "timezone": "タイムゾーンを選択してください。",
       "capacity": "収容人数は1以上の整数で入力してください。",
-      "mapUrl": "https:// で始まるリンクを使用してください。"
+      "mapUrl": "https:// で始まるリンクを使用してください。",
+      "contactEmail": "有効なメールアドレスを入力してください。",
+      "websiteUrl": "http:// または https:// で始まるリンクを入力してください。"
     },
     "quotes": {
       "title": "見積もり依頼",
@@ -3735,7 +3737,12 @@
       "details": "詳細"
     },
     "detailsTitle": "詳細",
-    "photo": "写真"
+    "photo": "写真",
+    "contactEmail": "連絡先メール",
+    "contactPhone": "連絡先電話番号",
+    "websiteUrl": "ウェブサイト",
+    "description": "説明",
+    "descriptionHint": "公開の会場ページに表示されます。Markdown に対応しています。"
   },
   "details": {
     "title": "イベントの詳細",
@@ -3821,7 +3828,9 @@
     "noEventsDescription": "後でもう一度ご確認いただくか、ご自身のイベントの見積もりを依頼してください。",
     "quoteTitle": "見積もりを依頼",
     "quoteDescription": "イベントについて {org} にお伝えください。メールで返信が届きます。",
-    "photos": "写真"
+    "photos": "写真",
+    "contact": "連絡先",
+    "website": "ウェブサイト"
   },
   "quote": {
     "name": "お名前",

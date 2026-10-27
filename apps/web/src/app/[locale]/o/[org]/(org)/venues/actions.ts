@@ -30,6 +30,10 @@ function venueFields(form: FormData) {
     capacity: numberOrNull(form, 'capacity'),
     accessibilityNotes: textOrNull(form, 'accessibilityNotes'),
     mapUrl: textOrNull(form, 'mapUrl'),
+    description: textOrNull(form, 'description'),
+    contactEmail: textOrNull(form, 'contactEmail'),
+    contactPhone: textOrNull(form, 'contactPhone'),
+    websiteUrl: textOrNull(form, 'websiteUrl'),
     directoryListed: form.get('directoryListed') === '1',
   };
 }

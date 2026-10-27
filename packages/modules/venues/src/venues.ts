@@ -275,6 +275,10 @@ function toPublic(r: PublicRow): PublicVenueDto {
     capacity: num(r.capacity),
     accessibilityNotes: r.accessibility_notes,
     mapUrl: r.map_url,
+    description: r.description,
+    contactEmail: r.contact_email,
+    contactPhone: r.contact_phone,
+    websiteUrl: r.website_url,
     organizerName: r.organizer_name,
   });
 }

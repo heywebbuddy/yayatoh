@@ -3704,7 +3704,9 @@
       "longitude": "Vul breedtegraad en lengtegraad samen in; de lengtegraad moet tussen -180 en 180 liggen.",
       "timezone": "Kies een tijdzone.",
       "capacity": "De capaciteit moet een geheel getal van minstens 1 zijn.",
-      "mapUrl": "Gebruik een link die begint met https://."
+      "mapUrl": "Gebruik een link die begint met https://.",
+      "contactEmail": "Voer een geldig e-mailadres in.",
+      "websiteUrl": "Voer een link in die begint met http:// of https://."
     },
     "quotes": {
       "title": "Offerteaanvragen",
@@ -3735,7 +3737,12 @@
       "details": "Gegevens"
     },
     "detailsTitle": "Gegevens",
-    "photo": "Foto"
+    "photo": "Foto",
+    "contactEmail": "Contact-e-mail",
+    "contactPhone": "Contacttelefoon",
+    "websiteUrl": "Website",
+    "description": "Beschrijving",
+    "descriptionHint": "Getoond op de openbare locatiepagina. Markdown wordt ondersteund."
   },
   "details": {
     "title": "Evenementdetails",
@@ -3821,7 +3828,9 @@
     "noEventsDescription": "Kom later terug of vraag een offerte aan voor je eigen evenement.",
     "quoteTitle": "Offerte aanvragen",
     "quoteDescription": "Vertel {org} over je evenement, dan krijg je per e-mail antwoord.",
-    "photos": "Foto's"
+    "photos": "Foto's",
+    "contact": "Contact",
+    "website": "Website"
   },
   "quote": {
     "name": "Je naam",

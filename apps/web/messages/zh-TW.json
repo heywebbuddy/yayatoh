@@ -3704,7 +3704,9 @@
       "longitude": "請同時填寫緯度與經度；經度必須介於 -180 到 180 之間。",
       "timezone": "請選擇時區。",
       "capacity": "容納人數必須是至少為 1 的整數。",
-      "mapUrl": "請使用以 https:// 開頭的連結。"
+      "mapUrl": "請使用以 https:// 開頭的連結。",
+      "contactEmail": "請輸入有效的電子郵件地址。",
+      "websiteUrl": "請輸入以 http:// 或 https:// 開頭的連結。"
     },
     "quotes": {
       "title": "報價請求",
@@ -3735,7 +3737,12 @@
       "details": "資訊"
     },
     "detailsTitle": "資訊",
-    "photo": "照片"
+    "photo": "照片",
+    "contactEmail": "聯絡電子郵件",
+    "contactPhone": "聯絡電話",
+    "websiteUrl": "網站",
+    "description": "簡介",
+    "descriptionHint": "顯示在公開的場地頁面上。支援 Markdown。"
   },
   "details": {
     "title": "活動詳細資料",
@@ -3821,7 +3828,9 @@
     "noEventsDescription": "請稍後再回來查看，或為你自己的活動索取報價。",
     "quoteTitle": "索取報價",
     "quoteDescription": "向 {org} 介紹你的活動，對方會以電子郵件回覆你。",
-    "photos": "照片"
+    "photos": "照片",
+    "contact": "聯絡方式",
+    "website": "網站"
   },
   "quote": {
     "name": "你的姓名",

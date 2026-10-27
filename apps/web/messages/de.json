@@ -3704,7 +3704,9 @@
       "longitude": "Gib Breiten- und Längengrad zusammen an; der Längengrad muss zwischen -180 und 180 liegen.",
       "timezone": "Wähle eine Zeitzone.",
       "capacity": "Die Kapazität muss eine ganze Zahl von mindestens 1 sein.",
-      "mapUrl": "Verwende einen Link, der mit https:// beginnt."
+      "mapUrl": "Verwende einen Link, der mit https:// beginnt.",
+      "contactEmail": "Gib eine gültige E-Mail-Adresse ein.",
+      "websiteUrl": "Gib einen Link ein, der mit http:// oder https:// beginnt."
     },
     "quotes": {
       "title": "Angebotsanfragen",
@@ -3735,7 +3737,12 @@
       "details": "Angaben"
     },
     "detailsTitle": "Angaben",
-    "photo": "Foto"
+    "photo": "Foto",
+    "contactEmail": "Kontakt-E-Mail",
+    "contactPhone": "Kontakttelefon",
+    "websiteUrl": "Website",
+    "description": "Beschreibung",
+    "descriptionHint": "Wird auf der öffentlichen Veranstaltungsort-Seite angezeigt. Markdown wird unterstützt."
   },
   "details": {
     "title": "Eventdetails",
@@ -3821,7 +3828,9 @@
     "noEventsDescription": "Schau später wieder vorbei oder frage ein Angebot für dein eigenes Event an.",
     "quoteTitle": "Angebot anfragen",
     "quoteDescription": "Erzähl {org} von deinem Event – du bekommst eine Antwort per E-Mail.",
-    "photos": "Fotos"
+    "photos": "Fotos",
+    "contact": "Kontakt",
+    "website": "Website"
   },
   "quote": {
     "name": "Dein Name",

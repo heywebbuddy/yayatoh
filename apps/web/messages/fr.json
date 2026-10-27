@@ -3704,7 +3704,9 @@
       "longitude": "Indiquez la latitude et la longitude ensemble ; la longitude doit être comprise entre -180 et 180.",
       "timezone": "Choisissez un fuseau horaire.",
       "capacity": "La capacité doit être un nombre entier d’au moins 1.",
-      "mapUrl": "Utilisez un lien qui commence par https://."
+      "mapUrl": "Utilisez un lien qui commence par https://.",
+      "contactEmail": "Saisissez une adresse e-mail valide.",
+      "websiteUrl": "Saisissez un lien commençant par http:// ou https://."
     },
     "quotes": {
       "title": "Demandes de devis",
@@ -3735,7 +3737,12 @@
       "details": "Informations"
     },
     "detailsTitle": "Informations",
-    "photo": "Photo"
+    "photo": "Photo",
+    "contactEmail": "E-mail de contact",
+    "contactPhone": "Téléphone de contact",
+    "websiteUrl": "Site web",
+    "description": "Description",
+    "descriptionHint": "Affiché sur la page publique du lieu. Markdown pris en charge."
   },
   "details": {
     "title": "Détails de l’événement",
@@ -3821,7 +3828,9 @@
     "noEventsDescription": "Revenez plus tard ou demandez un devis pour votre propre événement.",
     "quoteTitle": "Demander un devis",
     "quoteDescription": "Présentez votre événement à {org}, qui vous répondra par e-mail.",
-    "photos": "Photos"
+    "photos": "Photos",
+    "contact": "Contact",
+    "website": "Site web"
   },
   "quote": {
     "name": "Votre nom",

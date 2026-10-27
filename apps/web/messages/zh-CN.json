@@ -3704,7 +3704,9 @@
       "longitude": "请同时填写纬度和经度；经度必须介于 -180 到 180 之间。",
       "timezone": "请选择时区。",
       "capacity": "容纳人数必须是不小于 1 的整数。",
-      "mapUrl": "请使用以 https:// 开头的链接。"
+      "mapUrl": "请使用以 https:// 开头的链接。",
+      "contactEmail": "请输入有效的邮箱地址。",
+      "websiteUrl": "请输入以 http:// 或 https:// 开头的链接。"
     },
     "quotes": {
       "title": "询价请求",
@@ -3735,7 +3737,12 @@
       "details": "信息"
     },
     "detailsTitle": "信息",
-    "photo": "照片"
+    "photo": "照片",
+    "contactEmail": "联系邮箱",
+    "contactPhone": "联系电话",
+    "websiteUrl": "网站",
+    "description": "简介",
+    "descriptionHint": "显示在公开的场地页面上。支持 Markdown。"
   },
   "details": {
     "title": "活动详情",
@@ -3821,7 +3828,9 @@
     "noEventsDescription": "请稍后再来查看，或为你自己的活动发起询价。",
     "quoteTitle": "发起询价",
     "quoteDescription": "向 {org} 介绍你的活动，对方会通过电子邮件回复你。",
-    "photos": "照片"
+    "photos": "照片",
+    "contact": "联系方式",
+    "website": "网站"
   },
   "quote": {
     "name": "你的姓名",
