@@ -35,17 +35,26 @@ export { entryPath };
 /**
  * The org whose pages and posts the marketplace itself shows at `yayatoh.com/blogs/…` and
  * `/pages/…` (the platform org that receives yayatoh.com's Voyager content at ELT, roadmap T7).
- * Configured by `MARKETPLACE_CONTENT_ORG` (an org slug); unset → those URLs are 404.
+ * Configured by `MARKETPLACE_CONTENT_ORG` (an org slug); unset in production → those URLs are 404.
+ * Local, CI and preview builds (dev auth on, or not a production build) default to the seeded
+ * demo organizer `harbor-arts`, so the help centre, features, contact and blog pages show content.
  */
+export function contentOrgSlug(): string | null {
+  const set = process.env.MARKETPLACE_CONTENT_ORG?.trim();
+  if (set) return set;
+  const dev = process.env.NODE_ENV !== 'production' || Boolean(process.env.YAYATOH_DEV_AUTH);
+  return dev ? 'harbor-arts' : null;
+}
+
 export async function marketplaceContentOrg(): Promise<PublicOrganizer | null> {
-  const slug = process.env.MARKETPLACE_CONTENT_ORG?.trim();
+  const slug = contentOrgSlug();
   return slug ? publicOrganizer(slug) : null;
 }
 
-const isContentOrg = (o: PublicOrganizer) => process.env.MARKETPLACE_CONTENT_ORG?.trim() === o.slug;
+const isContentOrg = (o: PublicOrganizer) => contentOrgSlug() === o.slug;
 
 /** Is this org (by slug) the marketplace content org, whose console edits the help center and marketing site? */
-export const isPlatformContentOrg = (slug: string) => process.env.MARKETPLACE_CONTENT_ORG?.trim() === slug;
+export const isPlatformContentOrg = (slug: string) => contentOrgSlug() === slug;
 
 /** Where an org's pages and posts are canonical on this request (see `contentHomeFor`). */
 export function contentHome(req: RequestHost, o: PublicOrganizer): { origin: string; base: string } {

@@ -19927,7 +19927,9 @@
         "not_yet_on_sale": "Ainda não está à venda",
         "sales_ended": "Vendas encerradas"
       }
-    }
+    },
+    "searchNote": "A IA está desligada, então este é o resultado mais próximo dos detalhes publicados do evento.",
+    "aiOff": "A IA está desligada e não encontrei nada sobre isso nos detalhes publicados do evento."
   },
   "tourPickups": {
     "title": "Pontos de embarque",

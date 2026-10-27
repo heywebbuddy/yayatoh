@@ -2,7 +2,6 @@ import { withTenant } from '@yayatoh/db';
 import { type EventTarget, findEventTx, publicEventBySlug } from '@yayatoh/events';
 import { createCtx } from '@yayatoh/kernel';
 import { askAssistantAction } from '@/app/[locale]/events/[slug]/assistant-actions.ts';
-import { aiDrafter } from '@/server/ai.ts';
 import { EventAssistant } from './event-assistant.tsx';
 
 /**
@@ -11,7 +10,6 @@ import { EventAssistant } from './event-assistant.tsx';
  * verified target, the slug from the event itself.
  */
 export async function HolderAssistant({ target }: { target: EventTarget }) {
-  if (!aiDrafter()) return null;
   const ev = await withTenant(
     createCtx({ orgId: target.orgId, actor: { type: 'system', name: 'assistant.portal' } }),
     (tx) => findEventTx(tx, target.eventId),

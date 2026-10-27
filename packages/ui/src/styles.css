@@ -534,6 +534,22 @@
 @utility animate-eq {
   animation: showcase-eq var(--dur, 0.9s) ease-in-out var(--delay, 0s) infinite;
 }
+@keyframes showcase-drift {
+  to {
+    transform: translateY(-70px);
+  }
+}
+/* The hero circle drifts up slower than the page as it scrolls (scroll-driven, where supported). */
+@utility animate-drift {
+  @supports (animation-timeline: scroll()) {
+    animation: showcase-drift linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 700px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
 @utility animate-ring-pulse {
   animation: showcase-ring-pulse 6s ease-out infinite;
 }

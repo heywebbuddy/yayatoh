@@ -34,7 +34,7 @@ export default async function EventBrandingPage({
 
   return (
     <>
-      <PageHeader title={t('branding')} description={`${ev.name} · ${t('settings.brand.description')}`} />
+      <PageHeader title={t('nav.branding')} description={`${ev.name} · ${t('settings.brand.description')}`} />
       <section aria-labelledby="event-own-color-heading" className="flex flex-col gap-3">
         <h2 id="event-own-color-heading" className="text-section">
           {t('eventBranding.title')}

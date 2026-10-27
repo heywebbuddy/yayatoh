@@ -19927,7 +19927,9 @@
         "not_yet_on_sale": "Not on sale yet",
         "sales_ended": "Sales have ended"
       }
-    }
+    },
+    "searchNote": "AI is off, so this is the closest match from the event’s published details.",
+    "aiOff": "AI is off and I found nothing for that in this event’s published details."
   },
   "tourPickups": {
     "title": "Pickup points",

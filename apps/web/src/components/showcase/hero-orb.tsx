@@ -2,9 +2,9 @@
 
 import type { PublicMediaDto } from '@yayatoh/media';
 import { cx } from '@yayatoh/ui';
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { type ReactNode, useEffect, useState } from 'react';
 import { MediaPicture } from '../media-picture.tsx';
+import { useReducedMotion } from './use-reduced-motion.ts';
 
 /** Bars per side, the circle's radius and the radius of the outer silhouette (100-unit space). */
 const PER_SIDE = 11;
@@ -69,11 +69,11 @@ const BARS = makeBars();
 /**
  * The home hero's centrepiece, after the reference: a large circle holding a photo under a warm
  * red-to-amber wash, with equalizer teeth built into its left and right edges and faint sound
- * rings pulsing outward; it drifts up slower than the page on scroll.
+ * rings pulsing outward; it drifts up slower than the page on scroll (`animate-drift`).
  *
  * Strict CSP: the bars are SVG with their geometry in attributes and their beat in SMIL
  * `<animate>` (no style attributes, no script-set styles); the rings are CSS classes; the
- * framer-motion parallax mounts after hydration. Under reduced motion the `<animate>` elements are
+ * scroll parallax is a CSS scroll-driven animation (no script, no style writes). Under reduced motion the `<animate>` elements are
  * not rendered, so the bars stand still, and nothing drifts.
  */
 export function HeroOrb({
@@ -91,7 +91,7 @@ export function HeroOrb({
   useEffect(() => setMounted(true), []);
   const live = mounted && !reduced;
   const body = (
-    <div className={cx('relative aspect-square', className)}>
+    <div className={cx('animate-drift relative aspect-square', className)}>
       {['', 'delay-[2s]', 'delay-[4s]'].map((d) => (
         <span
           key={d || 'a'}
@@ -161,16 +161,5 @@ export function HeroOrb({
       {children}
     </div>
   );
-  return live ? <Drift>{body}</Drift> : body;
-}
-
-/** The parallax: after hydration only, so framer-motion never touches a server-rendered element. */
-function Drift({ children }: { children: ReactNode }) {
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 700], [0, -70]);
-  return (
-    <motion.div initial={false} style={{ y }} className="will-change-transform">
-      {children}
-    </motion.div>
-  );
+  return body;
 }

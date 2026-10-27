@@ -21,9 +21,11 @@ export function HeroVideo({
   playLabel: string;
   pauseLabel: string;
 }) {
-  const [playing, setPlaying] = useState(false);
+  // Rendered on the server too, so the player is in the page from the first byte; a visitor who
+  // prefers reduced motion has it removed again right after hydration (the poster stays).
+  const [playing, setPlaying] = useState(true);
   useEffect(() => {
-    setPlaying(!window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) setPlaying(false);
   }, []);
   return (
     <>
@@ -33,7 +35,6 @@ export function HeroVideo({
             src={src}
             title={title}
             tabIndex={-1}
-            loading="lazy"
             allow="autoplay; encrypted-media"
             referrerPolicy="strict-origin-when-cross-origin"
             className="pointer-events-none absolute top-1/2 left-1/2 h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2 border-0"

@@ -91,7 +91,7 @@ export function rankSources(question: string, sources: readonly AssistantSource[
       .split(/[^\p{L}\p{N}]+/u)
       .filter((w) => w.length > 3),
   );
-  return sources
+  const ranked = sources
     .map((s) => {
       const hay = `${s.label} ${s.text}`.toLowerCase();
       let score = 0;
@@ -101,4 +101,14 @@ export function rankSources(question: string, sources: readonly AssistantSource[
     .filter((x) => x.score > 0)
     .sort((a, b) => b.score - a.score)
     .map((x) => x.s);
+  // "When", "where" and friends: the first source is the event's own summary (dates, time zone, place).
+  const first = sources[0];
+  if (
+    first &&
+    /\b(when|time|date|day|start|starts|begin|end|ends|where|place|venue|address|location|city|open|doors)\b/i.test(
+      question,
+    )
+  )
+    return ranked.some((r) => r.id === first.id) ? ranked : [...ranked, first];
+  return ranked;
 }

@@ -1,4 +1,4 @@
-import { buttonClass } from '@yayatoh/ui';
+import { buttonClass, cx } from '@yayatoh/ui';
 import { Menu, Search } from 'lucide-react';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { BrandMark } from '@/components/brand-mark.tsx';
@@ -30,7 +30,7 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
     <>
       <IncidentBanner variant="site" />
       <div className="sticky top-0 z-50 px-3 pt-3 sm:px-5">
-        <header className="mx-auto grid w-full max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-3 rounded-pill border border-line bg-canvas/85 p-2 ps-3 backdrop-blur-xl">
+        <header className="mx-auto grid w-full max-w-7xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 rounded-pill border border-line bg-canvas/85 p-2 ps-2 sm:gap-3 sm:ps-3 backdrop-blur-xl">
           <search className="min-w-0">
             <form
               action={localizedPath(locale, '/events')}
@@ -93,15 +93,15 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
               </Link>
             </nav>
             {signedIn ? (
-              <Link href={access.href} className={buttonClass('ember', 'md')}>
+              <Link href={access.href} className={cx(buttonClass('ember', 'md'), 'max-sm:hidden')}>
                 {t('dashboard')}
               </Link>
             ) : (
               <>
-                <Link href="/sign-in?next=/attendee" className={`${link} hidden sm:inline-flex`}>
+                <Link href="/sign-in?next=/attendee" className={`${link} max-sm:hidden`}>
                   {t('signIn')}
                 </Link>
-                <Link href="/sign-up" className={buttonClass('ember', 'md')}>
+                <Link href="/sign-up" className={cx(buttonClass('ember', 'md'), 'max-sm:hidden')}>
                   {t('signUp')}
                 </Link>
               </>
@@ -136,12 +136,25 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
                     {t('myTickets')}
                   </Link>
                 </li>
-                {signedIn ? null : (
+                {signedIn ? (
                   <li>
-                    <Link href="/sign-in?next=/attendee" className={`${link} w-full`}>
-                      {t('signIn')}
+                    <Link href={access.href} className={`${link} w-full`}>
+                      {t('dashboard')}
                     </Link>
                   </li>
+                ) : (
+                  <>
+                    <li>
+                      <Link href="/sign-in?next=/attendee" className={`${link} w-full`}>
+                        {t('signIn')}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/sign-up" className={cx(buttonClass('ember', 'md'), 'mt-1 w-full')}>
+                        {t('signUp')}
+                      </Link>
+                    </li>
+                  </>
                 )}
               </ul>
             </details>

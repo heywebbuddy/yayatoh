@@ -124,13 +124,14 @@ function Answer({ reply, helpHref }: { reply: AssistantReply; helpHref: string }
   if (!reply.known)
     return (
       <div className={bubble}>
-        <p className="m-0 text-body">{t('dontKnow')}</p>
+        <p className="m-0 text-body">{reply.mode === 'search' ? t('aiOff') : t('dontKnow')}</p>
         <HumanHelp href={helpHref} />
       </div>
     );
   return (
     <div className={bubble}>
       <p className="m-0 text-body whitespace-pre-line">{reply.answer}</p>
+      {reply.mode === 'search' ? <p className="m-0 text-caption text-ink-3">{t('searchNote')}</p> : null}
       {reply.citations.length > 0 ? (
         <p className="m-0 flex flex-wrap items-center gap-x-2 gap-y-1 text-caption text-ink-2">
           <span className="font-bold">{t('sources')}</span>

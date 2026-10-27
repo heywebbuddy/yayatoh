@@ -52,6 +52,7 @@ export {
   AssistantSource,
   cleanAssistantAnswer,
   fitSources,
+  rankSources,
 } from './domain/assistant.ts';
 export {
   AGENDA_MAX_SESSIONS,

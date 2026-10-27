@@ -1,6 +1,6 @@
 'use server';
 
-import { askEventAssistant } from '@yayatoh/ai';
+import { askEventAssistant, rankSources } from '@yayatoh/ai';
 import { createCtx, isDomainError } from '@yayatoh/kernel';
 import { getLocale } from 'next-intl/server';
 import { aiDrafter } from '@/server/ai.ts';
@@ -13,6 +13,8 @@ export type AssistantReply =
   | {
       readonly kind: 'answer';
       readonly known: boolean;
+      /** `search`: no AI provider, the closest match from the event's own details (no credit spent). */
+      readonly mode: 'ai' | 'search';
       readonly answer: string;
       /** The sources the answer rests on, with the page anchor when the source has one. */
       readonly citations: readonly { readonly label: string; readonly href: string | null }[];
@@ -39,8 +41,20 @@ export async function askAssistantAction(slug: string, question: string): Promis
   const locale = await getLocale();
   const knowledge = await eventKnowledge(slug, locale);
   if (!knowledge || knowledge.sources.length === 0) return { kind: 'off' };
+  const drafter = aiDrafter();
+  if (!drafter) {
+    // AI is off: answer by keyword from the event's FAQs, agenda, times and tickets, and cite it.
+    const best = rankSources(q, knowledge.sources).slice(0, 2);
+    return {
+      kind: 'answer',
+      mode: 'search',
+      known: best.length > 0,
+      answer: best.map((s) => s.text).join('\n\n'),
+      citations: best.map((s) => ({ label: s.label, href: knowledge.anchors[s.id] ?? null })),
+    };
+  }
   try {
-    const res = await askEventAssistant(createCtx({ orgId: knowledge.orgId }), ports, aiDrafter(), {
+    const res = await askEventAssistant(createCtx({ orgId: knowledge.orgId }), ports, drafter, {
       eventId: knowledge.eventId,
       question: q,
       locale,
@@ -49,6 +63,7 @@ export async function askAssistantAction(slug: string, question: string): Promis
     });
     return {
       kind: 'answer',
+      mode: 'ai',
       known: res.known,
       answer: res.answer,
       citations: res.sourceIds.flatMap((id) => {

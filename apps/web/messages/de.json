@@ -19927,7 +19927,9 @@
         "not_yet_on_sale": "Noch nicht im Verkauf",
         "sales_ended": "Verkauf beendet"
       }
-    }
+    },
+    "searchNote": "KI ist aus, daher ist das der beste Treffer aus den veröffentlichten Angaben zum Event.",
+    "aiOff": "KI ist aus, und in den veröffentlichten Angaben zum Event habe ich dazu nichts gefunden."
   },
   "tourPickups": {
     "title": "Abholpunkte",

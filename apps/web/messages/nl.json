@@ -19927,7 +19927,9 @@
         "not_yet_on_sale": "Nog niet in de verkoop",
         "sales_ended": "Verkoop gesloten"
       }
-    }
+    },
+    "searchNote": "AI staat uit, dus dit is de beste match uit de gepubliceerde gegevens van het evenement.",
+    "aiOff": "AI staat uit en ik vond hierover niets in de gepubliceerde gegevens van het evenement."
   },
   "tourPickups": {
     "title": "Ophaalpunten",

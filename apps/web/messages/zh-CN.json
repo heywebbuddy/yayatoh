@@ -19927,7 +19927,9 @@
         "not_yet_on_sale": "尚未开售",
         "sales_ended": "已停售"
       }
-    }
+    },
+    "searchNote": "AI 已关闭，以下是本活动已发布信息中最接近的内容。",
+    "aiOff": "AI 已关闭，在本活动已发布的信息中没有找到相关内容。"
   },
   "tourPickups": {
     "title": "上车点",
