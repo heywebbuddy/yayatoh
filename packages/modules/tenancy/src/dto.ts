@@ -76,7 +76,7 @@ export const CreateOrganizationInput = z.object({
   name: z.string().trim().min(1).max(120),
   kind: z.enum(ORG_KINDS).exclude(['platform']).default('organizer'),
   defaultProfile: z
-    .enum(['wedding', 'gala', 'concert', 'conference', 'community', 'agency', 'other'])
+    .enum(['wedding', 'gala', 'concert', 'conference', 'community', 'tour', 'agency', 'other'])
     .default('other'),
   defaultLocale: z.enum(LOCALES).default('en'),
   timezone: IanaTimezone.default('America/New_York'),

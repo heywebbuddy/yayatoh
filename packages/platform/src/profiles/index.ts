@@ -10,6 +10,7 @@ export const PROFILE_KEYS = [
   'concert',
   'conference',
   'community',
+  'tour',
   'agency',
   'other',
 ] as const;
@@ -78,6 +79,9 @@ const attendees = item('attendees', 'build', 'attendees', 'users', 'attendees');
 const ticketsOrders = item('ticketsOrders', 'build', 'ticketing', 'ticket');
 const seating = item('seating', 'build', 'seating', 'armchair');
 const marketing = item('marketing', 'build', 'marketing', 'megaphone');
+// Tours: the repeating departures (the event's dates) and where each one picks passengers up.
+const departures = item('dates', 'build', 'events', 'calendar-range');
+const pickups = item('pickups', 'build', 'events', 'bus');
 const onsite = item('onsite', 'run', 'checkin', 'scan');
 const libraries = item('libraries', 'run', 'core', 'library');
 // M1.4c/d/e: venue, category, tags and short links; page content and announcements; cover and
@@ -219,6 +223,25 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
       onsite,
     ]),
     vocabulary: { attendee: 'member', attendees: 'members' },
+  },
+  // Tours (bus, boat, walking): repeating departures with their own capacity (the event's dates),
+  // pickup points the passenger chooses at checkout, and the usual selling and door pages.
+  tour: {
+    key: 'tour',
+    defaultModules: ['core', 'events', 'ticketing', 'orders', 'attendees', 'checkin', 'marketing', 'reports'],
+    nav: withContent([
+      home,
+      analysis,
+      setupGuide,
+      branding,
+      ticketsOrders,
+      attendees,
+      departures,
+      pickups,
+      marketing,
+      onsite,
+    ]),
+    vocabulary: { attendee: 'passenger', attendees: 'passengers' },
   },
   agency: {
     key: 'agency',

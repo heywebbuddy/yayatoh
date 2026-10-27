@@ -196,6 +196,14 @@ export {
   RecurrenceRuleInput,
   updateOccurrenceCommand,
 } from './occurrences.ts';
+export {
+  addPickupPointCommand,
+  deletePickupPointCommand,
+  MAX_PICKUP_POINTS,
+  PickupPointDto,
+  pickupPointsQuery,
+  updatePickupPointCommand,
+} from './pickups.ts';
 export { listPlatformCategoryCatalog } from './platform-categories.ts';
 export {
   consumePortalLink,

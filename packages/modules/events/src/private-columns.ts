@@ -10,6 +10,8 @@ export const privateColumns = columnPrivacy('events', {
   // Published announcements are public; the holders-only ones are not.
   // U6: the organizer's own to-dos; never on a public page.
   event_checklist_items: { title: internal() },
+  // Tours: where a departure picks passengers up; shown to buyers.
+  event_pickup_points: { name: 'public', address: 'public' },
   event_announcements: {
     title: holder(undefined, { where: "audience <> 'public'" }),
     body: holder(undefined, { where: "audience <> 'public'" }),

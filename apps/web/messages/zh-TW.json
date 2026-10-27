@@ -428,7 +428,8 @@
     "ceCredits": "繼續教育學分",
     "brandKits": "品牌套件",
     "venuePortal": "場地入口",
-    "promotions": "推廣"
+    "promotions": "推廣",
+    "pickups": "上車點"
   },
   "vocab": {
     "attendee": "參加者",
@@ -446,7 +447,9 @@
     "organizer": "主辦方",
     "organizers": "主辦方",
     "host": "主人",
-    "hosts": "主人"
+    "hosts": "主人",
+    "passenger": "乘客",
+    "passengers": "乘客"
   },
   "roles": {
     "owner": "擁有者",
@@ -472,7 +475,8 @@
     "conference": "研討會",
     "community": "社群",
     "agency": "代理商",
-    "other": "活動"
+    "other": "活動",
+    "tour": "導覽行程"
   },
   "greeting": {
     "morning": "早安，{name}。",
@@ -1784,7 +1788,8 @@
       "conference": "報名、場次、講者和名牌。",
       "community": "免費報名、聚會和簡單的票務。",
       "agency": "用一個帳戶為多個客戶舉辦活動。",
-      "other": "從簡單開始，依需要開啟功能。"
+      "other": "從簡單開始，依需要開啟功能。",
+      "tour": "巴士、遊船與步行導覽，支援重複班次與上車點。"
     },
     "terms": "我代表本組織同意<tos>服務條款</tos>和<dpa>資料處理附錄</dpa>。",
     "submit": "建立組織",
@@ -4452,7 +4457,8 @@
       "community": "社群",
       "other": "其他",
       "wedding": "婚禮",
-      "agency": "代理商"
+      "agency": "代理商",
+      "tour": "導覽行程"
     },
     "filters": {
       "label": "搜尋活動",
@@ -18016,7 +18022,8 @@
       "wedding": "賓客、回覆、座位安排和賓客網站。",
       "community": "為團體或公益事業管理成員、報名和訊息。",
       "agency": "為客戶舉辦的活動，含行銷和報表。",
-      "other": "其他任何活動的門票、參與者和報到。"
+      "other": "其他任何活動的門票、參與者和報到。",
+      "tour": "依時程出發，每個班次有各自的名額，乘客可選擇上車點。"
     }
   },
   "seriesField": {
@@ -18107,7 +18114,8 @@
       "conference": "報名、議程、講者、展商、贊助商和名牌。",
       "community": "聚會和課程：免費或付費報名、重複日期和報到。",
       "agency": "為客戶舉辦的活動，使用客戶的品牌和報告。",
-      "other": "通用活動：門票、參與者、活動頁面和報到。"
+      "other": "通用活動：門票、參與者、活動頁面和報到。",
+      "tour": "巴士、遊船或步行導覽：重複班次、每班次名額與上車點。"
     },
     "name": "範本名稱",
     "nameInvalid": "請輸入 2 到 120 個字元的名稱。",
@@ -19539,5 +19547,25 @@
         "sales_ended": "已停售"
       }
     }
+  },
+  "tourPickups": {
+    "title": "上車點",
+    "description": "乘客在每個班次的上車地點。",
+    "question": "選擇你的上車點",
+    "name": "名稱",
+    "address": "地址",
+    "minutesBefore": "發車前分鐘數",
+    "add": "新增上車點",
+    "save": "儲存",
+    "saved": "已儲存。",
+    "remove": "移除",
+    "removed": "已移除。",
+    "emptyTitle": "還沒有上車點",
+    "emptyDescription": "新增乘客可以上車的地點。他們在結帳時選擇一個，並在訂單中查看。",
+    "addTitle": "新增上車點",
+    "departuresHint": "班次及其名額在「日期」頁面設定：依時程重複行程，並為每個班次設定各自的名額。",
+    "beforeDeparture": "請在發車前 {minutes} 分鐘抵達。",
+    "atDeparture": "請在發車時間集合。",
+    "yourPickup": "你的上車點"
   }
 }

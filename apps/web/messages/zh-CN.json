@@ -428,7 +428,8 @@
     "ceCredits": "继续教育学分",
     "brandKits": "品牌套件",
     "venuePortal": "场地门户",
-    "promotions": "推广"
+    "promotions": "推广",
+    "pickups": "上车点"
   },
   "vocab": {
     "attendee": "参会者",
@@ -446,7 +447,9 @@
     "organizer": "主办方",
     "organizers": "主办方",
     "host": "主人",
-    "hosts": "主人"
+    "hosts": "主人",
+    "passenger": "乘客",
+    "passengers": "乘客"
   },
   "roles": {
     "owner": "所有者",
@@ -472,7 +475,8 @@
     "conference": "会议",
     "community": "社区",
     "agency": "代理机构",
-    "other": "活动"
+    "other": "活动",
+    "tour": "游览"
   },
   "greeting": {
     "morning": "早上好，{name}。",
@@ -1784,7 +1788,8 @@
       "conference": "报名、议程场次、演讲嘉宾和胸牌。",
       "community": "免费报名、聚会和简单的票务。",
       "agency": "用一个账户为多个客户举办活动。",
-      "other": "从简单开始，按需开启功能。"
+      "other": "从简单开始，按需开启功能。",
+      "tour": "大巴、游船和徒步游览，支持重复班次和上车点。"
     },
     "terms": "我代表本组织同意<tos>服务条款</tos>和<dpa>数据处理附录</dpa>。",
     "submit": "创建组织",
@@ -4452,7 +4457,8 @@
       "community": "社区",
       "other": "其他",
       "wedding": "婚礼",
-      "agency": "代理机构"
+      "agency": "代理机构",
+      "tour": "游览"
     },
     "filters": {
       "label": "搜索活动",
@@ -18016,7 +18022,8 @@
       "wedding": "宾客、回复、座位安排和宾客网站。",
       "community": "为团体或公益事业管理成员、报名和消息。",
       "agency": "为客户举办的活动，含营销和报表。",
-      "other": "其他任何活动的门票、参与者和签到。"
+      "other": "其他任何活动的门票、参与者和签到。",
+      "tour": "按日程发团，每个班次有各自的名额，乘客可选择上车点。"
     }
   },
   "seriesField": {
@@ -18107,7 +18114,8 @@
       "conference": "报名、议程、讲者、展商、赞助商和胸卡。",
       "community": "聚会和课程：免费或付费报名、重复日期和签到。",
       "agency": "为客户举办的活动，使用客户的品牌和报告。",
-      "other": "通用活动：门票、参与者、活动页面和签到。"
+      "other": "通用活动：门票、参与者、活动页面和签到。",
+      "tour": "大巴、游船或徒步游览：重复班次、每班次名额和上车点。"
     },
     "name": "模板名称",
     "nameInvalid": "请输入 2 到 120 个字符的名称。",
@@ -19539,5 +19547,25 @@
         "sales_ended": "已停售"
       }
     }
+  },
+  "tourPickups": {
+    "title": "上车点",
+    "description": "乘客在每个班次的上车地点。",
+    "question": "选择你的上车点",
+    "name": "名称",
+    "address": "地址",
+    "minutesBefore": "发车前分钟数",
+    "add": "添加上车点",
+    "save": "保存",
+    "saved": "已保存。",
+    "remove": "移除",
+    "removed": "已移除。",
+    "emptyTitle": "还没有上车点",
+    "emptyDescription": "添加乘客可以上车的地点。他们在结账时选择一个，并在订单中查看。",
+    "addTitle": "添加上车点",
+    "departuresHint": "班次及其名额在“日期”页面设置：按日程重复游览，并为每个班次设置各自的名额。",
+    "beforeDeparture": "请在发车前 {minutes} 分钟到达。",
+    "atDeparture": "请在发车时间集合。",
+    "yourPickup": "你的上车点"
   }
 }

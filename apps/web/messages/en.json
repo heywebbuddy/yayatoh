@@ -428,7 +428,8 @@
     "ceCredits": "CE credits",
     "brandKits": "Brand kits",
     "venuePortal": "Venue portal",
-    "promotions": "Promotions"
+    "promotions": "Promotions",
+    "pickups": "Pickup points"
   },
   "vocab": {
     "attendee": "Attendee",
@@ -446,7 +447,9 @@
     "organizer": "Organizer",
     "organizers": "Organizers",
     "host": "Host",
-    "hosts": "Hosts"
+    "hosts": "Hosts",
+    "passenger": "Passenger",
+    "passengers": "Passengers"
   },
   "roles": {
     "owner": "Owner",
@@ -472,7 +475,8 @@
     "conference": "Conference",
     "community": "Community",
     "agency": "Agency",
-    "other": "Event"
+    "other": "Event",
+    "tour": "Tour"
   },
   "greeting": {
     "morning": "Good morning, {name}.",
@@ -1784,7 +1788,8 @@
       "conference": "Registration, sessions, speakers and badges.",
       "community": "Free sign-ups, meetups and simple ticketing.",
       "agency": "Run events for several clients from one account.",
-      "other": "Start simple and switch on what you need."
+      "other": "Start simple and switch on what you need.",
+      "tour": "Bus, boat and walking tours with repeating departures and pickup points."
     },
     "terms": "I agree to the <tos>Terms of Service</tos> and the <dpa>Data Processing Addendum</dpa> on behalf of this organization.",
     "submit": "Create organization",
@@ -4452,7 +4457,8 @@
       "community": "Community",
       "other": "Other",
       "wedding": "Wedding",
-      "agency": "Agency"
+      "agency": "Agency",
+      "tour": "Tour"
     },
     "filters": {
       "label": "Search events",
@@ -18016,7 +18022,8 @@
       "wedding": "Guests, RSVPs, seating and a guest website.",
       "community": "Members, sign-ups and messages for a group or a cause.",
       "agency": "Events you run for clients, with marketing and reports.",
-      "other": "Tickets, attendees and check-in for anything else."
+      "other": "Tickets, attendees and check-in for anything else.",
+      "tour": "Departures on a schedule, a capacity for each, and pickup points passengers choose."
     }
   },
   "seriesField": {
@@ -18107,7 +18114,8 @@
       "conference": "Registration, sessions, speakers, exhibitors, sponsors and badges.",
       "community": "Meetups and classes: free or paid sign-ups, recurring dates and check-in.",
       "agency": "Events you run for clients, with their branding and reports.",
-      "other": "A general event: tickets, attendees, a page and check-in."
+      "other": "A general event: tickets, attendees, a page and check-in.",
+      "tour": "Bus, boat or walking tours: repeating departures, capacity per departure and pickup points."
     },
     "name": "Template name",
     "nameInvalid": "Enter a name of 2 to 120 characters.",
@@ -19539,5 +19547,25 @@
         "sales_ended": "Sales have ended"
       }
     }
+  },
+  "tourPickups": {
+    "title": "Pickup points",
+    "description": "Where passengers join each departure.",
+    "question": "Choose your pickup point",
+    "name": "Name",
+    "address": "Address",
+    "minutesBefore": "Minutes before departure",
+    "add": "Add pickup point",
+    "save": "Save",
+    "saved": "Saved.",
+    "remove": "Remove",
+    "removed": "Removed.",
+    "emptyTitle": "No pickup points yet",
+    "emptyDescription": "Add the places passengers can join. They choose one at checkout and see it on their order.",
+    "addTitle": "Add a pickup point",
+    "departuresHint": "Departures and their capacity are set on the Dates page: repeat the tour on a schedule and give each departure its own number of places.",
+    "beforeDeparture": "Be here {minutes, plural, one {# minute} other {# minutes}} before departure.",
+    "atDeparture": "Meet at the departure time.",
+    "yourPickup": "Your pickup point"
   }
 }

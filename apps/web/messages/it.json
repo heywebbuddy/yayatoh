@@ -428,7 +428,8 @@
     "ceCredits": "Crediti formativi",
     "brandKits": "Kit del brand",
     "venuePortal": "Portale della location",
-    "promotions": "Promozioni"
+    "promotions": "Promozioni",
+    "pickups": "Punti di ritrovo"
   },
   "vocab": {
     "attendee": "Partecipante",
@@ -446,7 +447,9 @@
     "organizer": "Organizzatore",
     "organizers": "Organizzatori",
     "host": "Padrone di casa",
-    "hosts": "Padroni di casa"
+    "hosts": "Padroni di casa",
+    "passenger": "Passeggero",
+    "passengers": "Passeggeri"
   },
   "roles": {
     "owner": "Proprietario",
@@ -472,7 +475,8 @@
     "conference": "Conferenza",
     "community": "Comunità",
     "agency": "Agenzia",
-    "other": "Evento"
+    "other": "Evento",
+    "tour": "Tour"
   },
   "greeting": {
     "morning": "Buongiorno, {name}.",
@@ -1784,7 +1788,8 @@
       "conference": "Registrazione, sessioni, relatori e badge.",
       "community": "Iscrizioni gratuite, meetup e biglietteria semplice.",
       "agency": "Gestisci eventi per più clienti da un unico account.",
-      "other": "Parti in modo semplice e attiva ciò che ti serve."
+      "other": "Parti in modo semplice e attiva ciò che ti serve.",
+      "tour": "Tour in autobus, barca e a piedi con partenze ricorrenti e punti di ritrovo."
     },
     "terms": "Accetto i <tos>Termini di servizio</tos> e l’<dpa>Accordo sul trattamento dei dati</dpa> per conto di questa organizzazione.",
     "submit": "Crea organizzazione",
@@ -4452,7 +4457,8 @@
       "community": "Comunità",
       "other": "Altro",
       "wedding": "Matrimonio",
-      "agency": "Agenzia"
+      "agency": "Agenzia",
+      "tour": "Tour"
     },
     "filters": {
       "label": "Cerca eventi",
@@ -18016,7 +18022,8 @@
       "wedding": "Ospiti, conferme, posti a sedere e un sito per gli ospiti.",
       "community": "Membri, iscrizioni e messaggi per un gruppo o una causa.",
       "agency": "Eventi che gestisci per i clienti, con marketing e report.",
-      "other": "Biglietti, partecipanti e check-in per tutto il resto."
+      "other": "Biglietti, partecipanti e check-in per tutto il resto.",
+      "tour": "Partenze programmate, una capienza per ciascuna e punti di ritrovo a scelta."
     }
   },
   "seriesField": {
@@ -18107,7 +18114,8 @@
       "conference": "Registrazioni, sessioni, relatori, espositori, sponsor e badge.",
       "community": "Incontri e corsi: iscrizioni gratuite o a pagamento, date ricorrenti e check-in.",
       "agency": "Eventi che organizzi per i clienti, con il loro marchio e i loro report.",
-      "other": "Un evento generico: biglietti, partecipanti, una pagina e check-in."
+      "other": "Un evento generico: biglietti, partecipanti, una pagina e check-in.",
+      "tour": "Tour in autobus, barca o a piedi: partenze ricorrenti, capienza per partenza e punti di ritrovo."
     },
     "name": "Nome del modello",
     "nameInvalid": "Inserisci un nome di 2-120 caratteri.",
@@ -19539,5 +19547,25 @@
         "sales_ended": "Vendita terminata"
       }
     }
+  },
+  "tourPickups": {
+    "title": "Punti di ritrovo",
+    "description": "Dove salgono i passeggeri a ogni partenza.",
+    "question": "Scegli il tuo punto di ritrovo",
+    "name": "Nome",
+    "address": "Indirizzo",
+    "minutesBefore": "Minuti prima della partenza",
+    "add": "Aggiungi punto di ritrovo",
+    "save": "Salva",
+    "saved": "Salvato.",
+    "remove": "Rimuovi",
+    "removed": "Rimosso.",
+    "emptyTitle": "Nessun punto di ritrovo",
+    "emptyDescription": "Aggiungi i luoghi in cui i passeggeri possono salire. Ne scelgono uno al pagamento e lo vedono nel loro ordine.",
+    "addTitle": "Aggiungi un punto di ritrovo",
+    "departuresHint": "Le partenze e la loro capienza si impostano nella pagina Date: ripeti il tour secondo un calendario e dai a ogni partenza il suo numero di posti.",
+    "beforeDeparture": "Sii qui {minutes, plural, one {# minuto} other {# minuti}} prima della partenza.",
+    "atDeparture": "Ritrovo all’orario di partenza.",
+    "yourPickup": "Il tuo punto di ritrovo"
   }
 }

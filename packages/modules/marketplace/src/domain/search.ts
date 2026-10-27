@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export const PAGE_SIZE = 12;
 export const PRICE_FILTERS = ['free', 'paid'] as const;
-export const CATEGORIES = ['gala', 'concert', 'conference', 'community', 'other'] as const;
+export const CATEGORIES = ['gala', 'concert', 'conference', 'community', 'tour', 'other'] as const;
 
 const blank = (v: unknown) => (typeof v === 'string' && v.trim() === '' ? undefined : v);
 const day = z.preprocess(

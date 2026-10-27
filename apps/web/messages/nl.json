@@ -428,7 +428,8 @@
     "ceCredits": "Nascholingspunten",
     "brandKits": "Merkkits",
     "venuePortal": "Locatieportaal",
-    "promotions": "Promoties"
+    "promotions": "Promoties",
+    "pickups": "Ophaalpunten"
   },
   "vocab": {
     "attendee": "Deelnemer",
@@ -446,7 +447,9 @@
     "organizer": "Organisator",
     "organizers": "Organisatoren",
     "host": "Gastheer",
-    "hosts": "Gastheren"
+    "hosts": "Gastheren",
+    "passenger": "Passagier",
+    "passengers": "Passagiers"
   },
   "roles": {
     "owner": "Eigenaar",
@@ -472,7 +475,8 @@
     "conference": "Congres",
     "community": "Community",
     "agency": "Bureau",
-    "other": "Evenement"
+    "other": "Evenement",
+    "tour": "Tour"
   },
   "greeting": {
     "morning": "Goedemorgen, {name}.",
@@ -1784,7 +1788,8 @@
       "conference": "Registratie, sessies, sprekers en badges.",
       "community": "Gratis aanmeldingen, meetups en eenvoudige ticketverkoop.",
       "agency": "Organiseer evenementen voor meerdere klanten vanuit één account.",
-      "other": "Begin eenvoudig en zet aan wat je nodig hebt."
+      "other": "Begin eenvoudig en zet aan wat je nodig hebt.",
+      "tour": "Bus-, boot- en wandeltours met terugkerende vertrektijden en ophaalpunten."
     },
     "terms": "Ik ga namens deze organisatie akkoord met de <tos>Servicevoorwaarden</tos> en de <dpa>Verwerkersovereenkomst</dpa>.",
     "submit": "Organisatie aanmaken",
@@ -4452,7 +4457,8 @@
       "community": "Gemeenschap",
       "other": "Overig",
       "wedding": "Bruiloft",
-      "agency": "Bureau"
+      "agency": "Bureau",
+      "tour": "Tour"
     },
     "filters": {
       "label": "Evenementen zoeken",
@@ -18016,7 +18022,8 @@
       "wedding": "Gasten, reacties, tafelschikking en een gastenwebsite.",
       "community": "Leden, aanmeldingen en berichten voor een groep of een goed doel.",
       "agency": "Evenementen die je voor klanten organiseert, met marketing en rapporten.",
-      "other": "Tickets, deelnemers en inchecken voor al het andere."
+      "other": "Tickets, deelnemers en inchecken voor al het andere.",
+      "tour": "Vertrektijden volgens een schema, een capaciteit per vertrek en ophaalpunten om uit te kiezen."
     }
   },
   "seriesField": {
@@ -18107,7 +18114,8 @@
       "conference": "Registratie, sessies, sprekers, exposanten, sponsors en badges.",
       "community": "Meetups en lessen: gratis of betaalde aanmeldingen, terugkerende data en check-in.",
       "agency": "Evenementen die je voor klanten organiseert, met hun huisstijl en rapporten.",
-      "other": "Een algemeen evenement: tickets, deelnemers, een pagina en check-in."
+      "other": "Een algemeen evenement: tickets, deelnemers, een pagina en check-in.",
+      "tour": "Bus-, boot- of wandeltours: terugkerende vertrekken, capaciteit per vertrek en ophaalpunten."
     },
     "name": "Naam van het sjabloon",
     "nameInvalid": "Vul een naam van 2 tot 120 tekens in.",
@@ -19539,5 +19547,25 @@
         "sales_ended": "Verkoop gesloten"
       }
     }
+  },
+  "tourPickups": {
+    "title": "Ophaalpunten",
+    "description": "Waar passagiers bij elk vertrek instappen.",
+    "question": "Kies je ophaalpunt",
+    "name": "Naam",
+    "address": "Adres",
+    "minutesBefore": "Minuten voor vertrek",
+    "add": "Ophaalpunt toevoegen",
+    "save": "Opslaan",
+    "saved": "Opgeslagen.",
+    "remove": "Verwijderen",
+    "removed": "Verwijderd.",
+    "emptyTitle": "Nog geen ophaalpunten",
+    "emptyDescription": "Voeg de plekken toe waar passagiers kunnen instappen. Ze kiezen er een bij het afrekenen en zien die in hun bestelling.",
+    "addTitle": "Een ophaalpunt toevoegen",
+    "departuresHint": "Vertrekken en hun capaciteit stel je in op de pagina Data: herhaal de tour volgens een schema en geef elk vertrek een eigen aantal plaatsen.",
+    "beforeDeparture": "Wees er {minutes, plural, one {# minuut} other {# minuten}} voor vertrek.",
+    "atDeparture": "Verzamelen op het vertrektijdstip.",
+    "yourPickup": "Jouw ophaalpunt"
   }
 }

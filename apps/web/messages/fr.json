@@ -428,7 +428,8 @@
     "ceCredits": "Crédits de formation",
     "brandKits": "Kits de marque",
     "venuePortal": "Portail du lieu",
-    "promotions": "Mises en avant"
+    "promotions": "Mises en avant",
+    "pickups": "Points de prise en charge"
   },
   "vocab": {
     "attendee": "Participant",
@@ -446,7 +447,9 @@
     "organizer": "Organisateur",
     "organizers": "Organisateurs",
     "host": "Hôte",
-    "hosts": "Hôtes"
+    "hosts": "Hôtes",
+    "passenger": "Passager",
+    "passengers": "Passagers"
   },
   "roles": {
     "owner": "Propriétaire",
@@ -472,7 +475,8 @@
     "conference": "Conférence",
     "community": "Communauté",
     "agency": "Agence",
-    "other": "Événement"
+    "other": "Événement",
+    "tour": "Visite"
   },
   "greeting": {
     "morning": "Bonjour, {name}.",
@@ -1784,7 +1788,8 @@
       "conference": "Inscriptions, sessions, intervenants et badges.",
       "community": "Inscriptions gratuites, rencontres et billetterie simple.",
       "agency": "Gérez les événements de plusieurs clients depuis un seul compte.",
-      "other": "Commencez simplement et activez ce dont vous avez besoin."
+      "other": "Commencez simplement et activez ce dont vous avez besoin.",
+      "tour": "Visites en bus, en bateau ou à pied avec départs récurrents et points de prise en charge."
     },
     "terms": "J’accepte les <tos>Conditions d’utilisation</tos> et l’<dpa>Accord de traitement des données</dpa> au nom de cette organisation.",
     "submit": "Créer l’organisation",
@@ -4452,7 +4457,8 @@
       "community": "Communauté",
       "other": "Autre",
       "wedding": "Mariage",
-      "agency": "Agence"
+      "agency": "Agence",
+      "tour": "Visite"
     },
     "filters": {
       "label": "Rechercher des événements",
@@ -18016,7 +18022,8 @@
       "wedding": "Invités, réponses, placement et un site pour les invités.",
       "community": "Membres, inscriptions et messages pour un groupe ou une cause.",
       "agency": "Des événements organisés pour vos clients, avec marketing et rapports.",
-      "other": "Billets, participants et enregistrement pour tout le reste."
+      "other": "Billets, participants et enregistrement pour tout le reste.",
+      "tour": "Des départs planifiés, une capacité par départ et des points de prise en charge au choix."
     }
   },
   "seriesField": {
@@ -18107,7 +18114,8 @@
       "conference": "Inscriptions, sessions, intervenants, exposants, sponsors et badges.",
       "community": "Rencontres et cours : inscriptions gratuites ou payantes, dates récurrentes et accueil.",
       "agency": "Des événements que vous organisez pour des clients, avec leur image de marque et leurs rapports.",
-      "other": "Un événement général : billets, participants, une page et l'accueil."
+      "other": "Un événement général : billets, participants, une page et l'accueil.",
+      "tour": "Visites en bus, en bateau ou à pied : départs récurrents, capacité par départ et points de prise en charge."
     },
     "name": "Nom du modèle",
     "nameInvalid": "Saisissez un nom de 2 à 120 caractères.",
@@ -19539,5 +19547,25 @@
         "sales_ended": "Vente terminée"
       }
     }
+  },
+  "tourPickups": {
+    "title": "Points de prise en charge",
+    "description": "Où les passagers montent à chaque départ.",
+    "question": "Choisissez votre point de prise en charge",
+    "name": "Nom",
+    "address": "Adresse",
+    "minutesBefore": "Minutes avant le départ",
+    "add": "Ajouter un point de prise en charge",
+    "save": "Enregistrer",
+    "saved": "Enregistré.",
+    "remove": "Retirer",
+    "removed": "Retiré.",
+    "emptyTitle": "Aucun point de prise en charge",
+    "emptyDescription": "Ajoutez les lieux où les passagers peuvent monter. Ils en choisissent un au paiement et le retrouvent sur leur commande.",
+    "addTitle": "Ajouter un point de prise en charge",
+    "departuresHint": "Les départs et leur capacité se règlent sur la page Dates : répétez la visite selon un calendrier et donnez à chaque départ son propre nombre de places.",
+    "beforeDeparture": "Soyez là {minutes, plural, one {# minute} other {# minutes}} avant le départ.",
+    "atDeparture": "Rendez-vous à l’heure du départ.",
+    "yourPickup": "Votre point de prise en charge"
   }
 }

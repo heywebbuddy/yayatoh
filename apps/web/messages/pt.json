@@ -428,7 +428,8 @@
     "ceCredits": "Créditos de formação",
     "brandKits": "Kits de marca",
     "venuePortal": "Portal do local",
-    "promotions": "Promoções"
+    "promotions": "Promoções",
+    "pickups": "Pontos de embarque"
   },
   "vocab": {
     "attendee": "Participante",
@@ -446,7 +447,9 @@
     "organizer": "Organizador",
     "organizers": "Organizadores",
     "host": "Anfitrião",
-    "hosts": "Anfitriões"
+    "hosts": "Anfitriões",
+    "passenger": "Passageiro",
+    "passengers": "Passageiros"
   },
   "roles": {
     "owner": "Proprietário",
@@ -472,7 +475,8 @@
     "conference": "Conferência",
     "community": "Comunidade",
     "agency": "Agência",
-    "other": "Evento"
+    "other": "Evento",
+    "tour": "Passeio"
   },
   "greeting": {
     "morning": "Bom dia, {name}.",
@@ -1784,7 +1788,8 @@
       "conference": "Inscrições, sessões, palestrantes e crachás.",
       "community": "Inscrições gratuitas, encontros e venda de ingressos simples.",
       "agency": "Organize eventos de vários clientes em uma só conta.",
-      "other": "Comece simples e ative o que precisar."
+      "other": "Comece simples e ative o que precisar.",
+      "tour": "Passeios de ônibus, barco e a pé com saídas recorrentes e pontos de embarque."
     },
     "terms": "Concordo com os <tos>Termos de Serviço</tos> e o <dpa>Adendo de Tratamento de Dados</dpa> em nome desta organização.",
     "submit": "Criar organização",
@@ -4452,7 +4457,8 @@
       "community": "Comunidade",
       "other": "Outro",
       "wedding": "Casamento",
-      "agency": "Agência"
+      "agency": "Agência",
+      "tour": "Passeio"
     },
     "filters": {
       "label": "Pesquisar eventos",
@@ -18016,7 +18022,8 @@
       "wedding": "Convidados, confirmações, lugares e um site para convidados.",
       "community": "Membros, inscrições e mensagens para um grupo ou uma causa.",
       "agency": "Eventos que você organiza para clientes, com marketing e relatórios.",
-      "other": "Ingressos, participantes e check-in para qualquer outra coisa."
+      "other": "Ingressos, participantes e check-in para qualquer outra coisa.",
+      "tour": "Saídas programadas, uma capacidade por saída e pontos de embarque à escolha."
     }
   },
   "seriesField": {
@@ -18107,7 +18114,8 @@
       "conference": "Inscrições, sessões, palestrantes, expositores, patrocinadores e crachás.",
       "community": "Encontros e aulas: inscrições gratuitas ou pagas, datas recorrentes e check-in.",
       "agency": "Eventos que você organiza para clientes, com a marca e os relatórios deles.",
-      "other": "Um evento geral: ingressos, participantes, uma página e check-in."
+      "other": "Um evento geral: ingressos, participantes, uma página e check-in.",
+      "tour": "Passeios de ônibus, barco ou a pé: saídas recorrentes, capacidade por saída e pontos de embarque."
     },
     "name": "Nome do modelo",
     "nameInvalid": "Digite um nome de 2 a 120 caracteres.",
@@ -19539,5 +19547,25 @@
         "sales_ended": "Vendas encerradas"
       }
     }
+  },
+  "tourPickups": {
+    "title": "Pontos de embarque",
+    "description": "Onde os passageiros embarcam em cada saída.",
+    "question": "Escolha seu ponto de embarque",
+    "name": "Nome",
+    "address": "Endereço",
+    "minutesBefore": "Minutos antes da saída",
+    "add": "Adicionar ponto de embarque",
+    "save": "Salvar",
+    "saved": "Salvo.",
+    "remove": "Remover",
+    "removed": "Removido.",
+    "emptyTitle": "Nenhum ponto de embarque ainda",
+    "emptyDescription": "Adicione os locais onde os passageiros podem embarcar. Eles escolhem um no pagamento e o veem no pedido.",
+    "addTitle": "Adicionar um ponto de embarque",
+    "departuresHint": "As saídas e a capacidade são definidas na página Datas: repita o passeio em um calendário e dê a cada saída o seu número de vagas.",
+    "beforeDeparture": "Esteja aqui {minutes, plural, one {# minuto} other {# minutos}} antes da saída.",
+    "atDeparture": "Encontro no horário da saída.",
+    "yourPickup": "Seu ponto de embarque"
   }
 }

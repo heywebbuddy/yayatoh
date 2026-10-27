@@ -428,7 +428,8 @@
     "ceCredits": "Créditos de formación",
     "brandKits": "Kits de marca",
     "venuePortal": "Portal del recinto",
-    "promotions": "Promociones"
+    "promotions": "Promociones",
+    "pickups": "Puntos de recogida"
   },
   "vocab": {
     "attendee": "Asistente",
@@ -446,7 +447,9 @@
     "organizer": "Organizador",
     "organizers": "Organizadores",
     "host": "Anfitrión",
-    "hosts": "Anfitriones"
+    "hosts": "Anfitriones",
+    "passenger": "Pasajero",
+    "passengers": "Pasajeros"
   },
   "roles": {
     "owner": "Propietario",
@@ -472,7 +475,8 @@
     "conference": "Conferencia",
     "community": "Comunidad",
     "agency": "Agencia",
-    "other": "Evento"
+    "other": "Evento",
+    "tour": "Tour"
   },
   "greeting": {
     "morning": "Buenos días, {name}.",
@@ -1784,7 +1788,8 @@
       "conference": "Inscripción, sesiones, ponentes y acreditaciones.",
       "community": "Inscripciones gratuitas, encuentros y venta de entradas sencilla.",
       "agency": "Organiza eventos para varios clientes desde una sola cuenta.",
-      "other": "Empieza con lo básico y activa lo que necesites."
+      "other": "Empieza con lo básico y activa lo que necesites.",
+      "tour": "Tours en autobús, barco y a pie con salidas recurrentes y puntos de recogida."
     },
     "terms": "Acepto los <tos>Términos del servicio</tos> y el <dpa>Acuerdo de tratamiento de datos</dpa> en nombre de esta organización.",
     "submit": "Crear organización",
@@ -4452,7 +4457,8 @@
       "community": "Comunidad",
       "other": "Otro",
       "wedding": "Boda",
-      "agency": "Agencia"
+      "agency": "Agencia",
+      "tour": "Tour"
     },
     "filters": {
       "label": "Buscar eventos",
@@ -18016,7 +18022,8 @@
       "wedding": "Invitados, confirmaciones, asientos y una web para invitados.",
       "community": "Miembros, inscripciones y mensajes para un grupo o una causa.",
       "agency": "Eventos que organizas para clientes, con marketing e informes.",
-      "other": "Entradas, asistentes y check-in para cualquier otra cosa."
+      "other": "Entradas, asistentes y check-in para cualquier otra cosa.",
+      "tour": "Salidas programadas, un aforo por salida y puntos de recogida a elegir."
     }
   },
   "seriesField": {
@@ -18107,7 +18114,8 @@
       "conference": "Inscripción, sesiones, ponentes, expositores, patrocinadores y acreditaciones.",
       "community": "Encuentros y clases: inscripciones gratis o de pago, fechas recurrentes y acceso.",
       "agency": "Eventos que organizas para clientes, con su marca y sus informes.",
-      "other": "Un evento general: entradas, asistentes, una página y acceso."
+      "other": "Un evento general: entradas, asistentes, una página y acceso.",
+      "tour": "Tours en autobús, barco o a pie: salidas recurrentes, aforo por salida y puntos de recogida."
     },
     "name": "Nombre de la plantilla",
     "nameInvalid": "Escribe un nombre de 2 a 120 caracteres.",
@@ -19539,5 +19547,25 @@
         "sales_ended": "Venta finalizada"
       }
     }
+  },
+  "tourPickups": {
+    "title": "Puntos de recogida",
+    "description": "Dónde se suben los pasajeros en cada salida.",
+    "question": "Elige tu punto de recogida",
+    "name": "Nombre",
+    "address": "Dirección",
+    "minutesBefore": "Minutos antes de la salida",
+    "add": "Añadir punto de recogida",
+    "save": "Guardar",
+    "saved": "Guardado.",
+    "remove": "Quitar",
+    "removed": "Quitado.",
+    "emptyTitle": "Aún no hay puntos de recogida",
+    "emptyDescription": "Añade los lugares donde pueden subir los pasajeros. Eligen uno al pagar y lo ven en su pedido.",
+    "addTitle": "Añadir un punto de recogida",
+    "departuresHint": "Las salidas y su aforo se fijan en la página de Fechas: repite el tour según un calendario y da a cada salida su propio número de plazas.",
+    "beforeDeparture": "Estate aquí {minutes, plural, one {# minuto} other {# minutos}} antes de la salida.",
+    "atDeparture": "Encuentro a la hora de salida.",
+    "yourPickup": "Tu punto de recogida"
   }
 }

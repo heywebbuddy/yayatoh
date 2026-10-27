@@ -428,7 +428,8 @@
     "ceCredits": "Fortbildungspunkte",
     "brandKits": "Marken-Kits",
     "venuePortal": "Veranstaltungsort-Portal",
-    "promotions": "Hervorhebungen"
+    "promotions": "Hervorhebungen",
+    "pickups": "Abholpunkte"
   },
   "vocab": {
     "attendee": "Teilnehmer",
@@ -446,7 +447,9 @@
     "organizer": "Veranstalter",
     "organizers": "Veranstalter",
     "host": "Gastgeber",
-    "hosts": "Gastgeber"
+    "hosts": "Gastgeber",
+    "passenger": "Fahrgast",
+    "passengers": "Fahrgäste"
   },
   "roles": {
     "owner": "Inhaber",
@@ -472,7 +475,8 @@
     "conference": "Konferenz",
     "community": "Community",
     "agency": "Agentur",
-    "other": "Event"
+    "other": "Event",
+    "tour": "Tour"
   },
   "greeting": {
     "morning": "Guten Morgen, {name}.",
@@ -1784,7 +1788,8 @@
       "conference": "Anmeldung, Sessions, Speaker und Namensschilder.",
       "community": "Kostenlose Anmeldungen, Meetups und einfaches Ticketing.",
       "agency": "Veranstalte Events für mehrere Kunden über ein Konto.",
-      "other": "Starte einfach und schalte zu, was du brauchst."
+      "other": "Starte einfach und schalte zu, was du brauchst.",
+      "tour": "Bus-, Boots- und Stadtführungen mit wiederkehrenden Abfahrten und Abholpunkten."
     },
     "terms": "Ich stimme den <tos>Allgemeinen Geschäftsbedingungen</tos> und dem <dpa>Auftragsverarbeitungsvertrag</dpa> im Namen dieser Organisation zu.",
     "submit": "Organisation erstellen",
@@ -4452,7 +4457,8 @@
       "community": "Gemeinschaft",
       "other": "Sonstiges",
       "wedding": "Hochzeit",
-      "agency": "Agentur"
+      "agency": "Agentur",
+      "tour": "Tour"
     },
     "filters": {
       "label": "Veranstaltungen suchen",
@@ -18016,7 +18022,8 @@
       "wedding": "Gäste, Zusagen, Sitzordnung und eine Gäste-Website.",
       "community": "Mitglieder, Anmeldungen und Nachrichten für eine Gruppe oder ein Anliegen.",
       "agency": "Veranstaltungen für Ihre Kunden, mit Marketing und Berichten.",
-      "other": "Tickets, Teilnehmende und Check-in für alles andere."
+      "other": "Tickets, Teilnehmende und Check-in für alles andere.",
+      "tour": "Abfahrten nach Zeitplan, eine Kapazität je Abfahrt und Abholpunkte zur Wahl."
     }
   },
   "seriesField": {
@@ -18107,7 +18114,8 @@
       "conference": "Anmeldung, Sessions, Sprecher, Aussteller, Sponsoren und Namensschilder.",
       "community": "Treffen und Kurse: kostenlose oder bezahlte Anmeldungen, wiederkehrende Termine und Einlass.",
       "agency": "Veranstaltungen, die Sie für Kunden durchführen, mit deren Branding und Berichten.",
-      "other": "Eine allgemeine Veranstaltung: Tickets, Teilnehmende, eine Seite und Einlass."
+      "other": "Eine allgemeine Veranstaltung: Tickets, Teilnehmende, eine Seite und Einlass.",
+      "tour": "Bus-, Boots- oder Wandertouren: wiederkehrende Abfahrten, Kapazität je Abfahrt und Abholpunkte."
     },
     "name": "Name der Vorlage",
     "nameInvalid": "Geben Sie einen Namen mit 2 bis 120 Zeichen ein.",
@@ -19539,5 +19547,25 @@
         "sales_ended": "Verkauf beendet"
       }
     }
+  },
+  "tourPickups": {
+    "title": "Abholpunkte",
+    "description": "Wo Fahrgäste bei jeder Abfahrt zusteigen.",
+    "question": "Abholpunkt wählen",
+    "name": "Name",
+    "address": "Adresse",
+    "minutesBefore": "Minuten vor Abfahrt",
+    "add": "Abholpunkt hinzufügen",
+    "save": "Speichern",
+    "saved": "Gespeichert.",
+    "remove": "Entfernen",
+    "removed": "Entfernt.",
+    "emptyTitle": "Noch keine Abholpunkte",
+    "emptyDescription": "Füge die Orte hinzu, an denen Fahrgäste zusteigen können. Sie wählen beim Bezahlen einen aus und sehen ihn in ihrer Bestellung.",
+    "addTitle": "Abholpunkt hinzufügen",
+    "departuresHint": "Abfahrten und ihre Kapazität legst du auf der Seite Termine fest: Wiederhole die Tour nach Zeitplan und gib jeder Abfahrt eine eigene Platzzahl.",
+    "beforeDeparture": "Bitte {minutes, plural, one {# Minute} other {# Minuten}} vor der Abfahrt da sein.",
+    "atDeparture": "Treffpunkt zur Abfahrtszeit.",
+    "yourPickup": "Dein Abholpunkt"
   }
 }

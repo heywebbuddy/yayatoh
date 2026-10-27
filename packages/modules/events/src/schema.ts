@@ -32,6 +32,7 @@ export const EVENT_PROFILES = [
   'concert',
   'conference',
   'community',
+  'tour',
   'agency',
   'other',
 ] as const;
