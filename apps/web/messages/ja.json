@@ -778,7 +778,30 @@
       "next": "次の写真",
       "counter": "写真 {n}/{total}",
       "thumbnails": "すべての写真"
-    }
+    },
+    "speakerRoles": {
+      "keynote": "基調講演者",
+      "speaker": "登壇者",
+      "panelist": "パネリスト",
+      "moderator": "モデレーター",
+      "host": "司会",
+      "dj": "DJ",
+      "artist": "アーティスト / パフォーマー",
+      "influencer": "インフルエンサー",
+      "special_guest": "スペシャルゲスト"
+    },
+    "speakerRolesPlural": {
+      "keynote": "基調講演者",
+      "speaker": "登壇者",
+      "panelist": "パネリスト",
+      "moderator": "モデレーター",
+      "host": "司会",
+      "dj": "DJ",
+      "artist": "アーティスト / パフォーマー",
+      "influencer": "インフルエンサー",
+      "special_guest": "スペシャルゲスト"
+    },
+    "featuredBadge": "注目"
   },
   "portal": {
     "day": "{day}日目 · {date}",
@@ -4938,7 +4961,10 @@
       "added": "{count, plural, other {#件のセッション}}をプログラムに追加しました。",
       "discard": "破棄",
       "discarded": "提案を破棄しました。何も追加されていません。"
-    }
+    },
+    "speakerRole": "役割",
+    "featured": "注目",
+    "featuredHint": "役割内で最初に、大きなカードで表示"
   },
   "aiDraft": {
     "title": "AIで下書き",

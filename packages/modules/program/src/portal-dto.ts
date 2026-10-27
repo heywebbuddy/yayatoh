@@ -1,6 +1,7 @@
 import { defineSerializer } from '@yayatoh/contracts';
 import { PortalAccountDto } from '@yayatoh/events';
 import { z } from 'zod';
+import { SPEAKER_ROLES } from './domain/speaker-roles.ts';
 import { LinkDto } from './dto.ts';
 import { CHANGE_STATUSES, TASK_KINDS } from './schema-portal.ts';
 
@@ -102,6 +103,7 @@ export const SpeakerPortalDto = z.object({
     company: z.string().nullable(),
     bio: z.string(),
     links: z.array(LinkDto),
+    role: z.enum(SPEAKER_ROLES),
   }),
   profileChange: PortalChangeSummary.nullable(),
   sessions: z.array(

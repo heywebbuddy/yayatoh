@@ -2,7 +2,12 @@
 
 import { parseLinksText, SectionTextError } from '@yayatoh/events';
 import { executeCommand } from '@yayatoh/kernel';
-import { createSpeakerCommand, deleteSpeakerCommand, updateSpeakerCommand } from '@yayatoh/program';
+import {
+  createSpeakerCommand,
+  deleteSpeakerCommand,
+  type SpeakerRole,
+  updateSpeakerCommand,
+} from '@yayatoh/program';
 import { revalidatePath } from 'next/cache';
 import type { ProgramFormState } from '@/components/program-form.tsx';
 import { loadEvent } from '@/server/console.ts';
@@ -18,6 +23,8 @@ function fields(form: FormData) {
     title: textOrNull(form, 'title'),
     company: textOrNull(form, 'company'),
     bio: String(form.get('bio') ?? ''),
+    role: String(form.get('role') ?? 'speaker') as SpeakerRole,
+    featured: form.get('featured') === '1',
     // One link per line, `Label | https://…` (the M1.4d links format).
     links: parseLinksText(String(form.get('links') ?? '')),
   };

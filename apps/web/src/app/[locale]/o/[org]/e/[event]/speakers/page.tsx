@@ -1,6 +1,6 @@
 import { formatLinksText } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
-import { type SpeakerDto, speakerAccessQuery, speakerChangesQuery } from '@yayatoh/program';
+import { SPEAKER_ROLES, type SpeakerDto, speakerAccessQuery, speakerChangesQuery } from '@yayatoh/program';
 import { Button, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
@@ -71,6 +71,20 @@ export default async function SpeakersPage({
       defaultValue: p?.company ?? undefined,
     },
     {
+      kind: 'select',
+      name: 'role',
+      label: tp('speakerRole'),
+      defaultValue: p?.role ?? 'speaker',
+      options: SPEAKER_ROLES.map((r) => ({ value: r, label: t(`publicEvent.speakerRoles.${r}`) })),
+    },
+    {
+      kind: 'checkboxes',
+      name: 'featured',
+      label: tp('featured'),
+      options: [{ value: '1', label: tp('featuredHint') }],
+      defaultValues: p?.featured ? ['1'] : [],
+    },
+    {
       kind: 'textarea',
       name: 'bio',
       label: tp('bio'),
@@ -136,6 +150,10 @@ export default async function SpeakersPage({
                   <div className="flex items-center gap-3">
                     <ProgramThumb item={photos.get(p.id)?.items[0]} round />
                     <h3 className="text-body font-medium">{p.name}</h3>
+                    <span className="rounded-tag bg-surface-3 px-2 text-caption text-ink-2">
+                      {t(`publicEvent.speakerRoles.${p.role}`)}
+                      {p.featured ? ` · ${tp('featured')}` : ''}
+                    </span>
                   </div>
                   <p className="text-caption text-ink-2">
                     {[p.title, p.company].filter(Boolean).join(' · ')}

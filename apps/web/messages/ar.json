@@ -778,7 +778,30 @@
       "next": "الصورة التالية",
       "counter": "الصورة {n} من {total}",
       "thumbnails": "كل الصور"
-    }
+    },
+    "speakerRoles": {
+      "keynote": "المتحدث الرئيسي",
+      "speaker": "متحدث",
+      "panelist": "مشارك في الحوار",
+      "moderator": "مدير الحوار",
+      "host": "المضيف / مقدّم الحفل",
+      "dj": "دي جي",
+      "artist": "فنان / مؤدٍّ",
+      "influencer": "مؤثّر",
+      "special_guest": "ضيف خاص"
+    },
+    "speakerRolesPlural": {
+      "keynote": "المتحدثون الرئيسيون",
+      "speaker": "المتحدثون",
+      "panelist": "المشاركون في الحوار",
+      "moderator": "مديرو الحوار",
+      "host": "المضيفون / مقدّمو الحفل",
+      "dj": "دي جي",
+      "artist": "الفنانون / المؤدّون",
+      "influencer": "المؤثّرون",
+      "special_guest": "ضيوف خاصون"
+    },
+    "featuredBadge": "مميّز"
   },
   "portal": {
     "day": "اليوم {day} · {date}",
@@ -4938,7 +4961,10 @@
       "added": "{count, plural, zero {لم تُضف أي جلسة} one {أُضيفت جلسة واحدة} two {أُضيفت جلستان} few {أُضيفت # جلسات} many {أُضيفت # جلسة} other {أُضيفت # جلسة}} إلى البرنامج.",
       "discard": "تجاهل",
       "discarded": "تم تجاهل المقترحات. لم يُضف شيء."
-    }
+    },
+    "speakerRole": "الدور",
+    "featured": "مميّز",
+    "featuredHint": "عرضه أولًا ضمن دوره ببطاقة أكبر"
   },
   "aiDraft": {
     "title": "صياغة بالذكاء الاصطناعي",

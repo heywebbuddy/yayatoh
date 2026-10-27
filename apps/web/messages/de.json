@@ -778,7 +778,30 @@
       "next": "Nächstes Foto",
       "counter": "Foto {n} von {total}",
       "thumbnails": "Alle Fotos"
-    }
+    },
+    "speakerRoles": {
+      "keynote": "Keynote-Speaker",
+      "speaker": "Referent:in",
+      "panelist": "Panelist:in",
+      "moderator": "Moderator:in",
+      "host": "Host / MC",
+      "dj": "DJ",
+      "artist": "Künstler:in / Performer:in",
+      "influencer": "Influencer:in",
+      "special_guest": "Ehrengast"
+    },
+    "speakerRolesPlural": {
+      "keynote": "Keynote-Speaker",
+      "speaker": "Referent:innen",
+      "panelist": "Panelist:innen",
+      "moderator": "Moderator:innen",
+      "host": "Hosts / MCs",
+      "dj": "DJs",
+      "artist": "Künstler:innen / Performer:innen",
+      "influencer": "Influencer:innen",
+      "special_guest": "Ehrengäste"
+    },
+    "featuredBadge": "Hervorgehoben"
   },
   "portal": {
     "day": "Tag {day} · {date}",
@@ -4938,7 +4961,10 @@
       "added": "{count, plural, one {# Session} other {# Sessions}} zum Programm hinzugefügt.",
       "discard": "Verwerfen",
       "discarded": "Vorschläge verworfen. Nichts wurde hinzugefügt."
-    }
+    },
+    "speakerRole": "Rolle",
+    "featured": "Hervorgehoben",
+    "featuredHint": "In seiner Rolle zuerst anzeigen, mit größerer Karte"
   },
   "aiDraft": {
     "title": "Mit KI entwerfen",

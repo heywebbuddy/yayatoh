@@ -4,6 +4,7 @@ import { DomainError, requireOrg } from '@yayatoh/kernel';
 import { tenantCommand } from '@yayatoh/platform';
 import { and, asc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
+import { SPEAKER_ROLES } from './domain/speaker-roles.ts';
 import { ExhibitorDto, SpeakerDto, SponsorDto, SponsorTierDto } from './dto.ts';
 import { endExhibitorRolesTx } from './exhibitor-portal.ts';
 import { exhibitors, speakers, sponsors, sponsorTiers } from './schema.ts';
@@ -65,6 +66,8 @@ const SpeakerFields = z.object({
     .array(z.object({ label: z.string().trim().min(1).max(120), url: WebUrl }))
     .max(10)
     .default([]),
+  role: z.enum(SPEAKER_ROLES).default('speaker'),
+  featured: z.boolean().default(false),
 });
 export const SpeakerInput = SpeakerFields.extend({ eventId: z.uuid() });
 export type SpeakerInput = z.input<typeof SpeakerInput>;

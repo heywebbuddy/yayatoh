@@ -778,7 +778,30 @@
       "next": "Foto successiva",
       "counter": "Foto {n} di {total}",
       "thumbnails": "Tutte le foto"
-    }
+    },
+    "speakerRoles": {
+      "keynote": "Relatore principale",
+      "speaker": "Relatore",
+      "panelist": "Panelist",
+      "moderator": "Moderatore",
+      "host": "Host / MC",
+      "dj": "DJ",
+      "artist": "Artista / performer",
+      "influencer": "Influencer",
+      "special_guest": "Ospite speciale"
+    },
+    "speakerRolesPlural": {
+      "keynote": "Relatori principali",
+      "speaker": "Relatori",
+      "panelist": "Panelist",
+      "moderator": "Moderatori",
+      "host": "Host / MC",
+      "dj": "DJ",
+      "artist": "Artisti / performer",
+      "influencer": "Influencer",
+      "special_guest": "Ospiti speciali"
+    },
+    "featuredBadge": "In evidenza"
   },
   "portal": {
     "day": "Giorno {day} · {date}",
@@ -4938,7 +4961,10 @@
       "added": "{count, plural, one {# sessione aggiunta} other {# sessioni aggiunte}} al programma.",
       "discard": "Scarta",
       "discarded": "Proposte scartate. Non è stato aggiunto nulla."
-    }
+    },
+    "speakerRole": "Ruolo",
+    "featured": "In evidenza",
+    "featuredHint": "Mostra per primo nel suo ruolo, con una scheda più grande"
   },
   "aiDraft": {
     "title": "Scrivi con l'IA",

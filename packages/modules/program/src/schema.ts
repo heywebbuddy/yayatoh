@@ -16,6 +16,7 @@ import {
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { SPEAKER_ROLES } from './domain/speaker-roles.ts';
 
 /**
  * M1.4f: the lightweight event program — tracks, rooms, sessions, speakers, exhibitors and
@@ -108,9 +109,14 @@ export const speakers = tenantTable(
     bio: text('bio').notNull().default(''),
     /** `[{ label, url }]`, http(s) only (validated by the command). */
     links: jsonb('links').notNull().default(sql`'[]'::jsonb`),
+    /** One of SPEAKER_ROLES: groups the public page ("Keynote speakers", "DJs"…). */
+    role: text('role').notNull().default('speaker'),
+    /** Featured people come first within their role and get a larger card. */
+    featured: boolean('featured').notNull().default(false),
   },
   (t) => [
     index('speakers_org_event_name_idx').on(t.orgId, t.eventId, t.name),
+    check('speakers_role_check', sql.raw(`role in (${SPEAKER_ROLES.map((r) => `'${r}'`).join(', ')})`)),
     check('speakers_name_length_check', sql`char_length(name) between 1 and 120`),
   ],
 );

@@ -778,7 +778,30 @@
       "next": "Próxima foto",
       "counter": "Foto {n} de {total}",
       "thumbnails": "Todas as fotos"
-    }
+    },
+    "speakerRoles": {
+      "keynote": "Orador principal",
+      "speaker": "Orador",
+      "panelist": "Painelista",
+      "moderator": "Moderador",
+      "host": "Anfitrião / apresentador",
+      "dj": "DJ",
+      "artist": "Artista / intérprete",
+      "influencer": "Influenciador",
+      "special_guest": "Convidado especial"
+    },
+    "speakerRolesPlural": {
+      "keynote": "Oradores principais",
+      "speaker": "Oradores",
+      "panelist": "Painelistas",
+      "moderator": "Moderadores",
+      "host": "Anfitriões / apresentadores",
+      "dj": "DJs",
+      "artist": "Artistas / intérpretes",
+      "influencer": "Influenciadores",
+      "special_guest": "Convidados especiais"
+    },
+    "featuredBadge": "Em destaque"
   },
   "portal": {
     "day": "Dia {day} · {date}",
@@ -4938,7 +4961,10 @@
       "added": "{count, plural, one {# sessão adicionada} other {# sessões adicionadas}} à programação.",
       "discard": "Descartar",
       "discarded": "Propostas descartadas. Nada foi adicionado."
-    }
+    },
+    "speakerRole": "Função",
+    "featured": "Em destaque",
+    "featuredHint": "Mostrar primeiro na sua função, com um cartão maior"
   },
   "aiDraft": {
     "title": "Rascunhar com IA",

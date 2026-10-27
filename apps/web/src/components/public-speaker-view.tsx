@@ -75,6 +75,9 @@ export async function PublicSpeakerView({
           />
         ) : null}
         <div className="flex flex-col gap-1">
+          <p className="m-0 text-label font-bold uppercase tracking-wide text-primary-ink">
+            {t(`speakerRoles.${speaker.role}`)}
+          </p>
           <h1 className="text-[36px] leading-tight font-extrabold tracking-[-0.03em]">{speaker.name}</h1>
           {speaker.title || speaker.company ? (
             <p className="text-body text-ink-2">

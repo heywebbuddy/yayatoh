@@ -778,7 +778,30 @@
       "next": "अगली फ़ोटो",
       "counter": "{total} में से फ़ोटो {n}",
       "thumbnails": "सभी फ़ोटो"
-    }
+    },
+    "speakerRoles": {
+      "keynote": "मुख्य वक्ता",
+      "speaker": "वक्ता",
+      "panelist": "पैनलिस्ट",
+      "moderator": "मॉडरेटर",
+      "host": "होस्ट / एमसी",
+      "dj": "डीजे",
+      "artist": "कलाकार / परफ़ॉर्मर",
+      "influencer": "इन्फ़्लुएंसर",
+      "special_guest": "विशेष अतिथि"
+    },
+    "speakerRolesPlural": {
+      "keynote": "मुख्य वक्ता",
+      "speaker": "वक्ता",
+      "panelist": "पैनलिस्ट",
+      "moderator": "मॉडरेटर",
+      "host": "होस्ट / एमसी",
+      "dj": "डीजे",
+      "artist": "कलाकार / परफ़ॉर्मर",
+      "influencer": "इन्फ़्लुएंसर",
+      "special_guest": "विशेष अतिथि"
+    },
+    "featuredBadge": "विशेष"
   },
   "portal": {
     "day": "दिन {day} · {date}",
@@ -4938,7 +4961,10 @@
       "added": "{count, plural, one {# सत्र} other {# सत्र}} कार्यक्रम में जोड़े गए।",
       "discard": "हटाएँ",
       "discarded": "सुझाव हटा दिए गए। कुछ नहीं जोड़ा गया।"
-    }
+    },
+    "speakerRole": "भूमिका",
+    "featured": "विशेष",
+    "featuredHint": "अपनी भूमिका में सबसे पहले, बड़े कार्ड के साथ दिखाएँ"
   },
   "aiDraft": {
     "title": "AI से ड्राफ़्ट बनाएँ",

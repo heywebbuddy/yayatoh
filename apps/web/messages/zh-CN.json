@@ -778,7 +778,30 @@
       "next": "下一张",
       "counter": "第 {n} 张，共 {total} 张",
       "thumbnails": "全部照片"
-    }
+    },
+    "speakerRoles": {
+      "keynote": "主旨演讲嘉宾",
+      "speaker": "演讲嘉宾",
+      "panelist": "圆桌嘉宾",
+      "moderator": "主持人",
+      "host": "主持 / MC",
+      "dj": "DJ",
+      "artist": "艺术家 / 表演者",
+      "influencer": "网红 / 影响者",
+      "special_guest": "特邀嘉宾"
+    },
+    "speakerRolesPlural": {
+      "keynote": "主旨演讲嘉宾",
+      "speaker": "演讲嘉宾",
+      "panelist": "圆桌嘉宾",
+      "moderator": "主持人",
+      "host": "主持 / MC",
+      "dj": "DJ",
+      "artist": "艺术家 / 表演者",
+      "influencer": "网红 / 影响者",
+      "special_guest": "特邀嘉宾"
+    },
+    "featuredBadge": "重点推荐"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -4938,7 +4961,10 @@
       "added": "已将 {count, plural, other {# 个场次}}添加到议程。",
       "discard": "放弃",
       "discarded": "已放弃建议,未添加任何内容。"
-    }
+    },
+    "speakerRole": "角色",
+    "featured": "重点推荐",
+    "featuredHint": "在其角色中优先显示,并使用更大的卡片"
   },
   "aiDraft": {
     "title": "用 AI 起草",

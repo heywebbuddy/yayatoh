@@ -778,7 +778,30 @@
       "next": "Next photo",
       "counter": "Photo {n} of {total}",
       "thumbnails": "All photos"
-    }
+    },
+    "speakerRoles": {
+      "keynote": "Keynote speaker",
+      "speaker": "Speaker",
+      "panelist": "Panelist",
+      "moderator": "Moderator",
+      "host": "Host / MC",
+      "dj": "DJ",
+      "artist": "Artist / Performer",
+      "influencer": "Influencer",
+      "special_guest": "Special guest"
+    },
+    "speakerRolesPlural": {
+      "keynote": "Keynote speakers",
+      "speaker": "Speakers",
+      "panelist": "Panelists",
+      "moderator": "Moderators",
+      "host": "Hosts / MCs",
+      "dj": "DJs",
+      "artist": "Artists / Performers",
+      "influencer": "Influencers",
+      "special_guest": "Special guests"
+    },
+    "featuredBadge": "Featured"
   },
   "portal": {
     "day": "Day {day} · {date}",
@@ -4938,7 +4961,10 @@
       "added": "{count, plural, one {# session added} other {# sessions added}} to the agenda.",
       "discard": "Discard",
       "discarded": "Proposals discarded. Nothing was added."
-    }
+    },
+    "speakerRole": "Role",
+    "featured": "Featured",
+    "featuredHint": "Show first in their role, with a larger card"
   },
   "aiDraft": {
     "title": "Draft with AI",

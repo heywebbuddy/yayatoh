@@ -9,7 +9,14 @@ export const privateColumns = columnPrivacy('program', {
   exhibitors: { name: 'public', description: 'public', booth_label: 'public', website_url: 'public' },
   rooms: { name: 'public' },
   sessions: { title: 'public', description: 'public' },
-  speakers: { name: 'public', title: 'public', company: 'public', bio: 'public', links: 'public' },
+  speakers: {
+    name: 'public',
+    title: 'public',
+    company: 'public',
+    bio: 'public',
+    links: 'public',
+    role: 'vocab',
+  },
   sponsor_tiers: { name: 'public' },
   // M5.3a speaker portal: proposals are unpublished until approved (then they land in the public
   // columns above); task answers and notes are between the organizer and the speaker.

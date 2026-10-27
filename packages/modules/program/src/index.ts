@@ -161,6 +161,7 @@ export {
   scheduleWarnings,
   warningsFor,
 } from './domain/schedule.ts';
+export { groupByRole, SPEAKER_ROLES, type SpeakerRole, speakerRoleRank } from './domain/speaker-roles.ts';
 // M5.4b: sponsor packages, deliverables, the sponsor portal and lead licenses.
 export {
   DEFAULT_INCLUDED_LEAD_LICENSES,

@@ -1,5 +1,6 @@
 import { defineSerializer } from '@yayatoh/contracts';
 import { z } from 'zod';
+import { SPEAKER_ROLES } from './domain/speaker-roles.ts';
 
 export const LinkDto = z.object({ label: z.string(), url: z.string() });
 
@@ -39,6 +40,8 @@ export const SpeakerDto = z.object({
   company: z.string().nullable(),
   bio: z.string(),
   links: z.array(LinkDto),
+  role: z.enum(SPEAKER_ROLES),
+  featured: z.boolean(),
 });
 export type SpeakerDto = z.infer<typeof SpeakerDto>;
 
@@ -127,6 +130,8 @@ export const PublicSpeakerDto = z.object({
   company: z.string().nullable(),
   bio: z.string(),
   links: z.array(LinkDto),
+  role: z.enum(SPEAKER_ROLES),
+  featured: z.boolean(),
 });
 export type PublicSpeakerDto = z.infer<typeof PublicSpeakerDto>;
 

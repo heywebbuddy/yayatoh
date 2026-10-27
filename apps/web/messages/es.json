@@ -778,7 +778,30 @@
       "next": "Foto siguiente",
       "counter": "Foto {n} de {total}",
       "thumbnails": "Todas las fotos"
-    }
+    },
+    "speakerRoles": {
+      "keynote": "Ponente principal",
+      "speaker": "Ponente",
+      "panelist": "Panelista",
+      "moderator": "Moderador",
+      "host": "Anfitrión / presentador",
+      "dj": "DJ",
+      "artist": "Artista / intérprete",
+      "influencer": "Influencer",
+      "special_guest": "Invitado especial"
+    },
+    "speakerRolesPlural": {
+      "keynote": "Ponentes principales",
+      "speaker": "Ponentes",
+      "panelist": "Panelistas",
+      "moderator": "Moderadores",
+      "host": "Anfitriones / presentadores",
+      "dj": "DJs",
+      "artist": "Artistas / intérpretes",
+      "influencer": "Influencers",
+      "special_guest": "Invitados especiales"
+    },
+    "featuredBadge": "Destacado"
   },
   "portal": {
     "day": "Día {day} · {date}",
@@ -4938,7 +4961,10 @@
       "added": "{count, plural, one {# sesión añadida} other {# sesiones añadidas}} a la agenda.",
       "discard": "Descartar",
       "discarded": "Propuestas descartadas. No se añadió nada."
-    }
+    },
+    "speakerRole": "Rol",
+    "featured": "Destacado",
+    "featuredHint": "Mostrar primero en su rol, con una tarjeta más grande"
   },
   "aiDraft": {
     "title": "Redactar con IA",

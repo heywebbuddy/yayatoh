@@ -778,7 +778,30 @@
       "next": "Volgende foto",
       "counter": "Foto {n} van {total}",
       "thumbnails": "Alle foto’s"
-    }
+    },
+    "speakerRoles": {
+      "keynote": "Keynotespreker",
+      "speaker": "Spreker",
+      "panelist": "Panellid",
+      "moderator": "Moderator",
+      "host": "Host / MC",
+      "dj": "DJ",
+      "artist": "Artiest / performer",
+      "influencer": "Influencer",
+      "special_guest": "Speciale gast"
+    },
+    "speakerRolesPlural": {
+      "keynote": "Keynotesprekers",
+      "speaker": "Sprekers",
+      "panelist": "Panelleden",
+      "moderator": "Moderators",
+      "host": "Hosts / MC’s",
+      "dj": "DJ’s",
+      "artist": "Artiesten / performers",
+      "influencer": "Influencers",
+      "special_guest": "Speciale gasten"
+    },
+    "featuredBadge": "Uitgelicht"
   },
   "portal": {
     "day": "Dag {day} · {date}",
@@ -4938,7 +4961,10 @@
       "added": "{count, plural, one {# sessie} other {# sessies}} toegevoegd aan het programma.",
       "discard": "Weggooien",
       "discarded": "Voorstellen weggegooid. Er is niets toegevoegd."
-    }
+    },
+    "speakerRole": "Rol",
+    "featured": "Uitgelicht",
+    "featuredHint": "Eerst tonen binnen de rol, met een grotere kaart"
   },
   "aiDraft": {
     "title": "Schrijven met AI",

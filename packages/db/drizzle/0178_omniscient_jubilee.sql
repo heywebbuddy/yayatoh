@@ -1,0 +1,3 @@
+ALTER TABLE "program"."speakers" ADD COLUMN "role" text DEFAULT 'speaker' NOT NULL;--> statement-breakpoint
+ALTER TABLE "program"."speakers" ADD COLUMN "featured" boolean DEFAULT false NOT NULL;--> statement-breakpoint
+ALTER TABLE "program"."speakers" ADD CONSTRAINT "speakers_role_check" CHECK (role in ('keynote', 'speaker', 'panelist', 'moderator', 'host', 'dj', 'artist', 'influencer', 'special_guest'));
