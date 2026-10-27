@@ -5206,7 +5206,19 @@
       "current": "Отмечает устройство, делающее больше {rate} сканов в минуту, и билет, перемещающийся между пунктами быстрее {kmh} км/ч."
     },
     "showAll": "Mostrar todos os sinais",
-    "reviewDetection": "Rever as definições de deteção"
+    "reviewDetection": "Rever as definições de deteção",
+    "reentry": {
+      "title": "Reentrada",
+      "description": "Permita que um bilhete seja lido de novo algumas horas após a última entrada, para convidados que saem e voltam. As leituras antes desse prazo continuam recusadas como duplicados. Desativado por predefinição.",
+      "enabled": "Permitir ler de novo um bilhete passadas algumas horas",
+      "hours": "Horas após a última entrada",
+      "hoursHint": "De 1 a 72. Uma leitura anterior continua a ser um duplicado.",
+      "hoursError": "Introduza um número inteiro de 1 a 72.",
+      "save": "Guardar definição de reentrada",
+      "saved": "Definição de reentrada guardada.",
+      "current": "Os bilhetes podem ser lidos de novo {hours, plural, one {# hora} other {# horas}} após a última entrada.",
+      "currentOff": "A reentrada está desativada: uma segunda leitura no mesmo dia é um duplicado."
+    }
   },
   "security": {
     "metaTitle": "Segurança da conta",

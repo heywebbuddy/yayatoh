@@ -5206,7 +5206,19 @@
       "current": "Sinaliza um aparelho com mais de {rate} escaneamentos por minuto e um ingresso que se move a mais de {kmh} km/h entre pontos de controle."
     },
     "showAll": "Alle signalen tonen",
-    "reviewDetection": "Detectie-instellingen bekijken"
+    "reviewDetection": "Detectie-instellingen bekijken",
+    "reentry": {
+      "title": "Heropnieuw binnenkomen",
+      "description": "Laat een ticket enkele uren na de laatste toegang opnieuw scannen, voor gasten die weggaan en terugkomen. Scans vóór die tijd worden nog steeds als dubbel geweigerd. Standaard uit.",
+      "enabled": "Een ticket na enkele uren opnieuw laten scannen",
+      "hours": "Uren na de laatste toegang",
+      "hoursHint": "Van 1 tot 72. Een eerdere scan blijft een dubbele.",
+      "hoursError": "Voer een geheel getal van 1 tot 72 in.",
+      "save": "Instelling opslaan",
+      "saved": "Instelling opgeslagen.",
+      "current": "Tickets kunnen {hours, plural, one {# uur} other {# uur}} na de laatste toegang opnieuw worden gescand.",
+      "currentOff": "Heropnieuw binnenkomen staat uit: een tweede scan op dezelfde dag is dubbel."
+    }
   },
   "security": {
     "metaTitle": "Accountbeveiliging",

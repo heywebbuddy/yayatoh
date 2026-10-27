@@ -5206,7 +5206,19 @@
       "current": "Flags a device doing more than {rate} scans a minute, and a ticket moving faster than {kmh} km/h between checkpoints."
     },
     "showAll": "Show all signals",
-    "reviewDetection": "Review detection settings"
+    "reviewDetection": "Review detection settings",
+    "reentry": {
+      "title": "Re-entry",
+      "description": "Let a ticket be scanned in again some hours after its last entry, for guests who step out and come back. Scans before that time are still refused as duplicates. Off by default.",
+      "enabled": "Allow a ticket to be scanned in again after some hours",
+      "hours": "Hours after the last entry",
+      "hoursHint": "From 1 to 72. A scan sooner than this is still a duplicate.",
+      "hoursError": "Enter a whole number from 1 to 72.",
+      "save": "Save re-entry setting",
+      "saved": "Re-entry setting saved.",
+      "current": "Tickets can be scanned in again {hours, plural, one {# hour} other {# hours}} after their last entry.",
+      "currentOff": "Re-entry is off: a second scan the same day is a duplicate."
+    }
   },
   "security": {
     "metaTitle": "Account security",

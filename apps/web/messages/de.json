@@ -5206,7 +5206,19 @@
       "current": "Markiert Geräte mit mehr als {rate} Scans pro Minute und Tickets, die sich schneller als {kmh} km/h zwischen Kontrollpunkten bewegen."
     },
     "showAll": "Alle Signale anzeigen",
-    "reviewDetection": "Erkennungseinstellungen prüfen"
+    "reviewDetection": "Erkennungseinstellungen prüfen",
+    "reentry": {
+      "title": "Wiedereinlass",
+      "description": "Erlaube, dass ein Ticket einige Stunden nach dem letzten Einlass erneut eingescannt wird, für Gäste, die hinausgehen und zurückkommen. Scans vor Ablauf dieser Zeit werden weiterhin als Duplikate abgelehnt. Standardmäßig aus.",
+      "enabled": "Erneutes Einscannen eines Tickets nach einigen Stunden erlauben",
+      "hours": "Stunden nach dem letzten Einlass",
+      "hoursHint": "Von 1 bis 72. Ein früherer Scan bleibt ein Duplikat.",
+      "hoursError": "Gib eine ganze Zahl von 1 bis 72 ein.",
+      "save": "Einstellung speichern",
+      "saved": "Einstellung gespeichert.",
+      "current": "Tickets können {hours, plural, one {# Stunde} other {# Stunden}} nach dem letzten Einlass erneut eingescannt werden.",
+      "currentOff": "Wiedereinlass ist aus: Ein zweiter Scan am selben Tag gilt als Duplikat."
+    }
   },
   "security": {
     "metaTitle": "Kontosicherheit",

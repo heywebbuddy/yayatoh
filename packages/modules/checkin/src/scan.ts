@@ -20,8 +20,10 @@ import {
   scanCheckpointTx,
   TWO_ENTRANCES_WINDOW_MS,
 } from './checkpoints.ts';
+import { lastEntryOf } from './domain/reentry.ts';
 import { scanningDeviceOf } from './live.ts';
 import { withOccurrenceTx } from './occurrence.ts';
+import { reenterTx, reentryHoursTx } from './reentry.ts';
 import { admissions, checkpoints, SCAN_RESULTS, type ScanResult, scans } from './schema.ts';
 import { sessionDoorTx, sessionScanTx } from './session-doors.ts';
 import { checkVelocityTx, FraudSignalDto, fraudSignalsTx, openHighSignalCountTx } from './signals.ts';
@@ -207,9 +209,25 @@ export const scanTicketCommand = tenantCommand({
             and(eq(admissions.ticketId, ticket.id), eq(admissions.day, day), isNull(admissions.undoneAt)),
           );
         admissionId = live?.id ?? null;
-        firstAdmittedAt = live?.admittedAt ?? null;
+        firstAdmittedAt = live ? lastEntryOf(live) : null;
+        // Re-entry: with a window set, a ticket that came in at least N hours ago may come in again.
+        const hours = live ? await reentryHoursTx(tx, event.id) : null;
+        if (live && hours !== null && (await reenterTx(tx, live.id, ctx.now, hours))) {
+          result = 'admitted';
+          firstAdmittedAt = null;
+          await publishRealtimeTx(tx, orgId, CHECKINS_CHANNEL, {
+            eventId: event.id,
+            event: 'admission',
+            data: {
+              change: 'reentry',
+              checkpointId: checkpoint?.id ?? null,
+              count: 0,
+              at: ctx.now.toISOString(),
+            },
+          });
+        }
         // Admitted at one entrance, shown at another minutes later: a pass being handed back.
-        if (
+        else if (
           live?.checkpointId &&
           checkpoint &&
           live.checkpointId !== checkpoint.id &&

@@ -5206,7 +5206,19 @@
       "current": "Markeert een apparaat met meer dan {rate} scans per minuut en een ticket dat sneller dan {kmh} km/u tussen controlepunten gaat."
     },
     "showAll": "すべてのシグナルを表示",
-    "reviewDetection": "検出設定を確認"
+    "reviewDetection": "検出設定を確認",
+    "reentry": {
+      "title": "再入場",
+      "description": "最後の入場から一定時間後に、同じチケットを再度スキャンして入場できるようにします（途中で退出して戻るゲスト向け）。その時間より前のスキャンは、これまで通り重複として拒否されます。初期設定ではオフです。",
+      "enabled": "数時間後にチケットの再スキャンを許可する",
+      "hours": "最後の入場からの時間",
+      "hoursHint": "1〜72。これより早いスキャンは重複のままです。",
+      "hoursError": "1〜72の整数を入力してください。",
+      "save": "設定を保存",
+      "saved": "設定を保存しました。",
+      "current": "最後の入場から{hours}時間後にチケットを再スキャンできます。",
+      "currentOff": "再入場はオフです。同じ日の2回目のスキャンは重複になります。"
+    }
   },
   "security": {
     "metaTitle": "アカウントのセキュリティ",

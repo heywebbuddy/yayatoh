@@ -5206,7 +5206,19 @@
       "current": "Signale un appareil à plus de {rate} scans par minute et un billet qui se déplace à plus de {kmh} km/h entre points de contrôle."
     },
     "showAll": "Afficher tous les signaux",
-    "reviewDetection": "Vérifier les réglages de détection"
+    "reviewDetection": "Vérifier les réglages de détection",
+    "reentry": {
+      "title": "Ré-entrée",
+      "description": "Autorisez un billet à être scanné à nouveau quelques heures après sa dernière entrée, pour les invités qui sortent et reviennent. Les scans avant ce délai restent refusés comme doublons. Désactivé par défaut.",
+      "enabled": "Autoriser un nouveau scan d’un billet après quelques heures",
+      "hours": "Heures après la dernière entrée",
+      "hoursHint": "De 1 à 72. Un scan plus tôt reste un doublon.",
+      "hoursError": "Saisissez un nombre entier de 1 à 72.",
+      "save": "Enregistrer le réglage",
+      "saved": "Réglage enregistré.",
+      "current": "Les billets peuvent être scannés à nouveau {hours, plural, one {# heure} other {# heures}} après leur dernière entrée.",
+      "currentOff": "La ré-entrée est désactivée : un second scan le même jour est un doublon."
+    }
   },
   "security": {
     "metaTitle": "Sécurité du compte",

@@ -5206,7 +5206,19 @@
       "current": "Segnala un dispositivo con più di {rate} scansioni al minuto e un biglietto che si sposta a più di {kmh} km/h tra i varchi."
     },
     "showAll": "Mostra tutti i segnali",
-    "reviewDetection": "Controlla le impostazioni di rilevamento"
+    "reviewDetection": "Controlla le impostazioni di rilevamento",
+    "reentry": {
+      "title": "Rientro",
+      "description": "Consenti di scansionare di nuovo un biglietto alcune ore dopo l’ultimo ingresso, per gli ospiti che escono e rientrano. Le scansioni prima di quel termine restano rifiutate come duplicati. Disattivato per impostazione predefinita.",
+      "enabled": "Consenti una nuova scansione del biglietto dopo alcune ore",
+      "hours": "Ore dall’ultimo ingresso",
+      "hoursHint": "Da 1 a 72. Una scansione precedente resta un duplicato.",
+      "hoursError": "Inserisci un numero intero da 1 a 72.",
+      "save": "Salva impostazione di rientro",
+      "saved": "Impostazione di rientro salvata.",
+      "current": "I biglietti possono essere scansionati di nuovo {hours, plural, one {# ora} other {# ore}} dopo l’ultimo ingresso.",
+      "currentOff": "Il rientro è disattivato: una seconda scansione nello stesso giorno è un duplicato."
+    }
   },
   "security": {
     "metaTitle": "Sicurezza dell’account",

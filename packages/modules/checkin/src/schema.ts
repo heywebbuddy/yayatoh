@@ -80,6 +80,12 @@ export const admissions = tenantTable(
     undoneBy: uuid('undone_by'),
     /** M5.1d: admitted with a balance still due on the invoice (a staff override, audited). */
     balanceOverride: boolean('balance_override').notNull().default(false),
+    /**
+     * Re-entry: when the ticket last came in again the same day (null = only the first entry).
+     * `entries` counts every time it came in. Duplicates are measured from the last entry.
+     */
+    lastEntryAt: ts('last_entry_at'),
+    entries: integer('entries').notNull().default(1),
   },
   (t) => [
     uniqueIndex('admissions_org_ticket_day_live_key')
@@ -559,6 +565,24 @@ export const detectionSettings = tenantTable(
     uniqueIndex('detection_settings_org_event_key').on(t.orgId, t.eventId),
     check('detection_settings_rate_check', sql`max_scans_per_minute between 2 and 600`),
     check('detection_settings_travel_check', sql`max_travel_kmh between 1 and 200`),
+  ],
+);
+
+/**
+ * Per-event re-entry window: a ticket that came in may be scanned in again once this many hours
+ * have passed since its last entry. No row = off (a second scan the same day is a duplicate).
+ */
+export const reentrySettings = tenantTable(
+  checkinSchema,
+  'reentry_settings',
+  {
+    eventId: uuid('event_id').notNull(),
+    hours: integer('hours').notNull(),
+    updatedBy: uuid('updated_by'),
+  },
+  (t) => [
+    uniqueIndex('reentry_settings_org_event_key').on(t.orgId, t.eventId),
+    check('reentry_settings_hours_check', sql`hours between 1 and 72`),
   ],
 );
 

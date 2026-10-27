@@ -5206,7 +5206,19 @@
       "current": "Marca un dispositivo con más de {rate} escaneos por minuto y una entrada que se mueve a más de {kmh} km/h entre puntos de control."
     },
     "showAll": "Mostrar todas las señales",
-    "reviewDetection": "Revisar los ajustes de detección"
+    "reviewDetection": "Revisar los ajustes de detección",
+    "reentry": {
+      "title": "Reentrada",
+      "description": "Permite que una entrada se escanee de nuevo unas horas después de su última entrada, para invitados que salen y vuelven. Los escaneos antes de ese plazo se siguen rechazando como duplicados. Desactivado por defecto.",
+      "enabled": "Permitir escanear de nuevo una entrada pasadas unas horas",
+      "hours": "Horas desde la última entrada",
+      "hoursHint": "De 1 a 72. Un escaneo anterior sigue siendo un duplicado.",
+      "hoursError": "Introduce un número entero de 1 a 72.",
+      "save": "Guardar ajuste de reentrada",
+      "saved": "Ajuste de reentrada guardado.",
+      "current": "Las entradas se pueden escanear de nuevo {hours, plural, one {# hora} other {# horas}} después de su última entrada.",
+      "currentOff": "La reentrada está desactivada: un segundo escaneo el mismo día es un duplicado."
+    }
   },
   "security": {
     "metaTitle": "Seguridad de la cuenta",
