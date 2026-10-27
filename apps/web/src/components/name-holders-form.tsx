@@ -31,7 +31,10 @@ export function NameHoldersForm({
   action,
   tickets,
   pending,
+  smsEnabled = false,
 }: {
+  /** A text-message provider is configured: each person may also be texted their ticket link. */
+  smsEnabled?: boolean;
   action: (prev: HoldersState, form: FormData) => Promise<HoldersState>;
   tickets: readonly HolderRow[];
   pending: readonly PendingHolder[];
@@ -58,16 +61,18 @@ export function NameHoldersForm({
       ? t('nothingEntered')
       : state.reason === 'incomplete'
         ? t('incomplete')
-        : state.reason === 'fee_not_accepted'
-          ? t('feeRequired')
-          : state.reason === 'same_holder'
-            ? t('sameHolder')
-            : state.reason === 'event_ended' ||
-                state.reason === 'deadline_passed' ||
-                state.reason === 'not_allowed' ||
-                state.reason === 'ticket_void'
-              ? t('notAllowed')
-              : te(errorMessageKey(state.code));
+        : state.reason === 'bad_phone'
+          ? t('badPhone')
+          : state.reason === 'fee_not_accepted'
+            ? t('feeRequired')
+            : state.reason === 'same_holder'
+              ? t('sameHolder')
+              : state.reason === 'event_ended' ||
+                  state.reason === 'deadline_passed' ||
+                  state.reason === 'not_allowed' ||
+                  state.reason === 'ticket_void'
+                ? t('notAllowed')
+                : te(errorMessageKey(state.code));
   const badTicket = state.ticketId ? tickets.find((x) => x.id === state.ticketId) : undefined;
   return (
     <form action={formAction} className="flex flex-col gap-4">
@@ -134,6 +139,27 @@ export function NameHoldersForm({
                     defaultValue={offer?.toEmail ?? ''}
                   />
                 </div>
+                {smsEnabled ? (
+                  <div className="flex flex-col gap-1 sm:col-span-2">
+                    <label htmlFor={`holder-phone-${i}`} className="text-[13px] font-bold text-ink">
+                      {t('phone')}
+                    </label>
+                    <input
+                      id={`holder-phone-${i}`}
+                      name={`phone:${tk.id}`}
+                      type="tel"
+                      inputMode="tel"
+                      autoComplete="off"
+                      maxLength={20}
+                      placeholder="+14155550123"
+                      aria-describedby={`holder-phone-hint-${i}`}
+                      className="field"
+                    />
+                    <span id={`holder-phone-hint-${i}`} className="text-caption text-ink-2">
+                      {t('phoneHint')}
+                    </span>
+                  </div>
+                ) : null}
               </div>
             </li>
           );

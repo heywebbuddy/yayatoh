@@ -1193,7 +1193,8 @@
       "promoInvalid": "Questo codice promozionale non è valido per questi biglietti.",
       "unavailable": "Il totale apparirà quando la tua scelta sarà valida."
     },
-    "accountHint": "Nessun account necessario. Potremmo inviarti un codice a 6 cifre per verificare il tuo indirizzo."
+    "accountHint": "Nessun account necessario. Potremmo inviarti un codice a 6 cifre per verificare il tuo indirizzo.",
+    "eventFull": "Spiacenti: l’evento è al completo. Non ci sono posti sufficienti per questo ordine."
   },
   "fakePay": {
     "eyebrow": "Pagamento di prova",
@@ -19439,7 +19440,10 @@
     "feeRequired": "Questo biglietto ha una commissione di trasferimento, quindi va inviato dalla sua pagina.",
     "sameHolder": "Questa persona ha già questo biglietto.",
     "notAllowed": "Questo biglietto non può essere inviato a un’altra persona (trasferimenti chiusi o non consentiti).",
-    "done": "Fatto. Ognuno ha ricevuto il proprio biglietto via e-mail."
+    "done": "Fatto. Ognuno ha ricevuto il proprio biglietto via e-mail.",
+    "phone": "Cellulare (facoltativo, per inviare il link via SMS)",
+    "phoneHint": "Con prefisso internazionale, es. +393123456789. Riceveranno un SMS con lo stesso link dell’e-mail.",
+    "badPhone": "Inserisci il cellulare con il prefisso internazionale, ad es. +393123456789."
   },
   "programDocs": {
     "title": "Brochure (PDF)",
@@ -19932,5 +19936,21 @@
     "beforeDeparture": "Sii qui {minutes, plural, one {# minuto} other {# minuti}} prima della partenza.",
     "atDeparture": "Ritrovo all’orario di partenza.",
     "yourPickup": "Il tuo punto di ritrovo"
+  },
+  "eventLimit": {
+    "title": "Limite di partecipanti dell’evento",
+    "description": "Limita quante persone possono partecipare in totale, su tutti i tipi di biglietto. Acquisto online e biglietteria smettono di vendere al raggiungimento.",
+    "none": "Nessun limite globale. {taken, plural, one {# biglietto} other {# biglietti}} venduti o trattenuti.",
+    "status": "{taken} posti su {max} occupati.",
+    "helpType": "Ogni tipo di biglietto ha la sua quantità e può esaurirsi da solo.",
+    "helpOrder": "«Max per ordine» di un tipo di biglietto limita quanti ne può prendere un acquirente in un ordine.",
+    "helpEvent": "Il limite globale qui sotto conta tutto ciò che è venduto o trattenuto su tutti i tipi di biglietto.",
+    "helpSeats": "Negli eventi con posti a sedere anche i posti sono un limite: un posto si vende una sola volta.",
+    "label": "Massimo partecipanti (tutti i tipi)",
+    "hint": "Lascia vuoto per nessun limite globale.",
+    "save": "Salva limite",
+    "saved": "Limite salvato.",
+    "invalid": "Inserisci un numero intero o lascia vuoto.",
+    "belowSold": "È inferiore ai biglietti già venduti o trattenuti. Scegli un numero più alto."
   }
 }

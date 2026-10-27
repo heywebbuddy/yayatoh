@@ -18,6 +18,7 @@ import {
   archiveTicketTypeCommand,
   createPromoCodeCommand,
   createTicketTypeCommand,
+  setEventLimitCommand,
   setPromoCodeActiveCommand,
   updateTicketTypeCommand,
 } from '@yayatoh/ticketing';
@@ -358,6 +359,33 @@ export async function setCheckoutVerificationAction(
     await executeCommand(
       setCheckoutSettingsCommand,
       { eventId: ev.id, verifyEmail: form.get('verifyEmail') === '1' },
+      data.ctx,
+      ports,
+    );
+  } catch (err) {
+    return failure(err);
+  }
+  revalidatePath(`/o/${org}/e/${event}`, 'layout');
+  return success();
+}
+
+/** The optional event-wide attendee limit (all ticket types together); empty clears it. */
+export async function setEventLimitAction(
+  org: string,
+  event: string,
+  _prev: FormState,
+  form: FormData,
+): Promise<FormState> {
+  const { data, event: ev } = await loadEvent(org, event, 'ticketsOrders');
+  const raw = String(form.get('maxAttendees') ?? '')
+    .replace(/[\s,.]/g, '')
+    .trim();
+  if (raw && !/^\d{1,7}$/.test(raw))
+    return { ok: false, code: 'validation_failed', fields: ['maxAttendees'] };
+  try {
+    await executeCommand(
+      setEventLimitCommand,
+      { eventId: ev.id, maxAttendees: raw ? Number(raw) : null },
       data.ctx,
       ports,
     );

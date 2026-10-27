@@ -88,7 +88,8 @@ export const KINDS = {
   },
   'ticketing.transfer-offered': {
     category: 'transactional',
-    channels: ['email'],
+    // SMS only goes out when the sender gave the recipient's number.
+    channels: ['email', 'sms'],
     urgent: true,
     params: ['url', 'name', 'fromName', 'eventName'],
   },

@@ -24,6 +24,7 @@ import { hasConferenceHub } from '@/server/conference-hub.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
 import { receiptEligible } from '@/server/receipt.ts';
 import { scheduleSummary } from '@/server/schedule.ts';
+import { smsAvailable } from '@/server/sms.ts';
 import { watchLinksForOrder } from '@/server/virtual.ts';
 import { webPushPublicKey } from '@/server/web-push.ts';
 import {
@@ -353,6 +354,7 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
             <NameHoldersForm
               action={assignHoldersAction.bind(null, token)}
               pending={order.pendingHolders}
+              smsEnabled={smsAvailable()}
               tickets={order.tickets.map((tk) => ({
                 id: tk.id,
                 holderName: tk.holderName,

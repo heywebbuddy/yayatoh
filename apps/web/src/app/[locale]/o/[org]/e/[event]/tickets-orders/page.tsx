@@ -3,11 +3,12 @@ import { getFormQuery, listResponsesQuery } from '@yayatoh/forms';
 import { currencyExponent, executeQuery, formatMoney, money } from '@yayatoh/kernel';
 import { checkoutSettingsQuery, listOrdersQuery, refundPolicyQuery } from '@yayatoh/orders';
 import { dateChartsQuery, publicSeatMap } from '@yayatoh/seating';
-import { listPromoCodesQuery, listTicketTypesQuery } from '@yayatoh/ticketing';
+import { eventLimitQuery, listPromoCodesQuery, listTicketTypesQuery } from '@yayatoh/ticketing';
 import { Button, buttonClass, Card, EmptyState, PageHeader, StatusDot, Table } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BoxOfficeForm } from '@/components/box-office-form.tsx';
 import { CheckoutVerificationForm } from '@/components/checkout-verification-form.tsx';
+import { EventLimitForm } from '@/components/event-limit-form.tsx';
 import { PromoCodeForm } from '@/components/promo-code-form.tsx';
 import { QuestionForm } from '@/components/question-form.tsx';
 import { RefundPolicyForm } from '@/components/refund-policy-form.tsx';
@@ -31,6 +32,7 @@ import {
   moveQuestionAction,
   removeQuestionAction,
   setCheckoutVerificationAction,
+  setEventLimitAction,
   setPromoCodeActiveAction,
   setRefundPolicyAction,
   transferRulesAction,
@@ -103,6 +105,7 @@ export default async function TicketsPage({
   const seatedTypes = new Set(seatMap?.seats.map((s) => s.ticketTypeId) ?? []);
   const policy = await executeQuery(refundPolicyQuery, { eventId: ev.id }, data.ctx, ports);
   const checkout = await executeQuery(checkoutSettingsQuery, { eventId: ev.id }, data.ctx, ports);
+  const limit = await executeQuery(eventLimitQuery, { eventId: ev.id }, data.ctx, ports);
   const tp = await getTranslations('refundPolicy');
   const subject = { kind: 'checkout_questions', subjectType: 'event', subjectId: ev.id } as const;
   const form = await executeQuery(getFormQuery, subject, data.ctx, ports);
@@ -564,6 +567,31 @@ export default async function TicketsPage({
             <QuestionForm action={addQuestionAction.bind(null, org, event)} />
           </Card>
         ) : null}
+      </section>
+      <section aria-labelledby="event-limit-heading" className="flex flex-col gap-3">
+        <h2 id="event-limit-heading" className="text-section">
+          {t('eventLimit.title')}
+        </h2>
+        <Card className="flex flex-col gap-3">
+          <p className="text-body text-ink-2">{t('eventLimit.description')}</p>
+          <p className="text-body font-medium">
+            {limit.maxAttendees === null
+              ? t('eventLimit.none', { taken: limit.taken })
+              : t('eventLimit.status', { taken: limit.taken, max: limit.maxAttendees })}
+          </p>
+          <ul className="m-0 flex list-disc flex-col gap-1 ps-5 text-caption text-ink-2">
+            <li>{t('eventLimit.helpType')}</li>
+            <li>{t('eventLimit.helpOrder')}</li>
+            <li>{t('eventLimit.helpEvent')}</li>
+            <li>{t('eventLimit.helpSeats')}</li>
+          </ul>
+          {canWrite ? (
+            <EventLimitForm
+              action={setEventLimitAction.bind(null, org, event)}
+              maxAttendees={limit.maxAttendees}
+            />
+          ) : null}
+        </Card>
       </section>
       <section aria-labelledby="buyer-email-heading" className="flex flex-col gap-3">
         <h2 id="buyer-email-heading" className="text-section">

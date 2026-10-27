@@ -28,6 +28,7 @@ import {
 } from '@yayatoh/seating';
 import { assertNotPausedTx } from '@yayatoh/tenancy';
 import {
+  assertEventCapacityTx,
   assignTicketSeatsTx,
   claimCouponTx,
   claimPromoTx,
@@ -271,6 +272,13 @@ export async function startCheckoutTx(
       reason: 'credit_not_applicable',
       field: 'promoCode',
     });
+  // The event-wide attendee limit (optional); a waitlist offer already holds its places.
+  if (!offer)
+    await assertEventCapacityTx(
+      tx,
+      event.id,
+      quote.lines.reduce((n, l) => n + l.quantity, 0),
+    );
   if (!offer)
     await holdInventoryTx(
       tx,

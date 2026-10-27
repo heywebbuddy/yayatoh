@@ -92,7 +92,7 @@ export function transferMailer(deps: { notifier: Notifier; appOrigin: string }) 
         if (t.status !== 'pending') return;
         await deps.notifier.enqueue(tx, {
           kind: 'ticketing.transfer-offered',
-          to: { email: t.toEmail, name: t.toName, timeZone },
+          to: { email: t.toEmail, name: t.toName, timeZone, ...(t.toPhone ? { phone: t.toPhone } : {}) },
           params: {
             url: `${deps.appOrigin}/claim/${signLinkToken(CLAIM_PURPOSE, t.claimId)}`,
             name: t.toName,

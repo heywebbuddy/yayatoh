@@ -1193,7 +1193,8 @@
       "promoInvalid": "Die promocode is niet geldig voor deze tickets.",
       "unavailable": "Het totaal verschijnt zodra je keuze geldig is."
     },
-    "accountHint": "Geen account nodig. Mogelijk mailen we je een code van 6 cijfers om je adres te controleren."
+    "accountHint": "Geen account nodig. Mogelijk mailen we je een code van 6 cijfers om je adres te controleren.",
+    "eventFull": "Sorry, het evenement zit vol. Er zijn niet genoeg plaatsen over voor deze bestelling."
   },
   "fakePay": {
     "eyebrow": "Testbetaling",
@@ -19439,7 +19440,10 @@
     "feeRequired": "Voor dit ticket gelden overdrachtskosten; verstuur het vanaf de eigen ticketpagina.",
     "sameHolder": "Deze persoon heeft dit ticket al.",
     "notAllowed": "Dit ticket kan niet naar iemand anders worden gestuurd (overdracht is gesloten of niet toegestaan).",
-    "done": "Klaar. Iedereen heeft zijn ticket per e-mail ontvangen."
+    "done": "Klaar. Iedereen heeft zijn ticket per e-mail ontvangen.",
+    "phone": "Mobiel nummer (optioneel, om de link te sms’en)",
+    "phoneHint": "Met landcode, bijv. +31612345678. Ze krijgen een sms met dezelfde link als in de e-mail.",
+    "badPhone": "Voer het mobiele nummer in met landcode, bijv. +31612345678."
   },
   "programDocs": {
     "title": "Brochures (PDF)",
@@ -19932,5 +19936,21 @@
     "beforeDeparture": "Wees er {minutes, plural, one {# minuut} other {# minuten}} voor vertrek.",
     "atDeparture": "Verzamelen op het vertrektijdstip.",
     "yourPickup": "Jouw ophaalpunt"
+  },
+  "eventLimit": {
+    "title": "Deelnemerslimiet voor het hele evenement",
+    "description": "Beperk hoeveel mensen in totaal kunnen deelnemen, over alle tickettypes heen. Checkout en kassa stoppen met verkopen zodra het is bereikt.",
+    "none": "Geen limiet voor het hele evenement. {taken, plural, one {# ticket} other {# tickets}} verkocht of vastgehouden.",
+    "status": "{taken} van {max} plaatsen bezet.",
+    "helpType": "Elk tickettype heeft een eigen aantal en kan op zichzelf uitverkocht raken.",
+    "helpOrder": "‘Max. per bestelling’ bij een tickettype beperkt hoeveel één koper per bestelling kan nemen.",
+    "helpEvent": "De limiet voor het hele evenement hieronder telt alles wat verkocht of vastgehouden is, over alle tickettypes heen.",
+    "helpSeats": "Bij evenementen met zitplaatsen zijn de stoelen zelf ook een limiet: een stoel wordt maar één keer verkocht.",
+    "label": "Maximaal aantal deelnemers (alle tickettypes)",
+    "hint": "Laat leeg voor geen limiet voor het hele evenement.",
+    "save": "Limiet opslaan",
+    "saved": "Limiet opgeslagen.",
+    "invalid": "Voer een geheel getal in of laat leeg.",
+    "belowSold": "Dat is minder dan het aantal al verkochte of vastgehouden tickets. Kies een hoger getal."
   }
 }

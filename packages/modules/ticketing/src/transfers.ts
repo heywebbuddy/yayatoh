@@ -94,6 +94,8 @@ export async function startTransferTx(
     ticketId: string;
     toName: string;
     toEmail: string;
+    /** E.164: also text the claim link to this number. */
+    toPhone?: string | null;
     by: 'organizer' | 'holder';
     /** Holder transfers: the holder agreed to the fee shown to them. */
     acceptFee?: boolean;
@@ -158,6 +160,7 @@ export async function startTransferTx(
       fromEmail: row.t.holderEmail,
       toName: input.toName.trim(),
       toEmail,
+      toPhone: input.toPhone ?? null,
       feeMinor: decision.feeMinor,
       currency: row.currency,
       createdBy: actorName(ctx),
