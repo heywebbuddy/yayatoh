@@ -1089,7 +1089,11 @@
         "adaEnforcedBest": "Les places accessibles sont réservées aux personnes qui en ont besoin jusqu’au {date}. Si vous en avez besoin, cochez « Une personne de mon groupe utilise un fauteuil roulant » et utilisez « Meilleures places »."
       },
       "groupSummary": "{group} — {free} sur {total} libres{chosen, plural, =0 {} one { · # choisie} other { · # choisies}}",
-      "companion": "Place d’accompagnateur"
+      "companion": "Place d’accompagnateur",
+      "selectTable": "Choisir toute la table ({count, plural, one {# place} other {# places}})",
+      "unselectTable": "Désélectionner la table",
+      "tableTooBig": "La table {label} compte {free, plural, one {# place libre} other {# places libres}}, mais une commande peut en contenir {max} au maximum. Choisissez les places une à une ou répartissez la table sur deux commandes.",
+      "tableNoFree": "La table {label} n’a plus de place libre."
     },
     "seatRuleCap": "C’est plus de places qu’une commande ne peut en compter. Veuillez en choisir moins.",
     "seatRuleAda": "Les places accessibles sont pour l’instant réservées aux personnes qui en ont besoin. Veuillez choisir d’autres places.",

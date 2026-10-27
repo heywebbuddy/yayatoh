@@ -1,10 +1,16 @@
 'use client';
 
-import { type FloorplanDoc, hitTest, PUBLIC_UNDERLAY_OPACITY, placedSeats } from '@yayatoh/floorplan';
+import {
+  bareItemLabel,
+  type FloorplanDoc,
+  hitTest,
+  PUBLIC_UNDERLAY_OPACITY,
+  placedSeats,
+} from '@yayatoh/floorplan';
 import { paper } from '@yayatoh/ui';
 import type Konva from 'konva';
 import { useMemo, useRef } from 'react';
-import { Layer, Rect, Stage, Text } from 'react-konva';
+import { Circle, Group, Layer, Rect, Stage, Text } from 'react-konva';
 import { PanZoomControls, roomPoint, useBoxWidth, usePanZoom } from './pan-zoom.tsx';
 import { type DotStyle, SeatDots } from './seat-dots.tsx';
 import { UnderlayImage } from './underlay-image.tsx';
@@ -25,11 +31,14 @@ export default function SeatMapCanvas({
   available,
   selected,
   onToggle,
+  onToggleTable,
 }: {
   doc: FloorplanDoc;
   available: ReadonlySet<string>;
   selected: ReadonlySet<string>;
   onToggle: (seatUuid: string) => void;
+  /** Tapping a table itself (not one of its seats) chooses its whole table, when offered. */
+  onToggleTable?: (itemId: string) => void;
 }) {
   const [box, width] = useBoxWidth(600, 260);
   const view = usePanZoom(doc, width, 560);
@@ -55,6 +64,13 @@ export default function SeatMapCanvas({
     const at = roomPoint(stage ?? null);
     const hit = at ? hitTest(doc, at, { seatRadius: SEAT_R + 6 }) : null;
     if (hit?.seatId && available.has(hit.seatId)) onToggle(hit.seatId);
+    else if (
+      hit &&
+      !hit.seatId &&
+      onToggleTable &&
+      doc.items.some((i) => i.id === hit.itemId && i.kind === 'table')
+    )
+      onToggleTable(hit.itemId);
   };
   return (
     <div className="flex flex-col gap-2">
@@ -110,6 +126,48 @@ export default function SeatMapCanvas({
                   fontSize={48}
                   fill={paper.sold}
                 />
+              ) : null,
+            )}
+            {doc.items.map((i) =>
+              i.kind === 'table' ? (
+                <Group key={`tb-${i.id}`} x={i.x} y={i.y} rotation={i.rotation}>
+                  {i.shape === 'round' ? (
+                    <Circle radius={i.width / 2} fill={paper.floor} stroke={paper.muted} strokeWidth={3} />
+                  ) : (
+                    <Rect
+                      x={-i.width / 2}
+                      y={-i.height / 2}
+                      width={i.width}
+                      height={i.height}
+                      fill={paper.floor}
+                      stroke={paper.muted}
+                      strokeWidth={3}
+                    />
+                  )}
+                  <Text
+                    text={bareItemLabel(i.label)}
+                    x={-i.width / 2}
+                    y={-24}
+                    width={i.width}
+                    align="center"
+                    fontSize={44}
+                    fontStyle="bold"
+                    fill={paper.label}
+                  />
+                </Group>
+              ) : i.kind === 'row' ? (
+                <Group key={`rw-${i.id}`} x={i.x} y={i.y} rotation={i.rotation}>
+                  <Text
+                    text={bareItemLabel(i.label)}
+                    x={-SEAT_R - 90}
+                    y={-24}
+                    width={70}
+                    align="right"
+                    fontSize={40}
+                    fontStyle="bold"
+                    fill={paper.label}
+                  />
+                </Group>
               ) : null,
             )}
             <SeatDots dots={dots} radius={SEAT_R} styleOf={styleOf} version={version} scale={view.scale} />

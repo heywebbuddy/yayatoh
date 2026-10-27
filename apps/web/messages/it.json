@@ -1089,7 +1089,11 @@
         "adaEnforcedBest": "I posti accessibili sono riservati a chi ne ha bisogno fino al {date}. Se te ne serve uno, spunta «Qualcuno del mio gruppo usa una sedia a rotelle» e usa «Migliori disponibili»."
       },
       "groupSummary": "{group} — {free} liberi su {total}{chosen, plural, =0 {} one { · # scelto} other { · # scelti}}",
-      "companion": "Posto accompagnatore"
+      "companion": "Posto accompagnatore",
+      "selectTable": "Scegli l’intero tavolo ({count, plural, one {# posto} other {# posti}})",
+      "unselectTable": "Deseleziona l’intero tavolo",
+      "tableTooBig": "Il tavolo {label} ha {free, plural, one {# posto libero} other {# posti liberi}}, ma un ordine ne può contenere al massimo {max}. Scegli i posti uno alla volta o dividi il tavolo in due ordini.",
+      "tableNoFree": "Il tavolo {label} non ha più posti liberi."
     },
     "seatRuleCap": "Sono più posti di quanti un ordine ne possa avere. Scegline meno.",
     "seatRuleAda": "Per ora i posti accessibili sono riservati a chi ne ha bisogno. Scegli altri posti.",

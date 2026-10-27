@@ -1089,7 +1089,11 @@
         "adaEnforcedBest": "無障礙座位保留給有需要的賓客，直到 {date}。如果你需要，請勾選「我的同行者中有人使用輪椅」，並使用最佳可選座位。"
       },
       "groupSummary": "{group} — {total} 個中 {free} 個空位{chosen, plural, =0 {} other { · 已選 #}}",
-      "companion": "陪同座位"
+      "companion": "陪同座位",
+      "selectTable": "選擇整張桌子（{count} 個座位）",
+      "unselectTable": "取消選擇整張桌子",
+      "tableTooBig": "{label} 桌有 {free} 個空位，但每筆訂單最多只能訂 {max} 個座位。請逐一選擇座位，或將該桌分成兩筆訂單。",
+      "tableNoFree": "{label} 桌已沒有空位。"
     },
     "seatRuleCap": "超出了單筆訂單可選的座位數，請減少選擇。",
     "seatRuleAda": "無障礙座位目前為有需要的賓客保留，請選擇其他座位。",

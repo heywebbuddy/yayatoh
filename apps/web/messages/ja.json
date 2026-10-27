@@ -1089,7 +1089,11 @@
         "adaEnforcedBest": "バリアフリー席は{date}まで必要な方のために確保されています。必要な場合は「同行者に車いす利用者がいます」にチェックを入れ、おまかせ座席を利用してください。"
       },
       "groupSummary": "{group} — 空席 {free}/{total}{chosen, plural, =0 {} other { · #席選択中}}",
-      "companion": "同伴者席"
+      "companion": "同伴者席",
+      "selectTable": "テーブル全体を選ぶ（{count}席）",
+      "unselectTable": "テーブル全体の選択を解除",
+      "tableTooBig": "テーブル{label}の空席は{free}席ですが、1回のご注文は最大{max}席までです。席を1つずつ選ぶか、2回に分けてご注文ください。",
+      "tableNoFree": "テーブル{label}に空席はありません。"
     },
     "seatRuleCap": "1回の注文で選べる座席数を超えています。座席数を減らしてください。",
     "seatRuleAda": "アクセシブル席は現在、必要な方のために確保されています。別の座席をお選びください。",

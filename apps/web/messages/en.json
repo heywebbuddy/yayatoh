@@ -1089,7 +1089,11 @@
         "adaEnforcedBest": "Accessible seats are kept for guests who need them until {date}. If you need one, tick “Someone in my party uses a wheelchair” and use Best available."
       },
       "groupSummary": "{group} — {free} of {total} free{chosen, plural, =0 {} other { · # chosen}}",
-      "companion": "Companion seat"
+      "companion": "Companion seat",
+      "selectTable": "Select whole table ({count, plural, one {# seat} other {# seats}})",
+      "unselectTable": "Unselect whole table",
+      "tableTooBig": "Table {label} has {free, plural, one {# free seat} other {# free seats}}, but one order can hold at most {max}. Choose seats one by one, or split the table over two orders.",
+      "tableNoFree": "Table {label} has no free seats left."
     },
     "seatRuleCap": "That's more seats than one order may have. Please choose fewer.",
     "seatRuleAda": "Accessible seats are kept for guests who need them for now. Please choose other seats.",

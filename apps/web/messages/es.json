@@ -1089,7 +1089,11 @@
         "adaEnforcedBest": "Los asientos accesibles se reservan para quienes los necesitan hasta el {date}. Si necesitas uno, marca «Alguien de mi grupo usa silla de ruedas» y usa «Mejor disponible»."
       },
       "groupSummary": "{group} — {free} de {total} libres{chosen, plural, =0 {} one { · # elegido} other { · # elegidos}}",
-      "companion": "Asiento de acompañante"
+      "companion": "Asiento de acompañante",
+      "selectTable": "Elegir la mesa entera ({count, plural, one {# asiento} other {# asientos}})",
+      "unselectTable": "Quitar la mesa entera",
+      "tableTooBig": "La mesa {label} tiene {free, plural, one {# asiento libre} other {# asientos libres}}, pero un pedido admite como máximo {max}. Elige los asientos uno a uno o reparte la mesa en dos pedidos.",
+      "tableNoFree": "La mesa {label} no tiene asientos libres."
     },
     "seatRuleCap": "Son más asientos de los permitidos en un pedido. Elige menos, por favor.",
     "seatRuleAda": "Por ahora, los asientos accesibles están reservados para quienes los necesitan. Elige otros asientos.",

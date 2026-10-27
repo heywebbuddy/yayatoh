@@ -1089,7 +1089,11 @@
         "adaEnforcedBest": "Barrierefreie Plätze sind bis {date} für Gäste reserviert, die sie brauchen. Wenn du einen brauchst, kreuze „Jemand in meiner Gruppe nutzt einen Rollstuhl“ an und nutze „Bester Platz“."
       },
       "groupSummary": "{group} — {free} von {total} frei{chosen, plural, =0 {} other { · # gewählt}}",
-      "companion": "Begleitplatz"
+      "companion": "Begleitplatz",
+      "selectTable": "Ganzen Tisch wählen ({count, plural, one {# Platz} other {# Plätze}})",
+      "unselectTable": "Tischauswahl aufheben",
+      "tableTooBig": "Tisch {label} hat {free, plural, one {# freien Platz} other {# freie Plätze}}, aber eine Bestellung umfasst höchstens {max}. Wähle die Plätze einzeln oder teile den Tisch auf zwei Bestellungen auf.",
+      "tableNoFree": "An Tisch {label} sind keine Plätze mehr frei."
     },
     "seatRuleCap": "Das sind mehr Plätze, als eine Bestellung haben darf. Bitte wähle weniger.",
     "seatRuleAda": "Barrierefreie Plätze sind vorerst für Gäste reserviert, die sie brauchen. Bitte wähle andere Plätze.",

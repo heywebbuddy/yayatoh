@@ -1089,7 +1089,11 @@
         "adaEnforcedBest": "Toegankelijke plaatsen zijn tot {date} gereserveerd voor gasten die ze nodig hebben. Heb je er een nodig? Vink ‘Iemand in mijn gezelschap gebruikt een rolstoel’ aan en gebruik ‘Beste plaatsen’."
       },
       "groupSummary": "{group} — {free} van {total} vrij{chosen, plural, =0 {} other { · # gekozen}}",
-      "companion": "Begeleidersplaats"
+      "companion": "Begeleidersplaats",
+      "selectTable": "Hele tafel kiezen ({count, plural, one {# plaats} other {# plaatsen}})",
+      "unselectTable": "Tafel deselecteren",
+      "tableTooBig": "Tafel {label} heeft {free, plural, one {# vrije plaats} other {# vrije plaatsen}}, maar een bestelling kan er maximaal {max} bevatten. Kies de plaatsen één voor één of verdeel de tafel over twee bestellingen.",
+      "tableNoFree": "Tafel {label} heeft geen vrije plaatsen meer."
     },
     "seatRuleCap": "Dat zijn meer plaatsen dan één bestelling mag hebben. Kies er minder.",
     "seatRuleAda": "Toegankelijke plaatsen worden voorlopig vrijgehouden voor gasten die ze nodig hebben. Kies andere plaatsen.",
