@@ -576,12 +576,16 @@ export async function voidTicketsTx(
 export async function assignTicketSeatsTx(
   tx: TenantTx,
   ctx: Ctx,
-  seats: readonly { ticketId: string; seatLabel: string }[],
+  seats: readonly { ticketId: string; seatLabel: string; occurrenceId?: string | null }[],
 ): Promise<void> {
   for (const s of seats)
     await tx
       .update(tickets)
-      .set({ seatLabel: s.seatLabel, updatedAt: ctx.now })
+      .set({
+        seatLabel: s.seatLabel,
+        ...(s.occurrenceId !== undefined ? { occurrenceId: s.occurrenceId } : {}),
+        updatedAt: ctx.now,
+      })
       .where(eq(tickets.id, s.ticketId));
 }
 

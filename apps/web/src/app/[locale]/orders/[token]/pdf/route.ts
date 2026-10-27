@@ -1,6 +1,6 @@
 import { orderByManageToken } from '@yayatoh/orders';
 import { getPdfRenderer } from '@/server/pdf.ts';
-import { pdfLocale, ticketsPdfResponse } from '@/server/ticket-pdf.ts';
+import { pdfLocale, ticketsPdfResponse, ticketsZipResponse } from '@/server/ticket-pdf.ts';
 
 /**
  * The buyer's tickets as a tagged PDF, reached by the manage token (the credential). With
@@ -11,11 +11,14 @@ export async function GET(req: Request, { params }: { params: Promise<{ locale: 
   const locale = pdfLocale(raw);
   const order = getPdfRenderer() ? await orderByManageToken(token) : null;
   if (!order) return new Response('Not found', { status: 404 });
-  const only = new URL(req.url).searchParams.get('ticket');
+  const params_ = new URL(req.url).searchParams;
+  const only = params_.get('ticket');
+  // One ticket, or `?format=pdf`: a PDF. Otherwise "download all" is a ZIP with a file per ticket.
+  const respond = only || params_.get('format') === 'pdf' ? ticketsPdfResponse : ticketsZipResponse;
   const picked = only ? order.tickets.filter((tk) => tk.id === only) : order.tickets;
   const date = order.tickets.find((tk) => tk.date)?.date ?? null;
   const first = picked[0];
-  return ticketsPdfResponse({
+  return respond({
     locale,
     event: order.event,
     // Multi-date events: an order's tickets are for one date (M1.4b); print that date.

@@ -1,5 +1,5 @@
 import type { TenantTx } from '@yayatoh/db';
-import { occurrencesOfEventTx } from '@yayatoh/events';
+import { findOccurrenceTx, occurrencesOfEventTx } from '@yayatoh/events';
 import { DomainError } from '@yayatoh/kernel';
 import { tenantQuery } from '@yayatoh/platform';
 import { and, eq, isNotNull, sql } from 'drizzle-orm';
@@ -11,6 +11,23 @@ import { tickets } from './schema.ts';
  * every date); a ticket bought for a date carries that `occurrence_id`. Access dates (multi-day
  * passes, M1.5) stay a separate rule on top: they name calendar days a pass admits.
  */
+
+/**
+ * The window a booking is really for: the date it was booked (a multi-date event's occurrence), else
+ * the event's own. Everything shown to a buyer or holder about "when" (dashboard, my tickets, claim
+ * page, transfer cut-off) uses this, never the whole series' first-to-last range.
+ */
+export async function bookedWindowTx(
+  tx: TenantTx,
+  event: { startsAt: Date; endsAt: Date },
+  occurrenceId: string | null | undefined,
+): Promise<{ startsAt: Date; endsAt: Date }> {
+  if (!occurrenceId) return { startsAt: event.startsAt, endsAt: event.endsAt };
+  const occ = await findOccurrenceTx(tx, occurrenceId);
+  return occ
+    ? { startsAt: occ.startsAt, endsAt: occ.endsAt }
+    : { startsAt: event.startsAt, endsAt: event.endsAt };
+}
 
 /** Every id must be a date of this event (any status: a cancelled one simply stops selling). */
 export async function assertOccurrenceIdsTx(

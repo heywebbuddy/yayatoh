@@ -42,6 +42,8 @@ export async function previewCheckout(
     eventId: string;
     items: readonly { ticketTypeId: string; quantity: number; amountMinor?: number }[];
     seats: readonly string[];
+    /** One seat per date: the seats chosen on each date. */
+    legs?: readonly { occurrenceId: string; seats: readonly string[] }[];
     /** Seats best available holds for this buyer (its token). */
     seatHold?: string | undefined;
     promoCode?: string | undefined;
@@ -58,9 +60,20 @@ export async function previewCheckout(
       for (const i of input.items) {
         if (i.quantity > 0) wanted.set(i.ticketTypeId, { quantity: i.quantity, ...amount(i.amountMinor) });
       }
-      const seated = input.seatHold
-        ? await heldTokenTicketTypesTx(tx, input.seatHold, ctx.now)
-        : await seatTicketTypesTx(tx, input.eventId, input.occurrenceId ?? null, input.seats);
+      const legCounts = new Map<string, number>();
+      for (const leg of input.legs ?? [])
+        for (const [ticketTypeId, n] of await seatTicketTypesTx(
+          tx,
+          input.eventId,
+          leg.occurrenceId,
+          leg.seats,
+        ))
+          legCounts.set(ticketTypeId, (legCounts.get(ticketTypeId) ?? 0) + n);
+      const seated = input.legs?.length
+        ? legCounts
+        : input.seatHold
+          ? await heldTokenTicketTypesTx(tx, input.seatHold, ctx.now)
+          : await seatTicketTypesTx(tx, input.eventId, input.occurrenceId ?? null, input.seats);
       for (const [ticketTypeId, n] of seated) {
         const prev = wanted.get(ticketTypeId);
         wanted.set(ticketTypeId, { ...prev, quantity: (prev?.quantity ?? 0) + n });

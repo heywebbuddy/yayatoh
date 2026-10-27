@@ -59,9 +59,14 @@ export default async function MyTicketsPage({
       ) : (
         <>
           {getPdfRenderer() ? (
-            <a href={`${pdfBase}/pdf`} className={buttonClass('secondary', 'md', 'self-start')}>
-              {t('order.downloadPdf')}
-            </a>
+            <div className="flex flex-wrap gap-2">
+              <a href={`${pdfBase}/pdf`} className={buttonClass('secondary', 'md')}>
+                {t('order.downloadZip')}
+              </a>
+              <a href={`${pdfBase}/pdf?format=pdf`} className={buttonClass('ghost', 'md')}>
+                {t('order.downloadCombined')}
+              </a>
+            </div>
           ) : null}
           <ul className="flex list-none flex-col gap-4 p-0">
             {data.tickets.map((tk) => (

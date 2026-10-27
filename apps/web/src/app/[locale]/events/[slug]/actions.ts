@@ -197,11 +197,19 @@ export async function checkoutAction(
   // Seated events: the chosen seats (their prices come from the seat map on the server).
   const seats = form.getAll('seat').map(String).slice(0, 50);
   // M6.11a: seats best available holds for this buyer (its token), and their accessibility need.
+  // One seat per date: `legseat:{date}` fields, one set per chosen date.
+  const legs = [...new Set([...form.keys()].filter((k) => k.startsWith('legseat:')))]
+    .map((k) => ({
+      occurrenceId: k.slice(8),
+      seats: form.getAll(k).map(String).slice(0, 20),
+    }))
+    .filter((l) => /^[0-9a-f-]{36}$/.test(l.occurrenceId) && l.seats.length > 0)
+    .slice(0, 8);
   const seatHold = String(form.get('seatHold') ?? '').trim();
   const accessibleNeed = form.get('accessibleNeed') === '1';
   if (form.get('seatMode') === 'best' && !seatHold && items.length === 0)
     return { code: 'validation_failed', reason: 'find_seats' };
-  if (items.length === 0 && seats.length === 0 && !seatHold)
+  if (items.length === 0 && seats.length === 0 && !seatHold && legs.length === 0)
     return { code: 'validation_failed', reason: 'empty' };
   // Answers are read by the published questions' keys and types; the server validates them again.
   const questions = await publicForm(target.orgId, {
@@ -275,6 +283,7 @@ export async function checkoutAction(
         eventId: target.eventId,
         items,
         seats: seatHold ? [] : seats,
+        ...(legs.length ? { legs } : {}),
         ...(seatHold ? { seatHold } : {}),
         accessibleNeed,
         // M6.11b: the sales code of the link the buyer came through (checked server-side).
@@ -353,6 +362,8 @@ export interface OrderPreviewInput {
     readonly amount?: string;
   }[];
   readonly seats: readonly string[];
+  /** One seat per date: the seats chosen on each date. */
+  readonly legs?: readonly { readonly occurrenceId: string; readonly seats: readonly string[] }[];
   readonly seatHold?: string;
   readonly promoCode?: string;
   readonly occurrenceId?: string | null;
@@ -406,6 +417,10 @@ export async function previewOrderAction(slug: string, input: OrderPreviewInput)
     eventId: target.eventId,
     items,
     seats: input.seats.map(String).slice(0, 50),
+    legs: (input.legs ?? []).slice(0, 8).map((l) => ({
+      occurrenceId: String(l.occurrenceId),
+      seats: l.seats.map(String).slice(0, 20),
+    })),
     seatHold: input.seatHold ? String(input.seatHold) : undefined,
     promoCode: input.promoCode ? String(input.promoCode).slice(0, 32) : undefined,
     occurrenceId: /^[0-9a-f-]{36}$/.test(String(input.occurrenceId ?? ''))

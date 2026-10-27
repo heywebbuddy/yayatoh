@@ -1,5 +1,6 @@
 import { RTL_LOCALES } from '@yayatoh/contracts';
 import { ticketsHtml } from '@yayatoh/pdf';
+import { zipSync } from 'fflate';
 import { getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing.ts';
 import { formatEventDateTimeRange } from '@/lib/format.ts';
@@ -34,7 +35,7 @@ export const pdfLocale = (raw: string) => routing.locales.find((l) => l === raw)
  * Ticket PDF pages as a response: all of a buyer's tickets, or one ticket (its own file). The
  * route has already checked the credential (manage or holder token) and chose the tickets.
  */
-export async function ticketsPdfResponse(a: {
+interface TicketsPdfArgs {
   locale: string;
   event: TicketPdfEvent;
   /** The event's date for this order (multi-date events), when it is not the event's own. */
@@ -42,7 +43,49 @@ export async function ticketsPdfResponse(a: {
   currency: string;
   tickets: readonly TicketPdfTicket[];
   filename: string;
-}): Promise<Response> {
+}
+
+const unavailable = (err: unknown) => {
+  // The renderer is a separate service: when it is down or cold, ask the buyer to retry.
+  console.error('ticket pdf', err);
+  return new Response('The PDF is temporarily unavailable. Please try again in a moment.', {
+    status: 503,
+    headers: { 'retry-after': '5', 'cache-control': 'no-store' },
+  });
+};
+
+const FILE_HEADERS = {
+  'cache-control': 'private, no-store',
+  'x-robots-tag': 'noindex',
+  'referrer-policy': 'no-referrer',
+};
+
+/**
+ * "Download all" as separate files: a ZIP with one PDF per ticket (`ticket-{serial}.pdf`). The
+ * combined PDF stays available as `ticketsPdfResponse`.
+ */
+export async function ticketsZipResponse(a: TicketsPdfArgs): Promise<Response> {
+  if (!getPdfRenderer() || a.tickets.length === 0) return new Response('Not found', { status: 404 });
+  try {
+    const files: Record<string, Uint8Array> = {};
+    for (const tk of a.tickets) {
+      const r = await ticketsPdfResponse({ ...a, tickets: [tk], filename: `ticket-${tk.serial}.pdf` });
+      if (!r.ok) return r;
+      files[`ticket-${tk.serial}.pdf`] = new Uint8Array(await r.arrayBuffer());
+    }
+    return new Response(new Uint8Array(zipSync(files, { level: 0 })), {
+      headers: {
+        ...FILE_HEADERS,
+        'content-type': 'application/zip',
+        'content-disposition': 'attachment; filename="tickets.zip"',
+      },
+    });
+  } catch (err) {
+    return unavailable(err);
+  }
+}
+
+export async function ticketsPdfResponse(a: TicketsPdfArgs): Promise<Response> {
   const renderer = getPdfRenderer();
   if (!renderer || a.tickets.length === 0) return new Response('Not found', { status: 404 });
   const t = await getTranslations({ locale: a.locale });

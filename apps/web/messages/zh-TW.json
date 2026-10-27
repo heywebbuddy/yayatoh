@@ -1191,9 +1191,13 @@
       "free": "免費",
       "note": "這是最終價格，將在下一步付款，目前不會扣款。",
       "promoInvalid": "該優惠碼不適用於這些票券。",
-      "unavailable": "選擇有效後將顯示總價。"
+      "unavailable": "選擇有效後將顯示總價。",
+      "noteFree": "此訂單免費，無需付款。"
     },
-    "accountHint": "無需註冊帳號。我們可能會寄送6位數驗證碼以核實信箱。"
+    "accountHint": "無需註冊帳號。我們可能會寄送6位數驗證碼以核實信箱。",
+    "eventFull": "抱歉，活動已額滿，剩餘名額不足以完成此訂單。",
+    "getTickets": "取得票券",
+    "confirmRegistration": "確認報名"
   },
   "fakePay": {
     "eyebrow": "測試付款",
@@ -1269,7 +1273,9 @@
     "purchasedBy": "購買人：{name}",
     "groupLabel": "團體：{group}",
     "downloadTicket": "下載此票（PDF）",
-    "downloadTicketLabel": "以 PDF 下載第 {serial} 號票"
+    "downloadTicketLabel": "以 PDF 下載第 {serial} 號票",
+    "downloadZip": "下載全部票券（ZIP，每張一個檔案）",
+    "downloadCombined": "或合併為一個 PDF"
   },
   "orders": {
     "title": "最近訂單",
@@ -1279,7 +1285,8 @@
     "items": "票券",
     "total": "總計",
     "status": "狀態",
-    "emptyAction": "開啟活動頁面"
+    "emptyAction": "開啟活動頁面",
+    "checkedInAt": "已報到 · {time}"
   },
   "promo": {
     "title": "優惠碼",
@@ -11766,7 +11773,8 @@
       "needHelpHint": "關於座位、無障礙、身體不適或物品遺失，都可以向活動工作人員求助。",
       "askButton": "請求協助",
       "ticketLink": "在活動現場：查詢座位或請求協助",
-      "ticketLinkLabel": "在活動現場查詢座位或請求協助（票券 {serial}）"
+      "ticketLinkLabel": "在活動現場查詢座位或請求協助（票券 {serial}）",
+      "ticketLinkHelp": "活動現場：尋求協助"
     },
     "where": "位置：{place}",
     "atEntrance": "在 {name}",
@@ -19437,7 +19445,10 @@
     "feeRequired": "該票需要支付轉讓費，請在該票自己的頁面寄送。",
     "sameHolder": "該聯絡人已持有這張票。",
     "notAllowed": "這張票無法寄給他人（轉讓已截止或不被允許）。",
-    "done": "完成。每個人都已透過郵件收到自己的票券。"
+    "done": "完成。每個人都已透過郵件收到自己的票券。",
+    "phone": "手機號碼（選填，用於簡訊傳送連結）",
+    "phoneHint": "含國碼，例如 +886912345678。對方會收到與郵件相同連結的簡訊。",
+    "badPhone": "請輸入含國碼的手機號碼，例如 +886912345678。"
   },
   "programDocs": {
     "title": "宣傳冊(PDF)",
@@ -19930,5 +19941,30 @@
     "beforeDeparture": "請在發車前 {minutes} 分鐘抵達。",
     "atDeparture": "請在發車時間集合。",
     "yourPickup": "你的上車點"
+  },
+  "eventLimit": {
+    "title": "活動總人數上限",
+    "description": "限制所有票種合計的參加人數。達到上限後，線上結帳和現場售票都會停止銷售。",
+    "none": "未設定總人數上限。已售或保留 {taken} 張票。",
+    "status": "已占用 {taken} / {max} 個名額。",
+    "helpType": "每個票種有各自的數量，可單獨售罄。",
+    "helpOrder": "票種的「每單上限」限制單一買家一次訂單可購買的數量。",
+    "helpEvent": "下方的總人數上限統計所有票種已售或已保留的總數。",
+    "helpSeats": "有座位的活動中，座位本身也是上限：每個座位只能售出一次。",
+    "label": "最大參加人數（所有票種合計）",
+    "hint": "留空表示不設總人數上限。",
+    "save": "儲存上限",
+    "saved": "上限已儲存。",
+    "invalid": "請輸入整數，或留空。",
+    "belowSold": "低於已售或已保留的票數，請填寫更大的數字。"
+  },
+  "legs": {
+    "metaTitle": "為每個日期選座",
+    "title": "為每個日期選座",
+    "description": "為想參加的日期選座。每個日期會產生獨立的帶座位票券；未選的日期不會預訂。",
+    "back": "← 返回活動",
+    "link": "一次預訂多個日期的座位",
+    "unavailableTitle": "暫不支援按日期選座",
+    "unavailableDescription": "需要至少兩個各有座位圖的未來日期。請改為在活動頁面選擇一個日期。"
   }
 }

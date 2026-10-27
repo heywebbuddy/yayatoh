@@ -13,6 +13,12 @@ export const HolderAssignment = z.object({
   ticketId: z.uuid(),
   name: z.string().trim().min(1).max(120),
   email: z.email().max(254),
+  /** Optional E.164 number: the person is also texted their ticket link. */
+  phone: z
+    .string()
+    .trim()
+    .regex(/^\+[1-9]\d{6,14}$/)
+    .optional(),
 });
 
 /**
@@ -77,6 +83,7 @@ export const assignHoldersCommand = tenantCommand({
             ticketId: h.ticketId,
             toName: h.name,
             toEmail: email,
+            toPhone: h.phone ?? null,
             by: 'holder',
             orderId: order.id,
           });

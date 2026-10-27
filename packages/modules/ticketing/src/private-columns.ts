@@ -41,6 +41,7 @@ export const privateColumns = columnPrivacy('ticketing', {
     from_email: personal('email'),
     to_name: personal(),
     to_email: personal('email'),
+    to_phone: personal('phone'),
     currency: 'vocab',
     created_by: internal(),
   },

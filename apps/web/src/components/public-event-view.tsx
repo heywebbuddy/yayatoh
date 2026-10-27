@@ -351,11 +351,17 @@ export async function PublicEventView({
           description={t('publicEvent.salesPausedDescription')}
         />
       ) : needsDate ? (
-        <EmptyState
-          className="min-w-0 flex-1"
-          title={t('publicEvent.pickDateTitle')}
-          description={t('publicEvent.pickDateDescription')}
-        />
+        <div className="flex min-w-0 flex-1 flex-col gap-3">
+          <EmptyState
+            title={t('publicEvent.pickDateTitle')}
+            description={t('publicEvent.pickDateDescription')}
+          />
+          {dates.length > 1 ? (
+            <Link href={`/events/${slug}/legs`} className={buttonClass('secondary', 'md', 'self-start')}>
+              {t('legs.link')}
+            </Link>
+          ) : null}
+        </div>
       ) : ev.passes.length === 0 && registrationOpen ? null : ev.passes.length === 0 ? (
         <EmptyState
           className="min-w-0 flex-1"

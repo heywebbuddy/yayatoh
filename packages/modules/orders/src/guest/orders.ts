@@ -5,6 +5,7 @@ import { findEventTx } from '@yayatoh/events';
 import { createCtx, DomainError, requireOrg, uuidv7 } from '@yayatoh/kernel';
 import { defineSubscriber, keyVault, type Notifier, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { organizationNameTx } from '@yayatoh/tenancy';
+import { bookedWindowTx } from '@yayatoh/ticketing';
 import { and, desc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { hashManageToken } from '../commands/checkout.ts';
@@ -271,8 +272,8 @@ async function guestOrdersInOrgTx(
         eventId: r.eventId,
         orgName,
         eventName: ev.name,
-        startsAt: ev.startsAt,
-        endsAt: ev.endsAt,
+        // A multi-date booking shows the date it was booked, not the whole series.
+        ...(await bookedWindowTx(tx, ev, r.occurrenceId)),
         timeZone: ev.timezone,
         status: r.status,
         tickets: counts.find((c) => c.orderId === r.id)?.n ?? 0,

@@ -14,7 +14,7 @@ import {
   seatedTicketTypesTx,
 } from '@yayatoh/seating';
 import { assertNotPausedTx } from '@yayatoh/tenancy';
-import { holdInventoryTx, quoteTx, sellHeldTx } from '@yayatoh/ticketing';
+import { assertEventCapacityTx, holdInventoryTx, quoteTx, sellHeldTx } from '@yayatoh/ticketing';
 import { z } from 'zod';
 import { HOLD_MINUTES } from '../domain/lifecycle.ts';
 import { OrderDto } from '../dto.ts';
@@ -148,6 +148,11 @@ export const recordBoxOfficeSaleCommand = tenantCommand({
     });
     const quote = await quoteTx(tx, event.id, wanted, { now: ctx.now, includeHidden: true, occurrenceId });
     const lines = quote.lines.map((l) => ({ ticketTypeId: l.ticketTypeId, quantity: l.quantity }));
+    await assertEventCapacityTx(
+      tx,
+      event.id,
+      lines.reduce((n, l) => n + l.quantity, 0),
+    );
     await holdInventoryTx(tx, lines);
     await sellHeldTx(tx, lines);
     const contact = await upsertContactTx(tx, ctx, {

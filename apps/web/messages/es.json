@@ -1191,9 +1191,13 @@
       "free": "Gratis",
       "note": "Este es el precio final. Lo pagas en el siguiente paso; todavía no se cobra nada.",
       "promoInvalid": "Ese código promocional no es válido para estas entradas.",
-      "unavailable": "El total aparecerá cuando tu selección sea válida."
+      "unavailable": "El total aparecerá cuando tu selección sea válida.",
+      "noteFree": "Este pedido es gratuito: no hay nada que pagar."
     },
-    "accountHint": "No necesitas cuenta. Es posible que te enviemos un código de 6 dígitos para comprobar tu correo."
+    "accountHint": "No necesitas cuenta. Es posible que te enviemos un código de 6 dígitos para comprobar tu correo.",
+    "eventFull": "Lo sentimos: el evento está completo. No quedan plazas suficientes para ese pedido.",
+    "getTickets": "Obtener entradas",
+    "confirmRegistration": "Confirmar inscripción"
   },
   "fakePay": {
     "eyebrow": "Pago de prueba",
@@ -1269,7 +1273,9 @@
     "purchasedBy": "Comprado por {name}",
     "groupLabel": "Grupo: {group}",
     "downloadTicket": "Descargar esta entrada (PDF)",
-    "downloadTicketLabel": "Descargar la entrada {serial} en PDF"
+    "downloadTicketLabel": "Descargar la entrada {serial} en PDF",
+    "downloadZip": "Descargar todas las entradas (ZIP, un archivo cada una)",
+    "downloadCombined": "o en un solo PDF"
   },
   "orders": {
     "title": "Pedidos recientes",
@@ -1279,7 +1285,8 @@
     "items": "Entradas",
     "total": "Total",
     "status": "Estado",
-    "emptyAction": "Abrir la página del evento"
+    "emptyAction": "Abrir la página del evento",
+    "checkedInAt": "Registrada · {time}"
   },
   "promo": {
     "title": "Códigos promocionales",
@@ -11766,7 +11773,8 @@
       "needHelpHint": "Pide ayuda al personal del evento con tu asiento, accesibilidad, un problema médico o un objeto perdido.",
       "askButton": "Pedir ayuda",
       "ticketLink": "En el evento: encuentra tu asiento o pide ayuda",
-      "ticketLinkLabel": "Encuentra tu asiento o pide ayuda en el evento (entrada {serial})"
+      "ticketLinkLabel": "Encuentra tu asiento o pide ayuda en el evento (entrada {serial})",
+      "ticketLinkHelp": "En el evento: pedir ayuda"
     },
     "where": "Dónde: {place}",
     "atEntrance": "En {name}",
@@ -19437,7 +19445,10 @@
     "feeRequired": "Esta entrada tiene una tarifa de transferencia, así que debe enviarse desde su propia página.",
     "sameHolder": "Esa persona ya tiene esta entrada.",
     "notAllowed": "Esta entrada no se puede enviar a otra persona (las transferencias están cerradas o no están permitidas).",
-    "done": "Listo. Cada persona ha recibido su entrada por correo."
+    "done": "Listo. Cada persona ha recibido su entrada por correo.",
+    "phone": "Móvil (opcional, para enviar el enlace por SMS)",
+    "phoneHint": "Con prefijo del país, p. ej. +34612345678. Recibirán un SMS con el mismo enlace que el correo.",
+    "badPhone": "Introduce el móvil con prefijo del país, como +34612345678."
   },
   "programDocs": {
     "title": "Folletos (PDF)",
@@ -19930,5 +19941,30 @@
     "beforeDeparture": "Estate aquí {minutes, plural, one {# minuto} other {# minutos}} antes de la salida.",
     "atDeparture": "Encuentro a la hora de salida.",
     "yourPickup": "Tu punto de recogida"
+  },
+  "eventLimit": {
+    "title": "Límite de asistentes del evento",
+    "description": "Limita cuántas personas pueden asistir en total, entre todos los tipos de entrada. La compra online y la taquilla dejan de vender al alcanzarlo.",
+    "none": "Sin límite global. {taken, plural, one {# entrada} other {# entradas}} vendidas o reservadas.",
+    "status": "{taken} de {max} plazas ocupadas.",
+    "helpType": "Cada tipo de entrada tiene su propia cantidad y puede agotarse por separado.",
+    "helpOrder": "«Máx. por pedido» en un tipo de entrada limita cuántas puede coger un comprador en un pedido.",
+    "helpEvent": "El límite global de abajo cuenta todo lo vendido o reservado en todos los tipos de entrada.",
+    "helpSeats": "En eventos con asientos, los propios asientos también son un límite: cada asiento se vende una sola vez.",
+    "label": "Máximo de asistentes (todos los tipos)",
+    "hint": "Déjalo vacío para no poner límite global.",
+    "save": "Guardar límite",
+    "saved": "Límite guardado.",
+    "invalid": "Introduce un número entero o déjalo vacío.",
+    "belowSold": "Es menos de las entradas ya vendidas o reservadas. Elige un número mayor."
+  },
+  "legs": {
+    "metaTitle": "Elige un asiento en cada fecha",
+    "title": "Elige un asiento en cada fecha",
+    "description": "Elige asientos en las fechas a las que quieres ir. Cada fecha será una entrada propia con su asiento; las fechas que omitas no se reservan.",
+    "back": "← Volver al evento",
+    "link": "Reservar asiento en varias fechas a la vez",
+    "unavailableTitle": "Los asientos por fecha no están disponibles",
+    "unavailableDescription": "Hacen falta al menos dos fechas próximas con su propio plano de asientos. Elige una sola fecha en la página del evento."
   }
 }

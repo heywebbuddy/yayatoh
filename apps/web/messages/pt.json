@@ -1191,9 +1191,13 @@
       "free": "Grátis",
       "note": "Este é o preço final. Paga no passo seguinte; ainda não é cobrado nada.",
       "promoInvalid": "Esse código promocional não é válido para estes bilhetes.",
-      "unavailable": "O total aparece quando a sua escolha for válida."
+      "unavailable": "O total aparece quando a sua escolha for válida.",
+      "noteFree": "Este pedido é gratuito: não há nada a pagar."
     },
-    "accountHint": "Não precisa de conta. Podemos enviar-lhe um código de 6 dígitos para verificar o seu e-mail."
+    "accountHint": "Não precisa de conta. Podemos enviar-lhe um código de 6 dígitos para verificar o seu e-mail.",
+    "eventFull": "Pedimos desculpa: o evento está esgotado. Não há lugares suficientes para este pedido.",
+    "getTickets": "Obter bilhetes",
+    "confirmRegistration": "Confirmar inscrição"
   },
   "fakePay": {
     "eyebrow": "Pagamento de teste",
@@ -1269,7 +1273,9 @@
     "purchasedBy": "Comprado por {name}",
     "groupLabel": "Grupo: {group}",
     "downloadTicket": "Descarregar este bilhete (PDF)",
-    "downloadTicketLabel": "Descarregar o bilhete {serial} em PDF"
+    "downloadTicketLabel": "Descarregar o bilhete {serial} em PDF",
+    "downloadZip": "Descarregar todos os bilhetes (ZIP, um ficheiro cada)",
+    "downloadCombined": "ou num só PDF"
   },
   "orders": {
     "title": "Pedidos recentes",
@@ -1279,7 +1285,8 @@
     "items": "Ingressos",
     "total": "Total",
     "status": "Status",
-    "emptyAction": "Abrir a página do evento"
+    "emptyAction": "Abrir a página do evento",
+    "checkedInAt": "Check-in feito · {time}"
   },
   "promo": {
     "title": "Códigos promocionais",
@@ -11766,7 +11773,8 @@
       "needHelpHint": "Peça ajuda à equipe do evento com seu lugar, acessibilidade, um problema médico ou um objeto perdido.",
       "askButton": "Pedir ajuda",
       "ticketLink": "No evento: encontre seu lugar ou peça ajuda",
-      "ticketLinkLabel": "Encontre seu lugar ou peça ajuda no evento (ingresso {serial})"
+      "ticketLinkLabel": "Encontre seu lugar ou peça ajuda no evento (ingresso {serial})",
+      "ticketLinkHelp": "No evento: pedir ajuda"
     },
     "where": "Onde: {place}",
     "atEntrance": "Em {name}",
@@ -19437,7 +19445,10 @@
     "feeRequired": "Este bilhete tem uma taxa de transferência, por isso tem de ser enviado a partir da sua própria página.",
     "sameHolder": "Essa pessoa já tem este bilhete.",
     "notAllowed": "Este bilhete não pode ser enviado a outra pessoa (as transferências estão fechadas ou não são permitidas).",
-    "done": "Feito. Cada pessoa recebeu o seu bilhete por e-mail."
+    "done": "Feito. Cada pessoa recebeu o seu bilhete por e-mail.",
+    "phone": "Telemóvel (opcional, para enviar a ligação por SMS)",
+    "phoneHint": "Com indicativo do país, p. ex. +351912345678. Recebem um SMS com a mesma ligação do e-mail.",
+    "badPhone": "Introduza o telemóvel com indicativo do país, como +351912345678."
   },
   "programDocs": {
     "title": "Brochuras (PDF)",
@@ -19930,5 +19941,30 @@
     "beforeDeparture": "Esteja aqui {minutes, plural, one {# minuto} other {# minutos}} antes da saída.",
     "atDeparture": "Encontro no horário da saída.",
     "yourPickup": "Seu ponto de embarque"
+  },
+  "eventLimit": {
+    "title": "Limite de participantes do evento",
+    "description": "Limite quantas pessoas podem participar no total, em todos os tipos de bilhete. A compra online e a bilheteira deixam de vender ao atingi-lo.",
+    "none": "Sem limite global. {taken, plural, one {# bilhete} other {# bilhetes}} vendidos ou reservados.",
+    "status": "{taken} de {max} lugares ocupados.",
+    "helpType": "Cada tipo de bilhete tem a sua quantidade e pode esgotar sozinho.",
+    "helpOrder": "«Máx. por pedido» num tipo de bilhete limita quantos um comprador pode levar num pedido.",
+    "helpEvent": "O limite global abaixo conta tudo o que foi vendido ou reservado em todos os tipos de bilhete.",
+    "helpSeats": "Em eventos com lugares marcados, os próprios lugares também são um limite: cada lugar só se vende uma vez.",
+    "label": "Máximo de participantes (todos os tipos)",
+    "hint": "Deixe vazio para não ter limite global.",
+    "save": "Guardar limite",
+    "saved": "Limite guardado.",
+    "invalid": "Introduza um número inteiro ou deixe vazio.",
+    "belowSold": "É inferior aos bilhetes já vendidos ou reservados. Escolha um número maior."
+  },
+  "legs": {
+    "metaTitle": "Escolha um lugar em cada data",
+    "title": "Escolha um lugar em cada data",
+    "description": "Escolha lugares nas datas a que quer ir. Cada data passa a ser um bilhete próprio com o seu lugar; as datas que ignorar não são reservadas.",
+    "back": "← Voltar ao evento",
+    "link": "Reservar lugar em várias datas de uma vez",
+    "unavailableTitle": "Os lugares por data não estão disponíveis",
+    "unavailableDescription": "São necessárias pelo menos duas datas futuras, cada uma com a sua planta. Escolha antes uma data na página do evento."
   }
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "orders"."orders" ADD COLUMN "seat_legs" jsonb;

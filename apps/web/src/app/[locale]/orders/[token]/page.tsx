@@ -24,6 +24,7 @@ import { hasConferenceHub } from '@/server/conference-hub.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
 import { receiptEligible } from '@/server/receipt.ts';
 import { scheduleSummary } from '@/server/schedule.ts';
+import { smsAvailable } from '@/server/sms.ts';
 import { watchLinksForOrder } from '@/server/virtual.ts';
 import { webPushPublicKey } from '@/server/web-push.ts';
 import {
@@ -248,12 +249,20 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
           <p className="text-caption text-ink-2">{t('order.ticketsHint')}</p>
           {getPdfRenderer() ? (
             // A plain link: the PDF route is not a page, so it bypasses client navigation.
-            <a
-              href={`${locale === 'en' ? '' : `/${locale}`}/orders/${token}/pdf`}
-              className={buttonClass('secondary', 'md', 'self-start')}
-            >
-              {t('order.downloadPdf')}
-            </a>
+            <div className="flex flex-wrap gap-2">
+              <a
+                href={`${locale === 'en' ? '' : `/${locale}`}/orders/${token}/pdf`}
+                className={buttonClass('secondary', 'md')}
+              >
+                {t('order.downloadZip')}
+              </a>
+              <a
+                href={`${locale === 'en' ? '' : `/${locale}`}/orders/${token}/pdf?format=pdf`}
+                className={buttonClass('ghost', 'md')}
+              >
+                {t('order.downloadCombined')}
+              </a>
+            </div>
           ) : null}
           <ul className="flex list-none flex-col gap-4 p-0">
             {order.tickets.map((tk) => (
@@ -327,7 +336,11 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
                       className="text-caption underline underline-offset-2"
                       aria-label={t('assistance.guest.ticketLinkLabel', { serial: tk.serial })}
                     >
-                      {t('assistance.guest.ticketLink')}
+                      {t(
+                        tk.seatLabel || tk.tableNo
+                          ? 'assistance.guest.ticketLink'
+                          : 'assistance.guest.ticketLinkHelp',
+                      )}
                     </Link>
                   ) : null}
                 </Card>
@@ -345,6 +358,7 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
             <NameHoldersForm
               action={assignHoldersAction.bind(null, token)}
               pending={order.pendingHolders}
+              smsEnabled={smsAvailable()}
               tickets={order.tickets.map((tk) => ({
                 id: tk.id,
                 holderName: tk.holderName,

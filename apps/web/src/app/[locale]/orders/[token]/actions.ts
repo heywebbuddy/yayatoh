@@ -88,8 +88,14 @@ export async function assignHoldersAction(
       ticketId,
       name: String(form.get(`name:${ticketId}`) ?? '').trim(),
       email: String(form.get(`email:${ticketId}`) ?? '').trim(),
+      phone: String(form.get(`phone:${ticketId}`) ?? '')
+        .replace(/[\s().-]/g, '')
+        .trim(),
     }))
     .filter((h) => h.name || h.email);
+  const badPhone = holders.find((h) => h.phone && !/^\+[1-9]\d{6,14}$/.test(h.phone));
+  if (badPhone)
+    return { ok: false, code: 'validation_failed', reason: 'bad_phone', ticketId: badPhone.ticketId };
   if (holders.length === 0) return { ok: false, code: 'validation_failed', reason: 'nothing_entered' };
   const incomplete = holders.find((h) => !h.name || !h.email);
   if (incomplete)
@@ -100,7 +106,15 @@ export async function assignHoldersAction(
       ticketId: incomplete.ticketId,
     };
   try {
-    await executeCommand(assignHoldersCommand, { manageToken: token, holders }, createCtx({ orgId }), ports);
+    await executeCommand(
+      assignHoldersCommand,
+      {
+        manageToken: token,
+        holders: holders.map(({ phone, ...h }) => ({ ...h, ...(phone ? { phone } : {}) })),
+      },
+      createCtx({ orgId }),
+      ports,
+    );
   } catch (err) {
     const state = failure(err);
     const ticketId = (err as { details?: { ticketId?: unknown } }).details?.ticketId;

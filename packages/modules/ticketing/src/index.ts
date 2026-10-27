@@ -11,6 +11,14 @@ export {
   ticketsByIdsTx,
 } from './bulk.ts';
 export {
+  assertEventCapacityTx,
+  EventLimitDto,
+  eventLimitQuery,
+  eventTicketsTakenTx,
+  MAX_EVENT_LIMIT,
+  setEventLimitCommand,
+} from './capacity.ts';
+export {
   archiveTicketTypeCommand,
   archiveTicketTypeTx,
   createTicketTypeCommand,
@@ -131,6 +139,7 @@ export { nameTicketHolderTx } from './naming.ts';
 export {
   activeTicketsForOccurrenceTx,
   assertOccurrenceIdsTx,
+  bookedWindowTx,
   OccurrenceSalesDto,
   occurrenceSalesQuery,
   validForOccurrence,

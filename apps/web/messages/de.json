@@ -1191,9 +1191,13 @@
       "free": "Kostenlos",
       "note": "Das ist der Endpreis. Du zahlst im nächsten Schritt; bisher wird nichts abgebucht.",
       "promoInvalid": "Dieser Promo-Code gilt nicht für diese Tickets.",
-      "unavailable": "Der Gesamtbetrag erscheint, sobald deine Auswahl gültig ist."
+      "unavailable": "Der Gesamtbetrag erscheint, sobald deine Auswahl gültig ist.",
+      "noteFree": "Diese Bestellung ist kostenlos: Es ist nichts zu zahlen."
     },
-    "accountHint": "Kein Konto nötig. Eventuell mailen wir dir einen 6-stelligen Code, um deine Adresse zu prüfen."
+    "accountHint": "Kein Konto nötig. Eventuell mailen wir dir einen 6-stelligen Code, um deine Adresse zu prüfen.",
+    "eventFull": "Leider ist die Veranstaltung ausgebucht. Für diese Bestellung sind nicht genug Plätze übrig.",
+    "getTickets": "Tickets holen",
+    "confirmRegistration": "Anmeldung bestätigen"
   },
   "fakePay": {
     "eyebrow": "Testzahlung",
@@ -1269,7 +1273,9 @@
     "purchasedBy": "Gekauft von {name}",
     "groupLabel": "Gruppe: {group}",
     "downloadTicket": "Dieses Ticket herunterladen (PDF)",
-    "downloadTicketLabel": "Ticket {serial} als PDF herunterladen"
+    "downloadTicketLabel": "Ticket {serial} als PDF herunterladen",
+    "downloadZip": "Alle Tickets herunterladen (ZIP, je eine Datei)",
+    "downloadCombined": "oder als eine PDF-Datei"
   },
   "orders": {
     "title": "Neueste Bestellungen",
@@ -1279,7 +1285,8 @@
     "items": "Tickets",
     "total": "Gesamt",
     "status": "Status",
-    "emptyAction": "Veranstaltungsseite öffnen"
+    "emptyAction": "Veranstaltungsseite öffnen",
+    "checkedInAt": "Eingecheckt · {time}"
   },
   "promo": {
     "title": "Rabattcodes",
@@ -11766,7 +11773,8 @@
       "needHelpHint": "Bitte das Personal um Hilfe mit deinem Platz, bei Barrierefreiheit, einem medizinischen Problem oder einem verlorenen Gegenstand.",
       "askButton": "Um Hilfe bitten",
       "ticketLink": "Bei der Veranstaltung: Platz finden oder um Hilfe bitten",
-      "ticketLinkLabel": "Bei der Veranstaltung den Platz finden oder um Hilfe bitten (Ticket {serial})"
+      "ticketLinkLabel": "Bei der Veranstaltung den Platz finden oder um Hilfe bitten (Ticket {serial})",
+      "ticketLinkHelp": "Vor Ort: Hilfe anfragen"
     },
     "where": "Wo: {place}",
     "atEntrance": "Am {name}",
@@ -19437,7 +19445,10 @@
     "feeRequired": "Für dieses Ticket fällt eine Übertragungsgebühr an; es muss über die eigene Ticketseite gesendet werden.",
     "sameHolder": "Diese Person hat dieses Ticket bereits.",
     "notAllowed": "Dieses Ticket kann nicht an eine andere Person gesendet werden (Übertragungen sind geschlossen oder nicht erlaubt).",
-    "done": "Erledigt. Alle haben ihr Ticket per E-Mail erhalten."
+    "done": "Erledigt. Alle haben ihr Ticket per E-Mail erhalten.",
+    "phone": "Handynummer (optional, um den Link per SMS zu senden)",
+    "phoneHint": "Mit Landesvorwahl, z. B. +4915112345678. Sie erhalten eine SMS mit demselben Link wie in der E-Mail.",
+    "badPhone": "Gib die Handynummer mit Landesvorwahl ein, z. B. +4915112345678."
   },
   "programDocs": {
     "title": "Broschüren (PDF)",
@@ -19930,5 +19941,30 @@
     "beforeDeparture": "Bitte {minutes, plural, one {# Minute} other {# Minuten}} vor der Abfahrt da sein.",
     "atDeparture": "Treffpunkt zur Abfahrtszeit.",
     "yourPickup": "Dein Abholpunkt"
+  },
+  "eventLimit": {
+    "title": "Teilnehmerlimit für die ganze Veranstaltung",
+    "description": "Begrenze, wie viele Personen insgesamt teilnehmen können, über alle Tickettypen hinweg. Checkout und Abendkasse stoppen den Verkauf, sobald das Limit erreicht ist.",
+    "none": "Kein Limit für die ganze Veranstaltung. {taken, plural, one {# Ticket} other {# Tickets}} verkauft oder reserviert.",
+    "status": "{taken} von {max} Plätzen belegt.",
+    "helpType": "Jeder Tickettyp hat eine eigene Menge, die für sich ausverkauft sein kann.",
+    "helpOrder": "„Max. pro Bestellung“ bei einem Tickettyp begrenzt, wie viele ein Käufer pro Bestellung nehmen kann.",
+    "helpEvent": "Das Limit unten zählt alles Verkaufte oder Reservierte über alle Tickettypen hinweg.",
+    "helpSeats": "Bei Veranstaltungen mit Sitzplan sind auch die Plätze selbst eine Grenze: Ein Platz kann nur einmal verkauft werden.",
+    "label": "Maximale Teilnehmerzahl (alle Tickettypen)",
+    "hint": "Leer lassen für kein Limit für die ganze Veranstaltung.",
+    "save": "Limit speichern",
+    "saved": "Limit gespeichert.",
+    "invalid": "Gib eine ganze Zahl ein oder lass das Feld leer.",
+    "belowSold": "Das liegt unter den bereits verkauften oder reservierten Tickets. Wähle eine höhere Zahl."
+  },
+  "legs": {
+    "metaTitle": "Platz für jeden Termin wählen",
+    "title": "Platz für jeden Termin wählen",
+    "description": "Wähle Plätze für die Termine, zu denen du kommen möchtest. Jeder Termin wird ein eigenes Ticket mit eigenem Platz; ausgelassene Termine werden nicht gebucht.",
+    "back": "← Zurück zur Veranstaltung",
+    "link": "Plätze für mehrere Termine auf einmal buchen",
+    "unavailableTitle": "Plätze pro Termin sind nicht verfügbar",
+    "unavailableDescription": "Dafür braucht es mindestens zwei kommende Termine mit jeweils eigenem Sitzplan. Wähle stattdessen einen Termin auf der Veranstaltungsseite."
   }
 }

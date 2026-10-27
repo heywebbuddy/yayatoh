@@ -371,6 +371,25 @@ export const TRANSFER_INITIATORS = ['organizer', 'holder'] as const;
  * link. At most one pending transfer per ticket. `fee_minor` is the ticket type's transfer fee at
  * the time (holder transfers only; organizers transfer for free).
  */
+/**
+ * An optional event-wide attendee limit (all ticket types together). No row = no event-wide limit
+ * (each ticket type keeps its own quantity). Checkout and the box office both enforce it.
+ */
+export const eventLimits = tenantTable(
+  ticketingSchema,
+  'event_limits',
+  {
+    /** `events.events` (hand-written FK, down the tiers). */
+    eventId: uuid('event_id').notNull(),
+    maxAttendees: integer('max_attendees').notNull(),
+    updatedBy: uuid('updated_by'),
+  },
+  (t) => [
+    uniqueIndex('event_limits_org_event_key').on(t.orgId, t.eventId),
+    check('event_limits_max_check', sql`max_attendees between 1 and 1000000`),
+  ],
+);
+
 export const ticketTransfers = tenantTable(
   ticketingSchema,
   'ticket_transfers',
@@ -385,6 +404,8 @@ export const ticketTransfers = tenantTable(
     fromEmail: text('from_email').notNull(),
     toName: text('to_name').notNull(),
     toEmail: text('to_email').notNull(),
+    /** Optional E.164 number: the recipient is also texted their claim link (SMS), when set. */
+    toPhone: text('to_phone'),
     feeMinor: bigint('fee_minor', { mode: 'number' }).notNull().default(0),
     currency: text('currency').notNull(),
     createdBy: text('created_by').notNull(),

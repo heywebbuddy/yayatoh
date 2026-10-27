@@ -1191,9 +1191,13 @@
       "free": "免费",
       "note": "这是最终价格，将在下一步付款，目前不会扣款。",
       "promoInvalid": "该优惠码不适用于这些门票。",
-      "unavailable": "选择有效后将显示总价。"
+      "unavailable": "选择有效后将显示总价。",
+      "noteFree": "此订单免费，无需付款。"
     },
-    "accountHint": "无需注册账号。我们可能会向您发送6位验证码以核实邮箱。"
+    "accountHint": "无需注册账号。我们可能会向您发送6位验证码以核实邮箱。",
+    "eventFull": "抱歉，活动已满员，剩余名额不足以完成此订单。",
+    "getTickets": "获取门票",
+    "confirmRegistration": "确认报名"
   },
   "fakePay": {
     "eyebrow": "测试付款",
@@ -1269,7 +1273,9 @@
     "purchasedBy": "购买人：{name}",
     "groupLabel": "团体：{group}",
     "downloadTicket": "下载此票（PDF）",
-    "downloadTicketLabel": "以 PDF 下载第 {serial} 号票"
+    "downloadTicketLabel": "以 PDF 下载第 {serial} 号票",
+    "downloadZip": "下载全部门票（ZIP，每张一个文件）",
+    "downloadCombined": "或合并为一个 PDF"
   },
   "orders": {
     "title": "最近订单",
@@ -1279,7 +1285,8 @@
     "items": "门票",
     "total": "合计",
     "status": "状态",
-    "emptyAction": "打开活动页面"
+    "emptyAction": "打开活动页面",
+    "checkedInAt": "已签到 · {time}"
   },
   "promo": {
     "title": "优惠码",
@@ -11766,7 +11773,8 @@
       "needHelpHint": "关于座位、无障碍、身体不适或物品遗失，都可以向活动工作人员求助。",
       "askButton": "请求帮助",
       "ticketLink": "在活动现场：查找座位或请求帮助",
-      "ticketLinkLabel": "在活动现场查找座位或请求帮助（门票 {serial}）"
+      "ticketLinkLabel": "在活动现场查找座位或请求帮助（门票 {serial}）",
+      "ticketLinkHelp": "活动现场：寻求帮助"
     },
     "where": "位置：{place}",
     "atEntrance": "在 {name}",
@@ -19437,7 +19445,10 @@
     "feeRequired": "该票需要支付转让费，请在该票自己的页面发送。",
     "sameHolder": "该联系人已持有这张票。",
     "notAllowed": "这张票无法发给他人（转让已截止或不被允许）。",
-    "done": "完成。每个人都已通过邮件收到自己的门票。"
+    "done": "完成。每个人都已通过邮件收到自己的门票。",
+    "phone": "手机号码（可选，用于短信发送链接）",
+    "phoneHint": "含国家区号，例如 +8613812345678。对方会收到与邮件相同链接的短信。",
+    "badPhone": "请输入含国家区号的手机号码，例如 +8613812345678。"
   },
   "programDocs": {
     "title": "宣传册(PDF)",
@@ -19930,5 +19941,30 @@
     "beforeDeparture": "请在发车前 {minutes} 分钟到达。",
     "atDeparture": "请在发车时间集合。",
     "yourPickup": "你的上车点"
+  },
+  "eventLimit": {
+    "title": "活动总人数上限",
+    "description": "限制所有票种合计的参加人数。达到上限后，在线结账和现场售票都会停止销售。",
+    "none": "未设置总人数上限。已售或已占用 {taken} 张票。",
+    "status": "已占用 {taken} / {max} 个名额。",
+    "helpType": "每个票种有各自的数量，可单独售罄。",
+    "helpOrder": "票种的“每单上限”限制单个买家一次订单可购买的数量。",
+    "helpEvent": "下方的总人数上限统计所有票种已售或已占用的总数。",
+    "helpSeats": "有座位的活动中，座位本身也是上限：每个座位只能售出一次。",
+    "label": "最大参加人数（所有票种合计）",
+    "hint": "留空表示不设总人数上限。",
+    "save": "保存上限",
+    "saved": "上限已保存。",
+    "invalid": "请输入整数，或留空。",
+    "belowSold": "低于已售或已占用的票数，请填写更大的数字。"
+  },
+  "legs": {
+    "metaTitle": "为每个日期选座",
+    "title": "为每个日期选座",
+    "description": "为想参加的日期选座。每个日期会生成独立的带座位门票；未选的日期不会预订。",
+    "back": "← 返回活动",
+    "link": "一次预订多个日期的座位",
+    "unavailableTitle": "暂不支持按日期选座",
+    "unavailableDescription": "需要至少两个各有座位图的未来日期。请改为在活动页面选择一个日期。"
   }
 }

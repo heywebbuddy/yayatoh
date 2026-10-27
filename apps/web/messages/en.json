@@ -1191,9 +1191,13 @@
       "free": "Free",
       "note": "This is the final price. You pay it on the next step; nothing is charged yet.",
       "promoInvalid": "That promo code isn’t valid for these tickets.",
-      "unavailable": "The total will be shown once your choice is valid."
+      "unavailable": "The total will be shown once your choice is valid.",
+      "noteFree": "This order is free: there is nothing to pay."
     },
-    "accountHint": "No account needed. We may email you a 6-digit code to check your address."
+    "accountHint": "No account needed. We may email you a 6-digit code to check your address.",
+    "eventFull": "Sorry — this event is full. There aren’t enough places left for that order.",
+    "getTickets": "Get tickets",
+    "confirmRegistration": "Confirm registration"
   },
   "fakePay": {
     "eyebrow": "Test payment",
@@ -1269,7 +1273,9 @@
     "purchasedBy": "Purchased by {name}",
     "groupLabel": "Group: {group}",
     "downloadTicket": "Download this ticket (PDF)",
-    "downloadTicketLabel": "Download ticket {serial} as a PDF"
+    "downloadTicketLabel": "Download ticket {serial} as a PDF",
+    "downloadZip": "Download all tickets (ZIP, one file each)",
+    "downloadCombined": "or as one PDF"
   },
   "orders": {
     "title": "Recent orders",
@@ -1279,7 +1285,8 @@
     "items": "Tickets",
     "total": "Total",
     "status": "Status",
-    "emptyAction": "Open the event page"
+    "emptyAction": "Open the event page",
+    "checkedInAt": "Checked in · {time}"
   },
   "promo": {
     "title": "Promo codes",
@@ -11766,7 +11773,8 @@
       "needHelpHint": "Ask the event's staff for help with your seat, accessibility, a medical issue or a lost item.",
       "askButton": "Ask for help",
       "ticketLink": "At the event: find your seat or ask for help",
-      "ticketLinkLabel": "Find your seat or ask for help at the event (ticket {serial})"
+      "ticketLinkLabel": "Find your seat or ask for help at the event (ticket {serial})",
+      "ticketLinkHelp": "At the event: ask for help"
     },
     "where": "Where: {place}",
     "atEntrance": "At {name}",
@@ -19437,7 +19445,10 @@
     "feeRequired": "This ticket has a transfer fee, so it has to be sent from the ticket’s own page.",
     "sameHolder": "That person already holds this ticket.",
     "notAllowed": "This ticket can’t be sent to someone else (transfers are closed or not allowed for it).",
-    "done": "Done. Each person has been emailed their ticket."
+    "done": "Done. Each person has been emailed their ticket.",
+    "phone": "Mobile number (optional, to text the link)",
+    "phoneHint": "With country code, e.g. +14155550123. They get a text with the same link as the email.",
+    "badPhone": "Enter the mobile number with its country code, like +14155550123."
   },
   "programDocs": {
     "title": "Brochures (PDF)",
@@ -19930,5 +19941,30 @@
     "beforeDeparture": "Be here {minutes, plural, one {# minute} other {# minutes}} before departure.",
     "atDeparture": "Meet at the departure time.",
     "yourPickup": "Your pickup point"
+  },
+  "eventLimit": {
+    "title": "Event-wide attendee limit",
+    "description": "Cap how many people can attend in total, across all ticket types. Checkout and the box office both stop selling when it is reached.",
+    "none": "No event-wide limit. {taken, plural, one {# ticket} other {# tickets}} sold or held.",
+    "status": "{taken} of {max} places taken.",
+    "helpType": "Each ticket type has its own quantity, which sells out on its own.",
+    "helpOrder": "“Max per order” on a ticket type limits how many one buyer can take in one order.",
+    "helpEvent": "The event-wide limit below counts everything sold or held across all ticket types.",
+    "helpSeats": "On seated events the seats themselves are also a limit: a seat can only be sold once.",
+    "label": "Maximum attendees (all ticket types)",
+    "hint": "Leave empty for no event-wide limit.",
+    "save": "Save limit",
+    "saved": "Limit saved.",
+    "invalid": "Enter a whole number, or leave it empty.",
+    "belowSold": "That is below the tickets already sold or held. Choose a higher number."
+  },
+  "legs": {
+    "metaTitle": "Choose a seat on each date",
+    "title": "Choose a seat on each date",
+    "description": "Pick seats on the dates you want to come to. Each date becomes its own ticket with its own seat; dates you skip are not booked.",
+    "back": "← Back to the event",
+    "link": "Book a seat on several dates at once",
+    "unavailableTitle": "Seats per date aren’t available",
+    "unavailableDescription": "This needs at least two upcoming dates that each have their own seat map. Choose one date on the event page instead."
   }
 }

@@ -122,6 +122,7 @@ export {
   ScanOutcomeDto,
   scanLogForTicketsTx,
   scanTicketCommand,
+  ticketAdmissionsQuery,
   undoAdmissionCommand,
 } from './scan.ts';
 export {
