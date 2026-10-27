@@ -1,3 +1,4 @@
+import { bareItemLabel } from '@yayatoh/floorplan';
 import { executeQuery } from '@yayatoh/kernel';
 import { listMediaQuery } from '@yayatoh/media';
 import { hostedTablesQuery } from '@yayatoh/orders';
@@ -226,7 +227,7 @@ export default async function TablesSponsorsPage({
         ) : (
           <ul className="m-0 grid list-none grid-cols-1 gap-4 p-0 lg:grid-cols-2">
             {planTables.map((p) => {
-              const label = t('tableLabel', { label: p.label });
+              const label = t('tableLabel', { label: bareItemLabel(p.label) });
               return (
                 <li key={p.itemId}>
                   <Card size="panel" className="flex h-full flex-col gap-4" data-plan-table={label}>

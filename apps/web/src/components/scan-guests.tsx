@@ -7,6 +7,7 @@ import {
   searchGuests,
   snapshotLabels,
 } from '@yayatoh/checkin-engine';
+import { bareItemLabel } from '@yayatoh/floorplan';
 import { Button, EmptyState, filterChipClass, StatusPill } from '@yayatoh/ui';
 import { useFormatter, useLocale, useTranslations } from 'next-intl';
 import { useId, useMemo, useRef, useState } from 'react';
@@ -16,7 +17,7 @@ import type { ScanClient } from '@/scan/client.ts';
 export function usePlaceText() {
   const t = useTranslations('scanGuests');
   return (p: SnapshotPlace) => {
-    const place = t(p.kind === 'row' ? 'placeRow' : 'placeTable', { label: p.label });
+    const place = t(p.kind === 'row' ? 'placeRow' : 'placeTable', { label: bareItemLabel(p.label) });
     return p.chart ? t('placeOnChart', { chart: p.chart, place }) : place;
   };
 }

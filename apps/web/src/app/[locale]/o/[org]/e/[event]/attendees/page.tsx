@@ -10,6 +10,7 @@ import {
 } from '@yayatoh/attendees';
 import { printingSetupQuery } from '@yayatoh/badges';
 import { contactStatsQuery, contactValueQuery } from '@yayatoh/crm';
+import { bareItemLabel } from '@yayatoh/floorplan';
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { ticketCancelBulk } from '@yayatoh/orders';
 import { type BulkOperationDto, isProfileKey, term } from '@yayatoh/platform';
@@ -228,7 +229,7 @@ export default async function AttendeesPage({
         ...items.map((i) => ({
           value: `item:${i.id}`,
           label: ts('assign.form.option', {
-            item: ts(`prices.item.${i.kind}`, { label: i.label }),
+            item: ts(`prices.item.${i.kind}`, { label: bareItemLabel(i.label) }),
             free: i.seats.filter((x) => available.has(x.id)).length,
             capacity: i.seats.length,
           }),

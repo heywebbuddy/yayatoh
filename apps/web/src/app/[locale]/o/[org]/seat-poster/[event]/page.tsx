@@ -1,3 +1,4 @@
+import { bareItemLabel } from '@yayatoh/floorplan';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { finderPosterQuery } from '@yayatoh/seating';
 import { roleCan } from '@yayatoh/tenancy';
@@ -48,7 +49,10 @@ export default async function SeatPosterPage({
     groups.set(letter, [...(groups.get(letter) ?? []), p]);
   }
   const seatText = (s: (typeof poster.people)[number]['seats'][number]) =>
-    t(s.itemKind === 'table' ? 'tableSeat' : 'rowSeat', { item: s.itemLabel, seat: s.seatLabel });
+    t(s.itemKind === 'table' ? 'tableSeat' : 'rowSeat', {
+      item: bareItemLabel(s.itemLabel),
+      seat: s.seatLabel,
+    });
   return (
     <main
       // Printed: always the light theme, whatever the screen uses (ADR 0022).

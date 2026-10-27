@@ -1,5 +1,6 @@
 'use client';
 
+import { bareItemLabel } from '@yayatoh/floorplan';
 import type { SelectionPageDto } from '@yayatoh/seating';
 import { Alert, Button } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
@@ -143,7 +144,9 @@ export function CompanionSeatsForm({
       </Button>
       {groups.map((g) => (
         <fieldset key={g.itemId} className="flex flex-col gap-1.5">
-          <legend className="mb-1 text-body font-medium">{t(`group.${g.kind}`, { label: g.label })}</legend>
+          <legend className="mb-1 text-body font-medium">
+            {t(`group.${g.kind}`, { label: bareItemLabel(g.label) })}
+          </legend>
           <div className="flex flex-wrap gap-x-5 gap-y-1.5">
             {g.seats.map((s) =>
               s.accessible ? (

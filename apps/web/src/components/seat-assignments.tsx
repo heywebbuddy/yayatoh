@@ -1,6 +1,6 @@
 'use client';
 
-import { type FloorplanDoc, hitTest } from '@yayatoh/floorplan';
+import { bareItemLabel, type FloorplanDoc, hitTest } from '@yayatoh/floorplan';
 import type { AssignSeatState, SeatAssignmentsDto } from '@yayatoh/seating';
 import { activeAdaRule, type SeatingRule } from '@yayatoh/seating/client';
 import { Alert, Button, Card, Select } from '@yayatoh/ui';
@@ -121,7 +121,7 @@ export function SeatAssignments({
     });
 
   const itemName = (i: { kind: 'row' | 'table'; label: string }) =>
-    t(`prices.item.${i.kind}`, { label: i.label });
+    t(`prices.item.${i.kind}`, { label: bareItemLabel(i.label) });
   const items = view.items;
   const byItem = useMemo(() => new Map(items.map((i) => [i.id, i])), [items]);
   const seatById = useMemo(

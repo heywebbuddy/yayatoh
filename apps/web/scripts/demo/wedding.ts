@@ -219,10 +219,10 @@ export async function wedding(d: Demo, venues: Record<VenueKey, string>, spec: E
   }
 
   // Seating chart: a head table and ten round tables of 8; attending guests seated by household.
-  const head = buildRectTable({ label: 'Head table', seats: 10, x: 1000, y: 260 });
+  const head = buildRectTable({ label: 'Head', seats: 10, x: 1000, y: 260 });
   const tables = Array.from({ length: 10 }, (_, i) =>
     buildRoundTable({
-      label: `Table ${i + 1}`,
+      label: `${i + 1}`,
       seats: 8,
       x: 300 + (i % 5) * 350,
       y: 650 + Math.floor(i / 5) * 400,

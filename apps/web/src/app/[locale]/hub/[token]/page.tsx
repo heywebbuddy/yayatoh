@@ -1,3 +1,4 @@
+import { bareItemLabel } from '@yayatoh/floorplan';
 import { nextProgramItem, type PartyHubView } from '@yayatoh/guests';
 import {
   buttonClass,
@@ -130,7 +131,10 @@ function renderHub(
   });
 
   const seatLine = (s: { itemKind: 'row' | 'table'; itemLabel: string; seatLabel: string }) =>
-    t(s.itemKind === 'table' ? 'tableLine' : 'rowLine', { table: s.itemLabel, seat: s.seatLabel });
+    t(s.itemKind === 'table' ? 'tableLine' : 'rowLine', {
+      table: bareItemLabel(s.itemLabel),
+      seat: s.seatLabel,
+    });
   const sections = [
     { id: 'rsvp', label: t('rsvpTitle') },
     { id: 'program', label: t('programTitle') },

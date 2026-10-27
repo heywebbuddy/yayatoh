@@ -103,7 +103,7 @@ export async function gala(d: Demo, venues: Record<VenueKey, string>, spec: Even
   ]);
   const tables = Array.from({ length: 12 }, (_, i) =>
     buildRoundTable({
-      label: `Table ${i + 1}`,
+      label: `${i + 1}`,
       seats: 10,
       x: 300 + (i % 4) * 450,
       y: 600 + Math.floor(i / 4) * 450,

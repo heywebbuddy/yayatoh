@@ -393,7 +393,7 @@ export async function orgLibrary(d: Demo) {
         height: 2000,
         items: [
           ...Array.from({ length: 12 }, (_, i) =>
-            buildRoundTable({ label: `Table ${i + 1}`, seats: 10, x: 300 + (i % 4) * 450, y: 600 + Math.floor(i / 4) * 450 }),
+            buildRoundTable({ label: `${i + 1}`, seats: 10, x: 300 + (i % 4) * 450, y: 600 + Math.floor(i / 4) * 450 }),
           ),
           object('stage', 'Stage', 800, 60, 400, 180),
           object('dance_floor', 'Dance floor', 850, 1800, 300, 150),

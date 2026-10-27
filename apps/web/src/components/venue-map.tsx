@@ -1,6 +1,12 @@
 'use client';
 
-import { type FloorplanDoc, itemCenter, type OBJECT_TYPES, placedSeats } from '@yayatoh/floorplan';
+import {
+  bareItemLabel,
+  type FloorplanDoc,
+  itemCenter,
+  type OBJECT_TYPES,
+  placedSeats,
+} from '@yayatoh/floorplan';
 import { Button } from '@yayatoh/ui';
 import { Maximize, Minus, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -237,7 +243,9 @@ export function VenueMap({
                 );
               }
               const label =
-                item.kind === 'table' ? t('table', { label: item.label }) : t('row', { label: item.label });
+                item.kind === 'table'
+                  ? t('table', { label: bareItemLabel(item.label) })
+                  : t('row', { label: bareItemLabel(item.label) });
               const yours = places.has(item.id);
               const tableStyle = yours ? 'fill-primary-soft stroke-primary' : 'fill-surface-3 stroke-ink-3';
               return (
