@@ -164,3 +164,48 @@ export async function currentSlugFor(oldSlug: string): Promise<string | null> {
   );
   return rows[0]?.slug ?? null;
 }
+
+/** Show the number of attendees ("689 going") on the public page (off by default). */
+export const setShowAttendeeCountCommand = tenantCommand({
+  name: 'events.setShowAttendeeCount',
+  input: z.object({ eventId: z.uuid(), show: z.boolean() }),
+  output: z.object({ show: z.boolean() }),
+  entitlement: 'core',
+  permission: 'events:write',
+  handler: async ({ input, ctx, tx }) => {
+    await findEvent(tx, input.eventId);
+    await tx
+      .update(events)
+      .set({ showAttendeeCount: input.show, updatedAt: ctx.now })
+      .where(eq(events.id, input.eventId));
+    return { show: input.show };
+  },
+  audit: (input) => ({
+    action: 'event.attendee_count',
+    targetType: 'event',
+    targetId: input.eventId,
+    data: { show: input.show },
+  }),
+});
+
+export const eventDisplayQuery = tenantQuery({
+  name: 'events.eventDisplay',
+  input: z.object({ eventId: z.uuid() }),
+  output: z.object({ showAttendeeCount: z.boolean() }),
+  entitlement: 'core',
+  permission: 'events:read',
+  handler: async ({ input, tx }) => ({
+    showAttendeeCount: (await findEvent(tx, input.eventId)).showAttendeeCount,
+  }),
+});
+
+/** Whether the public page shows the attendee count (server side, by target). */
+export async function publicShowsAttendeeCount(target: { orgId: string; eventId: string }): Promise<boolean> {
+  return withTenant(createCtx({ orgId: target.orgId }), async (tx) => {
+    const [row] = await tx
+      .select({ show: events.showAttendeeCount })
+      .from(events)
+      .where(eq(events.id, target.eventId));
+    return row?.show ?? false;
+  });
+}

@@ -7,6 +7,7 @@ import { chatRetentionCutoff, clipExcerpt, EXCERPT_MESSAGES } from '../domain/ch
 import { chatConversations, chatReports } from '../schema.ts';
 import { eventOf } from '../state.ts';
 import { ChatReportForReviewDto } from './dto.ts';
+import { lobbyEventIdsTx, purgeLobbyOfEventsTx } from './lobby.ts';
 
 /**
  * Networking chat reports in Yayatoh's platform review (M1.10d, beside messaging's reports).
@@ -142,6 +143,13 @@ export const chatRetentionCommand = tenantCommand({
       const ev = await eventOf(tx, id).catch(() => null);
       if (ev && ev.endsAt < cutoff) ended.push(id);
     }
+    // The event lobby follows the same rule: its messages (and reports) go with the chats.
+    const lobbyEnded: string[] = [];
+    for (const id of await lobbyEventIdsTx(tx)) {
+      const ev = await eventOf(tx, id).catch(() => null);
+      if (ev && ev.endsAt < cutoff) lobbyEnded.push(id);
+    }
+    await purgeLobbyOfEventsTx(tx, lobbyEnded);
     if (ended.length === 0) return { conversations: 0 };
     const gone = await tx
       .delete(chatConversations)

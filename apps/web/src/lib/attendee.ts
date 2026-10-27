@@ -5,6 +5,7 @@ export const ATTENDEE_SECTIONS = [
   'events',
   'tickets',
   'schedule',
+  'networking',
   'profile',
   'notifications',
   'settings',

@@ -809,7 +809,8 @@
     "videoTitle": "Video van {name}",
     "contact": "Contact",
     "brochures": "Brochures en downloads",
-    "teamAtEvent": "Team op het evenement"
+    "teamAtEvent": "Team op het evenement",
+    "going": "{count, plural, one {# gaat} other {# gaan}}"
   },
   "portal": {
     "day": "Dag {day} · {date}",
@@ -3840,6 +3841,13 @@
     "seo": {
       "title": "SEO en delen",
       "subtitle": "Wat zoekmachines en linkvoorbeelden voor dit evenement tonen, en het webadres van het evenement."
+    },
+    "previewPortal": "Deelnemersportaal bekijken",
+    "attendeeCount": {
+      "title": "Aantal deelnemers",
+      "label": "Toon op de evenementpagina hoeveel mensen gaan",
+      "hint": "Standaard uit. Toont een aantal zoals \"689 gaan\" naast de datum.",
+      "save": "Opslaan"
     }
   },
   "directory": {
@@ -14714,7 +14722,8 @@
       "connections": "Connecties",
       "meetings": "Afspraken",
       "profile": "Mijn profiel",
-      "chats": "Chats"
+      "chats": "Chats",
+      "lobby": "Lobby"
     },
     "signIn": {
       "intro": "Zie wie er nog meer komt, maak connecties en boek korte afspraken. Alleen wie zelf meedoet, verschijnt hier.",
@@ -14919,7 +14928,9 @@
       "past": "Dit tijdslot is al begonnen. Kies een later slot.",
       "unknown": "Die keuze is niet meer beschikbaar. Laad de pagina opnieuw.",
       "in_use": "Afspraken gebruiken dit nog. Annuleer ze eerst.",
-      "resolved": "Deze melding is al afgehandeld."
+      "resolved": "Deze melding is al afgehandeld.",
+      "lobby_off": "De lobby is gesloten.",
+      "already_reported": "Je hebt dit bericht al gemeld."
     },
     "console": {
       "link": "Netwerken",
@@ -15047,6 +15058,30 @@
         "restore": "Schorsing opheffen",
         "restoreName": "De schorsing van de standchat van {name} opheffen",
         "restored": "{name} kan weer chats aannemen."
+      },
+      "lobby": {
+        "heading": "Evenementlobby",
+        "on": "De lobby staat aan: deelnemers aan netwerken kunnen in één ruimte chatten.",
+        "off": "De lobby staat uit (standaard). Zet hem aan om deelnemers een gedeelde chatroom te geven.",
+        "needsChat": "De lobby werkt alleen als netwerken en chat allebei aan staan.",
+        "turnOn": "Lobby aanzetten",
+        "turnOff": "Lobby uitzetten",
+        "turnedOn": "Lobby aangezet.",
+        "turnedOff": "Lobby uitgezet.",
+        "stats": {
+          "messages": "Berichten",
+          "today": "Laatste 24 uur",
+          "reports": "Open meldingen"
+        },
+        "noReports": "Geen open meldingen.",
+        "reportTitle": "{reporter} meldde {reported}",
+        "removedMessage": "Verwijderd",
+        "remove": "Bericht verwijderen",
+        "removed": "Bericht verwijderd.",
+        "hide": "Persoon verbergen",
+        "hidden": "Persoon verborgen en berichten verwijderd.",
+        "dismiss": "Melding afwijzen",
+        "dismissed": "Melding afgewezen."
       }
     },
     "unreadChats": "{count, plural, one {# chat met ongelezen berichten} other {# chats met ongelezen berichten}}",
@@ -15067,6 +15102,27 @@
       "listLabel": "Voorgestelde personen",
       "score": "{score}% overeenkomst",
       "shared": "Jullie houden allebei van: {interests}"
+    },
+    "lobby": {
+      "title": "Evenementlobby",
+      "description": "Eén chatroom voor iedereen die meedoet met netwerken bij dit evenement.",
+      "rules": "Iedereen in de lobby kan lezen wat je schrijft. Wees aardig; je kunt een bericht melden, waarmee je de afzender ook blokkeert.",
+      "emptyTitle": "Nog geen berichten",
+      "emptyDescription": "Zeg hallo om het gesprek te starten.",
+      "messages": "Lobbyberichten",
+      "you": "Jij",
+      "removed": "Dit bericht is door een organisator verwijderd.",
+      "report": "Dit bericht melden",
+      "reportReason": "Reden",
+      "reportDetails": "Details (optioneel)",
+      "reportSubmit": "Melding versturen",
+      "reported": "Gemeld. De afzender is nu voor jou geblokkeerd.",
+      "write": "Je bericht",
+      "send": "Versturen",
+      "sent": "Verstuurd.",
+      "tooFast": "Je verstuurt te snel berichten. Wacht even.",
+      "tooLong": "Houd het bericht op 2000 tekens.",
+      "required": "Schrijf eerst een bericht."
     }
   },
   "chat": {
@@ -19187,7 +19243,8 @@
       "schedule": "Mijn programma",
       "profile": "Profiel",
       "notifications": "Meldingen",
-      "settings": "Accountinstellingen"
+      "settings": "Accountinstellingen",
+      "networking": "Netwerken"
     },
     "descriptions": {
       "overview": "Je boekingen, aankomende evenementen en account op één plek.",
@@ -19196,7 +19253,8 @@
       "schedule": "Je sessieboekingen en persoonlijke programma's voor evenementen die dat ondersteunen.",
       "profile": "Beheer je accountnaam en foto.",
       "notifications": "Kies wat je van elke organisator ontvangt.",
-      "settings": "Beheer inloggen, beveiliging en je persoonsgegevens."
+      "settings": "Beheer inloggen, beveiliging en je persoonsgegevens.",
+      "networking": "Ontmoet andere deelnemers, chat en boek afspraken bij je evenementen."
     },
     "signInTitle": "Je evenementen beginnen hier",
     "signInHint": "Log in op je account om aankopen te zien die met het geverifieerde e-mailadres zijn gedaan. Je kunt hieronder ook een ticket-e-mailadres verifiëren om de bijbehorende boekingen te bekijken.",
@@ -19250,7 +19308,21 @@
     "attendeeSignUpTitle": "Registreren",
     "attendeeSignUpDescription": "Verifieer je e-mailadres om een account aan te maken en je evenementen en tickets bij elkaar te houden.",
     "organizationAccessRequired": "Dit account heeft geen toegang tot een organisatie. Gebruik een organisatoraccount of ga verder naar je deelnemersdashboard.",
-    "useAnotherAccount": "Een ander account gebruiken"
+    "useAnotherAccount": "Een ander account gebruiken",
+    "networking": {
+      "emptyTitle": "Nog geen netwerken",
+      "emptyHint": "Zodra een organisator netwerken opent voor een van je komende evenementen, verschijnt het hier.",
+      "optInHint": "Netwerken is open. Doe mee om een profiel te tonen en mensen te ontmoeten.",
+      "optIn": "Meedoen met netwerken",
+      "unread": "{count} wachtend",
+      "links": {
+        "people": "Mensen",
+        "connections": "Connecties",
+        "meetings": "Afspraken",
+        "chats": "Chat",
+        "lobby": "Lobby"
+      }
+    }
   },
   "eventBranding": {
     "title": "Kleur van dit evenement",
@@ -19294,5 +19366,13 @@
       "slug": "Gebruik alleen kleine letters, cijfers en streepjes (niet aan het begin of einde).",
       "slugTaken": "Dit webadres is al in gebruik."
     }
+  },
+  "attendeePreview": {
+    "banner": "Voorbeeld: dit is een voorbeelddeelnemer, geen echt persoon.",
+    "bannerDetail": "Niets hier is echt: er wordt geen bestelling aangemaakt en geen deelnemersdata gelezen. Links zijn inactief.",
+    "title": "Voorbeeld van het deelnemersportaal",
+    "description": "Wat een deelnemer voor dit evenement ziet.",
+    "sections": "Portaalsecties",
+    "sampleStatus": "Betaald"
   }
 }

@@ -3,17 +3,14 @@
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-/**
- * Re-render the server page every `seconds` while the tab is visible: the polling fallback
- * until realtime (Ably, roadmap §6.4) is connected.
- */
-export function AutoRefresh({ seconds }: { seconds: number }) {
+/** Re-reads the server page every few seconds (the lobby has no push channel). */
+export function AutoRefresh({ seconds = 10 }: { seconds?: number }) {
   const router = useRouter();
   useEffect(() => {
-    const id = window.setInterval(() => {
+    const id = setInterval(() => {
       if (document.visibilityState === 'visible') router.refresh();
     }, seconds * 1000);
-    return () => window.clearInterval(id);
+    return () => clearInterval(id);
   }, [router, seconds]);
   return null;
 }

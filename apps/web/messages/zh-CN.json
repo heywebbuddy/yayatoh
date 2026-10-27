@@ -809,7 +809,8 @@
     "videoTitle": "{name} 的视频",
     "contact": "联系方式",
     "brochures": "宣传册与下载",
-    "teamAtEvent": "活动现场团队"
+    "teamAtEvent": "活动现场团队",
+    "going": "{count, plural, other {# 人参加}}"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -3840,6 +3841,13 @@
     "seo": {
       "title": "SEO 与分享",
       "subtitle": "搜索引擎和链接预览中显示的活动信息,以及活动的网址。"
+    },
+    "previewPortal": "预览参与者门户",
+    "attendeeCount": {
+      "title": "参与人数",
+      "label": "在活动页面显示参与人数",
+      "hint": "默认关闭。在日期旁显示“689 人参加”之类的人数。",
+      "save": "保存"
     }
   },
   "directory": {
@@ -14714,7 +14722,8 @@
       "connections": "联系人",
       "meetings": "会面",
       "profile": "我的资料",
-      "chats": "聊天"
+      "chats": "聊天",
+      "lobby": "大厅"
     },
     "signIn": {
       "intro": "看看还有谁会来、建立联系并预约简短会面。这里只显示选择参与的人。",
@@ -14919,7 +14928,9 @@
       "past": "该时段已经开始。请选择更晚的时段。",
       "unknown": "该选项已不可用。请刷新页面。",
       "in_use": "仍有会面在使用。请先取消它们。",
-      "resolved": "此举报已处理。"
+      "resolved": "此举报已处理。",
+      "lobby_off": "大厅已关闭。",
+      "already_reported": "您已举报过此消息。"
     },
     "console": {
       "link": "社交",
@@ -15047,6 +15058,30 @@
         "restore": "解除暂停",
         "restoreName": "解除 {name} 展位聊天的暂停",
         "restored": "{name} 可以重新接受聊天了。"
+      },
+      "lobby": {
+        "heading": "活动大厅",
+        "on": "大厅已开启:加入人脉社交的参与者可在同一聊天室交流。",
+        "off": "大厅已关闭(默认)。开启后,参与者可使用共享聊天室。",
+        "needsChat": "仅当人脉社交和聊天均开启时,大厅才可使用。",
+        "turnOn": "开启大厅",
+        "turnOff": "关闭大厅",
+        "turnedOn": "大厅已开启。",
+        "turnedOff": "大厅已关闭。",
+        "stats": {
+          "messages": "消息",
+          "today": "最近 24 小时",
+          "reports": "待处理举报"
+        },
+        "noReports": "没有待处理的举报。",
+        "reportTitle": "{reporter} 举报了 {reported}",
+        "removedMessage": "已删除",
+        "remove": "删除消息",
+        "removed": "消息已删除。",
+        "hide": "隐藏此人",
+        "hidden": "已隐藏此人并删除其消息。",
+        "dismiss": "忽略举报",
+        "dismissed": "举报已忽略。"
       }
     },
     "unreadChats": "{count, plural, other {# 个聊天有未读消息}}",
@@ -15067,6 +15102,27 @@
       "listLabel": "推荐的人",
       "score": "匹配度 {score}%",
       "shared": "你们都喜欢:{interests}"
+    },
+    "lobby": {
+      "title": "活动大厅",
+      "description": "所有加入本活动人脉社交的人共用的聊天室。",
+      "rules": "大厅中的所有人都能看到您写的内容。请友善;您可以举报消息,同时会为您屏蔽其作者。",
+      "emptyTitle": "暂无消息",
+      "emptyDescription": "打个招呼,开始交流吧。",
+      "messages": "大厅消息",
+      "you": "我",
+      "removed": "此消息已被组织者删除。",
+      "report": "举报此消息",
+      "reportReason": "原因",
+      "reportDetails": "详情(可选)",
+      "reportSubmit": "提交举报",
+      "reported": "已举报,该作者已为您屏蔽。",
+      "write": "您的消息",
+      "send": "发送",
+      "sent": "已发送。",
+      "tooFast": "发送过快,请稍候。",
+      "tooLong": "消息请控制在 2000 个字符以内。",
+      "required": "请先输入消息。"
     }
   },
   "chat": {
@@ -19187,7 +19243,8 @@
       "schedule": "我的日程",
       "profile": "资料",
       "notifications": "通知",
-      "settings": "账户设置"
+      "settings": "账户设置",
+      "networking": "人脉社交"
     },
     "descriptions": {
       "overview": "你的预订、即将举行的活动和账户，一目了然。",
@@ -19196,7 +19253,8 @@
       "schedule": "你的场次预订，以及支持此功能的活动的个人日程。",
       "profile": "管理你的账户名称和照片。",
       "notifications": "选择要从每个主办方接收的内容。",
-      "settings": "管理登录、安全和个人数据。"
+      "settings": "管理登录、安全和个人数据。",
+      "networking": "在您的活动中结识其他参与者、聊天并预约会面。"
     },
     "signInTitle": "你的活动从这里开始",
     "signInHint": "登录账户即可查看使用其已验证邮箱完成的购买。你也可以在下方验证门票邮箱，查看该邮箱的预订。",
@@ -19250,7 +19308,21 @@
     "attendeeSignUpTitle": "注册",
     "attendeeSignUpDescription": "验证邮箱即可创建账户，集中管理你的活动和门票。",
     "organizationAccessRequired": "此账户没有组织访问权限。请使用主办方账户，或继续前往你的参会者控制台。",
-    "useAnotherAccount": "使用其他账户"
+    "useAnotherAccount": "使用其他账户",
+    "networking": {
+      "emptyTitle": "暂无人脉社交",
+      "emptyHint": "当组织者为您即将参加的活动开放人脉社交后,会显示在这里。",
+      "optInHint": "人脉社交已开放。加入后即可展示资料并结识他人。",
+      "optIn": "加入人脉社交",
+      "unread": "{count} 条待处理",
+      "links": {
+        "people": "人员",
+        "connections": "联系人",
+        "meetings": "会面",
+        "chats": "聊天",
+        "lobby": "大厅"
+      }
+    }
   },
   "eventBranding": {
     "title": "此活动的颜色",
@@ -19294,5 +19366,13 @@
       "slug": "仅限小写字母、数字和连字符(不能在开头或结尾)。",
       "slugTaken": "该网址已被占用。"
     }
+  },
+  "attendeePreview": {
+    "banner": "预览:这是示例参与者,并非真实用户。",
+    "bannerDetail": "此处内容均为示例:不会创建订单,也不会读取任何参与者数据。链接不可点击。",
+    "title": "参与者门户预览",
+    "description": "参与者对此活动看到的内容。",
+    "sections": "门户栏目",
+    "sampleStatus": "已支付"
   }
 }

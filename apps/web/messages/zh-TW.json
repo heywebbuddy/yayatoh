@@ -809,7 +809,8 @@
     "videoTitle": "{name} 的影片",
     "contact": "聯絡方式",
     "brochures": "宣傳冊與下載",
-    "teamAtEvent": "活動現場團隊"
+    "teamAtEvent": "活動現場團隊",
+    "going": "{count, plural, other {# 人參加}}"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -3840,6 +3841,13 @@
     "seo": {
       "title": "SEO 與分享",
       "subtitle": "搜尋引擎和連結預覽中顯示的活動資訊,以及活動的網址。"
+    },
+    "previewPortal": "預覽參與者入口",
+    "attendeeCount": {
+      "title": "參與人數",
+      "label": "在活動頁面顯示參與人數",
+      "hint": "預設關閉。在日期旁顯示「689 人參加」之類的人數。",
+      "save": "儲存"
     }
   },
   "directory": {
@@ -14714,7 +14722,8 @@
       "connections": "聯絡人",
       "meetings": "會面",
       "profile": "我的檔案",
-      "chats": "聊天"
+      "chats": "聊天",
+      "lobby": "大廳"
     },
     "signIn": {
       "intro": "看看還有誰會來、建立聯繫並預約簡短會面。這裡只顯示選擇參與的人。",
@@ -14919,7 +14928,9 @@
       "past": "該時段已經開始。請選擇較晚的時段。",
       "unknown": "此選項已無法使用。請重新整理頁面。",
       "in_use": "仍有會面在使用。請先取消它們。",
-      "resolved": "此檢舉已處理。"
+      "resolved": "此檢舉已處理。",
+      "lobby_off": "大廳已關閉。",
+      "already_reported": "您已檢舉過此訊息。"
     },
     "console": {
       "link": "交流",
@@ -15047,6 +15058,30 @@
         "restore": "解除暫停",
         "restoreName": "解除 {name} 攤位聊天的暫停",
         "restored": "{name} 可以重新接受聊天了。"
+      },
+      "lobby": {
+        "heading": "活動大廳",
+        "on": "大廳已開啟:加入人脈社交的參與者可在同一聊天室交流。",
+        "off": "大廳已關閉(預設)。開啟後,參與者可使用共用聊天室。",
+        "needsChat": "僅當人脈社交與聊天皆開啟時,大廳才可使用。",
+        "turnOn": "開啟大廳",
+        "turnOff": "關閉大廳",
+        "turnedOn": "大廳已開啟。",
+        "turnedOff": "大廳已關閉。",
+        "stats": {
+          "messages": "訊息",
+          "today": "最近 24 小時",
+          "reports": "待處理檢舉"
+        },
+        "noReports": "沒有待處理的檢舉。",
+        "reportTitle": "{reporter} 檢舉了 {reported}",
+        "removedMessage": "已刪除",
+        "remove": "刪除訊息",
+        "removed": "訊息已刪除。",
+        "hide": "隱藏此人",
+        "hidden": "已隱藏此人並刪除其訊息。",
+        "dismiss": "忽略檢舉",
+        "dismissed": "檢舉已忽略。"
       }
     },
     "unreadChats": "{count, plural, other {# 個聊天有未讀訊息}}",
@@ -15067,6 +15102,27 @@
       "listLabel": "推薦的人",
       "score": "符合度 {score}%",
       "shared": "你們都喜歡:{interests}"
+    },
+    "lobby": {
+      "title": "活動大廳",
+      "description": "所有加入本活動人脈社交者共用的聊天室。",
+      "rules": "大廳中的所有人都能看到您寫的內容。請保持友善;您可以檢舉訊息,同時會為您封鎖其作者。",
+      "emptyTitle": "尚無訊息",
+      "emptyDescription": "打個招呼,開始交流吧。",
+      "messages": "大廳訊息",
+      "you": "我",
+      "removed": "此訊息已被主辦單位刪除。",
+      "report": "檢舉此訊息",
+      "reportReason": "原因",
+      "reportDetails": "詳情(選填)",
+      "reportSubmit": "提交檢舉",
+      "reported": "已檢舉,該作者已為您封鎖。",
+      "write": "您的訊息",
+      "send": "傳送",
+      "sent": "已傳送。",
+      "tooFast": "傳送過快,請稍候。",
+      "tooLong": "訊息請控制在 2000 個字元以內。",
+      "required": "請先輸入訊息。"
     }
   },
   "chat": {
@@ -19187,7 +19243,8 @@
       "schedule": "我的行程",
       "profile": "個人檔案",
       "notifications": "通知",
-      "settings": "帳戶設定"
+      "settings": "帳戶設定",
+      "networking": "人脈社交"
     },
     "descriptions": {
       "overview": "你的預訂、即將舉行的活動與帳戶，一次掌握。",
@@ -19196,7 +19253,8 @@
       "schedule": "你的場次預訂，以及支援此功能之活動的個人行程。",
       "profile": "管理你的帳戶名稱與相片。",
       "notifications": "選擇要從各主辦方接收的內容。",
-      "settings": "管理登入、安全性與個人資料。"
+      "settings": "管理登入、安全性與個人資料。",
+      "networking": "在您的活動中結識其他參與者、聊天並預約會面。"
     },
     "signInTitle": "你的活動從這裡開始",
     "signInHint": "登入帳戶即可查看以其已驗證電子郵件完成的購買。你也可以在下方驗證票券電子郵件，以查看該信箱的預訂。",
@@ -19250,7 +19308,21 @@
     "attendeeSignUpTitle": "註冊",
     "attendeeSignUpDescription": "驗證電子郵件即可建立帳戶，集中管理你的活動與票券。",
     "organizationAccessRequired": "此帳戶沒有組織存取權限。請使用主辦方帳戶，或繼續前往你的參加者控制台。",
-    "useAnotherAccount": "使用其他帳戶"
+    "useAnotherAccount": "使用其他帳戶",
+    "networking": {
+      "emptyTitle": "尚無人脈社交",
+      "emptyHint": "當主辦單位為您即將參加的活動開放人脈社交後,會顯示在這裡。",
+      "optInHint": "人脈社交已開放。加入後即可展示個人資料並結識他人。",
+      "optIn": "加入人脈社交",
+      "unread": "{count} 項待處理",
+      "links": {
+        "people": "人員",
+        "connections": "聯絡人",
+        "meetings": "會面",
+        "chats": "聊天",
+        "lobby": "大廳"
+      }
+    }
   },
   "eventBranding": {
     "title": "此活動的顏色",
@@ -19294,5 +19366,13 @@
       "slug": "僅限小寫字母、數字和連字號(不能在開頭或結尾)。",
       "slugTaken": "該網址已被使用。"
     }
+  },
+  "attendeePreview": {
+    "banner": "預覽:這是範例參與者,並非真實使用者。",
+    "bannerDetail": "此處內容均為範例:不會建立訂單,也不會讀取任何參與者資料。連結無法點擊。",
+    "title": "參與者入口預覽",
+    "description": "參與者對此活動看到的內容。",
+    "sections": "入口區段",
+    "sampleStatus": "已付款"
   }
 }

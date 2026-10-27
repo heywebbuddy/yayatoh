@@ -809,7 +809,8 @@
     "videoTitle": "Video di {name}",
     "contact": "Contatti",
     "brochures": "Brochure e download",
-    "teamAtEvent": "Team all’evento"
+    "teamAtEvent": "Team all’evento",
+    "going": "{count, plural, one {# partecipa} other {# partecipano}}"
   },
   "portal": {
     "day": "Giorno {day} · {date}",
@@ -3840,6 +3841,13 @@
     "seo": {
       "title": "SEO e condivisione",
       "subtitle": "Cosa mostrano motori di ricerca e anteprime dei link per questo evento, e l’indirizzo web dell’evento."
+    },
+    "previewPortal": "Anteprima portale partecipanti",
+    "attendeeCount": {
+      "title": "Numero di partecipanti",
+      "label": "Mostra nella pagina dell’evento quante persone partecipano",
+      "hint": "Disattivato di default. Mostra un numero come «689 partecipano» accanto alla data.",
+      "save": "Salva"
     }
   },
   "directory": {
@@ -14714,7 +14722,8 @@
       "connections": "Contatti",
       "meetings": "Incontri",
       "profile": "Il mio profilo",
-      "chats": "Chat"
+      "chats": "Chat",
+      "lobby": "Lobby"
     },
     "signIn": {
       "intro": "Scopri chi altro partecipa, entra in contatto e prenota brevi incontri. Qui compare solo chi sceglie di partecipare.",
@@ -14919,7 +14928,9 @@
       "past": "Questa fascia oraria è già iniziata. Scegline una successiva.",
       "unknown": "Questa scelta non è più disponibile. Ricarica la pagina.",
       "in_use": "Ci sono ancora incontri che lo usano. Annullali prima.",
-      "resolved": "Questa segnalazione è già stata gestita."
+      "resolved": "Questa segnalazione è già stata gestita.",
+      "lobby_off": "La lobby è chiusa.",
+      "already_reported": "Hai già segnalato questo messaggio."
     },
     "console": {
       "link": "Networking",
@@ -15047,6 +15058,30 @@
         "restore": "Revoca la sospensione",
         "restoreName": "Revoca la sospensione della chat dello stand di {name}",
         "restored": "{name} può di nuovo ricevere chat."
+      },
+      "lobby": {
+        "heading": "Lobby dell’evento",
+        "on": "La lobby è attiva: chi partecipa al networking può chattare in un’unica stanza.",
+        "off": "La lobby è disattivata (predefinito). Attivala per dare ai partecipanti una chat comune.",
+        "needsChat": "La lobby funziona solo con networking e chat attivi.",
+        "turnOn": "Attiva la lobby",
+        "turnOff": "Disattiva la lobby",
+        "turnedOn": "Lobby attivata.",
+        "turnedOff": "Lobby disattivata.",
+        "stats": {
+          "messages": "Messaggi",
+          "today": "Ultime 24 ore",
+          "reports": "Segnalazioni aperte"
+        },
+        "noReports": "Nessuna segnalazione aperta.",
+        "reportTitle": "{reporter} ha segnalato {reported}",
+        "removedMessage": "Rimosso",
+        "remove": "Rimuovi messaggio",
+        "removed": "Messaggio rimosso.",
+        "hide": "Nascondi la persona",
+        "hidden": "Persona nascosta e messaggi rimossi.",
+        "dismiss": "Archivia segnalazione",
+        "dismissed": "Segnalazione archiviata."
       }
     },
     "unreadChats": "{count, plural, one {# chat con messaggi non letti} other {# chat con messaggi non letti}}",
@@ -15067,6 +15102,27 @@
       "listLabel": "Persone suggerite",
       "score": "Corrispondenza del {score}%",
       "shared": "Vi piace a entrambi: {interests}"
+    },
+    "lobby": {
+      "title": "Lobby dell’evento",
+      "description": "Una chat room per tutti quelli che hanno aderito al networking di questo evento.",
+      "rules": "Tutti nella lobby possono leggere ciò che scrivi. Sii gentile; puoi segnalare un messaggio, e questo blocca anche il suo autore per te.",
+      "emptyTitle": "Nessun messaggio",
+      "emptyDescription": "Saluta per iniziare la conversazione.",
+      "messages": "Messaggi della lobby",
+      "you": "Tu",
+      "removed": "Questo messaggio è stato rimosso da un organizzatore.",
+      "report": "Segnala questo messaggio",
+      "reportReason": "Motivo",
+      "reportDetails": "Dettagli (facoltativi)",
+      "reportSubmit": "Invia segnalazione",
+      "reported": "Segnalato. L’autore è ora bloccato per te.",
+      "write": "Il tuo messaggio",
+      "send": "Invia",
+      "sent": "Inviato.",
+      "tooFast": "Stai inviando messaggi troppo in fretta. Attendi un attimo.",
+      "tooLong": "Limita il messaggio a 2000 caratteri.",
+      "required": "Scrivi prima un messaggio."
     }
   },
   "chat": {
@@ -19187,7 +19243,8 @@
       "schedule": "Il mio programma",
       "profile": "Profilo",
       "notifications": "Notifiche",
-      "settings": "Impostazioni account"
+      "settings": "Impostazioni account",
+      "networking": "Networking"
     },
     "descriptions": {
       "overview": "Le tue prenotazioni, i prossimi eventi e il tuo account, tutto insieme.",
@@ -19196,7 +19253,8 @@
       "schedule": "Le tue prenotazioni delle sessioni e i programmi personali per gli eventi che li supportano.",
       "profile": "Gestisci il nome e la foto del tuo account.",
       "notifications": "Scegli cosa ricevere da ciascun organizzatore.",
-      "settings": "Gestisci accesso, sicurezza e dati personali."
+      "settings": "Gestisci accesso, sicurezza e dati personali.",
+      "networking": "Incontra altri partecipanti, chatta e prenota incontri ai tuoi eventi."
     },
     "signInTitle": "I tuoi eventi iniziano qui",
     "signInHint": "Accedi al tuo account per vedere gli acquisti effettuati con la sua email verificata. Puoi anche verificare qui sotto l’email di un biglietto per vederne le prenotazioni.",
@@ -19250,7 +19308,21 @@
     "attendeeSignUpTitle": "Registrati",
     "attendeeSignUpDescription": "Verifica la tua email per creare un account e tenere insieme eventi e biglietti.",
     "organizationAccessRequired": "Questo account non ha accesso a un’organizzazione. Usa un account organizzatore o continua alla tua dashboard partecipante.",
-    "useAnotherAccount": "Usa un altro account"
+    "useAnotherAccount": "Usa un altro account",
+    "networking": {
+      "emptyTitle": "Nessun networking per ora",
+      "emptyHint": "Quando un organizzatore apre il networking per un tuo prossimo evento, appare qui.",
+      "optInHint": "Il networking è aperto. Partecipa per mostrare un profilo e conoscere persone.",
+      "optIn": "Partecipa al networking",
+      "unread": "{count} in attesa",
+      "links": {
+        "people": "Persone",
+        "connections": "Collegamenti",
+        "meetings": "Incontri",
+        "chats": "Chat",
+        "lobby": "Lobby"
+      }
+    }
   },
   "eventBranding": {
     "title": "Colore di questo evento",
@@ -19294,5 +19366,13 @@
       "slug": "Usa solo lettere minuscole, cifre e trattini (non all’inizio o alla fine).",
       "slugTaken": "Questo indirizzo web è già in uso."
     }
+  },
+  "attendeePreview": {
+    "banner": "Anteprima: è un partecipante di esempio, non una persona reale.",
+    "bannerDetail": "Niente qui è reale: nessun ordine viene creato e nessun dato letto. I link sono inattivi.",
+    "title": "Anteprima del portale partecipanti",
+    "description": "Cosa vede un partecipante per questo evento.",
+    "sections": "Sezioni del portale",
+    "sampleStatus": "Pagato"
   }
 }

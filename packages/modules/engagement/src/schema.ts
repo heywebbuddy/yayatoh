@@ -283,6 +283,8 @@ export const networkSettings = tenantTable(
     meetingsEnabled: boolean('meetings_enabled').notNull().default(true),
     /** M5.8b: 1:1 chat between connections and meeting parties, and booth chat (on with networking). */
     chatEnabled: boolean('chat_enabled').notNull().default(true),
+    /** The event-wide lobby chat room (off until an organizer turns it on; needs chat on). */
+    lobbyEnabled: boolean('lobby_enabled').notNull().default(false),
   },
   (t) => [uniqueIndex('network_settings_org_event_key').on(t.orgId, t.eventId)],
 );
@@ -706,6 +708,89 @@ export const chatReports = tenantTable(
       'chat_reports_review_note_check',
       sql`review_note is null or char_length(review_note) between 1 and 1000`,
     ),
+  ],
+);
+
+/**
+ * The event lobby (an event-wide chat room): messages by networking profiles, reports of a message
+ * by another profile (the organizer handles them like chat reports), and each profile's last read.
+ */
+export const lobbyMessages = tenantTable(
+  engagementSchema,
+  'lobby_messages',
+  {
+    eventId: uuid('event_id').notNull(),
+    profileId: uuid('profile_id').notNull(),
+    body: text('body').notNull(),
+    removedAt: ts('removed_at'),
+    removedBy: uuid('removed_by'),
+  },
+  (t) => [
+    index('lobby_messages_org_event_idx').on(t.orgId, t.eventId, t.createdAt),
+    index('lobby_messages_org_profile_idx').on(t.orgId, t.profileId, t.createdAt),
+    foreignKey({
+      name: 'lobby_messages_profile_fk',
+      columns: [t.orgId, t.profileId],
+      foreignColumns: [networkProfiles.orgId, networkProfiles.id],
+    }).onDelete('cascade'),
+    check('lobby_messages_body_check', sql`char_length(body) between 1 and 2000`),
+    check('lobby_messages_removed_check', sql`(removed_at is null) = (removed_by is null)`),
+  ],
+);
+
+export const lobbyReports = tenantTable(
+  engagementSchema,
+  'lobby_reports',
+  {
+    eventId: uuid('event_id').notNull(),
+    messageId: uuid('message_id').notNull(),
+    reporterId: uuid('reporter_id').notNull(),
+    reason: text('reason').notNull(),
+    details: text('details'),
+    moderation: text('moderation').notNull().default('open'),
+    moderatedAt: ts('moderated_at'),
+    moderatedBy: uuid('moderated_by'),
+  },
+  (t) => [
+    uniqueIndex('lobby_reports_org_open_key')
+      .on(t.orgId, t.messageId, t.reporterId)
+      .where(sql`moderation = 'open'`),
+    index('lobby_reports_org_event_idx').on(t.orgId, t.eventId, t.moderation, t.createdAt),
+    foreignKey({
+      name: 'lobby_reports_message_fk',
+      columns: [t.orgId, t.messageId],
+      foreignColumns: [lobbyMessages.orgId, lobbyMessages.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'lobby_reports_reporter_fk',
+      columns: [t.orgId, t.reporterId],
+      foreignColumns: [networkProfiles.orgId, networkProfiles.id],
+    }).onDelete('cascade'),
+    check(
+      'lobby_reports_reason_check',
+      sql`reason in ('spam', 'harassment', 'inappropriate', 'fake', 'other')`,
+    ),
+    check('lobby_reports_details_check', sql`details is null or char_length(details) between 1 and 500`),
+    check('lobby_reports_moderation_check', sql`moderation in ('open', 'actioned', 'dismissed')`),
+    check('lobby_reports_moderated_check', sql`(moderation = 'open') = (moderated_at is null)`),
+  ],
+);
+
+export const lobbyReads = tenantTable(
+  engagementSchema,
+  'lobby_reads',
+  {
+    eventId: uuid('event_id').notNull(),
+    profileId: uuid('profile_id').notNull(),
+    readAt: ts('read_at').notNull(),
+  },
+  (t) => [
+    uniqueIndex('lobby_reads_org_profile_key').on(t.orgId, t.profileId),
+    foreignKey({
+      name: 'lobby_reads_profile_fk',
+      columns: [t.orgId, t.profileId],
+      foreignColumns: [networkProfiles.orgId, networkProfiles.id],
+    }).onDelete('cascade'),
   ],
 );
 

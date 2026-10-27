@@ -809,7 +809,8 @@
     "videoTitle": "Vídeo de {name}",
     "contact": "Contacto",
     "brochures": "Folletos y descargas",
-    "teamAtEvent": "Equipo en el evento"
+    "teamAtEvent": "Equipo en el evento",
+    "going": "{count, plural, one {# asistirá} other {# asistirán}}"
   },
   "portal": {
     "day": "Día {day} · {date}",
@@ -3840,6 +3841,13 @@
     "seo": {
       "title": "SEO y compartir",
       "subtitle": "Lo que muestran los buscadores y las vistas previas de enlaces para este evento, y la dirección web del evento."
+    },
+    "previewPortal": "Vista previa del portal",
+    "attendeeCount": {
+      "title": "Número de asistentes",
+      "label": "Mostrar en la página del evento cuántas personas asisten",
+      "hint": "Desactivado por defecto. Muestra un número como «689 asistirán» junto a la fecha.",
+      "save": "Guardar"
     }
   },
   "directory": {
@@ -14714,7 +14722,8 @@
       "connections": "Contactos",
       "meetings": "Reuniones",
       "profile": "Mi perfil",
-      "chats": "Chats"
+      "chats": "Chats",
+      "lobby": "Lobby"
     },
     "signIn": {
       "intro": "Mira quién más viene, conecta y reserva reuniones breves. Aquí solo aparecen quienes eligen participar.",
@@ -14919,7 +14928,9 @@
       "past": "Esa franja ya empezó. Elige una posterior.",
       "unknown": "Esa opción ya no está disponible. Recarga la página.",
       "in_use": "Todavía hay reuniones que lo usan. Cancélalas primero.",
-      "resolved": "Esta denuncia ya se gestionó."
+      "resolved": "Esta denuncia ya se gestionó.",
+      "lobby_off": "El lobby está cerrado.",
+      "already_reported": "Ya denunciaste este mensaje."
     },
     "console": {
       "link": "Networking",
@@ -15047,6 +15058,30 @@
         "restore": "Levantar la suspensión",
         "restoreName": "Levantar la suspensión del chat del stand de {name}",
         "restored": "{name} puede volver a recibir chats."
+      },
+      "lobby": {
+        "heading": "Lobby del evento",
+        "on": "El lobby está activado: los asistentes en networking pueden chatear en una sala.",
+        "off": "El lobby está desactivado (predeterminado). Actívalo para dar a los asistentes una sala de chat común.",
+        "needsChat": "El lobby solo funciona mientras networking y chat estén activados.",
+        "turnOn": "Activar el lobby",
+        "turnOff": "Desactivar el lobby",
+        "turnedOn": "Lobby activado.",
+        "turnedOff": "Lobby desactivado.",
+        "stats": {
+          "messages": "Mensajes",
+          "today": "Últimas 24 horas",
+          "reports": "Denuncias abiertas"
+        },
+        "noReports": "No hay denuncias abiertas.",
+        "reportTitle": "{reporter} denunció a {reported}",
+        "removedMessage": "Eliminado",
+        "remove": "Eliminar mensaje",
+        "removed": "Mensaje eliminado.",
+        "hide": "Ocultar a la persona",
+        "hidden": "Persona oculta y mensajes eliminados.",
+        "dismiss": "Descartar denuncia",
+        "dismissed": "Denuncia descartada."
       }
     },
     "unreadChats": "{count, plural, one {# chat con mensajes sin leer} other {# chats con mensajes sin leer}}",
@@ -15067,6 +15102,27 @@
       "listLabel": "Personas sugeridas",
       "score": "{score} % de coincidencia",
       "shared": "A ambos os gusta: {interests}"
+    },
+    "lobby": {
+      "title": "Lobby del evento",
+      "description": "Una sala de chat para todos los que se unieron al networking de este evento.",
+      "rules": "Todos en el lobby pueden leer lo que escribes. Sé amable; puedes denunciar un mensaje, lo que también bloquea a su autor para ti.",
+      "emptyTitle": "Aún no hay mensajes",
+      "emptyDescription": "Saluda para empezar la conversación.",
+      "messages": "Mensajes del lobby",
+      "you": "Tú",
+      "removed": "Un organizador eliminó este mensaje.",
+      "report": "Denunciar este mensaje",
+      "reportReason": "Motivo",
+      "reportDetails": "Detalles (opcional)",
+      "reportSubmit": "Enviar denuncia",
+      "reported": "Denunciado. El autor queda bloqueado para ti.",
+      "write": "Tu mensaje",
+      "send": "Enviar",
+      "sent": "Enviado.",
+      "tooFast": "Estás enviando mensajes demasiado rápido. Espera un momento.",
+      "tooLong": "Limita el mensaje a 2000 caracteres.",
+      "required": "Escribe primero un mensaje."
     }
   },
   "chat": {
@@ -19187,7 +19243,8 @@
       "schedule": "Mi programa",
       "profile": "Perfil",
       "notifications": "Notificaciones",
-      "settings": "Ajustes de la cuenta"
+      "settings": "Ajustes de la cuenta",
+      "networking": "Networking"
     },
     "descriptions": {
       "overview": "Tus reservas, próximos eventos y tu cuenta, todo en un mismo lugar.",
@@ -19196,7 +19253,8 @@
       "schedule": "Tus reservas de sesiones y programas personales de los eventos que los admiten.",
       "profile": "Gestiona el nombre y la foto de tu cuenta.",
       "notifications": "Elige qué recibes de cada organizador.",
-      "settings": "Gestiona el inicio de sesión, la seguridad y tus datos personales."
+      "settings": "Gestiona el inicio de sesión, la seguridad y tus datos personales.",
+      "networking": "Conoce a otros asistentes, chatea y reserva reuniones en tus eventos."
     },
     "signInTitle": "Tus eventos empiezan aquí",
     "signInHint": "Inicia sesión en tu cuenta para ver las compras hechas con su correo verificado. También puedes verificar abajo el correo de tus entradas para ver sus reservas.",
@@ -19250,7 +19308,21 @@
     "attendeeSignUpTitle": "Registrarse",
     "attendeeSignUpDescription": "Verifica tu correo para crear una cuenta y tener tus eventos y entradas en un mismo lugar.",
     "organizationAccessRequired": "Esta cuenta no tiene acceso a ninguna organización. Usa una cuenta de organizador o continúa a tu panel de asistente.",
-    "useAnotherAccount": "Usar otra cuenta"
+    "useAnotherAccount": "Usar otra cuenta",
+    "networking": {
+      "emptyTitle": "Aún no hay networking",
+      "emptyHint": "Cuando un organizador abra el networking de uno de tus próximos eventos, aparecerá aquí.",
+      "optInHint": "El networking está abierto. Participa para mostrar un perfil y conocer gente.",
+      "optIn": "Unirme al networking",
+      "unread": "{count} pendientes",
+      "links": {
+        "people": "Personas",
+        "connections": "Conexiones",
+        "meetings": "Reuniones",
+        "chats": "Chat",
+        "lobby": "Lobby"
+      }
+    }
   },
   "eventBranding": {
     "title": "Color de este evento",
@@ -19294,5 +19366,13 @@
       "slug": "Usa solo minúsculas, dígitos y guiones (no al principio ni al final).",
       "slugTaken": "Esa dirección web ya está en uso."
     }
+  },
+  "attendeePreview": {
+    "banner": "Vista previa: es un asistente de ejemplo, no una persona real.",
+    "bannerDetail": "Nada aquí es real: no se crea ningún pedido ni se leen datos de asistentes. Los enlaces están inactivos.",
+    "title": "Vista previa del portal del asistente",
+    "description": "Lo que ve un asistente de este evento.",
+    "sections": "Secciones del portal",
+    "sampleStatus": "Pagado"
   }
 }

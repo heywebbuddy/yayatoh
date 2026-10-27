@@ -809,7 +809,8 @@
     "videoTitle": "Vidéo de {name}",
     "contact": "Contact",
     "brochures": "Brochures et téléchargements",
-    "teamAtEvent": "Équipe sur l’événement"
+    "teamAtEvent": "Équipe sur l’événement",
+    "going": "{count, plural, one {# participant} other {# participants}}"
   },
   "portal": {
     "day": "Jour {day} · {date}",
@@ -3840,6 +3841,13 @@
     "seo": {
       "title": "SEO et partage",
       "subtitle": "Ce que les moteurs de recherche et les aperçus de liens affichent pour cet événement, et son adresse web."
+    },
+    "previewPortal": "Aperçu du portail participant",
+    "attendeeCount": {
+      "title": "Nombre de participants",
+      "label": "Afficher sur la page de l’événement le nombre de participants",
+      "hint": "Désactivé par défaut. Affiche un nombre comme « 689 participants » près de la date.",
+      "save": "Enregistrer"
     }
   },
   "directory": {
@@ -14714,7 +14722,8 @@
       "connections": "Contacts",
       "meetings": "Rendez-vous",
       "profile": "Mon profil",
-      "chats": "Messages"
+      "chats": "Messages",
+      "lobby": "Salon"
     },
     "signIn": {
       "intro": "Voyez qui d’autre vient, échangez vos contacts et réservez de courts rendez-vous. Seules les personnes qui choisissent d’y participer apparaissent ici.",
@@ -14919,7 +14928,9 @@
       "past": "Ce créneau a déjà commencé. Choisissez-en un plus tard.",
       "unknown": "Ce choix n’est plus disponible. Rechargez la page.",
       "in_use": "Des rendez-vous l’utilisent encore. Annulez-les d’abord.",
-      "resolved": "Ce signalement a déjà été traité."
+      "resolved": "Ce signalement a déjà été traité.",
+      "lobby_off": "Le salon est fermé.",
+      "already_reported": "Vous avez déjà signalé ce message."
     },
     "console": {
       "link": "Networking",
@@ -15047,6 +15058,30 @@
         "restore": "Lever la suspension",
         "restoreName": "Lever la suspension de la messagerie du stand de {name}",
         "restored": "{name} peut de nouveau recevoir des messages."
+      },
+      "lobby": {
+        "heading": "Salon de l’événement",
+        "on": "Le salon est activé : les participants au réseau peuvent discuter dans un salon commun.",
+        "off": "Le salon est désactivé (par défaut). Activez-le pour offrir un salon commun aux participants.",
+        "needsChat": "Le salon ne fonctionne que si le réseau et les discussions sont activés.",
+        "turnOn": "Activer le salon",
+        "turnOff": "Désactiver le salon",
+        "turnedOn": "Salon activé.",
+        "turnedOff": "Salon désactivé.",
+        "stats": {
+          "messages": "Messages",
+          "today": "24 dernières heures",
+          "reports": "Signalements ouverts"
+        },
+        "noReports": "Aucun signalement ouvert.",
+        "reportTitle": "{reporter} a signalé {reported}",
+        "removedMessage": "Supprimé",
+        "remove": "Supprimer le message",
+        "removed": "Message supprimé.",
+        "hide": "Masquer la personne",
+        "hidden": "Personne masquée et messages supprimés.",
+        "dismiss": "Rejeter le signalement",
+        "dismissed": "Signalement rejeté."
       }
     },
     "unreadChats": "{count, plural, one {# discussion avec des messages non lus} many {# discussions avec des messages non lus} other {# discussions avec des messages non lus}}",
@@ -15067,6 +15102,27 @@
       "listLabel": "Personnes suggérées",
       "score": "{score} % de correspondance",
       "shared": "Vous aimez tous les deux : {interests}"
+    },
+    "lobby": {
+      "title": "Salon de l’événement",
+      "description": "Un salon de discussion pour tous ceux qui ont rejoint le réseau de cet événement.",
+      "rules": "Tous les membres du salon peuvent lire ce que vous écrivez. Soyez aimable ; vous pouvez signaler un message, ce qui bloque aussi son auteur pour vous.",
+      "emptyTitle": "Pas encore de messages",
+      "emptyDescription": "Dites bonjour pour lancer la conversation.",
+      "messages": "Messages du salon",
+      "you": "Vous",
+      "removed": "Ce message a été supprimé par un organisateur.",
+      "report": "Signaler ce message",
+      "reportReason": "Motif",
+      "reportDetails": "Détails (facultatif)",
+      "reportSubmit": "Envoyer le signalement",
+      "reported": "Signalé. L’auteur est maintenant bloqué pour vous.",
+      "write": "Votre message",
+      "send": "Envoyer",
+      "sent": "Envoyé.",
+      "tooFast": "Vous envoyez trop vite. Patientez un instant.",
+      "tooLong": "Limitez le message à 2000 caractères.",
+      "required": "Écrivez d’abord un message."
     }
   },
   "chat": {
@@ -19187,7 +19243,8 @@
       "schedule": "Mon programme",
       "profile": "Profil",
       "notifications": "Notifications",
-      "settings": "Paramètres du compte"
+      "settings": "Paramètres du compte",
+      "networking": "Réseau"
     },
     "descriptions": {
       "overview": "Vos réservations, vos prochains événements et votre compte, réunis.",
@@ -19196,7 +19253,8 @@
       "schedule": "Vos réservations de sessions et programmes personnels pour les événements qui les proposent.",
       "profile": "Gérez le nom et la photo de votre compte.",
       "notifications": "Choisissez ce que vous recevez de chaque organisateur.",
-      "settings": "Gérez la connexion, la sécurité et vos données personnelles."
+      "settings": "Gérez la connexion, la sécurité et vos données personnelles.",
+      "networking": "Rencontrez d’autres participants, discutez et réservez des rendez-vous à vos événements."
     },
     "signInTitle": "Vos événements commencent ici",
     "signInHint": "Connectez-vous à votre compte pour voir les achats effectués avec son e-mail vérifié. Vous pouvez aussi vérifier ci-dessous l’e-mail d’un billet pour voir ses réservations.",
@@ -19250,7 +19308,21 @@
     "attendeeSignUpTitle": "S’inscrire",
     "attendeeSignUpDescription": "Vérifiez votre e-mail pour créer un compte et retrouver vos événements et billets au même endroit.",
     "organizationAccessRequired": "Ce compte n’a pas d’accès organisation. Utilisez un compte organisateur ou continuez vers votre tableau de bord participant.",
-    "useAnotherAccount": "Utiliser un autre compte"
+    "useAnotherAccount": "Utiliser un autre compte",
+    "networking": {
+      "emptyTitle": "Pas encore de réseau",
+      "emptyHint": "Lorsqu’un organisateur ouvre le réseau pour l’un de vos prochains événements, il apparaît ici.",
+      "optInHint": "Le réseau est ouvert. Participez pour afficher un profil et rencontrer des gens.",
+      "optIn": "Rejoindre le réseau",
+      "unread": "{count} en attente",
+      "links": {
+        "people": "Personnes",
+        "connections": "Relations",
+        "meetings": "Rendez-vous",
+        "chats": "Discussions",
+        "lobby": "Salon"
+      }
+    }
   },
   "eventBranding": {
     "title": "Couleur de cet événement",
@@ -19294,5 +19366,13 @@
       "slug": "Utilisez uniquement des minuscules, des chiffres et des tirets (pas au début ni à la fin).",
       "slugTaken": "Cette adresse web est déjà prise."
     }
+  },
+  "attendeePreview": {
+    "banner": "Aperçu : un participant fictif, pas une vraie personne.",
+    "bannerDetail": "Rien ici n’est réel : aucune commande n’est créée ni donnée lue. Les liens sont inactifs.",
+    "title": "Aperçu du portail participant",
+    "description": "Ce que voit un participant pour cet événement.",
+    "sections": "Sections du portail",
+    "sampleStatus": "Payé"
   }
 }

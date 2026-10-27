@@ -20,11 +20,11 @@ export async function networkingOpen(orgId: string, eventId: string): Promise<bo
 export async function networkingEvent(
   orgId: string,
   eventId: string,
-): Promise<{ name: string; timeZone: string } | null> {
+): Promise<{ name: string; timeZone: string; slug: string } | null> {
   return withTenant(readCtx(orgId), async (tx) => {
     const s = await networkSettingsTx(tx, eventId);
     if (!s?.enabled) return null;
     const ev = await eventOf(tx, eventId).catch(() => null);
-    return ev?.status === 'published' ? { name: ev.name, timeZone: ev.timezone } : null;
+    return ev?.status === 'published' ? { name: ev.name, timeZone: ev.timezone, slug: ev.slug } : null;
   });
 }

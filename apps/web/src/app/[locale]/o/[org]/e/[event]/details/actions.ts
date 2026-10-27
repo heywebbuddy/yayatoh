@@ -6,6 +6,7 @@ import {
   setEventCurrencyCommand,
   setEventDetailsCommand,
   setEventSeoCommand,
+  setShowAttendeeCountCommand,
   setVanityShortLinkCommand,
   updateEventCommand,
 } from '@yayatoh/events';
@@ -134,4 +135,17 @@ export async function saveSeoAction(
   revalidatePath(`/events/${ev.slug}`);
   if (slug !== ev.slug) revalidatePath(`/events/${slug}`);
   return success();
+}
+
+/** "N going" on the public page: a checkbox form (off by default). */
+export async function setAttendeeCountAction(org: string, event: string, form: FormData): Promise<void> {
+  const { data, event: ev } = await loadEvent(org, event, 'details');
+  await executeCommand(
+    setShowAttendeeCountCommand,
+    { eventId: ev.id, show: form.get('show') === '1' },
+    data.ctx,
+    ports,
+  );
+  revalidatePath(`/o/${org}/e/${event}/details`);
+  revalidatePath(`/events/${ev.slug}`);
 }

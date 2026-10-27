@@ -809,7 +809,8 @@
     "videoTitle": "Video from {name}",
     "contact": "Contact",
     "brochures": "Brochures and downloads",
-    "teamAtEvent": "Team at the event"
+    "teamAtEvent": "Team at the event",
+    "going": "{count, plural, one {# going} other {# going}}"
   },
   "portal": {
     "day": "Day {day} · {date}",
@@ -3840,6 +3841,13 @@
     "seo": {
       "title": "SEO and sharing",
       "subtitle": "What search engines and link previews show for this event, and the event’s web address."
+    },
+    "previewPortal": "Preview attendee portal",
+    "attendeeCount": {
+      "title": "Attendee count",
+      "label": "Show how many people are going on the event page",
+      "hint": "Off by default. Shows a count like \"689 going\" next to the date.",
+      "save": "Save"
     }
   },
   "directory": {
@@ -14714,7 +14722,8 @@
       "connections": "Connections",
       "meetings": "Meetings",
       "profile": "My profile",
-      "chats": "Chats"
+      "chats": "Chats",
+      "lobby": "Lobby"
     },
     "signIn": {
       "intro": "See who else is coming, connect and book short meetings. Only people who choose to take part appear here.",
@@ -14919,7 +14928,9 @@
       "past": "That time slot has already started. Pick a later one.",
       "unknown": "That choice is no longer available. Reload the page.",
       "in_use": "Meetings still use this. Cancel them first.",
-      "resolved": "This report was already handled."
+      "resolved": "This report was already handled.",
+      "lobby_off": "The lobby is closed.",
+      "already_reported": "You already reported this message."
     },
     "console": {
       "link": "Networking",
@@ -15047,6 +15058,30 @@
         "restore": "Lift suspension",
         "restoreName": "Lift the suspension of {name}'s booth chat",
         "restored": "{name} can take chats again."
+      },
+      "lobby": {
+        "heading": "Event lobby",
+        "on": "The lobby is on: attendees who joined networking can chat in one room.",
+        "off": "The lobby is off (the default). Turn it on to give attendees one shared chat room.",
+        "needsChat": "The lobby works only while networking and chat are both on.",
+        "turnOn": "Turn the lobby on",
+        "turnOff": "Turn the lobby off",
+        "turnedOn": "Lobby turned on.",
+        "turnedOff": "Lobby turned off.",
+        "stats": {
+          "messages": "Messages",
+          "today": "Last 24 hours",
+          "reports": "Open reports"
+        },
+        "noReports": "No open reports.",
+        "reportTitle": "{reporter} reported {reported}",
+        "removedMessage": "Removed",
+        "remove": "Remove message",
+        "removed": "Message removed.",
+        "hide": "Hide the person",
+        "hidden": "Person hidden and their messages removed.",
+        "dismiss": "Dismiss report",
+        "dismissed": "Report dismissed."
       }
     },
     "unreadChats": "{count, plural, one {# chat with unread messages} other {# chats with unread messages}}",
@@ -15067,6 +15102,27 @@
       "listLabel": "Suggested matches",
       "score": "{score}% match",
       "shared": "You both like: {interests}"
+    },
+    "lobby": {
+      "title": "Event lobby",
+      "description": "One chat room for everyone who joined networking at this event.",
+      "rules": "Everyone in the lobby can read what you write. Be kind; you can report a message, which also blocks its author for you.",
+      "emptyTitle": "No messages yet",
+      "emptyDescription": "Say hello to start the conversation.",
+      "messages": "Lobby messages",
+      "you": "You",
+      "removed": "This message was removed by an organizer.",
+      "report": "Report this message",
+      "reportReason": "Reason",
+      "reportDetails": "Details (optional)",
+      "reportSubmit": "Send report",
+      "reported": "Reported. The author is now blocked for you.",
+      "write": "Your message",
+      "send": "Send",
+      "sent": "Sent.",
+      "tooFast": "You are sending messages too fast. Wait a moment.",
+      "tooLong": "Keep the message to 2000 characters.",
+      "required": "Write a message first."
     }
   },
   "chat": {
@@ -19187,7 +19243,8 @@
       "schedule": "My schedule",
       "profile": "Profile",
       "notifications": "Notifications",
-      "settings": "Account settings"
+      "settings": "Account settings",
+      "networking": "Networking"
     },
     "descriptions": {
       "overview": "Your bookings, upcoming events and account, together.",
@@ -19196,7 +19253,8 @@
       "schedule": "Your session bookings and personal schedules for events that support them.",
       "profile": "Manage your account name and photo.",
       "notifications": "Choose what you receive from each organizer.",
-      "settings": "Manage sign-in, security and your personal data."
+      "settings": "Manage sign-in, security and your personal data.",
+      "networking": "Meet other attendees, chat and book meetings at your events."
     },
     "signInTitle": "Your events start here",
     "signInHint": "Sign in to your account to see purchases made with its verified email. You can also verify a ticket email below to view its bookings.",
@@ -19250,7 +19308,21 @@
     "attendeeSignUpTitle": "Sign up",
     "attendeeSignUpDescription": "Verify your email to create an account and keep your events and tickets together.",
     "organizationAccessRequired": "This account does not have organization access. Use an organizer account or continue to your attendee dashboard.",
-    "useAnotherAccount": "Use a different account"
+    "useAnotherAccount": "Use a different account",
+    "networking": {
+      "emptyTitle": "No networking yet",
+      "emptyHint": "When an organizer opens networking for one of your upcoming events, it appears here.",
+      "optInHint": "Networking is open. Opt in to show a profile and meet people.",
+      "optIn": "Join networking",
+      "unread": "{count} waiting",
+      "links": {
+        "people": "People",
+        "connections": "Connections",
+        "meetings": "Meetings",
+        "chats": "Chat",
+        "lobby": "Lobby"
+      }
+    }
   },
   "eventBranding": {
     "title": "This event’s colour",
@@ -19294,5 +19366,13 @@
       "slug": "Use lowercase letters, digits and hyphens only (not at the start or end).",
       "slugTaken": "That web address is already taken."
     }
+  },
+  "attendeePreview": {
+    "banner": "Preview: this is a sample attendee, not a real person.",
+    "bannerDetail": "Nothing here is real: no order is created and no attendee data is read. Links are inactive.",
+    "title": "Attendee portal preview",
+    "description": "What an attendee sees for this event.",
+    "sections": "Portal sections",
+    "sampleStatus": "Paid"
   }
 }

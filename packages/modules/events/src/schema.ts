@@ -93,6 +93,8 @@ export const events = tenantTable(
     /** SEO title / meta description for search results and link previews (null: the defaults). */
     seoTitle: text('seo_title'),
     seoDescription: text('seo_description'),
+    /** Show "N going" on the public page (off by default). */
+    showAttendeeCount: boolean('show_attendee_count').notNull().default(false),
   },
   (t) => [
     uniqueIndex('events_slug_key').on(t.slug),

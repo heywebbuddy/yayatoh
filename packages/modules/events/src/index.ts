@@ -275,11 +275,14 @@ export {
 export {
   currentSlugFor,
   EventSeoDto,
+  eventDisplayQuery,
   eventSeoQuery,
   publicEventSeo,
+  publicShowsAttendeeCount,
   SEO_DESCRIPTION_MAX,
   SEO_TITLE_MAX,
   setEventSeoCommand,
+  setShowAttendeeCountCommand,
 } from './seo.ts';
 export {
   createSeriesCommand,

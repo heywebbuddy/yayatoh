@@ -18,6 +18,7 @@ export const privateColumns = columnPrivacy('events', {
   event_private_info: { body: holder(), join_url: holder('url') },
   event_role_assignments: { role: 'vocab' },
   event_sections: { kind: 'vocab', title: 'public', content: 'public' },
+  event_slug_redirects: { old_slug: 'public' },
   event_tags: { tag: 'public', tag_key: 'public' },
   events: {
     slug: 'public',
@@ -34,6 +35,8 @@ export const privateColumns = columnPrivacy('events', {
     category: 'vocab',
     attendance_mode: 'vocab',
     brand_color: 'public',
+    seo_title: 'public',
+    seo_description: 'public',
   },
   occurrences: { status: 'vocab' },
   // U8: org category names label public event pages.
