@@ -3821,7 +3821,8 @@
     "contactPhone": "هاتف التواصل",
     "websiteUrl": "الموقع الإلكتروني",
     "description": "الوصف",
-    "descriptionHint": "يظهر في صفحة المكان العامة. يدعم Markdown."
+    "descriptionHint": "يظهر في صفحة المكان العامة. يدعم Markdown.",
+    "timezoneCheck": "لهذا البلد عدة مناطق زمنية. اخترنا الأرجح؛ يرجى التحقق منها."
   },
   "details": {
     "title": "تفاصيل الفعالية",

@@ -3821,7 +3821,8 @@
     "contactPhone": "連絡先電話番号",
     "websiteUrl": "ウェブサイト",
     "description": "説明",
-    "descriptionHint": "公開の会場ページに表示されます。Markdown に対応しています。"
+    "descriptionHint": "公開の会場ページに表示されます。Markdown に対応しています。",
+    "timezoneCheck": "この国には複数のタイムゾーンがあります。最も可能性の高いものを選びました。ご確認ください。"
   },
   "details": {
     "title": "イベントの詳細",

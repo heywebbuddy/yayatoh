@@ -3821,7 +3821,8 @@
     "contactPhone": "Telefono di contatto",
     "websiteUrl": "Sito web",
     "description": "Descrizione",
-    "descriptionHint": "Mostrata nella pagina pubblica della sede. Markdown supportato."
+    "descriptionHint": "Mostrata nella pagina pubblica della sede. Markdown supportato.",
+    "timezoneCheck": "Questo paese ha più fusi orari. Abbiamo scelto il più probabile; controllalo, per favore."
   },
   "details": {
     "title": "Dettagli dell’evento",

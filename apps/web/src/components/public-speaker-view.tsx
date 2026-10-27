@@ -7,6 +7,7 @@ import { Markdown } from '@/components/markdown.tsx';
 import { MediaPicture } from '@/components/media-picture.tsx';
 import { SessionRow } from '@/components/program-sections.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { zoneLabel } from '@/lib/zone-label.ts';
 import { currentAccess } from '@/server/visitor.ts';
 
 /**
@@ -129,7 +130,7 @@ export async function PublicSpeakerView({
           </ol>
         )}
         <p className="text-caption text-ink-2">
-          {t('datesTimezone', { timezone: pub.timezone.replace(/_/g, ' ') })}
+          {t('datesTimezone', { timezone: zoneLabel(pub.timezone, locale) })}
         </p>
       </section>
     </main>

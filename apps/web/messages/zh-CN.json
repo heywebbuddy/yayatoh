@@ -3821,7 +3821,8 @@
     "contactPhone": "联系电话",
     "websiteUrl": "网站",
     "description": "简介",
-    "descriptionHint": "显示在公开的场地页面上。支持 Markdown。"
+    "descriptionHint": "显示在公开的场地页面上。支持 Markdown。",
+    "timezoneCheck": "该国家有多个时区。已选择最可能的一个,请核对。"
   },
   "details": {
     "title": "活动详情",

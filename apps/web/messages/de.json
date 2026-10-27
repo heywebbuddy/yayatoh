@@ -3821,7 +3821,8 @@
     "contactPhone": "Kontakttelefon",
     "websiteUrl": "Website",
     "description": "Beschreibung",
-    "descriptionHint": "Wird auf der öffentlichen Veranstaltungsort-Seite angezeigt. Markdown wird unterstützt."
+    "descriptionHint": "Wird auf der öffentlichen Veranstaltungsort-Seite angezeigt. Markdown wird unterstützt.",
+    "timezoneCheck": "Dieses Land hat mehrere Zeitzonen. Wir haben die wahrscheinlichste gewählt; bitte prüfe sie."
   },
   "details": {
     "title": "Eventdetails",

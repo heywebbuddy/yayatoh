@@ -14,6 +14,7 @@ import {
 } from '@/components/networking/network-forms.tsx';
 import { NetworkShell } from '@/components/networking/network-shell.tsx';
 import { getPathname, Link } from '@/i18n/navigation.ts';
+import { zoneLabel } from '@/lib/zone-label.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { loadNetworkPage, networkPath } from '@/server/networking.ts';
 import { ports } from '@/server/ports.ts';
@@ -156,7 +157,7 @@ export default async function NetworkPersonPage({ params }: Params) {
           ) : (
             <>
               <p className="text-body text-ink-2">
-                {t('person.meetHelp', { timezone: p.target.timeZone.replace(/_/g, ' ') })}
+                {t('person.meetHelp', { timezone: zoneLabel(p.target.timeZone, locale) })}
               </p>
               <MeetingRequestForm
                 action={requestMeetingAction.bind(null, slug, who.id)}

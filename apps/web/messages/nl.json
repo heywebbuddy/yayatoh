@@ -3821,7 +3821,8 @@
     "contactPhone": "Contacttelefoon",
     "websiteUrl": "Website",
     "description": "Beschrijving",
-    "descriptionHint": "Getoond op de openbare locatiepagina. Markdown wordt ondersteund."
+    "descriptionHint": "Getoond op de openbare locatiepagina. Markdown wordt ondersteund.",
+    "timezoneCheck": "Dit land heeft meerdere tijdzones. We kozen de meest waarschijnlijke; controleer hem even."
   },
   "details": {
     "title": "Evenementdetails",

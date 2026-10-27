@@ -3821,7 +3821,8 @@
     "contactPhone": "Contact phone",
     "websiteUrl": "Website",
     "description": "Description",
-    "descriptionHint": "Shown on the public venue page. Markdown is supported."
+    "descriptionHint": "Shown on the public venue page. Markdown is supported.",
+    "timezoneCheck": "This country has several time zones. We picked the most likely one; please check it."
   },
   "details": {
     "title": "Event details",

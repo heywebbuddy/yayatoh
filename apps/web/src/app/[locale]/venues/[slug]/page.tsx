@@ -23,6 +23,7 @@ import { QuoteForm } from '@/components/quote-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
 import { venueDisplayName } from '@/lib/venue-display.ts';
+import { zoneLabel } from '@/lib/zone-label.ts';
 import { humanCheckWidget } from '@/server/human-check.ts';
 import { requestQuoteAction } from './actions.ts';
 
@@ -216,7 +217,7 @@ export default async function PublicVenuePage({
                 <div className="flex items-start gap-3 rounded-card border border-line bg-surface-2 p-4">
                   <Clock3 aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-primary-ink" />
                   <p className="m-0 text-body">
-                    {t('timezone', { zone: venue.timezone.replace(/_/g, ' ') })}
+                    {t('timezone', { zone: zoneLabel(venue.timezone, locale) })}
                   </p>
                 </div>
               </div>

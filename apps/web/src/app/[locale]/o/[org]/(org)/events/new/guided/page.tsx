@@ -58,7 +58,7 @@ export default async function GuidedNewEventPage({
           ...(preset ? { series: preset } : {}),
         }}
         series={series.map((s) => ({ id: s.id, name: s.name }))}
-        venues={venues.map((v) => ({ id: v.id, name: v.name, city: v.city }))}
+        venues={venues.map((v) => ({ id: v.id, name: v.name, city: v.city, timezone: v.timezone }))}
         createVenue={createVenueInlineAction.bind(null, org)}
         currency={data.org.currency}
         ticketing={data.modules.has('ticketing')}

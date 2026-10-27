@@ -5,6 +5,7 @@ import { Markdown } from '@/components/markdown.tsx';
 import { MediaPicture } from '@/components/media-picture.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { sponsorLogoClass } from '@/lib/program-media.ts';
+import { zoneLabel } from '@/lib/zone-label.ts';
 
 /** M1.4h: speaker photos and exhibitor/sponsor logos by row id (allowlisted `PublicMediaDto`). */
 export type ProgramImages = Readonly<Record<string, PublicMediaDto>>;
@@ -129,7 +130,7 @@ export async function ProgramSections({
             {t('agenda')}
           </h2>
           <p className="text-caption text-ink-2">
-            {t('datesTimezone', { timezone: timeZone.replace(/_/g, ' ') })}
+            {t('datesTimezone', { timezone: zoneLabel(timeZone, locale) })}
           </p>
           {days.map((d) => (
             <section key={d.day} aria-labelledby={`agenda-${d.day}`} className="flex flex-col gap-2">

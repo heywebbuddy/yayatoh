@@ -3821,7 +3821,8 @@
     "contactPhone": "संपर्क फ़ोन",
     "websiteUrl": "वेबसाइट",
     "description": "विवरण",
-    "descriptionHint": "सार्वजनिक स्थल पृष्ठ पर दिखता है। Markdown समर्थित है।"
+    "descriptionHint": "सार्वजनिक स्थल पृष्ठ पर दिखता है। Markdown समर्थित है।",
+    "timezoneCheck": "इस देश में कई टाइम ज़ोन हैं। हमने सबसे संभावित चुना है; कृपया जाँच लें।"
   },
   "details": {
     "title": "इवेंट का विवरण",

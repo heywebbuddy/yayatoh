@@ -3821,7 +3821,8 @@
     "contactPhone": "聯絡電話",
     "websiteUrl": "網站",
     "description": "簡介",
-    "descriptionHint": "顯示在公開的場地頁面上。支援 Markdown。"
+    "descriptionHint": "顯示在公開的場地頁面上。支援 Markdown。",
+    "timezoneCheck": "該國家有多個時區。已選擇最可能的一個,請核對。"
   },
   "details": {
     "title": "活動詳細資料",

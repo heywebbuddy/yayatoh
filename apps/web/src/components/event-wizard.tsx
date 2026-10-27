@@ -110,7 +110,7 @@ export function EventWizard({
   profiles: readonly PickerProfile[];
   categories: readonly EventCategoryChoice[];
   manageCategoriesHref?: string;
-  venues: readonly { id: string; name: string; city: string | null }[];
+  venues: readonly { id: string; name: string; city: string | null; timezone: string }[];
   /** Creates a saved venue from the wizard ("+ Add a new venue"). */
   createVenue: (input: InlineVenueInput) => Promise<InlineVenueResult>;
   currency: string;
@@ -379,7 +379,10 @@ export function EventWizard({
                     id="wizard-venue"
                     name="venueId"
                     value={v.venueId}
-                    onValueChange={setTo('venueId')}
+                    onValueChange={(id: string) => {
+                      const picked = venues.find((x) => x.id === id);
+                      setV((p) => ({ ...p, venueId: id, ...(picked ? { timezone: picked.timezone } : {}) }));
+                    }}
                     className={selectClass}
                   >
                     <option value="">{t('noSavedVenue')}</option>
@@ -409,7 +412,13 @@ export function EventWizard({
                 onCancel={() => setAddingVenue(false)}
                 onCreated={(created) => {
                   setVenues((p) => [...p, created]);
-                  setV((p) => ({ ...p, venueId: created.id, venueName: '', city: '' }));
+                  setV((p) => ({
+                    ...p,
+                    venueId: created.id,
+                    venueName: '',
+                    city: '',
+                    timezone: created.timezone,
+                  }));
                   setAddingVenue(false);
                 }}
               />
