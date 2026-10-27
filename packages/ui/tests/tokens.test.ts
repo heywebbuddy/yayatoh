@@ -2,7 +2,8 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { dark, gradient, light, radius, shadow, showcase } from '../src/tokens.ts';
 
-const css = readFileSync(new URL('../src/styles.css', import.meta.url), 'utf8');
+// Checked out with CRLF on Windows: the selectors below span lines, so compare with LF.
+const css = readFileSync(new URL('../src/styles.css', import.meta.url), 'utf8').replaceAll('\r\n', '\n');
 
 const kebab = (s: string) => s.replace(/([A-Z]|\d+)/g, (c) => `-${c.toLowerCase()}`);
 // The formatter writes 0.40 as 0.4: compare numbers without trailing zeros.
