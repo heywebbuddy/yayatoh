@@ -85,8 +85,20 @@ const TASKS: Readonly<Record<PromptTask, string>> = {
   page: 'Write a page for the organizer\'s website. Reply with JSON {"title": string ≤ 120 chars, "excerpt": string ≤ 280, "body": Markdown with paragraphs, **bold**, *italic*, lists and https links only (no headings, HTML or images)}.',
   agenda:
     'Propose sessions for the event agenda inside the event\'s start and end. Reply with JSON {"sessions": [{"title": string ≤ 120, "description": plain text ≤ 600, "startsLocal": "YYYY-MM-DD HH:MM" in the event time zone, "minutes": 10 to 240}]} with at most the requested number of sessions, in time order, without overlaps.',
-  event_setup:
-    'Propose a complete draft event from the organizer\'s description. Reply with JSON {"name": string ≤ 160, "tagline": string ≤ 280, "profile": one of the listed profiles, "startsLocal": "YYYY-MM-DD HH:MM" in the listed time zone, not before today, "endsLocal": "YYYY-MM-DD HH:MM", "venueName": string or "", "city": string or "", "description": Markdown with paragraphs, **bold**, *italic* and lists (no headings, HTML or images), "tickets": [{"name", "description", "price": a number in the listed currency, "quantity": whole number}] (1 to 4), "agenda": [{"title", "description", "startsLocal", "minutes"}] (0 to 8, inside the event\'s dates), "faqs": [{"question", "answer"}] (3 to 6)}. Use dates, places and prices from the data when given; otherwise choose sensible, modest values and say nothing false about real people or sponsors.',
+  event_setup: [
+    "Turn the organizer's description (the brief) into a complete draft event. Reply with ONE JSON object:",
+    '{"name": string ≤ 160 (a proper event title, not the brief copied),',
+    '"tagline": string ≤ 280,',
+    '"profile": exactly one of the listed profiles that fits (wedding, gala, conference, concert, community, tour, agency, other),',
+    '"startsLocal": "YYYY-MM-DD HH:MM" in the listed time zone, on or after today (use a date from the brief when it has one),',
+    '"endsLocal": "YYYY-MM-DD HH:MM": for a multi-day event ("two-day", "weekend") it must be on the last day,',
+    '"venueName": the venue or, when only a place is named, that place; "city": the city or "",',
+    '"description": 2 to 3 short Markdown paragraphs plus an optional list (no headings, HTML or images), written for attendees,',
+    '"tickets": 1 to 4 of {"name","description","price" (a number in the listed currency, 0 if free),"quantity" (a whole number)} that suit the type (a wedding: free guest passes; a gala: seats and tables; a conference: early-bird, standard, student),',
+    '"agenda": 0 to 8 of {"title","description","startsLocal","minutes"} for the first day, inside the event dates,',
+    '"faqs": 3 to 6 of {"question","answer"} that attendees of this type really ask}.',
+    'Do not invent real people, sponsors or exact addresses. Prices and quantities are modest, editable suggestions.',
+  ].join(' '),
   audience:
     'Suggest an audience segment. Reply with JSON {"explanation": one sentence ≤ 200 chars, "definition": a segment definition in the platform DSL (version 1, a root group of conditions)}. Only reference event ids listed in the data. Prefer simple definitions with at most 4 conditions.',
 };

@@ -84,3 +84,42 @@ describe('AI event setup (Create with AI)', () => {
     expect(draft.agenda.map((a) => a.title)).toEqual(['Dinner']);
   });
 });
+
+describe('the no-provider fallback reads the sentence', () => {
+  it('"two-day wedding in Goa": wedding type, two days, Goa as place, wedding-shaped content', async () => {
+    const wide = {
+      ...bounds,
+      profiles: ['wedding', 'gala', 'conference', 'concert', 'community', 'tour', 'agency', 'other'],
+    };
+    const draft = cleanEventSetupDraft(
+      await fakeDrafter.compose({ ...request, brief: 'Two-day wedding in Goa', profiles: wide.profiles }),
+      wide,
+    );
+    expect(draft.profile).toBe('wedding');
+    expect(draft.city).toBe('Goa');
+    expect(draft.venueName).toBe('Goa');
+    // Two days: the end is on the day after the start.
+    expect(draft.endsLocal.slice(0, 10) > draft.startsLocal.slice(0, 10)).toBe(true);
+    expect(draft.name).toBe('Two-Day Wedding in Goa');
+    expect(draft.description).not.toContain('Two-day wedding in Goa.');
+    expect(draft.tickets[0]?.price).toBe(0);
+    expect(draft.agenda.length).toBeGreaterThan(2);
+    expect(draft.faqs.some((f) => /RSVP/i.test(f.question))).toBe(true);
+  });
+
+  it('a conference gets early-bird, standard and student tickets; a gala gets tables', async () => {
+    const profiles = ['gala', 'conference', 'other'];
+    const conf = cleanEventSetupDraft(
+      await fakeDrafter.compose({ ...request, brief: 'A one-day developer conference in Pune', profiles }),
+      { ...bounds, profiles },
+    );
+    expect(conf.profile).toBe('conference');
+    expect(conf.tickets.map((t) => t.name)).toEqual(['Early bird', 'Standard', 'Student']);
+    const gala = cleanEventSetupDraft(
+      await fakeDrafter.compose({ ...request, brief: 'Charity gala dinner for the library', profiles }),
+      { ...bounds, profiles },
+    );
+    expect(gala.profile).toBe('gala');
+    expect(gala.tickets.some((t) => /table/i.test(t.name))).toBe(true);
+  });
+});
