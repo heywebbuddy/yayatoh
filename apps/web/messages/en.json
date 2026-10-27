@@ -1227,7 +1227,9 @@
     "purchaser": "Purchased by",
     "group": "Group",
     "purchasedBy": "Purchased by {name}",
-    "groupLabel": "Group: {group}"
+    "groupLabel": "Group: {group}",
+    "downloadTicket": "Download this ticket (PDF)",
+    "downloadTicketLabel": "Download ticket {serial} as a PDF"
   },
   "orders": {
     "title": "Recent orders",

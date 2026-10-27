@@ -1227,7 +1227,9 @@
     "purchaser": "المشتري",
     "group": "المجموعة",
     "purchasedBy": "المشتري: {name}",
-    "groupLabel": "المجموعة: {group}"
+    "groupLabel": "المجموعة: {group}",
+    "downloadTicket": "تنزيل هذه التذكرة (PDF)",
+    "downloadTicketLabel": "تنزيل التذكرة {serial} بصيغة PDF"
   },
   "orders": {
     "title": "أحدث الطلبات",

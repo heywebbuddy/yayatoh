@@ -274,6 +274,15 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
                     <p className="text-body font-medium">{t('order.seatLabel', { seat: tk.seatLabel })}</p>
                   ) : null}
                   <p className="text-caption">{tk.holderName}</p>
+                  {getPdfRenderer() ? (
+                    <a
+                      href={`${locale === 'en' ? '' : `/${locale}`}/orders/${token}/pdf?ticket=${tk.id}`}
+                      className={buttonClass('secondary', 'sm')}
+                      aria-label={t('order.downloadTicketLabel', { serial: tk.serial })}
+                    >
+                      {t('order.downloadTicket')}
+                    </a>
+                  ) : null}
                   <p className="text-caption text-ink-2">
                     {t('order.purchasedBy', { name: order.buyerName })}
                   </p>

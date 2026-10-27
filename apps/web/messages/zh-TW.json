@@ -1227,7 +1227,9 @@
     "purchaser": "購買人",
     "group": "團體",
     "purchasedBy": "購買人：{name}",
-    "groupLabel": "團體：{group}"
+    "groupLabel": "團體：{group}",
+    "downloadTicket": "下載此票（PDF）",
+    "downloadTicketLabel": "以 PDF 下載第 {serial} 號票"
   },
   "orders": {
     "title": "最近訂單",

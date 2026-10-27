@@ -1227,7 +1227,9 @@
     "purchaser": "購入者",
     "group": "グループ",
     "purchasedBy": "購入者: {name}",
-    "groupLabel": "グループ: {group}"
+    "groupLabel": "グループ: {group}",
+    "downloadTicket": "このチケットをダウンロード（PDF）",
+    "downloadTicketLabel": "チケット{serial}をPDFでダウンロード"
   },
   "orders": {
     "title": "最近の注文",

@@ -1227,7 +1227,9 @@
     "purchaser": "Comprado por",
     "group": "Grupo",
     "purchasedBy": "Comprado por {name}",
-    "groupLabel": "Grupo: {group}"
+    "groupLabel": "Grupo: {group}",
+    "downloadTicket": "Descarregar este bilhete (PDF)",
+    "downloadTicketLabel": "Descarregar o bilhete {serial} em PDF"
   },
   "orders": {
     "title": "Pedidos recentes",

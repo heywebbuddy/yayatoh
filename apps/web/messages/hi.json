@@ -1227,7 +1227,9 @@
     "purchaser": "खरीदार",
     "group": "समूह",
     "purchasedBy": "खरीदार: {name}",
-    "groupLabel": "समूह: {group}"
+    "groupLabel": "समूह: {group}",
+    "downloadTicket": "यह टिकट डाउनलोड करें (PDF)",
+    "downloadTicketLabel": "टिकट {serial} को PDF में डाउनलोड करें"
   },
   "orders": {
     "title": "हाल के ऑर्डर",
