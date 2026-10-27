@@ -778,7 +778,9 @@
       "next": "Foto siguiente",
       "counter": "Foto {n} de {total}",
       "thumbnails": "Todas las fotos"
-    }
+    },
+    "shareWhatsApp": "Compartir por WhatsApp",
+    "shareMessage": "{name}: consigue tus entradas: {url}"
   },
   "portal": {
     "day": "Día {day} · {date}",
@@ -1089,7 +1091,11 @@
         "adaEnforcedBest": "Los asientos accesibles se reservan para quienes los necesitan hasta el {date}. Si necesitas uno, marca «Alguien de mi grupo usa silla de ruedas» y usa «Mejor disponible»."
       },
       "groupSummary": "{group} — {free} de {total} libres{chosen, plural, =0 {} one { · # elegido} other { · # elegidos}}",
-      "companion": "Asiento de acompañante"
+      "companion": "Asiento de acompañante",
+      "selectTable": "Elegir la mesa entera ({count, plural, one {# asiento} other {# asientos}})",
+      "unselectTable": "Quitar la mesa entera",
+      "tableTooBig": "La mesa {label} tiene {free, plural, one {# asiento libre} other {# asientos libres}}, pero un pedido admite como máximo {max}. Elige los asientos uno a uno o reparte la mesa en dos pedidos.",
+      "tableNoFree": "La mesa {label} no tiene asientos libres."
     },
     "seatRuleCap": "Son más asientos de los permitidos en un pedido. Elige menos, por favor.",
     "seatRuleAda": "Por ahora, los asientos accesibles están reservados para quienes los necesitan. Elige otros asientos.",
@@ -1137,7 +1143,19 @@
     "channelInvalid": "Este código de venta no es válido para este evento. Vuelve a abrir la página del evento sin él, o pregunta a quien te dio el enlace.",
     "channelNotice": "Estás comprando a través de {name}: los asientos reservados para {name} también están abiertos para ti.",
     "channelLinkInvalid": "Este enlace de venta no es válido para este evento. Aún puedes elegir entre los asientos abiertos a todos.",
-    "couponBuyerLimit": "Ya has usado este código tantas veces como permite."
+    "couponBuyerLimit": "Ya has usado este código tantas veces como permite.",
+    "summary": {
+      "title": "Tu pedido",
+      "subtotal": "Entradas",
+      "discount": "Descuento promocional",
+      "fee": "Gastos de gestión",
+      "total": "Total a pagar",
+      "free": "Gratis",
+      "note": "Este es el precio final. Lo pagas en el siguiente paso; todavía no se cobra nada.",
+      "promoInvalid": "Ese código promocional no es válido para estas entradas.",
+      "unavailable": "El total aparecerá cuando tu selección sea válida."
+    },
+    "accountHint": "No necesitas cuenta. Es posible que te enviemos un código de 6 dígitos para comprobar tu correo."
   },
   "fakePay": {
     "eyebrow": "Pago de prueba",
@@ -1205,7 +1223,15 @@
     "emailSentAt": "Enviado {when}",
     "emailScheduled": "Programado para {when}",
     "emailQueued": "Enviando",
-    "viewInvoice": "Ver, descargar o pagar tu factura"
+    "viewInvoice": "Ver, descargar o pagar tu factura",
+    "tableNo": "Mesa {n}",
+    "table": "Mesa",
+    "purchaser": "Comprado por",
+    "group": "Grupo",
+    "purchasedBy": "Comprado por {name}",
+    "groupLabel": "Grupo: {group}",
+    "downloadTicket": "Descargar esta entrada (PDF)",
+    "downloadTicketLabel": "Descargar la entrada {serial} en PDF"
   },
   "orders": {
     "title": "Pedidos recientes",
@@ -1609,7 +1635,9 @@
     "linkLabel": "Enlace para reclamar",
     "open": "Hay un enlace para reclamar pendiente de uso.",
     "openTo": "Se envió un enlace para reclamar a {email}.",
-    "revoke": "Revocar enlace"
+    "revoke": "Revocar enlace",
+    "shareWhatsApp": "Compartir por WhatsApp",
+    "whatsappMessage": "Aquí tienes tu entrada: {url}"
   },
   "claim": {
     "eyebrow": "Una entrada para ti",
@@ -2110,7 +2138,7 @@
   },
   "boxOffice": {
     "title": "Taquilla",
-    "description": "Registra las entradas que vendiste tú mismo: en efectivo en la puerta, por Zelle o con tu propio lector de tarjetas. Las entradas se emiten y se envían por correo electrónico al instante.",
+    "description": "Registra las entradas que vendiste tú mismo: en efectivo en la puerta, por Zelle o con tu propio lector de tarjetas. Las entradas se emiten y se envían por correo electrónico al instante. Para entregar un bloque de entradas a una persona (una empresa, el responsable de un grupo), registra toda la cantidad con su correo: recibirá un correo con la página de su pedido, donde podrá enviar a cada invitado su propia entrada.",
     "tickets": "Entradas",
     "name": "Nombre del comprador",
     "email": "Correo del comprador (las entradas se envían aquí)",
@@ -2326,7 +2354,8 @@
         "cancelled": "Esa persona ya no asiste.",
         "forbidden": "Puedes ver los asientos, pero no cambiarlos.",
         "dropMiss": "Suelta los nombres sobre una mesa, una fila o un asiento.",
-        "adaEnforced": "Ese asiento está reservado para quienes necesitan un asiento accesible. Marca «Este invitado necesita un asiento accesible» para sentarlo allí."
+        "adaEnforced": "Ese asiento está reservado para quienes necesitan un asiento accesible. Marca «Este invitado necesita un asiento accesible» para sentarlo allí.",
+        "noSeat": "Elige el asiento al que moverlos."
       },
       "canvas": {
         "title": "Plano",
@@ -2359,6 +2388,17 @@
         "title": "Mover a {name}",
         "submit": "Mover",
         "cancel": "Cancelar"
+      },
+      "ticketMove": {
+        "open": "Cambiar asiento",
+        "label": "Cambiar el asiento de {name}",
+        "title": "Cambiar el asiento de {name}",
+        "hint": "La entrada sigue siendo válida y conserva su código; solo cambia el asiento impreso. Elige un asiento libre o intercámbialo con otro titular.",
+        "swapWith": "{label}: intercambiar con {name}",
+        "submit": "Mover asiento",
+        "cancel": "Cancelar",
+        "done": "{name} tiene ahora el nuevo asiento. La entrada sigue siendo válida.",
+        "swapped": "{name} intercambió el asiento con otro titular. Ambas entradas siguen siendo válidas."
       }
     },
     "finder": {
@@ -5166,7 +5206,19 @@
       "current": "Marca un dispositivo con más de {rate} escaneos por minuto y una entrada que se mueve a más de {kmh} km/h entre puntos de control."
     },
     "showAll": "Mostrar todas las señales",
-    "reviewDetection": "Revisar los ajustes de detección"
+    "reviewDetection": "Revisar los ajustes de detección",
+    "reentry": {
+      "title": "Reentrada",
+      "description": "Permite que una entrada se escanee de nuevo unas horas después de su última entrada, para invitados que salen y vuelven. Los escaneos antes de ese plazo se siguen rechazando como duplicados. Desactivado por defecto.",
+      "enabled": "Permitir escanear de nuevo una entrada pasadas unas horas",
+      "hours": "Horas desde la última entrada",
+      "hoursHint": "De 1 a 72. Un escaneo anterior sigue siendo un duplicado.",
+      "hoursError": "Introduce un número entero de 1 a 72.",
+      "save": "Guardar ajuste de reentrada",
+      "saved": "Ajuste de reentrada guardado.",
+      "current": "Las entradas se pueden escanear de nuevo {hours, plural, one {# hora} other {# horas}} después de su última entrada.",
+      "currentOff": "La reentrada está desactivada: un segundo escaneo el mismo día es un duplicado."
+    }
   },
   "security": {
     "metaTitle": "Seguridad de la cuenta",
@@ -5503,7 +5555,7 @@
     }
   },
   "guestVerify": {
-    "title": "Confirma tu correo",
+    "title": "Comprobación rápida del correo: no necesitas cuenta",
     "sent": "Te enviamos un código de 6 dígitos a {email}. Introdúcelo para hacer tu pedido. Funciona durante 10 minutos.",
     "codeLabel": "Código de verificación",
     "submit": "Verificar y continuar",
@@ -5520,7 +5572,8 @@
     "settingOn": "Los compradores confirman su correo con un código antes de pedir.",
     "settingOff": "Los compradores piden sin confirmar su correo.",
     "resendIn": "{seconds, plural, one {Puedes pedir un código nuevo en # segundo.} other {Puedes pedir un código nuevo en # segundos.}}",
-    "wrong": "{count, plural, one {Ese código no es correcto. Queda # intento.} other {Ese código no es correcto. Quedan # intentos.}}"
+    "wrong": "{count, plural, one {Ese código no es correcto. Queda # intento.} other {Ese código no es correcto. Quedan # intentos.}}",
+    "noAccount": "Esto no es un inicio de sesión y no crearemos una cuenta. Solo comprobamos que tus entradas te lleguen. El resumen del pedido sigue arriba; no se cobra nada hasta el siguiente paso."
   },
   "attendeeSignIn": {
     "title": "Mis entradas",
@@ -19139,12 +19192,58 @@
     "attendeeSignUpTitle": "Registrarse",
     "attendeeSignUpDescription": "Verifica tu correo para crear una cuenta y tener tus eventos y entradas en un mismo lugar.",
     "organizationAccessRequired": "Esta cuenta no tiene acceso a ninguna organización. Usa una cuenta de organizador o continúa a tu panel de asistente.",
-    "useAnotherAccount": "Usar otra cuenta"
+    "useAnotherAccount": "Usar otra cuenta",
+    "openReceipt": "Ver recibo"
   },
   "eventBranding": {
     "title": "Color de este evento",
     "description": "Dale a este evento su propio color de acento en su página pública. Déjalo vacío para usar el color de marca de tu organización que aparece abajo.",
     "color": "Color del evento",
     "usesOrg": "Este evento usa el color de marca de la organización."
+  },
+  "receipt": {
+    "eyebrow": "Recibo",
+    "title": "Recibo {number}",
+    "number": "Número de recibo",
+    "paidOn": "Pagado el",
+    "billedTo": "Facturado a",
+    "event": "Evento",
+    "soldBy": "Vendido por",
+    "status": "Estado",
+    "item": "Concepto",
+    "quantity": "Cant.",
+    "unit": "Precio unitario",
+    "amount": "Importe",
+    "tickets": "Entradas",
+    "discount": "Descuento {code}",
+    "feesIncluded": "Gastos de gestión (incluidos arriba)",
+    "totalPaid": "Total pagado",
+    "payment": "Pago",
+    "note": "Este recibo confirma tu pago. Guárdalo para tus registros. Tus entradas están en la página de tu pedido.",
+    "footer": "Recibo emitido para {seller}.",
+    "downloadPdf": "Descargar recibo (PDF)",
+    "backToOrder": "Volver a mi pedido",
+    "view": "Ver recibo"
+  },
+  "nameHolders": {
+    "title": "¿Quién viene? Envía a cada uno su entrada",
+    "ticket": "Entrada {serial} · {type}",
+    "intro": "Introduce una sola vez el nombre y el correo de cada invitado. Cada persona recibe un correo con su propia entrada para reclamar, así todos tienen su propio código QR. También puedes copiar el enlace o compartirlo por WhatsApp. Deja una fila vacía para quedarte esa entrada.",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "submit": "Enviar entradas",
+    "ownEmailHint": "Si usas tu propio correo en una fila, solo se cambia el nombre en tu entrada.",
+    "sentTo": "Enviada a {name} ({email}). Pendiente de que la reclame.",
+    "copyLink": "Copiar enlace",
+    "copied": "Copiado",
+    "whatsapp": "Compartir por WhatsApp",
+    "whatsappMessage": "Aquí tienes tu entrada: {url}",
+    "changeHint": "Escribe otro nombre o correo abajo y envía de nuevo para cambiar el destinatario.",
+    "nothingEntered": "Introduce al menos un nombre y un correo.",
+    "incomplete": "Cada fila necesita nombre y correo.",
+    "feeRequired": "Esta entrada tiene una tarifa de transferencia, así que debe enviarse desde su propia página.",
+    "sameHolder": "Esa persona ya tiene esta entrada.",
+    "notAllowed": "Esta entrada no se puede enviar a otra persona (las transferencias están cerradas o no están permitidas).",
+    "done": "Listo. Cada persona ha recibido su entrada por correo."
   }
 }

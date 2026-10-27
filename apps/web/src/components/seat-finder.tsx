@@ -1,6 +1,6 @@
 'use client';
 
-import { type FloorplanDoc, mapArea, nearestObject, placedSeats } from '@yayatoh/floorplan';
+import { bareItemLabel, type FloorplanDoc, mapArea, nearestObject, placedSeats } from '@yayatoh/floorplan';
 import { Alert, Button, Card } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useMemo, useState, useTransition } from 'react';
@@ -166,7 +166,7 @@ function FinderBody({
                   <li key={s.seatUuid}>
                     <Card className="flex flex-col gap-0.5">
                       <span className="text-[22px] font-extrabold tracking-[-0.03em]">
-                        {t(`seatAt.${s.itemKind}`, { item: s.itemLabel, seat: s.seatLabel })}
+                        {t(`seatAt.${s.itemKind}`, { item: bareItemLabel(s.itemLabel), seat: s.seatLabel })}
                       </span>
                       {s.sponsor ? (
                         <span className="flex items-center gap-2 text-body" data-sponsor>

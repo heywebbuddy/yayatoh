@@ -778,7 +778,9 @@
       "next": "Next photo",
       "counter": "Photo {n} of {total}",
       "thumbnails": "All photos"
-    }
+    },
+    "shareWhatsApp": "Share on WhatsApp",
+    "shareMessage": "{name} — get your tickets: {url}"
   },
   "portal": {
     "day": "Day {day} · {date}",
@@ -1089,7 +1091,11 @@
         "adaEnforcedBest": "Accessible seats are kept for guests who need them until {date}. If you need one, tick “Someone in my party uses a wheelchair” and use Best available."
       },
       "groupSummary": "{group} — {free} of {total} free{chosen, plural, =0 {} other { · # chosen}}",
-      "companion": "Companion seat"
+      "companion": "Companion seat",
+      "selectTable": "Select whole table ({count, plural, one {# seat} other {# seats}})",
+      "unselectTable": "Unselect whole table",
+      "tableTooBig": "Table {label} has {free, plural, one {# free seat} other {# free seats}}, but one order can hold at most {max}. Choose seats one by one, or split the table over two orders.",
+      "tableNoFree": "Table {label} has no free seats left."
     },
     "seatRuleCap": "That's more seats than one order may have. Please choose fewer.",
     "seatRuleAda": "Accessible seats are kept for guests who need them for now. Please choose other seats.",
@@ -1137,7 +1143,19 @@
     "channelInvalid": "This sales code isn't valid for this event. Open the event page again without it, or ask whoever gave you the link.",
     "channelNotice": "You're buying through {name}: seats kept for {name} are open to you too.",
     "channelLinkInvalid": "This sales link isn't valid for this event. You can still choose from the seats open to everyone.",
-    "couponBuyerLimit": "You've already used this code as many times as it allows."
+    "couponBuyerLimit": "You've already used this code as many times as it allows.",
+    "summary": {
+      "title": "Your order",
+      "subtotal": "Tickets",
+      "discount": "Promo discount",
+      "fee": "Service fee",
+      "total": "Total to pay",
+      "free": "Free",
+      "note": "This is the final price. You pay it on the next step; nothing is charged yet.",
+      "promoInvalid": "That promo code isn’t valid for these tickets.",
+      "unavailable": "The total will be shown once your choice is valid."
+    },
+    "accountHint": "No account needed. We may email you a 6-digit code to check your address."
   },
   "fakePay": {
     "eyebrow": "Test payment",
@@ -1205,7 +1223,15 @@
     "emailSentAt": "Sent {when}",
     "emailScheduled": "Scheduled for {when}",
     "emailQueued": "Sending",
-    "viewInvoice": "View, download or pay your invoice"
+    "viewInvoice": "View, download or pay your invoice",
+    "tableNo": "Table {n}",
+    "table": "Table",
+    "purchaser": "Purchased by",
+    "group": "Group",
+    "purchasedBy": "Purchased by {name}",
+    "groupLabel": "Group: {group}",
+    "downloadTicket": "Download this ticket (PDF)",
+    "downloadTicketLabel": "Download ticket {serial} as a PDF"
   },
   "orders": {
     "title": "Recent orders",
@@ -1609,7 +1635,9 @@
     "linkLabel": "Claim link",
     "open": "A claim link is waiting to be used.",
     "openTo": "A claim link was sent to {email}.",
-    "revoke": "Revoke link"
+    "revoke": "Revoke link",
+    "shareWhatsApp": "Share on WhatsApp",
+    "whatsappMessage": "Here is your ticket: {url}"
   },
   "claim": {
     "eyebrow": "A ticket for you",
@@ -2110,7 +2138,7 @@
   },
   "boxOffice": {
     "title": "Box office",
-    "description": "Record tickets you sold yourself — cash at the door, Zelle, or your own card reader. Tickets are issued and emailed at once.",
+    "description": "Record tickets you sold yourself — cash at the door, Zelle, or your own card reader. Tickets are issued and emailed at once. To hand a block of tickets to one person (a company, a group leader), record the whole quantity with their email: they get one email with their order page, where they can send each guest their own ticket.",
     "tickets": "Tickets",
     "name": "Buyer's name",
     "email": "Buyer's email (tickets are sent here)",
@@ -2326,7 +2354,8 @@
         "cancelled": "That person is no longer attending.",
         "forbidden": "You can see the seating but not change it.",
         "dropMiss": "Drop names onto a table, a row or a seat.",
-        "adaEnforced": "That seat is kept for guests who need an accessible seat. Tick “This guest needs an accessible seat” to seat them there."
+        "adaEnforced": "That seat is kept for guests who need an accessible seat. Tick “This guest needs an accessible seat” to seat them there.",
+        "noSeat": "Choose the seat to move them to."
       },
       "canvas": {
         "title": "Plan",
@@ -2359,6 +2388,17 @@
         "title": "Move {name}",
         "submit": "Move",
         "cancel": "Cancel"
+      },
+      "ticketMove": {
+        "open": "Change seat",
+        "label": "Change the seat of {name}",
+        "title": "Change the seat of {name}",
+        "hint": "Their ticket stays valid and keeps its code; only the seat printed on it changes. Pick a free seat, or swap with another ticket holder.",
+        "swapWith": "{label} — swap with {name}",
+        "submit": "Move seat",
+        "cancel": "Cancel",
+        "done": "{name} now has the new seat. The ticket stays valid.",
+        "swapped": "{name} swapped seats with another ticket holder. Both tickets stay valid."
       }
     },
     "finder": {
@@ -5166,7 +5206,19 @@
       "current": "Flags a device doing more than {rate} scans a minute, and a ticket moving faster than {kmh} km/h between checkpoints."
     },
     "showAll": "Show all signals",
-    "reviewDetection": "Review detection settings"
+    "reviewDetection": "Review detection settings",
+    "reentry": {
+      "title": "Re-entry",
+      "description": "Let a ticket be scanned in again some hours after its last entry, for guests who step out and come back. Scans before that time are still refused as duplicates. Off by default.",
+      "enabled": "Allow a ticket to be scanned in again after some hours",
+      "hours": "Hours after the last entry",
+      "hoursHint": "From 1 to 72. A scan sooner than this is still a duplicate.",
+      "hoursError": "Enter a whole number from 1 to 72.",
+      "save": "Save re-entry setting",
+      "saved": "Re-entry setting saved.",
+      "current": "Tickets can be scanned in again {hours, plural, one {# hour} other {# hours}} after their last entry.",
+      "currentOff": "Re-entry is off: a second scan the same day is a duplicate."
+    }
   },
   "security": {
     "metaTitle": "Account security",
@@ -5503,7 +5555,7 @@
     }
   },
   "guestVerify": {
-    "title": "Confirm your email",
+    "title": "Quick email check — no account needed",
     "sent": "We emailed a 6-digit code to {email}. Enter it to place your order. It works for 10 minutes.",
     "codeLabel": "Verification code",
     "submit": "Verify and continue",
@@ -5520,7 +5572,8 @@
     "settingOn": "Buyers confirm their email with a code before ordering.",
     "settingOff": "Buyers order without confirming their email.",
     "resendIn": "{seconds, plural, one {You can ask for a new code in # second.} other {You can ask for a new code in # seconds.}}",
-    "wrong": "{count, plural, one {That code isn't right. # try left.} other {That code isn't right. # tries left.}}"
+    "wrong": "{count, plural, one {That code isn't right. # try left.} other {That code isn't right. # tries left.}}",
+    "noAccount": "This is not a sign-in and we won’t create an account for you. We only check that your tickets will reach you. Your order summary stays above; nothing is charged until the next step."
   },
   "attendeeSignIn": {
     "title": "My tickets",
@@ -19139,12 +19192,58 @@
     "attendeeSignUpTitle": "Sign up",
     "attendeeSignUpDescription": "Verify your email to create an account and keep your events and tickets together.",
     "organizationAccessRequired": "This account does not have organization access. Use an organizer account or continue to your attendee dashboard.",
-    "useAnotherAccount": "Use a different account"
+    "useAnotherAccount": "Use a different account",
+    "openReceipt": "View receipt"
   },
   "eventBranding": {
     "title": "This event’s colour",
     "description": "Give this event its own accent colour on its public event page. Leave it empty to use your organization’s brand colour below.",
     "color": "Event colour",
     "usesOrg": "This event uses the organization’s brand colour."
+  },
+  "receipt": {
+    "eyebrow": "Receipt",
+    "title": "Receipt {number}",
+    "number": "Receipt number",
+    "paidOn": "Paid on",
+    "billedTo": "Billed to",
+    "event": "Event",
+    "soldBy": "Sold by",
+    "status": "Status",
+    "item": "Item",
+    "quantity": "Qty",
+    "unit": "Unit price",
+    "amount": "Amount",
+    "tickets": "Tickets",
+    "discount": "Discount {code}",
+    "feesIncluded": "Service fees (included above)",
+    "totalPaid": "Total paid",
+    "payment": "Payment",
+    "note": "This receipt confirms your payment. Keep it for your records. Your tickets are on your order page.",
+    "footer": "Receipt issued for {seller}.",
+    "downloadPdf": "Download receipt (PDF)",
+    "backToOrder": "Back to my order",
+    "view": "View receipt"
+  },
+  "nameHolders": {
+    "title": "Who is coming? Send everyone their ticket",
+    "ticket": "Ticket {serial} · {type}",
+    "intro": "Enter each guest’s name and email once. Each person gets an email with their own ticket to claim, so everyone has their own QR code. You can also copy the link or share it on WhatsApp. Leave a row empty to keep that ticket yourself.",
+    "name": "Name",
+    "email": "Email",
+    "submit": "Send tickets",
+    "ownEmailHint": "Using your own email on a row only puts that name on your ticket.",
+    "sentTo": "Sent to {name} ({email}). Waiting for them to claim it.",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "whatsapp": "Share on WhatsApp",
+    "whatsappMessage": "Here is your ticket: {url}",
+    "changeHint": "Fill in a different name or email below and send again to change who it goes to.",
+    "nothingEntered": "Enter at least one name and email.",
+    "incomplete": "Each row needs both a name and an email.",
+    "feeRequired": "This ticket has a transfer fee, so it has to be sent from the ticket’s own page.",
+    "sameHolder": "That person already holds this ticket.",
+    "notAllowed": "This ticket can’t be sent to someone else (transfers are closed or not allowed for it).",
+    "done": "Done. Each person has been emailed their ticket."
   }
 }

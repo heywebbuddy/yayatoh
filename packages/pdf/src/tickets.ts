@@ -5,7 +5,7 @@ export interface TicketsPdfInput {
   readonly lang: string;
   readonly dir: 'ltr' | 'rtl';
   readonly eventName: string;
-  /** Already formatted in the event's timezone and the buyer's locale. */
+  /** Date and time, already formatted in the event's timezone and the buyer's locale. */
   readonly when: string;
   readonly where: string | null;
   readonly organizer: string;
@@ -14,6 +14,12 @@ export interface TicketsPdfInput {
     readonly serialLabel: string;
     readonly shortCode: string;
     readonly holderName: string;
+    /** Who bought the ticket, when it is not (only) the holder. */
+    readonly purchaserName?: string | null;
+    /** The group or party the holder belongs to, when there is one. */
+    readonly groupLabel?: string | null;
+    /** Gala tables: the table, e.g. "Table 4". */
+    readonly tableLabel?: string | null;
     /** Seated events: the seat, e.g. "Row A · 12". */
     readonly seatLabel?: string | null;
     readonly code: string;
@@ -23,6 +29,9 @@ export interface TicketsPdfInput {
   readonly labels: {
     readonly code: string;
     readonly holder: string;
+    readonly purchaser?: string;
+    readonly group?: string;
+    readonly table?: string;
     readonly seat?: string;
     readonly footer: string;
   };
@@ -49,6 +58,9 @@ export function ticketsHtml(input: TicketsPdfInput): string {
   <dl>
     <div><dt>${input.labels.code}</dt><dd class="code">${t.shortCode}</dd></div>
     <div><dt>${input.labels.holder}</dt><dd>${t.holderName}</dd></div>
+    ${t.purchaserName ? html`<div><dt>${input.labels.purchaser ?? ''}</dt><dd>${t.purchaserName}</dd></div>` : ''}
+    ${t.groupLabel ? html`<div><dt>${input.labels.group ?? ''}</dt><dd>${t.groupLabel}</dd></div>` : ''}
+    ${t.tableLabel ? html`<div><dt>${input.labels.table ?? ''}</dt><dd>${t.tableLabel}</dd></div>` : ''}
     ${t.seatLabel ? html`<div><dt>${input.labels.seat ?? ''}</dt><dd>${t.seatLabel}</dd></div>` : ''}
   </dl>
   <footer>${input.labels.footer}</footer>

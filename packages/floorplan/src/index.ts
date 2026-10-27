@@ -56,3 +56,4 @@ export {
   seatCount,
 } from './geometry.ts';
 export { itemCenter, MAP_AREAS, type MapArea, mapArea, nearestObject, seatPosition } from './guide.ts';
+export { bareItemLabel } from './labels.ts';

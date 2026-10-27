@@ -1,5 +1,6 @@
 'use client';
 
+import { bareItemLabel } from '@yayatoh/floorplan';
 import { Alert, Button, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { startTransition, useActionState } from 'react';
@@ -55,7 +56,7 @@ export function SeatGroups({
           ? released
           : null;
   const itemName = (i: { kind: 'row' | 'table'; label: string }) =>
-    t(`prices.item.${i.kind}`, { label: i.label });
+    t(`prices.item.${i.kind}`, { label: bareItemLabel(i.label) });
   const cls = 'field';
   const invalid = (f: GroupState['field']) => (state.field === f ? true : undefined);
   return (

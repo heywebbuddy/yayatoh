@@ -778,7 +778,9 @@
       "next": "次の写真",
       "counter": "写真 {n}/{total}",
       "thumbnails": "すべての写真"
-    }
+    },
+    "shareWhatsApp": "WhatsAppで共有",
+    "shareMessage": "{name} — チケットはこちら: {url}"
   },
   "portal": {
     "day": "{day}日目 · {date}",
@@ -1089,7 +1091,11 @@
         "adaEnforcedBest": "バリアフリー席は{date}まで必要な方のために確保されています。必要な場合は「同行者に車いす利用者がいます」にチェックを入れ、おまかせ座席を利用してください。"
       },
       "groupSummary": "{group} — 空席 {free}/{total}{chosen, plural, =0 {} other { · #席選択中}}",
-      "companion": "同伴者席"
+      "companion": "同伴者席",
+      "selectTable": "テーブル全体を選ぶ（{count}席）",
+      "unselectTable": "テーブル全体の選択を解除",
+      "tableTooBig": "テーブル{label}の空席は{free}席ですが、1回のご注文は最大{max}席までです。席を1つずつ選ぶか、2回に分けてご注文ください。",
+      "tableNoFree": "テーブル{label}に空席はありません。"
     },
     "seatRuleCap": "1回の注文で選べる座席数を超えています。座席数を減らしてください。",
     "seatRuleAda": "アクセシブル席は現在、必要な方のために確保されています。別の座席をお選びください。",
@@ -1137,7 +1143,19 @@
     "channelInvalid": "この販売コードはこのイベントでは使えません。コードなしでイベントページを開き直すか、リンクをくれた人に確認してください。",
     "channelNotice": "{name} 経由で購入しています。{name} 用に確保された席も選べます。",
     "channelLinkInvalid": "この販売リンクはこのイベントでは使えません。どなたでも選べる席からは引き続き選べます。",
-    "couponBuyerLimit": "このコードは利用できる回数をすでに使い切っています。"
+    "couponBuyerLimit": "このコードは利用できる回数をすでに使い切っています。",
+    "summary": {
+      "title": "ご注文内容",
+      "subtotal": "チケット",
+      "discount": "プロモーション割引",
+      "fee": "サービス手数料",
+      "total": "お支払い合計",
+      "free": "無料",
+      "note": "これが最終金額です。お支払いは次のステップで行われ、現時点では請求されません。",
+      "promoInvalid": "このプロモーションコードはこのチケットでは使えません。",
+      "unavailable": "選択内容が有効になると合計が表示されます。"
+    },
+    "accountHint": "アカウントは不要です。メールアドレス確認のため、6桁のコードをお送りする場合があります。"
   },
   "fakePay": {
     "eyebrow": "テスト決済",
@@ -1205,7 +1223,15 @@
     "emailSentAt": "{when} に送信",
     "emailScheduled": "{when} に送信予定",
     "emailQueued": "送信中",
-    "viewInvoice": "請求書を表示・ダウンロード・支払う"
+    "viewInvoice": "請求書を表示・ダウンロード・支払う",
+    "tableNo": "テーブル {n}",
+    "table": "テーブル",
+    "purchaser": "購入者",
+    "group": "グループ",
+    "purchasedBy": "購入者: {name}",
+    "groupLabel": "グループ: {group}",
+    "downloadTicket": "このチケットをダウンロード（PDF）",
+    "downloadTicketLabel": "チケット{serial}をPDFでダウンロード"
   },
   "orders": {
     "title": "最近の注文",
@@ -1609,7 +1635,9 @@
     "linkLabel": "受け取りリンク",
     "open": "受け取りリンクがまだ使用されていません。",
     "openTo": "{email} に受け取りリンクを送信しました。",
-    "revoke": "リンクを取り消す"
+    "revoke": "リンクを取り消す",
+    "shareWhatsApp": "WhatsAppで共有",
+    "whatsappMessage": "チケットはこちら: {url}"
   },
   "claim": {
     "eyebrow": "あなたへのチケット",
@@ -2110,7 +2138,7 @@
   },
   "boxOffice": {
     "title": "窓口販売",
-    "description": "ご自身で販売したチケットを記録します（当日の現金、Zelle、ご自身のカードリーダーなど）。チケットはすぐに発行され、メールで送信されます。",
+    "description": "ご自身で販売したチケットを記録します（当日の現金、Zelle、ご自身のカードリーダーなど）。チケットはすぐに発行され、メールで送信されます。 1人（会社やグループの代表者）にまとめてチケットを渡すには、数量全体をその方のメールアドレスで記録してください。注文ページのメールが届き、そこから各ゲストに専用チケットを送れます。",
     "tickets": "チケット",
     "name": "購入者の氏名",
     "email": "購入者のメールアドレス（チケットの送信先）",
@@ -2326,7 +2354,8 @@
         "cancelled": "この人はもう参加しません。",
         "forbidden": "座席は確認できますが、変更はできません。",
         "dropMiss": "名前をテーブル、列、または座席の上にドロップしてください。",
-        "adaEnforced": "この席はアクセシブル席を必要とする方のために確保されています。割り当てるには「このゲストはアクセシブル席が必要」にチェックしてください。"
+        "adaEnforced": "この席はアクセシブル席を必要とする方のために確保されています。割り当てるには「このゲストはアクセシブル席が必要」にチェックしてください。",
+        "noSeat": "移動先の席を選んでください。"
       },
       "canvas": {
         "title": "座席表",
@@ -2359,6 +2388,17 @@
         "title": "{name}さんを移動",
         "submit": "移動",
         "cancel": "キャンセル"
+      },
+      "ticketMove": {
+        "open": "席を変更",
+        "label": "{name}さんの席を変更",
+        "title": "{name}さんの席を変更",
+        "hint": "チケットは有効のままでコードも変わりません。印字される席だけが変わります。空席を選ぶか、他の保有者と入れ替えてください。",
+        "swapWith": "{label} — {name}さんと入れ替え",
+        "submit": "席を移動",
+        "cancel": "キャンセル",
+        "done": "{name}さんの席を変更しました。チケットは有効のままです。",
+        "swapped": "{name}さんは別の保有者と席を入れ替えました。どちらのチケットも有効です。"
       }
     },
     "finder": {
@@ -5166,7 +5206,19 @@
       "current": "Markeert een apparaat met meer dan {rate} scans per minuut en een ticket dat sneller dan {kmh} km/u tussen controlepunten gaat."
     },
     "showAll": "すべてのシグナルを表示",
-    "reviewDetection": "検出設定を確認"
+    "reviewDetection": "検出設定を確認",
+    "reentry": {
+      "title": "再入場",
+      "description": "最後の入場から一定時間後に、同じチケットを再度スキャンして入場できるようにします（途中で退出して戻るゲスト向け）。その時間より前のスキャンは、これまで通り重複として拒否されます。初期設定ではオフです。",
+      "enabled": "数時間後にチケットの再スキャンを許可する",
+      "hours": "最後の入場からの時間",
+      "hoursHint": "1〜72。これより早いスキャンは重複のままです。",
+      "hoursError": "1〜72の整数を入力してください。",
+      "save": "設定を保存",
+      "saved": "設定を保存しました。",
+      "current": "最後の入場から{hours}時間後にチケットを再スキャンできます。",
+      "currentOff": "再入場はオフです。同じ日の2回目のスキャンは重複になります。"
+    }
   },
   "security": {
     "metaTitle": "アカウントのセキュリティ",
@@ -5503,7 +5555,7 @@
     }
   },
   "guestVerify": {
-    "title": "メールアドレスの確認",
+    "title": "メールのかんたん確認（アカウント不要）",
     "sent": "{email}に6桁のコードを送信しました。入力すると注文できます。有効期間は10分です。",
     "codeLabel": "確認コード",
     "submit": "確認して続ける",
@@ -5520,7 +5572,8 @@
     "settingOn": "購入者は注文前にコードでメールアドレスを確認します。",
     "settingOff": "購入者はメールアドレスを確認せずに注文します。",
     "resendIn": "{seconds, plural, other {#秒後に新しいコードを請求できます。}}",
-    "wrong": "{count, plural, other {コードが正しくありません。あと#回試せます。}}"
+    "wrong": "{count, plural, other {コードが正しくありません。あと#回試せます。}}",
+    "noAccount": "これはログインではなく、アカウントも作成されません。チケットが確実に届くかを確認するだけです。注文内容は上に表示されたままで、次のステップまで請求されません。"
   },
   "attendeeSignIn": {
     "title": "マイチケット",
@@ -19139,12 +19192,58 @@
     "attendeeSignUpTitle": "新規登録",
     "attendeeSignUpDescription": "メールアドレスを確認してアカウントを作成し、イベントとチケットをまとめて管理しましょう。",
     "organizationAccessRequired": "このアカウントには組織へのアクセス権がありません。主催者アカウントを使用するか、参加者ダッシュボードに進んでください。",
-    "useAnotherAccount": "別のアカウントを使用"
+    "useAnotherAccount": "別のアカウントを使用",
+    "openReceipt": "領収書を見る"
   },
   "eventBranding": {
     "title": "このイベントの色",
     "description": "公開イベントページで、このイベント独自のアクセントカラーを使います。空欄にすると、下の組織のブランドカラーが使われます。",
     "color": "イベントカラー",
     "usesOrg": "このイベントは組織のブランドカラーを使用しています。"
+  },
+  "receipt": {
+    "eyebrow": "領収書",
+    "title": "領収書 {number}",
+    "number": "領収書番号",
+    "paidOn": "支払日",
+    "billedTo": "ご請求先",
+    "event": "イベント",
+    "soldBy": "販売元",
+    "status": "状態",
+    "item": "項目",
+    "quantity": "数量",
+    "unit": "単価",
+    "amount": "金額",
+    "tickets": "チケット",
+    "discount": "割引 {code}",
+    "feesIncluded": "サービス手数料（上記に含む）",
+    "totalPaid": "お支払い合計",
+    "payment": "お支払い",
+    "note": "この領収書はお支払いの確認です。記録として保管してください。チケットはご注文ページにあります。",
+    "footer": "{seller} 向けに発行された領収書。",
+    "downloadPdf": "領収書をダウンロード（PDF）",
+    "backToOrder": "ご注文に戻る",
+    "view": "領収書を見る"
+  },
+  "nameHolders": {
+    "title": "誰が参加しますか？ 全員にチケットを送る",
+    "ticket": "チケット {serial} · {type}",
+    "intro": "ゲストごとの名前とメールアドレスを一度入力するだけです。各自に専用チケットを受け取るメールが届き、全員が自分のQRコードを持てます。リンクのコピーやWhatsAppでの共有も可能です。空欄の行は、そのチケットをご自身で保持します。",
+    "name": "氏名",
+    "email": "メールアドレス",
+    "submit": "チケットを送信",
+    "ownEmailHint": "自分のメールアドレスを入力した行は、チケットの名前だけが変わります。",
+    "sentTo": "{name}（{email}）に送信済み。受け取り待ちです。",
+    "copyLink": "リンクをコピー",
+    "copied": "コピーしました",
+    "whatsapp": "WhatsAppで共有",
+    "whatsappMessage": "チケットはこちら: {url}",
+    "changeHint": "宛先を変えるには、下に別の名前またはメールを入力して再送信してください。",
+    "nothingEntered": "名前とメールアドレスを少なくとも1件入力してください。",
+    "incomplete": "各行に名前とメールアドレスの両方が必要です。",
+    "feeRequired": "このチケットには譲渡手数料がかかるため、チケット自身のページから送信してください。",
+    "sameHolder": "この方はすでにこのチケットを持っています。",
+    "notAllowed": "このチケットは他の方に送信できません（譲渡が締め切られているか、許可されていません）。",
+    "done": "完了しました。全員にチケットをメールで送信しました。"
   }
 }

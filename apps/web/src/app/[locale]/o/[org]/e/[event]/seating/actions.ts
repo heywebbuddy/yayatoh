@@ -2,6 +2,7 @@
 
 import { quickLayout } from '@yayatoh/floorplan';
 import { executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
+import { moveTicketSeatCommand } from '@yayatoh/orders';
 import {
   allocateGroupSeatsCommand,
   assignSeatCategoryCommand,
@@ -315,6 +316,30 @@ export async function unassignSeatAction(
     );
     revalidatePath(`/o/${org}/e/${event}/seating/assign`);
     return { ok: true, code: null, count: r.released };
+  } catch (err) {
+    return assignFail(err);
+  }
+}
+
+/**
+ * Move a ticket to another free seat, or swap it with another ticket (also for seats the buyer chose
+ * at checkout). The ticket stays valid; its printed seat label follows.
+ */
+export async function moveTicketSeatAction(
+  org: string,
+  event: string,
+  input: { ticketId: string; toSeatUuid: string },
+): Promise<AssignState> {
+  const { data } = await loadEvent(org, event, 'seating');
+  try {
+    const r = await executeCommand(
+      moveTicketSeatCommand,
+      { ticketId: input.ticketId, toSeatUuid: input.toSeatUuid },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/seating/assign`);
+    return { ok: true, code: null, count: r.moved.length, itemLabel: r.swapped ? 'swap' : undefined };
   } catch (err) {
     return assignFail(err);
   }

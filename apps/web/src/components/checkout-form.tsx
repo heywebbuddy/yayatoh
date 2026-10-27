@@ -3,10 +3,15 @@
 import { Alert, Button, buttonClass, Card, cx, Input, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, startTransition, useActionState, useState } from 'react';
-import type { CheckoutState } from '@/app/[locale]/events/[slug]/actions.ts';
+import type {
+  CheckoutState,
+  OrderPreviewInput,
+  OrderPreviewState,
+} from '@/app/[locale]/events/[slug]/actions.ts';
 import type { BestSeatsActions } from '@/components/best-available.tsx';
 import { CheckoutQuestions, type QuestionView } from '@/components/checkout-questions.tsx';
 import { GuestCodeFields } from '@/components/guest-code-fields.tsx';
+import { OrderSummary } from '@/components/order-summary.tsx';
 import type { SeatMapView, SeatStreamSource } from '@/components/seat-picker.tsx';
 import { SeatSelection } from '@/components/seat-selection.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -52,7 +57,10 @@ export function CheckoutForm({
   bestSeats = null,
   advancedSeating = false,
   channel = null,
+  preview = null,
 }: {
+  /** Prices the cart on the server (same rules as checkout) for the order summary. */
+  preview?: ((input: OrderPreviewInput) => Promise<OrderPreviewState>) | null;
   /** M4.8e: the event takes gifts tonight; offer to save a card for them after paying (P4-14). */
   cardForGiving?: boolean;
   /** Multi-date events (M1.4b): the date chosen on the page, posted with the order. */
@@ -315,6 +323,7 @@ export function CheckoutForm({
           <CheckoutQuestions questions={questions} invalidKey={state.field} />
         </Card>
       ) : null}
+      {buyable && preview ? <OrderSummary preview={preview} /> : null}
       {buyable ? (
         <Card tone="muted" className="flex flex-col gap-4">
           <div className="flex flex-col gap-4 @3xl:flex-row @3xl:items-end">
@@ -354,6 +363,7 @@ export function CheckoutForm({
               </Button>
             </div>
           </div>
+          {verify ? null : <p className="m-0 text-caption text-ink-2">{t('checkout.accountHint')}</p>}
           {/* Unticked by default: buying is never consent to marketing. */}
           <label className="flex min-h-6 items-start gap-2.5 text-caption text-ink-2">
             <input
@@ -394,6 +404,7 @@ export function CheckoutForm({
               pending={pending}
               idPrefix="checkout-verify"
             />
+            <p className="text-body text-ink-2">{t('guestVerify.noAccount')}</p>
             <p className="text-caption text-ink-2">{t('guestVerify.changeEmail')}</p>
           </section>
         </Card>

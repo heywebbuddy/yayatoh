@@ -2,6 +2,7 @@
 
 import { createCtx, executeCommand, isDomainError } from '@yayatoh/kernel';
 import {
+  assignHoldersCommand,
   manageTokenOrg,
   orderHolderTarget,
   registerOrderPushCommand,
@@ -63,6 +64,50 @@ const codeOf = (err: unknown) =>
 async function ctxFor(token: string) {
   const orgId = await manageTokenOrg(token);
   return orgId ? createCtx({ orgId }) : null;
+}
+
+export type HoldersState = FormState & { readonly ticketId?: string };
+
+/**
+ * "Name all holders at once": one name and email per ticket; the system sends each person their own
+ * ticket (the transfer/claim flow). Rows left empty are skipped. The manage link is the credential.
+ */
+export async function assignHoldersAction(
+  token: string,
+  _prev: HoldersState,
+  form: FormData,
+): Promise<HoldersState> {
+  const limit = await limitAction('holderLink', { identity: `assign:${token}`, scope: 'assign' });
+  if (!limit.allowed) return { ok: false, code: 'rate_limited' };
+  const orgId = (await orderHolderTarget(token))?.orgId;
+  if (!orgId) return { ok: false, code: 'not_found' };
+  const holders = form
+    .getAll('ticket')
+    .map(String)
+    .map((ticketId) => ({
+      ticketId,
+      name: String(form.get(`name:${ticketId}`) ?? '').trim(),
+      email: String(form.get(`email:${ticketId}`) ?? '').trim(),
+    }))
+    .filter((h) => h.name || h.email);
+  if (holders.length === 0) return { ok: false, code: 'validation_failed', reason: 'nothing_entered' };
+  const incomplete = holders.find((h) => !h.name || !h.email);
+  if (incomplete)
+    return {
+      ok: false,
+      code: 'validation_failed',
+      reason: 'incomplete',
+      ticketId: incomplete.ticketId,
+    };
+  try {
+    await executeCommand(assignHoldersCommand, { manageToken: token, holders }, createCtx({ orgId }), ports);
+  } catch (err) {
+    const state = failure(err);
+    const ticketId = (err as { details?: { ticketId?: unknown } }).details?.ticketId;
+    return typeof ticketId === 'string' ? { ...state, ticketId } : state;
+  }
+  revalidatePath(`/orders/${token}`);
+  return success();
 }
 
 /** Opt this browser in to push for the order's buyer (M1.10e). */

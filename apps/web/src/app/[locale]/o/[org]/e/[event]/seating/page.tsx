@@ -1,3 +1,4 @@
+import { bareItemLabel } from '@yayatoh/floorplan';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey } from '@yayatoh/platform';
 import { eventSeatingQuery, listLayoutsQuery, planTablesQuery } from '@yayatoh/seating';
@@ -276,7 +277,7 @@ export default async function SeatingPage({
                 {items.map((i) => (
                   <label key={i.id} className="flex min-h-6 items-center gap-2 text-body">
                     <input type="checkbox" name="itemId" value={i.id} className="size-5" />
-                    {t(`prices.item.${i.kind}`, { label: i.label })}
+                    {t(`prices.item.${i.kind}`, { label: bareItemLabel(i.label) })}
                   </label>
                 ))}
               </fieldset>

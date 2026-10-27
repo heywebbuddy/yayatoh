@@ -1,6 +1,6 @@
 'use client';
 
-import { type FloorplanDoc, hitTest } from '@yayatoh/floorplan';
+import { bareItemLabel, type FloorplanDoc, hitTest } from '@yayatoh/floorplan';
 import type { AssignSeatState, SeatAssignmentsDto } from '@yayatoh/seating';
 import { activeAdaRule, type SeatingRule } from '@yayatoh/seating/client';
 import { Alert, Button, Card, Select } from '@yayatoh/ui';
@@ -34,6 +34,7 @@ type Feedback = { tone: 'info' | 'danger'; text: string } | null;
 type Target = { itemId: string; seatId: string | null };
 type Item = SeatAssignmentsDto['items'][number];
 type Seat = Item['seats'][number];
+type TicketMove = { attendeeId: string; ticketId: string; name: string; itemId: string; seatId: string };
 type Moving = { attendeeId: string; name: string; itemId: string; seatId: string; override: boolean };
 
 /**
@@ -53,6 +54,7 @@ export function SeatAssignments({
   canWrite,
   assign,
   unassign,
+  moveTicket,
   rules = [],
   startsAt,
   timeZone,
@@ -68,6 +70,8 @@ export function SeatAssignments({
     overrideRules?: boolean;
   }) => Promise<AssignState>;
   unassign: (attendeeId: string) => Promise<AssignState>;
+  /** Moves a ticket's bought seat to a free seat (or swaps two tickets): works for buyers' own picks. */
+  moveTicket?: (input: { ticketId: string; toSeatUuid: string }) => Promise<AssignState>;
   rules?: readonly SeatingRule[];
   startsAt?: Date;
   timeZone?: string;
@@ -86,6 +90,7 @@ export function SeatAssignments({
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [hover, setHover] = useState<Target | null>(null);
   const [moving, setMoving] = useState<Moving | null>(null);
+  const [ticketMove, setTicketMove] = useState<TicketMove | null>(null);
   const dragged = useRef<string[] | null>(null);
   const pointerDrag = useRef<{ attendeeId: string; name: string; from: Target } | null>(null);
   const plan = useRef<HTMLDivElement>(null);
@@ -121,7 +126,7 @@ export function SeatAssignments({
     });
 
   const itemName = (i: { kind: 'row' | 'table'; label: string }) =>
-    t(`prices.item.${i.kind}`, { label: i.label });
+    t(`prices.item.${i.kind}`, { label: bareItemLabel(i.label) });
   const items = view.items;
   const byItem = useMemo(() => new Map(items.map((i) => [i.id, i])), [items]);
   const seatById = useMemo(
@@ -248,6 +253,23 @@ export function SeatAssignments({
       { itemId: moving.itemId, seatId: moving.seatId || null },
       { move: { name: moving.name }, override: moving.override, after: () => setMoving(null) },
     );
+  };
+  const onMoveTicket = (e: FormEvent) => {
+    e.preventDefault();
+    if (!ticketMove || !moveTicket) return;
+    if (!ticketMove.seatId) return setFeedback({ tone: 'danger', text: t('assign.errors.noSeat') });
+    const { name, ticketId, seatId } = ticketMove;
+    startTransition(async () => {
+      const r = await moveTicket({ ticketId, toSeatUuid: seatId });
+      if (r.ok) {
+        setFeedback({
+          tone: 'info',
+          text: t(r.itemLabel === 'swap' ? 'assign.ticketMove.swapped' : 'assign.ticketMove.done', { name }),
+        });
+        setTicketMove(null);
+        router.refresh();
+      } else setFeedback({ tone: 'danger', text: errorText(r) });
+    });
   };
   // Opening "Move to…" puts the keyboard on its table chooser.
   useEffect(() => {
@@ -566,6 +588,10 @@ export function SeatAssignments({
                     <ul className="flex list-none flex-col gap-1">
                       {people.map((p) => {
                         const movable = canWrite && !p.byTicket;
+                        const ticketMovable =
+                          canWrite && p.byTicket && Boolean(p.ticketId) && Boolean(moveTicket);
+                        const movingTicket = ticketMove?.attendeeId === p.attendeeId ? ticketMove : null;
+                        const ticketTarget = movingTicket ? byItem.get(movingTicket.itemId) : undefined;
                         const isMoving = moving?.attendeeId === p.attendeeId;
                         const target = isMoving ? byItem.get(moving.itemId) : undefined;
                         return (
@@ -596,6 +622,31 @@ export function SeatAssignments({
                                   {p.byTicket ? t('assign.tables.byTicket', { seat: p.seat }) : p.seat}
                                 </span>
                               </span>
+                              {ticketMovable ? (
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="ghost"
+                                  disabled={pending}
+                                  aria-expanded={Boolean(movingTicket)}
+                                  aria-label={t('assign.ticketMove.label', { name: p.name })}
+                                  onClick={() =>
+                                    setTicketMove(
+                                      movingTicket
+                                        ? null
+                                        : {
+                                            attendeeId: p.attendeeId,
+                                            ticketId: p.ticketId as string,
+                                            name: p.name,
+                                            itemId: i.id,
+                                            seatId: '',
+                                          },
+                                    )
+                                  }
+                                >
+                                  {t('assign.ticketMove.open')}
+                                </Button>
+                              ) : null}
                               {movable ? (
                                 <>
                                   <Button
@@ -637,6 +688,84 @@ export function SeatAssignments({
                                 </>
                               ) : null}
                             </div>
+                            {movingTicket ? (
+                              <form
+                                onSubmit={onMoveTicket}
+                                aria-label={t('assign.ticketMove.title', { name: p.name })}
+                                className="flex flex-col gap-2 rounded-card border border-line bg-surface-2 p-3"
+                              >
+                                <p className="m-0 text-caption text-ink-2">{t('assign.ticketMove.hint')}</p>
+                                <div className="flex flex-col gap-1">
+                                  <label
+                                    htmlFor={`tmove-item-${p.attendeeId}`}
+                                    className="text-[13px] font-bold text-ink"
+                                  >
+                                    {t('assign.form.item')}
+                                  </label>
+                                  <Select
+                                    id={`tmove-item-${p.attendeeId}`}
+                                    value={movingTicket.itemId}
+                                    onValueChange={(v) =>
+                                      setTicketMove({ ...movingTicket, itemId: v, seatId: '' })
+                                    }
+                                    className={field}
+                                  >
+                                    {items.map((o) => (
+                                      <option key={o.id} value={o.id}>
+                                        {itemName(o)}
+                                      </option>
+                                    ))}
+                                  </Select>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                  <label
+                                    htmlFor={`tmove-seat-${p.attendeeId}`}
+                                    className="text-[13px] font-bold text-ink"
+                                  >
+                                    {t('assign.form.seat')}
+                                  </label>
+                                  <Select
+                                    id={`tmove-seat-${p.attendeeId}`}
+                                    value={movingTicket.seatId}
+                                    onValueChange={(v) => setTicketMove({ ...movingTicket, seatId: v })}
+                                    className={field}
+                                  >
+                                    <option value="">{t('assign.form.choose')}</option>
+                                    {(ticketTarget?.seats ?? [])
+                                      .filter(
+                                        (s) =>
+                                          s.state === 'free' ||
+                                          (s.state === 'sold' &&
+                                            s.person?.ticketId &&
+                                            s.person.attendeeId !== p.attendeeId),
+                                      )
+                                      .map((s) => (
+                                        <option key={s.seatUuid} value={s.seatUuid}>
+                                          {s.state === 'sold'
+                                            ? t('assign.ticketMove.swapWith', {
+                                                label: s.label,
+                                                name: s.person?.name ?? '',
+                                              })
+                                            : s.label}
+                                        </option>
+                                      ))}
+                                  </Select>
+                                </div>
+                                <div className="flex gap-2">
+                                  <Button type="submit" size="sm" disabled={pending || !movingTicket.seatId}>
+                                    {t('assign.ticketMove.submit')}
+                                  </Button>
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => setTicketMove(null)}
+                                  >
+                                    {t('assign.ticketMove.cancel')}
+                                  </Button>
+                                </div>
+                              </form>
+                            ) : null}
                             {isMoving && moving ? (
                               <form
                                 onSubmit={onMove}

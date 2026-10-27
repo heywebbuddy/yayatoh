@@ -1,4 +1,4 @@
-import { type FloorplanDoc, itemCenter, mapArea, nearestObject } from '@yayatoh/floorplan';
+import { bareItemLabel, type FloorplanDoc, itemCenter, mapArea, nearestObject } from '@yayatoh/floorplan';
 import { Card } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
@@ -41,7 +41,7 @@ export function GuestPlaces({
           <li key={p.itemId} data-guest-place={p.itemId}>
             <Card className="flex flex-col gap-1">
               <span className="text-[22px] font-extrabold tracking-[-0.03em]">
-                {t(`placeAt.${p.itemKind}`, { item: p.itemLabel })}
+                {t(`placeAt.${p.itemKind}`, { item: bareItemLabel(p.itemLabel) })}
               </span>
               {p.sponsor ? (
                 <span className="flex items-center gap-2 text-body" data-sponsor>

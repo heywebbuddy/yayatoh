@@ -6,6 +6,7 @@ import {
   type FraudSeverity,
   type FraudSignalKind,
   listFraudSignalsQuery,
+  reentrySettingsQuery,
 } from '@yayatoh/checkin';
 import { eventRolesOf } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
@@ -15,11 +16,12 @@ import { Button, buttonClass, Card, EmptyState, PageHeader, Select } from '@yaya
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { DetectionForm } from '@/components/detection-form.tsx';
+import { ReentryForm } from '@/components/reentry-form.tsx';
 import { SignalItem } from '@/components/signal-item.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { resolveSignalAction, saveDetectionAction } from './actions.ts';
+import { resolveSignalAction, saveDetectionAction, saveReentryAction } from './actions.ts';
 
 const STATUSES = ['all', 'open', 'acknowledged', 'dismissed'] as const;
 type StatusFilter = (typeof STATUSES)[number];
@@ -76,6 +78,7 @@ export default async function SignalsPage({
     ports,
   );
   const settings = await executeQuery(detectionSettingsQuery, { eventId: ev.id }, data.ctx, ports);
+  const reentry = await executeQuery(reentrySettingsQuery, { eventId: ev.id }, data.ctx, ports);
   const people = await getUsersByIds([...new Set(signals.flatMap((s) => (s.userId ? [s.userId] : [])))]);
   const open = signals.filter((s) => s.status === 'open').length;
   const base = `/o/${org}/e/${event}`;
@@ -213,6 +216,23 @@ export default async function SignalsPage({
               rate: settings.maxScansPerMinute,
               kmh: settings.maxTravelKmh,
             })}
+          </p>
+        )}
+      </section>
+      <section aria-labelledby="reentry-heading" className="flex flex-col gap-3">
+        <h2 id="reentry-heading" className="text-section">
+          {t('signals.reentry.title')}
+        </h2>
+        <p className="text-caption text-ink-2">{t('signals.reentry.description')}</p>
+        {canTriage ? (
+          <Card>
+            <ReentryForm action={saveReentryAction.bind(null, org, event)} hours={reentry.hours} />
+          </Card>
+        ) : (
+          <p className="text-body">
+            {reentry.hours === null
+              ? t('signals.reentry.currentOff')
+              : t('signals.reentry.current', { hours: reentry.hours })}
           </p>
         )}
       </section>

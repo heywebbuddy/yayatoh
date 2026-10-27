@@ -18,6 +18,7 @@ export {
   companionSeatsTx,
   companionSuggestions,
   HeldSeatDto,
+  heldTokenTicketTypesTx,
   holdBestAvailableCommand,
   holdBestAvailableStaffCommand,
   holdBestAvailableTx,
@@ -248,6 +249,7 @@ export {
   releaseSeatHoldTx,
   seatedTicketTypeIds,
   seatedTicketTypesTx,
+  seatTicketTypesTx,
   sellSeatsTx,
   voidSeatTx,
 } from './holds.ts';
@@ -295,6 +297,7 @@ export {
   seatChannels,
   seatingLiveAccessQuery,
 } from './live.ts';
+export { type MovedSeat, moveSoldSeatTx } from './move-sold-seat.ts';
 export { seatedAttendeeIdsTx } from './participation.ts';
 // M4.7a: the seats of a party for its guest hub (the app passes this reader to the guests module).
 export { partySeatsTx } from './party-seats.ts';

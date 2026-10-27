@@ -472,6 +472,8 @@ export const HolderTicketsDto = z.object({
     startsAt: z.date(),
     endsAt: z.date(),
     timezone: z.string(),
+    venueName: z.string().nullable().default(null),
+    city: z.string().nullable().default(null),
   }),
   email: z.string(),
   tickets: z.array(
@@ -481,6 +483,8 @@ export const HolderTicketsDto = z.object({
       shortCode: z.string(),
       holderName: z.string(),
       typeName: z.string(),
+      /** Seated events: the seat, e.g. "Row A · 12". */
+      seatLabel: z.string().nullable().default(null),
       code: z.string(),
       /** An open claim link for this ticket is waiting to be claimed. */
       pendingTransfer: z.boolean(),
@@ -525,6 +529,7 @@ export const holderTicketsQuery = tenantQuery({
         shortCode: tickets.shortCode,
         holderName: tickets.holderName,
         typeName: ticketTypes.name,
+        seatLabel: tickets.seatLabel,
         code: ticketBarcodes.payload,
       })
       .from(tickets)
@@ -574,7 +579,15 @@ export const holderTicketsQuery = tenantQuery({
       ev,
     );
     return {
-      event: { id: ev.id, name: ev.name, startsAt: ev.startsAt, endsAt: ev.endsAt, timezone: ev.timezone },
+      event: {
+        id: ev.id,
+        name: ev.name,
+        startsAt: ev.startsAt,
+        endsAt: ev.endsAt,
+        timezone: ev.timezone,
+        venueName: ev.venueName ?? null,
+        city: ev.city ?? null,
+      },
       email: l.emailNorm,
       tickets: rows.map((r) => ({
         ...r,

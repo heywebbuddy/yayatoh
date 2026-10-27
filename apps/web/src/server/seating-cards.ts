@@ -1,3 +1,4 @@
+import { bareItemLabel } from '@yayatoh/floorplan';
 import 'server-only';
 import { RTL_LOCALES } from '@yayatoh/contracts';
 import type { CardKind, CardsCopy, ExportCopy } from '@yayatoh/seating';
@@ -18,7 +19,7 @@ export const localeDir = (lang: string): 'ltr' | 'rtl' => (RTL_LOCALES.has(lang 
 /** "Table 3", "Row A" in a language (the plan's labels are bare). */
 export async function placeNamer(lang: string) {
   const t = await getTranslations({ locale: lang, namespace: 'seating.guestSeating.place' });
-  return (p: { kind: 'table' | 'row'; label: string }) => t(p.kind, { label: p.label });
+  return (p: { kind: 'table' | 'row'; label: string }) => t(p.kind, { label: bareItemLabel(p.label) });
 }
 
 export async function cardsCopy(lang: string, kind: CardKind): Promise<CardsCopy> {

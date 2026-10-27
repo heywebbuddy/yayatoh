@@ -464,6 +464,8 @@ export const SeatAssignmentsDto = z.object({
               attendeeId: z.uuid(),
               name: z.string(),
               byTicket: z.boolean(),
+              /** The ticket whose bought seat this is (to move it), when the seat was bought. */
+              ticketId: z.uuid().nullable(),
               pinned: z.boolean(),
             })
             .nullable(),
@@ -535,7 +537,13 @@ export const seatAssignmentsQuery = tenantQuery({
             accessible: s.accessible,
             person:
               who && (a || state === 'sold')
-                ? { attendeeId: who.id, name: who.name, byTicket: !a, pinned: a?.pinned ?? false }
+                ? {
+                    attendeeId: who.id,
+                    name: who.name,
+                    byTicket: !a,
+                    ticketId: a ? null : (s.ticketId ?? null),
+                    pinned: a?.pinned ?? false,
+                  }
                 : null,
           },
         ];

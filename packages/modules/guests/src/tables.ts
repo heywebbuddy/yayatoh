@@ -1,4 +1,4 @@
-import { attendeesByIdsTx } from '@yayatoh/attendees';
+import { attendeesByIdsTx, attendeesByTicketIdsTx } from '@yayatoh/attendees';
 import { isUniqueViolation, type TenantTx } from '@yayatoh/db';
 import { type Ctx, DomainError, requireOrg } from '@yayatoh/kernel';
 import { and, asc, eq, inArray, sql } from 'drizzle-orm';
@@ -40,6 +40,45 @@ export async function guestsByTicketTx(tx: TenantTx, ticketIds: readonly string[
     .where(inArray(guests.ticketId, [...ticketIds]))
     .orderBy(asc(guests.createdAt), asc(guests.id));
   return rows.map((r) => ({ ...r, ticketId: r.ticketId as string }));
+}
+
+/**
+ * The party (group) name of each of these tickets: the party of the guest who holds the ticket
+ * (a table's named guest, or a guest the host gave a ticket). Tickets of nobody's party are left
+ * out. Names only, for the ticket the holder sees.
+ */
+export async function partyNamesByTicketTx(
+  tx: TenantTx,
+  ticketIds: readonly string[],
+): Promise<Map<string, string>> {
+  const out = new Map<string, string>();
+  if (ticketIds.length === 0) return out;
+  const direct = await tx
+    .select({ ticketId: guests.ticketId, party: parties.name })
+    .from(guests)
+    .innerJoin(parties, eq(parties.id, guests.partyId))
+    .where(inArray(guests.ticketId, [...ticketIds]));
+  for (const r of direct) if (r.ticketId) out.set(r.ticketId, r.party);
+  const rest = ticketIds.filter((id) => !out.has(id));
+  const attendees = await attendeesByTicketIdsTx(tx, rest);
+  if (attendees.length) {
+    const viaAttendee = await tx
+      .select({ attendeeId: guests.attendeeId, party: parties.name })
+      .from(guests)
+      .innerJoin(parties, eq(parties.id, guests.partyId))
+      .where(
+        inArray(
+          guests.attendeeId,
+          attendees.map((a) => a.id),
+        ),
+      );
+    const ticketOf = new Map(attendees.map((a) => [a.id, a.ticketId]));
+    for (const r of viaAttendee) {
+      const ticketId = r.attendeeId ? ticketOf.get(r.attendeeId) : null;
+      if (ticketId) out.set(ticketId, r.party);
+    }
+  }
+  return out;
 }
 
 /**

@@ -10,19 +10,23 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BuyerRefundRequestForm } from '@/components/buyer-refund-request.tsx';
 import { HolderContent } from '@/components/holder-content.tsx';
+import { NameHoldersForm } from '@/components/name-holders-form.tsx';
 import { OrderReview } from '@/components/reviews/order-review.tsx';
 import { TicketQr } from '@/components/ticket-qr.tsx';
 import { WebPushControl } from '@/components/web-push-control.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { formatEventDateTimeRange } from '@/lib/format.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { helpLinksForOrder } from '@/server/assistance.ts';
 import { certificateLinksForOrder } from '@/server/ce.ts';
 import { hasConferenceHub } from '@/server/conference-hub.ts';
 import { getPdfRenderer } from '@/server/pdf.ts';
+import { receiptEligible } from '@/server/receipt.ts';
 import { scheduleSummary } from '@/server/schedule.ts';
 import { watchLinksForOrder } from '@/server/virtual.ts';
 import { webPushPublicKey } from '@/server/web-push.ts';
 import {
+  assignHoldersAction,
   removeOrderDeviceAction,
   requestRefundAction,
   subscribeOrderPushAction,
@@ -99,6 +103,11 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
   const hub = await hasConferenceHub(token);
   // M4.2b: tables bought in this order, each with its claim link for naming the guests.
   const tables = await orderTablesByManageToken(token);
+  const eventWhen = formatEventDateTimeRange(
+    order.event.startsAt.toISOString(),
+    order.event.endsAt.toISOString(),
+    { locale, currency: order.currency, timeZone: order.event.timezone },
+  );
   const sinceFmt = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: order.event.timezone });
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-6 py-16">
@@ -112,6 +121,14 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
       </Link>
       <Card size="panel" className="flex flex-col gap-4">
         <StatusDot status={DOT[order.status]} label={t(`order.status.${order.status}`)} />
+        {receiptEligible(order) ? (
+          <Link
+            href={`/orders/${token}/receipt`}
+            className="inline-flex min-h-8 items-center self-start text-body font-bold text-primary-ink underline-offset-2 hover:underline"
+          >
+            {t('receipt.view')}
+          </Link>
+        ) : null}
         {/* M5.1d: a pay-later order: its invoice (view, PDF, pay). */}
         {order.invoicePath ? (
           <Link
@@ -258,11 +275,33 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
                     <p className="text-body font-medium">
                       {t('order.ticketDate', { date: dateFmt.format(tk.date.startsAt) })}
                     </p>
+                  ) : (
+                    <p className="text-body font-medium">{eventWhen}</p>
+                  )}
+                  {tk.tableNo ? (
+                    <p className="text-body font-medium">{t('order.tableNo', { n: tk.tableNo })}</p>
                   ) : null}
                   {tk.seatLabel ? (
                     <p className="text-body font-medium">{t('order.seatLabel', { seat: tk.seatLabel })}</p>
                   ) : null}
                   <p className="text-caption">{tk.holderName}</p>
+                  {getPdfRenderer() ? (
+                    <a
+                      href={`${locale === 'en' ? '' : `/${locale}`}/orders/${token}/pdf?ticket=${tk.id}`}
+                      className={buttonClass('secondary', 'sm')}
+                      aria-label={t('order.downloadTicketLabel', { serial: tk.serial })}
+                    >
+                      {t('order.downloadTicket')}
+                    </a>
+                  ) : null}
+                  <p className="text-caption text-ink-2">
+                    {t('order.purchasedBy', { name: order.buyerName })}
+                  </p>
+                  {tk.groupLabel ? (
+                    <p className="text-caption text-ink-2">
+                      {t('order.groupLabel', { group: tk.groupLabel })}
+                    </p>
+                  ) : null}
                   {watchLinks.get(tk.id) ? (
                     <Link
                       href={watchLinks.get(tk.id) as string}
@@ -294,6 +333,27 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
               </li>
             ))}
           </ul>
+        </section>
+      ) : null}
+      {(order.status === 'paid' || order.status === 'partially_refunded') && order.tickets.length > 0 ? (
+        <section aria-labelledby="name-holders-heading" className="flex flex-col gap-3">
+          <h2 id="name-holders-heading" className="text-section">
+            {t('nameHolders.title')}
+          </h2>
+          <Card size="panel">
+            <NameHoldersForm
+              action={assignHoldersAction.bind(null, token)}
+              pending={order.pendingHolders}
+              tickets={order.tickets.map((tk) => ({
+                id: tk.id,
+                holderName: tk.holderName,
+                label: t('nameHolders.ticket', {
+                  serial: tk.serial,
+                  type: typeName.get(tk.ticketTypeId) ?? '',
+                }),
+              }))}
+            />
+          </Card>
         </section>
       ) : null}
       {holderTarget ? (

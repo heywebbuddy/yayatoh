@@ -55,6 +55,10 @@ export const HolderTicketDto = z.object({
   code: z.string(),
   /** Multi-date events (M1.4b): the date this ticket admits; null = every date of the event. */
   date: z.object({ startsAt: z.date(), endsAt: z.date() }).nullable(),
+  /** The group (party) the holder belongs to, when the host or the table's buyer named one. */
+  groupLabel: z.string().nullable().default(null),
+  /** Gala tables (M4.2b): the number of the purchased table this ticket is a seat of. */
+  tableNo: z.int().nullable().default(null),
 });
 
 /** What a guest sees on the order page (reached by the manage token, which is the credential). */
@@ -135,6 +139,17 @@ export const PublicOrderDto = OrderDto.omit({ eventId: true }).extend({
   refundRequest: BuyerRefundPanelDto,
   /** M3.10c: credit notes on this order (store credit shows its code: the buyer's own). */
   creditNotes: z.array(BuyerCreditNoteDto).default([]),
+  /** Tickets sent to a named person and not yet claimed, with the claim link token to re-share. */
+  pendingHolders: z
+    .array(
+      z.object({
+        ticketId: z.uuid(),
+        toName: z.string(),
+        toEmail: z.string(),
+        claimToken: z.string(),
+      }),
+    )
+    .default([]),
   /** M5.1d: a pay-later order's invoice page (view, PDF, pay), on the event's public site. */
   invoicePath: z.string().nullable().default(null),
 });

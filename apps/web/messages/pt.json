@@ -778,7 +778,9 @@
       "next": "Próxima foto",
       "counter": "Foto {n} de {total}",
       "thumbnails": "Todas as fotos"
-    }
+    },
+    "shareWhatsApp": "Partilhar no WhatsApp",
+    "shareMessage": "{name} — garanta os seus bilhetes: {url}"
   },
   "portal": {
     "day": "Dia {day} · {date}",
@@ -1089,7 +1091,11 @@
         "adaEnforcedBest": "Os lugares acessíveis ficam reservados para quem precisa até {date}. Se você precisa de um, marque «Alguém do meu grupo usa cadeira de rodas» e use «Melhores disponíveis»."
       },
       "groupSummary": "{group} — {free} de {total} livres{chosen, plural, =0 {} one { · # escolhido} other { · # escolhidos}}",
-      "companion": "Lugar de acompanhante"
+      "companion": "Lugar de acompanhante",
+      "selectTable": "Escolher a mesa inteira ({count, plural, one {# lugar} other {# lugares}})",
+      "unselectTable": "Remover a mesa inteira",
+      "tableTooBig": "A mesa {label} tem {free, plural, one {# lugar livre} other {# lugares livres}}, mas um pedido admite no máximo {max}. Escolha os lugares um a um ou divida a mesa por dois pedidos.",
+      "tableNoFree": "A mesa {label} já não tem lugares livres."
     },
     "seatRuleCap": "São mais assentos do que um pedido pode ter. Escolha menos.",
     "seatRuleAda": "Por enquanto, os assentos acessíveis estão reservados para quem precisa. Escolha outros assentos.",
@@ -1137,7 +1143,19 @@
     "channelInvalid": "Este código de venda não é válido para este evento. Abra a página do evento sem ele, ou pergunte a quem lhe deu o link.",
     "channelNotice": "Você está comprando por {name}: os lugares reservados para {name} também estão abertos para você.",
     "channelLinkInvalid": "Este link de venda não é válido para este evento. Você ainda pode escolher entre os lugares abertos a todos.",
-    "couponBuyerLimit": "Você já usou este código quantas vezes ele permite."
+    "couponBuyerLimit": "Você já usou este código quantas vezes ele permite.",
+    "summary": {
+      "title": "O seu pedido",
+      "subtotal": "Bilhetes",
+      "discount": "Desconto promocional",
+      "fee": "Taxa de serviço",
+      "total": "Total a pagar",
+      "free": "Grátis",
+      "note": "Este é o preço final. Paga no passo seguinte; ainda não é cobrado nada.",
+      "promoInvalid": "Esse código promocional não é válido para estes bilhetes.",
+      "unavailable": "O total aparece quando a sua escolha for válida."
+    },
+    "accountHint": "Não precisa de conta. Podemos enviar-lhe um código de 6 dígitos para verificar o seu e-mail."
   },
   "fakePay": {
     "eyebrow": "Pagamento de teste",
@@ -1205,7 +1223,15 @@
     "emailSentAt": "Enviado {when}",
     "emailScheduled": "Agendado para {when}",
     "emailQueued": "Enviando",
-    "viewInvoice": "Ver, descarregar ou pagar a sua fatura"
+    "viewInvoice": "Ver, descarregar ou pagar a sua fatura",
+    "tableNo": "Mesa {n}",
+    "table": "Mesa",
+    "purchaser": "Comprado por",
+    "group": "Grupo",
+    "purchasedBy": "Comprado por {name}",
+    "groupLabel": "Grupo: {group}",
+    "downloadTicket": "Descarregar este bilhete (PDF)",
+    "downloadTicketLabel": "Descarregar o bilhete {serial} em PDF"
   },
   "orders": {
     "title": "Pedidos recentes",
@@ -1609,7 +1635,9 @@
     "linkLabel": "Link de resgate",
     "open": "Há um link de resgate aguardando uso.",
     "openTo": "Um link de resgate foi enviado para {email}.",
-    "revoke": "Revogar link"
+    "revoke": "Revogar link",
+    "shareWhatsApp": "Partilhar no WhatsApp",
+    "whatsappMessage": "Aqui está o seu bilhete: {url}"
   },
   "claim": {
     "eyebrow": "Um ingresso para você",
@@ -2110,7 +2138,7 @@
   },
   "boxOffice": {
     "title": "Bilheteria",
-    "description": "Registre os ingressos que você mesmo vendeu: em dinheiro na entrada, por Zelle ou na sua própria maquininha de cartão. Os ingressos são emitidos e enviados por e-mail na hora.",
+    "description": "Registre os ingressos que você mesmo vendeu: em dinheiro na entrada, por Zelle ou na sua própria maquininha de cartão. Os ingressos são emitidos e enviados por e-mail na hora. Para entregar um bloco de bilhetes a uma pessoa (uma empresa, o responsável de um grupo), registe toda a quantidade com o e-mail dela: recebe um e-mail com a página do pedido, onde pode enviar a cada convidado o seu próprio bilhete.",
     "tickets": "Ingressos",
     "name": "Nome do comprador",
     "email": "E-mail do comprador (os ingressos são enviados para ele)",
@@ -2326,7 +2354,8 @@
         "cancelled": "Essa pessoa não vai mais participar.",
         "forbidden": "Você pode ver os lugares, mas não alterá-los.",
         "dropMiss": "Solte os nomes sobre uma mesa, uma fileira ou um lugar.",
-        "adaEnforced": "Esse assento está reservado para quem precisa de um assento acessível. Marque “Este convidado precisa de um assento acessível” para colocá-lo ali."
+        "adaEnforced": "Esse assento está reservado para quem precisa de um assento acessível. Marque “Este convidado precisa de um assento acessível” para colocá-lo ali.",
+        "noSeat": "Escolha o lugar para onde os mover."
       },
       "canvas": {
         "title": "Planta",
@@ -2359,6 +2388,17 @@
         "title": "Mover {name}",
         "submit": "Mover",
         "cancel": "Cancelar"
+      },
+      "ticketMove": {
+        "open": "Mudar de lugar",
+        "label": "Mudar o lugar de {name}",
+        "title": "Mudar o lugar de {name}",
+        "hint": "O bilhete continua válido e mantém o código; só muda o lugar impresso. Escolha um lugar livre ou troque com outro titular.",
+        "swapWith": "{label} — trocar com {name}",
+        "submit": "Mover lugar",
+        "cancel": "Cancelar",
+        "done": "{name} tem agora o novo lugar. O bilhete continua válido.",
+        "swapped": "{name} trocou de lugar com outro titular. Ambos os bilhetes continuam válidos."
       }
     },
     "finder": {
@@ -5166,7 +5206,19 @@
       "current": "Отмечает устройство, делающее больше {rate} сканов в минуту, и билет, перемещающийся между пунктами быстрее {kmh} км/ч."
     },
     "showAll": "Mostrar todos os sinais",
-    "reviewDetection": "Rever as definições de deteção"
+    "reviewDetection": "Rever as definições de deteção",
+    "reentry": {
+      "title": "Reentrada",
+      "description": "Permita que um bilhete seja lido de novo algumas horas após a última entrada, para convidados que saem e voltam. As leituras antes desse prazo continuam recusadas como duplicados. Desativado por predefinição.",
+      "enabled": "Permitir ler de novo um bilhete passadas algumas horas",
+      "hours": "Horas após a última entrada",
+      "hoursHint": "De 1 a 72. Uma leitura anterior continua a ser um duplicado.",
+      "hoursError": "Introduza um número inteiro de 1 a 72.",
+      "save": "Guardar definição de reentrada",
+      "saved": "Definição de reentrada guardada.",
+      "current": "Os bilhetes podem ser lidos de novo {hours, plural, one {# hora} other {# horas}} após a última entrada.",
+      "currentOff": "A reentrada está desativada: uma segunda leitura no mesmo dia é um duplicado."
+    }
   },
   "security": {
     "metaTitle": "Segurança da conta",
@@ -5503,7 +5555,7 @@
     }
   },
   "guestVerify": {
-    "title": "Confirme o seu e-mail",
+    "title": "Verificação rápida do e-mail: não precisa de conta",
     "sent": "Enviámos um código de 6 dígitos para {email}. Digite-o para fazer o pedido. Funciona durante 10 minutos.",
     "codeLabel": "Código de verificação",
     "submit": "Verificar e continuar",
@@ -5520,7 +5572,8 @@
     "settingOn": "Os compradores confirmam o e-mail com um código antes de encomendar.",
     "settingOff": "Os compradores encomendam sem confirmar o e-mail.",
     "resendIn": "{seconds, plural, one {Pode pedir um novo código dentro de # segundo.} other {Pode pedir um novo código dentro de # segundos.}}",
-    "wrong": "{count, plural, one {Esse código não está certo. Resta # tentativa.} other {Esse código não está certo. Restam # tentativas.}}"
+    "wrong": "{count, plural, one {Esse código não está certo. Resta # tentativa.} other {Esse código não está certo. Restam # tentativas.}}",
+    "noAccount": "Isto não é um início de sessão e não criamos nenhuma conta. Só verificamos que os bilhetes lhe chegam. O resumo do pedido fica acima; nada é cobrado até ao passo seguinte."
   },
   "attendeeSignIn": {
     "title": "Meus ingressos",
@@ -19139,12 +19192,58 @@
     "attendeeSignUpTitle": "Criar conta",
     "attendeeSignUpDescription": "Verifique seu e-mail para criar uma conta e manter seus eventos e ingressos juntos.",
     "organizationAccessRequired": "Esta conta não tem acesso a uma organização. Use uma conta de organizador ou continue para o seu painel de participante.",
-    "useAnotherAccount": "Usar outra conta"
+    "useAnotherAccount": "Usar outra conta",
+    "openReceipt": "Ver recibo"
   },
   "eventBranding": {
     "title": "Cor deste evento",
     "description": "Dê a este evento uma cor de destaque própria na página pública dele. Deixe em branco para usar a cor da marca da sua organização, abaixo.",
     "color": "Cor do evento",
     "usesOrg": "Este evento usa a cor da marca da organização."
+  },
+  "receipt": {
+    "eyebrow": "Recibo",
+    "title": "Recibo {number}",
+    "number": "Número do recibo",
+    "paidOn": "Pago em",
+    "billedTo": "Faturado a",
+    "event": "Evento",
+    "soldBy": "Vendido por",
+    "status": "Estado",
+    "item": "Item",
+    "quantity": "Qtd.",
+    "unit": "Preço unitário",
+    "amount": "Valor",
+    "tickets": "Bilhetes",
+    "discount": "Desconto {code}",
+    "feesIncluded": "Taxas de serviço (incluídas acima)",
+    "totalPaid": "Total pago",
+    "payment": "Pagamento",
+    "note": "Este recibo confirma o seu pagamento. Guarde-o para os seus registos. Os seus bilhetes estão na página do pedido.",
+    "footer": "Recibo emitido para {seller}.",
+    "downloadPdf": "Descarregar recibo (PDF)",
+    "backToOrder": "Voltar ao meu pedido",
+    "view": "Ver recibo"
+  },
+  "nameHolders": {
+    "title": "Quem vem? Envie a cada um o seu bilhete",
+    "ticket": "Bilhete {serial} · {type}",
+    "intro": "Introduza uma só vez o nome e o e-mail de cada convidado. Cada pessoa recebe um e-mail com o seu próprio bilhete para reclamar, e assim todos têm o seu código QR. Também pode copiar a ligação ou partilhá-la no WhatsApp. Deixe uma linha vazia para ficar com esse bilhete.",
+    "name": "Nome",
+    "email": "E-mail",
+    "submit": "Enviar bilhetes",
+    "ownEmailHint": "Se usar o seu próprio e-mail numa linha, só muda o nome no seu bilhete.",
+    "sentTo": "Enviado a {name} ({email}). À espera de ser reclamado.",
+    "copyLink": "Copiar ligação",
+    "copied": "Copiado",
+    "whatsapp": "Partilhar no WhatsApp",
+    "whatsappMessage": "Aqui está o seu bilhete: {url}",
+    "changeHint": "Escreva outro nome ou e-mail abaixo e envie de novo para mudar o destinatário.",
+    "nothingEntered": "Introduza pelo menos um nome e um e-mail.",
+    "incomplete": "Cada linha precisa de nome e e-mail.",
+    "feeRequired": "Este bilhete tem uma taxa de transferência, por isso tem de ser enviado a partir da sua própria página.",
+    "sameHolder": "Essa pessoa já tem este bilhete.",
+    "notAllowed": "Este bilhete não pode ser enviado a outra pessoa (as transferências estão fechadas ou não são permitidas).",
+    "done": "Feito. Cada pessoa recebeu o seu bilhete por e-mail."
   }
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import type { FloorplanDoc } from '@yayatoh/floorplan';
+import { bareItemLabel } from '@yayatoh/floorplan';
 import {
   activeAdaRule,
   activeCompanionRule,
@@ -217,6 +218,33 @@ export function SeatPicker({
       ),
     [map.doc, bySeat],
   );
+  // "Select whole table": every free seat of the table in one tap (or all of them off again). A
+  // table bigger than what one order may hold selects nothing and says why.
+  const toggleTable = useCallback(
+    (groupId: string) => {
+      const g = groups.find((x) => x.id === groupId);
+      if (!g) return;
+      const free = g.seats.filter((id) => available.has(id));
+      if (free.length === 0) return setNotice(t('tableNoFree', { label: bareItemLabel(g.label) }));
+      const next = new Set(selected);
+      if (free.every((id) => next.has(id))) {
+        for (const id of free) next.delete(id);
+      } else {
+        const add = free.filter((id) => !next.has(id));
+        if (next.size + add.length > hardMax)
+          return setNotice(
+            t('tableTooBig', { label: bareItemLabel(g.label), free: free.length, max: hardMax }),
+          );
+        for (const id of add) next.add(id);
+      }
+      setNotice(null);
+      setPicked(next);
+    },
+    [groups, available, selected, hardMax, t],
+  );
+  const toggleTableRef = useRef(toggleTable);
+  toggleTableRef.current = toggleTable;
+  const onToggleTable = useCallback((id: string) => toggleTableRef.current(id), []);
   const date = (d: Date) =>
     format.dateTime(d, { dateStyle: 'medium', timeStyle: 'short', ...(timeZone ? { timeZone } : {}) });
   const keptNote = ada?.severity === 'enforce' ? t('rules.keptUntil', { date: date(ada.releaseAt) }) : null;
@@ -322,7 +350,13 @@ export function SeatPicker({
       </div>
       {showMap ? (
         // The list below offers the same choices by keyboard and screen reader.
-        <SeatMapCanvas doc={map.doc} available={available} selected={selected} onToggle={onToggle} />
+        <SeatMapCanvas
+          doc={map.doc}
+          available={available}
+          selected={selected}
+          onToggle={onToggle}
+          onToggleTable={onToggleTable}
+        />
       ) : null}
       <div className="flex max-h-96 flex-col gap-3 overflow-y-auto">
         {groups.map((g) => {
@@ -339,6 +373,7 @@ export function SeatPicker({
               available={available}
               selected={selected}
               onToggle={onToggle}
+              onToggleTable={onToggleTable}
             />
           );
           if (!large) return group;
@@ -363,7 +398,7 @@ export function SeatPicker({
             >
               <summary className="min-h-6 cursor-pointer text-body">
                 {t('groupSummary', {
-                  group: t(`group.${g.kind}`, { label: g.label }),
+                  group: t(`group.${g.kind}`, { label: bareItemLabel(g.label) }),
                   free: g.seats.filter((id) => available.has(id)).length,
                   total: g.seats.length,
                   chosen: g.seats.filter((id) => selected.has(id)).length,
@@ -392,6 +427,7 @@ const SeatGroup = memo(
     available,
     selected,
     onToggle,
+    onToggleTable,
   }: {
     group: Group;
     sig: string;
@@ -401,13 +437,32 @@ const SeatGroup = memo(
     available: ReadonlySet<string>;
     selected: ReadonlySet<string>;
     onToggle: (id: string) => void;
+    onToggleTable: (groupId: string) => void;
   }) {
     const t = useTranslations('checkout.seats');
+    const free = group.seats.filter((id) => available.has(id));
+    const all = free.length > 0 && free.every((id) => selected.has(id));
     return (
       <fieldset className="flex flex-col gap-1.5">
         <legend className="text-[13px] font-bold text-ink">
-          {t(`group.${group.kind}`, { label: group.label })}
+          {t(`group.${group.kind}`, { label: bareItemLabel(group.label) })}
         </legend>
+        {group.kind === 'table' && free.length > 0 ? (
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            className="self-start"
+            aria-pressed={all}
+            onClick={() => onToggleTable(group.id)}
+          >
+            {all ? t('unselectTable', { count: free.length }) : t('selectTable', { count: free.length })}
+            <span className="sr-only">
+              {' '}
+              — {t(`group.${group.kind}`, { label: bareItemLabel(group.label) })}
+            </span>
+          </Button>
+        ) : null}
         <div className="flex flex-wrap gap-x-4 gap-y-1.5">
           {group.seats.map((id) => {
             const seat = map.get(id);
@@ -448,5 +503,6 @@ const SeatGroup = memo(
     a.group === b.group &&
     a.prices === b.prices &&
     a.keptNote === b.keptNote &&
-    a.onToggle === b.onToggle,
+    a.onToggle === b.onToggle &&
+    a.onToggleTable === b.onToggleTable,
 );

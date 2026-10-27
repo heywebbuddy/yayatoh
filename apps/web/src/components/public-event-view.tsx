@@ -29,6 +29,7 @@ import {
   checkoutAction,
   findBestSeatsAction,
   findChannelBestSeatsAction,
+  previewOrderAction,
   redeemAccessCodeAction,
   releaseBestSeatsAction,
   requestHolderLinkAction,
@@ -54,6 +55,7 @@ import { galleryLabels } from '@/lib/gallery-labels.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { aggregateRatingJsonLd, eventJsonLd, jsonLdScript } from '@/lib/seo/jsonld.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
+import { whatsappHref } from '@/lib/share.ts';
 import { venueDisplayName } from '@/lib/venue-display.ts';
 import { hasAdvancedSeating } from '@/server/advanced-seating.ts';
 import { publicDemoOverlay } from '@/server/demo.ts';
@@ -400,6 +402,7 @@ export async function PublicEventView({
               : null
           }
           action={checkoutAction.bind(null, slug)}
+          preview={previewOrderAction.bind(null, slug)}
         />
       )}
     </section>
@@ -537,6 +540,15 @@ export async function PublicEventView({
                 {t('publicEvent.agenda')}
               </a>
             ) : null}
+            <a
+              href={whatsappHref(t('publicEvent.shareMessage', { name: ev.name, url: canonical }))}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={navLink}
+            >
+              {t('publicEvent.shareWhatsApp')}
+              <span className="sr-only"> {t('widget.newTab')}</span>
+            </a>
             {networking ? (
               // M5.8a: the event's networking (on the marketplace host only).
               <Link href={`/events/${slug}/network`} className={navLink}>

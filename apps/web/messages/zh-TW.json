@@ -778,7 +778,9 @@
       "next": "下一張",
       "counter": "第 {n} 張，共 {total} 張",
       "thumbnails": "所有照片"
-    }
+    },
+    "shareWhatsApp": "透過 WhatsApp 分享",
+    "shareMessage": "{name} — 立即購票：{url}"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -1089,7 +1091,11 @@
         "adaEnforcedBest": "無障礙座位保留給有需要的賓客，直到 {date}。如果你需要，請勾選「我的同行者中有人使用輪椅」，並使用最佳可選座位。"
       },
       "groupSummary": "{group} — {total} 個中 {free} 個空位{chosen, plural, =0 {} other { · 已選 #}}",
-      "companion": "陪同座位"
+      "companion": "陪同座位",
+      "selectTable": "選擇整張桌子（{count} 個座位）",
+      "unselectTable": "取消選擇整張桌子",
+      "tableTooBig": "{label} 桌有 {free} 個空位，但每筆訂單最多只能訂 {max} 個座位。請逐一選擇座位，或將該桌分成兩筆訂單。",
+      "tableNoFree": "{label} 桌已沒有空位。"
     },
     "seatRuleCap": "超出了單筆訂單可選的座位數，請減少選擇。",
     "seatRuleAda": "無障礙座位目前為有需要的賓客保留，請選擇其他座位。",
@@ -1137,7 +1143,19 @@
     "channelInvalid": "此銷售碼不適用於本活動。請不帶銷售碼重新開啟活動頁面，或詢問給你連結的人。",
     "channelNotice": "你正透過 {name} 購買：保留給 {name} 的座位也向你開放。",
     "channelLinkInvalid": "此銷售連結不適用於本活動。你仍可從向所有人開放的座位中選擇。",
-    "couponBuyerLimit": "你使用此代碼的次數已達上限。"
+    "couponBuyerLimit": "你使用此代碼的次數已達上限。",
+    "summary": {
+      "title": "您的訂單",
+      "subtotal": "票券",
+      "discount": "優惠碼折扣",
+      "fee": "服務費",
+      "total": "應付總額",
+      "free": "免費",
+      "note": "這是最終價格，將在下一步付款，目前不會扣款。",
+      "promoInvalid": "該優惠碼不適用於這些票券。",
+      "unavailable": "選擇有效後將顯示總價。"
+    },
+    "accountHint": "無需註冊帳號。我們可能會寄送6位數驗證碼以核實信箱。"
   },
   "fakePay": {
     "eyebrow": "測試付款",
@@ -1205,7 +1223,15 @@
     "emailSentAt": "已於 {when} 寄出",
     "emailScheduled": "預定於 {when} 寄出",
     "emailQueued": "傳送中",
-    "viewInvoice": "查看、下載或支付你的發票"
+    "viewInvoice": "查看、下載或支付你的發票",
+    "tableNo": "第 {n} 桌",
+    "table": "桌號",
+    "purchaser": "購買人",
+    "group": "團體",
+    "purchasedBy": "購買人：{name}",
+    "groupLabel": "團體：{group}",
+    "downloadTicket": "下載此票（PDF）",
+    "downloadTicketLabel": "以 PDF 下載第 {serial} 號票"
   },
   "orders": {
     "title": "最近訂單",
@@ -1609,7 +1635,9 @@
     "linkLabel": "領取連結",
     "open": "有一個領取連結尚未使用。",
     "openTo": "已將領取連結寄至 {email}。",
-    "revoke": "撤銷連結"
+    "revoke": "撤銷連結",
+    "shareWhatsApp": "透過 WhatsApp 分享",
+    "whatsappMessage": "這是您的票券：{url}"
   },
   "claim": {
     "eyebrow": "給你的一張票",
@@ -2110,7 +2138,7 @@
   },
   "boxOffice": {
     "title": "售票處",
-    "description": "記錄你自行售出的票券，例如現場現金、Zelle 或你自己的刷卡機收款。票券會立即開立並以電子郵件寄出。",
+    "description": "記錄你自行售出的票券，例如現場現金、Zelle 或你自己的刷卡機收款。票券會立即開立並以電子郵件寄出。 若要把一批票交給一個人（公司或團體負責人），請用對方信箱登記全部數量：對方會收到一封包含訂單頁面的郵件，可在其中把票券分別寄給每位客人。",
     "tickets": "票券",
     "name": "購票人姓名",
     "email": "購票人電子郵件（票券將寄送至此）",
@@ -2326,7 +2354,8 @@
         "cancelled": "此人已不再參加。",
         "forbidden": "你可以查看座位安排，但無法變更。",
         "dropMiss": "請把名字放到桌子、排或座位上。",
-        "adaEnforced": "該座位為需要無障礙座位的賓客保留。勾選「此賓客需要無障礙座位」即可安排。"
+        "adaEnforced": "該座位為需要無障礙座位的賓客保留。勾選「此賓客需要無障礙座位」即可安排。",
+        "noSeat": "請選擇要換到的座位。"
       },
       "canvas": {
         "title": "座位圖",
@@ -2359,6 +2388,17 @@
         "title": "移動 {name}",
         "submit": "移動",
         "cancel": "取消"
+      },
+      "ticketMove": {
+        "open": "更換座位",
+        "label": "更換 {name} 的座位",
+        "title": "更換 {name} 的座位",
+        "hint": "票券仍然有效且代碼不變，僅票面座位會更新。請選擇空位，或與另一位持票人互換。",
+        "swapWith": "{label} — 與 {name} 互換",
+        "submit": "移動座位",
+        "cancel": "取消",
+        "done": "{name} 已換到新座位，票券仍然有效。",
+        "swapped": "{name} 已與另一位持票人互換座位，兩張票仍然有效。"
       }
     },
     "finder": {
@@ -5166,7 +5206,19 @@
       "current": "標記每分鐘掃描超過 {rate} 次的裝置,以及在檢查點之間移動快於每小時 {kmh} 公里的票券。"
     },
     "showAll": "顯示全部訊號",
-    "reviewDetection": "查看偵測設定"
+    "reviewDetection": "查看偵測設定",
+    "reentry": {
+      "title": "重新入場",
+      "description": "允許票券在上次入場數小時後再次掃碼入場，適用於中途外出再返回的賓客。在此時間之前的掃碼仍會作為重複被拒絕。預設關閉。",
+      "enabled": "允許票券在數小時後再次掃碼",
+      "hours": "距上次入場的小時數",
+      "hoursHint": "1 至 72。早於該時間的掃碼仍為重複。",
+      "hoursError": "請輸入 1 至 72 的整數。",
+      "save": "儲存設定",
+      "saved": "設定已儲存。",
+      "current": "票券可在上次入場 {hours} 小時後再次掃碼。",
+      "currentOff": "重新入場已關閉：同一天第二次掃碼視為重複。"
+    }
   },
   "security": {
     "metaTitle": "帳戶安全",
@@ -5503,7 +5555,7 @@
     }
   },
   "guestVerify": {
-    "title": "確認您的電子郵件",
+    "title": "快速電子郵件驗證——無需註冊帳號",
     "sent": "我們已寄送 6 位數驗證碼至 {email}。輸入後即可下單。驗證碼 10 分鐘內有效。",
     "codeLabel": "驗證碼",
     "submit": "驗證並繼續",
@@ -5520,7 +5572,8 @@
     "settingOn": "購票人下單前以驗證碼確認電子郵件。",
     "settingOff": "購票人無需確認電子郵件即可下單。",
     "resendIn": "{seconds, plural, other {# 秒後可索取新驗證碼。}}",
-    "wrong": "{count, plural, other {驗證碼不正確。還可嘗試 # 次。}}"
+    "wrong": "{count, plural, other {驗證碼不正確。還可嘗試 # 次。}}",
+    "noAccount": "這不是登入，我們也不會為您建立帳號，只是確認票券能送達您的信箱。訂單摘要仍顯示在上方，進入下一步前不會扣款。"
   },
   "attendeeSignIn": {
     "title": "我的票券",
@@ -19139,12 +19192,58 @@
     "attendeeSignUpTitle": "註冊",
     "attendeeSignUpDescription": "驗證電子郵件即可建立帳戶，集中管理你的活動與票券。",
     "organizationAccessRequired": "此帳戶沒有組織存取權限。請使用主辦方帳戶，或繼續前往你的參加者控制台。",
-    "useAnotherAccount": "使用其他帳戶"
+    "useAnotherAccount": "使用其他帳戶",
+    "openReceipt": "查看收據"
   },
   "eventBranding": {
     "title": "此活動的顏色",
     "description": "為此活動在其公開活動頁面上設定專屬強調色。留空則使用下方你所屬組織的品牌顏色。",
     "color": "活動顏色",
     "usesOrg": "此活動使用組織的品牌顏色。"
+  },
+  "receipt": {
+    "eyebrow": "收據",
+    "title": "收據 {number}",
+    "number": "收據編號",
+    "paidOn": "付款時間",
+    "billedTo": "開票對象",
+    "event": "活動",
+    "soldBy": "銷售方",
+    "status": "狀態",
+    "item": "項目",
+    "quantity": "數量",
+    "unit": "單價",
+    "amount": "金額",
+    "tickets": "票券",
+    "discount": "折扣 {code}",
+    "feesIncluded": "服務費（已含於上方）",
+    "totalPaid": "實付總額",
+    "payment": "付款",
+    "note": "本收據確認您已付款，請妥善保存。您的票券在訂單頁面中。",
+    "footer": "為 {seller} 開立的收據。",
+    "downloadPdf": "下載收據（PDF）",
+    "backToOrder": "返回我的訂單",
+    "view": "查看收據"
+  },
+  "nameHolders": {
+    "title": "誰要參加？把票分別寄給每個人",
+    "ticket": "第 {serial} 號票 · {type}",
+    "intro": "只需一次填寫每位客人的姓名和信箱。每個人都會收到一封郵件領取自己的票券，因此人人都有獨立的 QR 碼。您也可以複製連結或透過 WhatsApp 分享。留空的一列表示該票由您自己保留。",
+    "name": "姓名",
+    "email": "信箱",
+    "submit": "寄送票券",
+    "ownEmailHint": "在某一列填寫您自己的信箱，只會更改您這張票上的姓名。",
+    "sentTo": "已寄給 {name}（{email}），等待對方領取。",
+    "copyLink": "複製連結",
+    "copied": "已複製",
+    "whatsapp": "透過 WhatsApp 分享",
+    "whatsappMessage": "這是您的票券：{url}",
+    "changeHint": "在下方填寫其他姓名或信箱並重新寄送，即可更換接收人。",
+    "nothingEntered": "請至少填寫一個姓名和信箱。",
+    "incomplete": "每一列都需要同時填寫姓名和信箱。",
+    "feeRequired": "該票需要支付轉讓費，請在該票自己的頁面寄送。",
+    "sameHolder": "該聯絡人已持有這張票。",
+    "notAllowed": "這張票無法寄給他人（轉讓已截止或不被允許）。",
+    "done": "完成。每個人都已透過郵件收到自己的票券。"
   }
 }

@@ -3,8 +3,11 @@
 import {
   FRAUD_NOTE_MAX,
   FRAUD_NOTE_MIN_DISMISS,
+  REENTRY_MAX_HOURS,
+  REENTRY_MIN_HOURS,
   resolveFraudSignalCommand,
   setDetectionSettingsCommand,
+  setReentrySettingsCommand,
 } from '@yayatoh/checkin';
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
 import { revalidatePath } from 'next/cache';
@@ -81,6 +84,36 @@ export async function saveDetectionAction(
     await executeCommand(
       setDetectionSettingsCommand,
       { eventId: ev.id, maxScansPerMinute, maxTravelKmh },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/e/${event}/onsite`, 'layout');
+    return { kind: 'saved', seq };
+  } catch (err) {
+    return { kind: 'error', code: isDomainError(err) ? err.code : 'internal', field: null, seq };
+  }
+}
+
+/**
+ * "A ticket can be scanned in again N hours after its last entry" (1–72), or off. Duplicates inside
+ * the window stay refused.
+ */
+export async function saveReentryAction(
+  org: string,
+  event: string,
+  prev: DetectionFormState,
+  form: FormData,
+): Promise<DetectionFormState> {
+  const { data, event: ev } = await loadEvent(org, event, 'onsite');
+  const seq = (prev.kind === 'idle' ? 0 : prev.seq) + 1;
+  const on = form.get('enabled') === 'on';
+  const hours = whole(form.get('hours'));
+  if (on && !(hours >= REENTRY_MIN_HOURS && hours <= REENTRY_MAX_HOURS))
+    return { kind: 'error', code: 'validation_failed', field: 'hours', seq };
+  try {
+    await executeCommand(
+      setReentrySettingsCommand,
+      { eventId: ev.id, hours: on ? hours : null },
       data.ctx,
       ports,
     );

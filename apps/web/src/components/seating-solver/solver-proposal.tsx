@@ -1,5 +1,6 @@
 'use client';
 
+import { bareItemLabel } from '@yayatoh/floorplan';
 import type { SolverProblemDto } from '@yayatoh/seating';
 import {
   compile,
@@ -159,7 +160,7 @@ export function SolverProposal({
       const key = await keyOf(nonce, chosen);
       const r = await accept({ tables: chosen, key });
       if (r.ok) {
-        const label = names.places.find((p) => p.itemId === itemIds[0])?.label ?? '';
+        const label = bareItemLabel(names.places.find((p) => p.itemId === itemIds[0])?.label ?? '');
         setFeedback({
           tone: 'success',
           text: all
@@ -375,11 +376,13 @@ const ProposalList = memo(function ProposalList({
           return (
             <li key={p.itemId}>
               <section
-                aria-label={t('region', { label: p.label })}
+                aria-label={t('region', { label: bareItemLabel(p.label) })}
                 className="flex flex-col gap-2 rounded-md border border-line p-3"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h4 className="m-0 text-body font-bold text-ink">{t('region', { label: p.label })}</h4>
+                  <h4 className="m-0 text-body font-bold text-ink">
+                    {t('region', { label: bareItemLabel(p.label) })}
+                  </h4>
                   <Badge tone={free < 0 ? 'danger' : 'neutral'}>
                     {t('fill', {
                       proposed: guests.length,
@@ -415,7 +418,7 @@ const ProposalList = memo(function ProposalList({
                       disabled={pending || layout.blocked(p.itemId)}
                       onClick={() => onAccept([p.itemId])}
                     >
-                      {t('accept', { label: p.label })}
+                      {t('accept', { label: bareItemLabel(p.label) })}
                     </Button>
                   </div>
                 ) : null}
@@ -478,7 +481,7 @@ function GuestRow({
           <option value="">{t('queueOption')}</option>
           {options.map((p) => (
             <option key={p.itemId} value={p.itemId}>
-              {t('optionFree', { label: p.label, free: p.free })}
+              {t('optionFree', { label: bareItemLabel(p.label), free: p.free })}
             </option>
           ))}
         </Select>

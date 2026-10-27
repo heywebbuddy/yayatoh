@@ -302,6 +302,12 @@ export const RATE_LIMIT_POLICIES = {
     anonymousIp: { limit: 60, windowMs: 10 * MIN },
     ipCeiling: { limit: 600, windowMs: 10 * MIN },
   },
+  /** The order summary's live price preview (read-only: no hold, no order). */
+  checkoutPreview: {
+    device: { limit: 120, windowMs: 10 * MIN },
+    anonymousIp: { limit: 300, windowMs: 10 * MIN },
+    ipCeiling: { limit: 3000, windowMs: 10 * MIN },
+  },
   /** Ticket-holder link actions (resend, transfer) and the holder magic link. */
   holderLink: {
     device: { limit: 10, windowMs: 10 * MIN },

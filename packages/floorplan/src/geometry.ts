@@ -1,4 +1,5 @@
 import { type FloorplanDoc, MAX_SEATS } from './document.ts';
+import { bareItemLabel } from './labels.ts';
 
 export interface PlacedSeat {
   readonly seatId: string;
@@ -31,7 +32,7 @@ export function placedSeats(doc: FloorplanDoc): PlacedSeat[] {
         itemId: item.id,
         itemLabel: item.label,
         sectionId: item.sectionId,
-        label: `${prefix} ${item.label} · ${s.label}`,
+        label: `${prefix} ${bareItemLabel(item.label)} · ${s.label}`,
         x: Math.round(item.x + p.x),
         y: Math.round(item.y + p.y),
         accessible: s.accessible,

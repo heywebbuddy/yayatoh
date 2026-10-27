@@ -51,6 +51,11 @@ async function BookingCard({
       >
         {t(schedule ? 'openSchedule' : 'openOrder')}
       </Link>
+      {['paid', 'partially_refunded', 'refunded'].includes(order.status) && order.totalMinor > 0 ? (
+        <Link href={`${order.managePath}/receipt`} className={buttonClass('secondary', 'sm', 'self-start')}>
+          {t('openReceipt')}
+        </Link>
+      ) : null}
     </Card>
   );
 }

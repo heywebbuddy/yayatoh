@@ -41,6 +41,12 @@ export {
   setDeviceStateCommand,
   syncScansCommand,
 } from './devices.ts';
+export {
+  REENTRY_MAX_HOURS,
+  REENTRY_MIN_HOURS,
+  reentryDue,
+  validReentryHours,
+} from './domain/reentry.ts';
 export { admissionsDsarTx, purgeScansBeforeTx } from './dsar.ts';
 export {
   ALERT_WINDOW_MS,
@@ -104,6 +110,7 @@ export { findTicketHoldersQuery, TicketHolderMatchDto } from './lookup.ts';
 // M5.8b: networking chat reports → chat_abuse signals.
 export { networkChatSignal, networkChatSignals } from './network-chat-signals.ts';
 export { privateColumns } from './private-columns.ts';
+export { ReentrySettingsDto, reentrySettingsQuery, setReentrySettingsCommand } from './reentry.ts';
 // M5.6b: lead capture reads a badge the way the door does (yy1, short code, legacy QR).
 export {
   admissionsForTicketsTx,

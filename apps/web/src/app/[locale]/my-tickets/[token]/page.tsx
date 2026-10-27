@@ -1,6 +1,6 @@
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { holderContext, holderTicketsQuery } from '@yayatoh/ticketing';
-import { Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ClaimLinkForm } from '@/components/claim-link-form.tsx';
@@ -9,6 +9,7 @@ import { ConfirmButton, HolderTransferForm } from '@/components/support-tools.ts
 import { TicketQr } from '@/components/ticket-qr.tsx';
 import { WhoScannedMe } from '@/components/who-scanned-me.tsx';
 import { formatEventDateRange } from '@/lib/format.ts';
+import { getPdfRenderer } from '@/server/pdf.ts';
 import { ports } from '@/server/ports.ts';
 import { cancelHolderTransferAction, giveTicketAction, holderTransferAction } from './actions.ts';
 
@@ -45,6 +46,7 @@ export default async function MyTicketsPage({
     currency: 'USD',
     timeZone: data.event.timezone,
   });
+  const pdfBase = `${locale === 'en' ? '' : `/${locale}`}/my-tickets/${raw}`;
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-6 py-16">
       <PageHeader
@@ -55,85 +57,106 @@ export default async function MyTicketsPage({
       {data.tickets.length === 0 ? (
         <EmptyState title={t('myTickets.noneTitle')} description={t('myTickets.noneDescription')} />
       ) : (
-        <ul className="flex list-none flex-col gap-4 p-0">
-          {data.tickets.map((tk) => (
-            <li key={tk.id}>
-              <Card size="panel" className="flex flex-col gap-4">
-                <div className="flex flex-wrap items-center gap-5">
-                  <TicketQr
-                    code={tk.code}
-                    label={t('order.qrLabel', { serial: tk.serial })}
-                    className="size-40 shrink-0 rounded-tag text-black"
-                  />
-                  <div className="flex flex-col gap-1">
-                    <p className="text-section">{tk.typeName}</p>
-                    <p className="text-body">{tk.holderName}</p>
-                    <p className="text-caption text-ink-2">{t('order.serial', { serial: tk.serial })}</p>
-                    <p className="font-mono text-[18px] tracking-[0.2em]">{tk.shortCode}</p>
+        <>
+          {getPdfRenderer() ? (
+            <a href={`${pdfBase}/pdf`} className={buttonClass('secondary', 'md', 'self-start')}>
+              {t('order.downloadPdf')}
+            </a>
+          ) : null}
+          <ul className="flex list-none flex-col gap-4 p-0">
+            {data.tickets.map((tk) => (
+              <li key={tk.id}>
+                <Card size="panel" className="flex flex-col gap-4">
+                  <div className="flex flex-wrap items-center gap-5">
+                    <TicketQr
+                      code={tk.code}
+                      label={t('order.qrLabel', { serial: tk.serial })}
+                      className="size-40 shrink-0 rounded-tag text-black"
+                    />
+                    <div className="flex flex-col gap-1">
+                      <p className="text-section">{tk.typeName}</p>
+                      <p className="text-body">{tk.holderName}</p>
+                      <p className="text-caption text-ink-2">{t('order.serial', { serial: tk.serial })}</p>
+                      <p className="font-mono text-[18px] tracking-[0.2em]">{tk.shortCode}</p>
+                      {tk.seatLabel ? (
+                        <p className="text-body font-medium">
+                          {t('order.seatLabel', { seat: tk.seatLabel })}
+                        </p>
+                      ) : null}
+                      {getPdfRenderer() ? (
+                        <a
+                          href={`${pdfBase}/pdf?ticket=${tk.id}`}
+                          className={buttonClass('secondary', 'sm', 'self-start')}
+                          aria-label={t('order.downloadTicketLabel', { serial: tk.serial })}
+                        >
+                          {t('order.downloadTicket')}
+                        </a>
+                      ) : null}
+                    </div>
                   </div>
-                </div>
-                <section
-                  aria-labelledby={`transfer-${tk.id}`}
-                  className="flex flex-col gap-2 border-t border-line pt-3"
-                >
-                  <h2 id={`transfer-${tk.id}`} className="text-caption text-ink-2">
-                    {t('supportTools.holder.title')}
-                  </h2>
-                  {tk.transfer?.pendingTransferId ? (
-                    <>
-                      <p className="text-body">
-                        {t('supportTools.holder.pending', { name: tk.transfer.pendingTransferTo ?? '' })}
-                      </p>
-                      <ConfirmButton
-                        action={cancelHolderTransferAction.bind(null, token, tk.transfer.pendingTransferId)}
-                        label={t('supportTools.holder.cancel')}
-                        done={t('supportTools.holder.cancelled')}
-                      />
-                    </>
-                  ) : tk.transfer?.allowed ? (
-                    <>
+                  <section
+                    aria-labelledby={`transfer-${tk.id}`}
+                    className="flex flex-col gap-2 border-t border-line pt-3"
+                  >
+                    <h2 id={`transfer-${tk.id}`} className="text-caption text-ink-2">
+                      {t('supportTools.holder.title')}
+                    </h2>
+                    {tk.transfer?.pendingTransferId ? (
+                      <>
+                        <p className="text-body">
+                          {t('supportTools.holder.pending', { name: tk.transfer.pendingTransferTo ?? '' })}
+                        </p>
+                        <ConfirmButton
+                          action={cancelHolderTransferAction.bind(null, token, tk.transfer.pendingTransferId)}
+                          label={t('supportTools.holder.cancel')}
+                          done={t('supportTools.holder.cancelled')}
+                        />
+                      </>
+                    ) : tk.transfer?.allowed ? (
+                      <>
+                        <p className="text-caption text-ink-2">
+                          {t('supportTools.holder.until', { date: deadline.format(tk.transfer.deadline) })}
+                          {tk.transfer.feeMinor > 0
+                            ? ` · ${t('supportTools.holder.fee', { fee: formatMoney(money(tk.transfer.feeMinor, tk.transfer.currency), locale) })}`
+                            : ''}
+                        </p>
+                        <HolderTransferForm
+                          action={holderTransferAction.bind(null, token, tk.id)}
+                          idPrefix={`transfer-${tk.id}`}
+                          fee={
+                            tk.transfer.feeMinor > 0
+                              ? formatMoney(money(tk.transfer.feeMinor, tk.transfer.currency), locale)
+                              : null
+                          }
+                        />
+                      </>
+                    ) : (
                       <p className="text-caption text-ink-2">
-                        {t('supportTools.holder.until', { date: deadline.format(tk.transfer.deadline) })}
-                        {tk.transfer.feeMinor > 0
-                          ? ` · ${t('supportTools.holder.fee', { fee: formatMoney(money(tk.transfer.feeMinor, tk.transfer.currency), locale) })}`
-                          : ''}
+                        {t(`supportTools.holder.refused.${tk.transfer?.reason ?? 'not_allowed'}`)}
                       </p>
-                      <HolderTransferForm
-                        action={holderTransferAction.bind(null, token, tk.id)}
-                        idPrefix={`transfer-${tk.id}`}
-                        fee={
-                          tk.transfer.feeMinor > 0
-                            ? formatMoney(money(tk.transfer.feeMinor, tk.transfer.currency), locale)
-                            : null
-                        }
-                      />
-                    </>
-                  ) : (
-                    <p className="text-caption text-ink-2">
-                      {t(`supportTools.holder.refused.${tk.transfer?.reason ?? 'not_allowed'}`)}
-                    </p>
-                  )}
-                </section>
-                <section
-                  aria-labelledby={`give-${tk.id}`}
-                  className="flex flex-col gap-2 border-t border-line pt-3"
-                >
-                  <h2 id={`give-${tk.id}`} className="text-caption text-ink-2">
-                    {t('myTickets.giveTitle')}
-                  </h2>
-                  {tk.pendingTransfer ? (
-                    <p className="text-caption text-ink-2">{t('myTickets.pending')}</p>
-                  ) : null}
-                  <ClaimLinkForm
-                    action={giveTicketAction.bind(null, token, tk.id)}
-                    idPrefix={`give-${tk.id}`}
-                    submitLabel={t('myTickets.give')}
-                  />
-                </section>
-              </Card>
-            </li>
-          ))}
-        </ul>
+                    )}
+                  </section>
+                  <section
+                    aria-labelledby={`give-${tk.id}`}
+                    className="flex flex-col gap-2 border-t border-line pt-3"
+                  >
+                    <h2 id={`give-${tk.id}`} className="text-caption text-ink-2">
+                      {t('myTickets.giveTitle')}
+                    </h2>
+                    {tk.pendingTransfer ? (
+                      <p className="text-caption text-ink-2">{t('myTickets.pending')}</p>
+                    ) : null}
+                    <ClaimLinkForm
+                      action={giveTicketAction.bind(null, token, tk.id)}
+                      idPrefix={`give-${tk.id}`}
+                      submitLabel={t('myTickets.give')}
+                    />
+                  </section>
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
       <WhoScannedMe token={token} holder={h} locale={locale} timeZone={data.event.timezone} />
       {data.tickets.length > 0 && h.ctx.orgId ? (

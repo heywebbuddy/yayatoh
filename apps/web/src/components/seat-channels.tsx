@@ -1,5 +1,6 @@
 'use client';
 
+import { bareItemLabel } from '@yayatoh/floorplan';
 import { CHANNEL_KINDS } from '@yayatoh/seating/client';
 import { Alert, Button, DateTimePicker, Select } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
@@ -228,7 +229,7 @@ export function AllotForm({
             <label key={i.id} className="flex min-h-6 items-start gap-2 text-body">
               <input type="checkbox" name="itemId" value={i.id} className="mt-0.5 size-5 shrink-0" />
               <span>
-                {t(`item.${i.kind}`, { label: i.label, seats: i.seats })}
+                {t(`item.${i.kind}`, { label: bareItemLabel(i.label), seats: i.seats })}
                 {i.allotted.length ? (
                   <span className="block text-caption text-ink-2">
                     {i.allotted.map((a) => t('itemAllotted', { count: a.count, name: a.name })).join(' · ')}

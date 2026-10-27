@@ -1,4 +1,5 @@
 import { type DayOfDto, dayOfQuery } from '@yayatoh/checkin';
+import { bareItemLabel } from '@yayatoh/floorplan';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, isProfileKey, navLabelKey } from '@yayatoh/platform';
 import { roleCan } from '@yayatoh/tenancy';
@@ -75,7 +76,7 @@ export default async function DayOfPage({
   const time = new Intl.DateTimeFormat(locale, { timeZone: ev.timezone, hour: 'numeric', minute: '2-digit' });
   const n = (v: number) => formatNumber(v, locale);
   const place = (p: Place) => {
-    const at = t(p.kind === 'row' ? 'placeRow' : 'placeTable', { label: p.label });
+    const at = t(p.kind === 'row' ? 'placeRow' : 'placeTable', { label: bareItemLabel(p.label) });
     return p.chart ? t('placeOnChart', { chart: p.chart, place: at }) : at;
   };
   const places = (ps: readonly Place[]) => (ps.length ? ps.map(place).join(' · ') : t('noPlace'));

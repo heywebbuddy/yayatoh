@@ -778,7 +778,9 @@
       "next": "Volgende foto",
       "counter": "Foto {n} van {total}",
       "thumbnails": "Alle foto’s"
-    }
+    },
+    "shareWhatsApp": "Delen via WhatsApp",
+    "shareMessage": "{name} — haal je tickets: {url}"
   },
   "portal": {
     "day": "Dag {day} · {date}",
@@ -1089,7 +1091,11 @@
         "adaEnforcedBest": "Toegankelijke plaatsen zijn tot {date} gereserveerd voor gasten die ze nodig hebben. Heb je er een nodig? Vink ‘Iemand in mijn gezelschap gebruikt een rolstoel’ aan en gebruik ‘Beste plaatsen’."
       },
       "groupSummary": "{group} — {free} van {total} vrij{chosen, plural, =0 {} other { · # gekozen}}",
-      "companion": "Begeleidersplaats"
+      "companion": "Begeleidersplaats",
+      "selectTable": "Hele tafel kiezen ({count, plural, one {# plaats} other {# plaatsen}})",
+      "unselectTable": "Tafel deselecteren",
+      "tableTooBig": "Tafel {label} heeft {free, plural, one {# vrije plaats} other {# vrije plaatsen}}, maar een bestelling kan er maximaal {max} bevatten. Kies de plaatsen één voor één of verdeel de tafel over twee bestellingen.",
+      "tableNoFree": "Tafel {label} heeft geen vrije plaatsen meer."
     },
     "seatRuleCap": "Dat zijn meer plaatsen dan één bestelling mag hebben. Kies er minder.",
     "seatRuleAda": "Toegankelijke plaatsen worden voorlopig vrijgehouden voor gasten die ze nodig hebben. Kies andere plaatsen.",
@@ -1137,7 +1143,19 @@
     "channelInvalid": "Deze verkoopcode is niet geldig voor dit evenement. Open de evenementpagina opnieuw zonder code, of vraag het aan wie je de link gaf.",
     "channelNotice": "Je koopt via {name}: plaatsen die voor {name} gereserveerd zijn, staan ook voor jou open.",
     "channelLinkInvalid": "Deze verkooplink is niet geldig voor dit evenement. Je kunt nog steeds kiezen uit de plaatsen die voor iedereen openstaan.",
-    "couponBuyerLimit": "U hebt deze code al zo vaak gebruikt als is toegestaan."
+    "couponBuyerLimit": "U hebt deze code al zo vaak gebruikt als is toegestaan.",
+    "summary": {
+      "title": "Je bestelling",
+      "subtotal": "Tickets",
+      "discount": "Promokorting",
+      "fee": "Servicekosten",
+      "total": "Totaal te betalen",
+      "free": "Gratis",
+      "note": "Dit is de eindprijs. Je betaalt in de volgende stap; er wordt nog niets afgeschreven.",
+      "promoInvalid": "Die promocode is niet geldig voor deze tickets.",
+      "unavailable": "Het totaal verschijnt zodra je keuze geldig is."
+    },
+    "accountHint": "Geen account nodig. Mogelijk mailen we je een code van 6 cijfers om je adres te controleren."
   },
   "fakePay": {
     "eyebrow": "Testbetaling",
@@ -1205,7 +1223,15 @@
     "emailSentAt": "Verzonden {when}",
     "emailScheduled": "Gepland voor {when}",
     "emailQueued": "Wordt verzonden",
-    "viewInvoice": "Je factuur bekijken, downloaden of betalen"
+    "viewInvoice": "Je factuur bekijken, downloaden of betalen",
+    "tableNo": "Tafel {n}",
+    "table": "Tafel",
+    "purchaser": "Gekocht door",
+    "group": "Groep",
+    "purchasedBy": "Gekocht door {name}",
+    "groupLabel": "Groep: {group}",
+    "downloadTicket": "Dit ticket downloaden (PDF)",
+    "downloadTicketLabel": "Ticket {serial} downloaden als PDF"
   },
   "orders": {
     "title": "Recente bestellingen",
@@ -1609,7 +1635,9 @@
     "linkLabel": "Claimlink",
     "open": "Er staat een claimlink klaar om gebruikt te worden.",
     "openTo": "Er is een claimlink verstuurd naar {email}.",
-    "revoke": "Link intrekken"
+    "revoke": "Link intrekken",
+    "shareWhatsApp": "Delen via WhatsApp",
+    "whatsappMessage": "Hier is je ticket: {url}"
   },
   "claim": {
     "eyebrow": "Een ticket voor jou",
@@ -2110,7 +2138,7 @@
   },
   "boxOffice": {
     "title": "Kassa",
-    "description": "Registreer tickets die je zelf hebt verkocht: contant aan de deur, via Zelle of met je eigen kaartlezer. De tickets worden direct uitgegeven en gemaild.",
+    "description": "Registreer tickets die je zelf hebt verkocht: contant aan de deur, via Zelle of met je eigen kaartlezer. De tickets worden direct uitgegeven en gemaild. Wil je een blok tickets aan één persoon geven (een bedrijf, een groepsleider), registreer dan de hele hoeveelheid met zijn of haar e-mailadres: die persoon krijgt één e-mail met de bestelpagina, waar elke gast zijn eigen ticket kan worden gestuurd.",
     "tickets": "Tickets",
     "name": "Naam van de koper",
     "email": "E-mailadres van de koper (de tickets worden hierheen gestuurd)",
@@ -2326,7 +2354,8 @@
         "cancelled": "Deze persoon komt niet meer.",
         "forbidden": "Je kunt de zaalindeling bekijken, maar niet wijzigen.",
         "dropMiss": "Zet namen neer op een tafel, een rij of een plaats.",
-        "adaEnforced": "Die plaats wordt vrijgehouden voor gasten die een toegankelijke plaats nodig hebben. Vink ‘Deze gast heeft een toegankelijke plaats nodig’ aan om hem daar te plaatsen."
+        "adaEnforced": "Die plaats wordt vrijgehouden voor gasten die een toegankelijke plaats nodig hebben. Vink ‘Deze gast heeft een toegankelijke plaats nodig’ aan om hem daar te plaatsen.",
+        "noSeat": "Kies de plaats waar ze naartoe moeten."
       },
       "canvas": {
         "title": "Plattegrond",
@@ -2359,6 +2388,17 @@
         "title": "{name} verplaatsen",
         "submit": "Verplaatsen",
         "cancel": "Annuleren"
+      },
+      "ticketMove": {
+        "open": "Plaats wijzigen",
+        "label": "Plaats van {name} wijzigen",
+        "title": "Plaats van {name} wijzigen",
+        "hint": "Het ticket blijft geldig en houdt zijn code; alleen de afgedrukte plaats verandert. Kies een vrije plaats of wissel met een andere houder.",
+        "swapWith": "{label} — wisselen met {name}",
+        "submit": "Plaats verplaatsen",
+        "cancel": "Annuleren",
+        "done": "{name} heeft nu de nieuwe plaats. Het ticket blijft geldig.",
+        "swapped": "{name} heeft van plaats gewisseld met een andere houder. Beide tickets blijven geldig."
       }
     },
     "finder": {
@@ -5166,7 +5206,19 @@
       "current": "Sinaliza um aparelho com mais de {rate} escaneamentos por minuto e um ingresso que se move a mais de {kmh} km/h entre pontos de controle."
     },
     "showAll": "Alle signalen tonen",
-    "reviewDetection": "Detectie-instellingen bekijken"
+    "reviewDetection": "Detectie-instellingen bekijken",
+    "reentry": {
+      "title": "Heropnieuw binnenkomen",
+      "description": "Laat een ticket enkele uren na de laatste toegang opnieuw scannen, voor gasten die weggaan en terugkomen. Scans vóór die tijd worden nog steeds als dubbel geweigerd. Standaard uit.",
+      "enabled": "Een ticket na enkele uren opnieuw laten scannen",
+      "hours": "Uren na de laatste toegang",
+      "hoursHint": "Van 1 tot 72. Een eerdere scan blijft een dubbele.",
+      "hoursError": "Voer een geheel getal van 1 tot 72 in.",
+      "save": "Instelling opslaan",
+      "saved": "Instelling opgeslagen.",
+      "current": "Tickets kunnen {hours, plural, one {# uur} other {# uur}} na de laatste toegang opnieuw worden gescand.",
+      "currentOff": "Heropnieuw binnenkomen staat uit: een tweede scan op dezelfde dag is dubbel."
+    }
   },
   "security": {
     "metaTitle": "Accountbeveiliging",
@@ -5503,7 +5555,7 @@
     }
   },
   "guestVerify": {
-    "title": "Bevestig je e-mail",
+    "title": "Snelle e-mailcontrole – geen account nodig",
     "sent": "We hebben een 6-cijferige code naar {email} gestuurd. Voer die in om je bestelling te plaatsen. De code werkt 10 minuten.",
     "codeLabel": "Verificatiecode",
     "submit": "Verifiëren en doorgaan",
@@ -5520,7 +5572,8 @@
     "settingOn": "Kopers bevestigen hun e-mail met een code voordat ze bestellen.",
     "settingOff": "Kopers bestellen zonder hun e-mail te bevestigen.",
     "resendIn": "{seconds, plural, one {Je kunt over # seconde een nieuwe code aanvragen.} other {Je kunt over # seconden een nieuwe code aanvragen.}}",
-    "wrong": "{count, plural, one {Die code klopt niet. Nog # poging.} other {Die code klopt niet. Nog # pogingen.}}"
+    "wrong": "{count, plural, one {Die code klopt niet. Nog # poging.} other {Die code klopt niet. Nog # pogingen.}}",
+    "noAccount": "Dit is geen inlog en we maken geen account voor je aan. We controleren alleen of je tickets bij je aankomen. Je besteloverzicht blijft hierboven staan; er wordt pas in de volgende stap betaald."
   },
   "attendeeSignIn": {
     "title": "Mijn tickets",
@@ -19139,12 +19192,58 @@
     "attendeeSignUpTitle": "Registreren",
     "attendeeSignUpDescription": "Verifieer je e-mailadres om een account aan te maken en je evenementen en tickets bij elkaar te houden.",
     "organizationAccessRequired": "Dit account heeft geen toegang tot een organisatie. Gebruik een organisatoraccount of ga verder naar je deelnemersdashboard.",
-    "useAnotherAccount": "Een ander account gebruiken"
+    "useAnotherAccount": "Een ander account gebruiken",
+    "openReceipt": "Betalingsbewijs bekijken"
   },
   "eventBranding": {
     "title": "Kleur van dit evenement",
     "description": "Geef dit evenement een eigen accentkleur op de openbare evenementpagina. Laat leeg om hieronder de huisstijlkleur van je organisatie te gebruiken.",
     "color": "Evenementkleur",
     "usesOrg": "Dit evenement gebruikt de huisstijlkleur van de organisatie."
+  },
+  "receipt": {
+    "eyebrow": "Betalingsbewijs",
+    "title": "Betalingsbewijs {number}",
+    "number": "Nummer",
+    "paidOn": "Betaald op",
+    "billedTo": "Gefactureerd aan",
+    "event": "Evenement",
+    "soldBy": "Verkocht door",
+    "status": "Status",
+    "item": "Onderdeel",
+    "quantity": "Aantal",
+    "unit": "Stukprijs",
+    "amount": "Bedrag",
+    "tickets": "Tickets",
+    "discount": "Korting {code}",
+    "feesIncluded": "Servicekosten (hierboven inbegrepen)",
+    "totalPaid": "Totaal betaald",
+    "payment": "Betaling",
+    "note": "Dit betalingsbewijs bevestigt je betaling. Bewaar het voor je administratie. Je tickets staan op je bestelpagina.",
+    "footer": "Betalingsbewijs uitgegeven voor {seller}.",
+    "downloadPdf": "Betalingsbewijs downloaden (PDF)",
+    "backToOrder": "Terug naar mijn bestelling",
+    "view": "Betalingsbewijs bekijken"
+  },
+  "nameHolders": {
+    "title": "Wie komt er mee? Stuur iedereen zijn ticket",
+    "ticket": "Ticket {serial} · {type}",
+    "intro": "Vul per gast één keer naam en e-mail in. Iedereen krijgt een e-mail met een eigen ticket om op te halen, dus iedereen heeft een eigen QR-code. Je kunt de link ook kopiëren of via WhatsApp delen. Laat een rij leeg om dat ticket zelf te houden.",
+    "name": "Naam",
+    "email": "E-mail",
+    "submit": "Tickets versturen",
+    "ownEmailHint": "Gebruik je je eigen e-mailadres op een rij, dan verandert alleen de naam op je ticket.",
+    "sentTo": "Verstuurd naar {name} ({email}). Wacht tot het wordt opgehaald.",
+    "copyLink": "Link kopiëren",
+    "copied": "Gekopieerd",
+    "whatsapp": "Delen via WhatsApp",
+    "whatsappMessage": "Hier is je ticket: {url}",
+    "changeHint": "Vul hieronder een andere naam of e-mail in en verstuur opnieuw om de ontvanger te wijzigen.",
+    "nothingEntered": "Vul minstens één naam en e-mail in.",
+    "incomplete": "Elke rij heeft een naam en e-mail nodig.",
+    "feeRequired": "Voor dit ticket gelden overdrachtskosten; verstuur het vanaf de eigen ticketpagina.",
+    "sameHolder": "Deze persoon heeft dit ticket al.",
+    "notAllowed": "Dit ticket kan niet naar iemand anders worden gestuurd (overdracht is gesloten of niet toegestaan).",
+    "done": "Klaar. Iedereen heeft zijn ticket per e-mail ontvangen."
   }
 }
