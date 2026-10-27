@@ -64,7 +64,7 @@ export async function ShowcaseHero({
   return (
     <section
       aria-labelledby="hero-title"
-      className="relative flex flex-col items-center gap-8 pt-10 text-center md:pt-16"
+      className="relative flex flex-col items-center gap-8 overflow-x-clip pt-10 text-center md:pt-16"
     >
       <HeroOrb cover={cover ?? null} className="w-[min(86vw,620px)]">
         <h1

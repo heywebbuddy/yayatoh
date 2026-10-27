@@ -93,15 +93,15 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
               </Link>
             </nav>
             {signedIn ? (
-              <Link href={access.href} className={cx(buttonClass('ember', 'md'), 'hidden sm:inline-flex')}>
+              <Link href={access.href} className={cx(buttonClass('ember', 'md'), 'max-sm:hidden')}>
                 {t('dashboard')}
               </Link>
             ) : (
               <>
-                <Link href="/sign-in?next=/attendee" className={`${link} hidden sm:inline-flex`}>
+                <Link href="/sign-in?next=/attendee" className={`${link} max-sm:hidden`}>
                   {t('signIn')}
                 </Link>
-                <Link href="/sign-up" className={cx(buttonClass('ember', 'md'), 'hidden sm:inline-flex')}>
+                <Link href="/sign-up" className={cx(buttonClass('ember', 'md'), 'max-sm:hidden')}>
                   {t('signUp')}
                 </Link>
               </>
