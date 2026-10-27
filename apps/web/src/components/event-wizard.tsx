@@ -30,6 +30,7 @@ const KNOWN_ERRORS = new Set([
   'name',
   'tagline',
   'slug',
+  'profile',
   'startsAt',
   'endsAt',
   'venueId',
@@ -66,6 +67,7 @@ type Field = keyof Values;
 function validate(step: number, v: Values): Partial<Record<Field, string>> {
   const e: Partial<Record<Field, string>> = {};
   if (step === 0) {
+    if (!v.profile) e.profile = 'profile';
     const n = v.name.trim().length;
     if (n < 2 || n > 160) e.name = 'name';
     if (v.tagline.trim().length > 280) e.tagline = 'tagline';
@@ -110,7 +112,7 @@ export function EventWizard({
   profiles: readonly PickerProfile[];
   categories: readonly EventCategoryChoice[];
   manageCategoriesHref?: string;
-  venues: readonly { id: string; name: string; city: string | null }[];
+  venues: readonly { id: string; name: string; city: string | null; timezone: string }[];
   /** Creates a saved venue from the wizard ("+ Add a new venue"). */
   createVenue: (input: InlineVenueInput) => Promise<InlineVenueResult>;
   currency: string;
@@ -289,6 +291,7 @@ export function EventWizard({
               value={v.profile}
               onValueChange={setTo('profile')}
               className={selectClass}
+              error={err('profile')}
             />
             <EventCategoryField
               id="wizard-category"
@@ -379,7 +382,10 @@ export function EventWizard({
                     id="wizard-venue"
                     name="venueId"
                     value={v.venueId}
-                    onValueChange={setTo('venueId')}
+                    onValueChange={(id: string) => {
+                      const picked = venues.find((x) => x.id === id);
+                      setV((p) => ({ ...p, venueId: id, ...(picked ? { timezone: picked.timezone } : {}) }));
+                    }}
                     className={selectClass}
                   >
                     <option value="">{t('noSavedVenue')}</option>
@@ -409,7 +415,13 @@ export function EventWizard({
                 onCancel={() => setAddingVenue(false)}
                 onCreated={(created) => {
                   setVenues((p) => [...p, created]);
-                  setV((p) => ({ ...p, venueId: created.id, venueName: '', city: '' }));
+                  setV((p) => ({
+                    ...p,
+                    venueId: created.id,
+                    venueName: '',
+                    city: '',
+                    timezone: created.timezone,
+                  }));
                   setAddingVenue(false);
                 }}
               />

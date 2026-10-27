@@ -3,10 +3,11 @@
 import { Alert, Button, CountryPicker, Input, TimeZonePicker } from '@yayatoh/ui';
 import type { VenueDto } from '@yayatoh/venues';
 import { useTranslations } from 'next-intl';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 import { keepValues } from '@/lib/keep-values.ts';
+import { guessVenueZone } from '@/lib/venue-timezone.ts';
 
 const FIELD_ERRORS = [
   'name',
@@ -44,6 +45,19 @@ export function VenueForm({
   const bad = new Set(state.fields ?? []);
   const err = (f: (typeof FIELD_ERRORS)[number]) => (bad.has(f) ? t(`errors.${f}`) : undefined);
   const selectClass = 'field';
+  // The time zone follows the venue's country and city until the organizer picks one themselves.
+  const [country, setCountry] = useState(venue?.country ?? '');
+  const [city, setCity] = useState(venue?.city ?? '');
+  const [timezone, setTimezone] = useState(venue?.timezone ?? defaultTimezone);
+  const [touched, setTouched] = useState(Boolean(venue));
+  const [uncertain, setUncertain] = useState(false);
+  const follow = (nextCountry: string, nextCity: string) => {
+    if (touched) return;
+    const guess = guessVenueZone(nextCountry, nextCity);
+    if (!guess) return;
+    setTimezone(guess.zone);
+    setUncertain(!guess.certain);
+  };
   return (
     <form action={formAction} onSubmit={keepValues(formAction)} className="flex flex-col gap-4" noValidate>
       <fieldset disabled={disabled} className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -88,7 +102,11 @@ export function VenueForm({
           maxLength={120}
           autoComplete="address-level2"
           label={t('city')}
-          defaultValue={venue?.city ?? undefined}
+          value={city}
+          onChange={(e) => {
+            setCity(e.target.value);
+            follow(country, e.target.value);
+          }}
         />
         {full ? (
           <>
@@ -113,7 +131,11 @@ export function VenueForm({
           required
           label={t('country')}
           hint={t('countryHint')}
-          defaultValue={venue?.country ?? ''}
+          value={country}
+          onValueChange={(value: string) => {
+            setCountry(value);
+            follow(value, city);
+          }}
           error={err('country')}
         />
         <div className="flex flex-col gap-1.5">
@@ -123,11 +145,17 @@ export function VenueForm({
           <TimeZonePicker
             id="venue-timezone"
             name="timezone"
-            defaultValue={venue?.timezone ?? defaultTimezone}
+            value={timezone}
+            onValueChange={(value: string) => {
+              setTimezone(value);
+              setTouched(true);
+              setUncertain(false);
+            }}
             aria-invalid={bad.has('timezone') || undefined}
             aria-describedby={bad.has('timezone') ? 'venue-timezone-error' : undefined}
             className={`${selectClass} ${bad.has('timezone') ? 'field-invalid' : ''}`}
           />
+          {uncertain ? <p className="m-0 text-caption text-ink-2">{t('timezoneCheck')}</p> : null}
           {bad.has('timezone') ? (
             <p id="venue-timezone-error" className="text-caption text-danger">
               {t('errors.timezone')}

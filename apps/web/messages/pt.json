@@ -791,7 +791,7 @@
       "speaker": "Orador",
       "panelist": "Painelista",
       "moderator": "Moderador",
-      "host": "Anfitrião / apresentador",
+      "host": "Anfitrião / MC",
       "dj": "DJ",
       "artist": "Artista / intérprete",
       "influencer": "Influenciador",
@@ -802,7 +802,7 @@
       "speaker": "Oradores",
       "panelist": "Painelistas",
       "moderator": "Moderadores",
-      "host": "Anfitriões / apresentadores",
+      "host": "Anfitriões / MC",
       "dj": "DJs",
       "artist": "Artistas / intérpretes",
       "influencer": "Influenciadores",
@@ -3828,7 +3828,8 @@
     "contactPhone": "Telefone de contacto",
     "websiteUrl": "Website",
     "description": "Descrição",
-    "descriptionHint": "Mostrado na página pública do local. Suporta Markdown."
+    "descriptionHint": "Mostrado na página pública do local. Suporta Markdown.",
+    "timezoneCheck": "Este país tem vários fusos horários. Escolhemos o mais provável; confirme, por favor."
   },
   "details": {
     "title": "Detalhes do evento",
@@ -5150,7 +5151,8 @@
       "ticketName": "Dê um nome ao ingresso.",
       "ticketPrice": "Informe um preço como 25 ou 25.00.",
       "ticketQuantity": "Informe quantos estão à venda (pelo menos 1).",
-      "generic": "Verifique este campo."
+      "generic": "Verifique este campo.",
+      "profile": "Escolha primeiro o tipo de evento."
     },
     "currency": "Moeda",
     "currencyHint": "Usada nos ingressos, no pagamento e nos relatórios. Pode ser alterada até o primeiro pedido.",
@@ -5707,7 +5709,9 @@
     "settingOff": "Os compradores encomendam sem confirmar o e-mail.",
     "resendIn": "{seconds, plural, one {Pode pedir um novo código dentro de # segundo.} other {Pode pedir um novo código dentro de # segundos.}}",
     "wrong": "{count, plural, one {Esse código não está certo. Resta # tentativa.} other {Esse código não está certo. Restam # tentativas.}}",
-    "noAccount": "Isto não é um início de sessão e não criamos nenhuma conta. Só verificamos que os bilhetes lhe chegam. O resumo do pedido fica acima; nada é cobrado até ao passo seguinte."
+    "noAccount": "Isto não é um início de sessão e não criamos nenhuma conta. Só verificamos que os bilhetes lhe chegam. O resumo do pedido fica acima; nada é cobrado até ao passo seguinte.",
+    "sentSignIn": "Enviámos um código de 6 dígitos para {email}. Introduza-o para iniciar sessão. É válido durante 10 minutos.",
+    "sentRegistration": "Enviámos um código de 6 dígitos para {email}. Introduza-o para confirmar o seu registo. É válido durante 10 minutos."
   },
   "attendeeSignIn": {
     "title": "Meus ingressos",
@@ -15191,7 +15195,9 @@
       "sent": "Enviado.",
       "tooFast": "Está a enviar mensagens demasiado depressa. Aguarde um momento.",
       "tooLong": "Limite a mensagem a 2000 caracteres.",
-      "required": "Escreva primeiro uma mensagem."
+      "required": "Escreva primeiro uma mensagem.",
+      "closedTitle": "O lobby não está aberto",
+      "closedDescription": "O organizador não ativou o lobby neste evento. As conversas com as suas ligações continuam a funcionar."
     }
   },
   "chat": {
@@ -18252,7 +18258,8 @@
       "agency": "Eventos que você organiza para clientes, com marketing e relatórios.",
       "other": "Ingressos, participantes e check-in para qualquer outra coisa.",
       "tour": "Saídas programadas, uma capacidade por saída e pontos de embarque à escolha."
-    }
+    },
+    "choose": "Escolha o tipo de evento…"
   },
   "seriesField": {
     "label": "Série (opcional)",

@@ -3828,7 +3828,8 @@
     "contactPhone": "Contact phone",
     "websiteUrl": "Website",
     "description": "Description",
-    "descriptionHint": "Shown on the public venue page. Markdown is supported."
+    "descriptionHint": "Shown on the public venue page. Markdown is supported.",
+    "timezoneCheck": "This country has several time zones. We picked the most likely one; please check it."
   },
   "details": {
     "title": "Event details",
@@ -5150,7 +5151,8 @@
       "ticketName": "Give the pass a name.",
       "ticketPrice": "Enter a price like 25 or 25.00.",
       "ticketQuantity": "Enter how many are for sale (at least 1).",
-      "generic": "Check this field."
+      "generic": "Check this field.",
+      "profile": "Choose the type of event first."
     },
     "currency": "Currency",
     "currencyHint": "Tickets, checkout and reports use it. You can change it until the first order.",
@@ -5707,7 +5709,9 @@
     "settingOff": "Buyers order without confirming their email.",
     "resendIn": "{seconds, plural, one {You can ask for a new code in # second.} other {You can ask for a new code in # seconds.}}",
     "wrong": "{count, plural, one {That code isn't right. # try left.} other {That code isn't right. # tries left.}}",
-    "noAccount": "This is not a sign-in and we won’t create an account for you. We only check that your tickets will reach you. Your order summary stays above; nothing is charged until the next step."
+    "noAccount": "This is not a sign-in and we won’t create an account for you. We only check that your tickets will reach you. Your order summary stays above; nothing is charged until the next step.",
+    "sentSignIn": "We emailed a 6-digit code to {email}. Enter it to sign in. It works for 10 minutes.",
+    "sentRegistration": "We emailed a 6-digit code to {email}. Enter it to confirm your registration. It works for 10 minutes."
   },
   "attendeeSignIn": {
     "title": "My tickets",
@@ -15191,7 +15195,9 @@
       "sent": "Sent.",
       "tooFast": "You are sending messages too fast. Wait a moment.",
       "tooLong": "Keep the message to 2000 characters.",
-      "required": "Write a message first."
+      "required": "Write a message first.",
+      "closedTitle": "The lobby is not open",
+      "closedDescription": "The organizer has not turned the lobby on for this event. Chats with your connections still work."
     }
   },
   "chat": {
@@ -18252,7 +18258,8 @@
       "agency": "Events you run for clients, with marketing and reports.",
       "other": "Tickets, attendees and check-in for anything else.",
       "tour": "Departures on a schedule, a capacity for each, and pickup points passengers choose."
-    }
+    },
+    "choose": "Choose the type of event…"
   },
   "seriesField": {
     "label": "Series (optional)",

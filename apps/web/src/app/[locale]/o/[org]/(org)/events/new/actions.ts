@@ -76,7 +76,7 @@ export async function createEventAction(
   // Built inside run(): an unparseable date throws there and is mapped below.
   const input = () => ({
     name: get('name'),
-    profile: get('profile') || data.profile,
+    profile: get('profile'),
     orgCategory: get('orgCategory') || null,
     timezone,
     // Organizers enter wall-clock times in the event's zone (CLAUDE.md → Time).
@@ -200,7 +200,7 @@ export async function guidedCreateAction(
   const input = {
     name: get('name'),
     tagline: get('tagline') || null,
-    profile: get('profile') || data.profile,
+    profile: get('profile'),
     orgCategory: get('orgCategory') || null,
     timezone,
     startsAt,

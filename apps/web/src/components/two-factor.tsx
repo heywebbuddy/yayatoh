@@ -1,8 +1,8 @@
 'use client';
 
-import { Alert, Button, buttonClass, Input } from '@yayatoh/ui';
+import { Alert, Button, buttonClass, Input, StatusDot } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
-import { useActionState, useId, useState, useTransition } from 'react';
+import { useActionState, useEffect, useId, useState, useTransition } from 'react';
 import {
   addDeviceAction,
   beginSetupAction,
@@ -142,6 +142,11 @@ export function TwoFactorSetup({ required }: { required: boolean }) {
     code: null,
   });
   const errorId = useId();
+  // The status line above ("Off") learns at once that it is on, without a reload that would also
+  // close the backup codes the person still has to save.
+  useEffect(() => {
+    if (state.ok && state.backupCodes) window.dispatchEvent(new Event(TWO_FACTOR_ENABLED));
+  }, [state]);
 
   const begin = () =>
     startTransition(async () => {
@@ -340,4 +345,28 @@ export function AddDevice() {
       </Button>
     </form>
   );
+}
+
+const TWO_FACTOR_ENABLED = 'yy:two-factor-enabled';
+
+/** The "On / Off" status of the authenticator app; turns On as soon as setup succeeds. */
+export function TwoFactorStatusDot({
+  enabled,
+  onLabel,
+  offLabel,
+}: {
+  enabled: boolean;
+  onLabel: string;
+  offLabel: string;
+}) {
+  const [on, setOn] = useState(enabled);
+  useEffect(() => {
+    setOn(enabled);
+  }, [enabled]);
+  useEffect(() => {
+    const turnOn = () => setOn(true);
+    window.addEventListener(TWO_FACTOR_ENABLED, turnOn);
+    return () => window.removeEventListener(TWO_FACTOR_ENABLED, turnOn);
+  }, []);
+  return <StatusDot status={on ? 'success' : 'neutral'} label={on ? onLabel : offLabel} />;
 }

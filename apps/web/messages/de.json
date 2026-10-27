@@ -3828,7 +3828,8 @@
     "contactPhone": "Kontakttelefon",
     "websiteUrl": "Website",
     "description": "Beschreibung",
-    "descriptionHint": "Wird auf der öffentlichen Veranstaltungsort-Seite angezeigt. Markdown wird unterstützt."
+    "descriptionHint": "Wird auf der öffentlichen Veranstaltungsort-Seite angezeigt. Markdown wird unterstützt.",
+    "timezoneCheck": "Dieses Land hat mehrere Zeitzonen. Wir haben die wahrscheinlichste gewählt; bitte prüfe sie."
   },
   "details": {
     "title": "Eventdetails",
@@ -5150,7 +5151,8 @@
       "ticketName": "Gib dem Ticket einen Namen.",
       "ticketPrice": "Gib einen Preis wie 25 oder 25.00 ein.",
       "ticketQuantity": "Gib an, wie viele verkauft werden (mindestens 1).",
-      "generic": "Prüfe dieses Feld."
+      "generic": "Prüfe dieses Feld.",
+      "profile": "Wähle zuerst die Art der Veranstaltung."
     },
     "currency": "Währung",
     "currencyHint": "Tickets, Checkout und Berichte verwenden sie. Bis zur ersten Bestellung änderbar.",
@@ -5707,7 +5709,9 @@
     "settingOff": "Käufer bestellen, ohne ihre E-Mail zu bestätigen.",
     "resendIn": "{seconds, plural, one {Sie können in # Sekunde einen neuen Code anfordern.} other {Sie können in # Sekunden einen neuen Code anfordern.}}",
     "wrong": "{count, plural, one {Dieser Code stimmt nicht. Noch # Versuch.} other {Dieser Code stimmt nicht. Noch # Versuche.}}",
-    "noAccount": "Das ist keine Anmeldung, und wir legen kein Konto für dich an. Wir prüfen nur, dass deine Tickets dich erreichen. Deine Bestellübersicht bleibt oben stehen; abgebucht wird erst im nächsten Schritt."
+    "noAccount": "Das ist keine Anmeldung, und wir legen kein Konto für dich an. Wir prüfen nur, dass deine Tickets dich erreichen. Deine Bestellübersicht bleibt oben stehen; abgebucht wird erst im nächsten Schritt.",
+    "sentSignIn": "Wir haben einen 6-stelligen Code an {email} gesendet. Gib ihn ein, um dich anzumelden. Er gilt 10 Minuten.",
+    "sentRegistration": "Wir haben einen 6-stelligen Code an {email} gesendet. Gib ihn ein, um deine Anmeldung zu bestätigen. Er gilt 10 Minuten."
   },
   "attendeeSignIn": {
     "title": "Meine Tickets",
@@ -15191,7 +15195,9 @@
       "sent": "Gesendet.",
       "tooFast": "Du sendest zu schnell. Warte einen Moment.",
       "tooLong": "Halte die Nachricht auf 2000 Zeichen.",
-      "required": "Schreibe zuerst eine Nachricht."
+      "required": "Schreibe zuerst eine Nachricht.",
+      "closedTitle": "Die Lobby ist nicht geöffnet",
+      "closedDescription": "Der Veranstalter hat die Lobby für diese Veranstaltung nicht eingeschaltet. Chats mit deinen Kontakten funktionieren weiterhin."
     }
   },
   "chat": {
@@ -18252,7 +18258,8 @@
       "agency": "Veranstaltungen für Ihre Kunden, mit Marketing und Berichten.",
       "other": "Tickets, Teilnehmende und Check-in für alles andere.",
       "tour": "Abfahrten nach Zeitplan, eine Kapazität je Abfahrt und Abholpunkte zur Wahl."
-    }
+    },
+    "choose": "Art der Veranstaltung wählen …"
   },
   "seriesField": {
     "label": "Serie (optional)",

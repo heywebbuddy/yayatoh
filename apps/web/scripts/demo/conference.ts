@@ -23,10 +23,12 @@ import {
   respondConnectionCommand,
   respondMeetingCommand,
   saveMeetingLocationCommand,
+  setLobbyEnabledCommand,
   updateSettingsCommand as updateLiveSettingsCommand,
   updateNetworkSettingsCommand,
   voteCommand,
 } from '@yayatoh/engagement';
+import { uploadProgramDocument } from '@yayatoh/media';
 import {
   assignBoothCommand,
   createExhibitorCommand,
@@ -42,6 +44,7 @@ import {
   saveExhibitorListingCommand,
   saveSponsorPackageCommand,
   setSessionAgendaCommand,
+  setSponsorTeamCommand,
 } from '@yayatoh/program';
 import { seedRegistrationDefaultsCommand } from '@yayatoh/registration';
 import { createSurveyCommand } from '@yayatoh/surveys';
@@ -69,12 +72,36 @@ import {
   log,
   owner,
   people,
+  quietPorts,
   read,
   run,
   step,
   ticketsOf,
   visitor,
 } from './kit.ts';
+
+/** A one-page PDF (valid enough for any viewer) used as a demo brochure. */
+function brochurePdf(title: string): Uint8Array {
+  const text = title.replace(/[^A-Za-z0-9 ]/g, '');
+  const stream = `BT /F1 28 Tf 72 720 Td (${text}) Tj 0 -40 Td /F1 14 Tf (Partner brochure - demo document) Tj ET`;
+  const objs = [
+    '<< /Type /Catalog /Pages 2 0 R >>',
+    '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+    '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>',
+    `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`,
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+  ];
+  let out = '%PDF-1.4\n';
+  const offsets: number[] = [];
+  objs.forEach((o, i) => {
+    offsets.push(out.length);
+    out += `${i + 1} 0 obj\n${o}\nendobj\n`;
+  });
+  const xref = out.length;
+  out += `xref\n0 ${objs.length + 1}\n0000000000 65535 f \n${offsets.map((o) => `${String(o).padStart(10, '0')} 00000 n \n`).join('')}`;
+  out += `trailer\n<< /Size ${objs.length + 1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`;
+  return new TextEncoder().encode(out);
+}
 
 const SPEAKERS = [
   [
@@ -105,6 +132,20 @@ const SPEAKERS = [
   ],
   ['Priya Venkatesh', 'Partner', 'Banyan Ventures', 'Invests in climate and deep-tech startups.'],
   ['Diego Alvarez', 'Product Lead', 'Orbit Payments', 'Shipped UPI integrations for global merchants.'],
+  ['Aarav Kapoor', 'Actor and entrepreneur', 'Kapoor Studios', 'Joins us as the summit’s special guest.'],
+] as const;
+
+/** One role per speaker (same order as SPEAKERS) so the public page shows every kind of person. */
+const SPEAKER_ROLES = [
+  ['keynote', true],
+  ['speaker', false],
+  ['panelist', false],
+  ['moderator', false],
+  ['host', true],
+  ['dj', false],
+  ['artist', false],
+  ['influencer', false],
+  ['special_guest', true],
 ] as const;
 
 const SESSIONS: {
@@ -323,7 +364,7 @@ export async function conference(d: Demo, venues: Record<VenueKey, string>, spec
     if (r) types[name] = r.id;
   }
   const speakers: string[] = [];
-  for (const [name, title, company, bio] of SPEAKERS) {
+  for (const [index, [name, title, company, bio]] of SPEAKERS.entries()) {
     const r = await step(`${b.slug} speaker ${name}`, () =>
       run<unknown, { id: string }>(
         createSpeakerCommand,
@@ -334,6 +375,8 @@ export async function conference(d: Demo, venues: Record<VenueKey, string>, spec
           company,
           bio,
           links: [{ label: 'LinkedIn', url: 'https://www.linkedin.com/' }],
+          role: SPEAKER_ROLES[index]?.[0] ?? 'speaker',
+          featured: SPEAKER_ROLES[index]?.[1] ?? false,
         },
         ctx(),
       ),
@@ -397,21 +440,56 @@ export async function conference(d: Demo, venues: Record<VenueKey, string>, spec
     ['Lumen Data', 2],
     ['Kite Robotics', 2],
   ] as const;
-  for (const [name, tier] of sponsorNames)
-    if (tiers[tier])
-      await step(`${b.slug} sponsor ${name}`, () =>
-        run(
-          createSponsorCommand,
-          {
-            eventId: b.id,
-            tierId: tiers[tier],
-            name,
-            description: `${name} supports builders across India.`,
-            websiteUrl: 'https://example.com/',
-          },
-          ctx(),
-        ),
-      );
+  for (const [index, [name, tier]] of sponsorNames.entries()) {
+    if (!tiers[tier]) continue;
+    const slugged = name.toLowerCase().replace(/[^a-z0-9]+/g, '');
+    const sponsor = await step(`${b.slug} sponsor ${name}`, () =>
+      run<unknown, { id: string }>(
+        createSponsorCommand,
+        {
+          eventId: b.id,
+          tierId: tiers[tier],
+          name,
+          description: `${name} supports builders across India.`,
+          websiteUrl: 'https://example.com/',
+          longDescription: `**${name}** has backed engineering communities since 2015.\n\n- Open-source grants every quarter\n- Mentoring for first-time founders\n- A free workshop at every summit\n\nFind us at our booth or book a time with the team below.`,
+          contactEmail: `partners@${slugged}.example.com`,
+          contactPhone: `+91 98765 4${String(1000 + index)}`,
+          videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        },
+        ctx(),
+      ),
+    );
+    if (!sponsor) continue;
+    await step(`${b.slug} team ${name}`, () =>
+      run(
+        setSponsorTeamCommand,
+        {
+          eventId: b.id,
+          sponsorId: sponsor.id,
+          members: [
+            { name: 'Neha Sharma', title: 'Head of Partnerships' },
+            { name: 'Vikram Nair', title: 'Developer Relations Lead' },
+            { name: 'Isha Menon', title: 'Community Manager' },
+          ],
+        },
+        ctx(),
+      ),
+    );
+    await step(`${b.slug} brochure ${name}`, () =>
+      uploadProgramDocument(
+        ctx(),
+        {
+          ownerType: 'sponsor',
+          ownerId: sponsor.id,
+          title: `${name} partner brochure`,
+          file: brochurePdf(name),
+          fileName: `${slugged}-brochure.pdf`,
+        },
+        quietPorts,
+      ),
+    );
+  }
   if (tiers[1])
     await step(`${b.slug} sponsor package`, () =>
       run(
@@ -451,11 +529,27 @@ export async function conference(d: Demo, venues: Record<VenueKey, string>, spec
           description: `Meet ${name} at booth ${i + 1}.`,
           boothLabel: `B${i + 1}`,
           websiteUrl: 'https://example.com/',
+          contactEmail: `hello@${name.toLowerCase().replace(/[^a-z0-9]+/g, '')}.example.com`,
+          contactPhone: `+91 90000 0${String(1000 + i)}`,
+          videoUrl: 'https://vimeo.com/76979871',
         },
         ctx(),
       ),
     );
     if (!ex) continue;
+    await step(`${b.slug} brochure ${name}`, () =>
+      uploadProgramDocument(
+        ctx(),
+        {
+          ownerType: 'exhibitor',
+          ownerId: ex.id,
+          title: `${name} product sheet`,
+          file: brochurePdf(name),
+          fileName: 'product-sheet.pdf',
+        },
+        quietPorts,
+      ),
+    );
     await step(`${b.slug} listing ${name}`, () =>
       run(
         saveExhibitorListingCommand,
@@ -627,8 +721,11 @@ async function networking(
   sessions: { id: string; title: string; startsAt: Date; endsAt: Date }[],
 ) {
   const ctx = () => owner(d);
-  const on = await step(`${b.slug} networking`, () =>
-    run(updateNetworkSettingsCommand, { eventId: b.id, enabled: true, meetingsEnabled: true }, ctx()),
+  const on = await step(
+    `${b.slug} networking`,
+    () => run(updateNetworkSettingsCommand, { eventId: b.id, enabled: true, meetingsEnabled: true }, ctx()),
+    // The event lobby (one chat room for everyone who joined networking) is on in the demo.
+    run(setLobbyEnabledCommand, { eventId: b.id, enabled: true }, ctx()),
   );
   if (!on) return;
   const loc = await step(`${b.slug} meeting point`, () =>

@@ -10,6 +10,7 @@ import { slotLabel } from '@/components/networking/format.ts';
 import { ActionButton } from '@/components/networking/network-forms.tsx';
 import { NetworkShell } from '@/components/networking/network-shell.tsx';
 import { getPathname, Link } from '@/i18n/navigation.ts';
+import { zoneLabel } from '@/lib/zone-label.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { loadNetworkPage, networkPath } from '@/server/networking.ts';
 import { ports } from '@/server/ports.ts';
@@ -92,7 +93,7 @@ export default async function NetworkMeetingsPage({ params }: Params) {
       slug={slug}
       eventName={p.target.eventName}
       title={t('meetings.title')}
-      description={t('meetings.intro', { timezone: tz.replace(/_/g, ' ') })}
+      description={t('meetings.intro', { timezone: zoneLabel(tz, locale) })}
       active="meetings"
       waiting={p.waiting}
     >

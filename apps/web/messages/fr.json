@@ -3828,7 +3828,8 @@
     "contactPhone": "Téléphone de contact",
     "websiteUrl": "Site web",
     "description": "Description",
-    "descriptionHint": "Affiché sur la page publique du lieu. Markdown pris en charge."
+    "descriptionHint": "Affiché sur la page publique du lieu. Markdown pris en charge.",
+    "timezoneCheck": "Ce pays compte plusieurs fuseaux horaires. Nous avons choisi le plus probable ; vérifiez-le."
   },
   "details": {
     "title": "Détails de l’événement",
@@ -5150,7 +5151,8 @@
       "ticketName": "Donnez un nom au billet.",
       "ticketPrice": "Saisissez un prix comme 25 ou 25.00.",
       "ticketQuantity": "Indiquez combien sont en vente (au moins 1).",
-      "generic": "Vérifiez ce champ."
+      "generic": "Vérifiez ce champ.",
+      "profile": "Choisissez d’abord le type d’événement."
     },
     "currency": "Devise",
     "currencyHint": "Les billets, le paiement et les rapports l'utilisent. Modifiable jusqu'à la première commande.",
@@ -5707,7 +5709,9 @@
     "settingOff": "Les acheteurs commandent sans confirmer leur e-mail.",
     "resendIn": "{seconds, plural, one {Vous pourrez demander un nouveau code dans # seconde.} other {Vous pourrez demander un nouveau code dans # secondes.}}",
     "wrong": "{count, plural, one {Ce code n'est pas bon. Il reste # essai.} other {Ce code n'est pas bon. Il reste # essais.}}",
-    "noAccount": "Ce n’est pas une connexion et nous ne créons aucun compte. Nous vérifions simplement que vos billets vous parviendront. Le récapitulatif reste au-dessus ; rien n’est débité avant l’étape suivante."
+    "noAccount": "Ce n’est pas une connexion et nous ne créons aucun compte. Nous vérifions simplement que vos billets vous parviendront. Le récapitulatif reste au-dessus ; rien n’est débité avant l’étape suivante.",
+    "sentSignIn": "Nous avons envoyé un code à 6 chiffres à {email}. Saisissez-le pour vous connecter. Il est valable 10 minutes.",
+    "sentRegistration": "Nous avons envoyé un code à 6 chiffres à {email}. Saisissez-le pour confirmer votre inscription. Il est valable 10 minutes."
   },
   "attendeeSignIn": {
     "title": "Mes billets",
@@ -15191,7 +15195,9 @@
       "sent": "Envoyé.",
       "tooFast": "Vous envoyez trop vite. Patientez un instant.",
       "tooLong": "Limitez le message à 2000 caractères.",
-      "required": "Écrivez d’abord un message."
+      "required": "Écrivez d’abord un message.",
+      "closedTitle": "Le salon n’est pas ouvert",
+      "closedDescription": "L’organisateur n’a pas activé le salon pour cet événement. Les discussions avec vos relations restent disponibles."
     }
   },
   "chat": {
@@ -18252,7 +18258,8 @@
       "agency": "Des événements organisés pour vos clients, avec marketing et rapports.",
       "other": "Billets, participants et enregistrement pour tout le reste.",
       "tour": "Des départs planifiés, une capacité par départ et des points de prise en charge au choix."
-    }
+    },
+    "choose": "Choisissez le type d’événement…"
   },
   "seriesField": {
     "label": "Série (facultatif)",

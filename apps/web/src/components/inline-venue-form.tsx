@@ -4,6 +4,7 @@ import { Alert, Button, CountryPicker, Input, TimeZonePicker } from '@yayatoh/ui
 import { useTranslations } from 'next-intl';
 import { useState, useTransition } from 'react';
 import type { InlineVenueResult } from '@/app/[locale]/o/[org]/(org)/venues/actions.ts';
+import { guessVenueZone } from '@/lib/venue-timezone.ts';
 
 export type InlineVenueInput = {
   name: string;
@@ -40,12 +41,21 @@ export function InlineVenueForm({
 }: {
   create: (input: InlineVenueInput) => Promise<InlineVenueResult>;
   defaultTimezone: string;
-  onCreated: (venue: { id: string; name: string; city: string | null }) => void;
+  onCreated: (venue: { id: string; name: string; city: string | null; timezone: string }) => void;
   onCancel: () => void;
 }) {
   const t = useTranslations('wizard.newVenue');
   const tv = useTranslations('venues');
   const [v, setV] = useState({ ...EMPTY, timezone: defaultTimezone });
+  const [touched, setTouched] = useState(false);
+  const [uncertain, setUncertain] = useState(false);
+  const follow = (country: string, city: string) => {
+    if (touched) return;
+    const guess = guessVenueZone(country, city);
+    if (!guess) return;
+    setV((p) => ({ ...p, timezone: guess.zone }));
+    setUncertain(!guess.certain);
+  };
   const [bad, setBad] = useState<ReadonlySet<string>>(new Set());
   const [failed, setFailed] = useState(false);
   const [pending, start] = useTransition();
@@ -92,12 +102,24 @@ export function InlineVenueForm({
           value={v.addressLine1}
           onChange={set('addressLine1')}
         />
-        <Input name="newVenueCity" label={tv('city')} maxLength={120} value={v.city} onChange={set('city')} />
+        <Input
+          name="newVenueCity"
+          label={tv('city')}
+          maxLength={120}
+          value={v.city}
+          onChange={(e) => {
+            set('city')(e);
+            follow(v.country, e.target.value);
+          }}
+        />
         <CountryPicker
           name="newVenueCountry"
           label={tv('country')}
           value={v.country}
-          onValueChange={(value: string) => setV((p) => ({ ...p, country: value }))}
+          onValueChange={(value: string) => {
+            setV((p) => ({ ...p, country: value }));
+            follow(value, v.city);
+          }}
           error={err('country')}
         />
         <div className="flex flex-col gap-1.5">
@@ -108,9 +130,14 @@ export function InlineVenueForm({
             id="new-venue-timezone"
             name="newVenueTimezone"
             value={v.timezone}
-            onValueChange={(value: string) => setV((p) => ({ ...p, timezone: value }))}
+            onValueChange={(value: string) => {
+              setV((p) => ({ ...p, timezone: value }));
+              setTouched(true);
+              setUncertain(false);
+            }}
             className="field"
           />
+          {uncertain ? <p className="m-0 text-caption text-ink-2">{tv('timezoneCheck')}</p> : null}
         </div>
         <Input
           name="newVenueCapacity"

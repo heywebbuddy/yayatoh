@@ -791,7 +791,7 @@
       "speaker": "Ponente",
       "panelist": "Panelista",
       "moderator": "Moderador",
-      "host": "Anfitrión / presentador",
+      "host": "Anfitrión / MC",
       "dj": "DJ",
       "artist": "Artista / intérprete",
       "influencer": "Influencer",
@@ -802,7 +802,7 @@
       "speaker": "Ponentes",
       "panelist": "Panelistas",
       "moderator": "Moderadores",
-      "host": "Anfitriones / presentadores",
+      "host": "Anfitriones / MC",
       "dj": "DJs",
       "artist": "Artistas / intérpretes",
       "influencer": "Influencers",
@@ -3828,7 +3828,8 @@
     "contactPhone": "Teléfono de contacto",
     "websiteUrl": "Sitio web",
     "description": "Descripción",
-    "descriptionHint": "Se muestra en la página pública del recinto. Admite Markdown."
+    "descriptionHint": "Se muestra en la página pública del recinto. Admite Markdown.",
+    "timezoneCheck": "Este país tiene varias zonas horarias. Elegimos la más probable; compruébala, por favor."
   },
   "details": {
     "title": "Detalles del evento",
@@ -5150,7 +5151,8 @@
       "ticketName": "Ponle un nombre a la entrada.",
       "ticketPrice": "Escribe un precio como 25 o 25.00.",
       "ticketQuantity": "Indica cuántas hay a la venta (al menos 1).",
-      "generic": "Revisa este campo."
+      "generic": "Revisa este campo.",
+      "profile": "Elige primero el tipo de evento."
     },
     "currency": "Moneda",
     "currencyHint": "La usan las entradas, el pago y los informes. Puedes cambiarla hasta el primer pedido.",
@@ -5707,7 +5709,9 @@
     "settingOff": "Los compradores piden sin confirmar su correo.",
     "resendIn": "{seconds, plural, one {Puedes pedir un código nuevo en # segundo.} other {Puedes pedir un código nuevo en # segundos.}}",
     "wrong": "{count, plural, one {Ese código no es correcto. Queda # intento.} other {Ese código no es correcto. Quedan # intentos.}}",
-    "noAccount": "Esto no es un inicio de sesión y no crearemos una cuenta. Solo comprobamos que tus entradas te lleguen. El resumen del pedido sigue arriba; no se cobra nada hasta el siguiente paso."
+    "noAccount": "Esto no es un inicio de sesión y no crearemos una cuenta. Solo comprobamos que tus entradas te lleguen. El resumen del pedido sigue arriba; no se cobra nada hasta el siguiente paso.",
+    "sentSignIn": "Enviamos un código de 6 dígitos a {email}. Introdúcelo para iniciar sesión. Vale durante 10 minutos.",
+    "sentRegistration": "Enviamos un código de 6 dígitos a {email}. Introdúcelo para confirmar tu registro. Vale durante 10 minutos."
   },
   "attendeeSignIn": {
     "title": "Mis entradas",
@@ -15191,7 +15195,9 @@
       "sent": "Enviado.",
       "tooFast": "Estás enviando mensajes demasiado rápido. Espera un momento.",
       "tooLong": "Limita el mensaje a 2000 caracteres.",
-      "required": "Escribe primero un mensaje."
+      "required": "Escribe primero un mensaje.",
+      "closedTitle": "El lobby no está abierto",
+      "closedDescription": "El organizador no ha activado el lobby para este evento. Los chats con tus conexiones siguen funcionando."
     }
   },
   "chat": {
@@ -18252,7 +18258,8 @@
       "agency": "Eventos que organizas para clientes, con marketing e informes.",
       "other": "Entradas, asistentes y check-in para cualquier otra cosa.",
       "tour": "Salidas programadas, un aforo por salida y puntos de recogida a elegir."
-    }
+    },
+    "choose": "Elige el tipo de evento…"
   },
   "seriesField": {
     "label": "Serie (opcional)",

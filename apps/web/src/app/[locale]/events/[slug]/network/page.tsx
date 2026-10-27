@@ -56,7 +56,7 @@ export default async function NetworkPage({ params, searchParams }: Params) {
         <Card className="flex flex-col gap-4">
           <h2 className="text-card">{t('signIn.heading')}</h2>
           <p className="text-body text-ink-2">{t('signIn.how')}</p>
-          <SignInForm action={signInAction.bind(null, null)} />
+          <SignInForm action={signInAction.bind(null, null)} next={networkPath(slug)} />
         </Card>
       </NetworkShell>
     );

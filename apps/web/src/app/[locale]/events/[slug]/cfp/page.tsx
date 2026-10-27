@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { formatMoment } from '@/lib/portal-format.ts';
+import { zoneLabel } from '@/lib/zone-label.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { submitCfpAction } from './actions.ts';
 import { CfpForm } from './cfp-form.tsx';
@@ -44,7 +45,7 @@ export default async function CfpPublicPage({
           call.closesAt && call.state === 'open'
             ? t('deadline', {
                 date: formatMoment(call.closesAt, locale, ev.timezone),
-                zone: ev.timezone.replace(/_/g, ' '),
+                zone: zoneLabel(ev.timezone, locale),
               })
             : undefined
         }

@@ -16,6 +16,7 @@ import {
 } from '@yayatoh/orders';
 import { organizationNameTx, resolveHost } from '@yayatoh/tenancy';
 import { refresh } from 'next/cache';
+import { headers } from 'next/headers';
 import { getLocale } from 'next-intl/server';
 import type { GuestCodeStatus } from '@/components/guest-code-fields.tsx';
 import { classifyHost } from '@/lib/hosts.ts';
@@ -28,9 +29,11 @@ import {
   guestSessionToken,
   pendingChallenge,
   rememberPendingChallenge,
+  rememberReturnPath,
   rememberVerifiedEmail,
   sendGuestEmail,
   setGuestSessionCookie,
+  takeReturnPath,
 } from '@/server/guest.ts';
 import { ports } from '@/server/ports.ts';
 import { limitAction, retryAfterMinutes } from '@/server/rate-limit.ts';
@@ -68,6 +71,8 @@ export type SignInState = {
   readonly attemptsLeft?: number | null;
   readonly resendAt?: number | null;
   readonly retryMinutes?: number;
+  /** Signed in: the page the browser loads next. */
+  readonly done?: string;
 };
 
 async function sendSignInCode(orgId: string | null, email: string): Promise<SignInState> {
@@ -103,6 +108,17 @@ async function sendSignInCode(orgId: string | null, email: string): Promise<Sign
   });
   await rememberPendingChallenge('sign_in', r.challengeId);
   return { step: 'code', code: null, email, status: 'sent', resendAt: r.resendAt.getTime() };
+}
+
+/** A same-site path to return to after signing in; anything else is ignored. */
+function safeNext(v: FormDataEntryValue | null): string | null {
+  const s = typeof v === 'string' ? v : '';
+  return /^\/(?!\/)[\w\-./?=&%]*$/.test(s) && !s.includes('..') ? s : null;
+}
+
+async function currentPath(): Promise<string> {
+  const h = await headers();
+  return h.get('referer') ? new URL(h.get('referer') as string).pathname : await myTicketsHref();
 }
 
 async function signIn(orgId: string | null, email: string) {
@@ -141,14 +157,16 @@ export async function signInAction(
     );
     if (r.status === 'ok') {
       await signIn(orgId, email);
-      // Re-render this page (its route, as the proxy rewrote it) with the session.
+      const back = await takeReturnPath();
+      // The browser loads the page again (a full load through the proxy), signed in.
       refresh();
-      return { step: 'email', code: null };
+      return { step: 'email', code: null, done: back ?? (await currentPath()) };
     }
     if (r.status === 'rate_limited')
       return { ...prev, code: 'rate_limited', retryMinutes: minutes(r.retryAfterMs) };
     return { step: 'code', code: null, email, status: r.status, attemptsLeft: r.attemptsLeft };
   }
+  await rememberReturnPath(safeNext(form.get('next')));
   return sendSignInCode(orgId, email);
 }
 
@@ -171,7 +189,7 @@ export async function openLinkAction(
   const r = await consumeGuestLink({ token, browserState: await browserState(false), scopeOrgId: orgId });
   if (r.status !== 'ok') return { code: null, status: 'expired' };
   await signIn(orgId, r.email);
-  return { code: null, done: await myTicketsHref() };
+  return { code: null, done: (await takeReturnPath()) ?? (await myTicketsHref()) };
 }
 
 /** The magic link opened in another browser: the code from the same email proves the address. */
@@ -196,7 +214,7 @@ export async function linkCodeAction(
   if (v.status === 'ok') {
     if (!v.email) return { code: null, status: 'expired' };
     await signIn(orgId, v.email);
-    return { code: null, done: await myTicketsHref() };
+    return { code: null, done: (await takeReturnPath()) ?? (await myTicketsHref()) };
   }
   if (v.status === 'rate_limited') return { code: 'rate_limited', retryMinutes: minutes(v.retryAfterMs) };
   return { code: null, status: v.status, attemptsLeft: v.attemptsLeft };

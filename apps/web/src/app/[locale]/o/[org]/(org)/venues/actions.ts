@@ -84,7 +84,7 @@ export async function setQuoteStatusAction(
 }
 
 export type InlineVenueResult =
-  | { ok: true; venue: { id: string; name: string; city: string | null } }
+  | { ok: true; venue: { id: string; name: string; city: string | null; timezone: string } }
   | { ok: false; fields: readonly string[] };
 
 /** The event wizard's "Add a new venue": creates the saved venue and returns it to be selected. */
@@ -113,7 +113,7 @@ export async function createVenueInlineAction(
       ports,
     );
     revalidatePath(`/o/${org}/venues`);
-    return { ok: true, venue: { id: row.id, name: row.name, city: row.city } };
+    return { ok: true, venue: { id: row.id, name: row.name, city: row.city, timezone: row.timezone } };
   } catch (err) {
     return { ok: false, fields: failure(err).fields ?? [] };
   }

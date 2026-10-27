@@ -24,6 +24,7 @@ export function ProfilePicker({
   defaultValue,
   onValueChange,
   className,
+  error,
 }: {
   id: string;
   name?: string;
@@ -34,9 +35,10 @@ export function ProfilePicker({
   defaultValue?: string;
   onValueChange?: (value: string) => void;
   className?: string;
+  error?: string;
 }) {
   const t = useTranslations();
-  const [inner, setInner] = useState(defaultValue ?? profiles[0]?.key ?? 'other');
+  const [inner, setInner] = useState(defaultValue ?? '');
   const value = controlled ?? inner;
   const chosen = profiles.find((p) => p.key === value);
   const summaryId = useId();
@@ -54,6 +56,9 @@ export function ProfilePicker({
           onValueChange?.(v);
         }}
         aria-describedby={summaryId}
+        placeholder={t('profilePicker.choose')}
+        required
+        error={error}
         className={className}
         options={profiles.map((p) => ({
           value: p.key,

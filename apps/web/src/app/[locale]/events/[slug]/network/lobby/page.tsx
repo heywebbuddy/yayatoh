@@ -31,7 +31,6 @@ export default async function LobbyPage({ params }: Params) {
   const t = await getTranslations('networking.lobby');
   const tn = await getTranslations('networking');
   const lobby = await executeQuery(lobbyQuery, p.at, p.ctx, ports);
-  if (!lobby.enabled) notFound();
   const time = new Intl.DateTimeFormat(locale, {
     timeZone: p.target.timeZone,
     dateStyle: 'short',
@@ -47,10 +46,13 @@ export default async function LobbyPage({ params }: Params) {
       waiting={p.waiting}
       meetings={p.home.meetingsEnabled}
     >
-      <AutoRefresh />
-      <LobbyRead mark={markLobbyReadAction.bind(null, slug)} count={lobby.messages.length} />
-      <Alert tone="info" title={t('rules')} />
-      {lobby.messages.length === 0 ? (
+      {lobby.enabled ? <AutoRefresh seconds={5} /> : null}
+      {lobby.enabled ? (
+        <LobbyRead mark={markLobbyReadAction.bind(null, slug)} count={lobby.messages.length} />
+      ) : null}
+      {lobby.enabled ? null : <EmptyState title={t('closedTitle')} description={t('closedDescription')} />}
+      {lobby.enabled ? <Alert tone="info" title={t('rules')} /> : null}
+      {!lobby.enabled ? null : lobby.messages.length === 0 ? (
         <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
       ) : (
         <ol aria-label={t('messages')} className="m-0 flex list-none flex-col gap-2 p-0">
@@ -96,17 +98,19 @@ export default async function LobbyPage({ params }: Params) {
           ))}
         </ol>
       )}
-      <Card size="panel">
-        <ProgramForm
-          action={sendLobbyAction.bind(null, slug)}
-          fields={[{ kind: 'textarea', name: 'body', label: t('write'), rows: 3, required: true }]}
-          idPrefix="lobby-send"
-          submitLabel={t('send')}
-          successLabel={t('sent')}
-          errors={{ rate_limited: t('tooFast'), too_long: t('tooLong'), required: t('required') }}
-          reset
-        />
-      </Card>
+      {lobby.enabled ? (
+        <Card size="panel">
+          <ProgramForm
+            action={sendLobbyAction.bind(null, slug)}
+            fields={[{ kind: 'textarea', name: 'body', label: t('write'), rows: 3, required: true }]}
+            idPrefix="lobby-send"
+            submitLabel={t('send')}
+            successLabel={t('sent')}
+            errors={{ rate_limited: t('tooFast'), too_long: t('tooLong'), required: t('required') }}
+            reset
+          />
+        </Card>
+      ) : null}
     </NetworkShell>
   );
 }

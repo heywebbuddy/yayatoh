@@ -37,6 +37,7 @@ export function GuestCodeFields({
   submitLabel,
   pending,
   idPrefix,
+  purpose = 'order',
 }: {
   email: string;
   status: GuestCodeStatus;
@@ -45,6 +46,8 @@ export function GuestCodeFields({
   submitLabel: string;
   pending: boolean;
   idPrefix: string;
+  /** What the code is for, so the sentence says the right thing (default: placing an order). */
+  purpose?: 'order' | 'signIn' | 'registration';
 }) {
   const t = useTranslations('guestVerify');
   // A cooldown answer keeps the last known time when none came back.
@@ -71,7 +74,11 @@ export function GuestCodeFields({
             : null;
   return (
     <div className="flex min-w-0 max-w-full flex-col gap-3">
-      <p className="text-body text-ink-2">{t('sent', { email })}</p>
+      <p className="text-body text-ink-2">
+        {t(purpose === 'signIn' ? 'sentSignIn' : purpose === 'registration' ? 'sentRegistration' : 'sent', {
+          email,
+        })}
+      </p>
       <div className="flex min-w-0 max-w-full flex-wrap items-end gap-3">
         <div className="w-full min-w-0 sm:w-56 sm:flex-none">
           <Input

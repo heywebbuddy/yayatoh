@@ -3828,7 +3828,8 @@
     "contactPhone": "Telefono di contatto",
     "websiteUrl": "Sito web",
     "description": "Descrizione",
-    "descriptionHint": "Mostrata nella pagina pubblica della sede. Markdown supportato."
+    "descriptionHint": "Mostrata nella pagina pubblica della sede. Markdown supportato.",
+    "timezoneCheck": "Questo paese ha più fusi orari. Abbiamo scelto il più probabile; controllalo, per favore."
   },
   "details": {
     "title": "Dettagli dell’evento",
@@ -5150,7 +5151,8 @@
       "ticketName": "Dai un nome al biglietto.",
       "ticketPrice": "Inserisci un prezzo come 25 o 25.00.",
       "ticketQuantity": "Indica quanti sono in vendita (almeno 1).",
-      "generic": "Controlla questo campo."
+      "generic": "Controlla questo campo.",
+      "profile": "Scegli prima il tipo di evento."
     },
     "currency": "Valuta",
     "currencyHint": "La usano biglietti, pagamento e report. Puoi cambiarla fino al primo ordine.",
@@ -5707,7 +5709,9 @@
     "settingOff": "Gli acquirenti ordinano senza confermare l'email.",
     "resendIn": "{seconds, plural, one {Potrai chiedere un nuovo codice tra # secondo.} other {Potrai chiedere un nuovo codice tra # secondi.}}",
     "wrong": "{count, plural, one {Il codice non è corretto. Resta # tentativo.} other {Il codice non è corretto. Restano # tentativi.}}",
-    "noAccount": "Non è un accesso e non creeremo alcun account. Verifichiamo solo che i biglietti ti arrivino. Il riepilogo resta qui sopra; non viene addebitato nulla fino al passaggio successivo."
+    "noAccount": "Non è un accesso e non creeremo alcun account. Verifichiamo solo che i biglietti ti arrivino. Il riepilogo resta qui sopra; non viene addebitato nulla fino al passaggio successivo.",
+    "sentSignIn": "Abbiamo inviato un codice di 6 cifre a {email}. Inseriscilo per accedere. Vale 10 minuti.",
+    "sentRegistration": "Abbiamo inviato un codice di 6 cifre a {email}. Inseriscilo per confermare la registrazione. Vale 10 minuti."
   },
   "attendeeSignIn": {
     "title": "I miei biglietti",
@@ -15191,7 +15195,9 @@
       "sent": "Inviato.",
       "tooFast": "Stai inviando messaggi troppo in fretta. Attendi un attimo.",
       "tooLong": "Limita il messaggio a 2000 caratteri.",
-      "required": "Scrivi prima un messaggio."
+      "required": "Scrivi prima un messaggio.",
+      "closedTitle": "La lobby non è aperta",
+      "closedDescription": "L’organizzatore non ha attivato la lobby per questo evento. Le chat con i tuoi collegamenti funzionano ancora."
     }
   },
   "chat": {
@@ -18252,7 +18258,8 @@
       "agency": "Eventi che gestisci per i clienti, con marketing e report.",
       "other": "Biglietti, partecipanti e check-in per tutto il resto.",
       "tour": "Partenze programmate, una capienza per ciascuna e punti di ritrovo a scelta."
-    }
+    },
+    "choose": "Scegli il tipo di evento…"
   },
   "seriesField": {
     "label": "Serie (facoltativo)",

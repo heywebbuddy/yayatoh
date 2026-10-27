@@ -218,3 +218,15 @@ export async function sendGuestEmail(input: {
     idempotencyKey: `guest-${Date.now()}-${Math.random().toString(36).slice(2)}`,
   });
 }
+
+const RETURN = 'yy_signin_next';
+/** Where the sign-in started (a same-site path), so the emailed link can bring the person back. */
+export async function rememberReturnPath(path: string | null) {
+  if (path) await setCookie(RETURN, path, 900);
+  else await dropCookie(RETURN);
+}
+export async function takeReturnPath(): Promise<string | null> {
+  const v = await readCookie(RETURN);
+  if (v) await dropCookie(RETURN);
+  return v;
+}

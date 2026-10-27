@@ -1,13 +1,19 @@
 import { isSocialProvider, listSocialAccounts, listTrustedDevices } from '@yayatoh/auth';
 import { accountDeletionBlockers } from '@yayatoh/privacy';
 import { agencyTwoFactorRequiredBy, twoFactorRequiredBy } from '@yayatoh/tenancy';
-import { buttonClass, Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
+import { buttonClass, Card, Label, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AccountDelete, AccountExport } from '@/components/account-data.tsx';
 import { SignInMethods, TrustedDevices } from '@/components/sign-in-methods.tsx';
 import { SignOutEverywhere } from '@/components/sign-out-everywhere.tsx';
 import { StepUpProvider } from '@/components/step-up.tsx';
-import { AddDevice, RegenerateCodes, TwoFactorOff, TwoFactorSetup } from '@/components/two-factor.tsx';
+import {
+  AddDevice,
+  RegenerateCodes,
+  TwoFactorOff,
+  TwoFactorSetup,
+  TwoFactorStatusDot,
+} from '@/components/two-factor.tsx';
 import { Link, redirect } from '@/i18n/navigation.ts';
 import { getTwoFactor } from '@/server/auth.ts';
 import { getSession } from '@/server/session.ts';
@@ -96,9 +102,10 @@ export async function AccountSecurityView({
             <h2 id="app-heading" className="text-section">
               {t('security.appTitle')}
             </h2>
-            <StatusDot
-              status={status.enabled ? 'success' : 'neutral'}
-              label={status.enabled ? t('security.statusOn') : t('security.statusOff')}
+            <TwoFactorStatusDot
+              enabled={status.enabled}
+              onLabel={t('security.statusOn')}
+              offLabel={t('security.statusOff')}
             />
           </div>
           <p className="text-body text-ink-2">{t('security.appExplain')}</p>

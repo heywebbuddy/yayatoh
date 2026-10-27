@@ -3828,7 +3828,8 @@
     "contactPhone": "Contacttelefoon",
     "websiteUrl": "Website",
     "description": "Beschrijving",
-    "descriptionHint": "Getoond op de openbare locatiepagina. Markdown wordt ondersteund."
+    "descriptionHint": "Getoond op de openbare locatiepagina. Markdown wordt ondersteund.",
+    "timezoneCheck": "Dit land heeft meerdere tijdzones. We kozen de meest waarschijnlijke; controleer hem even."
   },
   "details": {
     "title": "Evenementdetails",
@@ -5150,7 +5151,8 @@
       "ticketName": "Geef het ticket een naam.",
       "ticketPrice": "Vul een prijs in zoals 25 of 25.00.",
       "ticketQuantity": "Vul in hoeveel er te koop zijn (minstens 1).",
-      "generic": "Controleer dit veld."
+      "generic": "Controleer dit veld.",
+      "profile": "Kies eerst het type evenement."
     },
     "currency": "Valuta",
     "currencyHint": "Tickets, afrekenen en rapporten gebruiken deze. Wijzigen kan tot de eerste bestelling.",
@@ -5707,7 +5709,9 @@
     "settingOff": "Kopers bestellen zonder hun e-mail te bevestigen.",
     "resendIn": "{seconds, plural, one {Je kunt over # seconde een nieuwe code aanvragen.} other {Je kunt over # seconden een nieuwe code aanvragen.}}",
     "wrong": "{count, plural, one {Die code klopt niet. Nog # poging.} other {Die code klopt niet. Nog # pogingen.}}",
-    "noAccount": "Dit is geen inlog en we maken geen account voor je aan. We controleren alleen of je tickets bij je aankomen. Je besteloverzicht blijft hierboven staan; er wordt pas in de volgende stap betaald."
+    "noAccount": "Dit is geen inlog en we maken geen account voor je aan. We controleren alleen of je tickets bij je aankomen. Je besteloverzicht blijft hierboven staan; er wordt pas in de volgende stap betaald.",
+    "sentSignIn": "We hebben een code van 6 cijfers naar {email} gestuurd. Voer hem in om in te loggen. Hij werkt 10 minuten.",
+    "sentRegistration": "We hebben een code van 6 cijfers naar {email} gestuurd. Voer hem in om je registratie te bevestigen. Hij werkt 10 minuten."
   },
   "attendeeSignIn": {
     "title": "Mijn tickets",
@@ -15191,7 +15195,9 @@
       "sent": "Verstuurd.",
       "tooFast": "Je verstuurt te snel berichten. Wacht even.",
       "tooLong": "Houd het bericht op 2000 tekens.",
-      "required": "Schrijf eerst een bericht."
+      "required": "Schrijf eerst een bericht.",
+      "closedTitle": "De lobby is niet open",
+      "closedDescription": "De organisator heeft de lobby voor dit evenement niet aangezet. Chats met je connecties werken nog."
     }
   },
   "chat": {
@@ -18252,7 +18258,8 @@
       "agency": "Evenementen die je voor klanten organiseert, met marketing en rapporten.",
       "other": "Tickets, deelnemers en inchecken voor al het andere.",
       "tour": "Vertrektijden volgens een schema, een capaciteit per vertrek en ophaalpunten om uit te kiezen."
-    }
+    },
+    "choose": "Kies het type evenement…"
   },
   "seriesField": {
     "label": "Reeks (optioneel)",
