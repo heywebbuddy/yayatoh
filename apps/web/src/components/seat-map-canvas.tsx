@@ -7,19 +7,22 @@ import {
   PUBLIC_UNDERLAY_OPACITY,
   placedSeats,
 } from '@yayatoh/floorplan';
-import { paper } from '@yayatoh/ui';
+import { paper, paperDark } from '@yayatoh/ui';
 import type Konva from 'konva';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Circle, Group, Layer, Rect, Stage, Text } from 'react-konva';
 import { PanZoomControls, roomPoint, useBoxWidth, usePanZoom } from './pan-zoom.tsx';
 import { type DotStyle, SeatDots } from './seat-dots.tsx';
 import { UnderlayImage } from './underlay-image.tsx';
 
 const SEAT_R = 24;
-const MINE: DotStyle = { fill: paper.selected, stroke: paper.selected, strokeWidth: 3 };
-const FREE: DotStyle = { fill: paper.free, stroke: paper.muted, strokeWidth: 3 };
-const FREE_ACCESSIBLE: DotStyle = { fill: paper.free, stroke: paper.selected, strokeWidth: 6 };
-const TAKEN: DotStyle = { fill: paper.taken, stroke: paper.taken, strokeWidth: 3 };
+type Palette = { [K in keyof typeof paper]: string };
+const dotStyles = (paper: Palette) => ({
+  MINE: { fill: paper.selected, stroke: paper.selected, strokeWidth: 3 } as DotStyle,
+  FREE: { fill: paper.free, stroke: paper.muted, strokeWidth: 3 } as DotStyle,
+  FREE_ACCESSIBLE: { fill: paper.free, stroke: paper.selected, strokeWidth: 6 } as DotStyle,
+  TAKEN: { fill: paper.taken, stroke: paper.taken, strokeWidth: 3 } as DotStyle,
+});
 
 /**
  * The buyer's map: tap a free seat to choose it (the seat list beside it does the same, by
@@ -41,6 +44,11 @@ export default function SeatMapCanvas({
   onToggleTable?: (itemId: string) => void;
 }) {
   const [box, width] = useBoxWidth(600, 260);
+  // On the dark showcase surface the map draws in the dark palette (a white panel would glare).
+  const [dark, setDark] = useState(false);
+  useEffect(() => setDark(Boolean(box.current?.closest('[data-surface="showcase"]'))), [box]);
+  const paper_ = dark ? paperDark : paper;
+  const { MINE, FREE, FREE_ACCESSIBLE, TAKEN } = useMemo(() => dotStyles(paper_), [paper_]);
   const view = usePanZoom(doc, width, 560);
   const seats = useMemo(() => placedSeats(doc), [doc]);
   const dots = useMemo(() => seats.map((s) => ({ id: s.seatId, x: s.x, y: s.y })), [seats]);
@@ -53,7 +61,7 @@ export default function SeatMapCanvas({
     void [available, selected, accessible];
     versions.current += 1;
     return String(versions.current);
-  }, [available, selected, accessible]);
+  }, [available, selected, accessible, paper_]);
   const styleOf = ({ id }: { id: string }) =>
     selected.has(id) ? MINE : available.has(id) ? (accessible.has(id) ? FREE_ACCESSIBLE : FREE) : TAKEN;
   const choose = (e: Konva.KonvaEventObject<Event>) => {
@@ -98,7 +106,7 @@ export default function SeatMapCanvas({
           onTap={choose}
         >
           <Layer listening={false}>
-            <Rect width={doc.width} height={doc.height} fill={paper.free} />
+            <Rect width={doc.width} height={doc.height} fill={paper_.free} />
             {doc.underlay ? (
               <UnderlayImage underlay={doc.underlay} opacity={PUBLIC_UNDERLAY_OPACITY} />
             ) : null}
@@ -111,7 +119,7 @@ export default function SeatMapCanvas({
                   width={i.width}
                   height={i.height}
                   rotation={i.rotation}
-                  fill={paper.floor}
+                  fill={paper_.floor}
                   cornerRadius={12}
                 />
               ) : null,
@@ -124,7 +132,7 @@ export default function SeatMapCanvas({
                   y={i.y + 16}
                   text={i.label}
                   fontSize={48}
-                  fill={paper.sold}
+                  fill={paper_.sold}
                 />
               ) : null,
             )}
@@ -132,15 +140,15 @@ export default function SeatMapCanvas({
               i.kind === 'table' ? (
                 <Group key={`tb-${i.id}`} x={i.x} y={i.y} rotation={i.rotation}>
                   {i.shape === 'round' ? (
-                    <Circle radius={i.width / 2} fill={paper.floor} stroke={paper.muted} strokeWidth={3} />
+                    <Circle radius={i.width / 2} fill={paper_.floor} stroke={paper_.muted} strokeWidth={3} />
                   ) : (
                     <Rect
                       x={-i.width / 2}
                       y={-i.height / 2}
                       width={i.width}
                       height={i.height}
-                      fill={paper.floor}
-                      stroke={paper.muted}
+                      fill={paper_.floor}
+                      stroke={paper_.muted}
                       strokeWidth={3}
                     />
                   )}
@@ -152,7 +160,7 @@ export default function SeatMapCanvas({
                     align="center"
                     fontSize={44}
                     fontStyle="bold"
-                    fill={paper.label}
+                    fill={paper_.label}
                   />
                 </Group>
               ) : i.kind === 'row' ? (
@@ -165,7 +173,7 @@ export default function SeatMapCanvas({
                     align="right"
                     fontSize={40}
                     fontStyle="bold"
-                    fill={paper.label}
+                    fill={paper_.label}
                   />
                 </Group>
               ) : null,

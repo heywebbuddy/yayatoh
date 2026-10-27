@@ -290,6 +290,23 @@ export const paper = {
   focus: '#16131D',
 } as const;
 
+/** The same map palette on the dark showcase surface: a charcoal floor, light seats, red selection. */
+export const paperDark: { [K in keyof typeof paper]: string } = {
+  background: '#141414',
+  floor: '#262626',
+  label: '#F4F4F4',
+  muted: '#BDBDBD',
+  outline: '#6E6E6E',
+  free: '#1B1B1B',
+  taken: '#3A3A3A',
+  sold: '#8C8C8C',
+  selected: '#FF3150',
+  held: '#FFB020',
+  blocked: '#FF8798',
+  reserved: '#262626',
+  focus: '#FFFFFF',
+};
+
 /**
  * Printed badges (M5.5a) are always on white stock, whatever the screen theme: the ink, the
  * paper and the ribbon colours (keys are stored in badge designs; every pair is ≥4.5:1).
