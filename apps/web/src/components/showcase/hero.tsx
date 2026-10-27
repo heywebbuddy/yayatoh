@@ -69,7 +69,7 @@ export async function ShowcaseHero({
       <HeroOrb cover={cover ?? null} className="w-[min(86vw,620px)]">
         <h1
           id="hero-title"
-          className="animate-rise pointer-events-none absolute inset-x-[-12%] top-1/2 -translate-y-1/2 px-2 font-display text-[clamp(32px,8vw,104px)] leading-[0.95] font-black tracking-[-0.04em] text-balance text-white uppercase [text-shadow:0_4px_40px_var(--color-scrim)]"
+          className="pointer-events-none absolute inset-x-[-12%] top-1/2 -translate-y-1/2 px-2 font-display text-[clamp(32px,8vw,104px)] leading-[0.95] font-black tracking-[-0.04em] text-balance text-white uppercase [text-shadow:0_2px_24px_var(--color-scrim),0_0_2px_var(--color-scrim)]"
         >
           {t('title')}
         </h1>

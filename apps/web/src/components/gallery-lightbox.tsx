@@ -119,6 +119,7 @@ export function GalleryLightbox({
                 image={img}
                 sizes={sizes}
                 alt=""
+                eager
                 className={cx(imageClassName, 'transition-transform duration-300 group-hover:scale-[1.03]')}
               />
             </button>
