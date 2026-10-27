@@ -1,3 +1,4 @@
+import { isProductionEnv } from '@yayatoh/kernel';
 import 'server-only';
 import {
   type NavPageDto,
@@ -36,14 +37,14 @@ export { entryPath };
  * The org whose pages and posts the marketplace itself shows at `yayatoh.com/blogs/…` and
  * `/pages/…` (the platform org that receives yayatoh.com's Voyager content at ELT, roadmap T7).
  * Configured by `MARKETPLACE_CONTENT_ORG` (an org slug); unset in production → those URLs are 404.
- * Local, CI and preview builds (dev auth on, or not a production build) default to the seeded
+ * Anything that is not a production deployment (local, CI, preview, including `next build`) defaults to the seeded
  * demo organizer `harbor-arts`, so the help centre, features, contact and blog pages show content.
  */
 export function contentOrgSlug(): string | null {
   const set = process.env.MARKETPLACE_CONTENT_ORG?.trim();
   if (set) return set;
-  const dev = process.env.NODE_ENV !== 'production' || Boolean(process.env.YAYATOH_DEV_AUTH);
-  return dev ? 'harbor-arts' : null;
+  // `next build` always has NODE_ENV=production, so ask the deployment itself (YAYATOH_ENV).
+  return isProductionEnv() ? null : 'harbor-arts';
 }
 
 export async function marketplaceContentOrg(): Promise<PublicOrganizer | null> {
