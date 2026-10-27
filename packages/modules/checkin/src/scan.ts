@@ -520,6 +520,40 @@ export async function admittedTicketIdsTx(
   return new Set(rows.map((r) => r.ticketId));
 }
 
+/**
+ * When each of these tickets last came in (organizer's order page: "Checked in 7:42 PM"). Tickets
+ * never admitted are left out. Names and codes are not read.
+ */
+export const ticketAdmissionsQuery = tenantQuery({
+  name: 'checkin.ticketAdmissions',
+  input: z.object({ ticketIds: z.array(z.uuid()).max(500) }),
+  output: z.array(z.object({ ticketId: z.uuid(), lastEntryAt: z.date(), entries: z.int() })),
+  entitlement: 'checkin',
+  permission: 'orders:read',
+  handler: async ({ input, tx }) => {
+    if (input.ticketIds.length === 0) return [];
+    const rows = await tx
+      .select({
+        ticketId: admissions.ticketId,
+        admittedAt: admissions.admittedAt,
+        lastEntryAt: admissions.lastEntryAt,
+        entries: admissions.entries,
+      })
+      .from(admissions)
+      .where(and(inArray(admissions.ticketId, input.ticketIds), isNull(admissions.undoneAt)));
+    const latest = new Map<string, { lastEntryAt: Date; entries: number }>();
+    for (const r of rows) {
+      const at = r.lastEntryAt ?? r.admittedAt;
+      const prev = latest.get(r.ticketId);
+      latest.set(r.ticketId, {
+        lastEntryAt: prev && prev.lastEntryAt > at ? prev.lastEntryAt : at,
+        entries: (prev?.entries ?? 0) + r.entries,
+      });
+    }
+    return [...latest].map(([ticketId, v]) => ({ ticketId, ...v }));
+  },
+});
+
 /** Live admissions of some tickets, oldest first (the contact timeline). */
 export async function admissionsForTicketsTx(tx: TenantTx, ticketIds: readonly string[]) {
   if (ticketIds.length === 0) return [];

@@ -1282,7 +1282,8 @@
     "items": "チケット",
     "total": "合計",
     "status": "ステータス",
-    "emptyAction": "イベントページを開く"
+    "emptyAction": "イベントページを開く",
+    "checkedInAt": "チェックイン済み · {time}"
   },
   "promo": {
     "title": "プロモコード",

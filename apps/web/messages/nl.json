@@ -1282,7 +1282,8 @@
     "items": "Tickets",
     "total": "Totaal",
     "status": "Status",
-    "emptyAction": "Evenementpagina openen"
+    "emptyAction": "Evenementpagina openen",
+    "checkedInAt": "Ingecheckt · {time}"
   },
   "promo": {
     "title": "Kortingscodes",

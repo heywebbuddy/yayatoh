@@ -1282,7 +1282,8 @@
     "items": "Billets",
     "total": "Total",
     "status": "Statut",
-    "emptyAction": "Ouvrir la page de l’événement"
+    "emptyAction": "Ouvrir la page de l’événement",
+    "checkedInAt": "Enregistré · {time}"
   },
   "promo": {
     "title": "Codes promo",

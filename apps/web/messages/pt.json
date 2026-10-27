@@ -1282,7 +1282,8 @@
     "items": "Ingressos",
     "total": "Total",
     "status": "Status",
-    "emptyAction": "Abrir a página do evento"
+    "emptyAction": "Abrir a página do evento",
+    "checkedInAt": "Check-in feito · {time}"
   },
   "promo": {
     "title": "Códigos promocionais",

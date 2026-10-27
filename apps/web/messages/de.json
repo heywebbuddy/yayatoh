@@ -1282,7 +1282,8 @@
     "items": "Tickets",
     "total": "Gesamt",
     "status": "Status",
-    "emptyAction": "Veranstaltungsseite öffnen"
+    "emptyAction": "Veranstaltungsseite öffnen",
+    "checkedInAt": "Eingecheckt · {time}"
   },
   "promo": {
     "title": "Rabattcodes",

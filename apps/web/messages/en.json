@@ -1282,7 +1282,8 @@
     "items": "Tickets",
     "total": "Total",
     "status": "Status",
-    "emptyAction": "Open the event page"
+    "emptyAction": "Open the event page",
+    "checkedInAt": "Checked in · {time}"
   },
   "promo": {
     "title": "Promo codes",

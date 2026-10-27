@@ -1282,7 +1282,8 @@
     "items": "टिकट",
     "total": "कुल",
     "status": "स्थिति",
-    "emptyAction": "इवेंट पेज खोलें"
+    "emptyAction": "इवेंट पेज खोलें",
+    "checkedInAt": "चेक-इन हुआ · {time}"
   },
   "promo": {
     "title": "प्रोमो कोड",

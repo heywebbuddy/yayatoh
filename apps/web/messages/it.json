@@ -1282,7 +1282,8 @@
     "items": "Biglietti",
     "total": "Totale",
     "status": "Stato",
-    "emptyAction": "Apri la pagina dell’evento"
+    "emptyAction": "Apri la pagina dell’evento",
+    "checkedInAt": "Check-in effettuato · {time}"
   },
   "promo": {
     "title": "Codici promozionali",

@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { getUsersByIds } from '@yayatoh/auth';
-import { orderSignalsQuery } from '@yayatoh/checkin';
+import { orderSignalsQuery, ticketAdmissionsQuery } from '@yayatoh/checkin';
 import { eventRolesOf } from '@yayatoh/events';
 import { executeQuery, formatMoney, isDomainError, money } from '@yayatoh/kernel';
 import { orderAttributionQuery } from '@yayatoh/marketing';
@@ -168,6 +168,23 @@ export default async function OrderPage({
     ['paid', 'partially_refunded'].includes(order.status) &&
     order.totalMinor > 0;
   const active = order.tickets.filter((tk) => tk.status === 'active');
+  // A ticket that came in at the door is "Checked in {time}", not just "Valid".
+  const admitted = new Map(
+    (data.modules.has('checkin')
+      ? await executeQuery(
+          ticketAdmissionsQuery,
+          { ticketIds: active.map((tk) => tk.id) },
+          data.ctx,
+          ports,
+        ).catch(() => [])
+      : []
+    ).map((a) => [a.ticketId, a.lastEntryAt] as const),
+  );
+  const enteredAt = new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: ev.timezone,
+  });
   // The Seat column (M1.7g): the seat bought with each ticket, or the one the organizer gave its
   // holder, on the chart of the ticket's date.
   const seats = new Map(
@@ -331,7 +348,11 @@ export default async function OrderPage({
               cell: (tk) => (
                 <StatusDot
                   status={tk.status === 'active' ? 'success' : 'neutral'}
-                  label={t(`refunds.ticketStatus.${tk.status}`)}
+                  label={
+                    tk.status === 'active' && admitted.has(tk.id)
+                      ? t('orders.checkedInAt', { time: enteredAt.format(admitted.get(tk.id)) })
+                      : t(`refunds.ticketStatus.${tk.status}`)
+                  }
                 />
               ),
             },

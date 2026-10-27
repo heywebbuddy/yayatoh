@@ -1282,7 +1282,8 @@
     "items": "票券",
     "total": "總計",
     "status": "狀態",
-    "emptyAction": "開啟活動頁面"
+    "emptyAction": "開啟活動頁面",
+    "checkedInAt": "已報到 · {time}"
   },
   "promo": {
     "title": "優惠碼",

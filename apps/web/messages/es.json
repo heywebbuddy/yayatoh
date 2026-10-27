@@ -1282,7 +1282,8 @@
     "items": "Entradas",
     "total": "Total",
     "status": "Estado",
-    "emptyAction": "Abrir la página del evento"
+    "emptyAction": "Abrir la página del evento",
+    "checkedInAt": "Registrada · {time}"
   },
   "promo": {
     "title": "Códigos promocionales",

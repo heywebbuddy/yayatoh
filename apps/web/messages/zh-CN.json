@@ -1282,7 +1282,8 @@
     "items": "门票",
     "total": "合计",
     "status": "状态",
-    "emptyAction": "打开活动页面"
+    "emptyAction": "打开活动页面",
+    "checkedInAt": "已签到 · {time}"
   },
   "promo": {
     "title": "优惠码",

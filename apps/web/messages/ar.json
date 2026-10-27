@@ -1282,7 +1282,8 @@
     "items": "التذاكر",
     "total": "الإجمالي",
     "status": "الحالة",
-    "emptyAction": "فتح صفحة الفعالية"
+    "emptyAction": "فتح صفحة الفعالية",
+    "checkedInAt": "تم تسجيل الدخول · {time}"
   },
   "promo": {
     "title": "رموز الخصم",
