@@ -21,6 +21,7 @@ describe('event design options', () => {
       headingFont: 'modern',
       heroLayout: 'circle',
       heroVideoUrl: null,
+      heroVideoPoster: null,
       assistant: false,
     });
     expect(parseEventDesign(JSON.stringify(d))).toEqual(d);
@@ -35,6 +36,20 @@ describe('event design options', () => {
       false,
     );
     expect(EventDesign.safeParse({ ...base, heroVideoUrl: 'javascript:alert(1)' }).success).toBe(false);
+  });
+
+  it('accepts an uploaded video and its poster, and nothing else under /video', () => {
+    const id = '0190c0de-0000-7000-8000-000000000001';
+    const hash = 'a'.repeat(32);
+    const ok = {
+      heroVideoUrl: `/video/${id}/${id}/v-${hash}.mp4`,
+      heroVideoPoster: `/video/${id}/${id}/p-${hash}.jpg`,
+    };
+    expect(EventDesign.safeParse(ok).success).toBe(true);
+    expect(EventDesign.safeParse({ ...ok, heroVideoUrl: `/video/${id}/${id}/v-${hash}.exe` }).success).toBe(
+      false,
+    );
+    expect(EventDesign.safeParse({ ...ok, heroVideoPoster: 'https://evil.test/p.jpg' }).success).toBe(false);
   });
 
   it('knows the default, so it is stored as null', () => {

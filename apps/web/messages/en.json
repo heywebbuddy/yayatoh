@@ -20095,5 +20095,27 @@
       "events": "Browse events",
       "help": "Help center"
     }
+  },
+  "videoField": {
+    "modeLink": "YouTube or Vimeo link",
+    "modeUpload": "Upload a video",
+    "file": "Video file (MP4 or WebM)",
+    "poster": "Poster image (JPEG, PNG or WebP)",
+    "limits": "MP4 or WebM, up to {mb} MB. The poster shows before the video plays and when motion is reduced.",
+    "upload": "Upload",
+    "uploading": "Uploading…",
+    "uploaded": "Video uploaded. Save to use it.",
+    "remove": "Remove",
+    "chooseFile": "Choose a video file first.",
+    "error": {
+      "unsupported": "Use an MP4 or WebM video.",
+      "too_large": "That video is larger than {mb} MB.",
+      "poster_required": "Add a poster image for the video.",
+      "bad_poster": "The poster must be a JPEG, PNG or WebP image under 5 MB.",
+      "failed": "The upload failed. Try again.",
+      "unauthorized": "Sign in again to upload.",
+      "not_found": "You can’t upload for this organization.",
+      "invalid": "The upload could not be read."
+    }
   }
 }

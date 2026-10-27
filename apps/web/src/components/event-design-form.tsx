@@ -5,12 +5,14 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { SettingsState } from '@/app/[locale]/o/[org]/(org)/settings/actions.ts';
 import { SettingsForm } from './settings-form.tsx';
+import { VideoField } from './video-field.tsx';
 
 type Design = {
   theme: 'classic' | 'showcase';
   headingFont: 'modern' | 'extended' | 'classic';
   heroLayout: 'full' | 'circle' | 'video';
   heroVideoUrl: string | null;
+  heroVideoPoster: string | null;
   assistant: boolean;
 };
 
@@ -57,9 +59,14 @@ function Choice({
 export function EventDesignForm({
   action,
   initial,
+  org,
+  maxVideoBytes,
 }: {
   action: (prev: SettingsState, form: FormData) => Promise<SettingsState>;
   initial: Design;
+  /** The organization's slug, for the video upload. */
+  org: string;
+  maxVideoBytes: number;
 }) {
   const t = useTranslations('eventDesign');
   const ts = useTranslations('settings');
@@ -117,25 +124,15 @@ export function EventDesignForm({
           ))}
         </div>
       </fieldset>
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="hero-video-url" className="text-[13px] font-bold text-ink">
-          {t('videoLabel')}
-        </label>
-        <input
-          id="hero-video-url"
-          name="heroVideoUrl"
-          type="url"
-          inputMode="url"
-          maxLength={300}
-          defaultValue={initial.heroVideoUrl ?? ''}
-          placeholder={t('videoPlaceholder')}
-          aria-describedby="hero-video-hint"
-          className="field w-full"
-        />
-        <p id="hero-video-hint" className="m-0 text-caption text-ink-2">
-          {layout === 'video' ? t('videoHint') : t('videoHintOff')}
-        </p>
-      </div>
+      <VideoField
+        name="heroVideoUrl"
+        org={org}
+        initial={{ url: initial.heroVideoUrl, poster: initial.heroVideoPoster }}
+        maxBytes={maxVideoBytes}
+        label={t('videoLabel')}
+        linkPlaceholder={t('videoPlaceholder')}
+        hint={layout === 'video' ? t('videoHint') : t('videoHintOff')}
+      />
       <label className="flex items-start gap-3 rounded-tile border border-line bg-surface p-3.5">
         <input type="checkbox" name="assistant" defaultChecked={initial.assistant} className="mt-0.5" />
         <span className="flex flex-col gap-0.5">

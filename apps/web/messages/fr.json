@@ -20095,5 +20095,27 @@
       "events": "Parcourir les événements",
       "help": "Centre d’aide"
     }
+  },
+  "videoField": {
+    "modeLink": "Lien YouTube ou Vimeo",
+    "modeUpload": "Téléverser une vidéo",
+    "file": "Fichier vidéo (MP4 ou WebM)",
+    "poster": "Image d’affiche (JPEG, PNG ou WebP)",
+    "limits": "MP4 ou WebM, jusqu’à {mb} Mo. L’affiche s’affiche avant la lecture et quand le mouvement est réduit.",
+    "upload": "Téléverser",
+    "uploading": "Téléversement…",
+    "uploaded": "Vidéo téléversée. Enregistrez pour l’utiliser.",
+    "remove": "Retirer",
+    "chooseFile": "Choisissez d’abord un fichier vidéo.",
+    "error": {
+      "unsupported": "Utilisez une vidéo MP4 ou WebM.",
+      "too_large": "Cette vidéo dépasse {mb} Mo.",
+      "poster_required": "Ajoutez une image d’affiche pour la vidéo.",
+      "bad_poster": "L’affiche doit être une image JPEG, PNG ou WebP de moins de 5 Mo.",
+      "failed": "Le téléversement a échoué. Réessayez.",
+      "unauthorized": "Reconnectez-vous pour téléverser.",
+      "not_found": "Vous ne pouvez pas téléverser pour cette organisation.",
+      "invalid": "Le téléversement n’a pas pu être lu."
+    }
   }
 }

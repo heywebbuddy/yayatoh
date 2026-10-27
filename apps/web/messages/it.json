@@ -20095,5 +20095,27 @@
       "events": "Sfoglia gli eventi",
       "help": "Centro assistenza"
     }
+  },
+  "videoField": {
+    "modeLink": "Link YouTube o Vimeo",
+    "modeUpload": "Carica un video",
+    "file": "File video (MP4 o WebM)",
+    "poster": "Immagine di anteprima (JPEG, PNG o WebP)",
+    "limits": "MP4 o WebM, fino a {mb} MB. L’anteprima appare prima della riproduzione e quando il movimento è ridotto.",
+    "upload": "Carica",
+    "uploading": "Caricamento…",
+    "uploaded": "Video caricato. Salva per usarlo.",
+    "remove": "Rimuovi",
+    "chooseFile": "Scegli prima un file video.",
+    "error": {
+      "unsupported": "Usa un video MP4 o WebM.",
+      "too_large": "Il video supera i {mb} MB.",
+      "poster_required": "Aggiungi un’immagine di anteprima per il video.",
+      "bad_poster": "L’anteprima deve essere un’immagine JPEG, PNG o WebP sotto i 5 MB.",
+      "failed": "Caricamento non riuscito. Riprova.",
+      "unauthorized": "Accedi di nuovo per caricare.",
+      "not_found": "Non puoi caricare file per questa organizzazione.",
+      "invalid": "Impossibile leggere il caricamento."
+    }
   }
 }

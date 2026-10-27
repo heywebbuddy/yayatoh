@@ -4,6 +4,7 @@ import { liveSessionIds, networkingOpen } from '@yayatoh/engagement';
 import {
   accessTarget,
   checkoutTarget,
+  isUploadedVideo,
   type PublicEventContentDto,
   pageTarget,
   publicEventBySlug,
@@ -50,7 +51,7 @@ import { fallbackOf, MediaPicture } from '@/components/media-picture.tsx';
 import { ProgramSections } from '@/components/program-sections.tsx';
 import { EventReviews } from '@/components/reviews/event-reviews.tsx';
 import { JaggedCircle } from '@/components/showcase/hero.tsx';
-import { HeroVideo } from '@/components/showcase/hero-video.tsx';
+import { HeroUploadedVideo, HeroVideo } from '@/components/showcase/hero-video.tsx';
 import { TenantAccount } from '@/components/tenant-account.tsx';
 import { ThemeSwitch } from '@/components/theme-switch.tsx';
 import { VenueGuide } from '@/components/venue-guide.tsx';
@@ -526,6 +527,10 @@ export async function PublicEventView({
   // Organizer design options (event branding): theme, heading font, hero layout and video.
   const showcase = ev.design.theme === 'showcase';
   const heroVideo = ev.design.heroLayout === 'video' ? parseHeroVideo(ev.design.heroVideoUrl) : null;
+  const heroUpload =
+    ev.design.heroLayout === 'video' && isUploadedVideo(ev.design.heroVideoUrl)
+      ? ev.design.heroVideoUrl
+      : null;
   const heroCircle = ev.design.heroLayout === 'circle';
   const navLink =
     'inline-flex min-h-10 items-center rounded-[10px] px-3 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink';
@@ -627,7 +632,14 @@ export async function PublicEventView({
                 />
               </>
             )}
-            {heroVideo ? (
+            {heroUpload ? (
+              <HeroUploadedVideo
+                src={heroUpload}
+                poster={ev.design.heroVideoPoster}
+                playLabel={t('showcase.event.playVideo')}
+                pauseLabel={t('showcase.event.pauseVideo')}
+              />
+            ) : heroVideo ? (
               <HeroVideo
                 src={heroVideoSrc(heroVideo)}
                 title={ev.name}

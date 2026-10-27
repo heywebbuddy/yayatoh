@@ -1,6 +1,6 @@
 'use server';
 
-import { EventDesign, setEventDetailsCommand } from '@yayatoh/events';
+import { EventDesign, isUploadedVideo, setEventDetailsCommand } from '@yayatoh/events';
 import { executeCommand, isDomainError } from '@yayatoh/kernel';
 import { revalidatePath } from 'next/cache';
 import { parseHeroVideo } from '@/lib/hero-video.ts';
@@ -41,15 +41,19 @@ export async function eventDesignAction(
 ): Promise<SettingsState> {
   const { data, event: ev } = await loadEvent(org, event, 'branding');
   const video = String(form.get('heroVideoUrl') ?? '').trim();
+  const poster = String(form.get('heroVideoUrlPoster') ?? '').trim();
+  const uploaded = isUploadedVideo(video);
   const parsed = EventDesign.safeParse({
     theme: form.get('theme') ?? undefined,
     headingFont: form.get('headingFont') ?? undefined,
     heroLayout: form.get('heroLayout') ?? undefined,
     heroVideoUrl: video || null,
+    heroVideoPoster: uploaded && poster ? poster : null,
     assistant: form.get('assistant') === 'on',
   });
   // A link the page cannot embed would silently show the cover: refuse it instead.
-  if (!parsed.success || (video && !parseHeroVideo(video))) return { ok: false, code: 'validation_failed' };
+  if (!parsed.success || (video && !uploaded && !parseHeroVideo(video)) || (uploaded && !poster))
+    return { ok: false, code: 'validation_failed' };
   try {
     await executeCommand(setEventDetailsCommand, { eventId: ev.id, design: parsed.data }, data.ctx, ports);
     revalidatePath(`/o/${org}/e/${event}`, 'layout');
