@@ -8,6 +8,7 @@ import type { ReactNode } from 'react';
 import { Markdown } from '@/components/markdown.tsx';
 import { Pagination } from '@/components/marketplace/pagination.tsx';
 import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
+import { PageHero } from '@/components/showcase/page-hero.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatDate } from '@/lib/format.ts';
 import { blogPostingJsonLd, jsonLdScript } from '@/lib/seo/jsonld.ts';
@@ -76,7 +77,7 @@ export async function Chrome({
           </ul>
         </nav>
       ) : null}
-      <main id="main" className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-8 md:px-6">
+      <main id="main" className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 py-6 md:px-6">
         {children}
       </main>
       <SiteFooter>
@@ -109,19 +110,21 @@ export async function BlogIndexView({
   page: number;
 }) {
   const t = await getTranslations('cmsPublic');
+  const tp = await getTranslations('pages');
   const list = await cachedEntries(site.org.orgId, 'post', page);
   return (
     <Chrome site={site} current="/blogs">
-      <h1 className="break-words text-[40px] leading-tight font-extrabold tracking-[-0.03em]">
-        {t('blogTitle', { org: site.org.name })}
-      </h1>
+      <PageHero eyebrow={tp('eyebrow.blog')} title={t('blogTitle', { org: site.org.name })} />
       {list.items.length === 0 ? (
         <EmptyState title={t('emptyTitle')} description={t('emptyDescription', { org: site.org.name })} />
       ) : (
-        <ul aria-label={t('posts')} className="flex list-none flex-col gap-6 p-0">
+        <ul
+          aria-label={t('posts')}
+          className="m-0 grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-2 lg:grid-cols-3"
+        >
           {list.items.map((p) => (
             <li key={p.slug}>
-              <article className="flex flex-col gap-2 border-b border-line pb-6">
+              <article className="flex h-full flex-col gap-2 rounded-card border border-line bg-surface p-5 transition duration-300 hover:-translate-y-1 hover:border-ember motion-reduce:transition-none motion-reduce:hover:translate-y-0">
                 <h2 className="break-words text-[24px] font-extrabold tracking-[-0.02em]">
                   <Link
                     href={`${site.base}${entryPath('post', p.slug)}`}
@@ -187,7 +190,7 @@ export async function EntryView({
           dangerouslySetInnerHTML={{ __html: jsonLdScript(ld) }}
         />
       ) : null}
-      <article className="flex flex-col gap-6">
+      <article className="mx-auto flex w-full max-w-3xl flex-col gap-6">
         <header className="flex flex-col gap-2">
           {kind === 'post' ? (
             <Link href={`${site.base}/blogs`} className="self-start text-caption text-ink-2 underline">

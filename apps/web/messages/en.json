@@ -20062,5 +20062,38 @@
       "lede": "Create your event today and sell your first ticket in minutes.",
       "button": "Create an event"
     }
+  },
+  "pages": {
+    "toc": "On this page",
+    "cta": {
+      "title": "Still have a question?",
+      "lede": "Our team replies within one working day.",
+      "button": "Contact us"
+    },
+    "eyebrow": {
+      "help": "Help center",
+      "contact": "Contact",
+      "features": "Features",
+      "status": "Status",
+      "blog": "Blog"
+    },
+    "channel": {
+      "form": {
+        "title": "Write to us",
+        "desc": "Send a message to the team and we reply by email."
+      },
+      "help": {
+        "title": "Help center",
+        "desc": "Guides for organizers and buyers, with search."
+      },
+      "status": {
+        "title": "System status",
+        "desc": "See whether everything is running right now."
+      }
+    },
+    "notFound": {
+      "events": "Browse events",
+      "help": "Help center"
+    }
   }
 }

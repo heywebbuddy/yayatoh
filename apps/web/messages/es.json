@@ -20062,5 +20062,38 @@
       "lede": "Crea tu evento hoy y vende tu primera entrada en minutos.",
       "button": "Crear un evento"
     }
+  },
+  "pages": {
+    "toc": "En esta página",
+    "cta": {
+      "title": "¿Sigues con dudas?",
+      "lede": "Nuestro equipo responde en un día laborable.",
+      "button": "Contáctanos"
+    },
+    "eyebrow": {
+      "help": "Centro de ayuda",
+      "contact": "Contacto",
+      "features": "Funciones",
+      "status": "Estado",
+      "blog": "Blog"
+    },
+    "channel": {
+      "form": {
+        "title": "Escríbenos",
+        "desc": "Envía un mensaje al equipo y respondemos por correo."
+      },
+      "help": {
+        "title": "Centro de ayuda",
+        "desc": "Guías para organizadores y compradores, con buscador."
+      },
+      "status": {
+        "title": "Estado del sistema",
+        "desc": "Comprueba si todo funciona ahora mismo."
+      }
+    },
+    "notFound": {
+      "events": "Explorar eventos",
+      "help": "Centro de ayuda"
+    }
   }
 }

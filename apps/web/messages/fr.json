@@ -20062,5 +20062,38 @@
       "lede": "Créez votre événement dès aujourd’hui et vendez votre premier billet en quelques minutes.",
       "button": "Créer un événement"
     }
+  },
+  "pages": {
+    "toc": "Sur cette page",
+    "cta": {
+      "title": "Une autre question ?",
+      "lede": "Notre équipe répond sous un jour ouvré.",
+      "button": "Nous contacter"
+    },
+    "eyebrow": {
+      "help": "Centre d’aide",
+      "contact": "Contact",
+      "features": "Fonctionnalités",
+      "status": "État",
+      "blog": "Blog"
+    },
+    "channel": {
+      "form": {
+        "title": "Écrivez-nous",
+        "desc": "Envoyez un message à l’équipe, nous répondons par e-mail."
+      },
+      "help": {
+        "title": "Centre d’aide",
+        "desc": "Guides pour organisateurs et acheteurs, avec recherche."
+      },
+      "status": {
+        "title": "État du service",
+        "desc": "Vérifiez si tout fonctionne en ce moment."
+      }
+    },
+    "notFound": {
+      "events": "Parcourir les événements",
+      "help": "Centre d’aide"
+    }
   }
 }

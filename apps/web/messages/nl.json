@@ -20062,5 +20062,38 @@
       "lede": "Maak je evenement vandaag nog en verkoop binnen minuten je eerste ticket.",
       "button": "Evenement maken"
     }
+  },
+  "pages": {
+    "toc": "Op deze pagina",
+    "cta": {
+      "title": "Nog een vraag?",
+      "lede": "Ons team antwoordt binnen één werkdag.",
+      "button": "Neem contact op"
+    },
+    "eyebrow": {
+      "help": "Helpcentrum",
+      "contact": "Contact",
+      "features": "Functies",
+      "status": "Status",
+      "blog": "Blog"
+    },
+    "channel": {
+      "form": {
+        "title": "Schrijf ons",
+        "desc": "Stuur het team een bericht, we antwoorden per e-mail."
+      },
+      "help": {
+        "title": "Helpcentrum",
+        "desc": "Handleidingen voor organisatoren en kopers, met zoekfunctie."
+      },
+      "status": {
+        "title": "Systeemstatus",
+        "desc": "Kijk of alles nu werkt."
+      }
+    },
+    "notFound": {
+      "events": "Evenementen bekijken",
+      "help": "Helpcentrum"
+    }
   }
 }

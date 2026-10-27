@@ -1,10 +1,12 @@
 import type { ComponentStatus, StatusIncident } from '@yayatoh/platform';
 import { STATUS_COMPONENTS } from '@yayatoh/platform';
 import { EmptyState, StatusDot } from '@yayatoh/ui';
+import { Activity } from 'lucide-react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
+import { PageHero } from '@/components/showcase/page-hero.tsx';
 import { formatDate } from '@/lib/format.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { requestHost } from '@/server/request-origin.ts';
@@ -46,6 +48,7 @@ export default async function StatusPageView({ params }: Props) {
   pageLocale(locale);
   if ((await requestHost()).kind === 'tenant') notFound();
   const t = await getTranslations('status');
+  const tp = await getTranslations('pages');
   const snapshot = await statusSnapshot();
   const when = (d: Date) =>
     formatDate(
@@ -101,11 +104,13 @@ export default async function StatusPageView({ params }: Props) {
   return (
     <div className="min-h-dvh bg-surface">
       <SiteHeader />
-      <main id="main" className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-8 md:px-6">
-        <header className="flex flex-col gap-2">
-          <h1 className="text-[40px] leading-tight font-extrabold tracking-[-0.04em]">{t('page.title')}</h1>
-          <p className="text-[17px] text-ink-2">{t('page.lede')}</p>
-        </header>
+      <main id="main" className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-4 py-6 md:px-6">
+        <PageHero
+          eyebrow={tp('eyebrow.status')}
+          title={t('page.title')}
+          lede={t('page.lede')}
+          icon={Activity}
+        />
         {!snapshot ? (
           <EmptyState title={t('page.unavailableTitle')} description={t('page.unavailableBody')} />
         ) : (

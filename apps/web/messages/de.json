@@ -20062,5 +20062,38 @@
       "lede": "Lege dein Event noch heute an und verkaufe in Minuten das erste Ticket.",
       "button": "Event erstellen"
     }
+  },
+  "pages": {
+    "toc": "Auf dieser Seite",
+    "cta": {
+      "title": "Noch eine Frage?",
+      "lede": "Unser Team antwortet innerhalb eines Werktags.",
+      "button": "Kontakt aufnehmen"
+    },
+    "eyebrow": {
+      "help": "Hilfe-Center",
+      "contact": "Kontakt",
+      "features": "Funktionen",
+      "status": "Status",
+      "blog": "Blog"
+    },
+    "channel": {
+      "form": {
+        "title": "Schreib uns",
+        "desc": "Schick dem Team eine Nachricht, wir antworten per E-Mail."
+      },
+      "help": {
+        "title": "Hilfe-Center",
+        "desc": "Anleitungen für Veranstalter und Käufer, mit Suche."
+      },
+      "status": {
+        "title": "Systemstatus",
+        "desc": "Sieh, ob gerade alles läuft."
+      }
+    },
+    "notFound": {
+      "events": "Events entdecken",
+      "help": "Hilfe-Center"
+    }
   }
 }
