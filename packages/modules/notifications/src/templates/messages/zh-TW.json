@@ -1,7 +1,7 @@
 {
   "common": {
     "greeting": "{name}，您好：",
-    "greetingNoName": "您好：",
+    "greetingNoName": "您好！",
     "sentBy": "由 {org} 透過 Yayatoh 寄送。",
     "poweredBy": "由 Yayatoh 提供技術支援",
     "linkFallback": "如果按鈕無法使用，請將此連結複製到瀏覽器：",

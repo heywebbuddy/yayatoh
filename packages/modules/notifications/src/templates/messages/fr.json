@@ -1,7 +1,7 @@
 {
   "common": {
     "greeting": "Bonjour {name},",
-    "greetingNoName": "Bonjour,",
+    "greetingNoName": "Bonjour !",
     "sentBy": "Envoyé par {org} avec Yayatoh.",
     "poweredBy": "Propulsé par Yayatoh",
     "linkFallback": "Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :",

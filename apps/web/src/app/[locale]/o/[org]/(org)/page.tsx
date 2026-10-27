@@ -77,7 +77,8 @@ export default async function OrgHome({
   // M4.2a: someone invited to specific events lands on a console listing just those events.
   if (data.role === 'collaborator') return <MyTeamEvents data={data} org={org} locale={locale} />;
   const t = await getTranslations();
-  const firstName = data.session.name.split(' ')[0] ?? data.session.name;
+  // An account without a name is greeted by the part of its email before the @.
+  const firstName = data.session.name.trim().split(' ')[0] || data.session.email.split('@')[0] || '';
   const canWrite = roleCan(data.role, 'events:write');
   const paused = await executeQuery(suspensionsQuery, {}, data.ctx, ports);
   const create = canWrite ? (
