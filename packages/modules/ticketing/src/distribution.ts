@@ -6,6 +6,7 @@ import { signLinkToken, tenantCommand, tenantQuery, verifyLinkToken } from '@yay
 import { and, asc, count, desc, eq, gte, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { reissueTicketTx } from './issue.ts';
+import { bookedWindowTx } from './occurrences.ts';
 import {
   holderLinks,
   ticketBarcodes,
@@ -236,6 +237,7 @@ export const claimDetailsQuery = tenantQuery({
       .select({
         c: ticketClaims,
         eventId: tickets.eventId,
+        occurrenceId: tickets.occurrenceId,
         typeName: ticketTypes.name,
         status: tickets.status,
       })
@@ -253,7 +255,12 @@ export const claimDetailsQuery = tenantQuery({
       .where(eq(ticketTransfers.claimId, row.c.id));
     return {
       state,
-      event: { name: ev.name, startsAt: ev.startsAt, endsAt: ev.endsAt, timezone: ev.timezone },
+      // The date this ticket was booked for (a multi-date event's own date, not the series).
+      event: {
+        name: ev.name,
+        ...(await bookedWindowTx(tx, ev, row.occurrenceId)),
+        timezone: ev.timezone,
+      },
       ticketTypeName: row.typeName,
       transfer: transfer ?? null,
     };
@@ -485,6 +492,8 @@ export const HolderTicketsDto = z.object({
       typeName: z.string(),
       /** Seated events: the seat, e.g. "Row A · 12". */
       seatLabel: z.string().nullable().default(null),
+      /** Multi-date events: the date this ticket was booked for; null = the event's own time. */
+      date: z.object({ startsAt: z.date(), endsAt: z.date() }).nullable().default(null),
       code: z.string(),
       /** An open claim link for this ticket is waiting to be claimed. */
       pendingTransfer: z.boolean(),
@@ -530,6 +539,7 @@ export const holderTicketsQuery = tenantQuery({
         holderName: tickets.holderName,
         typeName: ticketTypes.name,
         seatLabel: tickets.seatLabel,
+        occurrenceId: tickets.occurrenceId,
         code: ticketBarcodes.payload,
       })
       .from(tickets)
@@ -578,19 +588,25 @@ export const holderTicketsQuery = tenantQuery({
       rows.map((r) => r.id),
       ev,
     );
+    // Each ticket shows the date it was booked; the header shows the first ticket's date (or the event's).
+    const windows = new Map<string | null, { startsAt: Date; endsAt: Date }>();
+    for (const occ of new Set(rows.map((r) => r.occurrenceId)))
+      windows.set(occ, await bookedWindowTx(tx, ev, occ));
+    const first = windows.get(rows[0]?.occurrenceId ?? null) ?? ev;
     return {
       event: {
         id: ev.id,
         name: ev.name,
-        startsAt: ev.startsAt,
-        endsAt: ev.endsAt,
+        startsAt: first.startsAt,
+        endsAt: first.endsAt,
         timezone: ev.timezone,
         venueName: ev.venueName ?? null,
         city: ev.city ?? null,
       },
       email: l.emailNorm,
-      tickets: rows.map((r) => ({
+      tickets: rows.map(({ occurrenceId, ...r }) => ({
         ...r,
+        date: occurrenceId ? (windows.get(occurrenceId) ?? null) : null,
         pendingTransfer: open.has(r.id),
         transfer: options.get(r.id) ?? null,
       })),

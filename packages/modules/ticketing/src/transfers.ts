@@ -6,6 +6,7 @@ import { signLinkToken, tenantCommand, tenantQuery } from '@yayatoh/platform';
 import { and, desc, eq, gt, inArray, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { decideTransfer, type TransferRefusal, transferDeadline } from './domain/transfer-rules.ts';
+import { bookedWindowTx } from './occurrences.ts';
 import { holderLinks, ticketClaims, tickets, ticketTransfers, ticketTypes } from './schema.ts';
 
 export const TRANSFER_CLAIM_PURPOSE = 'ticket-claim';
@@ -109,10 +110,11 @@ export async function startTransferTx(
     throw new DomainError('not_found', 'Ticket not found');
   const ev = await findEventTx(tx, row.t.eventId);
   if (!ev) throw new DomainError('not_found', 'Event not found');
+  const booked = await bookedWindowTx(tx, ev, row.t.occurrenceId);
   const decision = decideTransfer(row, {
     now: ctx.now,
-    startsAt: ev.startsAt,
-    endsAt: ev.endsAt,
+    startsAt: booked.startsAt,
+    endsAt: booked.endsAt,
     ticketActive: row.t.status === 'active',
     by: input.by,
   });
@@ -140,7 +142,7 @@ export async function startTransferTx(
       ),
     );
   const expiresAt = new Date(
-    Math.min(ctx.now.getTime() + TRANSFER_CLAIM_DAYS * 86_400_000, ev.endsAt.getTime()),
+    Math.min(ctx.now.getTime() + TRANSFER_CLAIM_DAYS * 86_400_000, booked.endsAt.getTime()),
   );
   const [claim] = await tx
     .insert(ticketClaims)
@@ -555,6 +557,7 @@ export async function holderTransferOptionsTx(
     .select({
       id: tickets.id,
       status: tickets.status,
+      occurrenceId: tickets.occurrenceId,
       transfersAllowed: ticketTypes.transfersAllowed,
       transferCutoffHours: ticketTypes.transferCutoffHours,
       transferFeeMinor: ticketTypes.transferFeeMinor,
@@ -576,12 +579,17 @@ export async function holderTransferOptionsTx(
       ),
     );
   const open = new Map(pending.map((p) => [p.ticketId, p]));
+  // Each ticket's cut-off counts from the date it was booked.
+  const windows = new Map<string | null, { startsAt: Date; endsAt: Date }>();
+  for (const occ of new Set(rows.map((r) => r.occurrenceId)))
+    windows.set(occ, await bookedWindowTx(tx, event, occ));
   return new Map(
     rows.map((r) => {
+      const w = windows.get(r.occurrenceId) ?? event;
       const d = decideTransfer(r, {
         now,
-        startsAt: event.startsAt,
-        endsAt: event.endsAt,
+        startsAt: w.startsAt,
+        endsAt: w.endsAt,
         ticketActive: r.status === 'active',
         by: 'holder',
       });
@@ -593,7 +601,7 @@ export async function holderTransferOptionsTx(
           reason: d.ok ? null : d.reason,
           feeMinor: r.transferFeeMinor,
           currency: r.currency,
-          deadline: transferDeadline(r, event.startsAt, event.endsAt),
+          deadline: transferDeadline(r, w.startsAt, w.endsAt),
           pendingTransferId: p?.id ?? null,
           pendingTransferTo: p?.toName ?? null,
         },

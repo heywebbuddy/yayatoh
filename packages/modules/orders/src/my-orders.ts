@@ -4,7 +4,7 @@ import { findEventTx } from '@yayatoh/events';
 import { createCtx } from '@yayatoh/kernel';
 import { keyVault } from '@yayatoh/platform';
 import { organizationNameTx } from '@yayatoh/tenancy';
-import { ticketsForOrderTx } from '@yayatoh/ticketing';
+import { bookedWindowTx, ticketsForOrderTx } from '@yayatoh/ticketing';
 import { eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { loadOrderTx } from './commands/checkout.ts';
@@ -88,8 +88,7 @@ export async function myOrderDetail(rawEmail: string, orderId: string): Promise<
       event: {
         slug: ev.slug,
         name: ev.name,
-        startsAt: ev.startsAt,
-        endsAt: ev.endsAt,
+        ...(await bookedWindowTx(tx, ev, o.occurrenceId)),
         timezone: ev.timezone,
       },
       status: o.status,

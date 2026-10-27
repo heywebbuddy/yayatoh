@@ -139,6 +139,7 @@ export { nameTicketHolderTx } from './naming.ts';
 export {
   activeTicketsForOccurrenceTx,
   assertOccurrenceIdsTx,
+  bookedWindowTx,
   OccurrenceSalesDto,
   occurrenceSalesQuery,
   validForOccurrence,
