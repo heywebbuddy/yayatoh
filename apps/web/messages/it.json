@@ -3875,7 +3875,8 @@
       "faq": "FAQ",
       "schedule": "Programma",
       "location": "Luogo",
-      "links": "Link"
+      "links": "Link",
+      "video": "Video"
     },
     "sectionTitle": "Titolo della sezione",
     "titleInvalid": "Inserisci un titolo di massimo 120 caratteri.",
@@ -3887,14 +3888,17 @@
       "links": "Link",
       "address": "Indirizzo",
       "directions": "Indicazioni stradali",
-      "mapUrl": "Link alla mappa"
+      "mapUrl": "Link alla mappa",
+      "videoUrl": "Link del video",
+      "videoCaption": "Didascalia (facoltativa)"
     },
     "hints": {
       "markdown": "Supporta **grassetto**, *corsivo*, ## titoli, - elenchi e [link](https://…).",
       "faq": "Separa ogni domanda con una riga vuota. La prima riga è la domanda; le righe sotto sono la risposta.",
       "schedule": "Un elemento per riga: 18:00 | Apertura porte | dettaglio facoltativo",
       "links": "Un link per riga: Etichetta | https://…",
-      "address": "Mostrato così come è scritto, riga per riga."
+      "address": "Mostrato così come è scritto, riga per riga.",
+      "videoUrl": "Incolla un link YouTube o Vimeo. Viene riprodotto nella pagina dell’evento con un player rispettoso della privacy."
     },
     "textErrors": {
       "faq_answer_missing": "La domanda {line} non ha una risposta: aggiungila nelle righe sotto.",
@@ -3915,7 +3919,42 @@
     "taglineHint": "Una riga breve mostrata sotto il nome dell'evento (fino a 280 caratteri). Lascia vuoto per rimuoverlo.",
     "saveTagline": "Salva slogan",
     "taglineSaved": "Slogan salvato.",
-    "taglineInvalid": "Lo slogan deve avere al massimo 280 caratteri."
+    "taglineInvalid": "Lo slogan deve avere al massimo 280 caratteri.",
+    "editor": {
+      "toolbar": "Formattazione del testo",
+      "bold": "Grassetto",
+      "italic": "Corsivo",
+      "heading": "Titolo",
+      "list": "Elenco puntato",
+      "link": "Link",
+      "listItem": "Voce elenco",
+      "linkText": "testo del link",
+      "boldText": "testo in grassetto",
+      "italicText": "testo in corsivo",
+      "rowUp": "Sposta {label} su",
+      "rowDown": "Sposta {label} giù",
+      "rowRemove": "Rimuovi {label}",
+      "question": "Domanda {n}",
+      "answer": "Risposta",
+      "addQuestion": "Aggiungi una domanda",
+      "scheduleHint": "Una riga per voce. L’orario è facoltativo. Aggiungi un titolo del giorno per raggruppare le righe successive (eventi di più giorni).",
+      "dayN": "Titolo del giorno {n}",
+      "itemN": "Voce {n}",
+      "dayHeading": "Titolo del giorno",
+      "dayPlaceholder": "Giorno 1: venerdì 12 giugno",
+      "time": "Orario (facoltativo)",
+      "itemTitle": "Titolo",
+      "detail": "Dettaglio (facoltativo)",
+      "addItem": "Aggiungi una voce",
+      "addDay": "Aggiungi un titolo del giorno",
+      "linkLabel": "Etichetta",
+      "linkUrl": "Link (https://…)",
+      "linkN": "Link {n}",
+      "addLink": "Aggiungi un link",
+      "preview": "Anteprima dal vivo",
+      "previewEmpty": "Ancora nulla da mostrare.",
+      "untitled": "Sezione senza titolo"
+    }
   },
   "dates": {
     "title": "Date",

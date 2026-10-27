@@ -10,6 +10,7 @@ import {
   SectionBody,
   SectionTextError,
 } from '../src/domain/sections.ts';
+import { parseVideoUrl, videoEmbedUrl } from '../src/domain/video.ts';
 
 describe('section text formats (M1.4d)', () => {
   it('parses FAQ blocks and round-trips', () => {
@@ -71,5 +72,42 @@ describe('tags (M1.4c)', () => {
   it('limits tag length and count', () => {
     expect(() => parseTags(['x'.repeat(41)])).toThrow(TagError);
     expect(() => parseTags(Array.from({ length: 11 }, (_, i) => `t${i}`))).toThrow(TagError);
+  });
+});
+
+describe('structured section content (U-editor)', () => {
+  it('accepts untimed schedule rows with day headings, and old stored rows', () => {
+    const parsed = SectionBody.parse({
+      kind: 'schedule',
+      content: {
+        items: [
+          { time: '09:00', title: 'Doors' },
+          { time: null, title: 'JOUR 2 : conférence', day: 'Jour 2' },
+        ],
+      },
+    });
+    expect(parsed.kind === 'schedule' && parsed.content.items.map((i) => [i.time, i.day])).toEqual([
+      ['09:00', null],
+      [null, 'Jour 2'],
+    ]);
+    expect(() =>
+      SectionBody.parse({ kind: 'schedule', content: { items: [{ time: '25:00', title: 'x' }] } }),
+    ).toThrow();
+  });
+
+  it('only embeds YouTube and Vimeo links', () => {
+    expect(parseVideoUrl('https://youtu.be/dQw4w9WgXcQ')).toEqual({ provider: 'youtube', id: 'dQw4w9WgXcQ' });
+    expect(parseVideoUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=3')?.id).toBe('dQw4w9WgXcQ');
+    expect(parseVideoUrl('https://vimeo.com/76979871')).toEqual({ provider: 'vimeo', id: '76979871' });
+    expect(parseVideoUrl('https://evil.example/watch?v=dQw4w9WgXcQ')).toBeNull();
+    expect(parseVideoUrl('javascript:alert(1)')).toBeNull();
+    const ref = parseVideoUrl('https://vimeo.com/76979871');
+    expect(ref && videoEmbedUrl(ref)).toBe('https://player.vimeo.com/video/76979871?dnt=1');
+    expect(
+      SectionBody.safeParse({ kind: 'video', content: { url: 'https://example.com/v.mp4' } }).success,
+    ).toBe(false);
+    expect(
+      SectionBody.safeParse({ kind: 'video', content: { url: 'https://youtu.be/dQw4w9WgXcQ' } }).success,
+    ).toBe(true);
   });
 });

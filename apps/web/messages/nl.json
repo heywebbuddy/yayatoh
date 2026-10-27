@@ -3875,7 +3875,8 @@
       "faq": "Veelgestelde vragen",
       "schedule": "Programma",
       "location": "Locatie",
-      "links": "Links"
+      "links": "Links",
+      "video": "Video"
     },
     "sectionTitle": "Titel van de sectie",
     "titleInvalid": "Vul een titel in van maximaal 120 tekens.",
@@ -3887,14 +3888,17 @@
       "links": "Links",
       "address": "Adres",
       "directions": "Routebeschrijving",
-      "mapUrl": "Kaartlink"
+      "mapUrl": "Kaartlink",
+      "videoUrl": "Videolink",
+      "videoCaption": "Onderschrift (optioneel)"
     },
     "hints": {
       "markdown": "Ondersteunt **vet**, *cursief*, ## koppen, - lijsten en [links](https://…).",
       "faq": "Scheid de vragen met een lege regel. De eerste regel is de vraag; de regels eronder zijn het antwoord.",
       "schedule": "Eén onderdeel per regel: 18:00 | Deuren open | optionele toelichting",
       "links": "Eén link per regel: Label | https://…",
-      "address": "Wordt getoond zoals geschreven, regel voor regel."
+      "address": "Wordt getoond zoals geschreven, regel voor regel.",
+      "videoUrl": "Plak een YouTube- of Vimeo-link. Hij wordt op de evenementpagina afgespeeld in een privacyvriendelijke speler."
     },
     "textErrors": {
       "faq_answer_missing": "Vraag {line} heeft geen antwoord: zet het antwoord op de regels eronder.",
@@ -3915,7 +3919,42 @@
     "taglineHint": "Eén korte regel onder de naam van het evenement (maximaal 280 tekens). Laat leeg om hem te verwijderen.",
     "saveTagline": "Slogan opslaan",
     "taglineSaved": "Slogan opgeslagen.",
-    "taglineInvalid": "De slogan mag maximaal 280 tekens zijn."
+    "taglineInvalid": "De slogan mag maximaal 280 tekens zijn.",
+    "editor": {
+      "toolbar": "Tekstopmaak",
+      "bold": "Vet",
+      "italic": "Cursief",
+      "heading": "Kop",
+      "list": "Opsomming",
+      "link": "Link",
+      "listItem": "Lijstitem",
+      "linkText": "linktekst",
+      "boldText": "vette tekst",
+      "italicText": "cursieve tekst",
+      "rowUp": "{label} omhoog",
+      "rowDown": "{label} omlaag",
+      "rowRemove": "{label} verwijderen",
+      "question": "Vraag {n}",
+      "answer": "Antwoord",
+      "addQuestion": "Vraag toevoegen",
+      "scheduleHint": "Eén rij per onderdeel. De tijd is optioneel. Voeg een dagkop toe om de rijen eronder te groeperen (voor meerdaagse evenementen).",
+      "dayN": "Dagkop {n}",
+      "itemN": "Onderdeel {n}",
+      "dayHeading": "Dagkop",
+      "dayPlaceholder": "Dag 1: vrijdag 12 juni",
+      "time": "Tijd (optioneel)",
+      "itemTitle": "Titel",
+      "detail": "Details (optioneel)",
+      "addItem": "Onderdeel toevoegen",
+      "addDay": "Dagkop toevoegen",
+      "linkLabel": "Label",
+      "linkUrl": "Link (https://…)",
+      "linkN": "Link {n}",
+      "addLink": "Link toevoegen",
+      "preview": "Live voorbeeld",
+      "previewEmpty": "Nog niets om te tonen.",
+      "untitled": "Sectie zonder titel"
+    }
   },
   "dates": {
     "title": "Data",

@@ -3875,7 +3875,8 @@
       "faq": "FAQ",
       "schedule": "Schedule",
       "location": "Location",
-      "links": "Links"
+      "links": "Links",
+      "video": "Video"
     },
     "sectionTitle": "Section title",
     "titleInvalid": "Enter a title of up to 120 characters.",
@@ -3887,14 +3888,17 @@
       "links": "Links",
       "address": "Address",
       "directions": "Directions",
-      "mapUrl": "Map link"
+      "mapUrl": "Map link",
+      "videoUrl": "Video link",
+      "videoCaption": "Caption (optional)"
     },
     "hints": {
       "markdown": "Supports **bold**, *italic*, ## headings, - lists and [links](https://…).",
       "faq": "Separate each question with a blank line. The first line is the question; the lines below it are the answer.",
       "schedule": "One item per line: 18:00 | Doors open | optional detail",
       "links": "One link per line: Label | https://…",
-      "address": "Shown as written, one line per line."
+      "address": "Shown as written, one line per line.",
+      "videoUrl": "Paste a YouTube or Vimeo link. It plays on the event page in a privacy-friendly player."
     },
     "textErrors": {
       "faq_answer_missing": "Question {line} has no answer: add the answer on the lines below it.",
@@ -3915,7 +3919,42 @@
     "taglineHint": "One short line shown under the event name (up to 280 characters). Leave it empty to remove it.",
     "saveTagline": "Save tagline",
     "taglineSaved": "Tagline saved.",
-    "taglineInvalid": "Keep the tagline to 280 characters or fewer."
+    "taglineInvalid": "Keep the tagline to 280 characters or fewer.",
+    "editor": {
+      "toolbar": "Text formatting",
+      "bold": "Bold",
+      "italic": "Italic",
+      "heading": "Heading",
+      "list": "Bulleted list",
+      "link": "Link",
+      "listItem": "List item",
+      "linkText": "link text",
+      "boldText": "bold text",
+      "italicText": "italic text",
+      "rowUp": "Move {label} up",
+      "rowDown": "Move {label} down",
+      "rowRemove": "Remove {label}",
+      "question": "Question {n}",
+      "answer": "Answer",
+      "addQuestion": "Add a question",
+      "scheduleHint": "One row per item. The time is optional. Add a day heading to group the rows below it (for multi-day events).",
+      "dayN": "Day heading {n}",
+      "itemN": "Item {n}",
+      "dayHeading": "Day heading",
+      "dayPlaceholder": "Day 1: Friday 12 June",
+      "time": "Time (optional)",
+      "itemTitle": "Title",
+      "detail": "Detail (optional)",
+      "addItem": "Add an item",
+      "addDay": "Add a day heading",
+      "linkLabel": "Label",
+      "linkUrl": "Link (https://…)",
+      "linkN": "Link {n}",
+      "addLink": "Add a link",
+      "preview": "Live preview",
+      "previewEmpty": "Nothing to preview yet.",
+      "untitled": "Untitled section"
+    }
   },
   "dates": {
     "title": "Dates",

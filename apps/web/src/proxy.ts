@@ -1,4 +1,5 @@
 import { LOCALES } from '@yayatoh/contracts';
+import { VIDEO_FRAME_ORIGINS } from '@yayatoh/events/ui';
 import { isProductionEnv } from '@yayatoh/kernel';
 import { frameAncestors, matchLegacyRedirect, widgetOrigins } from '@yayatoh/marketplace';
 import {
@@ -129,7 +130,8 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
   const nonce = generateNonce();
   // Cloudflare Turnstile's loader and challenge iframe, once the real challenge is configured.
   const turnstile = turnstileCspSources(process.env, isProductionEnv());
-  const headers = securityHeaders(pageTypeOf(stripLocale(path, routing.locales)), {
+  const pageType = pageTypeOf(stripLocale(path, routing.locales));
+  const headers = securityHeaders(pageType, {
     nonce,
     dev: process.env.NODE_ENV === 'development',
     https,
@@ -143,6 +145,8 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
       frame: [
         ...webhookPortalFrameSources(stripLocale(path, routing.locales), process.env),
         ...turnstile.frame,
+        // Event-page video sections (YouTube no-cookie, Vimeo); the console previews them too.
+        ...(pageType === 'public' || pageType === 'console' ? VIDEO_FRAME_ORIGINS : []),
       ],
     },
   });

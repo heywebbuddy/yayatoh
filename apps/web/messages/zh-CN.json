@@ -3875,7 +3875,8 @@
       "faq": "常见问题",
       "schedule": "日程",
       "location": "地点",
-      "links": "链接"
+      "links": "链接",
+      "video": "视频"
     },
     "sectionTitle": "板块标题",
     "titleInvalid": "请输入不超过 120 个字符的标题。",
@@ -3887,14 +3888,17 @@
       "links": "链接",
       "address": "地址",
       "directions": "交通指引",
-      "mapUrl": "地图链接"
+      "mapUrl": "地图链接",
+      "videoUrl": "视频链接",
+      "videoCaption": "说明文字(可选)"
     },
     "hints": {
       "markdown": "支持 **粗体**、*斜体*、## 标题、- 列表和 [链接](https://…)。",
       "faq": "每个问题之间用空行分隔。第一行是问题，下面的行是解答。",
       "schedule": "每行一项：18:00 | 开始入场 | 可选说明",
       "links": "每行一个链接：名称 | https://…",
-      "address": "按输入原样显示，每行一行。"
+      "address": "按输入原样显示，每行一行。",
+      "videoUrl": "粘贴 YouTube 或 Vimeo 链接。它将在活动页面中以注重隐私的播放器播放。"
     },
     "textErrors": {
       "faq_answer_missing": "问题 {line} 没有解答：请在其下方的行中添加解答。",
@@ -3915,7 +3919,42 @@
     "taglineHint": "显示在活动名称下方的一行短文字（最多 280 个字符）。留空即可删除。",
     "saveTagline": "保存标语",
     "taglineSaved": "标语已保存。",
-    "taglineInvalid": "标语不能超过 280 个字符。"
+    "taglineInvalid": "标语不能超过 280 个字符。",
+    "editor": {
+      "toolbar": "文本格式",
+      "bold": "加粗",
+      "italic": "斜体",
+      "heading": "标题",
+      "list": "项目列表",
+      "link": "链接",
+      "listItem": "列表项",
+      "linkText": "链接文字",
+      "boldText": "加粗文字",
+      "italicText": "斜体文字",
+      "rowUp": "上移{label}",
+      "rowDown": "下移{label}",
+      "rowRemove": "删除{label}",
+      "question": "问题 {n}",
+      "answer": "回答",
+      "addQuestion": "添加问题",
+      "scheduleHint": "每项一行。时间可不填。添加“日期标题”可将其下的行归为一组(适用于多日活动)。",
+      "dayN": "日期标题 {n}",
+      "itemN": "第 {n} 项",
+      "dayHeading": "日期标题",
+      "dayPlaceholder": "第 1 天:6 月 12 日(周五)",
+      "time": "时间(可选)",
+      "itemTitle": "标题",
+      "detail": "详情(可选)",
+      "addItem": "添加一项",
+      "addDay": "添加日期标题",
+      "linkLabel": "标签",
+      "linkUrl": "链接(https://…)",
+      "linkN": "链接 {n}",
+      "addLink": "添加链接",
+      "preview": "实时预览",
+      "previewEmpty": "暂无可预览的内容。",
+      "untitled": "未命名区块"
+    }
   },
   "dates": {
     "title": "场次",

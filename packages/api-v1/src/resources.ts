@@ -519,9 +519,13 @@ const ScheduleContent = z
   .object({
     items: z.array(
       z.object({
-        time: z.string().openapi({ description: '`HH:MM`, wall-clock in the event’s timezone.' }),
+        time: z
+          .string()
+          .nullable()
+          .openapi({ description: '`HH:MM`, wall-clock in the event’s timezone; null for an untimed row.' }),
         title: z.string(),
         detail: z.string().nullable(),
+        day: z.string().nullable().openapi({ description: 'Day heading the row is listed under, if any.' }),
       }),
     ),
   })
@@ -530,6 +534,9 @@ const LocationContent = z
   .object({ address: z.string(), directions: z.string(), mapUrl: z.string().nullable() })
   .openapi('LocationSectionContent');
 const LinksContent = z.object({ items: z.array(Link) }).openapi('LinksSectionContent');
+const VideoContent = z
+  .object({ url: z.string(), caption: z.string().nullable() })
+  .openapi('VideoSectionContent');
 
 function sectionSchema(prefix: string, extra: z.ZodRawShape = {}) {
   return z
@@ -539,6 +546,7 @@ function sectionSchema(prefix: string, extra: z.ZodRawShape = {}) {
       sectionVariant('schedule', ScheduleContent, `${prefix}ScheduleSection`, extra),
       sectionVariant('location', LocationContent, `${prefix}LocationSection`, extra),
       sectionVariant('links', LinksContent, `${prefix}LinksSection`, extra),
+      sectionVariant('video', VideoContent, `${prefix}VideoSection`, extra),
     ])
     .openapi(`${prefix}EventSection`, {
       description: 'A content block of the event page; `kind` says which `content` shape it has.',

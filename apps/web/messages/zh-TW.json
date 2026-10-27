@@ -3875,7 +3875,8 @@
       "faq": "常見問題",
       "schedule": "議程",
       "location": "地點",
-      "links": "連結"
+      "links": "連結",
+      "video": "影片"
     },
     "sectionTitle": "區塊標題",
     "titleInvalid": "請輸入最多 120 個字元的標題。",
@@ -3887,14 +3888,17 @@
       "links": "連結",
       "address": "地址",
       "directions": "交通資訊",
-      "mapUrl": "地圖連結"
+      "mapUrl": "地圖連結",
+      "videoUrl": "影片連結",
+      "videoCaption": "說明文字(選填)"
     },
     "hints": {
       "markdown": "支援 **粗體**、*斜體*、## 標題、- 清單與 [連結](https://…)。",
       "faq": "每個問題之間以空行分隔。第一行是問題，下面幾行是解答。",
       "schedule": "每行一項：18:00 | 開放入場 | 選填說明",
       "links": "每行一個連結：名稱 | https://…",
-      "address": "依輸入內容原樣顯示，一行對應一行。"
+      "address": "依輸入內容原樣顯示，一行對應一行。",
+      "videoUrl": "貼上 YouTube 或 Vimeo 連結。它會在活動頁面以注重隱私的播放器播放。"
     },
     "textErrors": {
       "faq_answer_missing": "問題 {line} 沒有解答：請在其下方幾行加入解答。",
@@ -3915,7 +3919,42 @@
     "taglineHint": "顯示在活動名稱下方的一行短文字（最多 280 個字元）。留空即可移除。",
     "saveTagline": "儲存標語",
     "taglineSaved": "標語已保存。",
-    "taglineInvalid": "標語不能超過 280 個字元。"
+    "taglineInvalid": "標語不能超過 280 個字元。",
+    "editor": {
+      "toolbar": "文字格式",
+      "bold": "粗體",
+      "italic": "斜體",
+      "heading": "標題",
+      "list": "項目清單",
+      "link": "連結",
+      "listItem": "清單項目",
+      "linkText": "連結文字",
+      "boldText": "粗體文字",
+      "italicText": "斜體文字",
+      "rowUp": "上移{label}",
+      "rowDown": "下移{label}",
+      "rowRemove": "刪除{label}",
+      "question": "問題 {n}",
+      "answer": "回答",
+      "addQuestion": "新增問題",
+      "scheduleHint": "每項一行。時間可不填。新增「日期標題」可將其下的列歸為一組(適用於多日活動)。",
+      "dayN": "日期標題 {n}",
+      "itemN": "第 {n} 項",
+      "dayHeading": "日期標題",
+      "dayPlaceholder": "第 1 天:6 月 12 日(週五)",
+      "time": "時間(選填)",
+      "itemTitle": "標題",
+      "detail": "詳情(選填)",
+      "addItem": "新增一項",
+      "addDay": "新增日期標題",
+      "linkLabel": "標籤",
+      "linkUrl": "連結(https://…)",
+      "linkN": "連結 {n}",
+      "addLink": "新增連結",
+      "preview": "即時預覽",
+      "previewEmpty": "尚無可預覽的內容。",
+      "untitled": "未命名區塊"
+    }
   },
   "dates": {
     "title": "場次",

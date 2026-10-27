@@ -1,0 +1,2 @@
+ALTER TABLE "events"."event_sections" DROP CONSTRAINT "event_sections_kind_check";--> statement-breakpoint
+ALTER TABLE "events"."event_sections" ADD CONSTRAINT "event_sections_kind_check" CHECK (kind in ('text', 'faq', 'schedule', 'location', 'links', 'video'));

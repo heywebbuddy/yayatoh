@@ -1,4 +1,4 @@
-export const SECTION_KINDS = ['text', 'faq', 'schedule', 'location', 'links'] as const;
+export const SECTION_KINDS = ['text', 'faq', 'schedule', 'location', 'links', 'video'] as const;
 export type SectionKind = (typeof SECTION_KINDS)[number];
 
 export const ANNOUNCEMENT_AUDIENCES = ['public', 'holders'] as const;

@@ -3875,7 +3875,8 @@
       "faq": "よくある質問",
       "schedule": "スケジュール",
       "location": "所在地",
-      "links": "リンク"
+      "links": "リンク",
+      "video": "動画"
     },
     "sectionTitle": "セクションのタイトル",
     "titleInvalid": "120文字以内のタイトルを入力してください。",
@@ -3887,14 +3888,17 @@
       "links": "リンク",
       "address": "住所",
       "directions": "道順",
-      "mapUrl": "地図のリンク"
+      "mapUrl": "地図のリンク",
+      "videoUrl": "動画のリンク",
+      "videoCaption": "キャプション(任意)"
     },
     "hints": {
       "markdown": "**太字**、*斜体*、## 見出し、- リスト、[リンク](https://…) に対応しています。",
       "faq": "質問ごとに空行で区切ります。最初の行が質問、その下の行が回答です。",
       "schedule": "1行に1項目: 18:00 | 開場 | 詳細（任意）",
       "links": "1行に1リンク: ラベル | https://…",
-      "address": "入力したとおり、1行ずつ表示されます。"
+      "address": "入力したとおり、1行ずつ表示されます。",
+      "videoUrl": "YouTube または Vimeo のリンクを貼り付けます。イベントページのプライバシーに配慮したプレーヤーで再生されます。"
     },
     "textErrors": {
       "faq_answer_missing": "質問 {line} に回答がありません。その下の行に回答を追加してください。",
@@ -3915,7 +3919,42 @@
     "taglineHint": "イベント名の下に表示される短い1行（280文字まで）。空欄にすると削除されます。",
     "saveTagline": "キャッチコピーを保存",
     "taglineSaved": "キャッチコピーを保存しました。",
-    "taglineInvalid": "キャッチコピーは280文字以内にしてください。"
+    "taglineInvalid": "キャッチコピーは280文字以内にしてください。",
+    "editor": {
+      "toolbar": "テキストの書式",
+      "bold": "太字",
+      "italic": "斜体",
+      "heading": "見出し",
+      "list": "箇条書き",
+      "link": "リンク",
+      "listItem": "リスト項目",
+      "linkText": "リンクテキスト",
+      "boldText": "太字のテキスト",
+      "italicText": "斜体のテキスト",
+      "rowUp": "{label} を上へ",
+      "rowDown": "{label} を下へ",
+      "rowRemove": "{label} を削除",
+      "question": "質問 {n}",
+      "answer": "回答",
+      "addQuestion": "質問を追加",
+      "scheduleHint": "1項目につき1行。時刻は任意です。複数日のイベントでは、日の見出しを追加して下の行をまとめられます。",
+      "dayN": "日の見出し {n}",
+      "itemN": "項目 {n}",
+      "dayHeading": "日の見出し",
+      "dayPlaceholder": "1日目:6月12日(金)",
+      "time": "時刻(任意)",
+      "itemTitle": "タイトル",
+      "detail": "詳細(任意)",
+      "addItem": "項目を追加",
+      "addDay": "日の見出しを追加",
+      "linkLabel": "ラベル",
+      "linkUrl": "リンク(https://…)",
+      "linkN": "リンク {n}",
+      "addLink": "リンクを追加",
+      "preview": "ライブプレビュー",
+      "previewEmpty": "プレビューする内容がまだありません。",
+      "untitled": "無題のセクション"
+    }
   },
   "dates": {
     "title": "日程",

@@ -3875,7 +3875,8 @@
       "faq": "FAQ",
       "schedule": "Programme",
       "location": "Localisation",
-      "links": "Liens"
+      "links": "Liens",
+      "video": "Vidéo"
     },
     "sectionTitle": "Titre de la section",
     "titleInvalid": "Saisissez un titre de 120 caractères au maximum.",
@@ -3887,14 +3888,17 @@
       "links": "Liens",
       "address": "Adresse",
       "directions": "Itinéraire",
-      "mapUrl": "Lien vers la carte"
+      "mapUrl": "Lien vers la carte",
+      "videoUrl": "Lien de la vidéo",
+      "videoCaption": "Légende (facultatif)"
     },
     "hints": {
       "markdown": "Prend en charge **gras**, *italique*, ## titres, - listes et [liens](https://…).",
       "faq": "Séparez chaque question par une ligne vide. La première ligne est la question ; les lignes suivantes sont la réponse.",
       "schedule": "Un élément par ligne : 18:00 | Ouverture des portes | détail facultatif",
       "links": "Un lien par ligne : Libellé | https://…",
-      "address": "Affichée telle quelle, ligne par ligne."
+      "address": "Affichée telle quelle, ligne par ligne.",
+      "videoUrl": "Collez un lien YouTube ou Vimeo. Il est lu sur la page de l’événement dans un lecteur respectueux de la vie privée."
     },
     "textErrors": {
       "faq_answer_missing": "La question {line} n’a pas de réponse : ajoutez la réponse sur les lignes suivantes.",
@@ -3915,7 +3919,42 @@
     "taglineHint": "Une courte ligne affichée sous le nom de l'événement (280 caractères maximum). Laissez vide pour la retirer.",
     "saveTagline": "Enregistrer l'accroche",
     "taglineSaved": "Accroche enregistrée.",
-    "taglineInvalid": "L'accroche doit faire 280 caractères au maximum."
+    "taglineInvalid": "L'accroche doit faire 280 caractères au maximum.",
+    "editor": {
+      "toolbar": "Mise en forme du texte",
+      "bold": "Gras",
+      "italic": "Italique",
+      "heading": "Titre",
+      "list": "Liste à puces",
+      "link": "Lien",
+      "listItem": "Élément de liste",
+      "linkText": "texte du lien",
+      "boldText": "texte en gras",
+      "italicText": "texte en italique",
+      "rowUp": "Monter {label}",
+      "rowDown": "Descendre {label}",
+      "rowRemove": "Supprimer {label}",
+      "question": "Question {n}",
+      "answer": "Réponse",
+      "addQuestion": "Ajouter une question",
+      "scheduleHint": "Une ligne par élément. L’heure est facultative. Ajoutez un titre de jour pour regrouper les lignes suivantes (événements sur plusieurs jours).",
+      "dayN": "Titre de jour {n}",
+      "itemN": "Élément {n}",
+      "dayHeading": "Titre de jour",
+      "dayPlaceholder": "Jour 1 : vendredi 12 juin",
+      "time": "Heure (facultatif)",
+      "itemTitle": "Titre",
+      "detail": "Détail (facultatif)",
+      "addItem": "Ajouter un élément",
+      "addDay": "Ajouter un titre de jour",
+      "linkLabel": "Libellé",
+      "linkUrl": "Lien (https://…)",
+      "linkN": "Lien {n}",
+      "addLink": "Ajouter un lien",
+      "preview": "Aperçu en direct",
+      "previewEmpty": "Rien à afficher pour l’instant.",
+      "untitled": "Section sans titre"
+    }
   },
   "dates": {
     "title": "Dates",

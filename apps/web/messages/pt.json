@@ -3875,7 +3875,8 @@
       "faq": "Perguntas frequentes",
       "schedule": "Programação",
       "location": "Localização",
-      "links": "Links"
+      "links": "Links",
+      "video": "Vídeo"
     },
     "sectionTitle": "Título da seção",
     "titleInvalid": "Informe um título de até 120 caracteres.",
@@ -3887,14 +3888,17 @@
       "links": "Links",
       "address": "Endereço",
       "directions": "Como chegar",
-      "mapUrl": "Link do mapa"
+      "mapUrl": "Link do mapa",
+      "videoUrl": "Ligação do vídeo",
+      "videoCaption": "Legenda (opcional)"
     },
     "hints": {
       "markdown": "Aceita **negrito**, *itálico*, ## títulos, - listas e [links](https://…).",
       "faq": "Separe cada pergunta com uma linha em branco. A primeira linha é a pergunta; as linhas abaixo dela são a resposta.",
       "schedule": "Um item por linha: 18:00 | Abertura dos portões | detalhe opcional",
       "links": "Um link por linha: Rótulo | https://…",
-      "address": "Exibido como está escrito, linha por linha."
+      "address": "Exibido como está escrito, linha por linha.",
+      "videoUrl": "Cole uma ligação do YouTube ou Vimeo. É reproduzida na página do evento num leitor que respeita a privacidade."
     },
     "textErrors": {
       "faq_answer_missing": "A pergunta {line} não tem resposta: adicione a resposta nas linhas abaixo dela.",
@@ -3915,7 +3919,42 @@
     "taglineHint": "Uma linha curta exibida abaixo do nome do evento (até 280 caracteres). Deixe em branco para removê-lo.",
     "saveTagline": "Salvar slogan",
     "taglineSaved": "Slogan salvo.",
-    "taglineInvalid": "O slogan deve ter no máximo 280 caracteres."
+    "taglineInvalid": "O slogan deve ter no máximo 280 caracteres.",
+    "editor": {
+      "toolbar": "Formatação do texto",
+      "bold": "Negrito",
+      "italic": "Itálico",
+      "heading": "Título",
+      "list": "Lista com marcadores",
+      "link": "Ligação",
+      "listItem": "Item da lista",
+      "linkText": "texto da ligação",
+      "boldText": "texto a negrito",
+      "italicText": "texto em itálico",
+      "rowUp": "Subir {label}",
+      "rowDown": "Descer {label}",
+      "rowRemove": "Remover {label}",
+      "question": "Pergunta {n}",
+      "answer": "Resposta",
+      "addQuestion": "Adicionar uma pergunta",
+      "scheduleHint": "Uma linha por item. A hora é opcional. Adicione um título de dia para agrupar as linhas seguintes (eventos de vários dias).",
+      "dayN": "Título do dia {n}",
+      "itemN": "Item {n}",
+      "dayHeading": "Título do dia",
+      "dayPlaceholder": "Dia 1: sexta-feira, 12 de junho",
+      "time": "Hora (opcional)",
+      "itemTitle": "Título",
+      "detail": "Detalhe (opcional)",
+      "addItem": "Adicionar um item",
+      "addDay": "Adicionar um título de dia",
+      "linkLabel": "Etiqueta",
+      "linkUrl": "Ligação (https://…)",
+      "linkN": "Ligação {n}",
+      "addLink": "Adicionar uma ligação",
+      "preview": "Pré-visualização em direto",
+      "previewEmpty": "Ainda nada para pré-visualizar.",
+      "untitled": "Secção sem título"
+    }
   },
   "dates": {
     "title": "Datas",
