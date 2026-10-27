@@ -801,7 +801,15 @@
       "influencer": "Influencers",
       "special_guest": "Special guests"
     },
-    "featuredBadge": "Featured"
+    "featuredBadge": "Featured",
+    "sponsorPageTitle": "Sponsor",
+    "exhibitorPageTitle": "Exhibitor",
+    "sponsorTier": "{tier} sponsor",
+    "video": "Video",
+    "videoTitle": "Video from {name}",
+    "contact": "Contact",
+    "brochures": "Brochures and downloads",
+    "teamAtEvent": "Team at the event"
   },
   "portal": {
     "day": "Day {day} · {date}",
@@ -3921,7 +3929,8 @@
       "schedule": "One item per line: 18:00 | Doors open | optional detail",
       "links": "One link per line: Label | https://…",
       "address": "Shown as written, one line per line.",
-      "videoUrl": "Paste a YouTube or Vimeo link. It plays on the event page in a privacy-friendly player."
+      "videoUrl": "Paste a YouTube or Vimeo link. It plays on the event page in a privacy-friendly player.",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=…"
     },
     "textErrors": {
       "faq_answer_missing": "Question {line} has no answer: add the answer on the lines below it.",
@@ -3976,7 +3985,8 @@
       "addLink": "Add a link",
       "preview": "Live preview",
       "previewEmpty": "Nothing to preview yet.",
-      "untitled": "Untitled section"
+      "untitled": "Untitled section",
+      "httpsPlaceholder": "https://"
     }
   },
   "dates": {
@@ -4932,7 +4942,11 @@
       "position": "Enter an order from 1 to 99.",
       "tier": "Pick a tier.",
       "tierInUse": "Move or delete this tier's sponsors first.",
-      "capacityBelowEnrolled": "People hold more places than that. Drop enrollments first or keep a higher capacity."
+      "capacityBelowEnrolled": "People hold more places than that. Drop enrollments first or keep a higher capacity.",
+      "contactEmail": "Enter a valid email address.",
+      "videoUrl": "Use a YouTube or Vimeo link.",
+      "team": "Check the team lines: each needs a name.",
+      "unknownAccount": "One of the portal emails is not an account of this sponsor."
     },
     "warnings": {
       "room_overlap": "{room} is also booked for “{other}” at this time.",
@@ -4964,7 +4978,17 @@
     },
     "speakerRole": "Role",
     "featured": "Featured",
-    "featuredHint": "Show first in their role, with a larger card"
+    "featuredHint": "Show first in their role, with a larger card",
+    "contactEmail": "Public contact email",
+    "contactPhone": "Public contact phone",
+    "longDescription": "Longer description (detail page)",
+    "longDescriptionHint": "Shown on the sponsor’s own page. Plain text with **bold**, *italic*, lists and links.",
+    "videoUrl": "Video link (YouTube or Vimeo)",
+    "videoUrlHint": "Plays on the detail page in a privacy-friendly player.",
+    "team": "Team at the event",
+    "teamHint": "One person per line: Name | Title | portal account email (optional, links the person to the sponsor’s portal account).",
+    "saveTeam": "Save team",
+    "teamSaved": "Team saved."
   },
   "aiDraft": {
     "title": "Draft with AI",
@@ -19226,5 +19250,23 @@
     "description": "Give this event its own accent colour on its public event page. Leave it empty to use your organization’s brand colour below.",
     "color": "Event colour",
     "usesOrg": "This event uses the organization’s brand colour."
+  },
+  "programDocs": {
+    "title": "Brochures (PDF)",
+    "remove": "Remove {name}",
+    "titleLabel": "Title (shown on the public page)",
+    "file": "PDF file",
+    "upload": "Upload brochure",
+    "uploading": "Uploading…",
+    "none": "No brochures yet.",
+    "fileHint": "PDF only, up to 10 MB, up to 5 per sponsor or exhibitor.",
+    "uploaded": "Brochure uploaded.",
+    "errors": {
+      "generic": "The upload failed. Try again.",
+      "no_file": "Choose a PDF file.",
+      "too_large": "The file is larger than 10 MB.",
+      "unsupported_type": "Only PDF files are accepted.",
+      "too_many": "The limit of 5 brochures is reached."
+    }
   }
 }

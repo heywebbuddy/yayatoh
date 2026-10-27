@@ -272,7 +272,7 @@ export {
   taskReminderMailer,
 } from './portal-tasks.ts';
 export { privateColumns } from './private-columns.ts';
-export { publicProgram, publicSpeaker } from './public.ts';
+export { publicExhibitor, publicProgram, publicSpeaker, publicSponsor } from './public.ts';
 export { EXHIBITOR_MEMBER_ROLES } from './schema.ts';
 export { CFP_STATUSES, type CfpStatus, SUBMISSION_STATUSES, type SubmissionStatus } from './schema-cfp.ts';
 export {
@@ -350,4 +350,11 @@ export {
   sponsorshipAdminQuery,
   unassignSponsoredSessionCommand,
 } from './sponsor-packages.ts';
+export {
+  hasSponsorPage,
+  SPONSOR_PAGE_TIERS,
+  SponsorTeamMemberDto,
+  setSponsorTeamCommand,
+  sponsorTeamQuery,
+} from './sponsor-pages.ts';
 export { sponsorPortalQuery } from './sponsor-portal.ts';

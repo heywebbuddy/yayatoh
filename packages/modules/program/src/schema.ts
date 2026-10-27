@@ -147,6 +147,10 @@ export const exhibitors = tenantTable(
     /** Free text for now ("B12", "Hall 2 · 214"); floor-plan booths arrive with M5.4. */
     boothLabel: text('booth_label'),
     websiteUrl: text('website_url'),
+    /** Public contact details and a YouTube/Vimeo link for the exhibitor's own page. */
+    contactEmail: text('contact_email'),
+    contactPhone: text('contact_phone'),
+    videoUrl: text('video_url'),
   },
   (t) => [
     index('exhibitors_org_event_name_idx').on(t.orgId, t.eventId, t.name),
@@ -181,6 +185,11 @@ export const sponsors = tenantTable(
     name: text('name').notNull(),
     description: text('description').notNull().default(''),
     websiteUrl: text('website_url'),
+    /** The sponsor's own page: a longer Markdown text, public contact details and a video link. */
+    longDescription: text('long_description').notNull().default(''),
+    contactEmail: text('contact_email'),
+    contactPhone: text('contact_phone'),
+    videoUrl: text('video_url'),
   },
   (t) => [
     index('sponsors_org_event_tier_idx').on(t.orgId, t.eventId, t.tierId),

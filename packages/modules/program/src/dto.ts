@@ -52,6 +52,9 @@ export const ExhibitorDto = z.object({
   description: z.string(),
   boothLabel: z.string().nullable(),
   websiteUrl: z.string().nullable(),
+  contactEmail: z.string().nullable(),
+  contactPhone: z.string().nullable(),
+  videoUrl: z.string().nullable(),
 });
 export type ExhibitorDto = z.infer<typeof ExhibitorDto>;
 
@@ -70,6 +73,10 @@ export const SponsorDto = z.object({
   name: z.string(),
   description: z.string(),
   websiteUrl: z.string().nullable(),
+  longDescription: z.string(),
+  contactEmail: z.string().nullable(),
+  contactPhone: z.string().nullable(),
+  videoUrl: z.string().nullable(),
 });
 export type SponsorDto = z.infer<typeof SponsorDto>;
 
@@ -143,10 +150,20 @@ export const PublicExhibitorDto = z.object({
   websiteUrl: z.string().nullable(),
 });
 
+export const SPONSOR_CARD_SIZES = ['large', 'medium', 'small'] as const;
+
 export const PublicSponsorTierDto = z.object({
   name: z.string(),
+  /** Higher tiers get larger cards; the top two also get a detail page. */
+  size: z.enum(SPONSOR_CARD_SIZES),
   sponsors: z.array(
-    z.object({ id: z.uuid(), name: z.string(), description: z.string(), websiteUrl: z.string().nullable() }),
+    z.object({
+      id: z.uuid(),
+      name: z.string(),
+      description: z.string(),
+      websiteUrl: z.string().nullable(),
+      hasPage: z.boolean(),
+    }),
   ),
 });
 
@@ -166,3 +183,39 @@ export const PublicSpeakerPageDto = z.object({
 });
 export type PublicSpeakerPageDto = z.infer<typeof PublicSpeakerPageDto>;
 export const publicSpeakerPageSerializer = defineSerializer('program.publicSpeaker', PublicSpeakerPageDto);
+
+/** A sponsor's own public page. */
+export const PublicSponsorPageDto = z.object({
+  id: z.uuid(),
+  name: z.string(),
+  tierName: z.string(),
+  description: z.string(),
+  longDescription: z.string(),
+  websiteUrl: z.string().nullable(),
+  contactEmail: z.string().nullable(),
+  contactPhone: z.string().nullable(),
+  videoUrl: z.string().nullable(),
+  team: z.array(z.object({ name: z.string(), title: z.string().nullable() })),
+});
+export type PublicSponsorPageDto = z.infer<typeof PublicSponsorPageDto>;
+export const publicSponsorPageSerializer = defineSerializer('program.publicSponsor', PublicSponsorPageDto);
+
+/** A listed exhibitor's own public page. */
+export const PublicExhibitorPageDto = z.object({
+  id: z.uuid(),
+  name: z.string(),
+  description: z.string(),
+  boothLabel: z.string().nullable(),
+  boothNumbers: z.array(z.string()),
+  websiteUrl: z.string().nullable(),
+  categories: z.array(z.string()),
+  links: z.array(LinkDto),
+  contactEmail: z.string().nullable(),
+  contactPhone: z.string().nullable(),
+  videoUrl: z.string().nullable(),
+});
+export type PublicExhibitorPageDto = z.infer<typeof PublicExhibitorPageDto>;
+export const publicExhibitorPageSerializer = defineSerializer(
+  'program.publicExhibitor',
+  PublicExhibitorPageDto,
+);

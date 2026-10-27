@@ -34,6 +34,7 @@ import {
 } from './dto.ts';
 import { variantFileName } from './pipeline/plan.ts';
 import { MediaRejected, processImage } from './pipeline/process.ts';
+import { purgeOwnerDocumentsTx } from './program-docs.ts';
 import { assets, OWNER_TYPES, type OwnerType, quotas, SLOTS, type Slot, variants } from './schema.ts';
 import { mediaStore } from './storage/config.ts';
 import { storageKey } from './storage/port.ts';
@@ -729,6 +730,10 @@ export function programMediaCleaner(): Subscriber {
       const purge: string[] = [];
       for (const row of rows) if ((await releaseTx(tx, event.orgId, row)).purge) purge.push(row.id);
       for (const id of purge) await mediaStore().deleteAsset(event.orgId, id);
+      // Brochures of a sponsor or an exhibitor go with it.
+      if (p.kind !== 'speaker')
+        for (const id of await purgeOwnerDocumentsTx(tx, p.kind, p.id))
+          await mediaStore().deleteAsset(event.orgId, id);
     },
   });
 }

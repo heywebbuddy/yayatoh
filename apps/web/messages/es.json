@@ -801,7 +801,15 @@
       "influencer": "Influencers",
       "special_guest": "Invitados especiales"
     },
-    "featuredBadge": "Destacado"
+    "featuredBadge": "Destacado",
+    "sponsorPageTitle": "Patrocinador",
+    "exhibitorPageTitle": "Expositor",
+    "sponsorTier": "Patrocinador {tier}",
+    "video": "Vídeo",
+    "videoTitle": "Vídeo de {name}",
+    "contact": "Contacto",
+    "brochures": "Folletos y descargas",
+    "teamAtEvent": "Equipo en el evento"
   },
   "portal": {
     "day": "Día {day} · {date}",
@@ -3921,7 +3929,8 @@
       "schedule": "Un elemento por línea: 18:00 | Apertura de puertas | detalle opcional",
       "links": "Un enlace por línea: Etiqueta | https://…",
       "address": "Se muestra tal como está escrita, línea por línea.",
-      "videoUrl": "Pega un enlace de YouTube o Vimeo. Se reproduce en la página del evento con un reproductor respetuoso con la privacidad."
+      "videoUrl": "Pega un enlace de YouTube o Vimeo. Se reproduce en la página del evento con un reproductor respetuoso con la privacidad.",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=…"
     },
     "textErrors": {
       "faq_answer_missing": "La pregunta {line} no tiene respuesta: añádela en las líneas de abajo.",
@@ -3976,7 +3985,8 @@
       "addLink": "Añadir un enlace",
       "preview": "Vista previa en vivo",
       "previewEmpty": "Aún no hay nada que previsualizar.",
-      "untitled": "Sección sin título"
+      "untitled": "Sección sin título",
+      "httpsPlaceholder": "https://"
     }
   },
   "dates": {
@@ -4932,7 +4942,11 @@
       "position": "Escribe un orden del 1 al 99.",
       "tier": "Elige un nivel.",
       "tierInUse": "Mueve o elimina primero los patrocinadores de este nivel.",
-      "capacityBelowEnrolled": "Hay más personas con plaza. Quita inscripciones primero o mantén una capacidad mayor."
+      "capacityBelowEnrolled": "Hay más personas con plaza. Quita inscripciones primero o mantén una capacidad mayor.",
+      "contactEmail": "Introduce un correo válido.",
+      "videoUrl": "Usa un enlace de YouTube o Vimeo.",
+      "team": "Revisa las líneas del equipo: cada una necesita un nombre.",
+      "unknownAccount": "Uno de los correos del portal no es una cuenta de este patrocinador."
     },
     "warnings": {
       "room_overlap": "{room} también está reservada para «{other}» a esa hora.",
@@ -4964,7 +4978,17 @@
     },
     "speakerRole": "Rol",
     "featured": "Destacado",
-    "featuredHint": "Mostrar primero en su rol, con una tarjeta más grande"
+    "featuredHint": "Mostrar primero en su rol, con una tarjeta más grande",
+    "contactEmail": "Correo de contacto público",
+    "contactPhone": "Teléfono de contacto público",
+    "longDescription": "Descripción larga (página de detalle)",
+    "longDescriptionHint": "Se muestra en la página propia del patrocinador. Texto con **negrita**, *cursiva*, listas y enlaces.",
+    "videoUrl": "Enlace de vídeo (YouTube o Vimeo)",
+    "videoUrlHint": "Se reproduce en la página de detalle con un reproductor respetuoso con la privacidad.",
+    "team": "Equipo en el evento",
+    "teamHint": "Una persona por línea: Nombre | Cargo | correo de la cuenta del portal (opcional, vincula a la persona con la cuenta del portal del patrocinador).",
+    "saveTeam": "Guardar equipo",
+    "teamSaved": "Equipo guardado."
   },
   "aiDraft": {
     "title": "Redactar con IA",
@@ -19226,5 +19250,23 @@
     "description": "Dale a este evento su propio color de acento en su página pública. Déjalo vacío para usar el color de marca de tu organización que aparece abajo.",
     "color": "Color del evento",
     "usesOrg": "Este evento usa el color de marca de la organización."
+  },
+  "programDocs": {
+    "title": "Folletos (PDF)",
+    "remove": "Quitar {name}",
+    "titleLabel": "Título (se muestra en la página pública)",
+    "file": "Archivo PDF",
+    "upload": "Subir folleto",
+    "uploading": "Subiendo…",
+    "none": "Aún no hay folletos.",
+    "fileHint": "Solo PDF, hasta 10 MB, hasta 5 por patrocinador o expositor.",
+    "uploaded": "Folleto subido.",
+    "errors": {
+      "generic": "La subida falló. Inténtalo de nuevo.",
+      "no_file": "Elige un archivo PDF.",
+      "too_large": "El archivo supera los 10 MB.",
+      "unsupported_type": "Solo se aceptan archivos PDF.",
+      "too_many": "Se alcanzó el límite de 5 folletos."
+    }
   }
 }

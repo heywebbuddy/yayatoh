@@ -801,7 +801,15 @@
       "influencer": "Influencer",
       "special_guest": "Ospiti speciali"
     },
-    "featuredBadge": "In evidenza"
+    "featuredBadge": "In evidenza",
+    "sponsorPageTitle": "Sponsor",
+    "exhibitorPageTitle": "Espositore",
+    "sponsorTier": "Sponsor {tier}",
+    "video": "Video",
+    "videoTitle": "Video di {name}",
+    "contact": "Contatti",
+    "brochures": "Brochure e download",
+    "teamAtEvent": "Team all’evento"
   },
   "portal": {
     "day": "Giorno {day} · {date}",
@@ -3921,7 +3929,8 @@
       "schedule": "Un elemento per riga: 18:00 | Apertura porte | dettaglio facoltativo",
       "links": "Un link per riga: Etichetta | https://…",
       "address": "Mostrato così come è scritto, riga per riga.",
-      "videoUrl": "Incolla un link YouTube o Vimeo. Viene riprodotto nella pagina dell’evento con un player rispettoso della privacy."
+      "videoUrl": "Incolla un link YouTube o Vimeo. Viene riprodotto nella pagina dell’evento con un player rispettoso della privacy.",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=…"
     },
     "textErrors": {
       "faq_answer_missing": "La domanda {line} non ha una risposta: aggiungila nelle righe sotto.",
@@ -3976,7 +3985,8 @@
       "addLink": "Aggiungi un link",
       "preview": "Anteprima dal vivo",
       "previewEmpty": "Ancora nulla da mostrare.",
-      "untitled": "Sezione senza titolo"
+      "untitled": "Sezione senza titolo",
+      "httpsPlaceholder": "https://"
     }
   },
   "dates": {
@@ -4932,7 +4942,11 @@
       "position": "Inserisci un ordine da 1 a 99.",
       "tier": "Scegli un livello.",
       "tierInUse": "Sposta o elimina prima gli sponsor di questo livello.",
-      "capacityBelowEnrolled": "Più persone hanno già un posto. Rimuovi prima delle iscrizioni o mantieni una capienza più alta."
+      "capacityBelowEnrolled": "Più persone hanno già un posto. Rimuovi prima delle iscrizioni o mantieni una capienza più alta.",
+      "contactEmail": "Inserisci un indirizzo e-mail valido.",
+      "videoUrl": "Usa un link YouTube o Vimeo.",
+      "team": "Controlla le righe del team: ognuna richiede un nome.",
+      "unknownAccount": "Una delle e-mail del portale non è un account di questo sponsor."
     },
     "warnings": {
       "room_overlap": "{room} è prenotata anche per «{other}» in questo orario.",
@@ -4964,7 +4978,17 @@
     },
     "speakerRole": "Ruolo",
     "featured": "In evidenza",
-    "featuredHint": "Mostra per primo nel suo ruolo, con una scheda più grande"
+    "featuredHint": "Mostra per primo nel suo ruolo, con una scheda più grande",
+    "contactEmail": "Email di contatto pubblica",
+    "contactPhone": "Telefono di contatto pubblico",
+    "longDescription": "Descrizione estesa (pagina di dettaglio)",
+    "longDescriptionHint": "Mostrata nella pagina dello sponsor. Testo con **grassetto**, *corsivo*, elenchi e link.",
+    "videoUrl": "Link video (YouTube o Vimeo)",
+    "videoUrlHint": "Viene riprodotto nella pagina di dettaglio con un player rispettoso della privacy.",
+    "team": "Team all’evento",
+    "teamHint": "Una persona per riga: Nome | Ruolo | e-mail dell’account del portale (facoltativa, collega la persona all’account del portale dello sponsor).",
+    "saveTeam": "Salva il team",
+    "teamSaved": "Team salvato."
   },
   "aiDraft": {
     "title": "Scrivi con l'IA",
@@ -19226,5 +19250,23 @@
     "description": "Dai a questo evento un colore di accento proprio nella sua pagina pubblica. Lascia vuoto per usare il colore del brand della tua organizzazione indicato sotto.",
     "color": "Colore dell’evento",
     "usesOrg": "Questo evento usa il colore del brand dell’organizzazione."
+  },
+  "programDocs": {
+    "title": "Brochure (PDF)",
+    "remove": "Rimuovi {name}",
+    "titleLabel": "Titolo (mostrato nella pagina pubblica)",
+    "file": "File PDF",
+    "upload": "Carica la brochure",
+    "uploading": "Caricamento…",
+    "none": "Nessuna brochure per ora.",
+    "fileHint": "Solo PDF, fino a 10 MB, fino a 5 per sponsor o espositore.",
+    "uploaded": "Brochure caricata.",
+    "errors": {
+      "generic": "Caricamento non riuscito. Riprova.",
+      "no_file": "Scegli un file PDF.",
+      "too_large": "Il file supera i 10 MB.",
+      "unsupported_type": "Sono accettati solo file PDF.",
+      "too_many": "Raggiunto il limite di 5 brochure."
+    }
   }
 }

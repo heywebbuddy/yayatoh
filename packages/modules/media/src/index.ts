@@ -92,7 +92,18 @@ export {
   uploadSpeakerPortalFileCommand,
 } from './portal-files.ts';
 export { privateColumns } from './private-columns.ts';
+export {
+  type DocumentTarget,
+  deleteProgramDocumentCommand,
+  documentTarget,
+  ProgramDocumentDto,
+  programDocumentsQuery,
+  publicProgramDocuments,
+  readDocument,
+  uploadProgramDocument,
+} from './program-docs.ts';
 export { OWNER_TYPES, type OwnerType, SLOTS, type Slot } from './schema.ts';
+export { MAX_DOCS_PER_OWNER, PROGRAM_DOC_MAX_BYTES, PROGRAM_DOC_OWNERS } from './schema-docs.ts';
 export {
   PORTAL_FILE_PURPOSES,
   PORTAL_FILE_TYPES,

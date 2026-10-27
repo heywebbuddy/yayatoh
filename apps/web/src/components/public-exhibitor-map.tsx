@@ -66,7 +66,11 @@ export async function PublicExhibitorMapView({ slug }: { slug: string }) {
                   className="h-12 w-auto max-w-48 self-start object-contain"
                 />
               ) : null}
-              <h3 className="font-medium">{x.name}</h3>
+              <h3 className="font-medium">
+                <Link href={`/events/${slug}/exhibitors/${x.id}`} className="underline underline-offset-2">
+                  {x.name}
+                </Link>
+              </h3>
               <span className="text-caption text-ink-2">
                 {x.boothNumbers.length
                   ? t('booths', { count: x.boothNumbers.length, numbers: x.boothNumbers.join(', ') })

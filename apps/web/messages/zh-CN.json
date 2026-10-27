@@ -801,7 +801,15 @@
       "influencer": "网红 / 影响者",
       "special_guest": "特邀嘉宾"
     },
-    "featuredBadge": "重点推荐"
+    "featuredBadge": "重点推荐",
+    "sponsorPageTitle": "赞助商",
+    "exhibitorPageTitle": "参展商",
+    "sponsorTier": "{tier}赞助商",
+    "video": "视频",
+    "videoTitle": "{name} 的视频",
+    "contact": "联系方式",
+    "brochures": "宣传册与下载",
+    "teamAtEvent": "活动现场团队"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -3921,7 +3929,8 @@
       "schedule": "每行一项：18:00 | 开始入场 | 可选说明",
       "links": "每行一个链接：名称 | https://…",
       "address": "按输入原样显示，每行一行。",
-      "videoUrl": "粘贴 YouTube 或 Vimeo 链接。它将在活动页面中以注重隐私的播放器播放。"
+      "videoUrl": "粘贴 YouTube 或 Vimeo 链接。它将在活动页面中以注重隐私的播放器播放。",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=…"
     },
     "textErrors": {
       "faq_answer_missing": "问题 {line} 没有解答：请在其下方的行中添加解答。",
@@ -3976,7 +3985,8 @@
       "addLink": "添加链接",
       "preview": "实时预览",
       "previewEmpty": "暂无可预览的内容。",
-      "untitled": "未命名区块"
+      "untitled": "未命名区块",
+      "httpsPlaceholder": "https://"
     }
   },
   "dates": {
@@ -4932,7 +4942,11 @@
       "position": "请输入 1 到 99 的顺序。",
       "tier": "请选择级别。",
       "tierInUse": "请先移动或删除此级别的赞助商。",
-      "capacityBelowEnrolled": "已有更多人占用名额。请先移除报名，或保持更高的容量。"
+      "capacityBelowEnrolled": "已有更多人占用名额。请先移除报名，或保持更高的容量。",
+      "contactEmail": "请输入有效的邮箱地址。",
+      "videoUrl": "请使用 YouTube 或 Vimeo 链接。",
+      "team": "请检查团队行:每行都需要姓名。",
+      "unknownAccount": "其中一个门户邮箱不是该赞助商的账号。"
     },
     "warnings": {
       "room_overlap": "{room} 在此时间也被“{other}”占用。",
@@ -4964,7 +4978,17 @@
     },
     "speakerRole": "角色",
     "featured": "重点推荐",
-    "featuredHint": "在其角色中优先显示,并使用更大的卡片"
+    "featuredHint": "在其角色中优先显示,并使用更大的卡片",
+    "contactEmail": "公开联系邮箱",
+    "contactPhone": "公开联系电话",
+    "longDescription": "详细介绍(详情页)",
+    "longDescriptionHint": "显示在赞助商自己的页面上。支持 **加粗**、*斜体*、列表和链接。",
+    "videoUrl": "视频链接(YouTube 或 Vimeo)",
+    "videoUrlHint": "在详情页以注重隐私的播放器播放。",
+    "team": "活动现场团队",
+    "teamHint": "每行一人:姓名 | 职位 | 门户账号邮箱(可选,将此人关联到赞助商的门户账号)。",
+    "saveTeam": "保存团队",
+    "teamSaved": "团队已保存。"
   },
   "aiDraft": {
     "title": "用 AI 起草",
@@ -19226,5 +19250,23 @@
     "description": "为此活动在其公开活动页面上设置专属强调色。留空则使用下方你所在组织的品牌颜色。",
     "color": "活动颜色",
     "usesOrg": "此活动使用组织的品牌颜色。"
+  },
+  "programDocs": {
+    "title": "宣传册(PDF)",
+    "remove": "删除 {name}",
+    "titleLabel": "标题(显示在公开页面上)",
+    "file": "PDF 文件",
+    "upload": "上传宣传册",
+    "uploading": "正在上传…",
+    "none": "暂无宣传册。",
+    "fileHint": "仅限 PDF,最大 10 MB,每个赞助商或参展商最多 5 个。",
+    "uploaded": "宣传册已上传。",
+    "errors": {
+      "generic": "上传失败,请重试。",
+      "no_file": "请选择 PDF 文件。",
+      "too_large": "文件超过 10 MB。",
+      "unsupported_type": "仅接受 PDF 文件。",
+      "too_many": "已达到 5 份宣传册的上限。"
+    }
   }
 }

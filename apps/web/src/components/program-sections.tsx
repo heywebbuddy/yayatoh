@@ -233,7 +233,12 @@ export async function ProgramSections({
                     className="h-12 w-auto max-w-48 self-start object-contain"
                   />
                 ) : null}
-                <span className="font-medium">{x.name}</span>
+                <Link
+                  href={`/events/${slug}/exhibitors/${x.id}`}
+                  className="inline-flex min-h-6 items-center self-start font-medium underline underline-offset-2"
+                >
+                  {x.name}
+                </Link>
                 {x.boothLabel ? (
                   <span className="text-caption text-ink-2">{t('booth', { booth: x.boothLabel })}</span>
                 ) : null}
@@ -263,21 +268,33 @@ export async function ProgramSections({
           <h2 id="sponsors-heading" className={h2}>
             {t('sponsors')}
           </h2>
-          {program.sponsorTiers.map((tier, rank) => (
+          {program.sponsorTiers.map((tier) => (
             <section key={tier.name} aria-label={tier.name} className="flex flex-col gap-2">
               <h3 className="text-label uppercase text-ink-2">{tier.name}</h3>
-              <ul className="flex list-none flex-wrap gap-3 p-0">
+              <ul
+                className={`grid list-none gap-3 p-0 ${tier.size === 'large' ? 'grid-cols-1 sm:grid-cols-2' : tier.size === 'medium' ? 'grid-cols-2 lg:grid-cols-3' : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'}`}
+              >
                 {tier.sponsors.map((s) => (
-                  <li key={s.id} className="flex flex-col gap-1 rounded-card border border-line px-4 py-3">
+                  <li
+                    key={s.id}
+                    className={`flex flex-col gap-1 rounded-card border border-line ${tier.size === 'large' ? 'p-6' : tier.size === 'medium' ? 'px-4 py-3' : 'px-3 py-2'}`}
+                  >
                     {images[s.id] ? (
                       // Logos are sized by tier: the first tier's are the largest.
                       <MediaPicture
                         image={images[s.id] as PublicMediaDto}
                         sizes="320px"
-                        className={`${sponsorLogoClass(rank)} w-auto max-w-full self-start object-contain`}
+                        className={`${sponsorLogoClass(tier.size === 'large' ? 0 : tier.size === 'medium' ? 1 : 2)} w-auto max-w-full self-start object-contain`}
                       />
                     ) : null}
-                    {s.websiteUrl ? (
+                    {s.hasPage ? (
+                      <Link
+                        href={`/events/${slug}/sponsors/${s.id}`}
+                        className={`inline-flex min-h-6 items-center font-medium underline underline-offset-2 ${tier.size === 'large' ? 'text-card' : ''}`}
+                      >
+                        {s.name}
+                      </Link>
+                    ) : s.websiteUrl ? (
                       <a
                         href={s.websiteUrl}
                         rel="noopener noreferrer nofollow"
@@ -288,7 +305,7 @@ export async function ProgramSections({
                     ) : (
                       <span className="font-medium">{s.name}</span>
                     )}
-                    {s.description ? (
+                    {s.description && tier.size !== 'small' ? (
                       <Markdown
                         source={s.description}
                         className="flex flex-col gap-2 text-caption text-ink-2"

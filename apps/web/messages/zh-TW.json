@@ -801,7 +801,15 @@
       "influencer": "網紅 / 影響者",
       "special_guest": "特邀嘉賓"
     },
-    "featuredBadge": "重點推薦"
+    "featuredBadge": "重點推薦",
+    "sponsorPageTitle": "贊助商",
+    "exhibitorPageTitle": "參展商",
+    "sponsorTier": "{tier}贊助商",
+    "video": "影片",
+    "videoTitle": "{name} 的影片",
+    "contact": "聯絡方式",
+    "brochures": "宣傳冊與下載",
+    "teamAtEvent": "活動現場團隊"
   },
   "portal": {
     "day": "第 {day} 天 · {date}",
@@ -3921,7 +3929,8 @@
       "schedule": "每行一項：18:00 | 開放入場 | 選填說明",
       "links": "每行一個連結：名稱 | https://…",
       "address": "依輸入內容原樣顯示，一行對應一行。",
-      "videoUrl": "貼上 YouTube 或 Vimeo 連結。它會在活動頁面以注重隱私的播放器播放。"
+      "videoUrl": "貼上 YouTube 或 Vimeo 連結。它會在活動頁面以注重隱私的播放器播放。",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=…"
     },
     "textErrors": {
       "faq_answer_missing": "問題 {line} 沒有解答：請在其下方幾行加入解答。",
@@ -3976,7 +3985,8 @@
       "addLink": "新增連結",
       "preview": "即時預覽",
       "previewEmpty": "尚無可預覽的內容。",
-      "untitled": "未命名區塊"
+      "untitled": "未命名區塊",
+      "httpsPlaceholder": "https://"
     }
   },
   "dates": {
@@ -4932,7 +4942,11 @@
       "position": "請輸入 1 到 99 的順序。",
       "tier": "請選擇級別。",
       "tierInUse": "請先移動或刪除此級別的贊助商。",
-      "capacityBelowEnrolled": "已有更多人佔用名額。請先移除報名，或維持更高的容量。"
+      "capacityBelowEnrolled": "已有更多人佔用名額。請先移除報名，或維持更高的容量。",
+      "contactEmail": "請輸入有效的電子郵件地址。",
+      "videoUrl": "請使用 YouTube 或 Vimeo 連結。",
+      "team": "請檢查團隊列:每列都需要姓名。",
+      "unknownAccount": "其中一個入口電子郵件不是該贊助商的帳號。"
     },
     "warnings": {
       "room_overlap": "{room} 在此時間也被「{other}」佔用。",
@@ -4964,7 +4978,17 @@
     },
     "speakerRole": "角色",
     "featured": "重點推薦",
-    "featuredHint": "在其角色中優先顯示,並使用較大的卡片"
+    "featuredHint": "在其角色中優先顯示,並使用較大的卡片",
+    "contactEmail": "公開聯絡電子郵件",
+    "contactPhone": "公開聯絡電話",
+    "longDescription": "詳細介紹(詳情頁)",
+    "longDescriptionHint": "顯示在贊助商自己的頁面上。支援 **粗體**、*斜體*、清單和連結。",
+    "videoUrl": "影片連結(YouTube 或 Vimeo)",
+    "videoUrlHint": "在詳情頁以注重隱私的播放器播放。",
+    "team": "活動現場團隊",
+    "teamHint": "每行一人:姓名 | 職稱 | 入口帳號電子郵件(選填,將此人連結到贊助商的入口帳號)。",
+    "saveTeam": "儲存團隊",
+    "teamSaved": "團隊已儲存。"
   },
   "aiDraft": {
     "title": "用 AI 起草",
@@ -19226,5 +19250,23 @@
     "description": "為此活動在其公開活動頁面上設定專屬強調色。留空則使用下方你所屬組織的品牌顏色。",
     "color": "活動顏色",
     "usesOrg": "此活動使用組織的品牌顏色。"
+  },
+  "programDocs": {
+    "title": "宣傳冊(PDF)",
+    "remove": "刪除 {name}",
+    "titleLabel": "標題(顯示在公開頁面上)",
+    "file": "PDF 檔案",
+    "upload": "上傳宣傳冊",
+    "uploading": "正在上傳…",
+    "none": "尚無宣傳冊。",
+    "fileHint": "僅限 PDF,最大 10 MB,每個贊助商或參展商最多 5 個。",
+    "uploaded": "宣傳冊已上傳。",
+    "errors": {
+      "generic": "上傳失敗,請重試。",
+      "no_file": "請選擇 PDF 檔案。",
+      "too_large": "檔案超過 10 MB。",
+      "unsupported_type": "僅接受 PDF 檔案。",
+      "too_many": "已達到 5 份宣傳冊的上限。"
+    }
   }
 }

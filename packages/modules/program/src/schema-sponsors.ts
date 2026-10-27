@@ -279,3 +279,26 @@ export const leadLicenses = tenantTable(
     orgFk('lead_licenses_exhibitor_fk', [t.orgId, t.exhibitorId], exhibitors).onDelete('cascade'),
   ],
 );
+
+/**
+ * The sponsor's people at the event, as listed on its public page: a name and a title, optionally
+ * linked to one of the sponsor's portal accounts (no FK: portal accounts belong to a lower tier).
+ */
+export const sponsorTeamMembers = tenantTable(
+  programSchema,
+  'sponsor_team_members',
+  {
+    eventId: uuid('event_id').notNull(),
+    sponsorId: uuid('sponsor_id').notNull(),
+    name: text('name').notNull(),
+    title: text('title'),
+    accountId: uuid('account_id'),
+    position: integer('position').notNull().default(0),
+  },
+  (t) => [
+    index('sponsor_team_members_org_sponsor_idx').on(t.orgId, t.sponsorId, t.position),
+    orgFk('sponsor_team_members_sponsor_fk', [t.orgId, t.sponsorId], sponsors).onDelete('cascade'),
+    check('sponsor_team_members_name_check', sql`char_length(name) between 1 and 120`),
+    check('sponsor_team_members_title_check', sql`title is null or char_length(title) <= 120`),
+  ],
+);

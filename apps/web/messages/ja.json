@@ -801,7 +801,15 @@
       "influencer": "インフルエンサー",
       "special_guest": "スペシャルゲスト"
     },
-    "featuredBadge": "注目"
+    "featuredBadge": "注目",
+    "sponsorPageTitle": "スポンサー",
+    "exhibitorPageTitle": "出展者",
+    "sponsorTier": "{tier}スポンサー",
+    "video": "動画",
+    "videoTitle": "{name} の動画",
+    "contact": "連絡先",
+    "brochures": "パンフレットとダウンロード",
+    "teamAtEvent": "イベントのチーム"
   },
   "portal": {
     "day": "{day}日目 · {date}",
@@ -3921,7 +3929,8 @@
       "schedule": "1行に1項目: 18:00 | 開場 | 詳細（任意）",
       "links": "1行に1リンク: ラベル | https://…",
       "address": "入力したとおり、1行ずつ表示されます。",
-      "videoUrl": "YouTube または Vimeo のリンクを貼り付けます。イベントページのプライバシーに配慮したプレーヤーで再生されます。"
+      "videoUrl": "YouTube または Vimeo のリンクを貼り付けます。イベントページのプライバシーに配慮したプレーヤーで再生されます。",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=…"
     },
     "textErrors": {
       "faq_answer_missing": "質問 {line} に回答がありません。その下の行に回答を追加してください。",
@@ -3976,7 +3985,8 @@
       "addLink": "リンクを追加",
       "preview": "ライブプレビュー",
       "previewEmpty": "プレビューする内容がまだありません。",
-      "untitled": "無題のセクション"
+      "untitled": "無題のセクション",
+      "httpsPlaceholder": "https://"
     }
   },
   "dates": {
@@ -4932,7 +4942,11 @@
       "position": "1〜99の表示順を入力してください。",
       "tier": "ランクを選んでください。",
       "tierInUse": "先にこのランクのスポンサーを移動または削除してください。",
-      "capacityBelowEnrolled": "すでにそれ以上の人が席を確保しています。先に登録を取り消すか、定員を高いままにしてください。"
+      "capacityBelowEnrolled": "すでにそれ以上の人が席を確保しています。先に登録を取り消すか、定員を高いままにしてください。",
+      "contactEmail": "有効なメールアドレスを入力してください。",
+      "videoUrl": "YouTube または Vimeo のリンクを使ってください。",
+      "team": "チームの行を確認してください。各行に名前が必要です。",
+      "unknownAccount": "ポータルのメールのうち1件はこのスポンサーのアカウントではありません。"
     },
     "warnings": {
       "room_overlap": "{room}はこの時間「{other}」にも使われています。",
@@ -4964,7 +4978,17 @@
     },
     "speakerRole": "役割",
     "featured": "注目",
-    "featuredHint": "役割内で最初に、大きなカードで表示"
+    "featuredHint": "役割内で最初に、大きなカードで表示",
+    "contactEmail": "公開用連絡先メール",
+    "contactPhone": "公開用連絡先電話番号",
+    "longDescription": "詳しい説明(詳細ページ)",
+    "longDescriptionHint": "スポンサー専用ページに表示されます。**太字**、*斜体*、リスト、リンクが使えます。",
+    "videoUrl": "動画リンク(YouTube または Vimeo)",
+    "videoUrlHint": "詳細ページのプライバシーに配慮したプレーヤーで再生されます。",
+    "team": "イベントのチーム",
+    "teamHint": "1行に1人: 名前 | 肩書 | ポータルアカウントのメール(任意。スポンサーのポータルアカウントと紐付けます)。",
+    "saveTeam": "チームを保存",
+    "teamSaved": "チームを保存しました。"
   },
   "aiDraft": {
     "title": "AIで下書き",
@@ -19226,5 +19250,23 @@
     "description": "公開イベントページで、このイベント独自のアクセントカラーを使います。空欄にすると、下の組織のブランドカラーが使われます。",
     "color": "イベントカラー",
     "usesOrg": "このイベントは組織のブランドカラーを使用しています。"
+  },
+  "programDocs": {
+    "title": "パンフレット(PDF)",
+    "remove": "{name} を削除",
+    "titleLabel": "タイトル(公開ページに表示)",
+    "file": "PDF ファイル",
+    "upload": "パンフレットをアップロード",
+    "uploading": "アップロード中…",
+    "none": "パンフレットはまだありません。",
+    "fileHint": "PDF のみ、10 MB まで、スポンサーまたは出展者ごとに最大5件。",
+    "uploaded": "パンフレットをアップロードしました。",
+    "errors": {
+      "generic": "アップロードに失敗しました。もう一度お試しください。",
+      "no_file": "PDF ファイルを選択してください。",
+      "too_large": "ファイルが 10 MB を超えています。",
+      "unsupported_type": "PDF ファイルのみ使用できます。",
+      "too_many": "パンフレットの上限(5件)に達しました。"
+    }
   }
 }

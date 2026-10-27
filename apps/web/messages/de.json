@@ -801,7 +801,15 @@
       "influencer": "Influencer:innen",
       "special_guest": "Ehrengäste"
     },
-    "featuredBadge": "Hervorgehoben"
+    "featuredBadge": "Hervorgehoben",
+    "sponsorPageTitle": "Sponsor",
+    "exhibitorPageTitle": "Aussteller",
+    "sponsorTier": "{tier}-Sponsor",
+    "video": "Video",
+    "videoTitle": "Video von {name}",
+    "contact": "Kontakt",
+    "brochures": "Broschüren und Downloads",
+    "teamAtEvent": "Team vor Ort"
   },
   "portal": {
     "day": "Tag {day} · {date}",
@@ -3921,7 +3929,8 @@
       "schedule": "Ein Eintrag pro Zeile: 18:00 | Einlass | optionales Detail",
       "links": "Ein Link pro Zeile: Bezeichnung | https://…",
       "address": "Wird so angezeigt, wie sie geschrieben ist, Zeile für Zeile.",
-      "videoUrl": "Füge einen YouTube- oder Vimeo-Link ein. Er wird auf der Veranstaltungsseite in einem datenschutzfreundlichen Player abgespielt."
+      "videoUrl": "Füge einen YouTube- oder Vimeo-Link ein. Er wird auf der Veranstaltungsseite in einem datenschutzfreundlichen Player abgespielt.",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=…"
     },
     "textErrors": {
       "faq_answer_missing": "Frage {line} hat keine Antwort: Füge die Antwort in den Zeilen darunter hinzu.",
@@ -3976,7 +3985,8 @@
       "addLink": "Link hinzufügen",
       "preview": "Live-Vorschau",
       "previewEmpty": "Noch nichts zur Vorschau.",
-      "untitled": "Abschnitt ohne Titel"
+      "untitled": "Abschnitt ohne Titel",
+      "httpsPlaceholder": "https://"
     }
   },
   "dates": {
@@ -4932,7 +4942,11 @@
       "position": "Gib eine Reihenfolge von 1 bis 99 ein.",
       "tier": "Wähle eine Stufe.",
       "tierInUse": "Verschiebe oder lösche zuerst die Sponsoren dieser Stufe.",
-      "capacityBelowEnrolled": "Es haben mehr Personen einen Platz. Entferne zuerst Anmeldungen oder behalte eine höhere Kapazität."
+      "capacityBelowEnrolled": "Es haben mehr Personen einen Platz. Entferne zuerst Anmeldungen oder behalte eine höhere Kapazität.",
+      "contactEmail": "Gib eine gültige E-Mail-Adresse ein.",
+      "videoUrl": "Verwende einen YouTube- oder Vimeo-Link.",
+      "team": "Prüfe die Teamzeilen: Jede braucht einen Namen.",
+      "unknownAccount": "Eine der Portal-E-Mails gehört nicht zu einem Konto dieses Sponsors."
     },
     "warnings": {
       "room_overlap": "{room} ist zu dieser Zeit auch für „{other}“ gebucht.",
@@ -4964,7 +4978,17 @@
     },
     "speakerRole": "Rolle",
     "featured": "Hervorgehoben",
-    "featuredHint": "In seiner Rolle zuerst anzeigen, mit größerer Karte"
+    "featuredHint": "In seiner Rolle zuerst anzeigen, mit größerer Karte",
+    "contactEmail": "Öffentliche Kontakt-E-Mail",
+    "contactPhone": "Öffentliche Kontakttelefonnummer",
+    "longDescription": "Ausführliche Beschreibung (Detailseite)",
+    "longDescriptionHint": "Wird auf der eigenen Seite des Sponsors angezeigt. Text mit **fett**, *kursiv*, Listen und Links.",
+    "videoUrl": "Video-Link (YouTube oder Vimeo)",
+    "videoUrlHint": "Wird auf der Detailseite in einem datenschutzfreundlichen Player abgespielt.",
+    "team": "Team vor Ort",
+    "teamHint": "Eine Person pro Zeile: Name | Titel | E-Mail des Portalkontos (optional, verknüpft die Person mit dem Portalkonto des Sponsors).",
+    "saveTeam": "Team speichern",
+    "teamSaved": "Team gespeichert."
   },
   "aiDraft": {
     "title": "Mit KI entwerfen",
@@ -19226,5 +19250,23 @@
     "description": "Gib diesem Event eine eigene Akzentfarbe auf seiner öffentlichen Eventseite. Lass das Feld leer, um unten die Markenfarbe deiner Organisation zu verwenden.",
     "color": "Eventfarbe",
     "usesOrg": "Dieses Event verwendet die Markenfarbe der Organisation."
+  },
+  "programDocs": {
+    "title": "Broschüren (PDF)",
+    "remove": "{name} entfernen",
+    "titleLabel": "Titel (auf der öffentlichen Seite angezeigt)",
+    "file": "PDF-Datei",
+    "upload": "Broschüre hochladen",
+    "uploading": "Wird hochgeladen …",
+    "none": "Noch keine Broschüren.",
+    "fileHint": "Nur PDF, bis zu 10 MB, bis zu 5 pro Sponsor oder Aussteller.",
+    "uploaded": "Broschüre hochgeladen.",
+    "errors": {
+      "generic": "Der Upload ist fehlgeschlagen. Versuche es erneut.",
+      "no_file": "Wähle eine PDF-Datei.",
+      "too_large": "Die Datei ist größer als 10 MB.",
+      "unsupported_type": "Es werden nur PDF-Dateien akzeptiert.",
+      "too_many": "Das Limit von 5 Broschüren ist erreicht."
+    }
   }
 }

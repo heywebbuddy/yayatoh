@@ -442,7 +442,7 @@ export function SectionForm({
                     <Input
                       type="url"
                       label={t('editor.linkUrl')}
-                      placeholder="https://"
+                      placeholder={t('editor.httpsPlaceholder')}
                       maxLength={500}
                       value={row.url}
                       onChange={(e) =>
@@ -472,7 +472,7 @@ export function SectionForm({
                 type="url"
                 label={t('fields.videoUrl')}
                 hint={t('hints.videoUrl')}
-                placeholder="https://www.youtube.com/watch?v=…"
+                placeholder={t('hints.videoPlaceholder')}
                 maxLength={500}
                 value={videoUrl}
                 onChange={(e) => setVideoUrl(e.target.value)}

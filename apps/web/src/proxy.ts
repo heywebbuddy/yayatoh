@@ -293,10 +293,10 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
     if (live)
       return secure(rewrite(req, forwarded, res, `/${locale}/t/${orgId}/realtime/${live[1]}`, locale));
     // M1.4f: speaker pages stay on the org's site (another org's event is a 404 there).
-    const sp = /^\/events\/([^/]+)\/speakers\/([^/]+)\/?$/.exec(rest);
+    const sp = /^\/events\/([^/]+)\/(speakers|sponsors|exhibitors)\/([^/]+)\/?$/.exec(rest);
     if (sp)
       return secure(
-        rewrite(req, forwarded, res, `/${locale}/t/${orgId}/events/${sp[1]}/speakers/${sp[2]}`, locale),
+        rewrite(req, forwarded, res, `/${locale}/t/${orgId}/events/${sp[1]}/${sp[2]}/${sp[3]}`, locale),
       );
   }
 

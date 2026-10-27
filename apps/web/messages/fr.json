@@ -801,7 +801,15 @@
       "influencer": "Influenceurs",
       "special_guest": "Invités spéciaux"
     },
-    "featuredBadge": "À l’affiche"
+    "featuredBadge": "À l’affiche",
+    "sponsorPageTitle": "Sponsor",
+    "exhibitorPageTitle": "Exposant",
+    "sponsorTier": "Sponsor {tier}",
+    "video": "Vidéo",
+    "videoTitle": "Vidéo de {name}",
+    "contact": "Contact",
+    "brochures": "Brochures et téléchargements",
+    "teamAtEvent": "Équipe sur l’événement"
   },
   "portal": {
     "day": "Jour {day} · {date}",
@@ -3921,7 +3929,8 @@
       "schedule": "Un élément par ligne : 18:00 | Ouverture des portes | détail facultatif",
       "links": "Un lien par ligne : Libellé | https://…",
       "address": "Affichée telle quelle, ligne par ligne.",
-      "videoUrl": "Collez un lien YouTube ou Vimeo. Il est lu sur la page de l’événement dans un lecteur respectueux de la vie privée."
+      "videoUrl": "Collez un lien YouTube ou Vimeo. Il est lu sur la page de l’événement dans un lecteur respectueux de la vie privée.",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=…"
     },
     "textErrors": {
       "faq_answer_missing": "La question {line} n’a pas de réponse : ajoutez la réponse sur les lignes suivantes.",
@@ -3976,7 +3985,8 @@
       "addLink": "Ajouter un lien",
       "preview": "Aperçu en direct",
       "previewEmpty": "Rien à afficher pour l’instant.",
-      "untitled": "Section sans titre"
+      "untitled": "Section sans titre",
+      "httpsPlaceholder": "https://"
     }
   },
   "dates": {
@@ -4932,7 +4942,11 @@
       "position": "Saisissez un ordre de 1 à 99.",
       "tier": "Choisissez un niveau.",
       "tierInUse": "Déplacez ou supprimez d'abord les sponsors de ce niveau.",
-      "capacityBelowEnrolled": "Plus de personnes ont déjà une place. Retirez d'abord des inscriptions ou gardez une capacité plus élevée."
+      "capacityBelowEnrolled": "Plus de personnes ont déjà une place. Retirez d'abord des inscriptions ou gardez une capacité plus élevée.",
+      "contactEmail": "Saisissez une adresse e-mail valide.",
+      "videoUrl": "Utilisez un lien YouTube ou Vimeo.",
+      "team": "Vérifiez les lignes de l’équipe : chacune doit avoir un nom.",
+      "unknownAccount": "L’un des e-mails du portail n’est pas un compte de ce sponsor."
     },
     "warnings": {
       "room_overlap": "{room} est aussi réservée pour « {other} » à ce moment-là.",
@@ -4964,7 +4978,17 @@
     },
     "speakerRole": "Rôle",
     "featured": "À l’affiche",
-    "featuredHint": "Afficher en premier dans son rôle, avec une carte plus grande"
+    "featuredHint": "Afficher en premier dans son rôle, avec une carte plus grande",
+    "contactEmail": "E-mail de contact public",
+    "contactPhone": "Téléphone de contact public",
+    "longDescription": "Description longue (page de détail)",
+    "longDescriptionHint": "Affichée sur la page du sponsor. Texte avec **gras**, *italique*, listes et liens.",
+    "videoUrl": "Lien vidéo (YouTube ou Vimeo)",
+    "videoUrlHint": "Lue sur la page de détail dans un lecteur respectueux de la vie privée.",
+    "team": "Équipe sur l’événement",
+    "teamHint": "Une personne par ligne : Nom | Titre | e-mail du compte du portail (facultatif, relie la personne au compte du portail du sponsor).",
+    "saveTeam": "Enregistrer l’équipe",
+    "teamSaved": "Équipe enregistrée."
   },
   "aiDraft": {
     "title": "Rédiger avec l'IA",
@@ -19226,5 +19250,23 @@
     "description": "Donnez à cet événement sa propre couleur d’accent sur sa page publique. Laissez vide pour utiliser la couleur de marque de votre organisation ci-dessous.",
     "color": "Couleur de l’événement",
     "usesOrg": "Cet événement utilise la couleur de marque de l’organisation."
+  },
+  "programDocs": {
+    "title": "Brochures (PDF)",
+    "remove": "Supprimer {name}",
+    "titleLabel": "Titre (affiché sur la page publique)",
+    "file": "Fichier PDF",
+    "upload": "Téléverser la brochure",
+    "uploading": "Téléversement…",
+    "none": "Aucune brochure pour l’instant.",
+    "fileHint": "PDF uniquement, jusqu’à 10 Mo, 5 maximum par sponsor ou exposant.",
+    "uploaded": "Brochure téléversée.",
+    "errors": {
+      "generic": "Le téléversement a échoué. Réessayez.",
+      "no_file": "Choisissez un fichier PDF.",
+      "too_large": "Le fichier dépasse 10 Mo.",
+      "unsupported_type": "Seuls les fichiers PDF sont acceptés.",
+      "too_many": "La limite de 5 brochures est atteinte."
+    }
   }
 }

@@ -1,19 +1,25 @@
-import type { SponsorDto } from '@yayatoh/program';
+import { executeQuery } from '@yayatoh/kernel';
+import { programDocumentsQuery } from '@yayatoh/media';
+import { type SponsorDto, sponsorTeamQuery } from '@yayatoh/program';
 import { Button, buttonClass, Card, EmptyState, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Markdown } from '@/components/markdown.tsx';
 import { MediaUploader } from '@/components/media-uploader.tsx';
+import { ProgramDocumentsAdmin } from '@/components/program-documents-admin.tsx';
 import { type FieldSpec, ProgramForm } from '@/components/program-form.tsx';
 import { ProgramThumb } from '@/components/program-thumb.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { defaultProgramAlt } from '@/lib/program-media.ts';
 import { programMediaPanels } from '@/server/media.ts';
+import { ports } from '@/server/ports.ts';
 import { loadProgramPage } from '@/server/program.ts';
 import {
   createSponsorAction,
   createTierAction,
   deleteSponsorAction,
+  deleteSponsorDocumentAction,
   deleteTierAction,
+  setSponsorTeamAction,
   updateSponsorAction,
 } from './actions.ts';
 
@@ -25,7 +31,7 @@ export default async function SponsorsPage({
 }) {
   const { locale, org, event } = await params;
   setRequestLocale(locale);
-  const { data, program, canWrite } = await loadProgramPage(org, event, 'sponsors');
+  const { data, ev, program, canWrite } = await loadProgramPage(org, event, 'sponsors');
   const tm = await getTranslations('media');
   const logos = await programMediaPanels(
     data,
@@ -41,9 +47,25 @@ export default async function SponsorsPage({
     position: tp('errors.position'),
     tierId: tp('errors.tier'),
     websiteUrl: tp('errors.website'),
+    contactEmail: tp('errors.contactEmail'),
+    videoUrl: tp('errors.videoUrl'),
+    unknown_account: tp('errors.unknownAccount'),
+    team: tp('errors.team'),
     tier_in_use: tp('errors.tierInUse'),
     too_many: tp('errors.too_many'),
   };
+  const team = await executeQuery(sponsorTeamQuery, { eventId: ev.id }, data.ctx, ports);
+  const docs = await executeQuery(
+    programDocumentsQuery,
+    { ownerType: 'sponsor', ownerIds: program.sponsors.map((x) => x.id) },
+    data.ctx,
+    ports,
+  );
+  const teamLines = (id: string) =>
+    team
+      .filter((m) => m.sponsorId === id)
+      .map((m) => [m.name, m.title ?? '', m.accountEmail ?? ''].join(' | ').replace(/( \| )+$/, ''))
+      .join('\n');
   const tierOptions = program.sponsorTiers.map((x) => ({ value: x.id, label: x.name }));
   const fields = (s?: SponsorDto): FieldSpec[] => [
     { kind: 'select', name: 'tierId', label: tp('tier'), options: tierOptions, defaultValue: s?.tierId },
@@ -62,6 +84,44 @@ export default async function SponsorsPage({
       label: tp('description'),
       hint: tp('markdownHint'),
       defaultValue: s?.description,
+    },
+    {
+      kind: 'textarea',
+      name: 'longDescription',
+      label: tp('longDescription'),
+      hint: tp('longDescriptionHint'),
+      rows: 8,
+      defaultValue: s?.longDescription,
+    },
+    {
+      kind: 'text',
+      name: 'contactEmail',
+      label: tp('contactEmail'),
+      defaultValue: s?.contactEmail ?? undefined,
+    },
+    {
+      kind: 'text',
+      name: 'contactPhone',
+      label: tp('contactPhone'),
+      maxLength: 40,
+      defaultValue: s?.contactPhone ?? undefined,
+    },
+    {
+      kind: 'url',
+      name: 'videoUrl',
+      label: tp('videoUrl'),
+      hint: tp('videoUrlHint'),
+      defaultValue: s?.videoUrl ?? undefined,
+    },
+  ];
+  const teamFields = (id: string): FieldSpec[] => [
+    {
+      kind: 'textarea',
+      name: 'team',
+      label: tp('team'),
+      hint: tp('teamHint'),
+      rows: 4,
+      defaultValue: teamLines(id),
     },
   ];
   return (
@@ -154,6 +214,23 @@ export default async function SponsorsPage({
                                     submitLabel={tp('save')}
                                     successLabel={tp('saved')}
                                     errors={errors}
+                                  />
+                                  <ProgramForm
+                                    action={setSponsorTeamAction.bind(null, org, event, s.id)}
+                                    fields={teamFields(s.id)}
+                                    idPrefix={`sponsor-team-${s.id}`}
+                                    submitLabel={tp('saveTeam')}
+                                    successLabel={tp('teamSaved')}
+                                    errors={errors}
+                                  />
+                                  <ProgramDocumentsAdmin
+                                    orgId={data.org.id}
+                                    ownerType="sponsor"
+                                    ownerId={s.id}
+                                    docs={docs.filter((d) => d.ownerId === s.id)}
+                                    canWrite={canWrite}
+                                    remove={deleteSponsorDocumentAction.bind(null, org, event)}
+                                    idPrefix={`sponsor-docs-${s.id}`}
                                   />
                                   <MediaUploader
                                     org={org}

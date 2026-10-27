@@ -801,7 +801,15 @@
       "influencer": "Influenciadores",
       "special_guest": "Convidados especiais"
     },
-    "featuredBadge": "Em destaque"
+    "featuredBadge": "Em destaque",
+    "sponsorPageTitle": "Patrocinador",
+    "exhibitorPageTitle": "Expositor",
+    "sponsorTier": "Patrocinador {tier}",
+    "video": "Vídeo",
+    "videoTitle": "Vídeo de {name}",
+    "contact": "Contacto",
+    "brochures": "Brochuras e transferências",
+    "teamAtEvent": "Equipa no evento"
   },
   "portal": {
     "day": "Dia {day} · {date}",
@@ -3921,7 +3929,8 @@
       "schedule": "Um item por linha: 18:00 | Abertura dos portões | detalhe opcional",
       "links": "Um link por linha: Rótulo | https://…",
       "address": "Exibido como está escrito, linha por linha.",
-      "videoUrl": "Cole uma ligação do YouTube ou Vimeo. É reproduzida na página do evento num leitor que respeita a privacidade."
+      "videoUrl": "Cole uma ligação do YouTube ou Vimeo. É reproduzida na página do evento num leitor que respeita a privacidade.",
+      "videoPlaceholder": "https://www.youtube.com/watch?v=…"
     },
     "textErrors": {
       "faq_answer_missing": "A pergunta {line} não tem resposta: adicione a resposta nas linhas abaixo dela.",
@@ -3976,7 +3985,8 @@
       "addLink": "Adicionar uma ligação",
       "preview": "Pré-visualização em direto",
       "previewEmpty": "Ainda nada para pré-visualizar.",
-      "untitled": "Secção sem título"
+      "untitled": "Secção sem título",
+      "httpsPlaceholder": "https://"
     }
   },
   "dates": {
@@ -4932,7 +4942,11 @@
       "position": "Informe uma ordem de 1 a 99.",
       "tier": "Escolha uma cota.",
       "tierInUse": "Mova ou exclua primeiro os patrocinadores desta cota.",
-      "capacityBelowEnrolled": "Há mais pessoas com vaga. Remova inscrições primeiro ou mantenha uma capacidade maior."
+      "capacityBelowEnrolled": "Há mais pessoas com vaga. Remova inscrições primeiro ou mantenha uma capacidade maior.",
+      "contactEmail": "Introduza um e-mail válido.",
+      "videoUrl": "Use uma ligação do YouTube ou Vimeo.",
+      "team": "Verifique as linhas da equipa: cada uma precisa de um nome.",
+      "unknownAccount": "Um dos e-mails do portal não é uma conta deste patrocinador."
     },
     "warnings": {
       "room_overlap": "{room} também está reservada para “{other}” neste horário.",
@@ -4964,7 +4978,17 @@
     },
     "speakerRole": "Função",
     "featured": "Em destaque",
-    "featuredHint": "Mostrar primeiro na sua função, com um cartão maior"
+    "featuredHint": "Mostrar primeiro na sua função, com um cartão maior",
+    "contactEmail": "E-mail de contacto público",
+    "contactPhone": "Telefone de contacto público",
+    "longDescription": "Descrição longa (página de detalhe)",
+    "longDescriptionHint": "Mostrada na página do próprio patrocinador. Texto com **negrito**, *itálico*, listas e ligações.",
+    "videoUrl": "Ligação de vídeo (YouTube ou Vimeo)",
+    "videoUrlHint": "É reproduzido na página de detalhe num leitor que respeita a privacidade.",
+    "team": "Equipa no evento",
+    "teamHint": "Uma pessoa por linha: Nome | Cargo | e-mail da conta do portal (opcional, liga a pessoa à conta do portal do patrocinador).",
+    "saveTeam": "Guardar equipa",
+    "teamSaved": "Equipa guardada."
   },
   "aiDraft": {
     "title": "Rascunhar com IA",
@@ -19226,5 +19250,23 @@
     "description": "Dê a este evento uma cor de destaque própria na página pública dele. Deixe em branco para usar a cor da marca da sua organização, abaixo.",
     "color": "Cor do evento",
     "usesOrg": "Este evento usa a cor da marca da organização."
+  },
+  "programDocs": {
+    "title": "Brochuras (PDF)",
+    "remove": "Remover {name}",
+    "titleLabel": "Título (mostrado na página pública)",
+    "file": "Ficheiro PDF",
+    "upload": "Carregar brochura",
+    "uploading": "A carregar…",
+    "none": "Ainda sem brochuras.",
+    "fileHint": "Apenas PDF, até 10 MB, até 5 por patrocinador ou expositor.",
+    "uploaded": "Brochura carregada.",
+    "errors": {
+      "generic": "O carregamento falhou. Tente novamente.",
+      "no_file": "Escolha um ficheiro PDF.",
+      "too_large": "O ficheiro tem mais de 10 MB.",
+      "unsupported_type": "Apenas são aceites ficheiros PDF.",
+      "too_many": "Atingiu o limite de 5 brochuras."
+    }
   }
 }
