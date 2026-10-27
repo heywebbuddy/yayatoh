@@ -26,8 +26,7 @@ const VARIANT: Record<ButtonVariant, string> = {
   dark: 'bg-tag text-tag-ink hover:opacity-90 active:opacity-80',
   ghost: 'bg-transparent text-ink hover:bg-surface-3 active:bg-line',
   danger: 'border border-danger/40 bg-danger-soft text-danger hover:border-danger active:opacity-85',
-  ember:
-    'rounded-pill bg-ember text-white elevation-primary hover:brightness-110 active:brightness-95',
+  ember: 'rounded-pill bg-ember text-white elevation-primary hover:brightness-110 active:brightness-95',
   white: 'rounded-pill bg-white text-black hover:bg-white/90 active:bg-white/80',
   inverse: 'border border-white/30 bg-white/15 text-white backdrop-blur hover:bg-white/25 active:bg-white/30',
 };

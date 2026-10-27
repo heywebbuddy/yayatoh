@@ -6,6 +6,7 @@ import { and, asc, eq, exists, ilike, inArray, isNull, or, sql } from 'drizzle-o
 import { z } from 'zod';
 import { resolveCategoryTx } from '../categories.ts';
 import { EventCategoryKey, parseTags, TagError, tagKey } from '../domain/categories.ts';
+import { isDefaultDesign, parseEventDesign } from '../domain/design.ts';
 import { categoryRef, isPlatformKey } from '../domain/org-categories.ts';
 import { EventDto } from '../dto.ts';
 import { EventDetailsDto, SetEventDetailsInput } from '../dto-content.ts';
@@ -54,6 +55,7 @@ async function detailsOf(tx: TenantTx, eventId: string) {
     categoryName: c?.name ?? null,
     categoryHidden: Boolean(c?.hiddenAt),
     brandColor: e.brandColor,
+    design: parseEventDesign(e.design),
   };
 }
 
@@ -122,6 +124,8 @@ export const setEventDetailsCommand = tenantCommand({
     }
     if (input.attendanceMode !== undefined) set.attendanceMode = input.attendanceMode;
     if (input.brandColor !== undefined) set.brandColor = input.brandColor?.toLowerCase() ?? null;
+    if (input.design !== undefined)
+      set.design = input.design && !isDefaultDesign(input.design) ? input.design : null;
     if (Object.keys(set).length)
       await tx
         .update(events)

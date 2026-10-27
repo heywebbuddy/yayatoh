@@ -19396,6 +19396,59 @@
           }
         }
       }
+    },
+    "event": {
+      "playVideo": "Achtergrondvideo afspelen",
+      "pauseVideo": "Achtergrondvideo pauzeren"
     }
+  },
+  "eventDesign": {
+    "title": "Paginaontwerp",
+    "description": "Kies hoe de openbare pagina van dit evenement eruitziet: thema, koppenlettertype en de header bovenaan.",
+    "themeLabel": "Thema",
+    "theme": {
+      "classic": {
+        "title": "Klassiek licht",
+        "hint": "De vertrouwde lichte pagina."
+      },
+      "showcase": {
+        "title": "Showcase donker",
+        "hint": "Bijna zwart met rood-roze accenten."
+      }
+    },
+    "fontLabel": "Koppenlettertype",
+    "font": {
+      "modern": {
+        "title": "Modern",
+        "hint": "Strak en vriendelijk."
+      },
+      "extended": {
+        "title": "Breed",
+        "hint": "Brede, vette hoofdletters voor een posterlook."
+      },
+      "classic": {
+        "title": "Klassiek serif",
+        "hint": "Een traditioneel serif voor formele evenementen."
+      }
+    },
+    "layoutLabel": "Headerindeling",
+    "layout": {
+      "full": {
+        "title": "Beeld over de volle breedte",
+        "hint": "De omslagfoto vult de bovenkant."
+      },
+      "circle": {
+        "title": "Rond beeld",
+        "hint": "De omslagfoto in een rond kader naast de titel."
+      },
+      "video": {
+        "title": "Videoachtergrond",
+        "hint": "Een video zonder geluid, in een lus, achter de titel."
+      }
+    },
+    "videoLabel": "Link naar headervideo (YouTube of Vimeo)",
+    "videoHint": "Speelt zonder geluid en in een lus achter de titel, met een pauzeknop. Eerst verschijnt de omslagfoto, en ook als de video niet kan afspelen.",
+    "videoHintOff": "Wordt gebruikt als de headerindeling Videoachtergrond is.",
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
   }
 }

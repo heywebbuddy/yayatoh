@@ -19396,6 +19396,59 @@
           }
         }
       }
+    },
+    "event": {
+      "playVideo": "播放背景视频",
+      "pauseVideo": "暂停背景视频"
     }
+  },
+  "eventDesign": {
+    "title": "页面设计",
+    "description": "选择此活动公开页面的外观：主题、标题字体和顶部主视觉。",
+    "themeLabel": "主题",
+    "theme": {
+      "classic": {
+        "title": "经典浅色",
+        "hint": "大家熟悉的浅色页面。"
+      },
+      "showcase": {
+        "title": "展示深色",
+        "hint": "近乎纯黑，搭配红到粉的点缀色。"
+      }
+    },
+    "fontLabel": "标题字体",
+    "font": {
+      "modern": {
+        "title": "现代",
+        "hint": "简洁友好。"
+      },
+      "extended": {
+        "title": "加宽",
+        "hint": "宽幅粗体大写字母，海报风格。"
+      },
+      "classic": {
+        "title": "经典衬线",
+        "hint": "适合正式活动的传统衬线体。"
+      }
+    },
+    "layoutLabel": "主视觉布局",
+    "layout": {
+      "full": {
+        "title": "全宽图片",
+        "hint": "封面图占满顶部。"
+      },
+      "circle": {
+        "title": "圆形图片",
+        "hint": "封面图以圆形边框显示在标题旁。"
+      },
+      "video": {
+        "title": "视频背景",
+        "hint": "标题后方静音循环播放的视频。"
+      }
+    },
+    "videoLabel": "主视觉视频链接（YouTube 或 Vimeo）",
+    "videoHint": "在标题后方静音循环播放，并带有暂停按钮。会先显示封面图，视频无法播放时也显示封面图。",
+    "videoHintOff": "主视觉布局为“视频背景”时使用。",
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
   }
 }

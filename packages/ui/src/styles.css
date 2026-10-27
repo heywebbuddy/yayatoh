@@ -89,6 +89,8 @@
     var(--font-unbounded, "Unbounded"), var(--font-manrope, "Manrope"),
     var(--font-arabic, "IBM Plex Sans Arabic"), "Noto Sans JP", "Noto Sans SC", "Noto Sans TC", system-ui,
     sans-serif;
+  /* The "classic" heading choice of an event page: a system serif, nothing to download. */
+  --font-heading-classic: ui-serif, Georgia, Cambria, "Times New Roman", serif;
   --font-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, monospace;
 
   --text-display: 56px;
@@ -372,6 +374,7 @@
   --color-focus: #ff8a9b;
   --color-scrim: rgba(0, 0, 0, 0.7);
   --gradient-page: radial-gradient(60% 40% at 50% -10%, rgba(255, 49, 80, 0.28), rgba(255, 49, 80, 0) 70%);
+  --gradient-hero: radial-gradient(90% 120% at 90% 10%, #ff5d4d 0%, #c8102e 38%, #1a0508 100%);
   --gradient-ember: linear-gradient(100deg, #ff2d3d 0%, #ff6a2b 52%, #ff3d86 100%);
   --gradient-ember-soft: linear-gradient(135deg, #ff2d3d 0%, #ff4d6d 55%, #ff7a8c 100%);
   --elevation-card: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 24px 48px rgba(0, 0, 0, 0.5);
@@ -380,6 +383,17 @@
   color-scheme: dark;
   color: var(--color-ink);
   background-color: var(--color-canvas);
+}
+
+/* An organizer's heading-font choice for the event page (event branding). */
+[data-heading="extended"] :is(h1, h2) {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+[data-heading="classic"] :is(h1, h2) {
+  font-family: var(--font-heading-classic);
+  font-weight: 700;
 }
 
 @utility bg-ember {

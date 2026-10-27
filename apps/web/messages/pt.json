@@ -19396,6 +19396,59 @@
           }
         }
       }
+    },
+    "event": {
+      "playVideo": "Reproduzir o vídeo de fundo",
+      "pauseVideo": "Pausar o vídeo de fundo"
     }
+  },
+  "eventDesign": {
+    "title": "Design da página",
+    "description": "Escolha o visual da página pública deste evento: tema, fonte dos títulos e cabeçalho.",
+    "themeLabel": "Tema",
+    "theme": {
+      "classic": {
+        "title": "Clássico claro",
+        "hint": "A página clara de sempre."
+      },
+      "showcase": {
+        "title": "Showcase escuro",
+        "hint": "Quase preto com detalhes do vermelho ao rosa."
+      }
+    },
+    "fontLabel": "Fonte dos títulos",
+    "font": {
+      "modern": {
+        "title": "Moderna",
+        "hint": "Limpa e amigável."
+      },
+      "extended": {
+        "title": "Estendida",
+        "hint": "Maiúsculas largas e em negrito, com visual de cartaz."
+      },
+      "classic": {
+        "title": "Serifa clássica",
+        "hint": "Uma serifa tradicional para eventos formais."
+      }
+    },
+    "layoutLabel": "Layout do cabeçalho",
+    "layout": {
+      "full": {
+        "title": "Imagem em largura total",
+        "hint": "A imagem de capa preenche o topo."
+      },
+      "circle": {
+        "title": "Imagem circular",
+        "hint": "A imagem de capa em uma moldura redonda ao lado do título."
+      },
+      "video": {
+        "title": "Vídeo de fundo",
+        "hint": "Um vídeo sem som e em loop atrás do título."
+      }
+    },
+    "videoLabel": "Link do vídeo do cabeçalho (YouTube ou Vimeo)",
+    "videoHint": "Toca sem som e em loop atrás do título, com um botão de pausa. A imagem de capa aparece primeiro, e também se o vídeo não puder ser reproduzido.",
+    "videoHintOff": "Usado quando o layout do cabeçalho é Vídeo de fundo.",
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
   }
 }

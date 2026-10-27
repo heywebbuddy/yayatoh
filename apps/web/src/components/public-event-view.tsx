@@ -44,6 +44,8 @@ import { HolderLinkForm } from '@/components/holder-link-form.tsx';
 import { fallbackOf, MediaPicture } from '@/components/media-picture.tsx';
 import { ProgramSections } from '@/components/program-sections.tsx';
 import { EventReviews } from '@/components/reviews/event-reviews.tsx';
+import { JaggedCircle } from '@/components/showcase/hero.tsx';
+import { HeroVideo } from '@/components/showcase/hero-video.tsx';
 import { TenantAccount } from '@/components/tenant-account.tsx';
 import { ThemeSwitch } from '@/components/theme-switch.tsx';
 import { VenueGuide } from '@/components/venue-guide.tsx';
@@ -51,6 +53,7 @@ import { VenueMap } from '@/components/venue-map.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
 import { galleryLabels } from '@/lib/gallery-labels.ts';
+import { heroVideoSrc, parseHeroVideo } from '@/lib/hero-video.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
 import { aggregateRatingJsonLd, eventJsonLd, jsonLdScript } from '@/lib/seo/jsonld.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
@@ -504,12 +507,20 @@ export async function PublicEventView({
     .slice(0, 2)
     .map((w) => w[0]?.toUpperCase() ?? '')
     .join('');
+  // Organizer design options (event branding): theme, heading font, hero layout and video.
+  const showcase = ev.design.theme === 'showcase';
+  const heroVideo = ev.design.heroLayout === 'video' ? parseHeroVideo(ev.design.heroVideoUrl) : null;
+  const heroCircle = ev.design.heroLayout === 'circle';
   const navLink =
     'inline-flex min-h-10 items-center rounded-[10px] px-3 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink';
   const chip =
     'inline-flex min-h-8 items-center gap-2 rounded-pill border border-white/30 bg-surface/15 px-3 text-[13px] font-bold';
   return (
-    <div className="min-h-dvh">
+    <div
+      className={cx('min-h-dvh', showcase && 'bg-page')}
+      data-heading={ev.design.headingFont}
+      {...(showcase ? { 'data-surface': 'showcase' } : {})}
+    >
       {ev.visibility === 'public' ? (
         <script
           type="application/ld+json"
@@ -557,7 +568,18 @@ export async function PublicEventView({
         </header>
 
         <main id="main" className="flex flex-col gap-6">
-          <section className="relative isolate flex min-h-[380px] flex-col justify-end gap-4 overflow-hidden rounded-[32px] bg-hero px-6 pt-16 pb-8 text-white elevation-card md:px-10 md:pb-10">
+          <section
+            className={cx(
+              'relative isolate flex min-h-[380px] flex-col justify-end gap-4 overflow-hidden rounded-[32px] bg-hero px-6 pt-16 pb-8 text-white elevation-card md:px-10 md:pb-10',
+              heroCircle && cover && 'md:pe-[46%]',
+            )}
+          >
+            {heroCircle && cover ? (
+              <JaggedCircle
+                cover={cover}
+                className="pointer-events-none absolute end-6 top-1/2 hidden w-[min(42%,400px)] -translate-y-1/2 md:block"
+              />
+            ) : null}
             {cover ? (
               // Dimmed under a dark scrim so the white text keeps its contrast.
               <div data-testid="event-cover" className="absolute inset-0 -z-10">
@@ -580,6 +602,14 @@ export async function PublicEventView({
                 />
               </>
             )}
+            {heroVideo ? (
+              <HeroVideo
+                src={heroVideoSrc(heroVideo)}
+                title={ev.name}
+                playLabel={t('showcase.event.playVideo')}
+                pauseLabel={t('showcase.event.pauseVideo')}
+              />
+            ) : null}
             <ul aria-label={t('publicEvent.facts')} className="m-0 flex list-none flex-wrap gap-2 p-0">
               <li className={chip}>
                 <CalendarDays aria-hidden="true" className="size-3.5" strokeWidth={2.2} />

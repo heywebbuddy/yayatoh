@@ -20,6 +20,7 @@ import { routing } from './i18n/routing.ts';
 import { appLinksResponse, isAppLinksPath } from './lib/app-links.ts';
 import { captureLanding } from './lib/attribution-capture.ts';
 import { FRONT_DOOR_ROUTE_HEADER, frontDoor } from './lib/front-door/index.ts';
+import { HERO_VIDEO_FRAME_ORIGINS } from './lib/hero-video.ts';
 import { bareHost, classifyHost } from './lib/hosts.ts';
 import { INTL_SCOPE_HEADER, intlScopeOf } from './lib/intl-scope.ts';
 import { robotsHeader } from './lib/seo/robots.ts';
@@ -129,7 +130,8 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
   const nonce = generateNonce();
   // Cloudflare Turnstile's loader and challenge iframe, once the real challenge is configured.
   const turnstile = turnstileCspSources(process.env, isProductionEnv());
-  const headers = securityHeaders(pageTypeOf(stripLocale(path, routing.locales)), {
+  const pageType = pageTypeOf(stripLocale(path, routing.locales));
+  const headers = securityHeaders(pageType, {
     nonce,
     dev: process.env.NODE_ENV === 'development',
     https,
@@ -143,6 +145,8 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
       frame: [
         ...webhookPortalFrameSources(stripLocale(path, routing.locales), process.env),
         ...turnstile.frame,
+        // The event page's hero background video (YouTube no-cookie, Vimeo).
+        ...(pageType === 'public' ? HERO_VIDEO_FRAME_ORIGINS : []),
       ],
     },
   });

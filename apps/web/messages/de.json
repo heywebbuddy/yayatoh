@@ -19396,6 +19396,59 @@
           }
         }
       }
+    },
+    "event": {
+      "playVideo": "Hintergrundvideo abspielen",
+      "pauseVideo": "Hintergrundvideo anhalten"
     }
+  },
+  "eventDesign": {
+    "title": "Seitendesign",
+    "description": "Lege fest, wie die öffentliche Seite dieses Events aussieht: Thema, Überschriftenschrift und der Kopfbereich.",
+    "themeLabel": "Thema",
+    "theme": {
+      "classic": {
+        "title": "Klassisch hell",
+        "hint": "Die vertraute helle Seite."
+      },
+      "showcase": {
+        "title": "Showcase dunkel",
+        "hint": "Fast schwarz mit rot-rosa Akzenten."
+      }
+    },
+    "fontLabel": "Überschriftenschrift",
+    "font": {
+      "modern": {
+        "title": "Modern",
+        "hint": "Klar und freundlich."
+      },
+      "extended": {
+        "title": "Breit",
+        "hint": "Breite, fette Großbuchstaben für den Plakatlook."
+      },
+      "classic": {
+        "title": "Klassische Serife",
+        "hint": "Eine traditionelle Serifenschrift für festliche Events."
+      }
+    },
+    "layoutLabel": "Kopfbereich-Layout",
+    "layout": {
+      "full": {
+        "title": "Vollflächiges Bild",
+        "hint": "Das Titelbild füllt den oberen Bereich."
+      },
+      "circle": {
+        "title": "Rundes Bild",
+        "hint": "Das Titelbild in rundem Rahmen neben dem Titel."
+      },
+      "video": {
+        "title": "Videohintergrund",
+        "hint": "Ein stummes, sich wiederholendes Video hinter dem Titel."
+      }
+    },
+    "videoLabel": "Link zum Kopfbereich-Video (YouTube oder Vimeo)",
+    "videoHint": "Läuft stumm und in Schleife hinter dem Titel, mit Pause-Taste. Zuerst und bei Wiedergabefehlern erscheint das Titelbild.",
+    "videoHintOff": "Wird genutzt, wenn das Layout Videohintergrund ist.",
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
   }
 }

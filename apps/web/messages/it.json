@@ -19396,6 +19396,59 @@
           }
         }
       }
+    },
+    "event": {
+      "playVideo": "Riproduci il video di sfondo",
+      "pauseVideo": "Metti in pausa il video di sfondo"
     }
+  },
+  "eventDesign": {
+    "title": "Design della pagina",
+    "description": "Scegli l’aspetto della pagina pubblica di questo evento: tema, font dei titoli e intestazione.",
+    "themeLabel": "Tema",
+    "theme": {
+      "classic": {
+        "title": "Classico chiaro",
+        "hint": "La solita pagina chiara."
+      },
+      "showcase": {
+        "title": "Showcase scuro",
+        "hint": "Quasi nero con accenti dal rosso al rosa."
+      }
+    },
+    "fontLabel": "Font dei titoli",
+    "font": {
+      "modern": {
+        "title": "Moderno",
+        "hint": "Pulito e amichevole."
+      },
+      "extended": {
+        "title": "Esteso",
+        "hint": "Maiuscole larghe e in grassetto, in stile locandina."
+      },
+      "classic": {
+        "title": "Serif classico",
+        "hint": "Un serif tradizionale per gli eventi formali."
+      }
+    },
+    "layoutLabel": "Layout dell’intestazione",
+    "layout": {
+      "full": {
+        "title": "Immagine a tutta larghezza",
+        "hint": "L’immagine di copertina riempie la parte alta."
+      },
+      "circle": {
+        "title": "Immagine circolare",
+        "hint": "L’immagine di copertina in una cornice rotonda accanto al titolo."
+      },
+      "video": {
+        "title": "Video di sfondo",
+        "hint": "Un video muto e in loop dietro il titolo."
+      }
+    },
+    "videoLabel": "Link del video dell’intestazione (YouTube o Vimeo)",
+    "videoHint": "Viene riprodotto senza audio e in loop dietro il titolo, con un pulsante di pausa. Prima compare l’immagine di copertina, anche se il video non può partire.",
+    "videoHintOff": "Usato quando il layout dell’intestazione è Video di sfondo.",
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
   }
 }

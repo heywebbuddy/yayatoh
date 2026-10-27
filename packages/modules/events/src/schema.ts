@@ -6,6 +6,7 @@ import {
   foreignKey,
   index,
   integer,
+  jsonb,
   pgSchema,
   text,
   timestamp,
@@ -90,9 +91,15 @@ export const events = tenantTable(
      * pages, over the org's brand kit. Null: the org's colour.
      */
     brandColor: text('brand_color'),
+    /**
+     * Organizer design options for the public page (theme, heading font, hero layout, hero video
+     * link); see `domain/design.ts`. Null: the classic default.
+     */
+    design: jsonb('design'),
   },
   (t) => [
     uniqueIndex('events_slug_key').on(t.slug),
+    check('events_design_check', sql`design is null or jsonb_typeof(design) = 'object'`),
     check('events_brand_color_check', sql`brand_color is null or brand_color ~ '^#[0-9a-f]{6}$'`),
     index('events_org_id_starts_at_idx').on(t.orgId, t.startsAt),
     check('events_status_check', inList('status', EVENT_STATUSES)),

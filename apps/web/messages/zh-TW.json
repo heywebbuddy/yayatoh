@@ -19396,6 +19396,59 @@
           }
         }
       }
+    },
+    "event": {
+      "playVideo": "播放背景影片",
+      "pauseVideo": "暫停背景影片"
     }
+  },
+  "eventDesign": {
+    "title": "頁面設計",
+    "description": "選擇此活動公開頁面的外觀：主題、標題字體與頂部主視覺。",
+    "themeLabel": "主題",
+    "theme": {
+      "classic": {
+        "title": "經典淺色",
+        "hint": "大家熟悉的淺色頁面。"
+      },
+      "showcase": {
+        "title": "展示深色",
+        "hint": "近乎純黑，搭配紅到粉的點綴色。"
+      }
+    },
+    "fontLabel": "標題字體",
+    "font": {
+      "modern": {
+        "title": "現代",
+        "hint": "簡潔友善。"
+      },
+      "extended": {
+        "title": "加寬",
+        "hint": "寬幅粗體大寫字母，海報風格。"
+      },
+      "classic": {
+        "title": "經典襯線",
+        "hint": "適合正式活動的傳統襯線體。"
+      }
+    },
+    "layoutLabel": "主視覺版面",
+    "layout": {
+      "full": {
+        "title": "全寬圖片",
+        "hint": "封面圖佔滿頂部。"
+      },
+      "circle": {
+        "title": "圓形圖片",
+        "hint": "封面圖以圓形邊框顯示在標題旁。"
+      },
+      "video": {
+        "title": "影片背景",
+        "hint": "標題後方靜音循環播放的影片。"
+      }
+    },
+    "videoLabel": "主視覺影片連結（YouTube 或 Vimeo）",
+    "videoHint": "在標題後方靜音循環播放，並附有暫停按鈕。會先顯示封面圖，影片無法播放時也顯示封面圖。",
+    "videoHintOff": "主視覺版面為「影片背景」時使用。",
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
   }
 }

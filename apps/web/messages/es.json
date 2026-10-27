@@ -19396,6 +19396,59 @@
           }
         }
       }
+    },
+    "event": {
+      "playVideo": "Reproducir el vídeo de fondo",
+      "pauseVideo": "Pausar el vídeo de fondo"
     }
+  },
+  "eventDesign": {
+    "title": "Diseño de la página",
+    "description": "Elige cómo se ve la página pública de este evento: el tema, la fuente de los títulos y la cabecera.",
+    "themeLabel": "Tema",
+    "theme": {
+      "classic": {
+        "title": "Clásico claro",
+        "hint": "La página clara de siempre."
+      },
+      "showcase": {
+        "title": "Showcase oscuro",
+        "hint": "Casi negro con acentos de rojo a rosa."
+      }
+    },
+    "fontLabel": "Fuente de los títulos",
+    "font": {
+      "modern": {
+        "title": "Moderna",
+        "hint": "Limpia y cercana."
+      },
+      "extended": {
+        "title": "Extendida",
+        "hint": "Mayúsculas anchas y negritas, con aire de cartel."
+      },
+      "classic": {
+        "title": "Serif clásica",
+        "hint": "Una serif tradicional para eventos formales."
+      }
+    },
+    "layoutLabel": "Diseño de la cabecera",
+    "layout": {
+      "full": {
+        "title": "Imagen a todo el ancho",
+        "hint": "La imagen de portada ocupa la parte superior."
+      },
+      "circle": {
+        "title": "Imagen circular",
+        "hint": "La imagen de portada en un marco redondo junto al título."
+      },
+      "video": {
+        "title": "Vídeo de fondo",
+        "hint": "Un vídeo sin sonido y en bucle detrás del título."
+      }
+    },
+    "videoLabel": "Enlace del vídeo de cabecera (YouTube o Vimeo)",
+    "videoHint": "Se reproduce sin sonido y en bucle detrás del título, con un botón de pausa. Se muestra antes la imagen de portada, y también si el vídeo no puede reproducirse.",
+    "videoHintOff": "Se usa cuando el diseño de la cabecera es Vídeo de fondo.",
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
   }
 }

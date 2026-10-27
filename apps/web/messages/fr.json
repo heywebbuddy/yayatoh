@@ -19396,6 +19396,59 @@
           }
         }
       }
+    },
+    "event": {
+      "playVideo": "Lire la vidéo d’arrière-plan",
+      "pauseVideo": "Mettre en pause la vidéo d’arrière-plan"
     }
+  },
+  "eventDesign": {
+    "title": "Design de la page",
+    "description": "Choisissez l’aspect de la page publique de cet événement : thème, police des titres et en-tête.",
+    "themeLabel": "Thème",
+    "theme": {
+      "classic": {
+        "title": "Classique clair",
+        "hint": "La page claire habituelle."
+      },
+      "showcase": {
+        "title": "Showcase sombre",
+        "hint": "Presque noir avec des accents du rouge au rose."
+      }
+    },
+    "fontLabel": "Police des titres",
+    "font": {
+      "modern": {
+        "title": "Moderne",
+        "hint": "Nette et conviviale."
+      },
+      "extended": {
+        "title": "Étendue",
+        "hint": "Des majuscules larges et grasses, pour un style affiche."
+      },
+      "classic": {
+        "title": "Serif classique",
+        "hint": "Une serif traditionnelle pour les événements formels."
+      }
+    },
+    "layoutLabel": "Disposition de l’en-tête",
+    "layout": {
+      "full": {
+        "title": "Image pleine largeur",
+        "hint": "L’image de couverture occupe le haut de la page."
+      },
+      "circle": {
+        "title": "Image ronde",
+        "hint": "L’image de couverture dans un cadre rond à côté du titre."
+      },
+      "video": {
+        "title": "Vidéo en arrière-plan",
+        "hint": "Une vidéo muette en boucle derrière le titre."
+      }
+    },
+    "videoLabel": "Lien de la vidéo d’en-tête (YouTube ou Vimeo)",
+    "videoHint": "Lue sans son et en boucle derrière le titre, avec un bouton pause. L’image de couverture s’affiche d’abord, et si la vidéo ne peut pas être lue.",
+    "videoHintOff": "Utilisé lorsque la disposition de l’en-tête est Vidéo en arrière-plan.",
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
   }
 }

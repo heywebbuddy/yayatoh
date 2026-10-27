@@ -19396,6 +19396,59 @@
           }
         }
       }
+    },
+    "event": {
+      "playVideo": "Play background video",
+      "pauseVideo": "Pause background video"
     }
+  },
+  "eventDesign": {
+    "title": "Page design",
+    "description": "Choose how this event’s public page looks: its theme, heading font and the hero at the top.",
+    "themeLabel": "Theme",
+    "theme": {
+      "classic": {
+        "title": "Classic light",
+        "hint": "The familiar light page."
+      },
+      "showcase": {
+        "title": "Showcase dark",
+        "hint": "Near-black with red-to-pink accents."
+      }
+    },
+    "fontLabel": "Heading font",
+    "font": {
+      "modern": {
+        "title": "Modern",
+        "hint": "Clean and friendly."
+      },
+      "extended": {
+        "title": "Extended",
+        "hint": "Wide, bold capitals for a poster look."
+      },
+      "classic": {
+        "title": "Classic serif",
+        "hint": "A traditional serif for formal events."
+      }
+    },
+    "layoutLabel": "Hero layout",
+    "layout": {
+      "full": {
+        "title": "Full-bleed image",
+        "hint": "The cover image fills the top."
+      },
+      "circle": {
+        "title": "Circle image",
+        "hint": "The cover image in a round frame beside the title."
+      },
+      "video": {
+        "title": "Video background",
+        "hint": "A muted, looping video behind the title."
+      }
+    },
+    "videoLabel": "Hero video link (YouTube or Vimeo)",
+    "videoHint": "Plays muted and looping behind the title, with a pause button. The cover image shows first, and if the video cannot play.",
+    "videoHintOff": "Used when the hero layout is Video background.",
+    "videoPlaceholder": "https://www.youtube.com/watch?v=…"
   }
 }

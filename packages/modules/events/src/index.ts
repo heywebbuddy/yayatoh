@@ -93,6 +93,15 @@ export {
   tagKey,
 } from './domain/categories.ts';
 export { ANNOUNCEMENT_AUDIENCES, SECTION_KINDS, type SectionKind } from './domain/content-kinds.ts';
+export {
+  DEFAULT_EVENT_DESIGN,
+  EVENT_THEMES,
+  EventDesign,
+  HEADING_FONTS,
+  HERO_LAYOUTS,
+  isDefaultDesign,
+  parseEventDesign,
+} from './domain/design.ts';
 export { EVENT_TRANSITIONS, type EventTransition, eventLifecycle, slugify } from './domain/lifecycle.ts';
 export {
   type MdBlock,
