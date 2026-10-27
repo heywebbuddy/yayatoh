@@ -1030,7 +1030,8 @@
     "manageCategories": "Gérer les catégories (s’ouvre dans un nouvel onglet)",
     "refreshCategories": "Actualiser la liste des catégories",
     "refreshingCategories": "Actualisation…",
-    "withAi": "Créer avec l’IA"
+    "withAi": "Créer avec l’IA",
+    "endsHint": "Obligatoire. Rempli deux heures après le début ; modifiez-le si l’événement dure plus longtemps."
   },
   "tickets": {
     "subtitle": "Types de billets, prix et stock. Tous les prix affichés aux acheteurs incluent les frais.",
@@ -5161,7 +5162,8 @@
       "title": "Nouveau lieu",
       "save": "Enregistrer et sélectionner le lieu",
       "cancel": "Annuler"
-    }
+    },
+    "endsHint": "Obligatoire. Rempli deux heures après le début ; modifiez-le si l’événement dure plus longtemps."
   },
   "eventMedia": {
     "title": "Images",
@@ -7245,7 +7247,8 @@
     "placement": {
       "home": "Page d'accueil : pourquoi Yayatoh",
       "features": "Page des fonctionnalités",
-      "contact": "Page de contact"
+      "contact": "Page de contact",
+      "testimonials": "Accueil : témoignages"
     },
     "fields": {
       "placement": "Page",
@@ -19975,5 +19978,122 @@
     "link": "Réserver une place sur plusieurs dates à la fois",
     "unavailableTitle": "Les places par date ne sont pas disponibles",
     "unavailableDescription": "Il faut au moins deux dates à venir ayant chacune son plan de salle. Choisissez plutôt une date sur la page de l’événement."
+  },
+  "homeSections": {
+    "blog": {
+      "title": "Les dernières du blog",
+      "all": "Tous les articles"
+    },
+    "testimonials": {
+      "title": "Ce que disent les organisateurs"
+    },
+    "how": {
+      "title": "Comment ça marche",
+      "s1": {
+        "title": "Créez votre événement",
+        "desc": "Ajoutez les détails, les dates et les types de billets, ou laissez l’IA proposer un brouillon à relire."
+      },
+      "s2": {
+        "title": "Publiez et vendez",
+        "desc": "Partagez un seul lien. Les acheteurs voient le prix complet, frais compris, dès le premier écran."
+      },
+      "s3": {
+        "title": "Accueillez vos invités",
+        "desc": "Placez-les, écrivez-leur et scannez les billets à l’entrée."
+      },
+      "s4": {
+        "title": "Apprenez des chiffres",
+        "desc": "Suivez les ventes et la fréquentation en direct, puis voyez ce qui a marché."
+      }
+    },
+    "features": {
+      "title": "Tout pour organiser des événements en direct",
+      "ticketing": {
+        "title": "Billetterie",
+        "desc": "Billets gratuits et payants, codes promo, tarifs early bird et frais affichés d’emblée."
+      },
+      "seating": {
+        "title": "Placement",
+        "desc": "Plans de salle, tables et plans de places que les invités choisissent ou retrouvent le jour J."
+      },
+      "checkin": {
+        "title": "Contrôle d’entrée",
+        "desc": "Scannez les billets à l’entrée avec les arrivées en direct et une file d’aide."
+      },
+      "networking": {
+        "title": "Réseautage",
+        "desc": "Profils des participants, rendez-vous et messagerie pour conférences et communautés."
+      },
+      "ai": {
+        "title": "Assistance IA",
+        "desc": "Créez un événement à partir d’une phrase et laissez un assistant répondre aux participants."
+      },
+      "sponsors": {
+        "title": "Sponsors et exposants",
+        "desc": "Formules, logos, stands et les contacts qu’ils collectent."
+      },
+      "analytics": {
+        "title": "Analyses",
+        "desc": "Rapports de ventes, de fréquentation et de campagnes au même endroit."
+      }
+    },
+    "stats": {
+      "events": "Événements publiés",
+      "organizers": "Organisateurs"
+    },
+    "trusted": {
+      "title": "Ils nous font confiance"
+    },
+    "faq": {
+      "title": "Vos questions, nos réponses",
+      "q1": "Combien coûte Yayatoh ?",
+      "a1": "Il n’y a actuellement ni frais de plateforme par billet ni abonnement. Voir la page des tarifs.",
+      "q2": "Les acheteurs voient-ils le prix complet ?",
+      "a2": "Oui. Les prix incluent tous les frais, du premier écran au paiement.",
+      "q3": "Puis-je organiser des mariages et des conférences ?",
+      "a3": "Oui. Chaque type d’événement démarre avec les outils nécessaires : listes d’invités et réponses, ou inscription, sessions et badges.",
+      "q4": "Comment les invités entrent-ils ?",
+      "a4": "Les billets sont envoyés par e-mail avec un code. L’équipe les scanne avec l’application, même avec une connexion faible.",
+      "q5": "Puis-je essayer d’abord ?",
+      "a5": "Créez un compte et préparez un brouillon. Rien n’est publié tant que vous ne le décidez pas."
+    },
+    "cta": {
+      "title": "Prêt pour votre prochain événement ?",
+      "lede": "Créez votre événement dès aujourd’hui et vendez votre premier billet en quelques minutes.",
+      "button": "Créer un événement"
+    }
+  },
+  "pages": {
+    "toc": "Sur cette page",
+    "cta": {
+      "title": "Une autre question ?",
+      "lede": "Notre équipe répond sous un jour ouvré.",
+      "button": "Nous contacter"
+    },
+    "eyebrow": {
+      "help": "Centre d’aide",
+      "contact": "Contact",
+      "features": "Fonctionnalités",
+      "status": "État",
+      "blog": "Blog"
+    },
+    "channel": {
+      "form": {
+        "title": "Écrivez-nous",
+        "desc": "Envoyez un message à l’équipe, nous répondons par e-mail."
+      },
+      "help": {
+        "title": "Centre d’aide",
+        "desc": "Guides pour organisateurs et acheteurs, avec recherche."
+      },
+      "status": {
+        "title": "État du service",
+        "desc": "Vérifiez si tout fonctionne en ce moment."
+      }
+    },
+    "notFound": {
+      "events": "Parcourir les événements",
+      "help": "Centre d’aide"
+    }
   }
 }

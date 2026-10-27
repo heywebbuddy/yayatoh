@@ -215,6 +215,47 @@ const FAQS: Record<Kind, [string, string][]> = {
   ],
 };
 
+const FILLER = new Set([
+  'a',
+  'an',
+  'the',
+  'one',
+  'two',
+  'three',
+  'four',
+  'five',
+  'day',
+  'days',
+  'small',
+  'big',
+  'large',
+  'nice',
+  'our',
+  'my',
+  'new',
+  'weekend',
+  'and',
+  'for',
+  'with',
+  'of',
+]);
+
+/** A short event name, not the prompt: "Goa Wedding", "Pune Developer Conference". */
+function shortName(text: string, kind: Kind, label: string, city: string): string {
+  const re = KEYWORDS.find(([k]) => k === kind)?.[1];
+  const m = re ? re.exec(text) : null;
+  const before = m
+    ? text
+        .slice(0, m.index)
+        .split(/[\s,]+/)
+        .filter(Boolean)
+    : [];
+  const mods = before
+    .slice(-2)
+    .filter((w) => !FILLER.has(w.toLowerCase()) && !/^\d|-day$/i.test(w) && /^[\p{L}]+$/u.test(w));
+  return titleCase([city, ...mods, label].filter(Boolean).join(' ')).slice(0, 80);
+}
+
 export interface RuleBasedSetup {
   readonly name: string;
   readonly tagline: string;
@@ -243,7 +284,7 @@ export function ruleBasedSetup(brief: string, today: string, allowed: readonly s
     addMinutesLocal(startsLocal, 180) ??
     startsLocal;
   const label = LABEL[kind];
-  const name = titleCase(text.replace(/[.!?]+$/, '')).slice(0, 80) || titleCase(label);
+  const name = shortName(text, kind, label, city);
   const where = city ? ` in ${city}` : '';
   const span = days > 1 ? `${days}-day ` : '';
   const description = [
@@ -260,7 +301,7 @@ export function ruleBasedSetup(brief: string, today: string, allowed: readonly s
       minutes: 45,
     }))
     // Every item must sit inside the first day's hours.
-    .filter((a) => addMinutesLocal(a.startsLocal, a.minutes)! <= endsLocal);
+    .filter((a) => (addMinutesLocal(a.startsLocal, a.minutes) ?? endsLocal) <= endsLocal);
   return {
     name,
     tagline: `A ${span}${label}${where}.`,

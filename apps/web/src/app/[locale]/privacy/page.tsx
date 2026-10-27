@@ -1,6 +1,6 @@
-import { Label, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { PageCta, PageHero } from '@/components/showcase/page-hero.tsx';
 import { PRIVACY_SECTIONS, PRIVACY_UPDATED } from '@/content/sub-processors.ts';
 import { Link } from '@/i18n/navigation.ts';
 
@@ -23,11 +23,11 @@ export default async function PrivacyNoticePage({ params }: { params: Promise<{ 
   setRequestLocale(locale);
   const t = await getTranslations('privacyNotice');
   return (
-    <main id="main" className="mx-auto flex min-h-dvh max-w-2xl flex-col gap-6 px-6 py-16">
-      <PageHeader
-        eyebrow={<Label>{t('eyebrow')}</Label>}
+    <main id="main" className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 px-4 py-6 md:px-6">
+      <PageHero
+        eyebrow={t('eyebrow')}
         title={t('title')}
-        description={t('updated', {
+        lede={t('updated', {
           date: new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'UTC' }).format(
             new Date(`${PRIVACY_UPDATED}T00:00:00Z`),
           ),
@@ -53,6 +53,7 @@ export default async function PrivacyNoticePage({ params }: { params: Promise<{ 
           {t('subProcessorsLink')}
         </Link>
       </p>
+      <PageCta />
     </main>
   );
 }

@@ -131,9 +131,23 @@ function fakeCompose(req: ComposeRequest): unknown {
       return { sessions };
     }
     case 'assistant': {
-      const best = rankSources(req.brief, req.sources)[0];
-      return best
-        ? { known: true, answer: cutWords(best.text, 300), sources: [best.id] }
+      // A two-part question gets the best source for each part.
+      const parts = req.brief
+        .split(/\?|;|,|&|\band\b|\bplus\b|\bor\b/i)
+        .map((x) => x.trim())
+        .filter((x) => x.length > 2);
+      const picked = new Map<string, (typeof req.sources)[number]>();
+      for (const part of parts.length > 1 ? parts : [req.brief]) {
+        const top = rankSources(part, req.sources)[0];
+        if (top) picked.set(top.id, top);
+      }
+      const best = [...picked.values()].slice(0, 3);
+      return best.length > 0
+        ? {
+            known: true,
+            answer: best.map((x) => cutWords(x.text, 300)).join(' '),
+            sources: best.map((x) => x.id),
+          }
         : { known: false, answer: '', sources: [] };
     }
     case 'event_setup':

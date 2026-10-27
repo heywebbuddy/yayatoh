@@ -44,7 +44,17 @@ export async function askAssistantAction(slug: string, question: string): Promis
   const drafter = aiDrafter();
   if (!drafter) {
     // AI is off: answer by keyword from the event's FAQs, agenda, times and tickets, and cite it.
-    const best = rankSources(q, knowledge.sources).slice(0, 2);
+    // A two-part question ("when and where?") gets an answer for each part, each from its best source.
+    const parts = q
+      .split(/\?|;|,|&|\band\b|\bplus\b|\bor\b/i)
+      .map((x) => x.trim())
+      .filter((x) => x.length > 2);
+    const picked = new Map<string, (typeof knowledge.sources)[number]>();
+    for (const part of parts.length > 1 ? parts : [q]) {
+      const top = rankSources(part, knowledge.sources)[0];
+      if (top) picked.set(top.id, top);
+    }
+    const best = [...picked.values()].slice(0, 3);
     return {
       kind: 'answer',
       mode: 'search',

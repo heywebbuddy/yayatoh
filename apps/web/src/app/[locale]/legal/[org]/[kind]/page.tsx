@@ -1,7 +1,8 @@
 import { LEGAL_PAGE_KINDS, type LegalPageKind, publicLegalPage } from '@yayatoh/tenancy';
-import { Label, PageHeader } from '@yayatoh/ui';
+import { Scale } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { PageHero, Toc, type TocItem } from '@/components/showcase/page-hero.tsx';
 import { PLATFORM_LEGAL } from '@/content/platform-legal.ts';
 import { Link } from '@/i18n/navigation.ts';
 
@@ -36,12 +37,25 @@ export default async function LegalPage({
     body = page.body;
     updated = page.updatedAt;
   }
+  const paras = body
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  // A short line without closing punctuation is a section heading: those feed the contents list.
+  const isHeading = (p: string) => p.length <= 80 && !p.includes('\n') && !/[.:;,]$/.test(p);
+  const toc: TocItem[] = [];
+  const blocks = paras.map((p, i) => {
+    const heading = isHeading(p);
+    if (heading) toc.push({ id: `section-${i}`, title: p.replace(/^\d+[.)]\s*/, '') });
+    return { p, id: `section-${i}`, heading };
+  });
   return (
-    <main id="main" className="mx-auto flex min-h-dvh max-w-2xl flex-col gap-6 px-6 py-16">
-      <PageHeader
-        eyebrow={<Label>{eyebrow}</Label>}
+    <main id="main" className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col gap-8 px-4 py-6 md:px-6">
+      <PageHero
+        eyebrow={eyebrow}
         title={title}
-        description={
+        icon={Scale}
+        lede={
           updated
             ? t('legal.updated', {
                 date: new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(updated),
@@ -49,12 +63,23 @@ export default async function LegalPage({
             : undefined
         }
       />
-      <div className="flex flex-col gap-4 text-body">
-        {body.split(/\n{2,}/).map((para, i) => (
-          <p key={i} className="whitespace-pre-line">
-            {para}
-          </p>
-        ))}
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[240px_minmax(0,1fr)]">
+        <Toc items={toc} />
+        <div
+          className={`flex max-w-[68ch] flex-col gap-4 text-[17px] leading-8 ${toc.length < 3 ? 'lg:col-span-2' : ''}`}
+        >
+          {blocks.map((b) =>
+            b.heading && toc.length >= 3 ? (
+              <h2 key={b.id} id={b.id} className="mt-4 scroll-mt-24 text-[22px] leading-snug font-extrabold">
+                {b.p}
+              </h2>
+            ) : (
+              <p key={b.id} className="whitespace-pre-line">
+                {b.p}
+              </p>
+            ),
+          )}
+        </div>
       </div>
       {org !== 'platform' && kind === 'privacy' ? (
         // M6.1c: the person's own data-subject request (a copy, or erasure).

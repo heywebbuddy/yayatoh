@@ -1,9 +1,12 @@
 import { HELP_AUDIENCES } from '@yayatoh/cms';
 import { EmptyState } from '@yayatoh/ui';
+import { LifeBuoy } from 'lucide-react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { CategoryGrid, HelpShell } from '@/components/help/help-views.tsx';
+import { HomeFaq } from '@/components/showcase/home-sections.tsx';
+import { PageCta, PageHero } from '@/components/showcase/page-hero.tsx';
 import { cachedHelpCenter, platformContentOrg } from '@/server/help.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { requestHost } from '@/server/request-origin.ts';
@@ -34,13 +37,11 @@ export default async function HelpCenter({ params }: Props) {
   const org = await platformContentOrg(await requestHost());
   if (!org) notFound();
   const t = await getTranslations('help');
+  const tp = await getTranslations('pages');
   const center = await cachedHelpCenter(org.orgId, locale);
   return (
     <HelpShell locale={locale} crumbs={[]}>
-      <header className="flex flex-col gap-2">
-        <h1 className="text-[40px] leading-tight font-extrabold tracking-[-0.04em]">{t('title')}</h1>
-        <p className="max-w-2xl text-[17px] text-ink-2">{t('lede')}</p>
-      </header>
+      <PageHero eyebrow={tp('eyebrow.help')} title={t('title')} lede={t('lede')} icon={LifeBuoy} />
       {center.categories.length === 0 ? (
         <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
       ) : (
@@ -57,6 +58,8 @@ export default async function HelpCenter({ params }: Props) {
           );
         })
       )}
+      <HomeFaq />
+      <PageCta />
     </HelpShell>
   );
 }
