@@ -113,6 +113,31 @@ describe('CMS entries (M1.4g)', () => {
     expect((await publicEntries(a.org.id, 'post')).items.some((i) => i.title.includes('Bravo'))).toBe(false);
   });
 
+  it('an organization cannot edit, publish or delete another organization’s posts', async () => {
+    const mine = await create({ title: 'Isolation check' });
+    const theirs = await create({ title: 'Bravo private draft' }, b.ctx());
+    // B's owner reaches neither A's post nor, from A, B's: every write is a not_found.
+    await expect(
+      executeCommand(updateEntryCommand, { entryId: mine.id, title: 'Hijacked' } as never, b.ctx(), ports),
+    ).rejects.toMatchObject({ code: 'not_found' });
+    await expect(status(mine.id, 'publish', b.ctx())).rejects.toMatchObject({ code: 'not_found' });
+    await expect(
+      executeCommand(deleteEntryCommand, { entryId: mine.id }, b.ctx(), ports),
+    ).rejects.toMatchObject({ code: 'not_found' });
+    await expect(
+      executeCommand(updateEntryCommand, { entryId: theirs.id, title: 'Hijacked' } as never, a.ctx(), ports),
+    ).rejects.toMatchObject({ code: 'not_found' });
+    // Both posts are exactly as their owners left them, and each org lists only its own.
+    expect((await executeQuery(getEntryQuery, { entryId: mine.id }, a.ctx(), ports)).title).toBe(
+      'Isolation check',
+    );
+    expect((await executeQuery(getEntryQuery, { entryId: theirs.id }, b.ctx(), ports)).title).toBe(
+      'Bravo private draft',
+    );
+    const listA = await executeQuery(listEntriesQuery, {}, a.ctx(), ports);
+    expect(listA.some((e) => e.id === theirs.id)).toBe(false);
+  });
+
   it('every write is audited and publishing emits cms.post_published@1', async () => {
     const rows = await withTenant(a.ctx(), (tx) =>
       tx.execute<{ action: string }>(
