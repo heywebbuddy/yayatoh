@@ -512,6 +512,30 @@ export const orderTransfersQuery = tenantQuery({
   handler: ({ input, ctx, tx }) => transfersWhereTx(tx, ctx.now, eq(ticketTransfers.orderId, input.orderId)),
 });
 
+/**
+ * The open offers of an order (tickets sent to a named person, waiting to be claimed), each with
+ * its claim link token: the buyer shows or re-shares it (copy, WhatsApp). The token is derived,
+ * never stored.
+ */
+export async function pendingOffersForOrderTx(tx: TenantTx, orderId: string) {
+  const rows = await tx
+    .select({
+      ticketId: ticketTransfers.ticketId,
+      toName: ticketTransfers.toName,
+      toEmail: ticketTransfers.toEmail,
+      claimId: ticketTransfers.claimId,
+    })
+    .from(ticketTransfers)
+    .where(and(eq(ticketTransfers.orderId, orderId), eq(ticketTransfers.status, 'pending')))
+    .orderBy(ticketTransfers.createdAt);
+  return rows.map((r) => ({
+    ticketId: r.ticketId,
+    toName: r.toName,
+    toEmail: r.toEmail,
+    claimToken: signLinkToken(TRANSFER_CLAIM_PURPOSE, r.claimId),
+  }));
+}
+
 /** Transfers of an order for other modules (timeline, dispute evidence). */
 export const transfersForOrderTx = (tx: TenantTx, orderId: string, now: Date) =>
   transfersWhereTx(tx, now, eq(ticketTransfers.orderId, orderId));

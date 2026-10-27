@@ -19212,5 +19212,26 @@
     "downloadPdf": "下載收據（PDF）",
     "backToOrder": "返回我的訂單",
     "view": "查看收據"
+  },
+  "nameHolders": {
+    "title": "誰要參加？把票分別寄給每個人",
+    "ticket": "第 {serial} 號票 · {type}",
+    "intro": "只需一次填寫每位客人的姓名和信箱。每個人都會收到一封郵件領取自己的票券，因此人人都有獨立的 QR 碼。您也可以複製連結或透過 WhatsApp 分享。留空的一列表示該票由您自己保留。",
+    "name": "姓名",
+    "email": "信箱",
+    "submit": "寄送票券",
+    "ownEmailHint": "在某一列填寫您自己的信箱，只會更改您這張票上的姓名。",
+    "sentTo": "已寄給 {name}（{email}），等待對方領取。",
+    "copyLink": "複製連結",
+    "copied": "已複製",
+    "whatsapp": "透過 WhatsApp 分享",
+    "whatsappMessage": "這是您的票券：{url}",
+    "changeHint": "在下方填寫其他姓名或信箱並重新寄送，即可更換接收人。",
+    "nothingEntered": "請至少填寫一個姓名和信箱。",
+    "incomplete": "每一列都需要同時填寫姓名和信箱。",
+    "feeRequired": "該票需要支付轉讓費，請在該票自己的頁面寄送。",
+    "sameHolder": "該聯絡人已持有這張票。",
+    "notAllowed": "這張票無法寄給他人（轉讓已截止或不被允許）。",
+    "done": "完成。每個人都已透過郵件收到自己的票券。"
   }
 }

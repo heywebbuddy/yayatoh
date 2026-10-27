@@ -19212,5 +19212,26 @@
     "downloadPdf": "Beleg herunterladen (PDF)",
     "backToOrder": "Zurück zu meiner Bestellung",
     "view": "Beleg ansehen"
+  },
+  "nameHolders": {
+    "title": "Wer kommt mit? Allen ihr Ticket schicken",
+    "ticket": "Ticket {serial} · {type}",
+    "intro": "Gib Name und E-Mail jedes Gastes einmal ein. Jede Person erhält eine E-Mail mit ihrem eigenen Ticket und damit einen eigenen QR-Code. Du kannst den Link auch kopieren oder über WhatsApp teilen. Lass eine Zeile leer, um das Ticket selbst zu behalten.",
+    "name": "Name",
+    "email": "E-Mail",
+    "submit": "Tickets senden",
+    "ownEmailHint": "Wenn du in einer Zeile deine eigene E-Mail-Adresse verwendest, wird nur der Name auf deinem Ticket geändert.",
+    "sentTo": "An {name} ({email}) gesendet. Wartet darauf, abgeholt zu werden.",
+    "copyLink": "Link kopieren",
+    "copied": "Kopiert",
+    "whatsapp": "Über WhatsApp teilen",
+    "whatsappMessage": "Hier ist dein Ticket: {url}",
+    "changeHint": "Trage unten einen anderen Namen oder eine andere E-Mail ein und sende erneut, um den Empfänger zu ändern.",
+    "nothingEntered": "Gib mindestens einen Namen und eine E-Mail ein.",
+    "incomplete": "Jede Zeile braucht Name und E-Mail.",
+    "feeRequired": "Für dieses Ticket fällt eine Übertragungsgebühr an; es muss über die eigene Ticketseite gesendet werden.",
+    "sameHolder": "Diese Person hat dieses Ticket bereits.",
+    "notAllowed": "Dieses Ticket kann nicht an eine andere Person gesendet werden (Übertragungen sind geschlossen oder nicht erlaubt).",
+    "done": "Erledigt. Alle haben ihr Ticket per E-Mail erhalten."
   }
 }

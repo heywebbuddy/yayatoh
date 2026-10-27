@@ -194,6 +194,7 @@ export {
   cancelHolderTransferCommand,
   cancelTransferCommand,
   orderTransfersQuery,
+  pendingOffersForOrderTx,
   StartedTransferDto,
   startAppTransferCommand,
   startHolderTransferCommand,

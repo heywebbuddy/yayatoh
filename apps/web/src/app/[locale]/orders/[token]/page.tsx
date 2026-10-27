@@ -10,6 +10,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BuyerRefundRequestForm } from '@/components/buyer-refund-request.tsx';
 import { HolderContent } from '@/components/holder-content.tsx';
+import { NameHoldersForm } from '@/components/name-holders-form.tsx';
 import { OrderReview } from '@/components/reviews/order-review.tsx';
 import { TicketQr } from '@/components/ticket-qr.tsx';
 import { WebPushControl } from '@/components/web-push-control.tsx';
@@ -25,6 +26,7 @@ import { scheduleSummary } from '@/server/schedule.ts';
 import { watchLinksForOrder } from '@/server/virtual.ts';
 import { webPushPublicKey } from '@/server/web-push.ts';
 import {
+  assignHoldersAction,
   removeOrderDeviceAction,
   requestRefundAction,
   subscribeOrderPushAction,
@@ -331,6 +333,27 @@ export default async function OrderPage({ params }: { params: Promise<{ locale: 
               </li>
             ))}
           </ul>
+        </section>
+      ) : null}
+      {(order.status === 'paid' || order.status === 'partially_refunded') && order.tickets.length > 0 ? (
+        <section aria-labelledby="name-holders-heading" className="flex flex-col gap-3">
+          <h2 id="name-holders-heading" className="text-section">
+            {t('nameHolders.title')}
+          </h2>
+          <Card size="panel">
+            <NameHoldersForm
+              action={assignHoldersAction.bind(null, token)}
+              pending={order.pendingHolders}
+              tickets={order.tickets.map((tk) => ({
+                id: tk.id,
+                holderName: tk.holderName,
+                label: t('nameHolders.ticket', {
+                  serial: tk.serial,
+                  type: typeName.get(tk.ticketTypeId) ?? '',
+                }),
+              }))}
+            />
+          </Card>
         </section>
       ) : null}
       {holderTarget ? (

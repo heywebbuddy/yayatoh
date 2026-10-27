@@ -24,6 +24,7 @@ export {
 } from './bookings.ts';
 export { BuyerOrderDto, buyerOrdersInOrg } from './buyer.ts';
 export { type CheckoutPreview, type CheckoutPreviewLine, previewCheckout } from './checkout-preview.ts';
+export { assignHoldersCommand } from './commands/assign-holders.ts';
 export { PAYMENT_METHODS, recordBoxOfficeSaleCommand } from './commands/box-office.ts';
 export { ticketCancelAction, ticketCancelBulk } from './commands/cancel-tickets.ts';
 export {

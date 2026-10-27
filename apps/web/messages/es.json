@@ -19212,5 +19212,26 @@
     "downloadPdf": "Descargar recibo (PDF)",
     "backToOrder": "Volver a mi pedido",
     "view": "Ver recibo"
+  },
+  "nameHolders": {
+    "title": "¿Quién viene? Envía a cada uno su entrada",
+    "ticket": "Entrada {serial} · {type}",
+    "intro": "Introduce una sola vez el nombre y el correo de cada invitado. Cada persona recibe un correo con su propia entrada para reclamar, así todos tienen su propio código QR. También puedes copiar el enlace o compartirlo por WhatsApp. Deja una fila vacía para quedarte esa entrada.",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "submit": "Enviar entradas",
+    "ownEmailHint": "Si usas tu propio correo en una fila, solo se cambia el nombre en tu entrada.",
+    "sentTo": "Enviada a {name} ({email}). Pendiente de que la reclame.",
+    "copyLink": "Copiar enlace",
+    "copied": "Copiado",
+    "whatsapp": "Compartir por WhatsApp",
+    "whatsappMessage": "Aquí tienes tu entrada: {url}",
+    "changeHint": "Escribe otro nombre o correo abajo y envía de nuevo para cambiar el destinatario.",
+    "nothingEntered": "Introduce al menos un nombre y un correo.",
+    "incomplete": "Cada fila necesita nombre y correo.",
+    "feeRequired": "Esta entrada tiene una tarifa de transferencia, así que debe enviarse desde su propia página.",
+    "sameHolder": "Esa persona ya tiene esta entrada.",
+    "notAllowed": "Esta entrada no se puede enviar a otra persona (las transferencias están cerradas o no están permitidas).",
+    "done": "Listo. Cada persona ha recibido su entrada por correo."
   }
 }

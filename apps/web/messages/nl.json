@@ -19212,5 +19212,26 @@
     "downloadPdf": "Betalingsbewijs downloaden (PDF)",
     "backToOrder": "Terug naar mijn bestelling",
     "view": "Betalingsbewijs bekijken"
+  },
+  "nameHolders": {
+    "title": "Wie komt er mee? Stuur iedereen zijn ticket",
+    "ticket": "Ticket {serial} · {type}",
+    "intro": "Vul per gast één keer naam en e-mail in. Iedereen krijgt een e-mail met een eigen ticket om op te halen, dus iedereen heeft een eigen QR-code. Je kunt de link ook kopiëren of via WhatsApp delen. Laat een rij leeg om dat ticket zelf te houden.",
+    "name": "Naam",
+    "email": "E-mail",
+    "submit": "Tickets versturen",
+    "ownEmailHint": "Gebruik je je eigen e-mailadres op een rij, dan verandert alleen de naam op je ticket.",
+    "sentTo": "Verstuurd naar {name} ({email}). Wacht tot het wordt opgehaald.",
+    "copyLink": "Link kopiëren",
+    "copied": "Gekopieerd",
+    "whatsapp": "Delen via WhatsApp",
+    "whatsappMessage": "Hier is je ticket: {url}",
+    "changeHint": "Vul hieronder een andere naam of e-mail in en verstuur opnieuw om de ontvanger te wijzigen.",
+    "nothingEntered": "Vul minstens één naam en e-mail in.",
+    "incomplete": "Elke rij heeft een naam en e-mail nodig.",
+    "feeRequired": "Voor dit ticket gelden overdrachtskosten; verstuur het vanaf de eigen ticketpagina.",
+    "sameHolder": "Deze persoon heeft dit ticket al.",
+    "notAllowed": "Dit ticket kan niet naar iemand anders worden gestuurd (overdracht is gesloten of niet toegestaan).",
+    "done": "Klaar. Iedereen heeft zijn ticket per e-mail ontvangen."
   }
 }

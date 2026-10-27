@@ -6,7 +6,7 @@ import { createCtx, DomainError } from '@yayatoh/kernel';
 import { buyerOrderMessagesTx } from '@yayatoh/notifications';
 import { tenantQuery } from '@yayatoh/platform';
 import { organizationNameTx } from '@yayatoh/tenancy';
-import { tableUnitsTx, ticketsForOrderTx } from '@yayatoh/ticketing';
+import { pendingOffersForOrderTx, tableUnitsTx, ticketsForOrderTx } from '@yayatoh/ticketing';
 import { and, desc, eq, inArray, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { hashManageToken, loadOrderTx } from './commands/checkout.ts';
@@ -179,6 +179,7 @@ export async function orderByManageToken(token: string): Promise<PublicOrderDto 
         refundRequest: await buyerRefundPanelTx(tx, ctx, o),
         creditNotes: await buyerCreditNotesTx(tx, o.id),
         invoicePath: await invoicePathForOrderTx(tx, o.id, ev.slug),
+        pendingHolders: await pendingOffersForOrderTx(tx, o.id),
       };
     });
     return publicOrderSerializer.serialize(order);

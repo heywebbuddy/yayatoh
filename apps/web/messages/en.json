@@ -19212,5 +19212,26 @@
     "downloadPdf": "Download receipt (PDF)",
     "backToOrder": "Back to my order",
     "view": "View receipt"
+  },
+  "nameHolders": {
+    "title": "Who is coming? Send everyone their ticket",
+    "ticket": "Ticket {serial} · {type}",
+    "intro": "Enter each guest’s name and email once. Each person gets an email with their own ticket to claim, so everyone has their own QR code. You can also copy the link or share it on WhatsApp. Leave a row empty to keep that ticket yourself.",
+    "name": "Name",
+    "email": "Email",
+    "submit": "Send tickets",
+    "ownEmailHint": "Using your own email on a row only puts that name on your ticket.",
+    "sentTo": "Sent to {name} ({email}). Waiting for them to claim it.",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "whatsapp": "Share on WhatsApp",
+    "whatsappMessage": "Here is your ticket: {url}",
+    "changeHint": "Fill in a different name or email below and send again to change who it goes to.",
+    "nothingEntered": "Enter at least one name and email.",
+    "incomplete": "Each row needs both a name and an email.",
+    "feeRequired": "This ticket has a transfer fee, so it has to be sent from the ticket’s own page.",
+    "sameHolder": "That person already holds this ticket.",
+    "notAllowed": "This ticket can’t be sent to someone else (transfers are closed or not allowed for it).",
+    "done": "Done. Each person has been emailed their ticket."
   }
 }

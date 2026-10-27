@@ -19212,5 +19212,26 @@
     "downloadPdf": "Scarica la ricevuta (PDF)",
     "backToOrder": "Torna al mio ordine",
     "view": "Vedi ricevuta"
+  },
+  "nameHolders": {
+    "title": "Chi viene? Invia a ciascuno il suo biglietto",
+    "ticket": "Biglietto {serial} · {type}",
+    "intro": "Inserisci una sola volta nome ed e-mail di ogni ospite. Ognuno riceve un’e-mail con il proprio biglietto da ritirare, così tutti hanno il proprio QR code. Puoi anche copiare il link o condividerlo su WhatsApp. Lascia vuota una riga per tenere quel biglietto.",
+    "name": "Nome",
+    "email": "E-mail",
+    "submit": "Invia i biglietti",
+    "ownEmailHint": "Se usi la tua e-mail in una riga, cambia solo il nome sul tuo biglietto.",
+    "sentTo": "Inviato a {name} ({email}). In attesa che lo ritiri.",
+    "copyLink": "Copia link",
+    "copied": "Copiato",
+    "whatsapp": "Condividi su WhatsApp",
+    "whatsappMessage": "Ecco il tuo biglietto: {url}",
+    "changeHint": "Inserisci un altro nome o e-mail qui sotto e invia di nuovo per cambiare destinatario.",
+    "nothingEntered": "Inserisci almeno un nome e un’e-mail.",
+    "incomplete": "Ogni riga richiede nome ed e-mail.",
+    "feeRequired": "Questo biglietto ha una commissione di trasferimento, quindi va inviato dalla sua pagina.",
+    "sameHolder": "Questa persona ha già questo biglietto.",
+    "notAllowed": "Questo biglietto non può essere inviato a un’altra persona (trasferimenti chiusi o non consentiti).",
+    "done": "Fatto. Ognuno ha ricevuto il proprio biglietto via e-mail."
   }
 }

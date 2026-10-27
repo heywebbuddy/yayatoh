@@ -19212,5 +19212,26 @@
     "downloadPdf": "Télécharger le reçu (PDF)",
     "backToOrder": "Retour à ma commande",
     "view": "Voir le reçu"
+  },
+  "nameHolders": {
+    "title": "Qui vient ? Envoyez à chacun son billet",
+    "ticket": "Billet {serial} · {type}",
+    "intro": "Saisissez une seule fois le nom et l’e-mail de chaque invité. Chacun reçoit un e-mail avec son propre billet à récupérer, donc chacun a son propre QR code. Vous pouvez aussi copier le lien ou le partager sur WhatsApp. Laissez une ligne vide pour garder ce billet.",
+    "name": "Nom",
+    "email": "E-mail",
+    "submit": "Envoyer les billets",
+    "ownEmailHint": "Si vous utilisez votre propre e-mail sur une ligne, seul le nom change sur votre billet.",
+    "sentTo": "Envoyé à {name} ({email}). En attente de récupération.",
+    "copyLink": "Copier le lien",
+    "copied": "Copié",
+    "whatsapp": "Partager sur WhatsApp",
+    "whatsappMessage": "Voici votre billet : {url}",
+    "changeHint": "Saisissez un autre nom ou e-mail ci-dessous et renvoyez pour changer le destinataire.",
+    "nothingEntered": "Saisissez au moins un nom et un e-mail.",
+    "incomplete": "Chaque ligne exige un nom et un e-mail.",
+    "feeRequired": "Ce billet a des frais de transfert ; il doit être envoyé depuis sa propre page.",
+    "sameHolder": "Cette personne détient déjà ce billet.",
+    "notAllowed": "Ce billet ne peut pas être envoyé à quelqu’un d’autre (transferts clos ou non autorisés).",
+    "done": "C’est fait. Chaque personne a reçu son billet par e-mail."
   }
 }

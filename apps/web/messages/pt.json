@@ -19212,5 +19212,26 @@
     "downloadPdf": "Descarregar recibo (PDF)",
     "backToOrder": "Voltar ao meu pedido",
     "view": "Ver recibo"
+  },
+  "nameHolders": {
+    "title": "Quem vem? Envie a cada um o seu bilhete",
+    "ticket": "Bilhete {serial} · {type}",
+    "intro": "Introduza uma só vez o nome e o e-mail de cada convidado. Cada pessoa recebe um e-mail com o seu próprio bilhete para reclamar, e assim todos têm o seu código QR. Também pode copiar a ligação ou partilhá-la no WhatsApp. Deixe uma linha vazia para ficar com esse bilhete.",
+    "name": "Nome",
+    "email": "E-mail",
+    "submit": "Enviar bilhetes",
+    "ownEmailHint": "Se usar o seu próprio e-mail numa linha, só muda o nome no seu bilhete.",
+    "sentTo": "Enviado a {name} ({email}). À espera de ser reclamado.",
+    "copyLink": "Copiar ligação",
+    "copied": "Copiado",
+    "whatsapp": "Partilhar no WhatsApp",
+    "whatsappMessage": "Aqui está o seu bilhete: {url}",
+    "changeHint": "Escreva outro nome ou e-mail abaixo e envie de novo para mudar o destinatário.",
+    "nothingEntered": "Introduza pelo menos um nome e um e-mail.",
+    "incomplete": "Cada linha precisa de nome e e-mail.",
+    "feeRequired": "Este bilhete tem uma taxa de transferência, por isso tem de ser enviado a partir da sua própria página.",
+    "sameHolder": "Essa pessoa já tem este bilhete.",
+    "notAllowed": "Este bilhete não pode ser enviado a outra pessoa (as transferências estão fechadas ou não são permitidas).",
+    "done": "Feito. Cada pessoa recebeu o seu bilhete por e-mail."
   }
 }

@@ -19212,5 +19212,26 @@
     "downloadPdf": "下载收据（PDF）",
     "backToOrder": "返回我的订单",
     "view": "查看收据"
+  },
+  "nameHolders": {
+    "title": "谁来参加？把票分别发给每个人",
+    "ticket": "第 {serial} 号票 · {type}",
+    "intro": "只需一次填写每位客人的姓名和邮箱。每个人都会收到一封邮件领取自己的门票，因此人人都有独立的二维码。您也可以复制链接或通过 WhatsApp 分享。留空的一行表示该票由您自己保留。",
+    "name": "姓名",
+    "email": "邮箱",
+    "submit": "发送门票",
+    "ownEmailHint": "在某一行填写您自己的邮箱，只会更改您这张票上的姓名。",
+    "sentTo": "已发送给 {name}（{email}），等待对方领取。",
+    "copyLink": "复制链接",
+    "copied": "已复制",
+    "whatsapp": "通过 WhatsApp 分享",
+    "whatsappMessage": "这是您的门票：{url}",
+    "changeHint": "在下方填写其他姓名或邮箱并重新发送，即可更换接收人。",
+    "nothingEntered": "请至少填写一个姓名和邮箱。",
+    "incomplete": "每一行都需要同时填写姓名和邮箱。",
+    "feeRequired": "该票需要支付转让费，请在该票自己的页面发送。",
+    "sameHolder": "该联系人已持有这张票。",
+    "notAllowed": "这张票无法发给他人（转让已截止或不被允许）。",
+    "done": "完成。每个人都已通过邮件收到自己的门票。"
   }
 }
