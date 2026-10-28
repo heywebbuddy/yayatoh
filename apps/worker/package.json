@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit",
     "signup-code": "node scripts/signup-code.ts",
     "open-signup": "node scripts/open-signup.ts",
+    "demo-platform-content": "node scripts/demo-platform-content.ts",
     "staff": "node scripts/staff.ts",
     "retention": "node scripts/retention.ts",
     "drill-tickets": "node scripts/drill-tickets.ts",

@@ -54,6 +54,7 @@ import {
   buildEvent,
   checkIns,
   complete,
+  EVENT_TZ,
   type EventSpec,
   existing,
   promoCodes,
@@ -385,7 +386,7 @@ export async function conference(d: Demo, venues: Record<VenueKey, string>, spec
   }
   const sessions: { id: string; title: string; startsAt: Date; endsAt: Date }[] = [];
   for (const s of SESSIONS) {
-    const startsAt = at(dayOf(addDays(b.startsAt, s.day), d.timezone), s.time, d.timezone);
+    const startsAt = at(dayOf(addDays(b.startsAt, s.day), EVENT_TZ), s.time, EVENT_TZ);
     const endsAt = addMinutes(startsAt, s.minutes);
     const r = await step(`${b.slug} session ${s.title}`, () =>
       run<unknown, { session: { id: string } }>(

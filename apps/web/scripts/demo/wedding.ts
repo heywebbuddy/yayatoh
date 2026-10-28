@@ -38,6 +38,7 @@ import {
   buildEvent,
   checkIns,
   complete,
+  EVENT_TZ,
   type EventSpec,
   existing,
   publish,
@@ -82,7 +83,7 @@ export async function wedding(d: Demo, venues: Record<VenueKey, string>, spec: E
   // Sub-events (the wedding days) and the menu.
   const subs: string[] = [];
   for (const s of SUB_EVENTS) {
-    const startsAt = at(dayOf(addDays(b.startsAt, s.day), d.timezone), s.start, d.timezone);
+    const startsAt = at(dayOf(addDays(b.startsAt, s.day), EVENT_TZ), s.start, EVENT_TZ);
     const r = await step(`${b.slug} sub-event ${s.name}`, () =>
       run<unknown, { id: string }>(
         createSubEventCommand,

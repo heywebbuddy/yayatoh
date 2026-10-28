@@ -187,7 +187,7 @@ export interface EventSpec {
   readonly visibility?: 'public' | 'unlisted' | 'private';
   readonly attendanceMode?: 'in_person' | 'online' | 'hybrid';
   readonly venue: VenueKey;
-  /** Local date and times in the org's timezone. */
+  /** Local date and times in the venue's timezone (EVENT_TZ). */
   readonly date: string;
   readonly start: string;
   readonly endDate?: string;
@@ -219,10 +219,13 @@ export async function existing(d: Demo, slug: string): Promise<boolean> {
   return Boolean(e);
 }
 
+/** Every demo venue is in India, so events and their sessions run on Indian time, not the org's zone. */
+export const EVENT_TZ = 'Asia/Kolkata';
+
 /** The event with everything every profile shows: details, content, media, access, links. */
 export async function buildEvent(d: Demo, venues: Record<VenueKey, string>, s: EventSpec): Promise<Built> {
-  const startsAt = at(s.date, s.start, d.timezone);
-  const endsAt = at(s.endDate ?? s.date, s.end, d.timezone);
+  const startsAt = at(s.date, s.start, EVENT_TZ);
+  const endsAt = at(s.endDate ?? s.date, s.end, EVENT_TZ);
   const ctx = owner(d);
   const v = VENUES[s.venue];
   const e = await run<unknown, { id: string }>(
@@ -233,7 +236,7 @@ export async function buildEvent(d: Demo, venues: Record<VenueKey, string>, s: E
       tagline: s.tagline,
       profile: s.profile,
       visibility: s.visibility ?? 'public',
-      timezone: d.timezone,
+      timezone: EVENT_TZ,
       startsAt,
       endsAt,
       venueName: v.name,
