@@ -1,4 +1,80 @@
-# Yayatoh QA: integration report (round 4 on top; rounds 3 and 2 below)
+# Yayatoh QA: integration report (round 5 on top; rounds 4, 3 and 2 below)
+
+## Round 5: last quick check on `qa-integration`
+
+Latest tips of `claude/batch-2-setup-59fe0b` and `claude/batch-3-redesign-664a1d` merged (clean; batch 1 unchanged). Not pushed. Database `yayatoh_qa4` migrated (no new migrations; journal still 190 entries, no 0189). Production build on port 3140 **without `MARKETPLACE_CONTENT_ORG`** set. The real Anthropic key still worked.
+
+### R5.1 Checks
+
+- `tsc --noEmit` on `apps/web` (12 GB): 0 errors. `pnpm typecheck` (76 packages, concurrency 2): 76 of 76 pass. `next build` (type-check on): ok.
+- `pnpm test`: 342 of 359 files pass, 53 tests fail. **`column-privacy` and the notification snapshots now pass.** Remaining failures are the known Windows-only ones, plus **one new**: `tools/check-modules/tests/check.test.ts`.
+- **`pnpm check:modules` FAILS** (new, major for CI): `apps/web/scripts/demo-content.ts: platform_reader access is limited to apps/admin and apps/worker`. Batch 2's demo-content script reads with the platform-reader role from `apps/web/scripts`, which the module-boundary check forbids; the check-modules unit test fails for the same reason. Fix: move the script to `apps/worker/scripts` or allow-list it.
+
+### R5.2 Browser checks (production build)
+
+| Check | Result |
+|---|---|
+| `/help`, `/features`, `/contact`, `/blogs` without the env variable | **200 on all four** (fixed: no content-org variable needed). |
+| Video section live preview | **Fixed** for a YouTube link: the editor preview shows the embedded player. (Preview of an uploaded file not rechecked.) |
+| Campaign "Draft with AI", real click | **Works**: credit 9 to 8, body filled with a sensible invitation ("Your past support has meant so much to us… Early-bird tickets end on 7 November…"). Round 4's "not filled" was my scripted click, not a bug. |
+| AI FAQ time zone | Uses the event's own time zone, printed as `America/New_York time` (the demo event is configured in New York although it is in Hyderabad). Unknown facts (student discount, refund) are now written as "[Organizer to confirm: …]" placeholders: honest, but easy to publish by accident. |
+| Create with AI, two-day conference | **Fixed**: agenda rows on both Dec 10 and Dec 11. |
+| Create with AI, "daily" boat tour | **Fixed**: proposes a repeating schedule (14 departures) and a "Pickup points" section (names generic: "Hotel pickup 1 / 2"). |
+| MP4 upload | **Done**: generated a real MP4 in the browser (MediaRecorder, `ftyp` header, 138 KB), uploaded it as the hero video with a poster, saved; the public page plays it (`paused=false`, ready, 2.3 s, no error). |
+| Accept a team invitation | **Done**: invited `qa.teammate2@example.com`, signed the owner out (one browser, no second profile), opened the invite link, signed up with the emailed code (the code is printed by the dev mailer in the server log, not the mailbox), "You'll join as Manager" then **Accept invitation** lands in the WebBuddy console. |
+
+### R5.3 New or remaining issues
+
+- **`check:modules` red** (R5.1), major for CI.
+- Dev auth codes appear in the server log, not the mailbox (environment note).
+- The AI FAQ "[Organizer to confirm]" placeholders (minor).
+- Demo event time zone is New York for a Hyderabad event (seed data).
+
+### R5.4 Final status of every client point
+
+1. Venue description and contact: DONE
+2. Add a venue from the event wizard: DONE (wizard takes the venue's time zone)
+3. Content editing too basic: DONE
+4. Select one seat or the entire table: DONE
+5. Checkout: DONE
+6. DJ, MC, artists, speakers, influencers: DONE (role "Host / MC")
+7. Video background in the hero: DONE (upload WebM and MP4 plays; YouTube/Vimeo link embeds)
+8. Table number on the seat map: DONE
+9. (screenshot only): n/a
+10. Video overviews on the event page: DONE (upload or link; live preview works for a link)
+11. Multi-day tickets; re-entry after X hours: DONE
+12. Seat per day or leg: DONE (three-date purchase, one seat per date)
+13. Attendee chat: DONE
+14. Total before paying; no forced sign-in: DONE
+15. Landing pages: DONE
+16. Event creation intuitive, more design options: DONE
+17. Frontend basic; missing features: DONE
+18. Sponsor detail pages; visibility by package: DONE
+19. Keynote speakers, artists, public figures: DONE
+20. Simple bus or boat tour: DONE (AI also proposes repeating departures and pickup points)
+21. Blog posts on the website: DONE (organization blogs; platform blog from the admin console)
+22. Share or distribute tickets via WhatsApp: DONE
+23. Manage users: DONE (invitation sent, email delivered, accepted as Manager)
+24. On-page SEO: DONE
+25. AI event setup and chat assistant: DONE (real AI graded A- to A; campaign draft, FAQ, assistant all work)
+26. Check in with the same ticket twice: DONE
+27. Organizer access to the attendee portal: DONE (a preview with sample data; links inactive)
+28. Change an individual user's table or seat: DONE (swap completed in the UI)
+29. Max attendees per event: DONE (event-wide limit)
+30. Competitor features: reference only (summary in the QA report)
+31. (screenshot only): n/a
+32. Ticket shows date, time, owner, purchaser, type, group: DONE
+33. Bulk tickets to one person, who sends by email, SMS, WhatsApp: PARTIAL (email and WhatsApp work, the mobile field exists; SMS delivery needs the Twilio account)
+34. End user sees and downloads their invoice: DONE (receipt page and PDF)
+35. Event-goers chat with each other: DONE
+36. Overall redesign: DONE (public pages; console stays light)
+37. Bulk download gives separate files per ticket: DONE (ZIP, one PDF per ticket)
+
+Open items, not client points: `pnpm check:modules` fails (platform-reader use in `apps/web/scripts/demo-content.ts`); the missing `0189` migration number (cosmetic); the web unit tests that fail only on Windows were not compared with a clean `main`.
+
+---
+
+# Round 4 (history)
 
 ## Round 4: final round on `qa-integration`
 
