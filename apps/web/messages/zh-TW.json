@@ -1870,7 +1870,9 @@
     "openNote": "您的組織將以設定模式開始：接受條款、發布隱私權聲明並建立第一個活動後，即可傳訊息給賓客。<pricing>查看價格與費用</pricing>。",
     "closedNow": "目前僅限受邀註冊。請輸入您的註冊代碼。",
     "verifyEmail": "請先確認您的電子郵件地址。",
-    "humanCheck": "請確認您是真人。"
+    "humanCheck": "請確認您是真人。",
+    "applyCta": "申請成為主辦單位",
+    "codeOtherEmail": "此邀請是寄給 {email} 的。請使用該電子郵件地址登入以接受邀請。"
   },
   "payouts": {
     "title": "收款",
@@ -19801,7 +19803,8 @@
       "included": "已包含",
       "notIncluded": "預設不包含",
       "demoTitle": "Yayatoh 上的同類活動"
-    }
+    },
+    "forOrganizers": "給主辦單位"
   },
   "eventDesign": {
     "title": "頁面設計",
@@ -20137,6 +20140,325 @@
       "unauthorized": "請重新登入後再上傳。",
       "not_found": "你無法為此組織上傳。",
       "invalid": "無法讀取所上傳的內容。"
+    }
+  },
+  "forOrganizers": {
+    "meta": {
+      "title": "給主辦單位：在 Yayatoh 上售票並舉辦活動",
+      "description": "票務、座位、活動網站、報到、贊助商、人脈交流、AI 設定與白標服務，全在同一個平台。立即申請成為主辦單位，或預約示範。"
+    },
+    "hero": {
+      "eyebrow": "給主辦單位",
+      "title": "從第一張票到最後一次報到，輕鬆辦好每場活動",
+      "lede": "Yayatoh 為您的組織提供票務、座位、活動網站、報到、贊助商、人脈交流與數據分析，一站式完成。立即申請，我們的團隊會盡快審核。",
+      "apply": "立即申請",
+      "demo": "預約示範",
+      "videoTitle": "Yayatoh 產品影片",
+      "play": "播放產品影片",
+      "pause": "暫停產品影片"
+    },
+    "trust": {
+      "eyebrow": "為真實活動而生",
+      "modules": "個產品模組",
+      "languages": "種語言，服務您的來賓",
+      "eventTypes": "種活動類型，各有專屬設定",
+      "plans": "種方案，從 Starter 到 Enterprise",
+      "builtFor": "活動類型"
+    },
+    "features": {
+      "eyebrow": "平台",
+      "title": "活動所需的一切，一次看完",
+      "lede": "下方每個模組目前都已上線。可使用的功能取決於您的方案，詳見下方。",
+      "benefit": "優點：",
+      "ticketing": {
+        "title": "票務與座位",
+        "how": "建立票種，整桌或單一座位皆可販售，多日活動還能依特定某一天售座。來賓可在即時平面圖上自行選位。",
+        "benefit": "減少重複訂位，提升銷量，讓售票更順暢。"
+      },
+      "website": {
+        "title": "活動網站與設計",
+        "how": "每場活動都有專屬網站，配上您的配色、標誌、議程、講者與報名表單。不需寫程式即可編輯設計，一鍵發布。",
+        "benefit": "不用組網頁團隊，也能擁有專業的活動頁面。"
+      },
+      "checkin": {
+        "title": "報到與再次入場",
+        "how": "使用工作人員 App 在門口掃描票券，排長隊也不怕。來賓可以離場後再次入場，每次掃描都有紀錄。",
+        "benefit": "排隊更快、杜絕重複入場，並即時掌握到場人數。"
+      },
+      "sponsors": {
+        "title": "贊助商與參展商",
+        "how": "販售贊助方案，為參展商提供專屬攤位簡介與入口網站，並讓他們透過掃描與會者的識別證來蒐集潛在客戶。",
+        "benefit": "為您帶來新收入，為合作夥伴創造明確價值。"
+      },
+      "networking": {
+        "title": "人脈交流與聊天",
+        "how": "與會者建立個人檔案，找到合適的人，並在活動聊天室中互相交流，您的團隊也有管理審核工具。",
+        "benefit": "來賓認識對的人，明年還會再來。"
+      },
+      "ai": {
+        "title": "AI 設定與助理",
+        "how": "用一句話描述您的活動，AI 就會草擬設定、票種與活動介紹。之後助理還會協助您的團隊與來賓解答問題。",
+        "benefit": "原本數小時的設定，幾分鐘就能完成。"
+      },
+      "donations": {
+        "title": "捐款",
+        "how": "在結帳時加入捐款選項，建立募款活動頁面，並在晚宴上顯示即時捐款螢幕。收據會自動寄出。",
+        "benefit": "募到更多款項，更少文書作業。"
+      },
+      "analytics": {
+        "title": "數據分析與收據",
+        "how": "透過即時報表追蹤銷售、到場與來源，匯出資料，並寄給來賓清楚的收據與稅務彙總。",
+        "benefit": "用事實做決策，財務帳目清楚無誤。"
+      }
+    },
+    "solutions": {
+      "eyebrow": "解決方案",
+      "title": "為您舉辦的活動量身打造",
+      "conferences": {
+        "name": "研討會",
+        "body": "為多日研討會提供議程、講者、場次、贊助商、參展商與識別證管理。"
+      },
+      "galas": {
+        "name": "晚宴與募款活動",
+        "body": "整桌售票、座位安排、捐款，以及當晚的即時捐款螢幕。"
+      },
+      "weddings": {
+        "name": "婚禮",
+        "body": "賓客名單、出席回覆、餐點選擇、座位安排與私人活動網站。"
+      },
+      "festivals": {
+        "name": "音樂節與節慶",
+        "body": "多種票種、單日通行證、入場管控，以及大規模的再次入場。"
+      },
+      "nonprofits": {
+        "name": "非營利組織與社群",
+        "body": "免費與付費活動、會員、捐款與清楚的收據。"
+      },
+      "agencies": {
+        "name": "代理商與場地",
+        "body": "在同一個控制台為眾多客戶辦活動，每位客戶都保有自己的品牌。"
+      }
+    },
+    "whiteLabel": {
+      "eyebrow": "白標",
+      "title": "您的品牌，我們的平台",
+      "lede": "將 Yayatoh 以您自己的產品呈現。代理商與大型組織可以用自己的名義服務眾多客戶。",
+      "domain": {
+        "title": "自訂網域",
+        "body": "使用您自己的網址（例如 tickets.yourbrand.com）發布活動，並附有安全憑證。"
+      },
+      "branding": {
+        "title": "您的配色與標誌",
+        "body": "在頁面、郵件與票券上統一使用您的品牌色與標誌。"
+      },
+      "site": {
+        "title": "品牌化活動網站",
+        "body": "每場活動的網站都像您自己的，並附有您的主辦單位頁面與部落格。"
+      },
+      "agency": {
+        "title": "代理商控制台",
+        "body": "在同一個控制台管理眾多客戶組織，角色與權限由您掌控。"
+      },
+      "api": {
+        "title": "公開 API",
+        "body": "透過 API 金鑰與 Webhook 連接您自己的系統，以販售票券並讀取資料。"
+      }
+    },
+    "how": {
+      "eyebrow": "運作方式",
+      "title": "四個步驟，從申請到首場活動",
+      "apply": {
+        "title": "申請",
+        "body": "告訴我們您的組織以及您舉辦的活動。"
+      },
+      "review": {
+        "title": "我們審核",
+        "body": "我們的團隊會檢視每份申請，並可能向您提問。"
+      },
+      "invite": {
+        "title": "收到邀請",
+        "body": "審核通過後，您會收到適用於所選方案的專屬郵件邀請。"
+      },
+      "launch": {
+        "title": "上線",
+        "body": "建立帳號，依照設定清單操作，然後發布您的第一場活動。"
+      }
+    },
+    "plans": {
+      "eyebrow": "方案與價格",
+      "title": "選擇適合您的方案",
+      "lede": "方案來自我們的即時目錄，之後隨時可以變更。",
+      "perMonth": "每月 {price}",
+      "onApproval": "審核通過後確認",
+      "choose": "申請 {plan}",
+      "note": "方案上架後，價格會顯示在這裡。平台票務手續費將在您的申請通過時確認。",
+      "starter": {
+        "name": "Starter",
+        "body": "適合剛開始舉辦付費活動的主辦單位。"
+      },
+      "pro": {
+        "name": "Pro",
+        "body": "適合每個月都舉辦活動的團隊。"
+      },
+      "white_label": {
+        "name": "白標 / 代理商",
+        "body": "您的品牌、您的網域與眾多客戶。"
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "body": "適合有客製需求的大型專案。"
+      }
+    },
+    "modules": {
+      "ticketing": "票務",
+      "seating": "座位圖",
+      "advanced_seating": "桌位與進階座位",
+      "website": "活動網站",
+      "registration": "報名表單",
+      "checkin": "報到與再次入場",
+      "sessions": "場次與議程",
+      "speakers": "講者",
+      "sponsors": "贊助商",
+      "exhibitors": "參展商",
+      "chat": "人脈交流與聊天",
+      "ai": "AI 助理",
+      "donations": "捐款",
+      "analytics_pro": "進階數據分析",
+      "integrations": "整合",
+      "api_access": "API 存取",
+      "whitelabel": "白標",
+      "agency": "代理商控制台",
+      "virtual": "線上活動"
+    },
+    "compare": {
+      "title": "方案比較",
+      "feature": "功能",
+      "included": "包含",
+      "notIncluded": "不包含"
+    },
+    "stories": {
+      "eyebrow": "客戶",
+      "title": "主辦單位怎麼說",
+      "empty": "客戶案例即將上線。預約示範，與我們的團隊一起了解平台。"
+    },
+    "faq": {
+      "title": "常見問題",
+      "cost": {
+        "q": "費用是多少？",
+        "a": "方案與票務手續費已列在上方，並於申請通過時確認。申請本身不收費。"
+      },
+      "review": {
+        "q": "審核需要多久？",
+        "a": "我們的團隊會逐一人工審核每份申請，並可能回覆問題。無論結果如何，您都會收到郵件。"
+      },
+      "whiteLabel": {
+        "q": "可以使用自己的品牌與網域嗎？",
+        "a": "可以。白標與代理商方案支援自訂網域、您的配色與標誌，以及管理眾多客戶的控制台。"
+      },
+      "payments": {
+        "q": "我要如何收款？",
+        "a": "票款會在通過撥款所需的審核後，匯入您在設定時綁定的銀行帳戶。"
+      },
+      "data": {
+        "q": "來賓的資料歸誰所有？",
+        "a": "歸您所有。我們代您處理資料，來賓可以要求匯出或刪除自己的資料。"
+      },
+      "migrate": {
+        "q": "可以從其他票務工具轉換過來嗎？",
+        "a": "可以。您可以匯入來賓名單，預約示範時我們的團隊也能協助您規劃轉換。"
+      }
+    },
+    "form": {
+      "eyebrow": "申請",
+      "title": "申請成為主辦單位",
+      "lede": "大約只需三分鐘。我們會審核每份申請，並以電子郵件回覆。",
+      "mode": "您想做什麼？",
+      "mode_apply": "申請成為主辦單位",
+      "mode_demo": "預約示範",
+      "orgName": "組織名稱",
+      "orgType": "組織類型",
+      "country": "國家/地區",
+      "countryPlaceholder": "選擇國家/地區",
+      "website": "網站",
+      "contactName": "您的姓名",
+      "contactEmail": "公司信箱",
+      "contactPhone": "電話號碼",
+      "eventTypes": "您舉辦哪些活動？",
+      "eventsPerYear": "每年活動數量",
+      "expectedTickets": "預計每年售出的票數",
+      "planInterest": "您感興趣的方案",
+      "whiteLabel": "您是否需要白標（自有品牌與網域）？",
+      "yes": "是",
+      "no": "否",
+      "preferredTime": "示範的偏好時間",
+      "preferredTimeHint": "您的時區：{zone}",
+      "message": "還有其他需要我們了解的嗎？",
+      "optional": "選填",
+      "privacy": "我們僅使用這些資料來審核您的申請，並就此與您聯絡。",
+      "submitApply": "送出申請",
+      "submitDemo": "申請示範",
+      "sentTitle": "謝謝，我們已收到",
+      "sentApply": "我們已寄出確認信到您的信箱。團隊將審核您的申請並盡快回覆。",
+      "sentDemo": "我們已寄出確認信到您的信箱。團隊將盡快與您確認示範時間。",
+      "fixErrors": "請檢查標示的欄位後再試一次。",
+      "rateLimited": "嘗試次數過多，請在 {minutes} 分鐘後再試。",
+      "errors": {
+        "orgName": "請輸入組織名稱。",
+        "country": "請選擇國家/地區。",
+        "website": "請輸入以 https:// 開頭的完整網址。",
+        "contactName": "請輸入您的姓名。",
+        "contactEmail": "請輸入有效的電子郵件地址。",
+        "eventTypes": "請至少選擇一種活動類型。",
+        "preferredTime": "請選擇示範時間。",
+        "human": "請確認您是真人。"
+      }
+    },
+    "options": {
+      "orgType": {
+        "company": "公司",
+        "nonprofit": "非營利組織",
+        "agency": "代理商",
+        "venue": "場地",
+        "school": "學校或大學",
+        "community": "社群",
+        "individual": "個人",
+        "other": "其他"
+      },
+      "eventType": {
+        "conference": "研討會",
+        "gala": "晚宴",
+        "wedding": "婚禮",
+        "festival": "音樂節與節慶",
+        "workshop": "工作坊",
+        "sports": "運動",
+        "fundraiser": "募款活動",
+        "other": "其他"
+      },
+      "eventsPerYear": {
+        "1-5": "1 至 5 場",
+        "6-20": "6 至 20 場",
+        "21-100": "21 至 100 場",
+        "100+": "超過 100 場"
+      },
+      "expectedTickets": {
+        "lt500": "少於 500 張",
+        "500-5000": "500 至 5,000 張",
+        "5000-50000": "5,000 至 50,000 張",
+        "gt50000": "超過 50,000 張"
+      },
+      "plan": {
+        "starter": "Starter",
+        "pro": "Pro",
+        "white_label": "白標 / 代理商",
+        "enterprise": "Enterprise",
+        "unsure": "尚未確定"
+      }
+    },
+    "mail": {
+      "applySubject": "我們已收到您的 Yayatoh 申請",
+      "applyBody": "{name} 您好：\n\n感謝您為 {org} 申請成為 Yayatoh 主辦單位。我們的團隊會審核每份申請，並以電子郵件回覆您。\n\nYayatoh 團隊",
+      "demoSubject": "我們已收到您的 Yayatoh 示範申請",
+      "demoBody": "{name} 您好：\n\n感謝您為 {org} 申請 Yayatoh 示範。我們的團隊會以電子郵件與您確認時間。\n\nYayatoh 團隊"
     }
   }
 }

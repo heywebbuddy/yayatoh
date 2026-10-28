@@ -1870,7 +1870,9 @@
     "openNote": "Je organisatie begint in de opstartmodus: accepteer de voorwaarden, publiceer een privacyverklaring en maak je eerste evenement aan om gasten berichten te kunnen sturen. <pricing>Bekijk prijzen en kosten</pricing>.",
     "closedNow": "Aanmelden kan op dit moment alleen op uitnodiging. Vul je aanmeldcode in.",
     "verifyEmail": "Bevestig eerst je e-mailadres.",
-    "humanCheck": "Bevestig dat je een mens bent."
+    "humanCheck": "Bevestig dat je een mens bent.",
+    "applyCta": "Aanmelden als organisator",
+    "codeOtherEmail": "Deze uitnodiging is voor {email}. Log in met dat e-mailadres om haar te gebruiken."
   },
   "payouts": {
     "title": "Uitbetalingen",
@@ -19801,7 +19803,8 @@
       "included": "Inbegrepen",
       "notIncluded": "Standaard niet inbegrepen",
       "demoTitle": "Evenementen zoals dit op Yayatoh"
-    }
+    },
+    "forOrganizers": "Voor organisatoren"
   },
   "eventDesign": {
     "title": "Paginaontwerp",
@@ -20137,6 +20140,325 @@
       "unauthorized": "Log opnieuw in om te uploaden.",
       "not_found": "Je kunt niet uploaden voor deze organisatie.",
       "invalid": "De upload kon niet worden gelezen."
+    }
+  },
+  "forOrganizers": {
+    "meta": {
+      "title": "Voor organisatoren: verkoop tickets en beheer je evenementen met Yayatoh",
+      "description": "Ticketing, zitplaatsen, evenementsites, check-in, sponsors, netwerken, AI-setup en white label in één platform. Meld je aan als organisator of boek een demo."
+    },
+    "hero": {
+      "eyebrow": "Voor organisatoren",
+      "title": "Beheer elk evenement, van het eerste ticket tot de laatste check-in",
+      "lede": "Yayatoh geeft je organisatie ticketing, zitplaatsen, een evenementsite, check-in, sponsors, netwerken en analyses op één plek. Meld je vandaag aan en ons team beoordeelt je aanvraag.",
+      "apply": "Nu aanmelden",
+      "demo": "Demo boeken",
+      "videoTitle": "Productvideo van Yayatoh",
+      "play": "Productvideo afspelen",
+      "pause": "Productvideo pauzeren"
+    },
+    "trust": {
+      "eyebrow": "Gebouwd voor echte evenementen",
+      "modules": "productmodules in de catalogus",
+      "languages": "talen voor je gasten",
+      "eventTypes": "soorten evenementen met een eigen setup",
+      "plans": "abonnementen, van Starter tot Enterprise",
+      "builtFor": "Soorten evenementen"
+    },
+    "features": {
+      "eyebrow": "Het platform",
+      "title": "Alles wat een evenement nodig heeft, in één rondleiding",
+      "lede": "Elke module hieronder is vandaag live in het product. Wat je kunt gebruiken hangt af van je abonnement, zoals verderop getoond.",
+      "benefit": "Het voordeel:",
+      "ticketing": {
+        "title": "Ticketing en zitplaatsen",
+        "how": "Maak tickettypes aan, verkoop hele tafels of losse stoelen, en verkoop zelfs een stoel voor één specifieke dag van een meerdaags evenement. Gasten kiezen hun plaats op een live plattegrond.",
+        "benefit": "Minder dubbele boekingen, meer verkoop en een soepelere kassa."
+      },
+      "website": {
+        "title": "Evenementsites en ontwerp",
+        "how": "Elk evenement krijgt een eigen website met jouw kleuren, logo, programma, sprekers en inschrijfformulier. Pas het ontwerp aan zonder code en publiceer met één klik.",
+        "benefit": "Een professionele evenementpagina zonder webteam in te huren."
+      },
+      "checkin": {
+        "title": "Check-in en heropname",
+        "how": "Scan tickets bij de ingang met de staff-app, ook bij een drukke rij. Gasten kunnen weggaan en terugkomen, en elke scan wordt vastgelegd.",
+        "benefit": "Snelle wachtrijen, geen dubbele toegang en live aanwezigheidscijfers."
+      },
+      "sponsors": {
+        "title": "Sponsors en exposanten",
+        "how": "Verkoop sponsorpakketten, geef exposanten een eigen standprofiel en portaal, en laat ze leads verzamelen door badges van bezoekers te scannen.",
+        "benefit": "Nieuwe inkomsten voor jou en duidelijke waarde voor je partners."
+      },
+      "networking": {
+        "title": "Netwerken en chat",
+        "how": "Deelnemers maken een profiel, vinden de juiste mensen en sturen elkaar berichten in de evenementchat, met moderatietools voor je team.",
+        "benefit": "Gasten ontmoeten de juiste mensen en komen volgend jaar terug."
+      },
+      "ai": {
+        "title": "AI-setup en assistent",
+        "how": "Beschrijf je evenement in één zin en de AI maakt een voorstel voor de setup, tickettypes en beschrijving. Daarna helpt een assistent je team en je gasten met vragen.",
+        "benefit": "Uren aan voorbereiding worden minuten."
+      },
+      "donations": {
+        "title": "Donaties",
+        "how": "Voeg een donatieoptie toe bij het afrekenen, start een campagnepagina en toon een live donatiescherm tijdens je gala. Bonnen worden automatisch verstuurd.",
+        "benefit": "Haal meer geld op, met minder papierwerk."
+      },
+      "analytics": {
+        "title": "Analyses en bonnen",
+        "how": "Volg verkoop, aanwezigheid en bronnen in live rapporten, exporteer je gegevens en stuur gasten duidelijke bonnen en belastingoverzichten.",
+        "benefit": "Beslissingen op basis van feiten, en een boekhouding die klopt."
+      }
+    },
+    "solutions": {
+      "eyebrow": "Oplossingen",
+      "title": "Gemaakt voor de evenementen die jij organiseert",
+      "conferences": {
+        "name": "Conferenties",
+        "body": "Programma's, sprekers, sessies, sponsors, exposanten en badges voor meerdaagse programma's."
+      },
+      "galas": {
+        "name": "Gala's en fondsenwervers",
+        "body": "Tafelverkoop, plattegronden, donaties en een live donatiescherm voor de avond."
+      },
+      "weddings": {
+        "name": "Bruiloften",
+        "body": "Gastenlijsten, RSVP's, maaltijdkeuzes, tafelschikking en een privé evenementsite."
+      },
+      "festivals": {
+        "name": "Festivals",
+        "body": "Meerdere tickettypes, dagkaarten, toegangscontrole en heropname op grote schaal."
+      },
+      "nonprofits": {
+        "name": "Non-profits en gemeenschappen",
+        "body": "Gratis en betaalde evenementen, lidmaatschappen, donaties en duidelijke bonnen."
+      },
+      "agencies": {
+        "name": "Bureaus en locaties",
+        "body": "Beheer evenementen voor veel klanten vanuit één console, elk met een eigen merk."
+      }
+    },
+    "whiteLabel": {
+      "eyebrow": "White label",
+      "title": "Jouw merk, ons platform",
+      "lede": "Presenteer Yayatoh als je eigen product. Bureaus en grotere organisaties kunnen veel klanten onder hun eigen naam beheren.",
+      "domain": {
+        "title": "Eigen domein",
+        "body": "Bied je evenementen aan via je eigen adres, zoals tickets.yourbrand.com, met een veilig certificaat."
+      },
+      "branding": {
+        "title": "Jouw kleuren en logo",
+        "body": "Zet je merkkleur en logo op je pagina's, e-mails en tickets."
+      },
+      "site": {
+        "title": "Evenementsite in jouw huisstijl",
+        "body": "Elk evenement krijgt een site die er als de jouwe uitziet, met een eigen organisatorpagina en blog."
+      },
+      "agency": {
+        "title": "Bureauconsole",
+        "body": "Beheer veel klantorganisaties vanuit één console, met rollen en toegang die je zelf bepaalt."
+      },
+      "api": {
+        "title": "Publieke API",
+        "body": "Koppel je eigen systemen met API-sleutels en webhooks om tickets te verkopen en gegevens uit te lezen."
+      }
+    },
+    "how": {
+      "eyebrow": "Zo werkt het",
+      "title": "Van aanmelding tot eerste evenement in vier stappen",
+      "apply": {
+        "title": "Aanmelden",
+        "body": "Vertel ons over je organisatie en de evenementen die je organiseert."
+      },
+      "review": {
+        "title": "Wij beoordelen",
+        "body": "Ons team bekijkt elke aanvraag en stelt zo nodig een vraag."
+      },
+      "invite": {
+        "title": "Ontvang je uitnodiging",
+        "body": "Na goedkeuring ontvang je een persoonlijke e-mailuitnodiging voor je abonnement."
+      },
+      "launch": {
+        "title": "Aan de slag",
+        "body": "Maak je account aan, volg de setup-checklist en publiceer je eerste evenement."
+      }
+    },
+    "plans": {
+      "eyebrow": "Abonnementen en prijzen",
+      "title": "Kies het abonnement dat bij je past",
+      "lede": "De abonnementen komen uit onze live catalogus. Elk abonnement kun je later wijzigen.",
+      "perMonth": "{price} per maand",
+      "onApproval": "Bevestigd bij goedkeuring",
+      "choose": "{plan} aanvragen",
+      "note": "Prijzen verschijnen hier zodra een abonnement te koop is. De ticketkosten van het platform worden bevestigd wanneer je aanvraag is goedgekeurd.",
+      "starter": {
+        "name": "Starter",
+        "body": "Voor organisatoren die starten met betaalde evenementen."
+      },
+      "pro": {
+        "name": "Pro",
+        "body": "Voor teams die elke maand evenementen organiseren."
+      },
+      "white_label": {
+        "name": "White label / Bureau",
+        "body": "Jouw merk, jouw domein en veel klanten."
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "body": "Voor grote programma's met maatwerk."
+      }
+    },
+    "modules": {
+      "ticketing": "Ticketing",
+      "seating": "Plattegronden",
+      "advanced_seating": "Tafels en geavanceerde zitplaatsen",
+      "website": "Evenementsite",
+      "registration": "Inschrijfformulieren",
+      "checkin": "Check-in en heropname",
+      "sessions": "Sessies en programma",
+      "speakers": "Sprekers",
+      "sponsors": "Sponsors",
+      "exhibitors": "Exposanten",
+      "chat": "Netwerken en chat",
+      "ai": "AI-assistent",
+      "donations": "Donaties",
+      "analytics_pro": "Geavanceerde analyses",
+      "integrations": "Integraties",
+      "api_access": "API-toegang",
+      "whitelabel": "White label",
+      "agency": "Bureauconsole",
+      "virtual": "Virtuele evenementen"
+    },
+    "compare": {
+      "title": "Abonnementen vergelijken",
+      "feature": "Functie",
+      "included": "Inbegrepen",
+      "notIncluded": "Niet inbegrepen"
+    },
+    "stories": {
+      "eyebrow": "Klanten",
+      "title": "Wat organisatoren zeggen",
+      "empty": "Klantverhalen volgen binnenkort. Boek een demo om het platform samen met ons team te bekijken."
+    },
+    "faq": {
+      "title": "Vragen",
+      "cost": {
+        "q": "Wat kost het?",
+        "a": "Abonnementen en ticketkosten staan hierboven en worden bevestigd wanneer je aanvraag is goedgekeurd. Aanmelden is gratis."
+      },
+      "review": {
+        "q": "Hoe lang duurt de beoordeling?",
+        "a": "Ons team beoordeelt elke aanvraag handmatig en kan reageren met een vraag. Je ontvangt in beide gevallen een e-mail."
+      },
+      "whiteLabel": {
+        "q": "Kan ik mijn eigen merk en domein gebruiken?",
+        "a": "Ja. White label- en bureau-abonnementen ondersteunen een eigen domein, jouw kleuren en logo, en een console voor veel klanten."
+      },
+      "payments": {
+        "q": "Hoe word ik uitbetaald?",
+        "a": "Het ticketgeld wordt uitbetaald op de bankrekening die je tijdens de setup koppelt, na de controles die voor uitbetalingen vereist zijn."
+      },
+      "data": {
+        "q": "Van wie zijn de gegevens van mijn gasten?",
+        "a": "Van jou. Wij verwerken ze namens jou, en gasten kunnen vragen om hun gegevens te exporteren of te wissen."
+      },
+      "migrate": {
+        "q": "Kan ik overstappen van een andere ticketingtool?",
+        "a": "Ja. Je kunt gastenlijsten importeren en ons team helpt je graag de overstap te plannen wanneer je een demo boekt."
+      }
+    },
+    "form": {
+      "eyebrow": "Aanmelden",
+      "title": "Aanmelden als organisator",
+      "lede": "Duurt ongeveer drie minuten. We beoordelen elke aanvraag en antwoorden per e-mail.",
+      "mode": "Wat wil je doen?",
+      "mode_apply": "Aanmelden als organisator",
+      "mode_demo": "Demo boeken",
+      "orgName": "Naam van de organisatie",
+      "orgType": "Type organisatie",
+      "country": "Land",
+      "countryPlaceholder": "Kies een land",
+      "website": "Website",
+      "contactName": "Je naam",
+      "contactEmail": "Zakelijk e-mailadres",
+      "contactPhone": "Telefoonnummer",
+      "eventTypes": "Welke evenementen organiseer je?",
+      "eventsPerYear": "Evenementen per jaar",
+      "expectedTickets": "Tickets die je per jaar verwacht te verkopen",
+      "planInterest": "Abonnement waarin je geïnteresseerd bent",
+      "whiteLabel": "Wil je white label (eigen merk en domein)?",
+      "yes": "Ja",
+      "no": "Nee",
+      "preferredTime": "Gewenst tijdstip voor de demo",
+      "preferredTimeHint": "Jouw tijdzone: {zone}",
+      "message": "Is er nog iets dat we moeten weten?",
+      "optional": "Optioneel",
+      "privacy": "We gebruiken deze gegevens alleen om je aanvraag te beoordelen en contact met je op te nemen.",
+      "submitApply": "Aanvraag versturen",
+      "submitDemo": "Demo aanvragen",
+      "sentTitle": "Bedankt, we hebben het ontvangen",
+      "sentApply": "We hebben een bevestiging naar je e-mail gestuurd. Ons team beoordeelt je aanvraag en antwoordt snel.",
+      "sentDemo": "We hebben een bevestiging naar je e-mail gestuurd. Ons team bevestigt binnenkort het tijdstip van je demo.",
+      "fixErrors": "Controleer de gemarkeerde velden en probeer het opnieuw.",
+      "rateLimited": "Te veel pogingen. Probeer het over {minutes} minuten opnieuw.",
+      "errors": {
+        "orgName": "Vul de naam van je organisatie in.",
+        "country": "Kies een land.",
+        "website": "Vul een volledig webadres in dat begint met https://.",
+        "contactName": "Vul je naam in.",
+        "contactEmail": "Vul een geldig e-mailadres in.",
+        "eventTypes": "Kies minstens één type evenement.",
+        "preferredTime": "Kies een tijdstip voor de demo.",
+        "human": "Bevestig dat je een mens bent."
+      }
+    },
+    "options": {
+      "orgType": {
+        "company": "Bedrijf",
+        "nonprofit": "Non-profit",
+        "agency": "Bureau",
+        "venue": "Locatie",
+        "school": "School of universiteit",
+        "community": "Gemeenschapsgroep",
+        "individual": "Particulier",
+        "other": "Anders"
+      },
+      "eventType": {
+        "conference": "Conferenties",
+        "gala": "Gala's",
+        "wedding": "Bruiloften",
+        "festival": "Festivals",
+        "workshop": "Workshops",
+        "sports": "Sport",
+        "fundraiser": "Fondsenwervers",
+        "other": "Anders"
+      },
+      "eventsPerYear": {
+        "1-5": "1 tot 5",
+        "6-20": "6 tot 20",
+        "21-100": "21 tot 100",
+        "100+": "Meer dan 100"
+      },
+      "expectedTickets": {
+        "lt500": "Minder dan 500",
+        "500-5000": "500 tot 5.000",
+        "5000-50000": "5.000 tot 50.000",
+        "gt50000": "Meer dan 50.000"
+      },
+      "plan": {
+        "starter": "Starter",
+        "pro": "Pro",
+        "white_label": "White label / Bureau",
+        "enterprise": "Enterprise",
+        "unsure": "Nog niet zeker"
+      }
+    },
+    "mail": {
+      "applySubject": "We hebben je Yayatoh-aanvraag ontvangen",
+      "applyBody": "Hallo {name},\n\nBedankt voor je aanmelding als organisator op Yayatoh voor {org}. Ons team beoordeelt elke aanvraag en antwoordt per e-mail.\n\nHet Yayatoh-team",
+      "demoSubject": "We hebben je Yayatoh-demoaanvraag ontvangen",
+      "demoBody": "Hallo {name},\n\nBedankt voor je aanvraag van een Yayatoh-demo voor {org}. Ons team stuurt je een e-mail om een tijdstip te bevestigen.\n\nHet Yayatoh-team"
     }
   }
 }

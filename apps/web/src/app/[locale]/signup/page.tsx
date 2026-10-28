@@ -1,4 +1,4 @@
-import { openSignupEnabled, signupCodeValid } from '@yayatoh/tenancy';
+import { openSignupEnabled, signupCodeInfo } from '@yayatoh/tenancy';
 import { buttonClass, Card, Input, Label, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AuthBar } from '@/components/auth-bar.tsx';
@@ -8,11 +8,8 @@ import { humanCheckWidget } from '@/server/human-check.ts';
 import { ownAuthSession } from '@/server/session.ts';
 import { signupAction } from './actions.ts';
 
-/** Where "Join the waitlist" goes while signup is closed (owner-provided; hidden when unset). */
-function waitlistUrl(): string | null {
-  const url = process.env.SIGNUP_WAITLIST_URL?.trim();
-  return url && /^(https:\/\/|mailto:)/.test(url) ? url : null;
-}
+/** a***@example.com: enough to recognise the address, not to learn it. */
+const maskEmail = (e: string) => e.replace(/^(.).*(@.*)$/, '$1***$2');
 
 /**
  * Signup. With a signup code (M1.3b), a person verifies their email (a one-time code creates the
@@ -33,10 +30,13 @@ export default async function SignupPage({
   setRequestLocale(locale);
   const t = await getTranslations();
   const [session, open] = await Promise.all([ownAuthSession(), openSignupEnabled()]);
-  const valid = code ? await signupCodeValid(code) : false;
+  const info = code ? await signupCodeInfo(code) : null;
+  const valid = info?.valid === true;
+  const wrongEmail = Boolean(
+    valid && info?.boundEmail && session && session.user.email.toLowerCase() !== info.boundEmail,
+  );
   const here = code ? `/signup?code=${encodeURIComponent(code)}` : '/signup';
   const selfServe = !code && open;
-  const waitlist = waitlistUrl();
   return (
     <>
       <AuthBar />
@@ -56,11 +56,9 @@ export default async function SignupPage({
                 {t('signup.comingSoon')}
               </h2>
               <p className="text-body text-ink-2">{t('signup.comingSoonBody')}</p>
-              {waitlist ? (
-                <a href={waitlist} className={buttonClass('primary', 'md', 'self-start')}>
-                  {t('signup.joinWaitlist')}
-                </a>
-              ) : null}
+              <Link href="/for-organizers#apply" className={buttonClass('primary', 'md', 'self-start')}>
+                {t('signup.applyCta')}
+              </Link>
               <p className="text-body text-ink-2">{t('signup.needCode')}</p>
               <form method="get" className="flex flex-wrap items-end gap-3">
                 <Input
@@ -92,6 +90,10 @@ export default async function SignupPage({
                 {t('signup.continueWithEmail')}
               </Link>
             </>
+          ) : wrongEmail ? (
+            <p className="text-body text-ink-2">
+              {t('signup.codeOtherEmail', { email: maskEmail(info?.boundEmail ?? '') })}
+            </p>
           ) : (
             <>
               <p className="text-caption text-ink-2">

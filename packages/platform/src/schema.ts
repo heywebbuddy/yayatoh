@@ -277,6 +277,11 @@ export const signupCodes = platform.table(
     note: text('note').notNull().default(''),
     createdBy: text('created_by').notNull(),
     createdAt: tsz('created_at').notNull().defaultNow(),
+    /** An approved organizer application: only this email can claim the code (lower case). */
+    boundEmail: text('bound_email'),
+    /** The plan the organization lands on after signup (an approved application). */
+    planKey: text('plan_key'),
+    applicationId: uuid('application_id'),
   },
   (t) => [
     uniqueIndex('signup_codes_code_hash_key').on(t.codeHash),

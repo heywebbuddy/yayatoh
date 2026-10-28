@@ -138,8 +138,10 @@ export {
   provisionOrganizationCommand,
   randomSignupCode,
   SignUpOrganizationInput,
+  type SignupCodeInfo,
   signUpOrganization,
   signUpOrganizationCommand,
+  signupCodeInfo,
   signupCodeValid,
   updateOrganizationCommand,
 } from './commands/organizations.ts';

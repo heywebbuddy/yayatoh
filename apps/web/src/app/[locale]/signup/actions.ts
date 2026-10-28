@@ -1,7 +1,8 @@
 'use server';
 
-import { createCtx, isDomainError } from '@yayatoh/kernel';
-import { signUpOrganization } from '@yayatoh/tenancy';
+import { assignOrganizationPlanCommand } from '@yayatoh/billing';
+import { createCtx, executeCommand, isDomainError } from '@yayatoh/kernel';
+import { signUpOrganization, signupCodeInfo } from '@yayatoh/tenancy';
 import { getLocale } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
 import { getHumanCheck, passedHumanCheck } from '@/server/human-check.ts';
@@ -33,12 +34,17 @@ export async function signupAction(_prev: SignupState, form: FormData): Promise<
     if (!limit.allowed) return { code: 'rate_limited', minutes: retryAfterMinutes(limit) };
     if (getHumanCheck() && (await passedHumanCheck(form)) !== true) return { code: 'human_check' };
   }
+  // An approved application's code is tied to one address and lands the org on the approved plan.
+  const info = code ? await signupCodeInfo(code) : null;
+  if (info?.boundEmail && !session.user.emailVerified) return { code: 'email_unverified' };
+  const plan = info?.planKey ?? null;
   let slug: string;
   try {
     const org = await signUpOrganization(
       createCtx({ actor: { type: 'user', userId: session.user.id }, locale }),
       {
         code,
+        claimEmail: code ? session.user.email : undefined,
         name: String(form.get('name') ?? ''),
         slug: String(form.get('slug') ?? '').toLowerCase(),
         defaultProfile: String(form.get('profile') ?? 'other'),
@@ -49,6 +55,13 @@ export async function signupAction(_prev: SignupState, form: FormData): Promise<
       ports,
     );
     slug = org.slug;
+    if (plan)
+      await executeCommand(
+        assignOrganizationPlanCommand,
+        { planKey: plan, reason: 'organizer application approved' },
+        createCtx({ orgId: org.id, actor: { type: 'system', name: 'organizer-application' }, locale }),
+        ports,
+      ).catch(() => undefined); // the org exists; staff can still set the plan in the console
   } catch (err) {
     if (!isDomainError(err)) throw err;
     const d = err.details as { field?: unknown; reason?: unknown } | undefined;

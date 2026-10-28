@@ -441,6 +441,9 @@ importers:
       '@fontsource-variable/manrope':
         specifier: 5.3.0
         version: 5.3.0
+      '@yayatoh/applications':
+        specifier: workspace:*
+        version: link:../../packages/modules/applications
       '@yayatoh/auth':
         specifier: workspace:*
         version: link:../../packages/auth
@@ -988,6 +991,9 @@ importers:
       '@yayatoh/api-v1':
         specifier: workspace:*
         version: link:../../packages/api-v1
+      '@yayatoh/applications':
+        specifier: workspace:*
+        version: link:../../packages/modules/applications
       '@yayatoh/assistance':
         specifier: workspace:*
         version: link:../../packages/modules/assistance
@@ -2077,6 +2083,31 @@ importers:
       '@yayatoh/ticketing':
         specifier: workspace:*
         version: link:../ticketing
+      drizzle-orm:
+        specifier: 'catalog:'
+        version: 0.45.3(@opentelemetry/api@1.9.1)(expo-sqlite@57.0.4(expo@57.0.30)(react-native@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/jest-preset@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(react@19.3.0))(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)
+      zod:
+        specifier: 'catalog:'
+        version: 4.6.5
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.0
+      '@yayatoh/config':
+        specifier: workspace:*
+        version: link:../../config
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+
+  packages/modules/applications:
+    dependencies:
+      '@yayatoh/db':
+        specifier: workspace:*
+        version: link:../../db
+      '@yayatoh/kernel':
+        specifier: workspace:*
+        version: link:../../kernel
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.3(@opentelemetry/api@1.9.1)(expo-sqlite@57.0.4(expo@57.0.30)(react-native@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(@react-native/jest-preset@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(react@19.3.0)(supports-color@10.2.2))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@10.2.2))(supports-color@10.2.2))(@types/react@19.3.0)(react@19.3.0)(supports-color@10.2.2))(react@19.3.0))(kysely@0.29.6)(pg@8.23.0)(postgres@3.4.9)

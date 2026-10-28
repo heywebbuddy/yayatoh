@@ -1870,7 +1870,9 @@
     "openNote": "Sua organização começa no modo de configuração: aceite os termos, publique um aviso de privacidade e crie seu primeiro evento para liberar mensagens aos convidados. <pricing>Ver preços e taxas</pricing>.",
     "closedNow": "Por enquanto, o cadastro é apenas por convite. Informe seu código de cadastro.",
     "verifyEmail": "Confirme primeiro seu endereço de e-mail.",
-    "humanCheck": "Confirme que você é uma pessoa."
+    "humanCheck": "Confirme que você é uma pessoa.",
+    "applyCta": "Candidatar-se a organizador",
+    "codeOtherEmail": "Este convite é para {email}. Inicie sessão com esse endereço de email para o utilizar."
   },
   "payouts": {
     "title": "Repasses",
@@ -19801,7 +19803,8 @@
       "included": "Incluído",
       "notIncluded": "Não incluído por padrão",
       "demoTitle": "Eventos como este no Yayatoh"
-    }
+    },
+    "forOrganizers": "Para organizadores"
   },
   "eventDesign": {
     "title": "Design da página",
@@ -20137,6 +20140,325 @@
       "unauthorized": "Entre novamente para enviar.",
       "not_found": "Você não pode enviar arquivos para esta organização.",
       "invalid": "Não foi possível ler o envio."
+    }
+  },
+  "forOrganizers": {
+    "meta": {
+      "title": "Para organizadores: venda bilhetes e gira os seus eventos no Yayatoh",
+      "description": "Bilheteira, lugares, sites de eventos, check-in, patrocinadores, networking, configuração com IA e white label numa só plataforma. Candidate-se a organizador ou marque uma demonstração."
+    },
+    "hero": {
+      "eyebrow": "Para organizadores",
+      "title": "Gira todos os eventos, do primeiro bilhete ao último check-in",
+      "lede": "O Yayatoh dá à sua organização bilheteira, lugares, um site do evento, check-in, patrocinadores, networking e análises num só lugar. Candidate-se hoje e a nossa equipa analisará o seu pedido.",
+      "apply": "Candidatar-se agora",
+      "demo": "Marcar demonstração",
+      "videoTitle": "Vídeo do produto Yayatoh",
+      "play": "Reproduzir o vídeo do produto",
+      "pause": "Pausar o vídeo do produto"
+    },
+    "trust": {
+      "eyebrow": "Feito para eventos reais",
+      "modules": "módulos de produto no catálogo",
+      "languages": "idiomas para os seus convidados",
+      "eventTypes": "tipos de evento com configuração própria",
+      "plans": "planos, do Starter ao Enterprise",
+      "builtFor": "Tipos de evento"
+    },
+    "features": {
+      "eyebrow": "A plataforma",
+      "title": "Tudo o que um evento precisa, numa só visita",
+      "lede": "Cada módulo abaixo está disponível hoje no produto. O que pode usar depende do seu plano, apresentado mais abaixo.",
+      "benefit": "O benefício:",
+      "ticketing": {
+        "title": "Bilheteira e lugares",
+        "how": "Crie tipos de bilhete, venda mesas inteiras ou lugares individuais e até um lugar para um dia específico de um evento de vários dias. Os convidados escolhem os lugares numa planta em tempo real.",
+        "benefit": "Menos reservas duplicadas, mais vendas e uma bilheteira mais fluida."
+      },
+      "website": {
+        "title": "Sites de eventos e design",
+        "how": "Cada evento tem o seu próprio site, com as suas cores, logótipo, programa, oradores e formulário de inscrição. Edite o design sem código e publique com um clique.",
+        "benefit": "Uma página de evento profissional sem contratar uma equipa web."
+      },
+      "checkin": {
+        "title": "Check-in e reentrada",
+        "how": "Leia os bilhetes à porta com a app da equipa, mesmo com a fila cheia. Os convidados podem sair e voltar, e cada leitura fica registada.",
+        "benefit": "Filas rápidas, sem entradas duplicadas e números de presença em tempo real."
+      },
+      "sponsors": {
+        "title": "Patrocinadores e expositores",
+        "how": "Venda pacotes de patrocínio, dê aos expositores o seu próprio perfil de stand e portal, e deixe-os recolher contactos lendo os crachás dos participantes.",
+        "benefit": "Novas receitas para si e valor claro para os seus parceiros."
+      },
+      "networking": {
+        "title": "Networking e chat",
+        "how": "Os participantes criam um perfil, encontram as pessoas certas e trocam mensagens no chat do evento, com ferramentas de moderação para a sua equipa.",
+        "benefit": "Os convidados conhecem as pessoas certas e voltam no próximo ano."
+      },
+      "ai": {
+        "title": "Configuração com IA e assistente",
+        "how": "Descreva o seu evento numa frase e a IA prepara a configuração, os tipos de bilhete e a descrição. Depois, um assistente ajuda a sua equipa e os convidados com dúvidas.",
+        "benefit": "Horas de configuração passam a minutos."
+      },
+      "donations": {
+        "title": "Donativos",
+        "how": "Adicione uma opção de donativo no pagamento, crie uma página de campanha e mostre um ecrã de donativos em direto na sua gala. Os recibos são enviados automaticamente.",
+        "benefit": "Angarie mais fundos, com menos burocracia."
+      },
+      "analytics": {
+        "title": "Análises e recibos",
+        "how": "Acompanhe vendas, presenças e origens em relatórios em tempo real, exporte os seus dados e envie aos convidados recibos e resumos fiscais claros.",
+        "benefit": "Decisões baseadas em factos e contas que batem certo."
+      }
+    },
+    "solutions": {
+      "eyebrow": "Soluções",
+      "title": "Feito para os eventos que organiza",
+      "conferences": {
+        "name": "Conferências",
+        "body": "Programas, oradores, sessões, patrocinadores, expositores e crachás para programas de vários dias."
+      },
+      "galas": {
+        "name": "Galas e angariação de fundos",
+        "body": "Venda de mesas, plantas de lugares, donativos e um ecrã de donativos em direto para a noite."
+      },
+      "weddings": {
+        "name": "Casamentos",
+        "body": "Listas de convidados, confirmações de presença, escolhas de menu, lugares e um site de evento privado."
+      },
+      "festivals": {
+        "name": "Festivais",
+        "body": "Vários tipos de bilhete, passes diários, controlo de entrada e reentrada em grande escala."
+      },
+      "nonprofits": {
+        "name": "Organizações sem fins lucrativos e comunidades",
+        "body": "Eventos gratuitos e pagos, adesões, donativos e recibos claros."
+      },
+      "agencies": {
+        "name": "Agências e espaços",
+        "body": "Gira eventos de muitos clientes a partir de uma só consola, cada um com a sua própria marca."
+      }
+    },
+    "whiteLabel": {
+      "eyebrow": "White label",
+      "title": "A sua marca, a nossa plataforma",
+      "lede": "Apresente o Yayatoh como o seu próprio produto. Agências e organizações maiores podem gerir muitos clientes sob o seu nome.",
+      "domain": {
+        "title": "Domínio próprio",
+        "body": "Publique os seus eventos no seu próprio endereço, como tickets.yourbrand.com, com certificado seguro."
+      },
+      "branding": {
+        "title": "As suas cores e logótipo",
+        "body": "Aplique a cor da sua marca e o logótipo nas páginas, emails e bilhetes."
+      },
+      "site": {
+        "title": "Site de evento com a sua marca",
+        "body": "Cada evento tem um site com o seu aspeto, com a sua própria página de organizador e blogue."
+      },
+      "agency": {
+        "title": "Consola de agência",
+        "body": "Gira muitas organizações clientes a partir de uma só consola, com funções e acessos que controla."
+      },
+      "api": {
+        "title": "API pública",
+        "body": "Ligue os seus próprios sistemas com chaves de API e webhooks para vender bilhetes e consultar dados."
+      }
+    },
+    "how": {
+      "eyebrow": "Como funciona",
+      "title": "Da candidatura ao primeiro evento em quatro passos",
+      "apply": {
+        "title": "Candidatura",
+        "body": "Conte-nos sobre a sua organização e os eventos que realiza."
+      },
+      "review": {
+        "title": "Analisamos",
+        "body": "A nossa equipa analisa cada candidatura e pode fazer uma pergunta."
+      },
+      "invite": {
+        "title": "Receba o convite",
+        "body": "Depois de aprovado, recebe um convite pessoal por email para o seu plano."
+      },
+      "launch": {
+        "title": "Arranque",
+        "body": "Crie a sua conta, siga a lista de configuração e publique o seu primeiro evento."
+      }
+    },
+    "plans": {
+      "eyebrow": "Planos e preços",
+      "title": "Escolha o plano certo para si",
+      "lede": "Os planos vêm do nosso catálogo em tempo real. Qualquer plano pode ser alterado mais tarde.",
+      "perMonth": "{price} por mês",
+      "onApproval": "Confirmado na aprovação",
+      "choose": "Candidatar-se ao {plan}",
+      "note": "Os preços aparecem aqui quando um plano estiver à venda. As taxas de bilhete da plataforma são confirmadas quando a sua candidatura for aprovada.",
+      "starter": {
+        "name": "Starter",
+        "body": "Para organizadores que começam com eventos pagos."
+      },
+      "pro": {
+        "name": "Pro",
+        "body": "Para equipas que organizam eventos todos os meses."
+      },
+      "white_label": {
+        "name": "White label / Agência",
+        "body": "A sua marca, o seu domínio e muitos clientes."
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "body": "Para grandes programas com necessidades específicas."
+      }
+    },
+    "modules": {
+      "ticketing": "Bilheteira",
+      "seating": "Plantas de lugares",
+      "advanced_seating": "Mesas e lugares avançados",
+      "website": "Site do evento",
+      "registration": "Formulários de inscrição",
+      "checkin": "Check-in e reentrada",
+      "sessions": "Sessões e programa",
+      "speakers": "Oradores",
+      "sponsors": "Patrocinadores",
+      "exhibitors": "Expositores",
+      "chat": "Networking e chat",
+      "ai": "Assistente de IA",
+      "donations": "Donativos",
+      "analytics_pro": "Análises avançadas",
+      "integrations": "Integrações",
+      "api_access": "Acesso à API",
+      "whitelabel": "White label",
+      "agency": "Consola de agência",
+      "virtual": "Eventos virtuais"
+    },
+    "compare": {
+      "title": "Comparar planos",
+      "feature": "Funcionalidade",
+      "included": "Incluído",
+      "notIncluded": "Não incluído"
+    },
+    "stories": {
+      "eyebrow": "Clientes",
+      "title": "O que dizem os organizadores",
+      "empty": "As histórias de clientes estão a caminho. Marque uma demonstração para ver a plataforma com a nossa equipa."
+    },
+    "faq": {
+      "title": "Perguntas",
+      "cost": {
+        "q": "Quanto custa?",
+        "a": "Os planos e as taxas de bilhete estão indicados acima e são confirmados quando a sua candidatura for aprovada. Candidatar-se não tem custos."
+      },
+      "review": {
+        "q": "Quanto tempo demora a análise?",
+        "a": "A nossa equipa analisa cada candidatura manualmente e pode responder com uma pergunta. Receberá um email em qualquer dos casos."
+      },
+      "whiteLabel": {
+        "q": "Posso usar a minha própria marca e domínio?",
+        "a": "Sim. Os planos white label e de agência permitem domínio próprio, as suas cores e logótipo, e uma consola para muitos clientes."
+      },
+      "payments": {
+        "q": "Como recebo o dinheiro?",
+        "a": "O dinheiro dos bilhetes é pago na conta bancária que ligar durante a configuração, após as verificações exigidas para pagamentos."
+      },
+      "data": {
+        "q": "De quem são os dados dos meus convidados?",
+        "a": "Seus. Tratamo-los em seu nome, e os convidados podem pedir a exportação ou o apagamento dos seus dados."
+      },
+      "migrate": {
+        "q": "Posso mudar de outra ferramenta de bilheteira?",
+        "a": "Sim. Pode importar listas de convidados, e a nossa equipa ajuda-o a planear a mudança quando marcar uma demonstração."
+      }
+    },
+    "form": {
+      "eyebrow": "Candidatura",
+      "title": "Candidatar-se a organizador",
+      "lede": "Demora cerca de três minutos. Analisamos todas as candidaturas e respondemos por email.",
+      "mode": "O que gostaria de fazer?",
+      "mode_apply": "Candidatar-se a organizador",
+      "mode_demo": "Marcar demonstração",
+      "orgName": "Nome da organização",
+      "orgType": "Tipo de organização",
+      "country": "País",
+      "countryPlaceholder": "Escolha um país",
+      "website": "Website",
+      "contactName": "O seu nome",
+      "contactEmail": "Email profissional",
+      "contactPhone": "Número de telefone",
+      "eventTypes": "Que eventos organiza?",
+      "eventsPerYear": "Eventos por ano",
+      "expectedTickets": "Bilhetes que prevê vender por ano",
+      "planInterest": "Plano em que está interessado",
+      "whiteLabel": "Quer white label (marca e domínio próprios)?",
+      "yes": "Sim",
+      "no": "Não",
+      "preferredTime": "Horário preferido para a demonstração",
+      "preferredTimeHint": "O seu fuso horário: {zone}",
+      "message": "Mais alguma coisa que devamos saber?",
+      "optional": "Opcional",
+      "privacy": "Usamos estes dados apenas para analisar a sua candidatura e contactá-lo sobre ela.",
+      "submitApply": "Enviar candidatura",
+      "submitDemo": "Pedir uma demonstração",
+      "sentTitle": "Obrigado, recebemos o seu pedido",
+      "sentApply": "Enviámos uma confirmação para o seu email. A nossa equipa analisará a sua candidatura e responderá em breve.",
+      "sentDemo": "Enviámos uma confirmação para o seu email. A nossa equipa confirmará em breve o horário da sua demonstração.",
+      "fixErrors": "Verifique os campos destacados e tente novamente.",
+      "rateLimited": "Demasiadas tentativas. Tente novamente dentro de {minutes} minutos.",
+      "errors": {
+        "orgName": "Indique o nome da sua organização.",
+        "country": "Escolha um país.",
+        "website": "Indique um endereço web completo, começado por https://.",
+        "contactName": "Indique o seu nome.",
+        "contactEmail": "Indique um endereço de email válido.",
+        "eventTypes": "Escolha pelo menos um tipo de evento.",
+        "preferredTime": "Escolha um horário para a demonstração.",
+        "human": "Confirme que é uma pessoa."
+      }
+    },
+    "options": {
+      "orgType": {
+        "company": "Empresa",
+        "nonprofit": "Organização sem fins lucrativos",
+        "agency": "Agência",
+        "venue": "Espaço",
+        "school": "Escola ou universidade",
+        "community": "Grupo comunitário",
+        "individual": "Particular",
+        "other": "Outro"
+      },
+      "eventType": {
+        "conference": "Conferências",
+        "gala": "Galas",
+        "wedding": "Casamentos",
+        "festival": "Festivais",
+        "workshop": "Workshops",
+        "sports": "Desporto",
+        "fundraiser": "Angariação de fundos",
+        "other": "Outro"
+      },
+      "eventsPerYear": {
+        "1-5": "1 a 5",
+        "6-20": "6 a 20",
+        "21-100": "21 a 100",
+        "100+": "Mais de 100"
+      },
+      "expectedTickets": {
+        "lt500": "Menos de 500",
+        "500-5000": "500 a 5.000",
+        "5000-50000": "5.000 a 50.000",
+        "gt50000": "Mais de 50.000"
+      },
+      "plan": {
+        "starter": "Starter",
+        "pro": "Pro",
+        "white_label": "White label / Agência",
+        "enterprise": "Enterprise",
+        "unsure": "Ainda não sei"
+      }
+    },
+    "mail": {
+      "applySubject": "Recebemos a sua candidatura ao Yayatoh",
+      "applyBody": "Olá {name},\n\nObrigado por se candidatar a organizador no Yayatoh para {org}. A nossa equipa analisa cada candidatura e responderá por email.\n\nA equipa Yayatoh",
+      "demoSubject": "Recebemos o seu pedido de demonstração do Yayatoh",
+      "demoBody": "Olá {name},\n\nObrigado por pedir uma demonstração do Yayatoh para {org}. A nossa equipa enviará um email para confirmar um horário.\n\nA equipa Yayatoh"
     }
   }
 }

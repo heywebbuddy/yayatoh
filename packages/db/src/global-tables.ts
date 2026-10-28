@@ -47,6 +47,12 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
     'Testimonials for the home page written by staff in the admin console; app_user reads published rows through cms.public_platform_testimonials; written only by cms.platform_save_testimonial / platform_delete_testimonial (platform_reader).',
   'cms.platform_hero':
     'The home hero (headline, subtitle, image, video, call to action), one row, written by staff in the admin console; app_user reads cms.public_platform_hero; written only by cms.platform_save_hero (platform_reader).',
+  'applications.applications':
+    'Organizer applications and demo requests from the for-organizers landing page (an applicant has no org yet); no app_user privileges, written by the SECURITY DEFINER applications.submit and, for staff, applications.* functions (platform_reader).',
+  'applications.notes':
+    'Internal staff notes on organizer applications; no app_user privileges; written by applications.add_note (platform_reader).',
+  'applications.events':
+    'Append-only audit log of organizer applications (submit, status, assignment, notes, emails, approval); no app_user privileges; written by applications.* functions.',
   'platform.signup_codes':
     'Invite-only signup codes (hashed); no app_user privileges, only SECURITY DEFINER check/claim and staff-only create.',
   'platform.flags':

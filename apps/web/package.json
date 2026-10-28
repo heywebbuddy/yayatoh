@@ -26,6 +26,7 @@
     "@yayatoh/alerts": "workspace:*",
     "@yayatoh/analytics": "workspace:*",
     "@yayatoh/api-v1": "workspace:*",
+    "@yayatoh/applications": "workspace:*",
     "@yayatoh/assistance": "workspace:*",
     "@yayatoh/attendees": "workspace:*",
     "@yayatoh/audiences": "workspace:*",

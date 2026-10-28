@@ -13,6 +13,7 @@ export type StaffAction =
   | 'impersonate'
   | 'status'
   | 'signupCodes'
+  | 'applications'
   | 'privacy'
   | 'messaging'
   | 'quotas'
@@ -32,6 +33,8 @@ export type StaffAction =
  *   suspending takes every public page offline and terminating can't be undone here, so it is an
  *   account decision; support already has the per-capability kill switches for incidents.
  * - Admins and support hand out signup codes (onboarding is a support task); finance doesn't.
+ * - `applications`: review organizer applications from the for-organizers page (applicants' contact
+ *   details, notes, approvals that create an invitation): admins and support, like signup codes.
  * - `privacy` (M1.14e): data-subject requests about Yayatoh accounts. Admin and support answer
  *   people's requests; finance has no reason to see or erase personal data (pending owner).
  * - `messaging` (M3.5a): see and lift complaint-rate auto-pauses (admin, support); `quotas`: set
@@ -69,6 +72,7 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'impersonate',
     'status',
     'signupCodes',
+    'applications',
     'privacy',
     'messaging',
     'quotas',
@@ -87,6 +91,7 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'suspend',
     'reports',
     'signupCodes',
+    'applications',
     'privacy',
     'messaging',
     'incidents',

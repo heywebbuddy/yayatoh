@@ -88,6 +88,9 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
               <Link href="/pricing" className={link}>
                 {t('pricing')}
               </Link>
+              <Link href="/for-organizers" className={link}>
+                {t('forOrganizers')}
+              </Link>
               <Link href="/my-tickets" className={link}>
                 {t('myTickets')}
               </Link>
@@ -129,6 +132,11 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
                 <li>
                   <Link href="/pricing" className={`${link} w-full`}>
                     {t('pricing')}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/for-organizers" className={`${link} w-full`}>
+                    {t('forOrganizers')}
                   </Link>
                 </li>
                 <li>

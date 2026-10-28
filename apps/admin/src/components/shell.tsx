@@ -3,6 +3,7 @@ import {
   BadgeCheck,
   Building2,
   ChartColumn,
+  ClipboardList,
   DoorOpen,
   KeyRound,
   LayoutDashboard,
@@ -51,6 +52,12 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
       label: t('signupCodes'),
       icon: <TicketCheck {...I} />,
       show: staff.can('signupCodes'),
+    },
+    {
+      href: '/applications',
+      label: t('applications'),
+      icon: <ClipboardList {...I} />,
+      show: staff.can('applications'),
     },
     {
       href: '/open-signup',

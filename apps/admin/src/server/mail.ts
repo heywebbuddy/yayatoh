@@ -2,6 +2,7 @@ import 'server-only';
 import { type AuthMailer, consoleMailer } from '@yayatoh/auth';
 import { isProductionEnv } from '@yayatoh/kernel';
 import {
+  devMailboxTransports,
   type EmailTransport,
   liveTransports,
   type MessageKind,
@@ -70,3 +71,30 @@ export const staffMailer: AuthMailer = {
     await consoleMailer.sendPasswordReset?.(to, url);
   },
 };
+
+let devMailbox: EmailTransport | undefined;
+
+/**
+ * A one-off email from the staff console (organizer applications: invitations, decisions): the
+ * live provider when it is configured; the dev mailbox (read at /dev/mailbox on the web app) in
+ * development and CI; never silently dropped in production, where it throws instead.
+ */
+export async function sendConsoleMail(m: {
+  to: string;
+  subject: string;
+  html: string;
+  text: string;
+  key: string;
+}): Promise<void> {
+  const transport = liveEmail() ?? (isProductionEnv() ? null : (devMailbox ??= devMailboxTransports().email));
+  if (!transport) throw new Error('No email provider is configured (EMAIL_PROVIDER=ses)');
+  await transport.send({
+    from: { name: 'Yayatoh', address: PLATFORM_SENDER },
+    to: m.to,
+    subject: m.subject,
+    html: m.html,
+    text: m.text,
+    headers: {},
+    idempotencyKey: m.key,
+  });
+}

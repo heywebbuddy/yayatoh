@@ -1331,6 +1331,13 @@
       "when": 1793115407168,
       "tag": "0190_platform_content",
       "breakpoints": true
+    },
+    {
+      "idx": 191,
+      "version": "7",
+      "when": 1793190499041,
+      "tag": "0191_organizer_applications",
+      "breakpoints": true
     }
   ]
 }

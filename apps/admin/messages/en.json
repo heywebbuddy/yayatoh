@@ -226,7 +226,8 @@
     "closeMenu": "Close menu",
     "categories": "Event categories",
     "listings": "Marketplace listings",
-    "content": "Site content"
+    "content": "Site content",
+    "applications": "Organizer applications"
   },
   "tenants": {
     "add": "Add organization",
@@ -1560,6 +1561,147 @@
       "ctaHref": "Button link",
       "ctaHint": "A path on this site (/events) or an https:// link. Text and link go together.",
       "save": "Save hero"
+    }
+  },
+  "applications": {
+    "title": "Organizer applications",
+    "description": "People and organizations who applied on the For organizers page or asked for a demo. Approving creates a one-time signup code for the applicant's email and mails the invitation.",
+    "filters": "Filter by status",
+    "search": "Search name, organization or email",
+    "searchButton": "Search",
+    "empty": "No applications match.",
+    "list": "Organizer applications",
+    "status": {
+      "all": "All",
+      "new": "New",
+      "in_review": "In review",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "needs_info": "Needs info"
+    },
+    "kind": {
+      "apply": "Application",
+      "demo": "Demo request"
+    },
+    "col": {
+      "org": "Organization",
+      "kind": "Type",
+      "status": "Status",
+      "plan": "Plan interest",
+      "assignee": "Assigned to",
+      "received": "Received (UTC)"
+    },
+    "plan": {
+      "starter": "Starter",
+      "pro": "Pro",
+      "white_label": "White label / Agency",
+      "enterprise": "Enterprise",
+      "unsure": "Not sure"
+    },
+    "orgType": {
+      "company": "Company",
+      "nonprofit": "Nonprofit",
+      "agency": "Agency",
+      "venue": "Venue",
+      "school": "School or university",
+      "community": "Community group",
+      "individual": "Individual",
+      "other": "Other"
+    },
+    "eventType": {
+      "conference": "Conference",
+      "gala": "Gala",
+      "wedding": "Wedding",
+      "festival": "Festival",
+      "workshop": "Workshop",
+      "sports": "Sports",
+      "fundraiser": "Fundraiser",
+      "other": "Other"
+    },
+    "unassigned": "Unassigned",
+    "back": "Back to the queue",
+    "f": {
+      "contact": "Contact",
+      "type": "Type and country",
+      "website": "Website",
+      "eventTypes": "Event types",
+      "volume": "Events per year / expected tickets",
+      "plan": "Plan interest",
+      "whiteLabel": "wants white label",
+      "locale": "Language",
+      "preferred": "Preferred demo time",
+      "message": "Message"
+    },
+    "assign": {
+      "title": "Assignment",
+      "label": "Assigned to",
+      "save": "Save assignment"
+    },
+    "startReview": "Start review",
+    "reopen": "Reopen for review",
+    "approved": {
+      "title": "Approved",
+      "body": "Approved on the {plan} plan by {who}. The invitation was emailed to the applicant.",
+      "resend": "Resend invitation (new code)"
+    },
+    "approve": {
+      "title": "Approve",
+      "help": "Creates a one-time signup code that only {email} can use, on the plan you pick, and emails the invitation. After signing up the organization lands on that plan and its setup checklist.",
+      "plan": "Plan",
+      "inactive": "not on sale",
+      "note": "Optional note in the invitation email",
+      "submit": "Approve and send invitation"
+    },
+    "needs_info": {
+      "title": "Ask for more information",
+      "submit": "Send and mark Needs info"
+    },
+    "rejected": {
+      "title": "Reject",
+      "submit": "Send and reject"
+    },
+    "email": {
+      "help": "This email goes to the applicant exactly as written. Edit it first.",
+      "subject": "Subject",
+      "body": "Message"
+    },
+    "notes": {
+      "title": "Internal notes",
+      "label": "Add a note (never sent to the applicant)",
+      "add": "Add note",
+      "empty": "No notes yet."
+    },
+    "log": {
+      "title": "Audit log",
+      "applicant": "Applicant",
+      "action": {
+        "submitted": "Submitted",
+        "status_changed": "Status changed",
+        "assigned": "Assigned",
+        "note_added": "Note added",
+        "email_sent": "Email sent",
+        "approved": "Approved",
+        "invitation_reissued": "Invitation reissued",
+        "signed_up": "Applicant signed up"
+      }
+    },
+    "done": {
+      "assigned": "Assignment saved.",
+      "noted": "Note added.",
+      "in_review": "Marked in review.",
+      "approved": "Approved. The invitation was emailed.",
+      "approved_no_email": "Approved, but the email could not be sent. Use Resend invitation.",
+      "resent": "A new invitation was emailed; the old code no longer works.",
+      "needs_info": "Email sent and marked Needs info.",
+      "rejected": "Email sent and application rejected."
+    },
+    "error": {
+      "assign": "Could not assign.",
+      "note": "Could not add the note.",
+      "status": "That status change is not allowed.",
+      "approve": "Could not approve (check the plan and the status).",
+      "resend": "Could not resend (the invitation may already be used).",
+      "email": "The email was not sent, so nothing changed."
     }
   }
 }

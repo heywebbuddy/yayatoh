@@ -357,6 +357,13 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 3, windowMs: 60 * MIN },
     ipCeiling: { limit: 100, windowMs: 10 * MIN },
   },
+  /** Organizer applications and demo requests from /for-organizers; identity = the applicant's email. */
+  organizerApplication: {
+    device: { limit: 3, windowMs: 10 * MIN },
+    anonymousIp: { limit: 8, windowMs: 10 * MIN },
+    identity: { limit: 3, windowMs: 60 * MIN },
+    ipCeiling: { limit: 100, windowMs: 10 * MIN },
+  },
   /** U10: messages through an org's contact page; identity = the sender's email and the org. */
   orgContact: {
     device: { limit: 5, windowMs: 10 * MIN },

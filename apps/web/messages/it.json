@@ -1870,7 +1870,9 @@
     "openNote": "La tua organizzazione parte in modalità configurazione: accetta i termini, pubblica un'informativa sulla privacy e crea il tuo primo evento per poter scrivere agli ospiti. <pricing>Vedi prezzi e commissioni</pricing>.",
     "closedNow": "Per ora la registrazione è solo su invito. Inserisci il tuo codice di registrazione.",
     "verifyEmail": "Conferma prima il tuo indirizzo email.",
-    "humanCheck": "Conferma di essere una persona."
+    "humanCheck": "Conferma di essere una persona.",
+    "applyCta": "Candidati come organizzatore",
+    "codeOtherEmail": "Questo invito è riservato a {email}. Accedi con quell'indirizzo email per usarlo."
   },
   "payouts": {
     "title": "Accrediti",
@@ -19801,7 +19803,8 @@
       "included": "Incluso",
       "notIncluded": "Non incluso di default",
       "demoTitle": "Eventi come questo su Yayatoh"
-    }
+    },
+    "forOrganizers": "Per gli organizzatori"
   },
   "eventDesign": {
     "title": "Design della pagina",
@@ -20137,6 +20140,325 @@
       "unauthorized": "Accedi di nuovo per caricare.",
       "not_found": "Non puoi caricare file per questa organizzazione.",
       "invalid": "Impossibile leggere il caricamento."
+    }
+  },
+  "forOrganizers": {
+    "meta": {
+      "title": "Per gli organizzatori: vendi biglietti e gestisci i tuoi eventi con Yayatoh",
+      "description": "Biglietteria, posti a sedere, siti per eventi, check-in, sponsor, networking, configurazione con IA e white label in un'unica piattaforma. Candidati come organizzatore o prenota una demo."
+    },
+    "hero": {
+      "eyebrow": "Per gli organizzatori",
+      "title": "Gestisci ogni evento, dal primo biglietto all'ultimo check-in",
+      "lede": "Yayatoh offre alla tua organizzazione biglietteria, posti a sedere, sito dell'evento, check-in, sponsor, networking e analisi in un unico posto. Candidati oggi e il nostro team esaminerà la tua richiesta.",
+      "apply": "Candidati ora",
+      "demo": "Prenota una demo",
+      "videoTitle": "Video di presentazione di Yayatoh",
+      "play": "Riproduci il video di presentazione",
+      "pause": "Metti in pausa il video di presentazione"
+    },
+    "trust": {
+      "eyebrow": "Pensato per eventi reali",
+      "modules": "moduli di prodotto a catalogo",
+      "languages": "lingue per i tuoi ospiti",
+      "eventTypes": "tipi di evento, ciascuno con la propria configurazione",
+      "plans": "piani, da Starter a Enterprise",
+      "builtFor": "Tipi di evento"
+    },
+    "features": {
+      "eyebrow": "La piattaforma",
+      "title": "Tutto ciò che serve a un evento, in un solo giro",
+      "lede": "Ogni modulo qui sotto è già attivo nel prodotto. Cosa puoi usare dipende dal tuo piano, indicato più avanti.",
+      "benefit": "Il vantaggio:",
+      "ticketing": {
+        "title": "Biglietteria e posti a sedere",
+        "how": "Crea tipologie di biglietto, vendi tavoli interi o singoli posti, e persino un posto per un giorno specifico di un evento di più giorni. Gli ospiti scelgono il posto su una piantina in tempo reale.",
+        "benefit": "Meno doppie prenotazioni, più vendite e una biglietteria più fluida."
+      },
+      "website": {
+        "title": "Siti per eventi e design",
+        "how": "Ogni evento ha il suo sito con i tuoi colori, il logo, il programma, i relatori e il modulo di registrazione. Modifica il design senza codice e pubblica con un clic.",
+        "benefit": "Una pagina evento professionale senza assumere un team web."
+      },
+      "checkin": {
+        "title": "Check-in e rientro",
+        "how": "Scansiona i biglietti all'ingresso con l'app per lo staff, anche con la fila lunga. Gli ospiti possono uscire e rientrare, e ogni scansione viene registrata.",
+        "benefit": "Code veloci, nessun doppio ingresso e presenze in tempo reale."
+      },
+      "sponsors": {
+        "title": "Sponsor ed espositori",
+        "how": "Vendi pacchetti sponsor, dai a ogni espositore il suo profilo stand e il suo portale, e lascia che raccolgano contatti scansionando i badge dei partecipanti.",
+        "benefit": "Nuovi ricavi per te e valore chiaro per i tuoi partner."
+      },
+      "networking": {
+        "title": "Networking e chat",
+        "how": "I partecipanti creano un profilo, trovano le persone giuste e si scrivono nella chat dell'evento, con strumenti di moderazione per il tuo team.",
+        "benefit": "Gli ospiti incontrano le persone giuste e tornano l'anno dopo."
+      },
+      "ai": {
+        "title": "Configurazione e assistente IA",
+        "how": "Descrivi il tuo evento in una frase e l'IA prepara la configurazione, le tipologie di biglietto e la descrizione. Poi un assistente aiuta il tuo team e i tuoi ospiti con le domande.",
+        "benefit": "Ore di configurazione diventano minuti."
+      },
+      "donations": {
+        "title": "Donazioni",
+        "how": "Aggiungi un'opzione di donazione al checkout, crea una pagina di campagna e mostra uno schermo delle donazioni in tempo reale alla tua serata di gala. Le ricevute partono in automatico.",
+        "benefit": "Raccogli più fondi, con meno burocrazia."
+      },
+      "analytics": {
+        "title": "Analisi e ricevute",
+        "how": "Segui vendite, presenze e provenienze in report in tempo reale, esporta i tuoi dati e invia agli ospiti ricevute e riepiloghi fiscali chiari.",
+        "benefit": "Decisioni basate sui fatti e conti che tornano."
+      }
+    },
+    "solutions": {
+      "eyebrow": "Soluzioni",
+      "title": "Fatto per gli eventi che organizzi",
+      "conferences": {
+        "name": "Conferenze",
+        "body": "Programmi, relatori, sessioni, sponsor, espositori e badge per eventi di più giorni."
+      },
+      "galas": {
+        "name": "Gala e raccolte fondi",
+        "body": "Vendita di tavoli, piantine, donazioni e uno schermo delle donazioni in tempo reale per la serata."
+      },
+      "weddings": {
+        "name": "Matrimoni",
+        "body": "Liste ospiti, conferme di partecipazione, scelte del menu, disposizione dei posti e un sito privato per l'evento."
+      },
+      "festivals": {
+        "name": "Festival",
+        "body": "Più tipologie di biglietto, abbonamenti giornalieri, controllo degli accessi e rientri su larga scala."
+      },
+      "nonprofits": {
+        "name": "Associazioni e community",
+        "body": "Eventi gratuiti e a pagamento, iscrizioni, donazioni e ricevute chiare."
+      },
+      "agencies": {
+        "name": "Agenzie e location",
+        "body": "Gestisci gli eventi di molti clienti da un'unica console, ciascuno con il proprio marchio."
+      }
+    },
+    "whiteLabel": {
+      "eyebrow": "White label",
+      "title": "Il tuo marchio, la nostra piattaforma",
+      "lede": "Presenta Yayatoh come un tuo prodotto. Agenzie e grandi organizzazioni possono gestire molti clienti con il proprio nome.",
+      "domain": {
+        "title": "Dominio personalizzato",
+        "body": "Pubblica i tuoi eventi dal tuo indirizzo, ad esempio tickets.yourbrand.com, con un certificato sicuro."
+      },
+      "branding": {
+        "title": "I tuoi colori e il tuo logo",
+        "body": "Applica il colore del tuo marchio e il tuo logo a pagine, email e biglietti."
+      },
+      "site": {
+        "title": "Sito evento con il tuo marchio",
+        "body": "Ogni evento ha un sito che sembra il tuo, con la tua pagina organizzatore e il tuo blog."
+      },
+      "agency": {
+        "title": "Console agenzia",
+        "body": "Gestisci molte organizzazioni clienti da un'unica console, con ruoli e accessi che controlli tu."
+      },
+      "api": {
+        "title": "API pubblica",
+        "body": "Collega i tuoi sistemi con chiavi API e webhook per vendere biglietti e leggere i dati."
+      }
+    },
+    "how": {
+      "eyebrow": "Come funziona",
+      "title": "Dalla candidatura al primo evento in quattro passi",
+      "apply": {
+        "title": "Candidati",
+        "body": "Raccontaci della tua organizzazione e degli eventi che gestisci."
+      },
+      "review": {
+        "title": "Valutiamo",
+        "body": "Il nostro team esamina ogni candidatura e può farti una domanda."
+      },
+      "invite": {
+        "title": "Ricevi il tuo invito",
+        "body": "Una volta approvato, ricevi via email un invito personale per il tuo piano."
+      },
+      "launch": {
+        "title": "Parti",
+        "body": "Crea il tuo account, segui la checklist di configurazione e pubblica il tuo primo evento."
+      }
+    },
+    "plans": {
+      "eyebrow": "Piani e prezzi",
+      "title": "Scegli il piano giusto per te",
+      "lede": "I piani arrivano dal nostro catalogo in tempo reale. Ogni piano può essere cambiato in seguito.",
+      "perMonth": "{price} al mese",
+      "onApproval": "Confermato all'approvazione",
+      "choose": "Candidati per {plan}",
+      "note": "I prezzi compaiono qui non appena un piano è in vendita. Le commissioni sui biglietti della piattaforma vengono confermate quando la tua candidatura è approvata.",
+      "starter": {
+        "name": "Starter",
+        "body": "Per organizzatori che iniziano con eventi a pagamento."
+      },
+      "pro": {
+        "name": "Pro",
+        "body": "Per team che organizzano eventi ogni mese."
+      },
+      "white_label": {
+        "name": "White label / Agenzia",
+        "body": "Il tuo marchio, il tuo dominio e molti clienti."
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "body": "Per grandi programmi con esigenze su misura."
+      }
+    },
+    "modules": {
+      "ticketing": "Biglietteria",
+      "seating": "Piantine dei posti",
+      "advanced_seating": "Tavoli e posti a sedere avanzati",
+      "website": "Sito dell'evento",
+      "registration": "Moduli di registrazione",
+      "checkin": "Check-in e rientro",
+      "sessions": "Sessioni e programma",
+      "speakers": "Relatori",
+      "sponsors": "Sponsor",
+      "exhibitors": "Espositori",
+      "chat": "Networking e chat",
+      "ai": "Assistente IA",
+      "donations": "Donazioni",
+      "analytics_pro": "Analisi avanzate",
+      "integrations": "Integrazioni",
+      "api_access": "Accesso API",
+      "whitelabel": "White label",
+      "agency": "Console agenzia",
+      "virtual": "Eventi virtuali"
+    },
+    "compare": {
+      "title": "Confronta i piani",
+      "feature": "Funzionalità",
+      "included": "Incluso",
+      "notIncluded": "Non incluso"
+    },
+    "stories": {
+      "eyebrow": "Clienti",
+      "title": "Cosa dicono gli organizzatori",
+      "empty": "Le storie dei clienti stanno arrivando. Prenota una demo per vedere la piattaforma con il nostro team."
+    },
+    "faq": {
+      "title": "Domande",
+      "cost": {
+        "q": "Quanto costa?",
+        "a": "Piani e commissioni sui biglietti sono indicati sopra e confermati quando la tua candidatura è approvata. Candidarsi è gratuito."
+      },
+      "review": {
+        "q": "Quanto tempo richiede la valutazione?",
+        "a": "Il nostro team esamina ogni candidatura a mano e può risponderti con una domanda. Riceverai comunque un'email."
+      },
+      "whiteLabel": {
+        "q": "Posso usare il mio marchio e il mio dominio?",
+        "a": "Sì. I piani white label e agenzia supportano un dominio personalizzato, i tuoi colori e il tuo logo, e una console per molti clienti."
+      },
+      "payments": {
+        "q": "Come vengo pagato?",
+        "a": "Il ricavato dei biglietti viene accreditato sul conto bancario che colleghi durante la configurazione, dopo i controlli previsti per i pagamenti."
+      },
+      "data": {
+        "q": "Di chi sono i dati dei miei ospiti?",
+        "a": "Tuoi. Noi li trattiamo per tuo conto e gli ospiti possono chiedere di esportarli o cancellarli."
+      },
+      "migrate": {
+        "q": "Posso passare da un altro strumento di biglietteria?",
+        "a": "Sì. Puoi importare le liste ospiti e il nostro team può aiutarti a pianificare il passaggio quando prenoti una demo."
+      }
+    },
+    "form": {
+      "eyebrow": "Candidati",
+      "title": "Candidati come organizzatore",
+      "lede": "Bastano circa tre minuti. Esaminiamo ogni candidatura e rispondiamo via email.",
+      "mode": "Cosa vuoi fare?",
+      "mode_apply": "Candidati come organizzatore",
+      "mode_demo": "Prenota una demo",
+      "orgName": "Nome dell'organizzazione",
+      "orgType": "Tipo di organizzazione",
+      "country": "Paese",
+      "countryPlaceholder": "Scegli un paese",
+      "website": "Sito web",
+      "contactName": "Il tuo nome",
+      "contactEmail": "Email di lavoro",
+      "contactPhone": "Numero di telefono",
+      "eventTypes": "Quali eventi organizzi?",
+      "eventsPerYear": "Eventi all'anno",
+      "expectedTickets": "Biglietti che prevedi di vendere all'anno",
+      "planInterest": "Piano che ti interessa",
+      "whiteLabel": "Vuoi il white label (il tuo marchio e il tuo dominio)?",
+      "yes": "Sì",
+      "no": "No",
+      "preferredTime": "Orario preferito per la demo",
+      "preferredTimeHint": "Il tuo fuso orario: {zone}",
+      "message": "Altro che dovremmo sapere?",
+      "optional": "Facoltativo",
+      "privacy": "Usiamo questi dati solo per esaminare la tua candidatura e contattarti a riguardo.",
+      "submitApply": "Invia candidatura",
+      "submitDemo": "Richiedi una demo",
+      "sentTitle": "Grazie, abbiamo ricevuto tutto",
+      "sentApply": "Abbiamo inviato una conferma alla tua email. Il nostro team esaminerà la tua candidatura e ti risponderà presto.",
+      "sentDemo": "Abbiamo inviato una conferma alla tua email. Il nostro team ti confermerà presto l'orario della demo.",
+      "fixErrors": "Controlla i campi evidenziati e riprova.",
+      "rateLimited": "Troppi tentativi. Riprova tra {minutes} minuti.",
+      "errors": {
+        "orgName": "Inserisci il nome della tua organizzazione.",
+        "country": "Scegli un paese.",
+        "website": "Inserisci un indirizzo web completo che inizi con https://.",
+        "contactName": "Inserisci il tuo nome.",
+        "contactEmail": "Inserisci un indirizzo email valido.",
+        "eventTypes": "Scegli almeno un tipo di evento.",
+        "preferredTime": "Scegli un orario per la demo.",
+        "human": "Conferma di essere una persona."
+      }
+    },
+    "options": {
+      "orgType": {
+        "company": "Azienda",
+        "nonprofit": "Non profit",
+        "agency": "Agenzia",
+        "venue": "Location",
+        "school": "Scuola o università",
+        "community": "Gruppo comunitario",
+        "individual": "Privato",
+        "other": "Altro"
+      },
+      "eventType": {
+        "conference": "Conferenze",
+        "gala": "Gala",
+        "wedding": "Matrimoni",
+        "festival": "Festival",
+        "workshop": "Workshop",
+        "sports": "Sport",
+        "fundraiser": "Raccolte fondi",
+        "other": "Altro"
+      },
+      "eventsPerYear": {
+        "1-5": "Da 1 a 5",
+        "6-20": "Da 6 a 20",
+        "21-100": "Da 21 a 100",
+        "100+": "Più di 100"
+      },
+      "expectedTickets": {
+        "lt500": "Meno di 500",
+        "500-5000": "Da 500 a 5.000",
+        "5000-50000": "Da 5.000 a 50.000",
+        "gt50000": "Più di 50.000"
+      },
+      "plan": {
+        "starter": "Starter",
+        "pro": "Pro",
+        "white_label": "White label / Agenzia",
+        "enterprise": "Enterprise",
+        "unsure": "Non ancora deciso"
+      }
+    },
+    "mail": {
+      "applySubject": "Abbiamo ricevuto la tua candidatura a Yayatoh",
+      "applyBody": "Ciao {name},\n\nGrazie per esserti candidato come organizzatore su Yayatoh per {org}. Il nostro team esamina ogni candidatura e ti risponderà via email.\n\nIl team Yayatoh",
+      "demoSubject": "Abbiamo ricevuto la tua richiesta di demo di Yayatoh",
+      "demoBody": "Ciao {name},\n\nGrazie per aver richiesto una demo di Yayatoh per {org}. Il nostro team ti scriverà per confermare un orario.\n\nIl team Yayatoh"
     }
   }
 }

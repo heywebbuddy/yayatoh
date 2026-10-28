@@ -59,6 +59,9 @@ export async function ShowcaseFooter({ children }: { children?: ReactNode }) {
             <Link href="/pricing" className={colLink}>
               {t('pricing')}
             </Link>
+            <Link href="/for-organizers" className={colLink}>
+              {t('forOrganizers')}
+            </Link>
           </nav>
           <nav aria-label={t('solutionsLabel')} className={col}>
             <h2 className={colTitle}>{t('solutionsLabel')}</h2>

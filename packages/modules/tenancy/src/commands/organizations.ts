@@ -90,6 +90,26 @@ export const NewSignupCodeInput = z.object({
   note: z.string().trim().min(1).max(200),
 });
 
+export interface SignupCodeInfo {
+  readonly valid: boolean;
+  /** The one address an approved application's code is tied to (null: any signed-in person). */
+  readonly boundEmail: string | null;
+  /** The plan the organization lands on (an approved application), else null. */
+  readonly planKey: string | null;
+}
+
+/** What a signup code is for: whether it works, the address it is tied to and its plan. */
+export async function signupCodeInfo(code: string): Promise<SignupCodeInfo> {
+  const none = { valid: false, boundEmail: null, planKey: null };
+  if (code.length < 6 || code.length > 64) return none;
+  const [r] = await withoutTenant((tx) =>
+    tx.execute<{ info_valid: boolean; info_email: string | null; info_plan: string | null }>(
+      sql`select * from platform.signup_code_info(${hashSignupCode(code)})`,
+    ),
+  );
+  return r ? { valid: true, boundEmail: r.info_email, planKey: r.info_plan } : none;
+}
+
 /** Is this signup code usable right now (not expired, revoked or used up)? */
 export async function signupCodeValid(code: string): Promise<boolean> {
   if (code.length < 6 || code.length > 64) return false;
@@ -116,6 +136,11 @@ export const SignUpOrganizationInput = CreateOrganizationInput.extend({
     (v) => (typeof v === 'string' && v.trim() === '' ? undefined : v),
     z.string().trim().min(6).max(64).optional(),
   ),
+  /**
+   * The signed-in person's verified email, set by the server (never the form): needed to use a
+   * code that an approved application tied to one address.
+   */
+  claimEmail: z.email().trim().toLowerCase().optional(),
   /** Click-wrap: the platform's current Terms of Service and DPA. */
   acceptTerms: z.literal(true),
 });
@@ -147,16 +172,19 @@ export const signUpOrganizationCommand = tenantCommand({
         reason: 'signup_closed',
       });
     if (path === 'code') {
-      const [claim] = await tx.execute<{ ok: boolean }>(
-        sql`select platform.claim_signup_code(${hashSignupCode(input.code ?? '')}) as ok`,
-      );
+      const hash = hashSignupCode(input.code ?? '');
+      const [claim] = input.claimEmail
+        ? await tx.execute<{ ok: boolean }>(
+            sql`select claim_ok as ok from platform.claim_signup_code_for(${hash}, ${input.claimEmail})`,
+          )
+        : await tx.execute<{ ok: boolean }>(sql`select platform.claim_signup_code(${hash}) as ok`);
       if (!claim?.ok)
         throw new DomainError('validation_failed', 'This signup code is not valid', {
           field: 'code',
           reason: 'invalid_code',
         });
     }
-    const { code: _code, acceptTerms: _terms, ...org } = input;
+    const { code: _code, claimEmail: _email, acceptTerms: _terms, ...org } = input;
     const row = await insertOrganizationTx(tx, ctx, org, emit, path);
     await markOnboardingStepTx(tx, 'terms', ctx.now);
     for (const document of AGREEMENT_DOCUMENTS)

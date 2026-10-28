@@ -112,9 +112,11 @@ export {
   countryCurrency,
   type PublicFee,
   PublicFeeDto,
+  type PublicPlanTier,
   pricingCurrency,
   pricingExample,
   publicFeeSchedules,
+  publicPlanTiers,
 } from './pricing.ts';
 export { privateColumns } from './private-columns.ts';
 export { billingEnabled, billingProviderFromEnv } from './provider/config.ts';

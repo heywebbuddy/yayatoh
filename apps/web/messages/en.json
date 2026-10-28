@@ -1870,7 +1870,9 @@
     "openNote": "Your organization starts in setup mode: accept the terms, publish a privacy notice and create your first event to unlock messaging guests. <pricing>See pricing and fees</pricing>.",
     "closedNow": "Signup is by invitation only right now. Enter your signup code.",
     "verifyEmail": "Confirm your email address first.",
-    "humanCheck": "Please confirm you're a person."
+    "humanCheck": "Please confirm you're a person.",
+    "applyCta": "Apply to become an organizer",
+    "codeOtherEmail": "This invitation is for {email}. Sign in with that email address to use it."
   },
   "payouts": {
     "title": "Payouts",
@@ -19801,7 +19803,8 @@
       "included": "Included",
       "notIncluded": "Not included by default",
       "demoTitle": "Events like this on Yayatoh"
-    }
+    },
+    "forOrganizers": "For organizers"
   },
   "eventDesign": {
     "title": "Page design",
@@ -20137,6 +20140,325 @@
       "unauthorized": "Sign in again to upload.",
       "not_found": "You can’t upload for this organization.",
       "invalid": "The upload could not be read."
+    }
+  },
+  "forOrganizers": {
+    "meta": {
+      "title": "For organizers: sell tickets and run your events on Yayatoh",
+      "description": "Ticketing, seating, event websites, check-in, sponsors, networking, AI setup and white label in one platform. Apply to become an organizer or book a demo."
+    },
+    "hero": {
+      "eyebrow": "For organizers",
+      "title": "Run every event, from first ticket to last check-in",
+      "lede": "Yayatoh gives your organization ticketing, seating, an event website, check-in, sponsors, networking and analytics in one place. Apply today and our team will review your application.",
+      "apply": "Apply now",
+      "demo": "Book a demo",
+      "videoTitle": "Yayatoh product video",
+      "play": "Play the product video",
+      "pause": "Pause the product video"
+    },
+    "trust": {
+      "eyebrow": "Built for real events",
+      "modules": "product modules in the catalog",
+      "languages": "languages for your guests",
+      "eventTypes": "event types with their own setup",
+      "plans": "plans, from Starter to Enterprise",
+      "builtFor": "Event types"
+    },
+    "features": {
+      "eyebrow": "The platform",
+      "title": "Everything an event needs, in one tour",
+      "lede": "Each module below is live in the product today. What you can use depends on your plan, shown further down.",
+      "benefit": "The benefit:",
+      "ticketing": {
+        "title": "Ticketing and seating",
+        "how": "Create ticket types, sell whole tables or single seats, and even sell a seat for one specific day of a multi-day event. Guests pick seats on a live floor plan.",
+        "benefit": "Fewer double bookings, higher sales and a smoother box office."
+      },
+      "website": {
+        "title": "Event websites and design",
+        "how": "Every event gets its own website with your colors, logo, agenda, speakers and registration form. Edit the design without code and publish in a click.",
+        "benefit": "A professional event page without hiring a web team."
+      },
+      "checkin": {
+        "title": "Check-in and re-entry",
+        "how": "Scan tickets at the door with the staff app, even on a busy line. Guests can leave and come back, and every scan is recorded.",
+        "benefit": "Fast queues, no duplicate entries and live attendance numbers."
+      },
+      "sponsors": {
+        "title": "Sponsors and exhibitors",
+        "how": "Sell sponsor packages, give exhibitors their own booth profile and portal, and let them collect leads by scanning attendee badges.",
+        "benefit": "New revenue for you and clear value for your partners."
+      },
+      "networking": {
+        "title": "Networking and chat",
+        "how": "Attendees build a profile, find the right people and message each other in event chat, with moderation tools for your team.",
+        "benefit": "Guests meet the right people and come back next year."
+      },
+      "ai": {
+        "title": "AI setup and assistant",
+        "how": "Describe your event in a sentence and the AI drafts the setup, ticket types and description. An assistant then helps your team and your guests with questions.",
+        "benefit": "Hours of setup become minutes."
+      },
+      "donations": {
+        "title": "Donations",
+        "how": "Add a donation option at checkout, run a campaign page and show a live giving screen at your gala. Receipts go out automatically.",
+        "benefit": "Raise more money, with less paperwork."
+      },
+      "analytics": {
+        "title": "Analytics and receipts",
+        "how": "Follow sales, attendance and sources in live reports, export your data, and send guests clear receipts and tax summaries.",
+        "benefit": "Decisions based on facts, and finance that adds up."
+      }
+    },
+    "solutions": {
+      "eyebrow": "Solutions",
+      "title": "Made for the events you run",
+      "conferences": {
+        "name": "Conferences",
+        "body": "Agendas, speakers, sessions, sponsors, exhibitors and badges for multi-day programs."
+      },
+      "galas": {
+        "name": "Galas and fundraisers",
+        "body": "Table sales, seating plans, donations and a live giving screen for the night."
+      },
+      "weddings": {
+        "name": "Weddings",
+        "body": "Guest lists, RSVPs, meal choices, seating and a private event site."
+      },
+      "festivals": {
+        "name": "Festivals",
+        "body": "Several ticket types, day passes, entry control and re-entry at scale."
+      },
+      "nonprofits": {
+        "name": "Nonprofits and communities",
+        "body": "Free and paid events, memberships, donations and clear receipts."
+      },
+      "agencies": {
+        "name": "Agencies and venues",
+        "body": "Run events for many clients from one console, with each client's own brand."
+      }
+    },
+    "whiteLabel": {
+      "eyebrow": "White label",
+      "title": "Your brand, our platform",
+      "lede": "Present Yayatoh as your own product. Agencies and larger organizations can run many clients under their own name.",
+      "domain": {
+        "title": "Custom domain",
+        "body": "Serve your events from your own address, such as tickets.yourbrand.com, with a secure certificate."
+      },
+      "branding": {
+        "title": "Your colors and logo",
+        "body": "Set your brand color and logo across your pages, emails and tickets."
+      },
+      "site": {
+        "title": "Branded event site",
+        "body": "Every event gets a site that looks like yours, with your own organizer page and blog."
+      },
+      "agency": {
+        "title": "Agency console",
+        "body": "Manage many client organizations from one console, with roles and access you control."
+      },
+      "api": {
+        "title": "Public API",
+        "body": "Connect your own systems with API keys and webhooks to sell tickets and read data."
+      }
+    },
+    "how": {
+      "eyebrow": "How it works",
+      "title": "From application to first event in four steps",
+      "apply": {
+        "title": "Apply",
+        "body": "Tell us about your organization and the events you run."
+      },
+      "review": {
+        "title": "We review",
+        "body": "Our team looks at every application and may ask a question."
+      },
+      "invite": {
+        "title": "Get your invitation",
+        "body": "Once approved you receive a personal email invitation for your plan."
+      },
+      "launch": {
+        "title": "Launch",
+        "body": "Create your account, follow the setup checklist and publish your first event."
+      }
+    },
+    "plans": {
+      "eyebrow": "Plans and pricing",
+      "title": "Pick the plan that fits",
+      "lede": "Plans come from our live catalog. Every plan can be changed later.",
+      "perMonth": "{price} per month",
+      "onApproval": "Confirmed when approved",
+      "choose": "Apply for {plan}",
+      "note": "Prices appear here once a plan is on sale. Platform ticket fees are confirmed when your application is approved.",
+      "starter": {
+        "name": "Starter",
+        "body": "For organizers getting started with paid events."
+      },
+      "pro": {
+        "name": "Pro",
+        "body": "For teams running events every month."
+      },
+      "white_label": {
+        "name": "White label / Agency",
+        "body": "Your brand, your domain and many clients."
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "body": "For large programs with custom needs."
+      }
+    },
+    "modules": {
+      "ticketing": "Ticketing",
+      "seating": "Seating plans",
+      "advanced_seating": "Tables and advanced seating",
+      "website": "Event website",
+      "registration": "Registration forms",
+      "checkin": "Check-in and re-entry",
+      "sessions": "Sessions and agenda",
+      "speakers": "Speakers",
+      "sponsors": "Sponsors",
+      "exhibitors": "Exhibitors",
+      "chat": "Networking and chat",
+      "ai": "AI assistant",
+      "donations": "Donations",
+      "analytics_pro": "Advanced analytics",
+      "integrations": "Integrations",
+      "api_access": "API access",
+      "whitelabel": "White label",
+      "agency": "Agency console",
+      "virtual": "Virtual events"
+    },
+    "compare": {
+      "title": "Compare plans",
+      "feature": "Feature",
+      "included": "Included",
+      "notIncluded": "Not included"
+    },
+    "stories": {
+      "eyebrow": "Customers",
+      "title": "What organizers say",
+      "empty": "Customer stories are on their way. Book a demo to see the platform with our team."
+    },
+    "faq": {
+      "title": "Questions",
+      "cost": {
+        "q": "What does it cost?",
+        "a": "Plans and ticket fees are shown above and confirmed when your application is approved. There is no charge to apply."
+      },
+      "review": {
+        "q": "How long does the review take?",
+        "a": "Our team reviews every application by hand and may reply with a question. You will get an email either way."
+      },
+      "whiteLabel": {
+        "q": "Can I use my own brand and domain?",
+        "a": "Yes. White label and agency plans support a custom domain, your colors and logo, and a console for many clients."
+      },
+      "payments": {
+        "q": "How do I get paid?",
+        "a": "Ticket money is paid out to the bank account you connect during setup, after the checks required for payouts."
+      },
+      "data": {
+        "q": "Who owns my guests' data?",
+        "a": "You do. We process it on your behalf, and guests can ask for their data to be exported or erased."
+      },
+      "migrate": {
+        "q": "Can I move from another ticketing tool?",
+        "a": "Yes. You can import guest lists, and our team can help you plan the move when you book a demo."
+      }
+    },
+    "form": {
+      "eyebrow": "Apply",
+      "title": "Apply to become an organizer",
+      "lede": "Takes about three minutes. We review every application and reply by email.",
+      "mode": "What would you like to do?",
+      "mode_apply": "Apply to become an organizer",
+      "mode_demo": "Book a demo",
+      "orgName": "Organization name",
+      "orgType": "Organization type",
+      "country": "Country",
+      "countryPlaceholder": "Choose a country",
+      "website": "Website",
+      "contactName": "Your name",
+      "contactEmail": "Work email",
+      "contactPhone": "Phone number",
+      "eventTypes": "Which events do you run?",
+      "eventsPerYear": "Events per year",
+      "expectedTickets": "Tickets you expect to sell per year",
+      "planInterest": "Plan you are interested in",
+      "whiteLabel": "Do you want white label (your own brand and domain)?",
+      "yes": "Yes",
+      "no": "No",
+      "preferredTime": "Preferred time for the demo",
+      "preferredTimeHint": "Your time zone: {zone}",
+      "message": "Anything else we should know?",
+      "optional": "Optional",
+      "privacy": "We use these details only to review your application and contact you about it.",
+      "submitApply": "Send application",
+      "submitDemo": "Request a demo",
+      "sentTitle": "Thank you, we have it",
+      "sentApply": "We sent a confirmation to your email. Our team will review your application and reply soon.",
+      "sentDemo": "We sent a confirmation to your email. Our team will confirm your demo time soon.",
+      "fixErrors": "Please check the highlighted fields and try again.",
+      "rateLimited": "Too many attempts. Please try again in {minutes} minutes.",
+      "errors": {
+        "orgName": "Enter your organization's name.",
+        "country": "Choose a country.",
+        "website": "Enter a full web address starting with https://.",
+        "contactName": "Enter your name.",
+        "contactEmail": "Enter a valid email address.",
+        "eventTypes": "Choose at least one event type.",
+        "preferredTime": "Choose a time for the demo.",
+        "human": "Please confirm you are a person."
+      }
+    },
+    "options": {
+      "orgType": {
+        "company": "Company",
+        "nonprofit": "Nonprofit",
+        "agency": "Agency",
+        "venue": "Venue",
+        "school": "School or university",
+        "community": "Community group",
+        "individual": "Individual",
+        "other": "Other"
+      },
+      "eventType": {
+        "conference": "Conferences",
+        "gala": "Galas",
+        "wedding": "Weddings",
+        "festival": "Festivals",
+        "workshop": "Workshops",
+        "sports": "Sports",
+        "fundraiser": "Fundraisers",
+        "other": "Other"
+      },
+      "eventsPerYear": {
+        "1-5": "1 to 5",
+        "6-20": "6 to 20",
+        "21-100": "21 to 100",
+        "100+": "More than 100"
+      },
+      "expectedTickets": {
+        "lt500": "Fewer than 500",
+        "500-5000": "500 to 5,000",
+        "5000-50000": "5,000 to 50,000",
+        "gt50000": "More than 50,000"
+      },
+      "plan": {
+        "starter": "Starter",
+        "pro": "Pro",
+        "white_label": "White label / Agency",
+        "enterprise": "Enterprise",
+        "unsure": "Not sure yet"
+      }
+    },
+    "mail": {
+      "applySubject": "We received your Yayatoh application",
+      "applyBody": "Hi {name},\n\nThank you for applying to become an organizer on Yayatoh for {org}. Our team reviews every application and will reply by email.\n\nThe Yayatoh team",
+      "demoSubject": "We received your Yayatoh demo request",
+      "demoBody": "Hi {name},\n\nThank you for asking for a Yayatoh demo for {org}. Our team will email you to confirm a time.\n\nThe Yayatoh team"
     }
   }
 }

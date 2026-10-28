@@ -1,6 +1,6 @@
 import { withoutTenant } from '@yayatoh/db';
 import { money } from '@yayatoh/kernel';
-import { asc, eq } from 'drizzle-orm';
+import { asc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { DEFAULT_PLAN } from './entitlements.ts';
 import { type FeeSchedule, type PriceBreakdown, priceBreakdown } from './fees.ts';
@@ -72,4 +72,40 @@ export function pricingExample(
 ): { passOn: PriceBreakdown; absorb: PriceBreakdown } {
   const face = money(faceMinor, fee.currency);
   return { passOn: priceBreakdown(face, fee, 'pass_on'), absorb: priceBreakdown(face, fee, 'absorb') };
+}
+
+/** One tier of the organizer landing page, from the plan catalog staff manage (never from copy). */
+export interface PublicPlanTier {
+  readonly key: string;
+  readonly name: string;
+  /** On sale in the catalog; an inactive plan is shown without a price. */
+  readonly active: boolean;
+  readonly modules: readonly string[];
+  /** Active prices only: a plan staff have not switched on advertises nothing. */
+  readonly prices: readonly {
+    readonly currency: string;
+    readonly interval: 'month' | 'year';
+    readonly unitAmountMinor: number;
+  }[];
+}
+
+/** The `tier_*` plans in catalog order with their real feature switches (modules) and active prices. */
+export async function publicPlanTiers(): Promise<PublicPlanTier[]> {
+  const rows = await withoutTenant((tx) =>
+    tx.execute<{
+      key: string;
+      name: string;
+      active: boolean;
+      modules: string[];
+      prices: { currency: string; interval: 'month' | 'year'; unitAmountMinor: number }[];
+    }>(sql`
+      select p.key, p.name, coalesce(c.active, false) as active,
+        coalesce((select jsonb_agg(m.module_key order by m.module_key) from billing.plan_modules m where m.plan_key = p.key), '[]'::jsonb) as modules,
+        coalesce((select jsonb_agg(jsonb_build_object('currency', x.currency, 'interval', x.billing_interval,
+          'unitAmountMinor', x.unit_amount_minor) order by x.billing_interval) from billing.plan_prices x
+          where x.plan_key = p.key and x.active and x.unit_amount_minor is not null), '[]'::jsonb) as prices
+      from billing.plans p left join billing.plan_catalog c on c.plan_key = p.key
+      where p.key like 'tier\_%' order by coalesce(c.sort_order, 999), p.key`),
+  );
+  return rows.map((r) => ({ ...r, modules: r.modules, prices: r.prices }));
 }
