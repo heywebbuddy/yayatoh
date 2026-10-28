@@ -1,3 +1,4 @@
+import { platformHero, platformPosts, platformTestimonials } from '@yayatoh/cms';
 import { buttonClass } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
@@ -64,12 +65,41 @@ export default async function Home({ params }: Props) {
   // M3.11b: the organizer sections ("Why Yayatoh") come from the platform CMS.
   const content = await platformContentOrg(await requestHost());
   const sections = content ? await cachedSections(content.orgId, 'home', locale) : [];
-  const quotes = content ? await cachedSections(content.orgId, 'testimonials', locale) : [];
-  const posts = content ? (await cachedEntries(content.orgId, 'post', 1)).items : [];
+  // Staff-managed platform content (admin console) first; the content org's is the fallback.
+  const [platformQuotes, platformPostList, hero] = await Promise.all([
+    platformTestimonials(),
+    platformPosts(3),
+    platformHero(),
+  ]);
+  const orgQuotes = content ? await cachedSections(content.orgId, 'testimonials', locale) : [];
+  const quotes =
+    platformQuotes.length > 0
+      ? platformQuotes.map((q) => ({
+          key: q.id,
+          quote: q.quote,
+          name: q.name,
+          role: q.role,
+          photoUrl: q.photoUrl,
+          rating: q.rating,
+        }))
+      : orgQuotes.map((s) => ({
+          key: s.slug,
+          quote: s.body || s.heading,
+          name: s.heading,
+          role: s.eyebrow || null,
+          lang: s.locale === locale ? undefined : s.locale,
+        }));
+  const posts =
+    platformPostList.items.length > 0
+      ? platformPostList.items
+      : content
+        ? (await cachedEntries(content.orgId, 'post', 1)).items
+        : [];
   const first = data.featured[0];
   return (
     <ShowcaseShell>
       <ShowcaseHero
+        override={hero}
         cover={data.heroCover}
         featured={first ? { name: first.name, href: `/events/${first.slug}` } : null}
       />
@@ -136,7 +166,7 @@ export default async function Home({ params }: Props) {
       </Reveal>
       <HowItWorks />
       <FeatureGrid />
-      <TestimonialsSection items={quotes} locale={locale} />
+      <TestimonialsSection items={quotes} />
       <BlogSection posts={posts} base="" locale={locale} />
       <TrustedBy organizers={data.organizers} />
       <HomeFaq />

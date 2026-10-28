@@ -1,6 +1,7 @@
 import { creditBalanceQuery, TAGLINE_MAX } from '@yayatoh/ai';
 import { announcementsQuery, type EventSectionDto, eventSectionsQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
+import { videoMaxBytes } from '@yayatoh/media';
 import { roleCan } from '@yayatoh/tenancy';
 import { Button, buttonClass, Card, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -97,6 +98,8 @@ export default async function ContentPage({
               kind={s.kind}
               values={valuesOf(s)}
               idPrefix={`section-${s.id}`}
+              org={org}
+              maxVideoBytes={videoMaxBytes()}
             />
             <form action={deleteSectionAction.bind(null, org, event, s.id)}>
               <Button type="submit" variant="ghost" size="sm">
@@ -208,7 +211,12 @@ export default async function ContentPage({
               <h3 id="adding-section-heading" className="text-section">
                 {t('content.addTitle')}
               </h3>
-              <SectionForm action={addSectionAction.bind(null, org, event)} idPrefix="new-section" />
+              <SectionForm
+                action={addSectionAction.bind(null, org, event)}
+                idPrefix="new-section"
+                org={org}
+                maxVideoBytes={videoMaxBytes()}
+              />
             </Card>
           </section>
         ) : null}

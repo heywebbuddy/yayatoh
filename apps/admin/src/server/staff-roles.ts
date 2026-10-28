@@ -22,6 +22,7 @@ export type StaffAction =
   | 'maintenance'
   | 'charities'
   | 'categories'
+  | 'content'
   | 'listings'
   | 'twoFactor';
 
@@ -47,6 +48,8 @@ export type StaffAction =
  *   list (what makes an org's receipts tax-deductible): admins and support (pending owner).
  * - `categories` (U8): the platform's default event category list, which every new organization
  *   starts from: admins only (pending owner).
+ * - `content`: the platform blog, testimonials and home hero (what yayatoh.com shows): admins and
+ *   support, every change in the access log.
  * - `listings` (M6.14a): hide a marketplace listing from the marketplace and its search, or show
  *   it again, always with a reason (content moderation): admins and support (pending owner).
  * - `twoFactor`: switch an org's two-step verification requirement, or turn a person's
@@ -75,6 +78,7 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'maintenance',
     'charities',
     'categories',
+    'content',
     'listings',
     'twoFactor',
   ],
@@ -87,6 +91,7 @@ const CAN: Readonly<Record<StaffRole, readonly StaffAction[]>> = {
     'messaging',
     'incidents',
     'charities',
+    'content',
     'listings',
     'twoFactor',
   ],

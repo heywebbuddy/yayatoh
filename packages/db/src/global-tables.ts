@@ -39,6 +39,14 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
     "The billing provider's Entitlement Features mirrored per module key (M6.6a); written by migrations and billing.apply_catalog (platform_reader); app_user: SELECT.",
   'events.platform_categories':
     "U8: the platform's default event category list (order, in or out of the defaults); seeded by migrations, changed by staff only through the SECURITY DEFINER events.set_platform_default_categories (platform_reader); app_user: SELECT.",
+  'cms.platform_assets':
+    'Images and videos uploaded by staff for the platform blog, testimonials and home hero; no app_user privileges on the table, read through the cms.public_platform_assets view; written only by cms.platform_store_asset (platform_reader).',
+  'cms.platform_posts':
+    'Platform blog posts written by staff in the admin console; app_user reads published rows through the cms.public_platform_posts view; written only by cms.platform_save_post / platform_delete_post (platform_reader).',
+  'cms.platform_testimonials':
+    'Testimonials for the home page written by staff in the admin console; app_user reads published rows through cms.public_platform_testimonials; written only by cms.platform_save_testimonial / platform_delete_testimonial (platform_reader).',
+  'cms.platform_hero':
+    'The home hero (headline, subtitle, image, video, call to action), one row, written by staff in the admin console; app_user reads cms.public_platform_hero; written only by cms.platform_save_hero (platform_reader).',
   'platform.signup_codes':
     'Invite-only signup codes (hashed); no app_user privileges, only SECURITY DEFINER check/claim and staff-only create.',
   'platform.flags':

@@ -19985,7 +19985,8 @@
       "all": "Alle berichten"
     },
     "testimonials": {
-      "title": "Wat organisatoren zeggen"
+      "title": "Wat organisatoren zeggen",
+      "rating": "Beoordeeld met {count} van 5"
     },
     "how": {
       "title": "Zo werkt het",
@@ -20094,6 +20095,37 @@
     "notFound": {
       "events": "Evenementen bekijken",
       "help": "Helpcentrum"
+    }
+  },
+  "platformBlog": {
+    "title": "Blog",
+    "description": "Nieuws, gidsen en verhalen van Yayatoh.",
+    "posts": "Blogberichten",
+    "emptyTitle": "Nog geen berichten",
+    "emptyDescription": "Kom snel terug.",
+    "all": "Alle berichten",
+    "by": "Door {name}"
+  },
+  "videoField": {
+    "modeLink": "YouTube- of Vimeo-link",
+    "modeUpload": "Video uploaden",
+    "file": "Videobestand (MP4 of WebM)",
+    "poster": "Posterafbeelding (JPEG, PNG of WebP)",
+    "limits": "MP4 of WebM, tot {mb} MB. De poster verschijnt vóór het afspelen en bij verminderde beweging.",
+    "upload": "Uploaden",
+    "uploading": "Uploaden…",
+    "uploaded": "Video geüpload. Sla op om hem te gebruiken.",
+    "remove": "Verwijderen",
+    "chooseFile": "Kies eerst een videobestand.",
+    "error": {
+      "unsupported": "Gebruik een MP4- of WebM-video.",
+      "too_large": "Die video is groter dan {mb} MB.",
+      "poster_required": "Voeg een posterafbeelding voor de video toe.",
+      "bad_poster": "De poster moet een JPEG-, PNG- of WebP-afbeelding onder 5 MB zijn.",
+      "failed": "Uploaden mislukt. Probeer het opnieuw.",
+      "unauthorized": "Log opnieuw in om te uploaden.",
+      "not_found": "Je kunt niet uploaden voor deze organisatie.",
+      "invalid": "De upload kon niet worden gelezen."
     }
   }
 }

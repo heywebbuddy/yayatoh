@@ -30,7 +30,8 @@ const config: NextConfig = {
     '@yayatoh/notifications',
   ],
   serverExternalPackages: ['postgres', '@node-rs/argon2'],
-  experimental: { taint: true },
+  // Uploads of the platform content forms (images up to 5 MB, a hero video up to 25 MB).
+  experimental: { taint: true, serverActions: { bodySizeLimit: '32mb' } },
   async headers() {
     return [
       {

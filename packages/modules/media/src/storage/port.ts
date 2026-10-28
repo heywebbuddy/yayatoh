@@ -40,7 +40,9 @@ export function assertOrgKey(orgId: string, key: string): void {
       // (`{org}/{request}/0-{hash}.zip`); M5.3a portal files (as uploaded): `f-{hash}.{ext}`.
       /^f-[0-9a-f]{32}\.(pdf|pptx|docx|jpg|png|webp)$/.test(parts[2] ?? '') ||
       // M4.5b: a gallery upload as the browser sent it, before it is sniffed and re-encoded.
-      /^u-[0-9a-f]{32}$/.test(parts[2] ?? '')
+      /^u-[0-9a-f]{32}$/.test(parts[2] ?? '') ||
+      // Uploaded videos and their posters: `v-{hash}.mp4|webm`, `p-{hash}.jpg|png|webp`.
+      /^(v-[0-9a-f]{32}\.(mp4|webm)|p-[0-9a-f]{32}\.(jpg|png|webp))$/.test(parts[2] ?? '')
     )
   )
     throw new Error('media store: key outside the org prefix');

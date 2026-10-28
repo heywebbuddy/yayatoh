@@ -19985,7 +19985,8 @@
       "all": "すべての記事"
     },
     "testimonials": {
-      "title": "主催者の声"
+      "title": "主催者の声",
+      "rating": "5段階中{count}の評価"
     },
     "how": {
       "title": "使い方",
@@ -20094,6 +20095,37 @@
     "notFound": {
       "events": "イベントを探す",
       "help": "ヘルプセンター"
+    }
+  },
+  "platformBlog": {
+    "title": "ブログ",
+    "description": "Yayatoh からのお知らせ、ガイド、ストーリー。",
+    "posts": "ブログ記事",
+    "emptyTitle": "記事はまだありません",
+    "emptyDescription": "また後でご確認ください。",
+    "all": "すべての記事",
+    "by": "{name} 著"
+  },
+  "videoField": {
+    "modeLink": "YouTubeまたはVimeoのリンク",
+    "modeUpload": "動画をアップロード",
+    "file": "動画ファイル（MP4またはWebM）",
+    "poster": "ポスター画像（JPEG、PNG、WebP）",
+    "limits": "MP4またはWebM、最大{mb} MB。ポスターは動画の再生前と、動きを減らす設定のときに表示されます。",
+    "upload": "アップロード",
+    "uploading": "アップロード中…",
+    "uploaded": "動画をアップロードしました。保存すると反映されます。",
+    "remove": "削除",
+    "chooseFile": "まず動画ファイルを選んでください。",
+    "error": {
+      "unsupported": "MP4またはWebMの動画を使用してください。",
+      "too_large": "この動画は{mb} MBを超えています。",
+      "poster_required": "動画のポスター画像を追加してください。",
+      "bad_poster": "ポスターは5 MB未満のJPEG、PNG、WebP画像にしてください。",
+      "failed": "アップロードに失敗しました。もう一度お試しください。",
+      "unauthorized": "アップロードするには再度サインインしてください。",
+      "not_found": "この組織にはアップロードできません。",
+      "invalid": "アップロードを読み取れませんでした。"
     }
   }
 }

@@ -7,6 +7,7 @@ import {
   KeyRound,
   LayoutDashboard,
   MessageSquareWarning,
+  Newspaper,
   Percent,
   Route,
   ScrollText,
@@ -74,6 +75,8 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
       show: staff.can('messaging'),
     },
     { href: '/incidents', label: t('incidents'), icon: <Siren {...I} />, show: staff.can('incidents') },
+    // Platform blog, testimonials and the home hero.
+    { href: '/content', label: t('content'), icon: <Newspaper {...I} />, show: staff.can('content') },
     // U8: the default event categories every new organization starts with.
     { href: '/categories', label: t('categories'), icon: <Tags {...I} />, show: staff.can('categories') },
     {

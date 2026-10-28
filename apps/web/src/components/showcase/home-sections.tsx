@@ -1,4 +1,4 @@
-import type { PublicEntrySummaryDto, PublicSiteSectionDto } from '@yayatoh/cms';
+import type { PublicEntrySummaryDto } from '@yayatoh/cms';
 import { buttonClass } from '@yayatoh/ui';
 import {
   Armchair,
@@ -27,7 +27,9 @@ export async function BlogSection({
   base,
   locale,
 }: {
-  posts: readonly PublicEntrySummaryDto[];
+  posts: readonly (Pick<PublicEntrySummaryDto, 'slug' | 'title' | 'excerpt' | 'publishedAt'> & {
+    coverUrl?: string | null;
+  })[];
   base: string;
   locale: string;
 }) {
@@ -51,6 +53,14 @@ export async function BlogSection({
               href={`${base}/blogs/${p.slug}`}
               className="group flex h-full flex-col gap-3 rounded-card border border-line bg-surface p-5 transition duration-300 hover:-translate-y-1 hover:border-ember motion-reduce:transition-none motion-reduce:hover:translate-y-0"
             >
+              {p.coverUrl ? (
+                <img
+                  src={p.coverUrl}
+                  alt=""
+                  loading="lazy"
+                  className="aspect-[16/9] w-full rounded-tile object-cover"
+                />
+              ) : null}
               <time dateTime={p.publishedAt.toISOString()} className="text-caption text-ink-2">
                 {f.dateTime(p.publishedAt, { dateStyle: 'medium' })}
               </time>
@@ -64,14 +74,18 @@ export async function BlogSection({
   );
 }
 
-/** Organizer quotes edited in the platform console (`site_sections`, placement "testimonials"). */
-export async function TestimonialsSection({
-  items,
-  locale,
-}: {
-  items: readonly PublicSiteSectionDto[];
-  locale: string;
-}) {
+export interface QuoteItem {
+  readonly key: string;
+  readonly quote: string;
+  readonly name: string;
+  readonly role: string | null;
+  readonly photoUrl?: string | null;
+  readonly rating?: number | null;
+  readonly lang?: string;
+}
+
+/** Quotes edited by staff in the admin console (or, as a fallback, the content org's sections). */
+export async function TestimonialsSection({ items }: { items: readonly QuoteItem[]; locale?: string }) {
   if (items.length === 0) return null;
   const t = await getTranslations('homeSections.testimonials');
   return (
@@ -82,20 +96,40 @@ export async function TestimonialsSection({
       <ul className="no-scrollbar m-0 flex list-none snap-x gap-4 overflow-x-auto p-0 pb-2">
         {items.map((s) => (
           <li
-            key={s.slug}
-            lang={s.locale === locale ? undefined : s.locale}
+            key={s.key}
+            lang={s.lang}
             className="flex w-[min(86vw,380px)] shrink-0 snap-start flex-col justify-between gap-5 rounded-card border border-line bg-surface p-6"
           >
             <figure className="m-0 flex flex-col gap-4">
+              {s.rating ? (
+                <p
+                  className="m-0 text-[18px] tracking-widest text-ember"
+                  role="img"
+                  aria-label={t('rating', { count: s.rating })}
+                >
+                  {'★'.repeat(s.rating)}
+                  <span className="text-line-strong">{'★'.repeat(5 - s.rating)}</span>
+                </p>
+              ) : null}
               <blockquote className="m-0 text-[17px] leading-relaxed text-ink [overflow-wrap:anywhere]">
                 <span className="block font-display text-[38px] leading-none text-ember" aria-hidden="true">
                   &ldquo;
                 </span>
-                {s.body || s.heading}
+                {s.quote}
               </blockquote>
-              <figcaption className="flex flex-col">
-                <span className="font-extrabold">{s.heading}</span>
-                {s.eyebrow ? <span className="text-caption text-ink-2">{s.eyebrow}</span> : null}
+              <figcaption className="flex items-center gap-3">
+                {s.photoUrl ? (
+                  <img
+                    src={s.photoUrl}
+                    alt=""
+                    loading="lazy"
+                    className="size-11 shrink-0 rounded-full object-cover"
+                  />
+                ) : null}
+                <span className="flex flex-col">
+                  <span className="font-extrabold">{s.name}</span>
+                  {s.role ? <span className="text-caption text-ink-2">{s.role}</span> : null}
+                </span>
               </figcaption>
             </figure>
           </li>

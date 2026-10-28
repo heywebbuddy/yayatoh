@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { UPLOADED_POSTER_PATH, UPLOADED_VIDEO_PATH } from './video.ts';
 
 /**
  * Organizer design options for the public event page (event branding): the page's theme, the
@@ -13,7 +14,10 @@ export const HeroVideoUrl = z
   .string()
   .trim()
   .max(300)
-  .regex(/^https:\/\/\S+$/, 'A https link');
+  .refine(
+    (v) => /^https:\/\/\S+$/.test(v) || UPLOADED_VIDEO_PATH.test(v),
+    'A https link or an uploaded video',
+  );
 
 export const EventDesign = z.object({
   theme: z.enum(EVENT_THEMES).default('showcase'),
@@ -21,6 +25,8 @@ export const EventDesign = z.object({
   heroLayout: z.enum(HERO_LAYOUTS).default('full'),
   /** The hero background video (layout `video`); the cover image stays its poster and fallback. */
   heroVideoUrl: HeroVideoUrl.nullable().default(null),
+  /** The poster of an uploaded hero video (its own storage path); null for a YouTube or Vimeo link. */
+  heroVideoPoster: z.string().regex(UPLOADED_POSTER_PATH).nullable().default(null),
   /** Show the AI assistant that answers attendees from this event's published details (off by default). */
   assistant: z.boolean().default(false),
 });
@@ -31,6 +37,7 @@ export const DEFAULT_EVENT_DESIGN: EventDesign = {
   headingFont: 'modern',
   heroLayout: 'full',
   heroVideoUrl: null,
+  heroVideoPoster: null,
   assistant: false,
 };
 
@@ -54,4 +61,5 @@ export const isDefaultDesign = (d: EventDesign): boolean =>
   d.headingFont === 'modern' &&
   d.heroLayout === 'full' &&
   d.heroVideoUrl === null &&
+  d.heroVideoPoster === null &&
   !d.assistant;
