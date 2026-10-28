@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import {
   hasPlatformPosts,
   PlatformBlogIndex,
@@ -14,7 +13,7 @@ const pageOf = (raw?: string) => Math.min(500, Math.max(1, Number.parseInt(raw ?
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { locale } = await params;
-  if (await hasPlatformPosts()) return platformBlogMetadata(locale);
+  if ((await hasPlatformPosts()) || !(await marketplaceContentSite())) return platformBlogMetadata(locale);
   return blogMetadata(await marketplaceContentSite(), locale, pageOf((await searchParams).page));
 }
 
@@ -26,6 +25,7 @@ export default async function MarketplaceBlog({ params, searchParams }: Props) {
   if (await hasPlatformPosts())
     return <PlatformBlogIndex locale={locale} page={pageOf((await searchParams).page)} />;
   const site = await marketplaceContentSite();
-  if (!site) notFound();
+  // No posts yet and no content org: the (empty) platform blog, never a 404.
+  if (!site) return <PlatformBlogIndex locale={locale} page={1} />;
   return <BlogIndexView site={site} locale={locale} page={pageOf((await searchParams).page)} />;
 }

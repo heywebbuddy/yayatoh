@@ -1,6 +1,12 @@
 'use client';
 
-import { SECTION_KINDS, type SectionBody, type SectionKind } from '@yayatoh/events/ui';
+import {
+  isUploadedVideo,
+  parseVideoUrl,
+  SECTION_KINDS,
+  type SectionBody,
+  type SectionKind,
+} from '@yayatoh/events/ui';
 import { Alert, Button, Input, Select } from '@yayatoh/ui';
 import { ArrowDown, ArrowUp, CalendarDays, Plus, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -213,12 +219,23 @@ export function SectionForm({
             ? { kind, content: { items: linksOut.map((l) => ({ ...l })) } }
             : kind === 'location'
               ? { kind, content: { address, directions, mapUrl: mapUrl.trim() || null } }
-              : null;
+              : kind === 'video'
+                ? {
+                    kind,
+                    content: {
+                      url: videoUrl.trim(),
+                      poster: videoPoster,
+                      caption: videoCaption.trim() || null,
+                    },
+                  }
+                : null;
   const previewEmpty =
     !preview ||
     (preview.kind === 'text' && !markdown.trim()) ||
     ('items' in preview.content && preview.content.items.length === 0) ||
-    (preview.kind === 'location' && !address.trim() && !directions.trim() && !mapUrl.trim());
+    (preview.kind === 'location' && !address.trim() && !directions.trim() && !mapUrl.trim()) ||
+    // A video previews once its link is a YouTube/Vimeo one or a file was uploaded.
+    (preview.kind === 'video' && !isUploadedVideo(videoUrl.trim()) && !parseVideoUrl(videoUrl.trim()));
 
   const errorId = `${idPrefix}-content-error`;
   const markdownField = (
@@ -558,9 +575,6 @@ export function SectionForm({
               <p className="m-0 text-body text-ink-2">{t('editor.previewEmpty')}</p>
             ) : preview ? (
               <SectionBodyView section={preview} openMap={t('openMap')} title={title} />
-            ) : null}
-            {kind === 'video' ? (
-              <p className="m-0 break-all text-body text-ink-2">{videoUrl || t('editor.previewEmpty')}</p>
             ) : null}
           </div>
         </aside>

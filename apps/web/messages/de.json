@@ -7108,7 +7108,9 @@
         "company": "Verwenden Sie höchstens 160 Zeichen.",
         "message": "Schreiben Sie eine Nachricht mit 10 bis 4.000 Zeichen.",
         "human": "Bestätigen Sie, dass Sie ein Mensch sind."
-      }
+      },
+      "fallbackBody": "Schreib uns, wir antworten per E-Mail, meist innerhalb eines Werktags.",
+      "fallbackHelp": "Zum Hilfecenter"
     }
   },
   "status": {

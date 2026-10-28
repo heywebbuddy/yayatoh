@@ -1,6 +1,5 @@
 import { LifeBuoy, Mail, Radio } from 'lucide-react';
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { ContactForm } from '@/components/marketing/contact-form.tsx';
 import { SiteSections } from '@/components/marketing/site-sections.tsx';
@@ -19,7 +18,6 @@ type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const req = await requestHost();
-  if (!(await platformContentOrg(req))) return {};
   const t = await getTranslations({ locale, namespace: 'marketing' });
   return publicMetadata({
     req,
@@ -37,9 +35,38 @@ export default async function Contact({ params }: Props) {
   const { locale } = await params;
   pageLocale(locale);
   const org = await platformContentOrg(await requestHost());
-  if (!org) notFound();
   const t = await getTranslations('marketing');
   const tp = await getTranslations('pages');
+  if (!org) {
+    // No content org to receive form requests: the contact address, help and status instead.
+    const email = process.env.PLATFORM_CONTACT_EMAIL?.trim() || 'support@yayatoh.com';
+    return (
+      <div className="min-h-dvh bg-surface">
+        <SiteHeader />
+        <main id="main" className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-6 md:px-6">
+          <PageHero
+            eyebrow={tp('eyebrow.contact')}
+            title={t('contact.title')}
+            lede={t('contact.lede')}
+            icon={Mail}
+          />
+          <section className="flex flex-col gap-3 rounded-card border border-line bg-surface p-6">
+            <p className="m-0 text-body text-ink-2">{t('contact.fallbackBody')}</p>
+            <a
+              href={`mailto:${email}`}
+              className="self-start text-card font-extrabold underline underline-offset-4"
+            >
+              {email}
+            </a>
+            <Link href="/help" className="self-start text-body underline underline-offset-4">
+              {t('contact.fallbackHelp')}
+            </Link>
+          </section>
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
   const sections = await cachedSections(org.orgId, 'contact', locale);
   return (
     <div className="min-h-dvh bg-surface">

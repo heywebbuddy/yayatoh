@@ -7108,7 +7108,9 @@
         "company": "Gebruik maximaal 160 tekens.",
         "message": "Schrijf een bericht van 10 tot 4.000 tekens.",
         "human": "Bevestig dat je een mens bent."
-      }
+      },
+      "fallbackBody": "Schrijf ons; we antwoorden per e-mail, meestal binnen één werkdag.",
+      "fallbackHelp": "Naar het helpcentrum"
     }
   },
   "status": {
