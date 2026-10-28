@@ -37,7 +37,8 @@ ENV NEXT_PUBLIC_APP_ORIGIN=$NEXT_PUBLIC_APP_ORIGIN \
     LEGACY_ABC_HOSTS=$LEGACY_ABC_HOSTS \
     FRONT_DOOR_MAX_BODY=$FRONT_DOOR_MAX_BODY
 # One app at a time: two 8 GB builds at once exhaust a 16 GB runner (as the CI typecheck).
-RUN NODE_OPTIONS=--max-old-space-size=8192 pnpm turbo run build --concurrency=1 --filter=@yayatoh/web --filter=@yayatoh/admin
+# Types are checked by `pnpm typecheck` in CI, so the image build skips Next's own type-check pass (it ran out of heap).
+RUN NEXT_SKIP_TYPECHECK=1 NODE_OPTIONS=--max-old-space-size=8192 pnpm turbo run build --concurrency=1 --filter=@yayatoh/web --filter=@yayatoh/admin
 
 FROM base AS runtime
 ENV NODE_ENV=production

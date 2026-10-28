@@ -60,6 +60,8 @@ const frontDoorMaxBody = Math.max(
 );
 
 const config: NextConfig = {
+  // The image build checks types in its own CI step; Next's in-build check needs more heap than the runner has.
+  typescript: { ignoreBuildErrors: process.env.NEXT_SKIP_TYPECHECK === '1' },
   poweredByHeader: false,
   reactStrictMode: true,
   transpilePackages: [
