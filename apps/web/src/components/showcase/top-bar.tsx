@@ -16,8 +16,8 @@ const popover =
   'absolute end-0 top-full z-10 m-0 mt-2 flex list-none flex-col gap-0.5 rounded-card border border-line bg-surface-solid p-2 elevation-pop';
 
 /**
- * The floating top bar of the public site: search on the left, the logo in the centre, links with a
- * "Sign up" pill and "Sign in" on the right. Under 1024 px the links fold into a menu (a
+ * The floating top bar of the public site: search and the logo on the left, links with a
+ * "Sign up" pill and "Sign in" on the right. Under 1280 px the links fold into a menu (a
  * `<details>`, so it works without JavaScript).
  */
 export async function ShowcaseTopBar({ name }: { name?: string }) {
@@ -30,12 +30,12 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
     <>
       <IncidentBanner variant="site" />
       <div className="sticky top-0 z-50 px-3 pt-3 sm:px-5">
-        <header className="mx-auto grid w-full max-w-7xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 rounded-pill border border-line bg-canvas/85 p-2 ps-2 sm:gap-3 sm:ps-3 backdrop-blur-xl">
-          <search className="min-w-0">
+        <header className="mx-auto flex w-full max-w-7xl items-center gap-2 rounded-pill border border-line bg-canvas/85 p-2 ps-2 sm:gap-3 sm:ps-3 backdrop-blur-xl">
+          <search className="min-w-0 shrink">
             <form
               action={localizedPath(locale, '/events')}
               method="get"
-              className="relative hidden max-w-[260px] md:block"
+              className="relative hidden w-[clamp(140px,18vw,260px)] md:block"
             >
               <label htmlFor="top-search" className="sr-only">
                 {t('searchLabel')}
@@ -63,13 +63,13 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
           </search>
           <Link
             href="/"
-            className="inline-flex min-h-10 items-center gap-2 rounded-pill px-2 font-display text-[18px] font-black tracking-[-0.03em] text-ink uppercase"
+            className="inline-flex min-h-10 shrink-0 items-center gap-2 rounded-pill px-2 font-display text-[18px] font-black tracking-[-0.03em] text-ink uppercase"
           >
             {name ? null : <BrandMark className="size-7" />}
             {name ?? t('wordmark')}
           </Link>
-          <div className="flex items-center justify-end gap-1">
-            <nav aria-label={t('siteNav')} className="hidden items-center lg:flex">
+          <div className="ms-auto flex shrink-0 items-center justify-end gap-1">
+            <nav aria-label={t('siteNav')} className="hidden items-center xl:flex">
               <Link href="/events" className={link}>
                 {t('events')}
               </Link>
@@ -106,7 +106,7 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
                 </Link>
               </>
             )}
-            <details className="relative lg:hidden">
+            <details className="relative xl:hidden">
               <summary
                 aria-label={t('menu')}
                 className="inline-flex size-10 cursor-pointer list-none items-center justify-center rounded-pill border border-line bg-surface [&::-webkit-details-marker]:hidden"

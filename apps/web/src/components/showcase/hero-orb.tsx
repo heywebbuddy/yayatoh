@@ -151,7 +151,9 @@ export function HeroOrb({
             eager
           />
         ) : (
-          <div className="size-full bg-ember-soft" />
+          // No cover set: a default concert photo under the same warm wash, never a blank ball.
+          // biome-ignore lint/performance/noImgElement: a fixed local asset, decorative
+          <img src="/showcase/hero-default.jpg" alt="" className="size-full bg-ember-soft object-cover" />
         )}
         {/* A warm duotone wash that keeps the photo readable, plus a soft shade at the foot. */}
         <div className="absolute inset-0 bg-linear-to-br from-ember/45 via-flame/20 to-rose/45 mix-blend-soft-light" />
