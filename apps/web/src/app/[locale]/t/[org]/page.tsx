@@ -3,11 +3,9 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { TenantHeader } from '@/components/cms/tenant-header.tsx';
-import { ListingGrid } from '@/components/marketplace/listing-grid.tsx';
-import { OrgHero } from '@/components/marketplace/org-hero.tsx';
-import { Pagination } from '@/components/marketplace/pagination.tsx';
 import { SiteFooter } from '@/components/marketplace/site-chrome.tsx';
-import { TagFilter } from '@/components/marketplace/tag-filter.tsx';
+import { OrgShowcase } from '@/components/showcase/org-showcase.tsx';
+import { cachedEntries } from '@/server/cms.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { cachedListingTags, cachedTenantListings } from '@/server/public-data.ts';
 import { requestHost } from '@/server/request-origin.ts';
@@ -52,44 +50,35 @@ export default async function TenantHome({ params, searchParams }: Props) {
   const tag = tags.find((x) => x.key === sp.tag?.trim().toLowerCase())?.key ?? null;
   const listings = await cachedTenantListings(orgId, page, tag);
   const t = await getTranslations('market');
+  const posts = await cachedEntries(orgId, 'post', 1);
   return (
-    <div className="min-h-dvh bg-surface">
-      <TenantHeader org={o} current="/" />
-      <main id="main" className="flex flex-col gap-8">
-        <OrgHero orgId={orgId} eyebrow={t('tenant.eyebrow')} name={o.name} brandColor={o.brandColor} />
-        <section
-          aria-labelledby="upcoming-heading"
-          className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 md:px-6"
-        >
-          <h2 id="upcoming-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
-            {t('upcoming')}
-          </h2>
-          <TagFilter tags={tags} current={tag} path="/" />
-          <ListingGrid
-            items={listings.items}
-            locale={locale}
-            label={t('upcoming')}
-            organizerHref={null}
-            empty={{
-              title: t('tenant.emptyTitle'),
-              description: t('tenant.emptyDescription', { org: o.name }),
-            }}
-          />
-          <Pagination
-            path="/"
-            params={{ tag: tag ?? undefined }}
-            page={page}
-            pageCount={listings.pageCount}
-          />
-        </section>
-      </main>
-      <SiteFooter>
-        {o.poweredByVisible ? (
-          <a href="https://yayatoh.com" className="self-start text-caption text-ink-2 underline">
-            {t('poweredBy')}
-          </a>
-        ) : null}
-      </SiteFooter>
-    </div>
+    <OrgShowcase
+      orgId={orgId}
+      name={o.name}
+      brandColor={o.brandColor}
+      eyebrow={t('tenant.eyebrow')}
+      lede={t('tenant.description', { org: o.name })}
+      listings={listings.items}
+      locale={locale}
+      tags={tags}
+      tag={tag}
+      path="/"
+      page={page}
+      pageCount={listings.pageCount}
+      posts={posts.items}
+      postsHref="/blogs"
+      emptyTitle={t('tenant.emptyTitle')}
+      emptyDescription={t('tenant.emptyDescription', { org: o.name })}
+      header={<TenantHeader org={o} current="/" />}
+      footer={
+        <SiteFooter>
+          {o.poweredByVisible ? (
+            <a href="https://yayatoh.com" className="self-start text-caption text-ink-2 underline">
+              {t('poweredBy')}
+            </a>
+          ) : null}
+        </SiteFooter>
+      }
+    />
   );
 }

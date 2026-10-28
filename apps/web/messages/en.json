@@ -20162,95 +20162,16 @@
     },
     "hero": {
       "eyebrow": "For organizers",
-      "title": "Run every event, from first ticket to last check-in",
-      "lede": "Yayatoh gives your organization ticketing, seating, an event website, check-in, sponsors, networking and analytics in one place. Apply today and our team will review your application.",
+      "line1": "Run every event",
+      "line2": "from first ticket",
+      "line3": "to last check-in",
+      "lede": "Sell more tickets, save hours of setup and look professional from the first click. Ticketing, seating, your own event website, check-in, sponsors, networking and analytics in one platform.",
       "apply": "Apply now",
       "demo": "Book a demo",
       "videoTitle": "Yayatoh product video",
       "play": "Play the product video",
-      "pause": "Pause the product video"
-    },
-    "trust": {
-      "eyebrow": "Built for real events",
-      "modules": "product modules in the catalog",
-      "languages": "languages for your guests",
-      "eventTypes": "event types with their own setup",
-      "plans": "plans, from Starter to Enterprise",
-      "builtFor": "Event types"
-    },
-    "features": {
-      "eyebrow": "The platform",
-      "title": "Everything an event needs, in one tour",
-      "lede": "Each module below is live in the product today. What you can use depends on your plan, shown further down.",
-      "benefit": "The benefit:",
-      "ticketing": {
-        "title": "Ticketing and seating",
-        "how": "Create ticket types, sell whole tables or single seats, and even sell a seat for one specific day of a multi-day event. Guests pick seats on a live floor plan.",
-        "benefit": "Fewer double bookings, higher sales and a smoother box office."
-      },
-      "website": {
-        "title": "Event websites and design",
-        "how": "Every event gets its own website with your colors, logo, agenda, speakers and registration form. Edit the design without code and publish in a click.",
-        "benefit": "A professional event page without hiring a web team."
-      },
-      "checkin": {
-        "title": "Check-in and re-entry",
-        "how": "Scan tickets at the door with the staff app, even on a busy line. Guests can leave and come back, and every scan is recorded.",
-        "benefit": "Fast queues, no duplicate entries and live attendance numbers."
-      },
-      "sponsors": {
-        "title": "Sponsors and exhibitors",
-        "how": "Sell sponsor packages, give exhibitors their own booth profile and portal, and let them collect leads by scanning attendee badges.",
-        "benefit": "New revenue for you and clear value for your partners."
-      },
-      "networking": {
-        "title": "Networking and chat",
-        "how": "Attendees build a profile, find the right people and message each other in event chat, with moderation tools for your team.",
-        "benefit": "Guests meet the right people and come back next year."
-      },
-      "ai": {
-        "title": "AI setup and assistant",
-        "how": "Describe your event in a sentence and the AI drafts the setup, ticket types and description. An assistant then helps your team and your guests with questions.",
-        "benefit": "Hours of setup become minutes."
-      },
-      "donations": {
-        "title": "Donations",
-        "how": "Add a donation option at checkout, run a campaign page and show a live giving screen at your gala. Receipts go out automatically.",
-        "benefit": "Raise more money, with less paperwork."
-      },
-      "analytics": {
-        "title": "Analytics and receipts",
-        "how": "Follow sales, attendance and sources in live reports, export your data, and send guests clear receipts and tax summaries.",
-        "benefit": "Decisions based on facts, and finance that adds up."
-      }
-    },
-    "solutions": {
-      "eyebrow": "Solutions",
-      "title": "Made for the events you run",
-      "conferences": {
-        "name": "Conferences",
-        "body": "Agendas, speakers, sessions, sponsors, exhibitors and badges for multi-day programs."
-      },
-      "galas": {
-        "name": "Galas and fundraisers",
-        "body": "Table sales, seating plans, donations and a live giving screen for the night."
-      },
-      "weddings": {
-        "name": "Weddings",
-        "body": "Guest lists, RSVPs, meal choices, seating and a private event site."
-      },
-      "festivals": {
-        "name": "Festivals",
-        "body": "Several ticket types, day passes, entry control and re-entry at scale."
-      },
-      "nonprofits": {
-        "name": "Nonprofits and communities",
-        "body": "Free and paid events, memberships, donations and clear receipts."
-      },
-      "agencies": {
-        "name": "Agencies and venues",
-        "body": "Run events for many clients from one console, with each client's own brand."
-      }
+      "pause": "Pause the product video",
+      "scroll": "Scroll to explore"
     },
     "whiteLabel": {
       "eyebrow": "White label",
@@ -20275,7 +20196,9 @@
       "api": {
         "title": "Public API",
         "body": "Connect your own systems with API keys and webhooks to sell tickets and read data."
-      }
+      },
+      "line1": "Your brand,",
+      "line2": "our platform"
     },
     "how": {
       "eyebrow": "How it works",
@@ -20295,7 +20218,9 @@
       "launch": {
         "title": "Launch",
         "body": "Create your account, follow the setup checklist and publish your first event."
-      }
+      },
+      "line1": "From application to",
+      "line2": "first event in four steps"
     },
     "plans": {
       "eyebrow": "Plans and pricing",
@@ -20323,7 +20248,9 @@
       },
       "perYear": "{price} per year",
       "custom": "Custom pricing",
-      "orYearly": "or {price} billed yearly"
+      "orYearly": "or {price} billed yearly",
+      "line1": "Pick the plan",
+      "line2": "that fits"
     },
     "modules": {
       "ticketing": "Ticketing",
@@ -20355,7 +20282,8 @@
     "stories": {
       "eyebrow": "Customers",
       "title": "What organizers say",
-      "empty": "Customer stories are on their way. Book a demo to see the platform with our team."
+      "empty": "Customer stories are on their way. Book a demo to see the platform with our team.",
+      "line1": "What organizers say"
     },
     "faq": {
       "title": "Questions",
@@ -20382,7 +20310,8 @@
       "migrate": {
         "q": "Can I move from another ticketing tool?",
         "a": "Yes. You can import guest lists, and our team can help you plan the move when you book a demo."
-      }
+      },
+      "line1": "Questions"
     },
     "form": {
       "eyebrow": "Apply",
@@ -20427,7 +20356,9 @@
         "eventTypes": "Choose at least one event type.",
         "preferredTime": "Choose a time for the demo.",
         "human": "Please confirm you are a person."
-      }
+      },
+      "line1": "Apply to become",
+      "line2": "an organizer"
     },
     "options": {
       "orgType": {
@@ -20475,6 +20406,212 @@
       "applyBody": "Hi {name},\n\nThank you for applying to become an organizer on Yayatoh for {org}. Our team reviews every application and will reply by email.\n\nThe Yayatoh team",
       "demoSubject": "We received your Yayatoh demo request",
       "demoBody": "Hi {name},\n\nThank you for asking for a Yayatoh demo for {org}. Our team will email you to confirm a time.\n\nThe Yayatoh team"
+    },
+    "marquee": {
+      "label": "What you can run on Yayatoh",
+      "words": "Ticketing • Seating • Event websites • Check-in • Sponsors • Networking • AI setup • Donations • Analytics • Marketing • White label"
+    },
+    "benefits": {
+      "eyebrow": "Why organizers choose Yayatoh",
+      "line1": "Everything you need",
+      "line2": "to sell out",
+      "sell": {
+        "title": "Sell more",
+        "body": "Whole tables, seats per date, coupons, waitlists and a checkout guests finish."
+      },
+      "time": {
+        "title": "Save time",
+        "body": "Start from a template or let AI draft the event. Guests, orders and emails run themselves."
+      },
+      "pro": {
+        "title": "Look professional",
+        "body": "A branded event website, tickets and emails that look like yours, on your own domain."
+      },
+      "paid": {
+        "title": "Get paid",
+        "body": "Payouts to your bank account, clear receipts and finance reports that add up."
+      },
+      "know": {
+        "title": "Know your audience",
+        "body": "See who buys, where they come from and what works, then follow up in their language."
+      }
+    },
+    "stats": {
+      "modules": "product modules",
+      "languages": "languages for your guests",
+      "templates": "event templates to start from",
+      "plans": "plans, Starter to Enterprise"
+    },
+    "showcase": {
+      "eyebrow": "The platform, feature by feature",
+      "line1": "See every tool",
+      "line2": "in action",
+      "lede": "These are real screens from Yayatoh with demo data. Scroll through each feature: what it does, how it works and what you get.",
+      "list": "Features",
+      "how": "How it works",
+      "outcome": "The outcome",
+      "features": {
+        "ticketing": {
+          "title": "Ticketing and seating",
+          "what": "Sell tickets and design your room. Offer whole tables or single seats, and even a seat for one specific date of a multi-day event.",
+          "s1": "Create ticket types, prices and limits.",
+          "s2": "Draw the floor plan and put seats or tables on sale.",
+          "s3": "Guests pick their seats on the live map.",
+          "outcome": "Fewer double bookings, higher sales and a calm box office."
+        },
+        "checkout": {
+          "title": "Checkout and receipts",
+          "what": "A fast checkout with cards and local payment methods, instant tickets by email and receipts that satisfy finance.",
+          "s1": "Guests choose tickets and pay in a few taps.",
+          "s2": "Tickets and receipts arrive by email at once.",
+          "s3": "You see every order, refund and payout.",
+          "outcome": "More guests finish buying, and you never chase a receipt."
+        },
+        "website": {
+          "title": "Event websites and design",
+          "what": "Every event gets its own website with your colors, logo, agenda, speakers and registration, built without code.",
+          "s1": "Pick a design and add your brand.",
+          "s2": "Fill in agenda, speakers and details.",
+          "s3": "Publish in one click, on your own domain if you like.",
+          "outcome": "A professional event page without hiring a web team."
+        },
+        "checkin": {
+          "title": "Check-in and re-entry",
+          "what": "Scan tickets at the door with the staff app, find guests by name and let people leave and come back with every scan recorded.",
+          "s1": "Add door staff and checkpoints.",
+          "s2": "Scan QR codes or search for a guest.",
+          "s3": "Watch attendance live from anywhere.",
+          "outcome": "Short queues, no duplicate entries and live numbers."
+        },
+        "sponsors": {
+          "title": "Sponsors and exhibitors",
+          "what": "Sell sponsor packages, give exhibitors their own portal and booth profile, and let them collect leads by scanning badges.",
+          "s1": "Create sponsor packages and tiers.",
+          "s2": "Partners fill in their profile and deliverables.",
+          "s3": "Exhibitors scan attendee badges for leads.",
+          "outcome": "New revenue for you and clear value for your partners."
+        },
+        "networking": {
+          "title": "Networking and lobby chat",
+          "what": "Attendees build a profile, find the right people and message each other in event chat, with moderation for your team.",
+          "s1": "Guests opt in and create a profile.",
+          "s2": "They browse people and start conversations.",
+          "s3": "Your team moderates and can pause chat.",
+          "outcome": "Guests meet the right people and come back next year."
+        },
+        "ai": {
+          "title": "AI setup and assistant",
+          "what": "Describe your event in a sentence and Create with AI drafts the setup. Drafting tools write your copy and an assistant answers your guests.",
+          "s1": "Describe the event in your own words.",
+          "s2": "Review the draft: tickets, schedule and text.",
+          "s3": "Publish, and let the assistant answer questions.",
+          "outcome": "Hours of setup become minutes."
+        },
+        "donations": {
+          "title": "Donations",
+          "what": "Add a donation option at checkout, run a campaign page and show a live giving screen at your gala, with receipts sent automatically.",
+          "s1": "Turn on donations and set suggested amounts.",
+          "s2": "Run the paddle raise with a live giving screen.",
+          "s3": "Send receipts and reconcile gifts in one click.",
+          "outcome": "Raise more money with less paperwork."
+        },
+        "analytics": {
+          "title": "Analytics and reports",
+          "what": "Follow sales, attendance and sources in live reports, set alerts, export your data and schedule reports for your team.",
+          "s1": "Open the live dashboard for any event.",
+          "s2": "Drill into sales, sources and attendance.",
+          "s3": "Schedule reports and set alerts.",
+          "outcome": "Decisions based on facts, not guesses."
+        },
+        "marketing": {
+          "title": "Marketing and campaigns",
+          "what": "Email and WhatsApp campaigns, tracked links, surveys and search-friendly pages help you fill the room.",
+          "s1": "Build an audience from your guests.",
+          "s2": "Send a campaign by email or WhatsApp.",
+          "s3": "Track every link back to ticket sales.",
+          "outcome": "A full room, and proof of what filled it."
+        },
+        "team": {
+          "title": "Team and roles",
+          "what": "Invite your team with the right access: owners, managers, finance, marketing and door staff, with an audit trail of who did what.",
+          "s1": "Invite people by email.",
+          "s2": "Give each a role, or access to one event.",
+          "s3": "Review activity any time.",
+          "outcome": "Everyone does their job, and nobody sees more than they should."
+        },
+        "languages": {
+          "title": "13 languages",
+          "what": "Your event pages, checkout, tickets and emails speak the language of your guests: English, Arabic, German, Spanish, French, Hindi, Italian, Japanese, Dutch, Portuguese, Russian and two Chinese variants.",
+          "s1": "Guests pick their language on any page.",
+          "s2": "Tickets and emails follow their choice.",
+          "s3": "Your own copy can be translated per language.",
+          "outcome": "A welcome for guests anywhere in the world."
+        }
+      }
+    },
+    "templates": {
+      "eyebrow": "Event templates",
+      "line1": "Start with a template,",
+      "line2": "not a blank page",
+      "lede": "Pick a starting point and your event arrives with the right modules, navigation and checklist. Save your own events as templates too.",
+      "sets": "What it sets up",
+      "gala": {
+        "name": "Charity gala",
+        "body": "Tables, a seating plan, donations and a live giving screen for the night.",
+        "tag1": "Seating",
+        "tag2": "Donations",
+        "tag3": "Giving screen"
+      },
+      "conference": {
+        "name": "Two-day conference",
+        "body": "Tracks, rooms, session types, sponsor tiers and badges, ready for a new edition.",
+        "tag1": "Agenda",
+        "tag2": "Sponsors",
+        "tag3": "Badges"
+      },
+      "concert": {
+        "name": "Seated concert",
+        "body": "Gold and silver zones, standing room and a VIP lounge.",
+        "tag1": "Zones",
+        "tag2": "Standing",
+        "tag3": "VIP"
+      },
+      "wedding": {
+        "name": "Destination wedding",
+        "body": "Mehendi, sangeet, ceremony and reception, with the guest website and seating chart.",
+        "tag1": "RSVP",
+        "tag2": "Guest site",
+        "tag3": "Seating"
+      },
+      "tour": {
+        "name": "Tour",
+        "body": "Several dates, each with its own seat map and a seat per date.",
+        "tag1": "Dates",
+        "tag2": "Seat per date",
+        "tag3": "Legs"
+      }
+    },
+    "types": {
+      "eyebrow": "Event types",
+      "line1": "We turn events",
+      "line2": "into reality",
+      "wedding": "Weddings",
+      "gala": "Galas",
+      "concert": "Concerts",
+      "conference": "Conferences",
+      "community": "Community",
+      "tour": "Tours",
+      "corporate": "Corporate",
+      "open": "See the solution"
+    },
+    "preview": {
+      "eyebrow": "Your website",
+      "line1": "See what your event",
+      "line2": "website looks like",
+      "lede": "This is the real public page of WebBuddy, a demo organizer. Your brand color, your events and your blog, on the same design as the Yayatoh marketplace.",
+      "open": "Open WebBuddy's site",
+      "frameLabel": "Preview of the WebBuddy organizer website",
+      "newTab": "Opens in a new tab"
     }
   }
 }

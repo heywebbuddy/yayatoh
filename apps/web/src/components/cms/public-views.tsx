@@ -7,8 +7,9 @@ import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { Markdown } from '@/components/markdown.tsx';
 import { Pagination } from '@/components/marketplace/pagination.tsx';
-import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
+import { SiteFooter } from '@/components/marketplace/site-chrome.tsx';
 import { PageHero } from '@/components/showcase/page-hero.tsx';
+import { ShowcaseTopBar } from '@/components/showcase/top-bar.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatDate } from '@/lib/format.ts';
 import { blogPostingJsonLd, jsonLdScript } from '@/lib/seo/jsonld.ts';
@@ -41,8 +42,8 @@ export async function Chrome({
   // U10: the organizer's contact page, while it is on.
   const contact = site.variant === 'organizer' ? await cachedContactPage(site.org.orgId) : null;
   return (
-    <div className="min-h-dvh bg-surface">
-      {site.variant === 'tenant' ? <TenantHeader org={site.org} current={current} /> : <SiteHeader />}
+    <div data-surface="showcase" className="min-h-dvh bg-page">
+      {site.variant === 'tenant' ? <TenantHeader org={site.org} current={current} /> : <ShowcaseTopBar />}
       {site.variant === 'organizer' ? (
         <nav
           aria-label={t('organizerNav', { org: site.org.name })}

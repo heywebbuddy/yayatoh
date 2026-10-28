@@ -2,11 +2,9 @@ import { parseSearchParams, publicOrganizer } from '@yayatoh/marketplace';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { ListingGrid } from '@/components/marketplace/listing-grid.tsx';
-import { OrgHero } from '@/components/marketplace/org-hero.tsx';
-import { Pagination } from '@/components/marketplace/pagination.tsx';
-import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
-import { TagFilter } from '@/components/marketplace/tag-filter.tsx';
+import { ShowcaseFooter } from '@/components/showcase/footer.tsx';
+import { OrgShowcase } from '@/components/showcase/org-showcase.tsx';
+import { ShowcaseTopBar } from '@/components/showcase/top-bar.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { originFor } from '@/lib/hosts.ts';
 import { cachedContactPage, cachedEntries } from '@/server/cms.ts';
@@ -64,54 +62,46 @@ export default async function OrganizerPage({ params, searchParams }: Props) {
   // U10: the contact page, while the organizer has it on.
   const contact = await cachedContactPage(o.orgId);
   const tc = await getTranslations('cmsPublic');
+  const links = (
+    <>
+      {site ? (
+        <a href={site} className="text-body font-bold underline underline-offset-4">
+          {t('organizer.site')}
+        </a>
+      ) : null}
+      {posts.items.length > 0 ? (
+        <Link href={`${path}/blogs`} className="text-body font-bold underline underline-offset-4">
+          {tc('blog')}
+        </Link>
+      ) : null}
+      {contact ? (
+        <Link href={`${path}/contact`} className="text-body font-bold underline underline-offset-4">
+          {tc('contact')}
+        </Link>
+      ) : null}
+    </>
+  );
   return (
-    <div className="min-h-dvh bg-surface">
-      <SiteHeader />
-      <main id="main" className="flex flex-col gap-8">
-        <OrgHero orgId={o.orgId} eyebrow={t('organizer.eyebrow')} name={o.name} brandColor={o.brandColor}>
-          {site ? (
-            <a href={site} className="self-start text-body underline">
-              {t('organizer.site')}
-            </a>
-          ) : null}
-          {posts.items.length > 0 ? (
-            <Link href={`${path}/blogs`} className="self-start text-body underline">
-              {tc('blog')}
-            </Link>
-          ) : null}
-          {contact ? (
-            <Link href={`${path}/contact`} className="self-start text-body underline">
-              {tc('contact')}
-            </Link>
-          ) : null}
-        </OrgHero>
-        <section
-          aria-labelledby="upcoming-heading"
-          className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 md:px-6"
-        >
-          <h2 id="upcoming-heading" className="text-[28px] font-extrabold tracking-[-0.03em]">
-            {t('upcoming')}
-          </h2>
-          <TagFilter tags={tags} current={tag} path={path} />
-          <ListingGrid
-            items={listings.items}
-            locale={locale}
-            label={t('organizer.events', { org: o.name })}
-            organizerHref={null}
-            empty={{
-              title: t('organizer.emptyTitle'),
-              description: t('organizer.emptyDescription', { org: o.name }),
-            }}
-          />
-          <Pagination
-            path={path}
-            params={{ tag: tag ?? undefined }}
-            page={listings.page}
-            pageCount={listings.pageCount}
-          />
-        </section>
-      </main>
-      <SiteFooter />
-    </div>
+    <OrgShowcase
+      orgId={o.orgId}
+      name={o.name}
+      brandColor={o.brandColor}
+      eyebrow={t('organizer.eyebrow')}
+      lede={t('organizer.description', { org: o.name })}
+      listings={listings.items}
+      locale={locale}
+      tags={tags}
+      tag={tag}
+      path={path}
+      page={listings.page}
+      pageCount={listings.pageCount}
+      posts={posts.items}
+      postsHref={`${path}/blogs`}
+      links={links}
+      emptyTitle={t('organizer.emptyTitle')}
+      emptyDescription={t('organizer.emptyDescription', { org: o.name })}
+      header={<ShowcaseTopBar />}
+      footer={<ShowcaseFooter />}
+    />
   );
 }
