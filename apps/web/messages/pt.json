@@ -8711,7 +8711,12 @@
       "apply": "Usar este rascunho",
       "applied": "Rascunho colocado no editor. Revise e depois salve.",
       "discard": "Descartar",
-      "discarded": "Rascunho descartado. Nada mudou."
+      "discarded": "Rascunho descartado. Nada mudou.",
+      "autoApplied": "O rascunho já está no editor, abaixo. Mantenha-o ou desfaça para recuperar seu texto.",
+      "keep": "Manter rascunho",
+      "undo": "Desfazer",
+      "kept": "Rascunho mantido. Revise e salve.",
+      "undone": "Seu texto anterior voltou."
     }
   },
   "journeys": {
@@ -19869,7 +19874,11 @@
       "venue": "Local",
       "city": "Cidade",
       "description": "Descrição",
-      "descriptionHint": "Markdown: parágrafos, negrito, itálico e listas."
+      "descriptionHint": "Markdown: parágrafos, negrito, itálico e listas.",
+      "repeatDays": "Sai todos os dias por (dias)",
+      "repeatDaysHint": "Quantos dias seguidos o passeio acontece. 0 ou 1 é uma única data.",
+      "pickups": "Pontos de embarque",
+      "pickupsHint": "Um por linha, por exemplo uma estação de metrô ou um hotel."
     },
     "tickets": {
       "title": "Tipos de ingresso",

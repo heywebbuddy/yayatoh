@@ -304,10 +304,11 @@ export async function proposeEventSetup(
             profiles: input.profiles,
           }),
         ),
-        { today, profiles: input.profiles },
+        { today, profiles: input.profiles, brief: input.brief },
       ),
   );
-  return { draft: value, timezone: input.timezone, currency: input.currency, balance };
+  // The event's own zone (read from its city) wins over the organization's default.
+  return { draft: value, timezone: value.timezone ?? input.timezone, currency: input.currency, balance };
 }
 
 /** Events an audience suggestion may reference: the org's 30 latest. */

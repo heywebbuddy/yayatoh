@@ -1,7 +1,12 @@
 'use server';
 
-import { type EventSetupDraftDto, proposeEventSetup } from '@yayatoh/ai';
-import { addSectionCommand, createEventCommand } from '@yayatoh/events';
+import { type EventSetupDraftDto, isTimeZone, proposeEventSetup } from '@yayatoh/ai';
+import {
+  addPickupPointCommand,
+  addRecurringOccurrencesCommand,
+  addSectionCommand,
+  createEventCommand,
+} from '@yayatoh/events';
 import { executeCommand, isDomainError, moneyFromDecimal, zonedTimeToUtc } from '@yayatoh/kernel';
 import { createSessionCommand } from '@yayatoh/program';
 import { createTicketTypeCommand } from '@yayatoh/ticketing';
@@ -59,6 +64,10 @@ const Confirmed = z.object({
   endsLocal: Local,
   venueName: z.string().trim().max(160),
   city: z.string().trim().max(120),
+  /** The zone the proposal's times are in (the event's own place, else the organization's). */
+  timezone: z.string().max(64).nullable().default(null),
+  repeatDays: z.coerce.number().int().min(0).max(30).default(0),
+  pickups: z.array(z.string().trim().min(1).max(80)).max(8).default([]),
   description: z.string().max(6000),
   tickets: z
     .array(
@@ -79,7 +88,7 @@ const Confirmed = z.object({
         minutes: z.coerce.number().int().min(10).max(240),
       }),
     )
-    .max(12),
+    .max(24),
   faqs: z
     .array(
       z.object({ question: z.string().trim().min(1).max(300), answer: z.string().trim().min(1).max(1500) }),
@@ -113,7 +122,7 @@ export async function createFromAiAction(org: string, payload: unknown): Promise
     return { ok: false, code: 'validation_failed', ...(typeof field === 'string' ? { field } : {}) };
   }
   const p = parsed.data;
-  const timezone = data.org.timezone;
+  const timezone = isTimeZone(p.timezone) ? p.timezone : data.org.timezone;
   const currency = data.org.currency;
   let startsAt: Date;
   let endsAt: Date;
@@ -206,6 +215,37 @@ export async function createFromAiAction(org: string, payload: unknown): Promise
           );
         });
     else if (p.agenda.length > 0) skipped.push('agenda');
+    if (p.profile === 'tour') {
+      for (const [i, name] of p.pickups.entries())
+        await part('pickups', () =>
+          executeCommand(
+            addPickupPointCommand,
+            { eventId, name, address: '', minutesBefore: i === 0 ? 15 : 0 },
+            data.ctx,
+            ports,
+          ),
+        );
+      // "Daily": the first date is the event itself; the rest are added as a repeating schedule.
+      if (p.repeatDays > 1)
+        await part('repeat', () =>
+          executeCommand(
+            addRecurringOccurrencesCommand,
+            {
+              eventId,
+              rule: {
+                startDate: p.startsLocal.slice(0, 10),
+                startTime: p.startsLocal.slice(11, 16),
+                endTime: p.endsLocal.slice(11, 16),
+                freq: 'daily',
+                interval: 1,
+                count: p.repeatDays,
+              },
+            },
+            data.ctx,
+            ports,
+          ),
+        );
+    }
     return { ok: true, code: null, slug: created.slug, skipped: [...new Set(skipped)] };
   } catch (err) {
     if (isDomainError(err)) return { ok: false, code: err.code };

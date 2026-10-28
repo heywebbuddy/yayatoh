@@ -1,7 +1,8 @@
 'use client';
 
+import { timeZoneLabel } from '@yayatoh/ai/ui';
 import { Alert, Button, Input, Select, Textarea } from '@yayatoh/ui';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useId, useState, useTransition } from 'react';
 import type {
   CreateFromAiState,
@@ -50,6 +51,7 @@ function Review({
   const te = useTranslations();
   const id = useId();
   const router = useRouter();
+  const locale = useLocale();
   const d: Draft = proposal.draft;
   const [requestKey] = useState(() => crypto.randomUUID());
   const [name, setName] = useState(d.name);
@@ -63,6 +65,8 @@ function Review({
   const [tickets, setTickets] = useState(d.tickets.map((x) => ({ ...x, price: String(x.price) })));
   const [agenda, setAgenda] = useState(d.agenda.map((x) => ({ ...x, startsLocal: x.startsLocal })));
   const [faqs, setFaqs] = useState(d.faqs);
+  const [repeatDays, setRepeatDays] = useState(String(d.repeatDays));
+  const [pickups, setPickups] = useState(d.pickups.join('\n'));
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
 
@@ -78,6 +82,12 @@ function Review({
         endsLocal,
         venueName,
         city,
+        timezone: proposal.timezone,
+        repeatDays: Number(repeatDays) || 0,
+        pickups: pickups
+          .split('\n')
+          .map((x) => x.trim())
+          .filter(Boolean),
         description,
         tickets,
         agenda,
@@ -134,7 +144,7 @@ function Review({
           id={`${id}-starts`}
           type="datetime-local"
           label={t('fields.starts')}
-          hint={proposal.timezone}
+          hint={timeZoneLabel(proposal.timezone, locale)}
           value={startsLocal}
           onChange={(e) => setStarts(e.target.value)}
           required
@@ -161,6 +171,28 @@ function Review({
           onChange={(e) => setCity(e.target.value)}
           maxLength={120}
         />
+        {profile === 'tour' ? (
+          <>
+            <Input
+              id={`${id}-repeat`}
+              type="number"
+              min={0}
+              max={30}
+              label={t('fields.repeatDays')}
+              hint={t('fields.repeatDaysHint')}
+              value={repeatDays}
+              onChange={(e) => setRepeatDays(e.target.value)}
+            />
+            <Textarea
+              id={`${id}-pickups`}
+              label={t('fields.pickups')}
+              hint={t('fields.pickupsHint')}
+              rows={3}
+              value={pickups}
+              onChange={(e) => setPickups(e.target.value)}
+            />
+          </>
+        ) : null}
       </div>
       <Textarea
         id={`${id}-desc`}

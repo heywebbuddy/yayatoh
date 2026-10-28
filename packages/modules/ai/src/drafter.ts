@@ -4,6 +4,7 @@ import { AiOutputError, addMinutesLocal, buildComposePrompt, type ComposeRequest
 import { buildPrompt, DraftOutputError, type DraftRequest } from './domain/drafts.ts';
 import { fakeEmbedding } from './domain/embed.ts';
 import { ruleBasedSetup } from './domain/event-setup-rules.ts';
+import { timeZoneLabel } from './domain/timezone.ts';
 import type { Tone } from './domain/tones.ts';
 
 /**
@@ -48,13 +49,13 @@ export const fakeDrafter: AiDrafter = {
         return `${f.name}: an unforgettable ${f.profile === 'other' ? 'event' : f.profile}${place ? ` at ${place}` : ''} on ${when}.`;
       case 'description':
         return [
-          `**${f.name}** takes place on ${when}${place ? ` at ${place}` : ''} (${f.timezone.replace(/_/g, ' ')} time).`,
+          `**${f.name}** takes place on ${when}${place ? ` at ${place}` : ''} (${timeZoneLabel(f.timezone)}).`,
           notes ? `What to expect: ${notes}` : 'Join us for a day worth remembering.',
           '- Doors open before the start\n- Tickets are sent by email',
         ].join('\n\n');
       case 'faq':
         return [
-          `When is ${f.name}?\nIt starts on ${f.startsLocal} and ends on ${f.endsLocal} (${f.timezone.replace(/_/g, ' ')} time).`,
+          `When is ${f.name}?\nIt starts on ${f.startsLocal} and ends on ${f.endsLocal} (${timeZoneLabel(f.timezone)}).`,
           `Where does it take place?\n${place ? `At ${place}.` : 'The location will be announced soon.'}`,
           'How do I get my ticket?\nYour ticket is emailed to you right after checkout.',
         ].join('\n\n');

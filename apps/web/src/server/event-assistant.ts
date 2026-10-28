@@ -1,5 +1,5 @@
 import 'server-only';
-import type { AssistantSource } from '@yayatoh/ai';
+import { type AssistantSource, timeZoneLabel } from '@yayatoh/ai';
 import {
   checkoutTarget,
   markdownToPlainText,
@@ -58,7 +58,7 @@ export async function eventKnowledge(slug: string, locale: string): Promise<Even
     [
       pub.name,
       pub.tagline ?? '',
-      `${formatEventDateRange(pub.startsAt.toISOString(), pub.endsAt.toISOString(), f)} (${pub.timezone})`,
+      `${formatEventDateRange(pub.startsAt.toISOString(), pub.endsAt.toISOString(), f)} (${timeZoneLabel(pub.timezone, locale)})`,
       place,
       pub.status === 'published' ? '' : `Status: ${pub.status}`,
     ]

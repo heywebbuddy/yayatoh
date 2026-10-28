@@ -8711,7 +8711,12 @@
       "apply": "Usa questa bozza",
       "applied": "Bozza inserita nell'editor. Controllala e poi salva.",
       "discard": "Scarta",
-      "discarded": "Bozza scartata. Non è cambiato nulla."
+      "discarded": "Bozza scartata. Non è cambiato nulla.",
+      "autoApplied": "La bozza è ora nell’editor qui sotto. Tienila, oppure annulla per riavere il tuo testo.",
+      "keep": "Tieni la bozza",
+      "undo": "Annulla",
+      "kept": "Bozza mantenuta. Rivedila e poi salva.",
+      "undone": "Il tuo testo precedente è tornato."
     }
   },
   "journeys": {
@@ -19869,7 +19874,11 @@
       "venue": "Sede",
       "city": "Città",
       "description": "Descrizione",
-      "descriptionHint": "Markdown: paragrafi, grassetto, corsivo ed elenchi."
+      "descriptionHint": "Markdown: paragrafi, grassetto, corsivo ed elenchi.",
+      "repeatDays": "Parte ogni giorno per (giorni)",
+      "repeatDaysHint": "Per quanti giorni di fila si svolge il tour. 0 o 1 è una data singola.",
+      "pickups": "Punti di ritrovo",
+      "pickupsHint": "Uno per riga, ad esempio una stazione della metro o un hotel."
     },
     "tickets": {
       "title": "Tipi di biglietto",

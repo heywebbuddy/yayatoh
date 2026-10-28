@@ -89,6 +89,8 @@ export function CampaignEditor({
   const [previewing, startPreview] = useTransition();
   const focusNext = useRef<string | null>(null);
   const lastAiEvent = useRef('');
+  // The text before the first AI draft of this session, so Undo gets it back.
+  const beforeAi = useRef<CampaignContent | null>(null);
   const errors = state.errors ?? {};
   const err = (path: string) => errors[path];
   const firstEvent = events[0]?.id ?? '';
@@ -164,9 +166,15 @@ export function CampaignEditor({
             <p className="text-body text-ink-2">{t('ai.explainer')}</p>
             <AiComposePanel<CampaignDraftDto>
               setup={ai.setup}
-              run={(v) => {
+              run={async (v) => {
                 lastAiEvent.current = v.eventId;
-                return ai.draft(v);
+                const res = await ai.draft(v);
+                // The draft goes straight into the editor (to keep or undo), not into a box to open.
+                if (res.ok && res.value) {
+                  beforeAi.current ??= content;
+                  applyDraft(res.value, v.eventId);
+                }
+                return res;
               }}
               events={events}
               briefLabel={t('ai.brief')}
@@ -188,18 +196,29 @@ export function CampaignEditor({
                   {d.buttonLabel ? (
                     <p className="text-caption">{t('ai.button', { label: d.buttonLabel })}</p>
                   ) : null}
+                  <p className="text-caption font-bold text-ink-2" role="status">
+                    {t('ai.autoApplied')}
+                  </p>
                   <div className="flex flex-wrap gap-3">
                     <Button
                       type="button"
                       onClick={() => {
-                        applyDraft(d, lastAiEvent.current);
-                        done(t('ai.applied'));
+                        beforeAi.current = null;
+                        done(t('ai.kept'));
                       }}
                     >
-                      {t('ai.apply')}
+                      {t('ai.keep')}
                     </Button>
-                    <Button type="button" variant="secondary" onClick={() => done(t('ai.discarded'))}>
-                      {t('ai.discard')}
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      onClick={() => {
+                        if (beforeAi.current) setContent(beforeAi.current);
+                        beforeAi.current = null;
+                        done(t('ai.undone'));
+                      }}
+                    >
+                      {t('ai.undo')}
                     </Button>
                   </div>
                 </div>

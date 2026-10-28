@@ -1,5 +1,6 @@
 /** Client-safe exports (no database code): constants for forms. */
 export { DRAFT_KINDS, type DraftKind, FREE_MONTHLY_CREDITS, MAX_NOTES_LENGTH } from './domain/ledger.ts';
+export { guessTimeZone, isTimeZone, timeZoneLabel } from './domain/timezone.ts';
 export {
   AGENDA_MAX_SESSIONS,
   BRAND_KIT_NAME_MAX,

@@ -8711,7 +8711,12 @@
       "apply": "Dit concept gebruiken",
       "applied": "Concept in de editor gezet. Controleer het en sla het daarna op.",
       "discard": "Weggooien",
-      "discarded": "Concept weggegooid. Er is niets veranderd."
+      "discarded": "Concept weggegooid. Er is niets veranderd.",
+      "autoApplied": "Het concept staat nu in de editor hieronder. Bewaar het, of maak ongedaan om je tekst terug te krijgen.",
+      "keep": "Concept bewaren",
+      "undo": "Ongedaan maken",
+      "kept": "Concept bewaard. Controleer het en sla daarna op.",
+      "undone": "Je vorige tekst is terug."
     }
   },
   "journeys": {
@@ -19869,7 +19874,11 @@
       "venue": "Locatie",
       "city": "Plaats",
       "description": "Beschrijving",
-      "descriptionHint": "Markdown: alinea’s, vet, cursief en lijsten."
+      "descriptionHint": "Markdown: alinea’s, vet, cursief en lijsten.",
+      "repeatDays": "Vertrekt dagelijks gedurende (dagen)",
+      "repeatDaysHint": "Hoeveel dagen achter elkaar de tour plaatsvindt. 0 of 1 is één datum.",
+      "pickups": "Ophaalpunten",
+      "pickupsHint": "Eén per regel, bijvoorbeeld een metrostation of een hotel."
     },
     "tickets": {
       "title": "Tickettypen",

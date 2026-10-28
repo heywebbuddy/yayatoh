@@ -1,4 +1,5 @@
 import { addMinutesLocal } from './compose.ts';
+import { guessTimeZone } from './timezone.ts';
 
 /**
  * The no-provider fallback of "Create with AI": a rule-based reading of the organizer's sentence.
@@ -37,6 +38,32 @@ export function detectDays(brief: string): number {
 export function detectCity(brief: string): string {
   const m = /\b(?:in|at|near)\s+([A-Z][\p{L}.'-]+(?:\s+[A-Z][\p{L}.'-]+){0,2})/u.exec(brief);
   return m?.[1]?.trim() ?? '';
+}
+
+/** A tour that departs every day: how many days in a row (14 unless the sentence says "for N days"). */
+export function detectRepeatDays(brief: string): number {
+  if (!/\b(daily|every day|each day|everyday)\b/i.test(brief)) return 0;
+  const m = /\bfor\s+(\d{1,2})\s+days?\b/i.exec(brief);
+  return m?.[1] ? Math.min(30, Math.max(2, Number(m[1]))) : 14;
+}
+
+/** Pickup locations named in the sentence ("pickups at Hitech City and Charminar"). */
+export function detectPickups(brief: string): string[] {
+  const m =
+    /pick[\s-]?ups?(?:\s+(?:points?|locations?|spots?|stops?))?\s*(?:at|from|in|:|are)?\s+([^.;]+)/i.exec(
+      brief,
+    );
+  if (!m?.[1]) return [];
+  const names = m[1]
+    .split(/,|&|\band\b|\bor\b/i)
+    .map((x) =>
+      x
+        .replace(/^(the|a|an)\s+/i, '')
+        .replace(/\s+(daily|every day|each day|at \d.*)$/i, '')
+        .trim(),
+    )
+    .filter((x) => x.length >= 2 && x.length <= 60 && /^[\p{L}\d]/u.test(x));
+  return [...new Set(names)].slice(0, 8);
 }
 
 const SMALL = new Set(['in', 'at', 'of', 'the', 'a', 'an', 'and', 'for', 'to', 'on']);
@@ -264,6 +291,9 @@ export interface RuleBasedSetup {
   readonly endsLocal: string;
   readonly venueName: string;
   readonly city: string;
+  readonly timezone: string | null;
+  readonly repeatDays: number;
+  readonly pickups: readonly string[];
   readonly description: string;
   readonly tickets: readonly Ticket[];
   readonly agenda: readonly { title: string; description: string; startsLocal: string; minutes: number }[];
@@ -292,16 +322,25 @@ export function ruleBasedSetup(brief: string, today: string, allowed: readonly s
     `Everything you need to know is on this page: the programme, how to get your ticket and answers to common questions.`,
     `- Dates: ${days > 1 ? `${firstLocal} to ${lastDay}` : firstLocal}\n- Place: ${city || 'to be announced'}\n- Tickets: see the pass options`,
   ].join('\n\n');
-  const agenda = (AGENDA[kind] ?? [])
-    .slice(0, 8)
-    .map(([offset, title, d]) => ({
-      title,
-      description: d,
-      startsLocal: addMinutesLocal(startsLocal, offset) ?? startsLocal,
-      minutes: 45,
-    }))
-    // Every item must sit inside the first day's hours.
-    .filter((a) => (addMinutesLocal(a.startsLocal, a.minutes) ?? endsLocal) <= endsLocal);
+  // Every day of a multi-day event gets its own programme (the first day alone would leave the rest empty).
+  const perDay = Math.max(2, Math.min(8, Math.floor(24 / days)));
+  const agenda = Array.from({ length: days }, (_, day) =>
+    (AGENDA[kind] ?? []).slice(0, perDay).map(([offset, title, d]) => {
+      const dayStart = addMinutesLocal(startsLocal, day * 24 * 60) ?? startsLocal;
+      return {
+        title: days > 1 ? `Day ${day + 1}: ${title}` : title,
+        description: d,
+        startsLocal: addMinutesLocal(dayStart, offset) ?? dayStart,
+        minutes: 45,
+        dayEnd: addMinutesLocal(dayStart, HOURS[kind] * 60) ?? endsLocal,
+      };
+    }),
+  )
+    .flat()
+    // Every item must end inside its own day's hours.
+    .filter((a) => (addMinutesLocal(a.startsLocal, a.minutes) ?? a.dayEnd) <= a.dayEnd)
+    .map(({ dayEnd: _d, ...a }) => a);
+  const tour = kind === 'tour';
   return {
     name,
     tagline: `A ${span}${label}${where}.`,
@@ -310,6 +349,9 @@ export function ruleBasedSetup(brief: string, today: string, allowed: readonly s
     endsLocal,
     venueName: city,
     city,
+    timezone: guessTimeZone(city, text),
+    repeatDays: tour ? detectRepeatDays(text) : 0,
+    pickups: tour ? detectPickups(text) : [],
     description,
     tickets: TICKETS[kind],
     agenda,

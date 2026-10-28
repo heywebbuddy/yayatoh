@@ -8711,7 +8711,12 @@
       "apply": "Usar este borrador",
       "applied": "Borrador colocado en el editor. Revísalo y guárdalo.",
       "discard": "Descartar",
-      "discarded": "Borrador descartado. No cambió nada."
+      "discarded": "Borrador descartado. No cambió nada.",
+      "autoApplied": "El borrador ya está en el editor, abajo. Consérvalo o deshaz para recuperar tu texto.",
+      "keep": "Conservar borrador",
+      "undo": "Deshacer",
+      "kept": "Borrador conservado. Revísalo y guarda.",
+      "undone": "Tu texto anterior ha vuelto."
     }
   },
   "journeys": {
@@ -19869,7 +19874,11 @@
       "venue": "Recinto",
       "city": "Ciudad",
       "description": "Descripción",
-      "descriptionHint": "Markdown: párrafos, negrita, cursiva y listas."
+      "descriptionHint": "Markdown: párrafos, negrita, cursiva y listas.",
+      "repeatDays": "Sale a diario durante (días)",
+      "repeatDaysHint": "Cuántos días seguidos se realiza la excursión. 0 o 1 es una sola fecha.",
+      "pickups": "Puntos de recogida",
+      "pickupsHint": "Uno por línea, por ejemplo una estación de metro o un hotel."
     },
     "tickets": {
       "title": "Tipos de entrada",
