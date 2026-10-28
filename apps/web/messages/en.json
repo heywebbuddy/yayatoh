@@ -20073,9 +20073,22 @@
       "a5": "Create an account and set up a draft event. Nothing is published until you say so."
     },
     "cta": {
-      "title": "Ready to host your next event?",
-      "lede": "Create your event today and sell your first ticket in minutes.",
-      "button": "Create an event"
+      "title": "Find your next event",
+      "lede": "Concerts, conferences, galas and more, with the full price shown up front.",
+      "button": "Browse events"
+    },
+    "buyerFaq": {
+      "title": "Questions, answered",
+      "q1": "Do I see the full price before I pay?",
+      "a1": "Yes. Prices include all fees from the first screen to checkout, so there are no surprises.",
+      "q2": "How do I get my ticket?",
+      "a2": "Your ticket is emailed right after checkout with a QR code. You can also find it under My tickets.",
+      "q3": "Can I get a refund?",
+      "a3": "Each event has its own refund policy, shown on its page before you buy.",
+      "q4": "Can I send a ticket to a friend?",
+      "a4": "Yes. Open the ticket in My tickets and transfer it to their email address.",
+      "q5": "Do I need an account to buy?",
+      "a5": "No. You can check out as a guest; an account just keeps your tickets in one place."
     }
   },
   "pages": {

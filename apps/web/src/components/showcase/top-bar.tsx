@@ -88,13 +88,13 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
               <Link href="/pricing" className={link}>
                 {t('pricing')}
               </Link>
-              <Link href="/for-organizers" className={link}>
-                {t('forOrganizers')}
-              </Link>
               <Link href="/my-tickets" className={link}>
                 {t('myTickets')}
               </Link>
             </nav>
+            <Link href="/for-organizers" className={cx(buttonClass('secondary', 'md'), 'max-md:hidden')}>
+              {t('forOrganizers')}
+            </Link>
             {signedIn ? (
               <Link href={access.href} className={cx(buttonClass('ember', 'md'), 'max-sm:hidden')}>
                 {t('dashboard')}

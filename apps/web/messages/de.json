@@ -20073,9 +20073,22 @@
       "a5": "Erstelle ein Konto und lege einen Event-Entwurf an. Nichts wird veröffentlicht, bevor du es willst."
     },
     "cta": {
-      "title": "Bereit für dein nächstes Event?",
-      "lede": "Lege dein Event noch heute an und verkaufe in Minuten das erste Ticket.",
-      "button": "Event erstellen"
+      "title": "Finde dein nächstes Event",
+      "lede": "Konzerte, Konferenzen, Galas und mehr, mit dem vollen Preis von Anfang an.",
+      "button": "Events entdecken"
+    },
+    "buyerFaq": {
+      "title": "Fragen und Antworten",
+      "q1": "Sehe ich den vollen Preis, bevor ich zahle?",
+      "a1": "Ja. Die Preise enthalten alle Gebühren, vom ersten Bildschirm bis zur Kasse, ohne Überraschungen.",
+      "q2": "Wie bekomme ich mein Ticket?",
+      "a2": "Dein Ticket kommt direkt nach dem Kauf per E-Mail mit QR-Code. Du findest es auch unter Meine Tickets.",
+      "q3": "Bekomme ich eine Erstattung?",
+      "a3": "Jedes Event hat eine eigene Erstattungsregel, die vor dem Kauf auf der Eventseite steht.",
+      "q4": "Kann ich ein Ticket an Freunde schicken?",
+      "a4": "Ja. Öffne das Ticket unter Meine Tickets und übertrage es an die E-Mail-Adresse.",
+      "q5": "Brauche ich ein Konto zum Kaufen?",
+      "a5": "Nein. Du kannst als Gast bezahlen; ein Konto sammelt deine Tickets nur an einem Ort."
     }
   },
   "pages": {

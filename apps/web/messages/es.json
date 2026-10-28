@@ -20073,9 +20073,22 @@
       "a5": "Crea una cuenta y prepara un borrador. No se publica nada hasta que lo decidas."
     },
     "cta": {
-      "title": "¿Listo para tu próximo evento?",
-      "lede": "Crea tu evento hoy y vende tu primera entrada en minutos.",
-      "button": "Crear un evento"
+      "title": "Encuentra tu próximo evento",
+      "lede": "Conciertos, congresos, galas y más, con el precio completo a la vista.",
+      "button": "Explorar eventos"
+    },
+    "buyerFaq": {
+      "title": "Preguntas y respuestas",
+      "q1": "¿Veo el precio completo antes de pagar?",
+      "a1": "Sí. Los precios incluyen todas las tarifas desde la primera pantalla hasta el pago, sin sorpresas.",
+      "q2": "¿Cómo recibo mi entrada?",
+      "a2": "Tu entrada llega por correo justo después del pago, con un código QR. También la encuentras en Mis entradas.",
+      "q3": "¿Puedo pedir un reembolso?",
+      "a3": "Cada evento tiene su propia política de reembolso, visible en su página antes de comprar.",
+      "q4": "¿Puedo enviar una entrada a un amigo?",
+      "a4": "Sí. Abre la entrada en Mis entradas y transfiérela a su correo.",
+      "q5": "¿Necesito una cuenta para comprar?",
+      "a5": "No. Puedes pagar como invitado; una cuenta solo reúne tus entradas en un lugar."
     }
   },
   "pages": {

@@ -20073,9 +20073,22 @@
       "a5": "Créez un compte et préparez un brouillon. Rien n’est publié tant que vous ne le décidez pas."
     },
     "cta": {
-      "title": "Prêt pour votre prochain événement ?",
-      "lede": "Créez votre événement dès aujourd’hui et vendez votre premier billet en quelques minutes.",
-      "button": "Créer un événement"
+      "title": "Trouvez votre prochain événement",
+      "lede": "Concerts, conférences, galas et plus, avec le prix complet affiché d’emblée.",
+      "button": "Parcourir les événements"
+    },
+    "buyerFaq": {
+      "title": "Vos questions, nos réponses",
+      "q1": "Vois-je le prix complet avant de payer ?",
+      "a1": "Oui. Les prix incluent tous les frais, du premier écran au paiement, sans surprise.",
+      "q2": "Comment recevoir mon billet ?",
+      "a2": "Votre billet est envoyé par e-mail juste après le paiement, avec un QR code. Il est aussi dans Mes billets.",
+      "q3": "Puis-je être remboursé ?",
+      "a3": "Chaque événement a sa propre politique de remboursement, indiquée sur sa page avant l’achat.",
+      "q4": "Puis-je envoyer un billet à un ami ?",
+      "a4": "Oui. Ouvrez le billet dans Mes billets et transférez-le à son adresse e-mail.",
+      "q5": "Faut-il un compte pour acheter ?",
+      "a5": "Non. Vous pouvez payer en invité ; un compte réunit simplement vos billets au même endroit."
     }
   },
   "pages": {

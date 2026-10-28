@@ -286,6 +286,30 @@ export async function HomeFaq() {
   );
 }
 
+export async function BuyerFaq() {
+  const t = await getTranslations('homeSections.buyerFaq');
+  return (
+    <section aria-labelledby="home-buyer-faq" className="mx-auto flex w-full max-w-3xl flex-col gap-6">
+      <h2 id="home-buyer-faq" className={H2}>
+        {t('title')}
+      </h2>
+      <div className="flex flex-col gap-3">
+        {(['1', '2', '3', '4', '5'] as const).map((n) => (
+          <details key={n} className="group rounded-card border border-line bg-surface p-5 open:border-ember">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-extrabold [&::-webkit-details-marker]:hidden">
+              {t(`q${n}`)}
+              <span aria-hidden="true" className="text-ember transition-transform group-open:rotate-45">
+                +
+              </span>
+            </summary>
+            <p className="mt-3 text-body text-ink-2">{t(`a${n}`)}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export async function FinalCta() {
   const t = await getTranslations('homeSections.cta');
   return (
@@ -297,7 +321,7 @@ export async function FinalCta() {
         {t('title')}
       </h2>
       <p className="max-w-lg text-[17px] text-white/90">{t('lede')}</p>
-      <Link href="/signup" className={buttonClass('white', 'lg')}>
+      <Link href="/events" className={buttonClass('white', 'lg')}>
         {t('button')}
       </Link>
     </section>

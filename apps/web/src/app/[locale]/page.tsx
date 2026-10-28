@@ -1,31 +1,18 @@
-import { platformHero, platformPosts, platformTestimonials } from '@yayatoh/cms';
+import { platformHero } from '@yayatoh/cms';
 import { buttonClass } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import { SiteSections } from '@/components/marketing/site-sections.tsx';
 import { Carousel } from '@/components/showcase/carousel.tsx';
 import { CategoryRail } from '@/components/showcase/category-rail.tsx';
 import { ShowcaseHero } from '@/components/showcase/hero.tsx';
 import { loadShowcaseHome } from '@/components/showcase/home-data.ts';
-import {
-  BlogSection,
-  FeatureGrid,
-  FinalCta,
-  HomeFaq,
-  HowItWorks,
-  StatsBand,
-  TestimonialsSection,
-  TrustedBy,
-} from '@/components/showcase/home-sections.tsx';
-import { OrganizerCta } from '@/components/showcase/organizer-cta.tsx';
+import { BuyerFaq, FinalCta } from '@/components/showcase/home-sections.tsx';
 import { OrganizersPanel } from '@/components/showcase/organizers-panel.tsx';
 import { PosterCard } from '@/components/showcase/poster-card.tsx';
 import { railItems, sectionLabel } from '@/components/showcase/rail-items.ts';
 import { Reveal } from '@/components/showcase/reveal.tsx';
 import { ShowcaseShell } from '@/components/showcase/shell.tsx';
 import { Link } from '@/i18n/navigation.ts';
-import { cachedEntries } from '@/server/cms.ts';
-import { cachedSections, platformContentOrg } from '@/server/help.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { apexOrigin, publicMetadata } from '@/server/seo.ts';
@@ -62,39 +49,8 @@ export default async function Home({ params }: Props) {
   const t = await getTranslations('showcase');
   const tm = await getTranslations('market');
   const data = await loadShowcaseHome();
-  // M3.11b: the organizer sections ("Why Yayatoh") come from the platform CMS.
-  const content = await platformContentOrg(await requestHost());
-  const sections = content ? await cachedSections(content.orgId, 'home', locale) : [];
-  // Staff-managed platform content (admin console) first; the content org's is the fallback.
-  const [platformQuotes, platformPostList, hero] = await Promise.all([
-    platformTestimonials(),
-    platformPosts(3),
-    platformHero(),
-  ]);
-  const orgQuotes = content ? await cachedSections(content.orgId, 'testimonials', locale) : [];
-  const quotes =
-    platformQuotes.length > 0
-      ? platformQuotes.map((q) => ({
-          key: q.id,
-          quote: q.quote,
-          name: q.name,
-          role: q.role,
-          photoUrl: q.photoUrl,
-          rating: q.rating,
-        }))
-      : orgQuotes.map((s) => ({
-          key: s.slug,
-          quote: s.body || s.heading,
-          name: s.heading,
-          role: s.eyebrow || null,
-          lang: s.locale === locale ? undefined : s.locale,
-        }));
-  const posts =
-    platformPostList.items.length > 0
-      ? platformPostList.items
-      : content
-        ? (await cachedEntries(content.orgId, 'post', 1)).items
-        : [];
+  // Staff-managed hero text (admin console) overrides the default headline.
+  const hero = await platformHero();
   const first = data.featured[0];
   return (
     <ShowcaseShell>
@@ -145,34 +101,7 @@ export default async function Home({ params }: Props) {
       <Reveal>
         <OrganizersPanel organizers={data.organizers} />
       </Reveal>
-      {sections.length > 0 ? (
-        <section aria-labelledby="home-organizers" className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
-            <h2
-              id="home-organizers"
-              className="font-display text-[26px] leading-none font-black tracking-[-0.02em] uppercase md:text-[34px]"
-            >
-              {tm('home.organizersTitle')}
-            </h2>
-            <Link href="/features" className="self-start text-body underline underline-offset-4">
-              {tm('home.organizersMore')}
-            </Link>
-          </div>
-          <SiteSections sections={sections} layout="grid" locale={locale} headingLevel={3} />
-        </section>
-      ) : null}
-      <Reveal>
-        <StatsBand events={data.events.length} organizers={new Set(data.events.map((e) => e.orgSlug)).size} />
-      </Reveal>
-      <HowItWorks />
-      <FeatureGrid />
-      <TestimonialsSection items={quotes} />
-      <BlogSection posts={posts} base="" locale={locale} />
-      <TrustedBy organizers={data.organizers} />
-      <HomeFaq />
-      <Reveal>
-        <OrganizerCta events={data.featured} covers={data.covers} />
-      </Reveal>
+      <BuyerFaq />
       <FinalCta />
       {devAuthEnabled() ? (
         <Link className={buttonClass('secondary', 'md', 'self-center')} href="/dev/login">

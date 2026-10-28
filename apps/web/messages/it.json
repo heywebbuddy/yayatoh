@@ -20073,9 +20073,22 @@
       "a5": "Crea un account e prepara una bozza. Nulla viene pubblicato finché non lo decidi."
     },
     "cta": {
-      "title": "Pronto per il tuo prossimo evento?",
-      "lede": "Crea il tuo evento oggi e vendi il primo biglietto in pochi minuti.",
-      "button": "Crea un evento"
+      "title": "Trova il tuo prossimo evento",
+      "lede": "Concerti, conferenze, gala e altro, con il prezzo completo in chiaro.",
+      "button": "Sfoglia gli eventi"
+    },
+    "buyerFaq": {
+      "title": "Domande e risposte",
+      "q1": "Vedo il prezzo completo prima di pagare?",
+      "a1": "Sì. I prezzi includono tutte le commissioni, dalla prima schermata al pagamento, senza sorprese.",
+      "q2": "Come ricevo il biglietto?",
+      "a2": "Il biglietto arriva via e-mail subito dopo il pagamento, con un codice QR. Lo trovi anche in I miei biglietti.",
+      "q3": "Posso avere un rimborso?",
+      "a3": "Ogni evento ha la sua politica di rimborso, mostrata nella sua pagina prima dell’acquisto.",
+      "q4": "Posso inviare un biglietto a un amico?",
+      "a4": "Sì. Apri il biglietto in I miei biglietti e trasferiscilo al suo indirizzo e-mail.",
+      "q5": "Serve un account per comprare?",
+      "a5": "No. Puoi pagare come ospite; un account raccoglie solo i tuoi biglietti in un posto."
     }
   },
   "pages": {

@@ -20073,9 +20073,22 @@
       "a5": "Maak een account en een concept. Er wordt niets gepubliceerd voordat jij dat wilt."
     },
     "cta": {
-      "title": "Klaar voor je volgende evenement?",
-      "lede": "Maak je evenement vandaag nog en verkoop binnen minuten je eerste ticket.",
-      "button": "Evenement maken"
+      "title": "Vind je volgende evenement",
+      "lede": "Concerten, conferenties, gala’s en meer, met de volledige prijs vooraf.",
+      "button": "Evenementen bekijken"
+    },
+    "buyerFaq": {
+      "title": "Vragen en antwoorden",
+      "q1": "Zie ik de volledige prijs voordat ik betaal?",
+      "a1": "Ja. Prijzen bevatten alle kosten, van het eerste scherm tot het afrekenen, zonder verrassingen.",
+      "q2": "Hoe krijg ik mijn ticket?",
+      "a2": "Je ticket komt direct na de betaling per e-mail met een QR-code. Je vindt het ook onder Mijn tickets.",
+      "q3": "Kan ik mijn geld terugkrijgen?",
+      "a3": "Elk evenement heeft een eigen terugbetalingsbeleid, zichtbaar op de pagina vóór je koopt.",
+      "q4": "Kan ik een ticket naar een vriend sturen?",
+      "a4": "Ja. Open het ticket in Mijn tickets en draag het over aan zijn of haar e-mailadres.",
+      "q5": "Heb ik een account nodig om te kopen?",
+      "a5": "Nee. Je kunt als gast afrekenen; een account bewaart je tickets alleen op één plek."
     }
   },
   "pages": {
