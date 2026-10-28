@@ -4,6 +4,8 @@ export {
   createEntryCommand,
   deleteEntryCommand,
   ENTRY_ACTIONS,
+  entryCover,
+  entryCoverQuery,
   getEntryQuery,
   listEntriesQuery,
   MAX_NAV_PAGES,
@@ -12,9 +14,12 @@ export {
   pageIdsTx,
   publicEntries,
   publicEntry,
+  publicPosts,
   setEntryStatusCommand,
   sitemapEntries,
+  sniffCover,
   updateEntryCommand,
+  uploadEntryCoverCommand,
 } from './cms.ts';
 export {
   CONTACT_INTRO_MAX,

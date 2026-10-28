@@ -5904,7 +5904,12 @@
       "excerpt": "Riassunto",
       "body": "Testo",
       "seoTitle": "Titolo per la ricerca",
-      "seoDescription": "Descrizione per la ricerca"
+      "seoDescription": "Descrizione per la ricerca",
+      "category": "Categoria",
+      "tags": "Tag",
+      "author": "Nome dell'autore",
+      "cover": "Immagine di copertina",
+      "coverAlt": "Descrizione dell'immagine di copertina (testo alt)"
     },
     "titleError": "Inserisci un titolo (fino a 160 caratteri).",
     "slugHint": "La parte finale dell’indirizzo web, dopo {prefix}. Lascia vuoto per crearla dal titolo.",
@@ -5943,7 +5948,16 @@
       "create": "Crea una bozza da questo",
       "discard": "Scarta",
       "discarded": "Bozza scartata. Non è stato salvato nulla."
-    }
+    },
+    "postLegend": "Dettagli dell'articolo",
+    "categoryHint": "Una parola o una breve frase, mostrata sulla scheda e usata per i filtri.",
+    "tagsHint": "Fino a 6 tag, separati da virgole.",
+    "authorHint": "Mostrato sotto il titolo. Per impostazione predefinita è il tuo nome.",
+    "coverHint": "JPEG, PNG o WebP, fino a 5 MB. Le immagini larghe (16:9) rendono meglio.",
+    "coverHave": "È allegata una copertina. Scegli un file per sostituirla.",
+    "coverAltHint": "Descrivi l'immagine per chi non può vederla. Obbligatorio con una copertina.",
+    "coverError": "Aggiungi un'immagine valida e descrivila.",
+    "coverRemove": "Rimuovi l'immagine di copertina"
   },
   "cmsPublic": {
     "blog": "Blog",
@@ -19570,7 +19584,8 @@
       "series": "Serie",
       "features": "Tutte le funzioni",
       "resources": "Risorse",
-      "help": "Centro assistenza"
+      "help": "Centro assistenza",
+      "blog": "Blog"
     },
     "solutions": {
       "createEvent": "Crea un evento",
@@ -20620,5 +20635,43 @@
       "frameLabel": "Anteprima del sito organizzatore di WebBuddy",
       "newTab": "Si apre in una nuova scheda"
     }
+  },
+  "blogUi": {
+    "eyebrow": "Blog",
+    "platformLine1": "Storie, consigli",
+    "platformLine2": "e novità",
+    "platformLede": "Idee per organizzatori e ospiti: come vendere più biglietti, gestire eventi più fluidi e raccontare storie migliori.",
+    "orgLede": "Novità, storie e aggiornamenti da {org}.",
+    "searchLabel": "Cerca articoli",
+    "searchPlaceholder": "Cerca nel blog",
+    "searchButton": "Cerca",
+    "filterLabel": "Categorie",
+    "all": "Tutti",
+    "featured": "In evidenza",
+    "readMore": "Leggi l'articolo",
+    "minRead": "{n} min di lettura",
+    "by": "Di {name}",
+    "results": "Risultati per “{q}”",
+    "emptyTitle": "Nessun articolo trovato",
+    "emptyBody": "Prova un'altra ricerca o scegli una categoria diversa.",
+    "clear": "Cancella filtri",
+    "noPostsTitle": "Ancora nessun articolo",
+    "noPostsBody": "I nuovi articoli appariranno presto qui.",
+    "back": "Torna al blog",
+    "published": "Pubblicato il {date}",
+    "toc": "In questa pagina",
+    "share": "Condividi",
+    "shareWhatsapp": "Condividi su WhatsApp",
+    "shareLinkedin": "Condividi su LinkedIn",
+    "shareX": "Condividi su X",
+    "copyLink": "Copia link",
+    "copied": "Link copiato",
+    "related": "Continua a leggere",
+    "ctaTitle": "Organizza i tuoi eventi su Yayatoh",
+    "ctaBody": "Biglietteria, posti a sedere, sito dell'evento e check-in in un'unica piattaforma. Candidati per diventare organizzatore.",
+    "ctaButton": "Per organizzatori",
+    "orgEventsTitle": "Prossimi eventi di {org}",
+    "orgEventsAll": "Vedi tutti gli eventi",
+    "progress": "Avanzamento della lettura"
   }
 }

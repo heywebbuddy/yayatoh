@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { sanitizeMarkdown } from '@yayatoh/contracts';
 import { isUniqueViolation, type TenantTx, withTenant } from '@yayatoh/db';
 import { createCtx, DomainError, requireOrg } from '@yayatoh/kernel';
@@ -14,11 +15,12 @@ import {
   navPageSerializer,
   type PublicEntryDto,
   type PublicEntryPageDto,
+  type PublicEntrySummaryDto,
   publicEntrySerializer,
   publicEntrySummarySerializer,
   UpdateEntryInput,
 } from './dto.ts';
-import { entries } from './schema.ts';
+import { entries, entryCovers } from './schema.ts';
 
 /** Entries shown per page of a public blog index (12, as the legacy Voyager blog). */
 export const POSTS_PER_PAGE = 12;
@@ -56,6 +58,16 @@ async function takenSlugs(tx: TenantTx, kind: EntryKind, base: string): Promise<
   return new Set(rows.map((r) => r.slug));
 }
 
+/** A cover needs alt text (a screen reader names the picture by it). */
+function coverAltOrFail(alt: string | null | undefined): string {
+  if (!alt?.trim())
+    throw new DomainError('validation_failed', 'A cover image needs alt text', {
+      issues: [{ path: 'coverAlt', code: 'required' }],
+      field: 'coverAlt',
+    });
+  return alt.trim();
+}
+
 const slugConflict = () =>
   new DomainError('conflict', 'Another entry already uses this address', {
     issues: [{ path: 'slug', code: 'taken' }],
@@ -89,6 +101,10 @@ export const createEntryCommand = tenantCommand({
             seoDescription: input.seoDescription,
             authorUserId: ctx.actor.type === 'user' ? ctx.actor.userId : null,
             authorName: input.authorName,
+            category: input.category,
+            tags: input.tags,
+            coverAssetId: input.coverAssetId,
+            coverAlt: input.coverAssetId ? coverAltOrFail(input.coverAlt) : null,
             createdAt: ctx.now,
             updatedAt: ctx.now,
           })
@@ -125,6 +141,10 @@ export const updateEntryCommand = tenantCommand({
   handler: async ({ input, ctx, tx }) => {
     const { entryId, slug: rawSlug, body, ...fields } = input;
     const current = await findEntry(tx, entryId);
+    const coverId = fields.coverAssetId === undefined ? current.coverAssetId : fields.coverAssetId;
+    if (coverId)
+      fields.coverAlt = coverAltOrFail(fields.coverAlt === undefined ? current.coverAlt : fields.coverAlt);
+    else if (fields.coverAssetId === null) fields.coverAlt = null;
     let slug: string | undefined;
     if (rawSlug !== undefined && rawSlug !== '' && rawSlug !== current.slug) {
       // Published addresses are public links (and sitemap entries): they never change.
@@ -227,6 +247,7 @@ export const deleteEntryCommand = tenantCommand({
   handler: async ({ input, tx, emit }) => {
     const [row] = await tx.delete(entries).where(eq(entries.id, input.entryId)).returning();
     if (!row) throw new DomainError('not_found');
+    if (row.coverAssetId) await tx.delete(entryCovers).where(eq(entryCovers.id, row.coverAssetId));
     emit({
       type: 'cms.entry_deleted',
       version: 1,
@@ -341,4 +362,101 @@ export async function sitemapEntries(
       .orderBy(asc(entries.kind), asc(entries.slug)),
   );
   return rows.map((r) => ({ kind: EntryKind.parse(r.kind), slug: r.slug, updatedAt: r.updatedAt }));
+}
+
+/* ----------------------------------------------------------------------------- covers ----- */
+
+const COVER_MAX = 5 * 1024 * 1024;
+
+/** What a cover file really is, from its first bytes (never from the name or the claimed type). */
+export function sniffCover(b: Uint8Array): 'image/jpeg' | 'image/png' | 'image/webp' | null {
+  const at = (i: number, ...v: number[]) => v.every((x, k) => b[i + k] === x);
+  if (at(0, 0xff, 0xd8, 0xff)) return 'image/jpeg';
+  if (at(0, 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a)) return 'image/png';
+  if (at(0, 0x52, 0x49, 0x46, 0x46) && at(8, 0x57, 0x45, 0x42, 0x50)) return 'image/webp';
+  return null;
+}
+
+/** Store a blog cover image for this org; returns its id (attach it with `coverAssetId`). */
+export const uploadEntryCoverCommand = tenantCommand({
+  name: 'cms.uploadEntryCover',
+  input: z.object({ bytes: z.instanceof(Uint8Array) }),
+  output: z.object({ id: z.uuid() }),
+  entitlement: 'core',
+  permission: CMS_WRITE,
+  handler: async ({ input, ctx, tx }) => {
+    const orgId = requireOrg(ctx);
+    const type = sniffCover(input.bytes);
+    if (!type || input.bytes.byteLength === 0)
+      throw new DomainError('validation_failed', 'Use a JPEG, PNG or WebP image', {
+        field: 'cover',
+        reason: 'type',
+      });
+    if (input.bytes.byteLength > COVER_MAX)
+      throw new DomainError('validation_failed', 'The image is larger than 5 MB', {
+        field: 'cover',
+        reason: 'too_large',
+      });
+    const sha = createHash('sha256').update(input.bytes).digest('hex');
+    const [row] = await tx
+      .insert(entryCovers)
+      .values({ orgId, contentType: type, bytes: input.bytes, size: input.bytes.byteLength, sha256: sha })
+      .returning({ id: entryCovers.id });
+    if (!row) throw new DomainError('internal');
+    return { id: row.id };
+  },
+  audit: (_input, out) => ({
+    action: 'cms.entry.cover_upload',
+    targetType: 'cms_entry_cover',
+    targetId: out.id,
+  }),
+});
+
+/**
+ * A blog cover (or an image placed inside a post) for the public, by org and unguessable id. The
+ * file never changes under its id; nothing else about the org is readable through it.
+ */
+export async function entryCover(
+  orgId: string,
+  id: string,
+): Promise<{ contentType: string; bytes: Uint8Array; sha256: string } | null> {
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
+  return withTenant(publicCtx(orgId), async (tx) => {
+    const [row] = await tx
+      .select({ contentType: entryCovers.contentType, bytes: entryCovers.bytes, sha256: entryCovers.sha256 })
+      .from(entryCovers)
+      .where(eq(entryCovers.id, id))
+      .limit(1);
+    return row ?? null;
+  });
+}
+
+/** The console's preview of a cover (any status), under the member's own tenant context. */
+export const entryCoverQuery = tenantQuery({
+  name: 'cms.entryCover',
+  input: z.object({ id: z.uuid() }),
+  output: z.object({ contentType: z.string(), bytes: z.instanceof(Uint8Array), sha256: z.string() }),
+  entitlement: 'core',
+  permission: CMS_READ,
+  handler: async ({ input, tx }) => {
+    const [row] = await tx
+      .select({ contentType: entryCovers.contentType, bytes: entryCovers.bytes, sha256: entryCovers.sha256 })
+      .from(entryCovers)
+      .where(eq(entryCovers.id, input.id));
+    if (!row) throw new DomainError('not_found');
+    return row;
+  },
+});
+
+/** Every published post of an org (newest first, up to 200) for the blog's filters and search. */
+export async function publicPosts(orgId: string): Promise<PublicEntrySummaryDto[]> {
+  return withTenant(publicCtx(orgId), async (tx) => {
+    const rows = await tx
+      .select()
+      .from(entries)
+      .where(published('post'))
+      .orderBy(desc(entries.publishedAt), asc(entries.slug))
+      .limit(200);
+    return publicEntrySummarySerializer.serializeMany(rows);
+  });
 }

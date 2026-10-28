@@ -109,6 +109,7 @@ export {
   markdownToPlainText,
   parseMarkdown,
   safeHref,
+  safeImgSrc,
   sanitizeMarkdown,
 } from './domain/markdown.ts';
 export {

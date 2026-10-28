@@ -7,5 +7,6 @@ export {
   parseInline,
   parseMarkdown,
   safeHref,
+  safeImgSrc,
   sanitizeMarkdown,
 } from '@yayatoh/contracts';

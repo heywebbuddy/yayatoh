@@ -6,9 +6,11 @@ import {
   type PublicContactPageDto,
   type PublicEntryDto,
   type PublicEntryPageDto,
+  type PublicEntrySummaryDto,
   publicContactPage,
   publicEntries,
   publicEntry,
+  publicPosts,
 } from '@yayatoh/cms';
 import {
   type PublicOrganizer,
@@ -85,6 +87,15 @@ export const cachedEntries = (orgId: string, kind: 'page' | 'post', page: number
       const p = raw as PublicEntryPageDto & { items: Raw[] };
       return { ...p, items: p.items.map(reviveEntry) } as PublicEntryPageDto;
     },
+  );
+
+/** Every published post of an org (up to 200), for the blog's filters, search and related posts. */
+export const cachedPosts = (orgId: string) =>
+  publicCached(
+    { org: orgId },
+    ['cms-posts-all'],
+    () => publicPosts(orgId),
+    (raw) => (raw as Raw[]).map(reviveEntry) as unknown as PublicEntrySummaryDto[],
   );
 
 export const cachedEntry = (orgId: string, kind: 'page' | 'post', slug: string) =>

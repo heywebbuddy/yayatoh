@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import {
   boolean,
   check,
+  customType,
   foreignKey,
   index,
   integer,
@@ -19,6 +20,30 @@ export const cmsSchema = pgSchema('cms');
 export { ENTRY_KINDS, ENTRY_STATUSES } from './domain/kinds.ts';
 
 const ts = (name: string) => timestamp(name, { withTimezone: true, mode: 'date' });
+
+const bytea = customType<{ data: Uint8Array; driverData: Buffer }>({
+  dataType: () => 'bytea',
+  toDriver: (v) => Buffer.from(v.buffer, v.byteOffset, v.byteLength),
+  fromDriver: (v) => new Uint8Array(v.buffer, v.byteOffset, v.byteLength),
+});
+
+/** A blog post's cover image: the original bytes (jpeg, png or webp, 5 MB at most), served with a long cache. */
+export const entryCovers = tenantTable(
+  cmsSchema,
+  'entry_covers',
+  {
+    contentType: text('content_type').notNull(),
+    bytes: bytea('bytes').notNull(),
+    size: integer('size').notNull(),
+    sha256: text('sha256').notNull(),
+    width: integer('width'),
+    height: integer('height'),
+  },
+  () => [
+    check('entry_covers_type_check', sql`content_type in ('image/jpeg', 'image/png', 'image/webp')`),
+    check('entry_covers_size_check', sql`size between 1 and 5242880`),
+  ],
+);
 
 /**
  * An org's CMS entry (M1.4g): a page (`/pages/{slug}`) or a blog post (`/blogs/{slug}`) on its
@@ -43,6 +68,12 @@ export const entries = tenantTable(
     /** The member who created it; `author_name` is the name shown publicly (a snapshot). */
     authorUserId: uuid('author_user_id'),
     authorName: text('author_name'),
+    /** Blog posts: one category and a few tags for the filter pills and the cards. */
+    category: text('category'),
+    tags: text('tags').array().notNull().default(sql`'{}'::text[]`),
+    /** The cover image (an `entry_covers` row of the same org) and its alt text. */
+    coverAssetId: uuid('cover_asset_id'),
+    coverAlt: text('cover_alt'),
   },
   (t) => [
     uniqueIndex('entries_org_kind_slug_key').on(t.orgId, t.kind, t.slug),
@@ -59,6 +90,17 @@ export const entries = tenantTable(
       sql`seo_description is null or char_length(seo_description) <= 160`,
     ),
     check('entries_published_at_check', sql`status <> 'published' or published_at is not null`),
+    check('entries_category_check', sql`category is null or char_length(category) between 1 and 40`),
+    check('entries_tags_check', sql`cardinality(tags) <= 6`),
+    check(
+      'entries_cover_alt_check',
+      sql`cover_asset_id is null or (cover_alt is not null and char_length(btrim(cover_alt)) between 1 and 300)`,
+    ),
+    foreignKey({
+      name: 'entries_cover_fk',
+      columns: [t.orgId, t.coverAssetId],
+      foreignColumns: [entryCovers.orgId, entryCovers.id],
+    }),
   ],
 );
 

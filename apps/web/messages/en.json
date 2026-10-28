@@ -5904,7 +5904,12 @@
       "excerpt": "Summary",
       "body": "Text",
       "seoTitle": "Search title",
-      "seoDescription": "Search description"
+      "seoDescription": "Search description",
+      "category": "Category",
+      "tags": "Tags",
+      "author": "Author name",
+      "cover": "Cover image",
+      "coverAlt": "Cover image description (alt text)"
     },
     "titleError": "Give it a title (up to 160 characters).",
     "slugHint": "The end of the web address, after {prefix}. Leave empty to make one from the title.",
@@ -5943,7 +5948,16 @@
       "create": "Create draft from this",
       "discard": "Discard",
       "discarded": "Draft discarded. Nothing was saved."
-    }
+    },
+    "postLegend": "Blog post details",
+    "categoryHint": "One word or short phrase, shown on the card and used for the filter pills.",
+    "tagsHint": "Up to 6 tags, separated by commas.",
+    "authorHint": "Shown under the title. Defaults to your name.",
+    "coverHint": "JPEG, PNG or WebP, up to 5 MB. Wide images (16:9) look best.",
+    "coverHave": "A cover is attached. Choose a file to replace it.",
+    "coverAltHint": "Describe the picture for people who cannot see it. Required with a cover.",
+    "coverError": "Add a valid image and describe it.",
+    "coverRemove": "Remove the cover image"
   },
   "cmsPublic": {
     "blog": "Blog",
@@ -19570,7 +19584,8 @@
       "series": "Series",
       "features": "All features",
       "resources": "Resources",
-      "help": "Help centre"
+      "help": "Help centre",
+      "blog": "Blog"
     },
     "solutions": {
       "createEvent": "Create an event",
@@ -20620,5 +20635,43 @@
       "frameLabel": "Preview of the WebBuddy organizer website",
       "newTab": "Opens in a new tab"
     }
+  },
+  "blogUi": {
+    "eyebrow": "Blog",
+    "platformLine1": "Stories, tips",
+    "platformLine2": "and news",
+    "platformLede": "Ideas for organizers and guests: how to sell more tickets, run smoother events and tell better stories.",
+    "orgLede": "News, stories and updates from {org}.",
+    "searchLabel": "Search articles",
+    "searchPlaceholder": "Search the blog",
+    "searchButton": "Search",
+    "filterLabel": "Categories",
+    "all": "All",
+    "featured": "Featured",
+    "readMore": "Read article",
+    "minRead": "{n} min read",
+    "by": "By {name}",
+    "results": "Results for “{q}”",
+    "emptyTitle": "No articles found",
+    "emptyBody": "Try another search or choose a different category.",
+    "clear": "Clear filters",
+    "noPostsTitle": "No posts yet",
+    "noPostsBody": "New articles will appear here soon.",
+    "back": "Back to the blog",
+    "published": "Published {date}",
+    "toc": "On this page",
+    "share": "Share",
+    "shareWhatsapp": "Share on WhatsApp",
+    "shareLinkedin": "Share on LinkedIn",
+    "shareX": "Share on X",
+    "copyLink": "Copy link",
+    "copied": "Link copied",
+    "related": "Keep reading",
+    "ctaTitle": "Run your own events on Yayatoh",
+    "ctaBody": "Ticketing, seating, an event website and check-in in one platform. Apply to become an organizer.",
+    "ctaButton": "For organizers",
+    "orgEventsTitle": "Upcoming events by {org}",
+    "orgEventsAll": "See all events",
+    "progress": "Reading progress"
   }
 }

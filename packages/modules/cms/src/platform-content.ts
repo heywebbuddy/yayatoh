@@ -13,14 +13,19 @@ export interface PlatformPostSummary {
   readonly title: string;
   readonly excerpt: string;
   readonly coverUrl: string | null;
+  readonly coverAlt: string | null;
+  readonly category: string | null;
+  readonly tags: readonly string[];
+  readonly authorName: string | null;
   readonly publishedAt: Date;
+  /** Words in the body, for the reading time. */
+  readonly words: number;
 }
 
 export interface PlatformPost extends PlatformPostSummary {
   readonly body: string;
   readonly seoTitle: string | null;
   readonly seoDescription: string | null;
-  readonly authorName: string | null;
   readonly updatedAt: Date;
 }
 
@@ -32,7 +37,14 @@ const summary = (r: Row): PlatformPostSummary => ({
   title: String(r.title),
   excerpt: String(r.excerpt ?? ''),
   coverUrl: platformAssetUrl(text(r.cover_asset_id)),
+  coverAlt: text(r.cover_alt),
+  category: text(r.category),
+  tags: (r.tags as string[] | null) ?? [],
+  authorName: text(r.author_name),
   publishedAt: new Date(String(r.published_at)),
+  words: String(r.body ?? '')
+    .split(/\s+/)
+    .filter(Boolean).length,
 });
 
 export async function platformPosts(
@@ -41,7 +53,7 @@ export async function platformPosts(
 ): Promise<{ items: PlatformPostSummary[]; total: number }> {
   const rows = await withoutTenant((tx) =>
     tx.execute<Row>(
-      sql`select slug, title, excerpt, cover_asset_id, published_at, count(*) over ()::int as total
+      sql`select slug, title, excerpt, body, cover_asset_id, cover_alt, category, tags, author_name, published_at, count(*) over ()::int as total
           from cms.public_platform_posts order by published_at desc, slug limit ${limit} offset ${offset}`,
     ),
   );

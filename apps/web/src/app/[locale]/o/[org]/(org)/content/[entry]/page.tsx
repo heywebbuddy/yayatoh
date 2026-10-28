@@ -100,6 +100,11 @@ export default async function EntryPage({
               body: entry.body,
               seoTitle: entry.seoTitle ?? '',
               seoDescription: entry.seoDescription ?? '',
+              category: entry.category ?? '',
+              tags: entry.tags.join(', '),
+              authorName: entry.authorName ?? '',
+              coverAlt: entry.coverAlt ?? '',
+              hasCover: entry.coverAssetId !== null,
             }}
           />
         </Card>

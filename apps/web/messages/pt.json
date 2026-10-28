@@ -5904,7 +5904,12 @@
       "excerpt": "Resumo",
       "body": "Texto",
       "seoTitle": "Título para buscadores",
-      "seoDescription": "Descrição para buscadores"
+      "seoDescription": "Descrição para buscadores",
+      "category": "Categoria",
+      "tags": "Tags",
+      "author": "Nome do autor",
+      "cover": "Imagem de capa",
+      "coverAlt": "Descrição da imagem de capa (texto alternativo)"
     },
     "titleError": "Dê um título (até 160 caracteres).",
     "slugHint": "O final do endereço web, depois de {prefix}. Deixe vazio para gerar a partir do título.",
@@ -5943,7 +5948,16 @@
       "create": "Criar rascunho a partir disto",
       "discard": "Descartar",
       "discarded": "Rascunho descartado. Nada foi salvo."
-    }
+    },
+    "postLegend": "Detalhes do artigo do blog",
+    "categoryHint": "Uma palavra ou frase curta, exibida no cartão e usada nos filtros.",
+    "tagsHint": "Até 6 tags, separadas por vírgulas.",
+    "authorHint": "Exibido abaixo do título. Por padrão, o seu nome.",
+    "coverHint": "JPEG, PNG ou WebP, até 5 MB. Imagens largas (16:9) ficam melhores.",
+    "coverHave": "Há uma capa anexada. Escolha um arquivo para substituí-la.",
+    "coverAltHint": "Descreva a imagem para quem não pode vê-la. Obrigatório com uma capa.",
+    "coverError": "Adicione uma imagem válida e descreva-a.",
+    "coverRemove": "Remover a imagem de capa"
   },
   "cmsPublic": {
     "blog": "Blog",
@@ -19570,7 +19584,8 @@
       "series": "Séries",
       "features": "Todos os recursos",
       "resources": "Recursos",
-      "help": "Central de ajuda"
+      "help": "Central de ajuda",
+      "blog": "Blog"
     },
     "solutions": {
       "createEvent": "Criar um evento",
@@ -20620,5 +20635,43 @@
       "frameLabel": "Pré-visualização do site de organizador da WebBuddy",
       "newTab": "Abre num novo separador"
     }
+  },
+  "blogUi": {
+    "eyebrow": "Blog",
+    "platformLine1": "Histórias, dicas",
+    "platformLine2": "e novidades",
+    "platformLede": "Ideias para organizadores e convidados: como vender mais ingressos, realizar eventos mais tranquilos e contar histórias melhores.",
+    "orgLede": "Novidades, histórias e atualizações de {org}.",
+    "searchLabel": "Pesquisar artigos",
+    "searchPlaceholder": "Pesquisar no blog",
+    "searchButton": "Pesquisar",
+    "filterLabel": "Categorias",
+    "all": "Todos",
+    "featured": "Destaque",
+    "readMore": "Ler artigo",
+    "minRead": "{n} min de leitura",
+    "by": "Por {name}",
+    "results": "Resultados para “{q}”",
+    "emptyTitle": "Nenhum artigo encontrado",
+    "emptyBody": "Tente outra pesquisa ou escolha outra categoria.",
+    "clear": "Limpar filtros",
+    "noPostsTitle": "Ainda não há publicações",
+    "noPostsBody": "Novos artigos aparecerão aqui em breve.",
+    "back": "Voltar ao blog",
+    "published": "Publicado em {date}",
+    "toc": "Nesta página",
+    "share": "Compartilhar",
+    "shareWhatsapp": "Compartilhar no WhatsApp",
+    "shareLinkedin": "Compartilhar no LinkedIn",
+    "shareX": "Compartilhar no X",
+    "copyLink": "Copiar link",
+    "copied": "Link copiado",
+    "related": "Continue lendo",
+    "ctaTitle": "Realize seus próprios eventos na Yayatoh",
+    "ctaBody": "Venda de ingressos, mapa de assentos, site do evento e check-in em uma só plataforma. Candidate-se para ser organizador.",
+    "ctaButton": "Para organizadores",
+    "orgEventsTitle": "Próximos eventos de {org}",
+    "orgEventsAll": "Ver todos os eventos",
+    "progress": "Progresso da leitura"
   }
 }

@@ -5904,7 +5904,12 @@
       "excerpt": "摘要",
       "body": "正文",
       "seoTitle": "搜索标题",
-      "seoDescription": "搜索描述"
+      "seoDescription": "搜索描述",
+      "category": "分类",
+      "tags": "标签",
+      "author": "作者姓名",
+      "cover": "封面图片",
+      "coverAlt": "封面图片说明（替代文字）"
     },
     "titleError": "请输入标题（最多 160 个字符）。",
     "slugHint": "网址中 {prefix} 之后的部分。留空则根据标题生成。",
@@ -5943,7 +5948,16 @@
       "create": "据此创建草稿",
       "discard": "放弃",
       "discarded": "已放弃草稿,未保存任何内容。"
-    }
+    },
+    "postLegend": "博客文章详情",
+    "categoryHint": "一个词或短语，显示在卡片上，并用于筛选标签。",
+    "tagsHint": "最多 6 个标签，用逗号分隔。",
+    "authorHint": "显示在标题下方。默认为你的姓名。",
+    "coverHint": "JPEG、PNG 或 WebP，最大 5 MB。宽图（16:9）效果最佳。",
+    "coverHave": "已添加封面。选择文件即可替换。",
+    "coverAltHint": "为看不到图片的人描述这张图片。添加封面时必填。",
+    "coverError": "请添加有效的图片并为其添加说明。",
+    "coverRemove": "移除封面图片"
   },
   "cmsPublic": {
     "blog": "博客",
@@ -19570,7 +19584,8 @@
       "series": "系列活动",
       "features": "全部功能",
       "resources": "资源",
-      "help": "帮助中心"
+      "help": "帮助中心",
+      "blog": "博客"
     },
     "solutions": {
       "createEvent": "创建活动",
@@ -20620,5 +20635,43 @@
       "frameLabel": "WebBuddy 组织者网站预览",
       "newTab": "在新标签页中打开"
     }
+  },
+  "blogUi": {
+    "eyebrow": "博客",
+    "platformLine1": "故事与技巧",
+    "platformLine2": "以及资讯",
+    "platformLede": "为组织者和嘉宾提供的灵感：如何卖出更多门票、办好活动、讲好故事。",
+    "orgLede": "来自 {org} 的资讯、故事和动态。",
+    "searchLabel": "搜索文章",
+    "searchPlaceholder": "搜索博客",
+    "searchButton": "搜索",
+    "filterLabel": "分类",
+    "all": "全部",
+    "featured": "精选",
+    "readMore": "阅读文章",
+    "minRead": "阅读需 {n} 分钟",
+    "by": "作者：{name}",
+    "results": "“{q}”的搜索结果",
+    "emptyTitle": "未找到文章",
+    "emptyBody": "换个关键词试试，或选择其他分类。",
+    "clear": "清除筛选",
+    "noPostsTitle": "暂无文章",
+    "noPostsBody": "新文章即将发布。",
+    "back": "返回博客",
+    "published": "发布于 {date}",
+    "toc": "本页目录",
+    "share": "分享",
+    "shareWhatsapp": "分享到 WhatsApp",
+    "shareLinkedin": "分享到 LinkedIn",
+    "shareX": "分享到 X",
+    "copyLink": "复制链接",
+    "copied": "链接已复制",
+    "related": "继续阅读",
+    "ctaTitle": "在 Yayatoh 上举办你自己的活动",
+    "ctaBody": "票务、座位、活动网站和签到，一个平台全搞定。立即申请成为组织者。",
+    "ctaButton": "面向组织者",
+    "orgEventsTitle": "{org} 的即将举行的活动",
+    "orgEventsAll": "查看全部活动",
+    "progress": "阅读进度"
   }
 }

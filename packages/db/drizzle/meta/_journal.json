@@ -1338,6 +1338,13 @@
       "when": 1793190499041,
       "tag": "0191_organizer_applications",
       "breakpoints": true
+    },
+    {
+      "idx": 192,
+      "version": "7",
+      "when": 1793204725193,
+      "tag": "0192_blog_covers_categories",
+      "breakpoints": true
     }
   ]
 }

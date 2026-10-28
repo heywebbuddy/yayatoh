@@ -1,19 +1,17 @@
 import { markdownToPlainText } from '@yayatoh/contracts';
 import type { PublicOrganizer } from '@yayatoh/marketplace';
-import { EmptyState } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { OrgBlogIndex, OrgPostView } from '@/components/blog/org-blog.tsx';
 import { Markdown } from '@/components/markdown.tsx';
-import { Pagination } from '@/components/marketplace/pagination.tsx';
 import { SiteFooter } from '@/components/marketplace/site-chrome.tsx';
-import { PageHero } from '@/components/showcase/page-hero.tsx';
 import { ShowcaseTopBar } from '@/components/showcase/top-bar.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatDate } from '@/lib/format.ts';
 import { blogPostingJsonLd, jsonLdScript } from '@/lib/seo/jsonld.ts';
-import { cachedContactPage, cachedEntries, cachedEntry, contentHome, entryPath } from '@/server/cms.ts';
+import { cachedContactPage, cachedEntry, contentHome, entryPath } from '@/server/cms.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { publicMetadata } from '@/server/seo.ts';
 import { TenantHeader } from './tenant-header.tsx';
@@ -93,7 +91,7 @@ export async function Chrome({
 }
 
 /** Post dates in the org's timezone (a post belongs to no event). */
-const fmt = (d: Date, locale: string, timeZone: string) =>
+const _fmt = (d: Date, locale: string, timeZone: string) =>
   formatDate(
     d.toISOString(),
     { locale, currency: 'USD', timeZone },
@@ -105,50 +103,16 @@ export async function BlogIndexView({
   site,
   locale,
   page,
+  q = '',
+  category = '',
 }: {
   site: ContentSite;
   locale: string;
   page: number;
+  q?: string;
+  category?: string;
 }) {
-  const t = await getTranslations('cmsPublic');
-  const tp = await getTranslations('pages');
-  const list = await cachedEntries(site.org.orgId, 'post', page);
-  return (
-    <Chrome site={site} current="/blogs">
-      <PageHero eyebrow={tp('eyebrow.blog')} title={t('blogTitle', { org: site.org.name })} />
-      {list.items.length === 0 ? (
-        <EmptyState title={t('emptyTitle')} description={t('emptyDescription', { org: site.org.name })} />
-      ) : (
-        <ul
-          aria-label={t('posts')}
-          className="m-0 grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-2 lg:grid-cols-3"
-        >
-          {list.items.map((p) => (
-            <li key={p.slug}>
-              <article className="flex h-full flex-col gap-2 rounded-card border border-line bg-surface p-5 transition duration-300 hover:-translate-y-1 hover:border-ember motion-reduce:transition-none motion-reduce:hover:translate-y-0">
-                <h2 className="break-words text-[24px] font-extrabold tracking-[-0.02em]">
-                  <Link
-                    href={`${site.base}${entryPath('post', p.slug)}`}
-                    className="underline-offset-4 hover:underline"
-                  >
-                    {p.title}
-                  </Link>
-                </h2>
-                <p className="text-caption text-ink-2">
-                  <time dateTime={p.publishedAt.toISOString()}>
-                    {fmt(p.publishedAt, locale, site.org.timezone)}
-                  </time>
-                  {p.authorName ? ` · ${t('by', { name: p.authorName })}` : null}
-                </p>
-                {p.excerpt ? <p className="text-body text-ink-2">{p.excerpt}</p> : null}
-              </article>
-            </li>
-          ))}
-        </ul>
-      )}
-      <Pagination path={`${site.base}/blogs`} params={{}} page={list.page} pageCount={list.pageCount} />
-    </Chrome>
-  );
+  return <OrgBlogIndex site={site} locale={locale} page={page} q={q} category={category} />;
 }
 
 /** One published page or post (drafts, archived and unknown slugs are a 404). */
@@ -165,7 +129,7 @@ export async function EntryView({
 }) {
   const entry = await cachedEntry(site.org.orgId, kind, slug);
   if (!entry) notFound();
-  const t = await getTranslations('cmsPublic');
+  const _t = await getTranslations('cmsPublic');
   const req = await requestHost();
   const home = contentHome(req, site.org);
   const url = `${home.origin}${home.base}${entryPath(kind, slug)}`;
@@ -182,33 +146,26 @@ export async function EntryView({
           publisher: { name: site.org.name, url: `${home.origin}${home.base || '/'}` },
         })
       : null;
+  if (kind === 'post')
+    return (
+      <>
+        {ld ? (
+          <script
+            type="application/ld+json"
+            // JSON-LD must be inline; jsonLdScript escapes `<` so the text cannot close the script.
+            dangerouslySetInnerHTML={{ __html: jsonLdScript(ld) }}
+          />
+        ) : null}
+        <OrgPostView site={site} locale={locale} entry={entry} />
+      </>
+    );
   return (
     <Chrome site={site} current={entryPath(kind, slug)}>
-      {ld ? (
-        <script
-          type="application/ld+json"
-          // JSON-LD must be inline; jsonLdScript escapes `<` so the text cannot close the script.
-          dangerouslySetInnerHTML={{ __html: jsonLdScript(ld) }}
-        />
-      ) : null}
       <article className="mx-auto flex w-full max-w-3xl flex-col gap-6">
         <header className="flex flex-col gap-2">
-          {kind === 'post' ? (
-            <Link href={`${site.base}/blogs`} className="self-start text-caption text-ink-2 underline">
-              {t('allPosts')}
-            </Link>
-          ) : null}
           <h1 className="break-words text-[40px] leading-tight font-extrabold tracking-[-0.03em]">
             {entry.title}
           </h1>
-          {kind === 'post' ? (
-            <p className="text-caption text-ink-2">
-              <time dateTime={entry.publishedAt.toISOString()}>
-                {fmt(entry.publishedAt, locale, site.org.timezone)}
-              </time>
-              {entry.authorName ? ` · ${t('by', { name: entry.authorName })}` : null}
-            </p>
-          ) : null}
           {entry.excerpt ? <p className="text-[17px] leading-7 text-ink-2">{entry.excerpt}</p> : null}
         </header>
         <Markdown source={entry.body} />

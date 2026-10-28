@@ -16,7 +16,10 @@ export type MdInline =
 export type MdBlock =
   | { readonly t: 'p'; readonly c: readonly MdInline[] }
   | { readonly t: 'h'; readonly level: 2 | 3; readonly c: readonly MdInline[] }
-  | { readonly t: 'ul' | 'ol'; readonly items: readonly (readonly MdInline[])[] };
+  | { readonly t: 'ul' | 'ol'; readonly items: readonly (readonly MdInline[])[] }
+  | { readonly t: 'quote'; readonly c: readonly MdInline[] }
+  | { readonly t: 'img'; readonly src: string; readonly alt: string }
+  | { readonly t: 'pre'; readonly v: string };
 
 export const MARKDOWN_MAX_LENGTH = 10_000;
 
@@ -42,6 +45,18 @@ export function safeHref(href: string): string | null {
   try {
     const u = new URL(h);
     return u.protocol === 'https:' || u.protocol === 'http:' ? u.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Images: https addresses or paths on this site (`/…`), never data: or javascript: addresses. */
+export function safeImgSrc(src: string): string | null {
+  const s = src.trim();
+  if (/^\/(?!\/)[^\s]*$/.test(s)) return s;
+  try {
+    const u = new URL(s);
+    return u.protocol === 'https:' ? u.toString() : null;
   } catch {
     return null;
   }
@@ -82,18 +97,48 @@ export function parseMarkdown(src: string): MdBlock[] {
   const blocks: MdBlock[] = [];
   let para: string[] = [];
   let list: { t: 'ul' | 'ol'; items: MdInline[][] } | null = null;
+  let quote: string[] = [];
+  let fence: string[] | null = null;
   const flush = () => {
     if (para.length) blocks.push({ t: 'p', c: parseInline(para.join(' ')) });
     para = [];
     if (list) blocks.push(list);
     list = null;
+    if (quote.length) blocks.push({ t: 'quote', c: parseInline(quote.join(' ')) });
+    quote = [];
   };
   for (const raw of sanitizeMarkdown(src).split('\n')) {
+    if (fence) {
+      if (raw.trim().startsWith('```')) {
+        blocks.push({ t: 'pre', v: fence.join('\n') });
+        fence = null;
+      } else fence.push(raw);
+      continue;
+    }
     const line = raw.trim();
+    if (line.startsWith('```')) {
+      flush();
+      fence = [];
+      continue;
+    }
     if (!line) {
       flush();
       continue;
     }
+    const image = /^!\[([^\]]*)\]\(([^)\s]+)\)$/.exec(line);
+    if (image) {
+      flush();
+      const src2 = safeImgSrc(image[2] as string);
+      if (src2) blocks.push({ t: 'img', src: src2, alt: (image[1] as string).trim() });
+      continue;
+    }
+    const q = /^>\s?(.*)$/.exec(line);
+    if (q) {
+      if (para.length || list) flush();
+      quote.push(q[1] as string);
+      continue;
+    }
+    if (quote.length) flush();
     const heading = /^(#{1,3})\s+(.+)$/.exec(line);
     if (heading) {
       flush();
@@ -117,6 +162,7 @@ export function parseMarkdown(src: string): MdBlock[] {
     if (list) flush();
     para.push(line);
   }
+  if (fence) blocks.push({ t: 'pre', v: (fence as string[]).join('\n') });
   flush();
   return blocks;
 }
@@ -126,6 +172,14 @@ export function markdownToPlainText(src: string): string {
   const inline = (c: readonly MdInline[]): string =>
     c.map((n) => (n.t === 'text' || n.t === 'code' ? n.v : inline(n.c))).join('');
   return parseMarkdown(src)
-    .map((b) => (b.t === 'p' || b.t === 'h' ? inline(b.c) : b.items.map(inline).join(' ')))
+    .map((b) =>
+      b.t === 'p' || b.t === 'h' || b.t === 'quote'
+        ? inline(b.c)
+        : b.t === 'img'
+          ? b.alt
+          : b.t === 'pre'
+            ? b.v
+            : b.items.map(inline).join(' '),
+    )
     .join(' ');
 }

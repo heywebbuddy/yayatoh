@@ -5,7 +5,10 @@ import { tenantContentSite } from '@/server/cms.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { tenantOrgParam } from '@/server/tenant-site.ts';
 
-type Props = { params: Promise<{ locale: string; org: string }>; searchParams: Promise<{ page?: string }> };
+type Props = {
+  params: Promise<{ locale: string; org: string }>;
+  searchParams: Promise<{ page?: string; q?: string; category?: string }>;
+};
 const pageOf = (raw?: string) => Math.min(500, Math.max(1, Number.parseInt(raw ?? '1', 10) || 1));
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
@@ -23,5 +26,13 @@ export default async function TenantBlog({ params, searchParams }: Props) {
   pageLocale(locale);
   const site = await tenantContentSite(tenantOrgParam(org));
   if (!site) notFound();
-  return <BlogIndexView site={site} locale={locale} page={pageOf((await searchParams).page)} />;
+  return (
+    <BlogIndexView
+      site={site}
+      locale={locale}
+      page={pageOf((await searchParams).page)}
+      q={((await searchParams).q ?? '').slice(0, 80)}
+      category={((await searchParams).category ?? '').slice(0, 40)}
+    />
+  );
 }

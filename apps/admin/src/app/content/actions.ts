@@ -47,6 +47,13 @@ const uuidOrNull = (v: string | null) => (v && /^[0-9a-f-]{36}$/i.test(v) ? v : 
 
 /* ----------------------------------------------------------------------------- blog ---- */
 
+/** Tags typed as a comma separated list. */
+const tagList = (form: FormData) =>
+  String(form.get('tags') ?? '')
+    .split(',')
+    .map((t) => t.trim().toLowerCase())
+    .filter(Boolean);
+
 export async function savePostAction(form: FormData) {
   const staff = await requireStaff('content');
   const id = uuidOrNull(orNull(form, 'id'));
@@ -64,6 +71,9 @@ export async function savePostAction(form: FormData) {
     seoDescription: orNull(form, 'seoDescription'),
     status: form.get('intent') === 'publish' ? 'published' : 'draft',
     authorName: orNull(form, 'authorName'),
+    category: orNull(form, 'category'),
+    tags: tagList(form),
+    coverAlt: orNull(form, 'coverAlt'),
   });
   if (!parsed.success) redirect(`${back}?error=invalid`);
   let saved: string;
@@ -92,6 +102,9 @@ export async function unpublishPostAction(form: FormData) {
     seoDescription: orNull(form, 'seoDescription'),
     status: 'draft',
     authorName: orNull(form, 'authorName'),
+    category: orNull(form, 'category'),
+    tags: tagList(form),
+    coverAlt: orNull(form, 'coverAlt'),
   });
   if (!parsed.success) redirect(`/content/blog/${id}?error=invalid`);
   await savePost(staff.actor, parsed.data);

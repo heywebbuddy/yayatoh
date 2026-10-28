@@ -96,6 +96,9 @@ export interface PostRow {
   readonly status: 'draft' | 'published';
   readonly publishedAt: Date | null;
   readonly authorName: string | null;
+  readonly category: string | null;
+  readonly tags: readonly string[];
+  readonly coverAlt: string | null;
   readonly updatedAt: Date;
   readonly updatedBy: string;
 }
@@ -112,6 +115,9 @@ const toPost = (r: Row): PostRow => ({
   status: r.status === 'published' ? 'published' : 'draft',
   publishedAt: r.published_at ? new Date(String(r.published_at)) : null,
   authorName: str(r.author_name),
+  category: str(r.category),
+  tags: (r.tags as string[] | null) ?? [],
+  coverAlt: str(r.cover_alt),
   updatedAt: new Date(String(r.updated_at)),
   updatedBy: String(r.updated_by),
 });
@@ -143,6 +149,11 @@ export const PostInput = z.object({
   seoDescription: text(200).nullable(),
   status: z.enum(['draft', 'published']),
   authorName: text(120).nullable(),
+  category: text(40).nullable(),
+  tags: z.array(text(30).min(1)).max(6),
+  coverAlt: text(300).nullable(),
+  /** Optional date for seeding older posts; staff publishing leaves it empty (now). */
+  publishedAt: z.iso.datetime().nullable().optional(),
 });
 export type PostInput = z.infer<typeof PostInput>;
 

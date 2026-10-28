@@ -7,6 +7,7 @@ import {
   EntryKind,
   setEntryStatusCommand,
   updateEntryCommand,
+  uploadEntryCoverCommand,
 } from '@yayatoh/cms';
 import { executeCommand } from '@yayatoh/kernel';
 import { revalidatePath, updateTag } from 'next/cache';
@@ -31,7 +32,35 @@ function fields(form: FormData) {
     body: text(form, 'body'),
     seoTitle: text(form, 'seoTitle'),
     seoDescription: text(form, 'seoDescription'),
+    category: text(form, 'category'),
+    tags: text(form, 'tags')
+      .split(',')
+      .map((t) => t.trim())
+      .filter(Boolean),
   };
+}
+
+/**
+ * The cover of a blog post: a new file is stored first (type and size are checked from its bytes),
+ * "remove" detaches it, and the alt text always travels with it.
+ */
+async function coverFields(
+  form: FormData,
+  ctx: Parameters<typeof executeCommand>[2],
+): Promise<{ coverAssetId?: string | null; coverAlt?: string | null }> {
+  if (text(form, 'coverRemove') === 'yes') return { coverAssetId: null };
+  const file = form.get('cover');
+  const alt = text(form, 'coverAlt');
+  if (file instanceof File && file.size > 0) {
+    const { id } = (await executeCommand(
+      uploadEntryCoverCommand,
+      { bytes: new Uint8Array(await file.arrayBuffer()) },
+      ctx,
+      ports,
+    )) as { id: string };
+    return { coverAssetId: id, coverAlt: alt };
+  }
+  return { coverAlt: alt };
 }
 
 /** Public pages of this org (tenant site, organizer page, marketplace) drop their cache. */
@@ -53,9 +82,10 @@ export async function createEntryAction(
       createEntryCommand,
       {
         ...f,
+        ...(await coverFields(form, data.ctx)),
         slug: f.slug || undefined,
         kind: EntryKind.parse(kind),
-        authorName: data.session.name || null,
+        authorName: text(form, 'authorName').trim() || data.session.name || null,
       },
       data.ctx,
       ports,
@@ -77,7 +107,17 @@ export async function updateEntryAction(
   const data = await loadConsole(org);
   try {
     const f = fields(form);
-    await executeCommand(updateEntryCommand, { entryId, ...f }, data.ctx, ports);
+    await executeCommand(
+      updateEntryCommand,
+      {
+        entryId,
+        ...f,
+        ...(await coverFields(form, data.ctx)),
+        authorName: text(form, 'authorName').trim() || null,
+      },
+      data.ctx,
+      ports,
+    );
   } catch (err) {
     return failure(err);
   }

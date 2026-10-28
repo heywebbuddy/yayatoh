@@ -1,9 +1,11 @@
 import type { PublicEntrySummaryDto } from '@yayatoh/cms';
 import type { ListingDto } from '@yayatoh/marketplace';
 import { publicCovers, publicMedia } from '@yayatoh/media';
-import { brandPalette, cx } from '@yayatoh/ui';
+import { brandPalette } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { BlogGridCard } from '@/components/blog/blog-index.tsx';
+import { orgCard } from '@/components/blog/org-blog.tsx';
 import { BrandSection } from '@/components/brand-styled.tsx';
 import { Pagination } from '@/components/marketplace/pagination.tsx';
 import { MediaPicture } from '@/components/media-picture.tsx';
@@ -90,7 +92,7 @@ export async function OrgShowcase({
   const logo = logos[0] ?? null;
   const brand = brandColor ? brandPalette(brandColor) : null;
   const heroCover = listings[0] ? (covers.get(listings[0].slug) ?? null) : null;
-  const date = new Intl.DateTimeFormat(locale, { dateStyle: 'medium' });
+  const _date = new Intl.DateTimeFormat(locale, { dateStyle: 'medium' });
   return (
     <div data-surface="showcase" className="min-h-dvh bg-page">
       {header}
@@ -155,29 +157,14 @@ export async function OrgShowcase({
                 {ts('viewAll')}
               </Link>
             </div>
-            <ul className="m-0 grid list-none gap-4 p-0 md:grid-cols-3">
+            <ul className="m-0 grid list-none gap-5 p-0 md:grid-cols-3">
               {posts.slice(0, 3).map((p, i) => (
-                <li key={p.slug}>
-                  <article
-                    className={cx(
-                      'group relative flex h-full flex-col gap-2 rounded-card border border-line p-6 transition-transform duration-300 hover:-translate-y-1 motion-reduce:transition-none',
-                      i % 3 === 0 ? 'bg-ember-soft text-white' : 'bg-surface',
-                    )}
-                  >
-                    <p className="m-0 text-caption font-bold opacity-80">
-                      <time dateTime={p.publishedAt.toISOString()}>{date.format(p.publishedAt)}</time>
-                    </p>
-                    <h3 className="m-0 text-[20px] leading-snug font-extrabold">
-                      <Link
-                        href={`${postsHref}/${p.slug}`}
-                        className="outline-none after:absolute after:inset-0 after:content-[''] focus-visible:underline"
-                      >
-                        {p.title}
-                      </Link>
-                    </h3>
-                    {p.excerpt ? <p className="m-0 line-clamp-3 text-body opacity-80">{p.excerpt}</p> : null}
-                  </article>
-                </li>
+                <BlogGridCard
+                  key={p.slug}
+                  card={orgCard({ org: { orgId }, base: postsHref.replace(/\/blogs$/, '') }, p)}
+                  locale={locale}
+                  index={i}
+                />
               ))}
             </ul>
           </Reveal>

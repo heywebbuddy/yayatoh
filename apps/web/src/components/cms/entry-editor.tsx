@@ -16,6 +16,11 @@ export interface EntryValues {
   readonly body: string;
   readonly seoTitle: string;
   readonly seoDescription: string;
+  readonly category: string;
+  readonly tags: string;
+  readonly authorName: string;
+  readonly coverAlt: string;
+  readonly hasCover: boolean;
 }
 
 const area = 'rounded-card border bg-surface px-4 py-2 text-body';
@@ -94,6 +99,68 @@ export function EntryEditor({
           {t('excerptHint')}
         </p>
       </div>
+      {kind === 'post' ? (
+        <fieldset className="flex flex-col gap-4 rounded-card border border-line p-4">
+          <legend className="px-1 text-[13px] font-bold text-ink">{t('postLegend')}</legend>
+          <div className="grid gap-4 md:grid-cols-2">
+            <Input
+              id="entry-category"
+              name="category"
+              maxLength={40}
+              label={t('fields.category')}
+              hint={t('categoryHint')}
+              defaultValue={values?.category}
+            />
+            <Input
+              id="entry-tags"
+              name="tags"
+              maxLength={200}
+              label={t('fields.tags')}
+              hint={t('tagsHint')}
+              defaultValue={values?.tags}
+            />
+            <Input
+              id="entry-author"
+              name="authorName"
+              maxLength={120}
+              label={t('fields.author')}
+              hint={t('authorHint')}
+              defaultValue={values?.authorName}
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="entry-cover" className="text-[13px] font-bold text-ink">
+              {t('fields.cover')}
+            </label>
+            <input
+              id="entry-cover"
+              name="cover"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              aria-describedby="entry-cover-hint"
+              className="text-body"
+            />
+            <p id="entry-cover-hint" className="text-caption text-ink-2">
+              {values?.hasCover ? t('coverHave') : t('coverHint')}
+            </p>
+          </div>
+          <Input
+            id="entry-cover-alt"
+            name="coverAlt"
+            maxLength={300}
+            label={t('fields.coverAlt')}
+            hint={t('coverAltHint')}
+            defaultValue={values?.coverAlt}
+            error={bad.has('coverAlt') || bad.has('cover') ? t('coverError') : undefined}
+          />
+          {values?.hasCover ? (
+            <label className="flex items-center gap-2 text-body">
+              <input type="checkbox" name="coverRemove" value="yes" className="size-5" />
+              {t('coverRemove')}
+            </label>
+          ) : null}
+        </fieldset>
+      ) : null}
       <div className="flex flex-col gap-1.5">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <label htmlFor="entry-body" className="text-[13px] font-bold text-ink">

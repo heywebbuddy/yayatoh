@@ -5904,7 +5904,12 @@
       "excerpt": "概要",
       "body": "本文",
       "seoTitle": "検索用タイトル",
-      "seoDescription": "検索用説明"
+      "seoDescription": "検索用説明",
+      "category": "カテゴリ",
+      "tags": "タグ",
+      "author": "著者名",
+      "cover": "カバー画像",
+      "coverAlt": "カバー画像の説明（alt テキスト）"
     },
     "titleError": "タイトルを入力してください（160 文字以内）。",
     "slugHint": "{prefix} の後に続くウェブアドレス。空欄にするとタイトルから作成されます。",
@@ -5943,7 +5948,16 @@
       "create": "これを下書きとして作成",
       "discard": "破棄",
       "discarded": "下書きを破棄しました。何も保存されていません。"
-    }
+    },
+    "postLegend": "ブログ記事の詳細",
+    "categoryHint": "1語または短いフレーズ。カードに表示され、フィルターにも使われます。",
+    "tagsHint": "タグは最大6個、カンマ区切りで入力します。",
+    "authorHint": "タイトルの下に表示されます。初期値はあなたの名前です。",
+    "coverHint": "JPEG、PNG、WebP、5 MBまで。横長（16:9）の画像がおすすめです。",
+    "coverHave": "カバーが設定されています。置き換えるにはファイルを選択してください。",
+    "coverAltHint": "見えない方のために画像を説明してください。カバーを設定する場合は必須です。",
+    "coverError": "有効な画像を追加し、説明を入力してください。",
+    "coverRemove": "カバー画像を削除"
   },
   "cmsPublic": {
     "blog": "ブログ",
@@ -19570,7 +19584,8 @@
       "series": "シリーズ",
       "features": "すべての機能",
       "resources": "リソース",
-      "help": "ヘルプセンター"
+      "help": "ヘルプセンター",
+      "blog": "ブログ"
     },
     "solutions": {
       "createEvent": "イベントを作成",
@@ -20620,5 +20635,43 @@
       "frameLabel": "WebBuddy主催者サイトのプレビュー",
       "newTab": "新しいタブで開きます"
     }
+  },
+  "blogUi": {
+    "eyebrow": "ブログ",
+    "platformLine1": "ストーリーとヒント",
+    "platformLine2": "そしてニュース",
+    "platformLede": "主催者とゲスト向けのアイデア：チケットをもっと売る方法、スムーズなイベント運営、より魅力的な伝え方。",
+    "orgLede": "{org}のニュース、ストーリー、お知らせ。",
+    "searchLabel": "記事を検索",
+    "searchPlaceholder": "ブログを検索",
+    "searchButton": "検索",
+    "filterLabel": "カテゴリ",
+    "all": "すべて",
+    "featured": "注目",
+    "readMore": "記事を読む",
+    "minRead": "読了目安 {n} 分",
+    "by": "{name} 著",
+    "results": "「{q}」の検索結果",
+    "emptyTitle": "記事が見つかりません",
+    "emptyBody": "別のキーワードで検索するか、別のカテゴリを選んでください。",
+    "clear": "フィルターをクリア",
+    "noPostsTitle": "まだ記事がありません",
+    "noPostsBody": "新しい記事がまもなくここに表示されます。",
+    "back": "ブログに戻る",
+    "published": "{date} 公開",
+    "toc": "このページの内容",
+    "share": "シェア",
+    "shareWhatsapp": "WhatsAppでシェア",
+    "shareLinkedin": "LinkedInでシェア",
+    "shareX": "Xでシェア",
+    "copyLink": "リンクをコピー",
+    "copied": "リンクをコピーしました",
+    "related": "関連記事",
+    "ctaTitle": "Yayatohで自分のイベントを開催",
+    "ctaBody": "チケット販売、座席、イベントサイト、チェックインを1つのプラットフォームで。主催者になるには申し込んでください。",
+    "ctaButton": "主催者向け",
+    "orgEventsTitle": "{org}の開催予定イベント",
+    "orgEventsAll": "すべてのイベントを見る",
+    "progress": "読み進めた割合"
   }
 }

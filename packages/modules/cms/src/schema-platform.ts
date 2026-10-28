@@ -65,6 +65,9 @@ export const platformPosts = cmsSchema.table(
     status: text('status').notNull().default('draft'),
     publishedAt: ts('published_at'),
     authorName: text('author_name'),
+    category: text('category'),
+    tags: text('tags').array().notNull().default(sql`'{}'::text[]`),
+    coverAlt: text('cover_alt'),
     createdAt: ts('created_at').notNull().defaultNow(),
     updatedAt: ts('updated_at').notNull().defaultNow(),
     updatedBy: text('updated_by').notNull(),
@@ -76,6 +79,8 @@ export const platformPosts = cmsSchema.table(
       sql`slug ~ '^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$' and char_length(slug) <= 80`,
     ),
     check('platform_posts_title_check', sql`char_length(title) between 1 and 160`),
+    check('platform_posts_category_check', sql`category is null or char_length(category) between 1 and 40`),
+    check('platform_posts_tags_check', sql`cardinality(tags) <= 6`),
     check('platform_posts_excerpt_check', sql`char_length(excerpt) <= 400`),
     check('platform_posts_body_check', sql`char_length(body) <= 50000`),
     check(

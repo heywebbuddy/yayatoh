@@ -33,6 +33,29 @@ export function Markdown({ source, className }: { source: string; className?: st
             </List>
           );
         }
+        if (b.t === 'quote')
+          return (
+            <blockquote key={key} className="border-s-4 border-line-strong ps-4 italic">
+              <Inline nodes={b.c} />
+            </blockquote>
+          );
+        if (b.t === 'img')
+          return (
+            // biome-ignore lint/performance/noImgElement: author-supplied image, size unknown
+            <img
+              key={key}
+              src={b.src}
+              alt={b.alt}
+              loading="lazy"
+              className="h-auto max-w-full rounded-card"
+            />
+          );
+        if (b.t === 'pre')
+          return (
+            <pre key={key} className="overflow-x-auto rounded-card bg-surface-3 p-3 font-mono text-[0.9em]">
+              <code>{b.v}</code>
+            </pre>
+          );
         return (
           <p key={key}>
             <Inline nodes={b.c} />

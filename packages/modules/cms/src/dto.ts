@@ -22,6 +22,10 @@ export const EntryDto = z.object({
   seoTitle: z.string().nullable(),
   seoDescription: z.string().nullable(),
   authorName: z.string().nullable(),
+  category: z.string().nullable(),
+  tags: z.array(z.string()),
+  coverAssetId: z.uuid().nullable(),
+  coverAlt: z.string().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -40,6 +44,10 @@ export const PublicEntryDto = z.object({
   seoTitle: z.string().nullable(),
   seoDescription: z.string().nullable(),
   authorName: z.string().nullable(),
+  category: z.string().nullable(),
+  tags: z.array(z.string()),
+  coverAssetId: z.uuid().nullable(),
+  coverAlt: z.string().nullable(),
 });
 export type PublicEntryDto = z.infer<typeof PublicEntryDto>;
 export const publicEntrySerializer = defineSerializer('cms.publicEntry', PublicEntryDto);
@@ -51,6 +59,11 @@ export const PublicEntrySummaryDto = PublicEntryDto.pick({
   publishedAt: true,
   updatedAt: true,
   authorName: true,
+  category: true,
+  tags: true,
+  coverAssetId: true,
+  coverAlt: true,
+  body: true,
 });
 export type PublicEntrySummaryDto = z.infer<typeof PublicEntrySummaryDto>;
 export const publicEntrySummarySerializer = defineSerializer('cms.publicEntrySummary', PublicEntrySummaryDto);
@@ -75,6 +88,11 @@ const optText = (max: number) =>
     .nullable()
     .transform((v) => (v ? v : null));
 
+const tagList = z
+  .array(z.string().trim().min(1).max(30))
+  .max(6)
+  .transform((v) => [...new Set(v.map((t) => t.toLowerCase()))]);
+
 const EntryFields = z.object({
   title: z.string().trim().min(1).max(160),
   /** Empty or absent: derived from the title. */
@@ -86,6 +104,10 @@ const EntryFields = z.object({
     .default(''),
   seoTitle: optText(70).default(null),
   seoDescription: optText(160).default(null),
+  category: optText(40).default(null),
+  tags: tagList.default([]),
+  coverAssetId: z.uuid().nullable().default(null),
+  coverAlt: optText(300).default(null),
 });
 
 export const CreateEntryInput = EntryFields.extend({
@@ -106,5 +128,10 @@ export const UpdateEntryInput = z.object({
     .optional(),
   seoTitle: optText(70).optional(),
   seoDescription: optText(160).optional(),
+  category: optText(40).optional(),
+  tags: tagList.optional(),
+  coverAssetId: z.uuid().nullable().optional(),
+  coverAlt: optText(300).optional(),
+  authorName: z.string().trim().max(120).nullable().optional(),
 });
 export type UpdateEntryInput = z.input<typeof UpdateEntryInput>;

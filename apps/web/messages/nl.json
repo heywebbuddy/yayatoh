@@ -5904,7 +5904,12 @@
       "excerpt": "Samenvatting",
       "body": "Tekst",
       "seoTitle": "Zoektitel",
-      "seoDescription": "Zoekbeschrijving"
+      "seoDescription": "Zoekbeschrijving",
+      "category": "Categorie",
+      "tags": "Tags",
+      "author": "Naam van de auteur",
+      "cover": "Omslagafbeelding",
+      "coverAlt": "Beschrijving van de omslagafbeelding (alt-tekst)"
     },
     "titleError": "Geef een titel (maximaal 160 tekens).",
     "slugHint": "Het einde van het webadres, na {prefix}. Laat leeg om het uit de titel te maken.",
@@ -5943,7 +5948,16 @@
       "create": "Concept hiervan maken",
       "discard": "Weggooien",
       "discarded": "Concept weggegooid. Er is niets opgeslagen."
-    }
+    },
+    "postLegend": "Gegevens van de blogpost",
+    "categoryHint": "Eén woord of korte zin, getoond op de kaart en gebruikt voor de filters.",
+    "tagsHint": "Maximaal 6 tags, gescheiden door komma's.",
+    "authorHint": "Getoond onder de titel. Standaard je eigen naam.",
+    "coverHint": "JPEG, PNG of WebP, tot 5 MB. Brede afbeeldingen (16:9) zien er het best uit.",
+    "coverHave": "Er is een omslag toegevoegd. Kies een bestand om het te vervangen.",
+    "coverAltHint": "Beschrijf de afbeelding voor mensen die haar niet kunnen zien. Verplicht bij een omslag.",
+    "coverError": "Voeg een geldige afbeelding toe en beschrijf die.",
+    "coverRemove": "Omslagafbeelding verwijderen"
   },
   "cmsPublic": {
     "blog": "Blog",
@@ -19570,7 +19584,8 @@
       "series": "Reeksen",
       "features": "Alle functies",
       "resources": "Bronnen",
-      "help": "Helpcentrum"
+      "help": "Helpcentrum",
+      "blog": "Blog"
     },
     "solutions": {
       "createEvent": "Een evenement maken",
@@ -20620,5 +20635,43 @@
       "frameLabel": "Voorbeeld van de organisatorsite van WebBuddy",
       "newTab": "Opent in een nieuw tabblad"
     }
+  },
+  "blogUi": {
+    "eyebrow": "Blog",
+    "platformLine1": "Verhalen, tips",
+    "platformLine2": "en nieuws",
+    "platformLede": "Ideeën voor organisatoren en gasten: meer tickets verkopen, soepelere evenementen draaien en betere verhalen vertellen.",
+    "orgLede": "Nieuws, verhalen en updates van {org}.",
+    "searchLabel": "Artikelen zoeken",
+    "searchPlaceholder": "Zoek in de blog",
+    "searchButton": "Zoeken",
+    "filterLabel": "Categorieën",
+    "all": "Alles",
+    "featured": "Uitgelicht",
+    "readMore": "Lees artikel",
+    "minRead": "{n} min leestijd",
+    "by": "Door {name}",
+    "results": "Resultaten voor “{q}”",
+    "emptyTitle": "Geen artikelen gevonden",
+    "emptyBody": "Probeer een andere zoekopdracht of kies een andere categorie.",
+    "clear": "Filters wissen",
+    "noPostsTitle": "Nog geen berichten",
+    "noPostsBody": "Nieuwe artikelen verschijnen hier binnenkort.",
+    "back": "Terug naar de blog",
+    "published": "Gepubliceerd op {date}",
+    "toc": "Op deze pagina",
+    "share": "Delen",
+    "shareWhatsapp": "Delen via WhatsApp",
+    "shareLinkedin": "Delen via LinkedIn",
+    "shareX": "Delen via X",
+    "copyLink": "Link kopiëren",
+    "copied": "Link gekopieerd",
+    "related": "Lees verder",
+    "ctaTitle": "Organiseer je eigen evenementen op Yayatoh",
+    "ctaBody": "Ticketing, zitplaatsen, een evenementensite en check-in op één platform. Meld je aan als organisator.",
+    "ctaButton": "Voor organisatoren",
+    "orgEventsTitle": "Aankomende evenementen van {org}",
+    "orgEventsAll": "Alle evenementen bekijken",
+    "progress": "Leesvoortgang"
   }
 }
