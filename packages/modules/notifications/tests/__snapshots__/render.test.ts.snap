@@ -5,7 +5,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert · ar 1`] = 
   "subject": "37 حاضرًا ليس لديهم مقاعد",
   "text": "37 حاضرًا ليس لديهم مقاعد
 
-مرحبًا،
+مرحبًا!
 
 هناك ما يحتاج إلى انتباه في Lakeside Jazz Night. يفتح الزر الصفحة التي تعالجه.
 
@@ -21,7 +21,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert · de 1`] = 
   "subject": "37 Teilnehmende haben keinen Sitzplatz",
   "text": "37 Teilnehmende haben keinen Sitzplatz
 
-Hallo,
+Hallo!
 
 Bei Lakeside Jazz Night braucht etwas Aufmerksamkeit. Die Schaltfläche öffnet die Seite, die es behebt.
 
@@ -37,7 +37,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert · en 1`] = 
   "subject": "37 attendees do not have seats",
   "text": "37 attendees do not have seats
 
-Hello,
+Hello!
 
 This needs attention at Lakeside Jazz Night. The button opens the page that fixes it.
 
@@ -53,7 +53,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert · es 1`] = 
   "subject": "37 asistentes no tienen asiento",
   "text": "37 asistentes no tienen asiento
 
-Hola:
+¡Hola!
 
 Algo necesita atención en Lakeside Jazz Night. El botón abre la página que lo soluciona.
 
@@ -69,7 +69,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert · fr 1`] = 
   "subject": "37 participants n’ont pas de place",
   "text": "37 participants n’ont pas de place
 
-Bonjour,
+Bonjour !
 
 Quelque chose demande votre attention pour Lakeside Jazz Night. Le bouton ouvre la page qui le règle.
 
@@ -85,7 +85,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert · hi 1`] = 
   "subject": "37 उपस्थित लोगों के पास सीट नहीं है",
   "text": "37 उपस्थित लोगों के पास सीट नहीं है
 
-नमस्ते,
+नमस्ते!
 
 Lakeside Jazz Night में किसी चीज़ पर ध्यान देने की ज़रूरत है। बटन वह पेज खोलता है जो इसे ठीक करता है।
 
@@ -101,7 +101,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert · it 1`] = 
   "subject": "37 partecipanti non hanno un posto",
   "text": "37 partecipanti non hanno un posto
 
-Ciao,
+Ciao!
 
 Qualcosa richiede attenzione per Lakeside Jazz Night. Il pulsante apre la pagina che lo risolve.
 
@@ -133,7 +133,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert · nl 1`] = 
   "subject": "37 deelnemers hebben geen plaats",
   "text": "37 deelnemers hebben geen plaats
 
-Hallo,
+Hallo!
 
 Er vraagt iets aandacht bij Lakeside Jazz Night. De knop opent de pagina die het oplost.
 
@@ -181,7 +181,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert · zh-CN 1`]
   "subject": "37 位参会者没有座位",
   "text": "37 位参会者没有座位
 
-您好：
+您好！
 
 Lakeside Jazz Night 有需要关注的事项。点击按钮打开处理页面。
 
@@ -197,7 +197,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert · zh-TW 1`]
   "subject": "37 位參加者沒有座位",
   "text": "37 位參加者沒有座位
 
-您好：
+您好！
 
 Lakeside Jazz Night 有需要注意的事項。點按鈕開啟處理頁面。
 
@@ -213,7 +213,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · ar 1
   "subject": "3 أجهزة تسجيل دخول غير متصلة",
   "text": "3 أجهزة تسجيل دخول غير متصلة
 
-مرحبًا،
+مرحبًا!
 
 هناك ما يحتاج إلى انتباه في Lakeside Jazz Night. يفتح الزر الصفحة التي تعالجه.
 
@@ -229,7 +229,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · de 1
   "subject": "Drei Check-in-Geräte sind offline",
   "text": "Drei Check-in-Geräte sind offline
 
-Hallo,
+Hallo!
 
 Bei Lakeside Jazz Night braucht etwas Aufmerksamkeit. Die Schaltfläche öffnet die Seite, die es behebt.
 
@@ -245,7 +245,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · en 1
   "subject": "Three check-in devices are offline",
   "text": "Three check-in devices are offline
 
-Hello,
+Hello!
 
 This needs attention at Lakeside Jazz Night. The button opens the page that fixes it.
 
@@ -261,7 +261,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · es 1
   "subject": "Tres dispositivos de control de acceso están sin conexión",
   "text": "Tres dispositivos de control de acceso están sin conexión
 
-Hola:
+¡Hola!
 
 Algo necesita atención en Lakeside Jazz Night. El botón abre la página que lo soluciona.
 
@@ -277,7 +277,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · fr 1
   "subject": "Trois appareils de contrôle sont hors ligne",
   "text": "Trois appareils de contrôle sont hors ligne
 
-Bonjour,
+Bonjour !
 
 Quelque chose demande votre attention pour Lakeside Jazz Night. Le bouton ouvre la page qui le règle.
 
@@ -293,7 +293,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · hi 1
   "subject": "तीन चेक-इन डिवाइस ऑफ़लाइन हैं",
   "text": "तीन चेक-इन डिवाइस ऑफ़लाइन हैं
 
-नमस्ते,
+नमस्ते!
 
 Lakeside Jazz Night में किसी चीज़ पर ध्यान देने की ज़रूरत है। बटन वह पेज खोलता है जो इसे ठीक करता है।
 
@@ -309,7 +309,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · it 1
   "subject": "Tre dispositivi di check-in sono offline",
   "text": "Tre dispositivi di check-in sono offline
 
-Ciao,
+Ciao!
 
 Qualcosa richiede attenzione per Lakeside Jazz Night. Il pulsante apre la pagina che lo risolve.
 
@@ -341,7 +341,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · nl 1
   "subject": "Drie check-inapparaten zijn offline",
   "text": "Drie check-inapparaten zijn offline
 
-Hallo,
+Hallo!
 
 Er vraagt iets aandacht bij Lakeside Jazz Night. De knop opent de pagina die het oplost.
 
@@ -389,7 +389,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · zh-C
   "subject": "3 台签到设备离线",
   "text": "3 台签到设备离线
 
-您好：
+您好！
 
 Lakeside Jazz Night 有需要关注的事项。点击按钮打开处理页面。
 
@@ -405,7 +405,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-text · zh-T
   "subject": "3 台報到裝置離線",
   "text": "3 台報到裝置離線
 
-您好：
+您好！
 
 Lakeside Jazz Night 有需要注意的事項。點按鈕開啟處理頁面。
 
@@ -421,7 +421,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text 
   "subject": "بلغ المكان سعته القصوى (100٪)",
   "text": "بلغ المكان سعته القصوى (100٪)
 
-مرحبًا،
+مرحبًا!
 
 هناك ما يحتاج إلى انتباه في Lakeside Jazz Night. يفتح الزر الصفحة التي تعالجه.
 
@@ -437,7 +437,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text 
   "subject": "Der Veranstaltungsort ist voll (100 %)",
   "text": "Der Veranstaltungsort ist voll (100 %)
 
-Hallo,
+Hallo!
 
 Bei Lakeside Jazz Night braucht etwas Aufmerksamkeit. Die Schaltfläche öffnet die Seite, die es behebt.
 
@@ -453,7 +453,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text 
   "subject": "The venue is at capacity (100% full)",
   "text": "The venue is at capacity (100% full)
 
-Hello,
+Hello!
 
 This needs attention at Lakeside Jazz Night. The button opens the page that fixes it.
 
@@ -469,7 +469,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text 
   "subject": "El recinto está lleno (100 %)",
   "text": "El recinto está lleno (100 %)
 
-Hola:
+¡Hola!
 
 Algo necesita atención en Lakeside Jazz Night. El botón abre la página que lo soluciona.
 
@@ -485,7 +485,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text 
   "subject": "Le lieu est complet (100 %)",
   "text": "Le lieu est complet (100 %)
 
-Bonjour,
+Bonjour !
 
 Quelque chose demande votre attention pour Lakeside Jazz Night. Le bouton ouvre la page qui le règle.
 
@@ -501,7 +501,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text 
   "subject": "स्थल पूरी तरह भर गया है (100%)",
   "text": "स्थल पूरी तरह भर गया है (100%)
 
-नमस्ते,
+नमस्ते!
 
 Lakeside Jazz Night में किसी चीज़ पर ध्यान देने की ज़रूरत है। बटन वह पेज खोलता है जो इसे ठीक करता है।
 
@@ -517,7 +517,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text 
   "subject": "La sede è al completo (100%)",
   "text": "La sede è al completo (100%)
 
-Ciao,
+Ciao!
 
 Qualcosa richiede attenzione per Lakeside Jazz Night. Il pulsante apre la pagina che lo risolve.
 
@@ -549,7 +549,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text 
   "subject": "De locatie is vol (100%)",
   "text": "De locatie is vol (100%)
 
-Hallo,
+Hallo!
 
 Er vraagt iets aandacht bij Lakeside Jazz Night. De knop opent de pagina die het oplost.
 
@@ -597,7 +597,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text 
   "subject": "场地已满员（100%）",
   "text": "场地已满员（100%）
 
-您好：
+您好！
 
 Lakeside Jazz Night 有需要关注的事项。点击按钮打开处理页面。
 
@@ -613,7 +613,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.alert-urgent-text 
   "subject": "場地已額滿（100%）",
   "text": "場地已額滿（100%）
 
-您好：
+您好！
 
 Lakeside Jazz Night 有需要注意的事項。點按鈕開啟處理頁面。
 
@@ -629,7 +629,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric · ar 1`] =
   "subject": "تم تفعيل قاعدة التنبيه «Refunds this week»",
   "text": "تم تفعيل قاعدة التنبيه «Refunds this week»
 
-مرحبًا،
+مرحبًا!
 
 تم تفعيل قاعدة التنبيه «Refunds this week» في Lakeside Events: $1,250.00 خلال آخر 7 أيام. افتحه لتأكيده أو تأجيله.
 
@@ -645,7 +645,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric · de 1`] =
   "subject": "Alarmregel „Refunds this week“ wurde ausgelöst",
   "text": "Alarmregel „Refunds this week“ wurde ausgelöst
 
-Hallo,
+Hallo!
 
 Deine Alarmregel „Refunds this week“ wurde bei Lakeside Events ausgelöst: $1,250.00 in den letzten 7 Tagen. Öffne sie, um sie zu bestätigen oder zu pausieren.
 
@@ -661,7 +661,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric · en 1`] =
   "subject": "Alert rule “Refunds this week” is firing",
   "text": "Alert rule “Refunds this week” is firing
 
-Hello,
+Hello!
 
 Your alert rule “Refunds this week” is firing at Lakeside Events: $1,250.00 over the last 7 days. Open it to acknowledge or snooze it.
 
@@ -677,7 +677,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric · es 1`] =
   "subject": "La regla de alerta «Refunds this week» se ha activado",
   "text": "La regla de alerta «Refunds this week» se ha activado
 
-Hola:
+¡Hola!
 
 Tu regla de alerta «Refunds this week» se ha activado en Lakeside Events: $1,250.00 en los últimos 7 días. Ábrela para confirmarla o posponerla.
 
@@ -693,7 +693,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric · fr 1`] =
   "subject": "La règle d’alerte « Refunds this week » s’est déclenchée",
   "text": "La règle d’alerte « Refunds this week » s’est déclenchée
 
-Bonjour,
+Bonjour !
 
 Votre règle d’alerte « Refunds this week » s’est déclenchée chez Lakeside Events : $1,250.00 sur les 7 derniers jours. Ouvrez-la pour la confirmer ou la mettre en pause.
 
@@ -709,7 +709,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric · hi 1`] =
   "subject": "अलर्ट नियम “Refunds this week” सक्रिय हुआ",
   "text": "अलर्ट नियम “Refunds this week” सक्रिय हुआ
 
-नमस्ते,
+नमस्ते!
 
 आपका अलर्ट नियम “Refunds this week” Lakeside Events में सक्रिय हुआ: पिछले 7 दिनों में $1,250.00। इसे स्वीकार करने या स्नूज़ करने के लिए खोलें।
 
@@ -725,7 +725,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric · it 1`] =
   "subject": "La regola di avviso «Refunds this week» è scattata",
   "text": "La regola di avviso «Refunds this week» è scattata
 
-Ciao,
+Ciao!
 
 La tua regola di avviso «Refunds this week» è scattata per Lakeside Events: $1,250.00 negli ultimi 7 giorni. Aprila per confermarla o posticiparla.
 
@@ -757,7 +757,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric · nl 1`] =
   "subject": "Waarschuwingsregel ‘Refunds this week’ is afgegaan",
   "text": "Waarschuwingsregel ‘Refunds this week’ is afgegaan
 
-Hallo,
+Hallo!
 
 Je waarschuwingsregel ‘Refunds this week’ is afgegaan bij Lakeside Events: $1,250.00 in de afgelopen 7 dagen. Open hem om hem te bevestigen of uit te stellen.
 
@@ -805,7 +805,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric · zh-CN 1`
   "subject": "提醒规则“Refunds this week”已触发",
   "text": "提醒规则“Refunds this week”已触发
 
-您好：
+您好！
 
 Lakeside Events 的提醒规则“Refunds this week”已触发：最近 7 天为 $1,250.00。 打开以确认或暂缓提醒。
 
@@ -821,7 +821,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric · zh-TW 1`
   "subject": "提醒規則「Refunds this week」已觸發",
   "text": "提醒規則「Refunds this week」已觸發
 
-您好：
+您好！
 
 Lakeside Events 的提醒規則「Refunds this week」已觸發：最近 7 天為 $1,250.00。 開啟以確認或暫緩提醒。
 
@@ -837,7 +837,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · ar 1
   "subject": "تم تفعيل قاعدة التنبيه «Daily registrations»",
   "text": "تم تفعيل قاعدة التنبيه «Daily registrations»
 
-مرحبًا،
+مرحبًا!
 
 تم تفعيل قاعدة التنبيه «Daily registrations» في Lakeside Events: 12 خلال اليوم الأخير. افتحه لتأكيده أو تأجيله.
 
@@ -853,7 +853,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · de 1
   "subject": "Alarmregel „Daily registrations“ wurde ausgelöst",
   "text": "Alarmregel „Daily registrations“ wurde ausgelöst
 
-Hallo,
+Hallo!
 
 Deine Alarmregel „Daily registrations“ wurde bei Lakeside Events ausgelöst: 12 in dem letzten Tag. Öffne sie, um sie zu bestätigen oder zu pausieren.
 
@@ -869,7 +869,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · en 1
   "subject": "Alert rule “Daily registrations” is firing",
   "text": "Alert rule “Daily registrations” is firing
 
-Hello,
+Hello!
 
 Your alert rule “Daily registrations” is firing at Lakeside Events: 12 over the last day. Open it to acknowledge or snooze it.
 
@@ -885,7 +885,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · es 1
   "subject": "La regla de alerta «Daily registrations» se ha activado",
   "text": "La regla de alerta «Daily registrations» se ha activado
 
-Hola:
+¡Hola!
 
 Tu regla de alerta «Daily registrations» se ha activado en Lakeside Events: 12 en el último día. Ábrela para confirmarla o posponerla.
 
@@ -901,7 +901,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · fr 1
   "subject": "La règle d’alerte « Daily registrations » s’est déclenchée",
   "text": "La règle d’alerte « Daily registrations » s’est déclenchée
 
-Bonjour,
+Bonjour !
 
 Votre règle d’alerte « Daily registrations » s’est déclenchée chez Lakeside Events : 12 sur le dernier jour. Ouvrez-la pour la confirmer ou la mettre en pause.
 
@@ -917,7 +917,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · hi 1
   "subject": "अलर्ट नियम “Daily registrations” सक्रिय हुआ",
   "text": "अलर्ट नियम “Daily registrations” सक्रिय हुआ
 
-नमस्ते,
+नमस्ते!
 
 आपका अलर्ट नियम “Daily registrations” Lakeside Events में सक्रिय हुआ: पिछले दिन में 12। इसे स्वीकार करने या स्नूज़ करने के लिए खोलें।
 
@@ -933,7 +933,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · it 1
   "subject": "La regola di avviso «Daily registrations» è scattata",
   "text": "La regola di avviso «Daily registrations» è scattata
 
-Ciao,
+Ciao!
 
 La tua regola di avviso «Daily registrations» è scattata per Lakeside Events: 12 nell’ultimo giorno. Aprila per confermarla o posticiparla.
 
@@ -965,7 +965,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · nl 1
   "subject": "Waarschuwingsregel ‘Daily registrations’ is afgegaan",
   "text": "Waarschuwingsregel ‘Daily registrations’ is afgegaan
 
-Hallo,
+Hallo!
 
 Je waarschuwingsregel ‘Daily registrations’ is afgegaan bij Lakeside Events: 12 in de afgelopen dag. Open hem om hem te bevestigen of uit te stellen.
 
@@ -1013,7 +1013,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · zh-C
   "subject": "提醒规则“Daily registrations”已触发",
   "text": "提醒规则“Daily registrations”已触发
 
-您好：
+您好！
 
 Lakeside Events 的提醒规则“Daily registrations”已触发：最近 1 天为 12。 打开以确认或暂缓提醒。
 
@@ -1029,7 +1029,7 @@ exports[`renderMessage: every kind in all 13 locales > alerts.metric-now · zh-T
   "subject": "提醒規則「Daily registrations」已觸發",
   "text": "提醒規則「Daily registrations」已觸發
 
-您好：
+您好！
 
 Lakeside Events 的提醒規則「Daily registrations」已觸發：最近 1 天為 12。 開啟以確認或暫緩提醒。
 
@@ -1526,7 +1526,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.magic-link · ar 1`]
   "subject": "رابط تسجيل الدخول إلى Yayatoh",
   "text": "رابط تسجيل الدخول إلى Yayatoh
 
-مرحبًا،
+مرحبًا!
 
 استخدم الزر أدناه لتسجيل الدخول إلى Yayatoh في هذا المتصفح. يعمل الرابط مرة واحدة وتنتهي صلاحيته خلال 15 دقيقة. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
 
@@ -1544,7 +1544,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.magic-link · de 1`]
   "subject": "Ihr Yayatoh-Anmeldelink",
   "text": "Ihr Yayatoh-Anmeldelink
 
-Hallo,
+Hallo!
 
 Melden Sie sich mit der Schaltfläche unten in diesem Browser bei Yayatoh an. Der Link gilt einmal und läuft in 15 Minuten ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.
 
@@ -1562,7 +1562,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.magic-link · en 1`]
   "subject": "Your Yayatoh sign-in link",
   "text": "Your Yayatoh sign-in link
 
-Hello,
+Hello!
 
 Use the button below to sign in to Yayatoh in this browser. The link works once and expires in 15 minutes. If you didn't ask for it, you can ignore this email.
 
@@ -1580,7 +1580,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.magic-link · es 1`]
   "subject": "Tu enlace para iniciar sesión en Yayatoh",
   "text": "Tu enlace para iniciar sesión en Yayatoh
 
-Hola:
+¡Hola!
 
 Usa el botón de abajo para iniciar sesión en Yayatoh en este navegador. El enlace sirve una vez y caduca en 15 minutos. Si no lo pediste, puedes ignorar este correo.
 
@@ -1598,7 +1598,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.magic-link · fr 1`]
   "subject": "Votre lien de connexion Yayatoh",
   "text": "Votre lien de connexion Yayatoh
 
-Bonjour,
+Bonjour !
 
 Utilisez le bouton ci-dessous pour vous connecter à Yayatoh dans ce navigateur. Le lien fonctionne une fois et expire dans 15 minutes. Si vous ne l’avez pas demandé, ignorez cet e-mail.
 
@@ -1616,7 +1616,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.magic-link · hi 1`]
   "subject": "आपका Yayatoh साइन-इन लिंक",
   "text": "आपका Yayatoh साइन-इन लिंक
 
-नमस्ते,
+नमस्ते!
 
 इस ब्राउज़र में Yayatoh में साइन इन करने के लिए नीचे दिए गए बटन का उपयोग करें। लिंक एक बार काम करता है और 15 मिनट में समाप्त हो जाता है। अगर आपने यह नहीं माँगा, तो इस ईमेल को अनदेखा करें।
 
@@ -1634,7 +1634,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.magic-link · it 1`]
   "subject": "Il tuo link di accesso a Yayatoh",
   "text": "Il tuo link di accesso a Yayatoh
 
-Ciao,
+Ciao!
 
 Usa il pulsante qui sotto per accedere a Yayatoh in questo browser. Il link vale una volta e scade tra 15 minuti. Se non l’hai richiesto, ignora questa email.
 
@@ -1670,7 +1670,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.magic-link · nl 1`]
   "subject": "Je inloglink voor Yayatoh",
   "text": "Je inloglink voor Yayatoh
 
-Hallo,
+Hallo!
 
 Gebruik de knop hieronder om in deze browser in te loggen bij Yayatoh. De link werkt één keer en verloopt over 15 minuten. Heb je dit niet gevraagd, negeer dan deze e-mail.
 
@@ -1724,7 +1724,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.magic-link · zh-CN 
   "subject": "您的 Yayatoh 登录链接",
   "text": "您的 Yayatoh 登录链接
 
-您好：
+您好！
 
 点击下方按钮，在此浏览器中登录 Yayatoh。链接仅可使用一次，15 分钟后失效。如果这不是您的请求，请忽略此邮件。
 
@@ -1742,7 +1742,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.magic-link · zh-TW 
   "subject": "您的 Yayatoh 登入連結",
   "text": "您的 Yayatoh 登入連結
 
-您好：
+您好！
 
 點擊下方按鈕，在此瀏覽器中登入 Yayatoh。連結僅能使用一次，15 分鐘後失效。如果這不是您的請求，請忽略此郵件。
 
@@ -1760,7 +1760,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.password-reset · ar
   "subject": "اختر كلمة مرور جديدة لـ Yayatoh",
   "text": "اختر كلمة مرور جديدة لـ Yayatoh
 
-مرحبًا،
+مرحبًا!
 
 طلب أحدهم إعادة تعيين كلمة مرور حسابك في Yayatoh. يتيح لك الزر أدناه اختيار كلمة مرور جديدة؛ يعمل مرة واحدة وتنتهي صلاحيته خلال 30 دقيقة. إذا لم تطلب ذلك، يمكنك تجاهل هذه الرسالة: تبقى كلمة مرورك كما هي.
 
@@ -1778,7 +1778,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.password-reset · de
   "subject": "Neues Yayatoh-Passwort wählen",
   "text": "Neues Yayatoh-Passwort wählen
 
-Hallo,
+Hallo!
 
 Jemand hat angefordert, das Passwort Ihres Yayatoh-Kontos zurückzusetzen. Mit der Schaltfläche unten wählen Sie ein neues; sie gilt einmal und läuft in 30 Minuten ab. Wenn Sie das nicht angefordert haben, können Sie diese E-Mail ignorieren: Ihr Passwort bleibt unverändert.
 
@@ -1796,7 +1796,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.password-reset · en
   "subject": "Choose a new Yayatoh password",
   "text": "Choose a new Yayatoh password
 
-Hello,
+Hello!
 
 Someone asked to reset the password of your Yayatoh account. The button below lets you choose a new one; it works once and expires in 30 minutes. If you didn't ask for it, you can ignore this email: your password stays the same.
 
@@ -1814,7 +1814,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.password-reset · es
   "subject": "Elige una nueva contraseña de Yayatoh",
   "text": "Elige una nueva contraseña de Yayatoh
 
-Hola:
+¡Hola!
 
 Alguien pidió restablecer la contraseña de tu cuenta de Yayatoh. El botón de abajo te permite elegir una nueva; sirve una vez y caduca en 30 minutos. Si no lo pediste, puedes ignorar este correo: tu contraseña no cambia.
 
@@ -1832,7 +1832,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.password-reset · fr
   "subject": "Choisissez un nouveau mot de passe Yayatoh",
   "text": "Choisissez un nouveau mot de passe Yayatoh
 
-Bonjour,
+Bonjour !
 
 Quelqu’un a demandé à réinitialiser le mot de passe de votre compte Yayatoh. Le bouton ci-dessous vous permet d’en choisir un nouveau ; il fonctionne une fois et expire dans 30 minutes. Si vous ne l’avez pas demandé, ignorez cet e-mail : votre mot de passe ne change pas.
 
@@ -1850,7 +1850,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.password-reset · hi
   "subject": "Yayatoh का नया पासवर्ड चुनें",
   "text": "Yayatoh का नया पासवर्ड चुनें
 
-नमस्ते,
+नमस्ते!
 
 किसी ने आपके Yayatoh खाते का पासवर्ड रीसेट करने का अनुरोध किया है। नीचे दिया गया बटन आपको नया पासवर्ड चुनने देता है; यह एक बार काम करता है और 30 मिनट में समाप्त हो जाता है। अगर आपने यह नहीं माँगा, तो इस ईमेल को अनदेखा करें: आपका पासवर्ड वही रहेगा।
 
@@ -1868,7 +1868,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.password-reset · it
   "subject": "Scegli una nuova password di Yayatoh",
   "text": "Scegli una nuova password di Yayatoh
 
-Ciao,
+Ciao!
 
 Qualcuno ha chiesto di reimpostare la password del tuo account Yayatoh. Il pulsante qui sotto ti permette di sceglierne una nuova; vale una volta e scade tra 30 minuti. Se non l’hai richiesto, ignora questa email: la tua password non cambia.
 
@@ -1904,7 +1904,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.password-reset · nl
   "subject": "Kies een nieuw Yayatoh-wachtwoord",
   "text": "Kies een nieuw Yayatoh-wachtwoord
 
-Hallo,
+Hallo!
 
 Iemand heeft gevraagd het wachtwoord van je Yayatoh-account opnieuw in te stellen. Met de knop hieronder kies je een nieuw wachtwoord; die werkt één keer en verloopt over 30 minuten. Heb je dit niet gevraagd, negeer dan deze e-mail: je wachtwoord blijft hetzelfde.
 
@@ -1958,7 +1958,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.password-reset · zh
   "subject": "设置新的 Yayatoh 密码",
   "text": "设置新的 Yayatoh 密码
 
-您好：
+您好！
 
 有人请求重置您 Yayatoh 账户的密码。点击下方按钮即可设置新密码；按钮仅可使用一次，30 分钟后失效。如果这不是您的请求，请忽略此邮件：您的密码不会改变。
 
@@ -1976,7 +1976,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.password-reset · zh
   "subject": "設定新的 Yayatoh 密碼",
   "text": "設定新的 Yayatoh 密碼
 
-您好：
+您好！
 
 有人請求重設您 Yayatoh 帳戶的密碼。點擊下方按鈕即可設定新密碼；按鈕僅能使用一次，30 分鐘後失效。如果這不是您的請求，請忽略此郵件：您的密碼不會改變。
 
@@ -1994,7 +1994,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · ar 1
   "subject": "305117 هو رمز تسجيل الدخول إلى Yayatoh",
   "text": "305117 هو رمز تسجيل الدخول إلى Yayatoh
 
-مرحبًا،
+مرحبًا!
 
 أدخل 305117 لتسجيل الدخول إلى Yayatoh. يعمل الرمز مرة واحدة وتنتهي صلاحيته خلال 10 دقائق. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
 
@@ -2010,7 +2010,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · de 1
   "subject": "305117 ist Ihr Yayatoh-Anmeldecode",
   "text": "305117 ist Ihr Yayatoh-Anmeldecode
 
-Hallo,
+Hallo!
 
 Geben Sie 305117 ein, um sich bei Yayatoh anzumelden. Der Code gilt einmal und läuft in 10 Minuten ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.
 
@@ -2026,7 +2026,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · en 1
   "subject": "305117 is your Yayatoh sign-in code",
   "text": "305117 is your Yayatoh sign-in code
 
-Hello,
+Hello!
 
 Enter 305117 to sign in to Yayatoh. The code works once and expires in 10 minutes. If you didn't ask for it, you can ignore this email.
 
@@ -2042,7 +2042,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · es 1
   "subject": "305117 es tu código para iniciar sesión en Yayatoh",
   "text": "305117 es tu código para iniciar sesión en Yayatoh
 
-Hola:
+¡Hola!
 
 Introduce 305117 para iniciar sesión en Yayatoh. El código sirve una vez y caduca en 10 minutos. Si no lo pediste, puedes ignorar este correo.
 
@@ -2058,7 +2058,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · fr 1
   "subject": "305117 est votre code de connexion Yayatoh",
   "text": "305117 est votre code de connexion Yayatoh
 
-Bonjour,
+Bonjour !
 
 Saisissez 305117 pour vous connecter à Yayatoh. Le code fonctionne une fois et expire dans 10 minutes. Si vous ne l’avez pas demandé, ignorez cet e-mail.
 
@@ -2074,7 +2074,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · hi 1
   "subject": "305117 आपका Yayatoh साइन-इन कोड है",
   "text": "305117 आपका Yayatoh साइन-इन कोड है
 
-नमस्ते,
+नमस्ते!
 
 Yayatoh में साइन इन करने के लिए 305117 दर्ज करें। कोड एक बार काम करता है और 10 मिनट में समाप्त हो जाता है। अगर आपने यह नहीं माँगा, तो इस ईमेल को अनदेखा करें।
 
@@ -2090,7 +2090,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · it 1
   "subject": "305117 è il tuo codice di accesso a Yayatoh",
   "text": "305117 è il tuo codice di accesso a Yayatoh
 
-Ciao,
+Ciao!
 
 Inserisci 305117 per accedere a Yayatoh. Il codice vale una volta e scade tra 10 minuti. Se non l’hai richiesto, ignora questa email.
 
@@ -2122,7 +2122,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · nl 1
   "subject": "305117 is je inlogcode voor Yayatoh",
   "text": "305117 is je inlogcode voor Yayatoh
 
-Hallo,
+Hallo!
 
 Voer 305117 in om in te loggen bij Yayatoh. De code werkt één keer en verloopt over 10 minuten. Heb je dit niet gevraagd, negeer dan deze e-mail.
 
@@ -2170,7 +2170,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · zh-C
   "subject": "305117 是您的 Yayatoh 登录验证码",
   "text": "305117 是您的 Yayatoh 登录验证码
 
-您好：
+您好！
 
 输入 305117 以登录 Yayatoh。验证码仅可使用一次，10 分钟后失效。如果这不是您的请求，请忽略此邮件。
 
@@ -2186,7 +2186,7 @@ exports[`renderMessage: every kind in all 13 locales > auth.sign-in-code · zh-T
   "subject": "305117 是您的 Yayatoh 登入驗證碼",
   "text": "305117 是您的 Yayatoh 登入驗證碼
 
-您好：
+您好！
 
 輸入 305117 以登入 Yayatoh。驗證碼僅能使用一次，10 分鐘後失效。如果這不是您的請求，請忽略此郵件。
 
@@ -2462,7 +2462,7 @@ exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · ar 1
   "subject": "730514 هو رمز كشك الشارات الخاص بك في Midwest Leadership Summit",
   "text": "730514 هو رمز كشك الشارات الخاص بك في Midwest Leadership Summit
 
-مرحبًا،
+مرحبًا!
 
 أدخل 730514 في كشك الشارات لمراجعة بياناتك وطباعة شارتك. يعمل الرمز مرة واحدة وتنتهي صلاحيته خلال 10 دقائق. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
 
@@ -2478,7 +2478,7 @@ exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · de 1
   "subject": "730514 ist Ihr Code für das Badge-Terminal bei Midwest Leadership Summit",
   "text": "730514 ist Ihr Code für das Badge-Terminal bei Midwest Leadership Summit
 
-Hallo,
+Hallo!
 
 Geben Sie 730514 am Badge-Terminal ein, um Ihre Angaben zu prüfen und Ihr Badge zu drucken. Der Code gilt einmal und läuft in 10 Minuten ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.
 
@@ -2494,7 +2494,7 @@ exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · en 1
   "subject": "730514 is your badge kiosk code for Midwest Leadership Summit",
   "text": "730514 is your badge kiosk code for Midwest Leadership Summit
 
-Hello,
+Hello!
 
 Enter 730514 on the badge kiosk to check your details and print your badge. The code works once and expires in 10 minutes. If you didn't ask for it, you can ignore this email.
 
@@ -2510,7 +2510,7 @@ exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · es 1
   "subject": "730514 es tu código para el quiosco de credenciales de Midwest Leadership Summit",
   "text": "730514 es tu código para el quiosco de credenciales de Midwest Leadership Summit
 
-Hola:
+¡Hola!
 
 Introduce 730514 en el quiosco de credenciales para revisar tus datos e imprimir tu credencial. El código sirve una vez y caduca en 10 minutos. Si no lo pediste, puedes ignorar este correo.
 
@@ -2526,7 +2526,7 @@ exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · fr 1
   "subject": "730514 est votre code pour la borne de badges de Midwest Leadership Summit",
   "text": "730514 est votre code pour la borne de badges de Midwest Leadership Summit
 
-Bonjour,
+Bonjour !
 
 Saisissez 730514 sur la borne de badges pour vérifier vos informations et imprimer votre badge. Le code fonctionne une fois et expire dans 10 minutes. Si vous ne l'avez pas demandé, ignorez cet e-mail.
 
@@ -2542,7 +2542,7 @@ exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · hi 1
   "subject": "730514 Midwest Leadership Summit के बैज कियोस्क के लिए आपका कोड है",
   "text": "730514 Midwest Leadership Summit के बैज कियोस्क के लिए आपका कोड है
 
-नमस्ते,
+नमस्ते!
 
 अपना विवरण जाँचने और अपना बैज प्रिंट करने के लिए बैज कियोस्क पर 730514 दर्ज करें। कोड एक बार काम करता है और 10 मिनट में समाप्त हो जाता है। अगर आपने यह नहीं माँगा था, तो इस ईमेल को अनदेखा करें।
 
@@ -2558,7 +2558,7 @@ exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · it 1
   "subject": "730514 è il tuo codice per il chiosco badge di Midwest Leadership Summit",
   "text": "730514 è il tuo codice per il chiosco badge di Midwest Leadership Summit
 
-Ciao,
+Ciao!
 
 Inserisci 730514 nel chiosco badge per controllare i tuoi dati e stampare il badge. Il codice vale una volta e scade tra 10 minuti. Se non l'hai richiesto, ignora questa email.
 
@@ -2590,7 +2590,7 @@ exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · nl 1
   "subject": "730514 is je code voor de badgekiosk van Midwest Leadership Summit",
   "text": "730514 is je code voor de badgekiosk van Midwest Leadership Summit
 
-Hallo,
+Hallo!
 
 Voer 730514 in bij de badgekiosk om je gegevens te controleren en je badge af te drukken. De code werkt één keer en verloopt over 10 minuten. Heb je hem niet aangevraagd? Dan kun je deze e-mail negeren.
 
@@ -2638,7 +2638,7 @@ exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · zh-C
   "subject": "730514 是你在 Midwest Leadership Summit 胸牌自助机的验证码",
   "text": "730514 是你在 Midwest Leadership Summit 胸牌自助机的验证码
 
-您好：
+您好！
 
 在胸牌自助机上输入 730514，即可核对你的信息并打印胸牌。验证码只能使用一次，10 分钟后失效。如果不是你本人申请，请忽略此邮件。
 
@@ -2654,7 +2654,7 @@ exports[`renderMessage: every kind in all 13 locales > badges.kiosk-code · zh-T
   "subject": "730514 是你在 Midwest Leadership Summit 名牌自助機的驗證碼",
   "text": "730514 是你在 Midwest Leadership Summit 名牌自助機的驗證碼
 
-您好：
+您好！
 
 在名牌自助機上輸入 730514，即可核對你的資料並列印名牌。驗證碼只能使用一次，10 分鐘後失效。如果不是你本人申請，請忽略此郵件。
 
@@ -2670,7 +2670,7 @@ exports[`renderMessage: every kind in all 13 locales > campaigns.test · ar 1`] 
   "subject": "[تجربة] Early-bird tickets are back",
   "text": "[تجربة] Early-bird tickets are back
 
-مرحبًا،
+مرحبًا!
 
 إرسال تجريبي لحملتك.
 
@@ -2686,7 +2686,7 @@ exports[`renderMessage: every kind in all 13 locales > campaigns.test · de 1`] 
   "subject": "[Test] Early-bird tickets are back",
   "text": "[Test] Early-bird tickets are back
 
-Hallo,
+Hallo!
 
 Ein Testversand deiner Kampagne.
 
@@ -2702,7 +2702,7 @@ exports[`renderMessage: every kind in all 13 locales > campaigns.test · en 1`] 
   "subject": "[Test] Early-bird tickets are back",
   "text": "[Test] Early-bird tickets are back
 
-Hello,
+Hello!
 
 A test send of your campaign.
 
@@ -2718,7 +2718,7 @@ exports[`renderMessage: every kind in all 13 locales > campaigns.test · es 1`] 
   "subject": "[Prueba] Early-bird tickets are back",
   "text": "[Prueba] Early-bird tickets are back
 
-Hola:
+¡Hola!
 
 Un envío de prueba de tu campaña.
 
@@ -2734,7 +2734,7 @@ exports[`renderMessage: every kind in all 13 locales > campaigns.test · fr 1`] 
   "subject": "[Test] Early-bird tickets are back",
   "text": "[Test] Early-bird tickets are back
 
-Bonjour,
+Bonjour !
 
 Un envoi de test de votre campagne.
 
@@ -2750,7 +2750,7 @@ exports[`renderMessage: every kind in all 13 locales > campaigns.test · hi 1`] 
   "subject": "[परीक्षण] Early-bird tickets are back",
   "text": "[परीक्षण] Early-bird tickets are back
 
-नमस्ते,
+नमस्ते!
 
 आपके अभियान का परीक्षण भेजना।
 
@@ -2766,7 +2766,7 @@ exports[`renderMessage: every kind in all 13 locales > campaigns.test · it 1`] 
   "subject": "[Prova] Early-bird tickets are back",
   "text": "[Prova] Early-bird tickets are back
 
-Ciao,
+Ciao!
 
 Un invio di prova della tua campagna.
 
@@ -2798,7 +2798,7 @@ exports[`renderMessage: every kind in all 13 locales > campaigns.test · nl 1`] 
   "subject": "[Test] Early-bird tickets are back",
   "text": "[Test] Early-bird tickets are back
 
-Hallo,
+Hallo!
 
 Een testverzending van je campagne.
 
@@ -2846,7 +2846,7 @@ exports[`renderMessage: every kind in all 13 locales > campaigns.test · zh-CN 1
   "subject": "[测试] Early-bird tickets are back",
   "text": "[测试] Early-bird tickets are back
 
-您好：
+您好！
 
 你的营销活动的测试发送。
 
@@ -2862,7 +2862,7 @@ exports[`renderMessage: every kind in all 13 locales > campaigns.test · zh-TW 1
   "subject": "[測試] Early-bird tickets are back",
   "text": "[測試] Early-bird tickets are back
 
-您好：
+您好！
 
 你的行銷活動的測試寄送。
 
@@ -5426,7 +5426,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · ar
   "subject": "305117 هو رمز تأكيد بريدك الإلكتروني",
   "text": "305117 هو رمز تأكيد بريدك الإلكتروني
 
-مرحبًا،
+مرحبًا!
 
 أدخل 305117 لتأكيد بريدك الإلكتروني وإتمام طلبك لدى Lakeside Events. يعمل الرمز مرة واحدة وتنتهي صلاحيته خلال 10 دقائق. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
 
@@ -5442,7 +5442,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · de
   "subject": "305117 ist Ihr Code zur Bestätigung Ihrer E-Mail",
   "text": "305117 ist Ihr Code zur Bestätigung Ihrer E-Mail
 
-Hallo,
+Hallo!
 
 Geben Sie 305117 ein, um Ihre E-Mail zu bestätigen und Ihre Bestellung bei Lakeside Events abzuschließen. Der Code gilt einmal und läuft in 10 Minuten ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.
 
@@ -5458,7 +5458,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · en
   "subject": "305117 is your code to confirm your email",
   "text": "305117 is your code to confirm your email
 
-Hello,
+Hello!
 
 Enter 305117 to confirm your email and finish your order with Lakeside Events. The code works once and expires in 10 minutes. If you didn't ask for it, you can ignore this email.
 
@@ -5474,7 +5474,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · es
   "subject": "305117 es tu código para confirmar tu correo",
   "text": "305117 es tu código para confirmar tu correo
 
-Hola:
+¡Hola!
 
 Introduce 305117 para confirmar tu correo y terminar tu pedido con Lakeside Events. El código se usa una sola vez y caduca en 10 minutos. Si no lo pediste, puedes ignorar este correo.
 
@@ -5490,7 +5490,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · fr
   "subject": "305117 est votre code pour confirmer votre e-mail",
   "text": "305117 est votre code pour confirmer votre e-mail
 
-Bonjour,
+Bonjour !
 
 Saisissez 305117 pour confirmer votre e-mail et finaliser votre commande avec Lakeside Events. Le code ne fonctionne qu'une fois et expire dans 10 minutes. Si vous ne l'avez pas demandé, ignorez cet e-mail.
 
@@ -5506,7 +5506,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · hi
   "subject": "305117 आपका ईमेल पुष्टि कोड है",
   "text": "305117 आपका ईमेल पुष्टि कोड है
 
-नमस्ते,
+नमस्ते!
 
 अपना ईमेल पुष्ट करने और Lakeside Events के साथ अपना ऑर्डर पूरा करने के लिए 305117 दर्ज करें। कोड एक बार काम करता है और 10 मिनट में समाप्त हो जाता है। अगर आपने इसे नहीं माँगा, तो इस ईमेल को अनदेखा करें।
 
@@ -5522,7 +5522,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · it
   "subject": "305117 è il tuo codice per confermare l'email",
   "text": "305117 è il tuo codice per confermare l'email
 
-Ciao,
+Ciao!
 
 Inserisci 305117 per confermare la tua email e completare l'ordine con Lakeside Events. Il codice vale una volta e scade tra 10 minuti. Se non l'hai richiesto, ignora questa email.
 
@@ -5554,7 +5554,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · nl
   "subject": "305117 is je code om je e-mail te bevestigen",
   "text": "305117 is je code om je e-mail te bevestigen
 
-Hallo,
+Hallo!
 
 Voer 305117 in om je e-mail te bevestigen en je bestelling bij Lakeside Events af te ronden. De code werkt één keer en verloopt over 10 minuten. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.
 
@@ -5602,7 +5602,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · zh
   "subject": "305117 是您的邮箱确认码",
   "text": "305117 是您的邮箱确认码
 
-您好：
+您好！
 
 输入 305117 以确认您的邮箱并完成在 Lakeside Events 的订单。验证码仅可使用一次，10 分钟后失效。如果这不是您本人的请求，请忽略此邮件。
 
@@ -5618,7 +5618,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.checkout-code · zh
   "subject": "305117 是您的電子郵件確認碼",
   "text": "305117 是您的電子郵件確認碼
 
-您好：
+您好！
 
 輸入 305117 以確認您的電子郵件並完成在 Lakeside Events 的訂單。驗證碼僅能使用一次，10 分鐘後失效。如果這不是您本人的要求，請忽略此郵件。
 
@@ -5634,7 +5634,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.sign-in · ar 1`] =
   "subject": "305117 هو رمزك لصفحة تذاكري",
   "text": "305117 هو رمزك لصفحة تذاكري
 
-مرحبًا،
+مرحبًا!
 
 أدخل 305117 لرؤية تذاكرك على Lakeside Events، أو استخدم الزر أدناه في المتصفح نفسه. تنتهي صلاحية الرمز خلال 10 دقائق والزر خلال 15 دقيقة؛ ويعمل كل منهما مرة واحدة. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
 
@@ -5652,7 +5652,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.sign-in · de 1`] =
   "subject": "305117 ist Ihr Code für Meine Tickets",
   "text": "305117 ist Ihr Code für Meine Tickets
 
-Hallo,
+Hallo!
 
 Geben Sie 305117 ein, um Ihre Tickets auf Lakeside Events zu sehen, oder nutzen Sie die Schaltfläche unten im selben Browser. Der Code läuft in 10 Minuten ab, die Schaltfläche in 15 Minuten; beide gelten einmal. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.
 
@@ -5670,7 +5670,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.sign-in · en 1`] =
   "subject": "305117 is your code for My tickets",
   "text": "305117 is your code for My tickets
 
-Hello,
+Hello!
 
 Enter 305117 to see your tickets on Lakeside Events, or use the button below in the same browser. The code expires in 10 minutes and the button in 15 minutes; each works once. If you didn't ask for it, you can ignore this email.
 
@@ -5688,7 +5688,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.sign-in · es 1`] =
   "subject": "305117 es tu código para Mis entradas",
   "text": "305117 es tu código para Mis entradas
 
-Hola:
+¡Hola!
 
 Introduce 305117 para ver tus entradas en Lakeside Events, o usa el botón de abajo en el mismo navegador. El código caduca en 10 minutos y el botón en 15 minutos; cada uno funciona una vez. Si no lo pediste, puedes ignorar este correo.
 
@@ -5706,7 +5706,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.sign-in · fr 1`] =
   "subject": "305117 est votre code pour Mes billets",
   "text": "305117 est votre code pour Mes billets
 
-Bonjour,
+Bonjour !
 
 Saisissez 305117 pour voir vos billets sur Lakeside Events, ou utilisez le bouton ci-dessous dans le même navigateur. Le code expire dans 10 minutes et le bouton dans 15 minutes ; chacun ne fonctionne qu'une fois. Si vous ne l'avez pas demandé, ignorez cet e-mail.
 
@@ -5724,7 +5724,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.sign-in · hi 1`] =
   "subject": "305117 मेरे टिकट के लिए आपका कोड है",
   "text": "305117 मेरे टिकट के लिए आपका कोड है
 
-नमस्ते,
+नमस्ते!
 
 Lakeside Events पर अपने टिकट देखने के लिए 305117 दर्ज करें, या उसी ब्राउज़र में नीचे दिए बटन का उपयोग करें। कोड 10 मिनट में और बटन 15 मिनट में समाप्त होता है; हर एक एक बार काम करता है। अगर आपने इसे नहीं माँगा, तो इस ईमेल को अनदेखा करें।
 
@@ -5742,7 +5742,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.sign-in · it 1`] =
   "subject": "305117 è il tuo codice per I miei biglietti",
   "text": "305117 è il tuo codice per I miei biglietti
 
-Ciao,
+Ciao!
 
 Inserisci 305117 per vedere i tuoi biglietti su Lakeside Events, oppure usa il pulsante qui sotto nello stesso browser. Il codice scade tra 10 minuti e il pulsante tra 15 minuti; ciascuno vale una volta. Se non l'hai richiesto, ignora questa email.
 
@@ -5778,7 +5778,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.sign-in · nl 1`] =
   "subject": "305117 is je code voor Mijn tickets",
   "text": "305117 is je code voor Mijn tickets
 
-Hallo,
+Hallo!
 
 Voer 305117 in om je tickets op Lakeside Events te zien, of gebruik de knop hieronder in dezelfde browser. De code verloopt over 10 minuten en de knop over 15 minuten; elk werkt één keer. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.
 
@@ -5832,7 +5832,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.sign-in · zh-CN 1`
   "subject": "305117 是您的“我的门票”验证码",
   "text": "305117 是您的“我的门票”验证码
 
-您好：
+您好！
 
 输入 305117 即可在 Lakeside Events 查看您的门票，也可以在同一浏览器中使用下方按钮。验证码 10 分钟后失效，按钮 15 分钟后失效；每个仅可使用一次。如果这不是您本人的请求，请忽略此邮件。
 
@@ -5850,7 +5850,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.sign-in · zh-TW 1`
   "subject": "305117 是您的「我的票券」驗證碼",
   "text": "305117 是您的「我的票券」驗證碼
 
-您好：
+您好！
 
 輸入 305117 即可在 Lakeside Events 查看您的票券，也可以在同一瀏覽器中使用下方按鈕。驗證碼 10 分鐘後失效，按鈕 15 分鐘後失效；每個僅能使用一次。如果這不是您本人的要求，請忽略此郵件。
 
@@ -5868,7 +5868,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · ar
   "subject": "305117 هو رمزك للانضمام إلى قائمة الانتظار",
   "text": "305117 هو رمزك للانضمام إلى قائمة الانتظار
 
-مرحبًا،
+مرحبًا!
 
 أدخل 305117 لتأكيد بريدك الإلكتروني والانضمام إلى قائمة انتظار Lakeside Jazz Night لدى Lakeside Events. يعمل الرمز مرة واحدة وتنتهي صلاحيته خلال 10 دقائق. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
 
@@ -5884,7 +5884,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · de
   "subject": "305117 ist Ihr Code für die Warteliste",
   "text": "305117 ist Ihr Code für die Warteliste
 
-Hallo,
+Hallo!
 
 Geben Sie 305117 ein, um Ihre E-Mail zu bestätigen und sich bei Lakeside Events auf die Warteliste für Lakeside Jazz Night zu setzen. Der Code gilt einmal und läuft in 10 Minuten ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren.
 
@@ -5900,7 +5900,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · en
   "subject": "305117 is your code to join the waitlist",
   "text": "305117 is your code to join the waitlist
 
-Hello,
+Hello!
 
 Enter 305117 to confirm your email and join the waitlist for Lakeside Jazz Night with Lakeside Events. The code works once and expires in 10 minutes. If you didn't ask for it, you can ignore this email.
 
@@ -5916,7 +5916,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · es
   "subject": "305117 es tu código para unirte a la lista de espera",
   "text": "305117 es tu código para unirte a la lista de espera
 
-Hola:
+¡Hola!
 
 Introduce 305117 para confirmar tu correo y unirte a la lista de espera de Lakeside Jazz Night con Lakeside Events. El código se usa una sola vez y caduca en 10 minutos. Si no lo pediste, puedes ignorar este correo.
 
@@ -5932,7 +5932,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · fr
   "subject": "305117 est votre code pour rejoindre la liste d'attente",
   "text": "305117 est votre code pour rejoindre la liste d'attente
 
-Bonjour,
+Bonjour !
 
 Saisissez 305117 pour confirmer votre e-mail et rejoindre la liste d'attente de Lakeside Jazz Night avec Lakeside Events. Le code ne fonctionne qu'une fois et expire dans 10 minutes. Si vous ne l'avez pas demandé, ignorez cet e-mail.
 
@@ -5948,7 +5948,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · hi
   "subject": "305117 प्रतीक्षा सूची में शामिल होने के लिए आपका कोड है",
   "text": "305117 प्रतीक्षा सूची में शामिल होने के लिए आपका कोड है
 
-नमस्ते,
+नमस्ते!
 
 अपना ईमेल पुष्ट करने और Lakeside Events के साथ Lakeside Jazz Night की प्रतीक्षा सूची में शामिल होने के लिए 305117 दर्ज करें। कोड एक बार काम करता है और 10 मिनट में समाप्त हो जाता है। अगर आपने इसे नहीं माँगा, तो इस ईमेल को अनदेखा करें।
 
@@ -5964,7 +5964,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · it
   "subject": "305117 è il tuo codice per entrare nella lista d'attesa",
   "text": "305117 è il tuo codice per entrare nella lista d'attesa
 
-Ciao,
+Ciao!
 
 Inserisci 305117 per confermare la tua email ed entrare nella lista d'attesa di Lakeside Jazz Night con Lakeside Events. Il codice vale una volta e scade tra 10 minuti. Se non l'hai richiesto, ignora questa email.
 
@@ -5996,7 +5996,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · nl
   "subject": "305117 is je code om op de wachtlijst te komen",
   "text": "305117 is je code om op de wachtlijst te komen
 
-Hallo,
+Hallo!
 
 Voer 305117 in om je e-mail te bevestigen en bij Lakeside Events op de wachtlijst voor Lakeside Jazz Night te komen. De code werkt één keer en verloopt over 10 minuten. Heb je hier niet om gevraagd, dan kun je deze e-mail negeren.
 
@@ -6044,7 +6044,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · zh
   "subject": "305117 是您加入候补名单的验证码",
   "text": "305117 是您加入候补名单的验证码
 
-您好：
+您好！
 
 输入 305117 以确认您的邮箱并加入 Lakeside Events 的 Lakeside Jazz Night 候补名单。验证码仅可使用一次，10 分钟后失效。如果这不是您本人的请求，请忽略此邮件。
 
@@ -6060,7 +6060,7 @@ exports[`renderMessage: every kind in all 13 locales > guest.waitlist-code · zh
   "subject": "305117 是您加入候補名單的驗證碼",
   "text": "305117 是您加入候補名單的驗證碼
 
-您好：
+您好！
 
 輸入 305117 以確認您的電子郵件並加入 Lakeside Events 的 Lakeside Jazz Night 候補名單。驗證碼僅能使用一次，10 分鐘後失效。如果這不是您本人的要求，請忽略此郵件。
 
@@ -6076,7 +6076,7 @@ exports[`renderMessage: every kind in all 13 locales > guests.invitation · ar 1
   "subject": "You're invited: Lopez Chen Wedding",
   "text": "You're invited: Lopez Chen Wedding
 
-مرحبًا،
+مرحبًا!
 
 Dear The Garcia family,
 
@@ -6096,7 +6096,7 @@ exports[`renderMessage: every kind in all 13 locales > guests.invitation · de 1
   "subject": "You're invited: Lopez Chen Wedding",
   "text": "You're invited: Lopez Chen Wedding
 
-Hallo,
+Hallo!
 
 Dear The Garcia family,
 
@@ -6116,7 +6116,7 @@ exports[`renderMessage: every kind in all 13 locales > guests.invitation · en 1
   "subject": "You're invited: Lopez Chen Wedding",
   "text": "You're invited: Lopez Chen Wedding
 
-Hello,
+Hello!
 
 Dear The Garcia family,
 
@@ -6136,7 +6136,7 @@ exports[`renderMessage: every kind in all 13 locales > guests.invitation · es 1
   "subject": "You're invited: Lopez Chen Wedding",
   "text": "You're invited: Lopez Chen Wedding
 
-Hola:
+¡Hola!
 
 Dear The Garcia family,
 
@@ -6156,7 +6156,7 @@ exports[`renderMessage: every kind in all 13 locales > guests.invitation · fr 1
   "subject": "You're invited: Lopez Chen Wedding",
   "text": "You're invited: Lopez Chen Wedding
 
-Bonjour,
+Bonjour !
 
 Dear The Garcia family,
 
@@ -6176,7 +6176,7 @@ exports[`renderMessage: every kind in all 13 locales > guests.invitation · hi 1
   "subject": "You're invited: Lopez Chen Wedding",
   "text": "You're invited: Lopez Chen Wedding
 
-नमस्ते,
+नमस्ते!
 
 Dear The Garcia family,
 
@@ -6196,7 +6196,7 @@ exports[`renderMessage: every kind in all 13 locales > guests.invitation · it 1
   "subject": "You're invited: Lopez Chen Wedding",
   "text": "You're invited: Lopez Chen Wedding
 
-Ciao,
+Ciao!
 
 Dear The Garcia family,
 
@@ -6236,7 +6236,7 @@ exports[`renderMessage: every kind in all 13 locales > guests.invitation · nl 1
   "subject": "You're invited: Lopez Chen Wedding",
   "text": "You're invited: Lopez Chen Wedding
 
-Hallo,
+Hallo!
 
 Dear The Garcia family,
 
@@ -6296,7 +6296,7 @@ exports[`renderMessage: every kind in all 13 locales > guests.invitation · zh-C
   "subject": "You're invited: Lopez Chen Wedding",
   "text": "You're invited: Lopez Chen Wedding
 
-您好：
+您好！
 
 Dear The Garcia family,
 
@@ -6316,7 +6316,7 @@ exports[`renderMessage: every kind in all 13 locales > guests.invitation · zh-T
   "subject": "You're invited: Lopez Chen Wedding",
   "text": "You're invited: Lopez Chen Wedding
 
-您好：
+您好！
 
 Dear The Garcia family,
 
@@ -7142,7 +7142,7 @@ exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · 
   "subject": "تم إيقاف الرسائل مؤقتًا لـ Lakeside Events",
   "text": "تم إيقاف الرسائل مؤقتًا لـ Lakeside Events
 
-مرحبًا،
+مرحبًا!
 
 بلغت الشكاوى من رسائل Lakeside Events الإلكترونية 0.42‎%‎، وهو أعلى من الحد 0.3%، لذا أوقفت Yayatoh التذكيرات والتحديثات والتسويق مؤقتًا. ما زالت التذاكر والإيصالات والردود تُرسل. سيراجع دعم Yayatoh الأمر معك قبل استئناف الإرسال.
 
@@ -7158,7 +7158,7 @@ exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · 
   "subject": "Nachrichten für Lakeside Events pausiert",
   "text": "Nachrichten für Lakeside Events pausiert
 
-Hallo,
+Hallo!
 
 Beschwerden über die E-Mails von Lakeside Events erreichten 0,42 % und damit mehr als die Grenze von 0,3 %. Yayatoh hat daher Erinnerungen, Neuigkeiten und Marketing pausiert. Tickets, Belege und Antworten werden weiter versendet. Der Yayatoh-Support prüft das mit Ihnen, bevor der Versand wieder startet.
 
@@ -7174,7 +7174,7 @@ exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · 
   "subject": "Messaging paused for Lakeside Events",
   "text": "Messaging paused for Lakeside Events
 
-Hello,
+Hello!
 
 Complaints about Lakeside Events's emails reached 0.42%, above the 0.3% limit, so Yayatoh paused your reminders, updates and marketing. Tickets, receipts and replies still go out. Yayatoh support will review it with you before messaging resumes.
 
@@ -7190,7 +7190,7 @@ exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · 
   "subject": "Mensajes en pausa para Lakeside Events",
   "text": "Mensajes en pausa para Lakeside Events
 
-Hola:
+¡Hola!
 
 Las quejas sobre los correos de Lakeside Events llegaron al 0,42 %, por encima del límite del 0,3 %, así que Yayatoh pausó tus recordatorios, novedades y marketing. Las entradas, los recibos y las respuestas se siguen enviando. El soporte de Yayatoh lo revisará contigo antes de reanudar los mensajes.
 
@@ -7206,7 +7206,7 @@ exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · 
   "subject": "Messages suspendus pour Lakeside Events",
   "text": "Messages suspendus pour Lakeside Events
 
-Bonjour,
+Bonjour !
 
 Les plaintes concernant les e-mails de Lakeside Events ont atteint 0,42 %, au-delà de la limite de 0,3 %, donc Yayatoh a suspendu vos rappels, actualités et envois marketing. Les billets, reçus et réponses partent toujours. Le support Yayatoh examinera la situation avec vous avant la reprise des envois.
 
@@ -7222,7 +7222,7 @@ exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · 
   "subject": "Lakeside Events के संदेश रोके गए",
   "text": "Lakeside Events के संदेश रोके गए
 
-नमस्ते,
+नमस्ते!
 
 Lakeside Events के ईमेल के बारे में शिकायतें 0.42% तक पहुँच गईं, जो 0.3% की सीमा से ऊपर है, इसलिए Yayatoh ने आपके रिमाइंडर, अपडेट और मार्केटिंग रोक दिए हैं। टिकट, रसीदें और जवाब अब भी भेजे जाते हैं। संदेश फिर शुरू होने से पहले Yayatoh सहायता आपके साथ इसकी समीक्षा करेगी।
 
@@ -7238,7 +7238,7 @@ exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · 
   "subject": "Messaggi in pausa per Lakeside Events",
   "text": "Messaggi in pausa per Lakeside Events
 
-Ciao,
+Ciao!
 
 I reclami sulle email di Lakeside Events hanno raggiunto il 0,42%, oltre il limite dello 0,3%, quindi Yayatoh ha messo in pausa promemoria, aggiornamenti e marketing. Biglietti, ricevute e risposte continuano a partire. Il supporto Yayatoh verificherà con te prima di riprendere gli invii.
 
@@ -7270,7 +7270,7 @@ exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · 
   "subject": "Berichten gepauzeerd voor Lakeside Events",
   "text": "Berichten gepauzeerd voor Lakeside Events
 
-Hallo,
+Hallo!
 
 Klachten over de e-mails van Lakeside Events bereikten 0,42%, boven de grens van 0,3%, dus Yayatoh heeft je herinneringen, updates en marketing gepauzeerd. Tickets, bonnen en antwoorden gaan nog steeds uit. Yayatoh-support bekijkt het met je voordat het versturen weer start.
 
@@ -7318,7 +7318,7 @@ exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · 
   "subject": "Lakeside Events 的消息发送已暂停",
   "text": "Lakeside Events 的消息发送已暂停
 
-您好：
+您好！
 
 针对 Lakeside Events 邮件的投诉率达到 0.42%，超过 0.3% 的上限，因此 Yayatoh 已暂停你的提醒、动态和营销消息。门票、收据和回复仍会照常发送。恢复发送前，Yayatoh 支持团队会与你一起核查。
 
@@ -7334,7 +7334,7 @@ exports[`renderMessage: every kind in all 13 locales > messaging.auto_paused · 
   "subject": "Lakeside Events 的訊息傳送已暫停",
   "text": "Lakeside Events 的訊息傳送已暫停
 
-您好：
+您好！
 
 針對 Lakeside Events 電子郵件的投訴率達到 0.42%，超過 0.3% 的上限，因此 Yayatoh 已暫停你的提醒、動態和行銷訊息。門票、收據和回覆仍會照常傳送。恢復傳送前，Yayatoh 支援團隊會與你一起檢視。
 
@@ -7831,7 +7831,7 @@ exports[`renderMessage: every kind in all 13 locales > notifications.test · ar 
   "subject": "إشعار تجريبي",
   "text": "إشعار تجريبي
 
-مرحبًا،
+مرحبًا!
 
 الإشعارات تعمل.
 
@@ -7847,7 +7847,7 @@ exports[`renderMessage: every kind in all 13 locales > notifications.test · de 
   "subject": "Testbenachrichtigung",
   "text": "Testbenachrichtigung
 
-Hallo,
+Hallo!
 
 Benachrichtigungen funktionieren.
 
@@ -7863,7 +7863,7 @@ exports[`renderMessage: every kind in all 13 locales > notifications.test · en 
   "subject": "Test notification",
   "text": "Test notification
 
-Hello,
+Hello!
 
 Notifications are working.
 
@@ -7879,7 +7879,7 @@ exports[`renderMessage: every kind in all 13 locales > notifications.test · es 
   "subject": "Notificación de prueba",
   "text": "Notificación de prueba
 
-Hola:
+¡Hola!
 
 Las notificaciones funcionan.
 
@@ -7895,7 +7895,7 @@ exports[`renderMessage: every kind in all 13 locales > notifications.test · fr 
   "subject": "Notification de test",
   "text": "Notification de test
 
-Bonjour,
+Bonjour !
 
 Les notifications fonctionnent.
 
@@ -7911,7 +7911,7 @@ exports[`renderMessage: every kind in all 13 locales > notifications.test · hi 
   "subject": "परीक्षण सूचना",
   "text": "परीक्षण सूचना
 
-नमस्ते,
+नमस्ते!
 
 सूचनाएँ काम कर रही हैं।
 
@@ -7927,7 +7927,7 @@ exports[`renderMessage: every kind in all 13 locales > notifications.test · it 
   "subject": "Notifica di prova",
   "text": "Notifica di prova
 
-Ciao,
+Ciao!
 
 Le notifiche funzionano.
 
@@ -7959,7 +7959,7 @@ exports[`renderMessage: every kind in all 13 locales > notifications.test · nl 
   "subject": "Testmelding",
   "text": "Testmelding
 
-Hallo,
+Hallo!
 
 Meldingen werken.
 
@@ -8007,7 +8007,7 @@ exports[`renderMessage: every kind in all 13 locales > notifications.test · zh-
   "subject": "测试通知",
   "text": "测试通知
 
-您好：
+您好！
 
 通知功能正常。
 
@@ -8023,7 +8023,7 @@ exports[`renderMessage: every kind in all 13 locales > notifications.test · zh-
   "subject": "測試通知",
   "text": "測試通知
 
-您好：
+您好！
 
 通知功能正常。
 
@@ -10886,7 +10886,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.destination-chan
   "subject": "حساب جديد لاستلام مدفوعات Lakeside Events",
   "text": "حساب جديد لاستلام مدفوعات Lakeside Events
 
-مرحبًا،
+مرحبًا!
 
 تم ربط حساب لاستلام المدفوعات بـ Lakeside Events. حرصًا على أمانك، لن تُحوَّل إليه أي أموال قبل 13‏/06‏/2027، 10:00 ص. إذا لم تُجرِ هذا التغيير، فتواصل مع دعم Yayatoh فورًا.
 
@@ -10904,7 +10904,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.destination-chan
   "subject": "Neues Auszahlungskonto für Lakeside Events",
   "text": "Neues Auszahlungskonto für Lakeside Events
 
-Hallo,
+Hallo!
 
 Ein Auszahlungskonto wurde mit Lakeside Events verbunden. Zu deiner Sicherheit wird vor dem 13.06.2027, 10:00 kein Geld darauf überwiesen. Wenn du diese Änderung nicht vorgenommen hast, wende dich sofort an den Yayatoh-Support.
 
@@ -10922,7 +10922,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.destination-chan
   "subject": "A new payout account for Lakeside Events",
   "text": "A new payout account for Lakeside Events
 
-Hello,
+Hello!
 
 A payout account was connected to Lakeside Events. For your security, no money is sent to it before Jun 13, 2027, 10:00 AM. If you didn't make this change, contact Yayatoh support right away.
 
@@ -10940,7 +10940,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.destination-chan
   "subject": "Nueva cuenta de pagos para Lakeside Events",
   "text": "Nueva cuenta de pagos para Lakeside Events
 
-Hola:
+¡Hola!
 
 Se conectó una cuenta de pagos a Lakeside Events. Por tu seguridad, no se le enviará dinero antes del 13 jun 2027, 10:00. Si no hiciste este cambio, contacta de inmediato con el soporte de Yayatoh.
 
@@ -10958,7 +10958,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.destination-chan
   "subject": "Nouveau compte de versement pour Lakeside Events",
   "text": "Nouveau compte de versement pour Lakeside Events
 
-Bonjour,
+Bonjour !
 
 Un compte de versement a été associé à Lakeside Events. Par sécurité, aucun virement n'y sera effectué avant le 13 juin 2027, 10:00. Si vous n'êtes pas à l'origine de ce changement, contactez immédiatement l'assistance Yayatoh.
 
@@ -10976,7 +10976,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.destination-chan
   "subject": "Lakeside Events के लिए नया भुगतान खाता",
   "text": "Lakeside Events के लिए नया भुगतान खाता
 
-नमस्ते,
+नमस्ते!
 
 Lakeside Events से एक भुगतान खाता जोड़ा गया है। आपकी सुरक्षा के लिए, 13 जून 2027, 10:00 am से पहले इसमें कोई पैसा नहीं भेजा जाएगा। अगर यह बदलाव आपने नहीं किया है, तो तुरंत Yayatoh सहायता से संपर्क करें।
 
@@ -10994,7 +10994,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.destination-chan
   "subject": "Nuovo conto per i pagamenti di Lakeside Events",
   "text": "Nuovo conto per i pagamenti di Lakeside Events
 
-Ciao,
+Ciao!
 
 È stato collegato un conto per i pagamenti a Lakeside Events. Per sicurezza, non verrà inviato denaro prima del 13 giu 2027, 10:00. Se non hai effettuato tu questa modifica, contatta subito l'assistenza Yayatoh.
 
@@ -11030,7 +11030,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.destination-chan
   "subject": "Nieuwe uitbetalingsrekening voor Lakeside Events",
   "text": "Nieuwe uitbetalingsrekening voor Lakeside Events
 
-Hallo,
+Hallo!
 
 Er is een uitbetalingsrekening gekoppeld aan Lakeside Events. Voor je veiligheid wordt er vóór 13 jun 2027, 10:00 geen geld naar overgemaakt. Heb je deze wijziging niet zelf gedaan? Neem dan meteen contact op met Yayatoh-support.
 
@@ -11084,7 +11084,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.destination-chan
   "subject": "Lakeside Events 的新收款账户",
   "text": "Lakeside Events 的新收款账户
 
-您好：
+您好！
 
 已为 Lakeside Events 关联收款账户。为了您的安全，在 2027年6月13日 10:00 之前不会向该账户转账。如果这不是您本人所做的更改，请立即联系 Yayatoh 支持。
 
@@ -11102,7 +11102,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.destination-chan
   "subject": "Lakeside Events 的新收款帳戶",
   "text": "Lakeside Events 的新收款帳戶
 
-您好：
+您好！
 
 已為 Lakeside Events 連結收款帳戶。為了您的安全，在 2027年6月13日 上午10:00 之前不會轉帳至此帳戶。如果這不是您本人所做的變更，請立即聯絡 Yayatoh 支援。
 
@@ -11120,7 +11120,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline
   "subject": "موعد أدلة النزاع يقترب: Lakeside Jazz Night",
   "text": "موعد أدلة النزاع يقترب: Lakeside Jazz Night
 
-مرحبًا،
+مرحبًا!
 
 يحين موعد أدلة نزاع بقيمة ‏45.00 US$ على طلب لفعالية Lakeside Jazz Night خلال 20 ساعة. راجعها وأرسلها قبل الموعد النهائي.
 
@@ -11137,7 +11137,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline
   "subject": "Nachweise für Rückbuchung bald fällig: Lakeside Jazz Night",
   "text": "Nachweise für Rückbuchung bald fällig: Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Die Nachweise für eine Rückbuchung über 45,00 $ zu einer Bestellung für Lakeside Jazz Night sind in 20 Stunden fällig. Prüfe sie und reiche sie vor Fristende ein.
 
@@ -11154,7 +11154,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline
   "subject": "Dispute evidence due soon: Lakeside Jazz Night",
   "text": "Dispute evidence due soon: Lakeside Jazz Night
 
-Hello,
+Hello!
 
 The evidence for a $45.00 dispute on an order for Lakeside Jazz Night is due in 20 hours. Review it and submit it before the deadline.
 
@@ -11171,7 +11171,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline
   "subject": "Pruebas de disputa por vencer: Lakeside Jazz Night",
   "text": "Pruebas de disputa por vencer: Lakeside Jazz Night
 
-Hola:
+¡Hola!
 
 Las pruebas de una disputa de 45,00 US$ sobre un pedido para Lakeside Jazz Night vencen en 20 horas. Revísalas y envíalas antes del plazo.
 
@@ -11188,7 +11188,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline
   "subject": "Preuves de litige bientôt dues : Lakeside Jazz Night",
   "text": "Preuves de litige bientôt dues : Lakeside Jazz Night
 
-Bonjour,
+Bonjour !
 
 Les preuves d’un litige de 45,00 $US sur une commande pour Lakeside Jazz Night sont dues dans 20 heures. Vérifiez-les et envoyez-les avant l’échéance.
 
@@ -11205,7 +11205,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline
   "subject": "विवाद के साक्ष्य की समय-सीमा निकट: Lakeside Jazz Night",
   "text": "विवाद के साक्ष्य की समय-सीमा निकट: Lakeside Jazz Night
 
-नमस्ते,
+नमस्ते!
 
 Lakeside Jazz Night के एक ऑर्डर पर $45.00 के विवाद के साक्ष्य 20 घंटे में देय हैं। समय-सीमा से पहले इनकी समीक्षा करके जमा करें।
 
@@ -11222,7 +11222,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline
   "subject": "Prove della contestazione in scadenza: Lakeside Jazz Night",
   "text": "Prove della contestazione in scadenza: Lakeside Jazz Night
 
-Ciao,
+Ciao!
 
 Le prove per una contestazione di 45,00 USD su un ordine per Lakeside Jazz Night scadono tra 20 ore. Controllale e inviale prima della scadenza.
 
@@ -11256,7 +11256,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline
   "subject": "Bewijs voor terugboeking bijna verschuldigd: Lakeside Jazz Night",
   "text": "Bewijs voor terugboeking bijna verschuldigd: Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Het bewijs voor een terugboeking van US$ 45,00 op een bestelling voor Lakeside Jazz Night moet binnen 20 uur binnen zijn. Controleer het en dien het in vóór de deadline.
 
@@ -11307,7 +11307,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline
   "subject": "争议证据即将到期:Lakeside Jazz Night",
   "text": "争议证据即将到期:Lakeside Jazz Night
 
-您好：
+您好！
 
 Lakeside Jazz Night 一笔订单上金额为 US$45.00 的争议证据将在 20 小时后到期。请在截止前审核并提交。
 
@@ -11324,7 +11324,7 @@ exports[`renderMessage: every kind in all 13 locales > payments.dispute-deadline
   "subject": "爭議證據即將到期:Lakeside Jazz Night",
   "text": "爭議證據即將到期:Lakeside Jazz Night
 
-您好：
+您好！
 
 Lakeside Jazz Night 一筆訂單上金額 US$45.00 的爭議證據將在 20 小時後到期。請在截止前審核並提交。
 
@@ -11341,7 +11341,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.invite · ar 1`] =
   "subject": "دعوة إلى بوابة Midwest Leadership Summit",
   "text": "دعوة إلى بوابة Midwest Leadership Summit
 
-مرحبًا،
+مرحبًا!
 
 دعتك Lakeside Events إلى بوابة Midwest Leadership Summit بصفة متحدث. هناك يمكنك رؤية جلساتك وتحديث ملفك الشخصي وإنجاز مهامك. سيطلب الزر رمز دخول يُرسل إلى هذا العنوان.
 
@@ -11359,7 +11359,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.invite · de 1`] =
   "subject": "Einladung zum Portal von Midwest Leadership Summit",
   "text": "Einladung zum Portal von Midwest Leadership Summit
 
-Hallo,
+Hallo!
 
 Lakeside Events hat Sie als Speaker zum Portal von Midwest Leadership Summit eingeladen. Dort sehen Sie Ihre Sessions, aktualisieren Ihr Profil und erledigen Ihre Aufgaben. Die Schaltfläche fragt nach einem Anmeldecode, der an diese Adresse gesendet wird.
 
@@ -11377,7 +11377,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.invite · en 1`] =
   "subject": "You're invited to the Midwest Leadership Summit portal",
   "text": "You're invited to the Midwest Leadership Summit portal
 
-Hello,
+Hello!
 
 Lakeside Events invited you to the portal for Midwest Leadership Summit as speaker. There you can see your sessions, update your profile and complete your tasks. The button asks for a sign-in code sent to this address.
 
@@ -11395,7 +11395,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.invite · es 1`] =
   "subject": "Te invitan al portal de Midwest Leadership Summit",
   "text": "Te invitan al portal de Midwest Leadership Summit
 
-Hola:
+¡Hola!
 
 Lakeside Events te invitó al portal de Midwest Leadership Summit como ponente. Allí puedes ver tus sesiones, actualizar tu perfil y completar tus tareas. El botón pide un código de acceso que se envía a esta dirección.
 
@@ -11413,7 +11413,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.invite · fr 1`] =
   "subject": "Invitation au portail de Midwest Leadership Summit",
   "text": "Invitation au portail de Midwest Leadership Summit
 
-Bonjour,
+Bonjour !
 
 Lakeside Events vous a invité au portail de Midwest Leadership Summit en tant que intervenant. Vous pourrez y voir vos sessions, mettre à jour votre profil et accomplir vos tâches. Le bouton demande un code de connexion envoyé à cette adresse.
 
@@ -11431,7 +11431,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.invite · hi 1`] =
   "subject": "Midwest Leadership Summit पोर्टल के लिए आमंत्रण",
   "text": "Midwest Leadership Summit पोर्टल के लिए आमंत्रण
 
-नमस्ते,
+नमस्ते!
 
 Lakeside Events ने आपको Midwest Leadership Summit के पोर्टल में वक्ता के रूप में आमंत्रित किया है। वहाँ आप अपने सत्र देख सकते हैं, अपनी प्रोफ़ाइल अपडेट कर सकते हैं और अपने कार्य पूरे कर सकते हैं। बटन इस पते पर भेजा गया साइन-इन कोड माँगेगा।
 
@@ -11449,7 +11449,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.invite · it 1`] =
   "subject": "Sei invitato al portale di Midwest Leadership Summit",
   "text": "Sei invitato al portale di Midwest Leadership Summit
 
-Ciao,
+Ciao!
 
 Lakeside Events ti ha invitato al portale di Midwest Leadership Summit come relatore. Lì puoi vedere le tue sessioni, aggiornare il profilo e completare le attività. Il pulsante chiede un codice di accesso inviato a questo indirizzo.
 
@@ -11485,7 +11485,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.invite · nl 1`] =
   "subject": "Uitnodiging voor het portaal van Midwest Leadership Summit",
   "text": "Uitnodiging voor het portaal van Midwest Leadership Summit
 
-Hallo,
+Hallo!
 
 Lakeside Events heeft je als spreker uitgenodigd voor het portaal van Midwest Leadership Summit. Daar zie je je sessies, werk je je profiel bij en rond je je taken af. De knop vraagt om een inlogcode die naar dit adres wordt gestuurd.
 
@@ -11539,7 +11539,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.invite · zh-CN 1`
   "subject": "邀请您加入Midwest Leadership Summit门户",
   "text": "邀请您加入Midwest Leadership Summit门户
 
-您好：
+您好！
 
 Lakeside Events邀请您以演讲者身份加入Midwest Leadership Summit门户。您可以在那里查看自己的场次、更新个人资料并完成任务。点击按钮后需要输入发送到此邮箱的登录验证码。
 
@@ -11557,7 +11557,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.invite · zh-TW 1`
   "subject": "邀請您加入Midwest Leadership Summit入口網站",
   "text": "邀請您加入Midwest Leadership Summit入口網站
 
-您好：
+您好！
 
 Lakeside Events邀請您以講者身分加入Midwest Leadership Summit入口網站。您可以在那裡查看自己的場次、更新個人檔案並完成任務。點選按鈕後需要輸入寄到此信箱的登入驗證碼。
 
@@ -11575,7 +11575,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.sign-in · ar 1`] 
   "subject": "305117 هو رمز الدخول إلى Midwest Leadership Summit",
   "text": "305117 هو رمز الدخول إلى Midwest Leadership Summit
 
-مرحبًا،
+مرحبًا!
 
 أدخل 305117 لتسجيل الدخول إلى بوابة Midwest Leadership Summit، أو استخدم الزر أدناه في المتصفح نفسه. صلاحية الرمز: 10 د. صلاحية الزر: 15 د. يعمل كل منهما مرة واحدة. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
 
@@ -11593,7 +11593,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.sign-in · de 1`] 
   "subject": "305117 ist Ihr Anmeldecode für Midwest Leadership Summit",
   "text": "305117 ist Ihr Anmeldecode für Midwest Leadership Summit
 
-Hallo,
+Hallo!
 
 Geben Sie 305117 ein, um sich im Portal von Midwest Leadership Summit anzumelden, oder nutzen Sie die Schaltfläche unten im selben Browser. Code gültig: 10 Min. Schaltfläche gültig: 15 Min. Beide funktionieren einmal. Wenn Sie ihn nicht angefordert haben, ignorieren Sie diese E-Mail.
 
@@ -11611,7 +11611,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.sign-in · en 1`] 
   "subject": "305117 is your sign-in code for Midwest Leadership Summit",
   "text": "305117 is your sign-in code for Midwest Leadership Summit
 
-Hello,
+Hello!
 
 Enter 305117 to sign in to the Midwest Leadership Summit portal, or use the button below in the same browser. Code valid for: 10 min. Button valid for: 15 min. Each works once. If you didn't ask for it, you can ignore this email.
 
@@ -11629,7 +11629,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.sign-in · es 1`] 
   "subject": "305117 es tu código de acceso para Midwest Leadership Summit",
   "text": "305117 es tu código de acceso para Midwest Leadership Summit
 
-Hola:
+¡Hola!
 
 Introduce 305117 para entrar en el portal de Midwest Leadership Summit o usa el botón de abajo en el mismo navegador. Código válido: 10 min. Botón válido: 15 min. Cada uno funciona una vez. Si no lo pediste, ignora este correo.
 
@@ -11647,7 +11647,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.sign-in · fr 1`] 
   "subject": "305117 est votre code de connexion pour Midwest Leadership Summit",
   "text": "305117 est votre code de connexion pour Midwest Leadership Summit
 
-Bonjour,
+Bonjour !
 
 Saisissez 305117 pour vous connecter au portail de Midwest Leadership Summit, ou utilisez le bouton ci-dessous dans le même navigateur. Code valable : 10 min. Bouton valable : 15 min. Chacun ne fonctionne qu’une fois. Si vous ne l’avez pas demandé, ignorez cet e-mail.
 
@@ -11665,7 +11665,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.sign-in · hi 1`] 
   "subject": "Midwest Leadership Summit के लिए आपका साइन-इन कोड 305117 है",
   "text": "Midwest Leadership Summit के लिए आपका साइन-इन कोड 305117 है
 
-नमस्ते,
+नमस्ते!
 
 Midwest Leadership Summit पोर्टल में साइन इन करने के लिए 305117 दर्ज करें, या इसी ब्राउज़र में नीचे दिया बटन इस्तेमाल करें। कोड की वैधता: 10 मिनट। बटन की वैधता: 15 मिनट। हर एक केवल एक बार काम करता है। अगर आपने यह नहीं माँगा, तो इस ईमेल को अनदेखा करें।
 
@@ -11683,7 +11683,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.sign-in · it 1`] 
   "subject": "305117 è il tuo codice di accesso per Midwest Leadership Summit",
   "text": "305117 è il tuo codice di accesso per Midwest Leadership Summit
 
-Ciao,
+Ciao!
 
 Inserisci 305117 per accedere al portale di Midwest Leadership Summit, oppure usa il pulsante qui sotto nello stesso browser. Codice valido: 10 min. Pulsante valido: 15 min. Ciascuno funziona una volta. Se non l’hai richiesto, ignora questa email.
 
@@ -11719,7 +11719,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.sign-in · nl 1`] 
   "subject": "305117 is je inlogcode voor Midwest Leadership Summit",
   "text": "305117 is je inlogcode voor Midwest Leadership Summit
 
-Hallo,
+Hallo!
 
 Voer 305117 in om in te loggen op het portaal van Midwest Leadership Summit, of gebruik de knop hieronder in dezelfde browser. Code geldig: 10 min. Knop geldig: 15 min. Elk werkt één keer. Heb je dit niet aangevraagd, negeer deze e-mail dan.
 
@@ -11773,7 +11773,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.sign-in · zh-CN 1
   "subject": "305117 是您的Midwest Leadership Summit登录验证码",
   "text": "305117 是您的Midwest Leadership Summit登录验证码
 
-您好：
+您好！
 
 输入 305117 登录Midwest Leadership Summit门户，或在同一浏览器中使用下面的按钮。验证码有效期：10 分钟。按钮有效期：15 分钟。每个只能使用一次。如果不是您本人申请，请忽略此邮件。
 
@@ -11791,7 +11791,7 @@ exports[`renderMessage: every kind in all 13 locales > portal.sign-in · zh-TW 1
   "subject": "305117 是您的Midwest Leadership Summit登入驗證碼",
   "text": "305117 是您的Midwest Leadership Summit登入驗證碼
 
-您好：
+您好！
 
 輸入 305117 登入Midwest Leadership Summit入口網站，或在同一個瀏覽器中使用下方按鈕。驗證碼有效時間：10 分鐘。按鈕有效時間：15 分鐘。每個只能使用一次。如果不是您本人申請，請忽略此郵件。
 
@@ -11809,7 +11809,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · 
   "subject": "بياناتك الشخصية لدى Lakeside Events جاهزة",
   "text": "بياناتك الشخصية لدى Lakeside Events جاهزة
 
-مرحبًا،
+مرحبًا!
 
 ردّت Lakeside Events على طلبك: نسخة من البيانات الشخصية التي تحتفظ بها عنك جاهزة كملف ZIP. يعمل الرابط لمدة 7 أيام. الأرشيف موقّع، لتتمكن من التحقق من أنه لم يُعدَّل.
 
@@ -11827,7 +11827,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · 
   "subject": "Ihre personenbezogenen Daten von Lakeside Events sind bereit",
   "text": "Ihre personenbezogenen Daten von Lakeside Events sind bereit
 
-Hallo,
+Hallo!
 
 Lakeside Events hat Ihre Anfrage beantwortet: Eine Kopie der Daten, die über Sie gespeichert sind, liegt als ZIP-Datei bereit. Der Link gilt 7 Tage. Das Archiv ist signiert, damit Sie prüfen können, dass es nicht verändert wurde.
 
@@ -11845,7 +11845,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · 
   "subject": "Your personal data from Lakeside Events is ready",
   "text": "Your personal data from Lakeside Events is ready
 
-Hello,
+Hello!
 
 Lakeside Events answered your request: a copy of the personal data it holds about you is ready as a ZIP file. The link works for 7 days. The archive is signed, so you can check it was not changed.
 
@@ -11863,7 +11863,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · 
   "subject": "Tus datos personales de Lakeside Events están listos",
   "text": "Tus datos personales de Lakeside Events están listos
 
-Hola:
+¡Hola!
 
 Lakeside Events respondió a tu solicitud: una copia de los datos personales que guarda sobre ti está lista en un archivo ZIP. El enlace funciona durante 7 días. El archivo está firmado, así puedes comprobar que no se modificó.
 
@@ -11881,7 +11881,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · 
   "subject": "Vos données personnelles chez Lakeside Events sont prêtes",
   "text": "Vos données personnelles chez Lakeside Events sont prêtes
 
-Bonjour,
+Bonjour !
 
 Lakeside Events a répondu à votre demande : une copie des données personnelles qu’elle détient sur vous est prête sous forme de fichier ZIP. Le lien fonctionne pendant 7 jours. L’archive est signée : vous pouvez vérifier qu’elle n’a pas été modifiée.
 
@@ -11899,7 +11899,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · 
   "subject": "Lakeside Events से आपका निजी डेटा तैयार है",
   "text": "Lakeside Events से आपका निजी डेटा तैयार है
 
-नमस्ते,
+नमस्ते!
 
 Lakeside Events ने आपके अनुरोध का उत्तर दिया: आपके बारे में रखे गए निजी डेटा की एक प्रति ZIP फ़ाइल के रूप में तैयार है। लिंक 7 दिन तक काम करेगा। संग्रह पर हस्ताक्षर है, ताकि आप जाँच सकें कि इसमें बदलाव नहीं हुआ।
 
@@ -11917,7 +11917,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · 
   "subject": "I tuoi dati personali di Lakeside Events sono pronti",
   "text": "I tuoi dati personali di Lakeside Events sono pronti
 
-Ciao,
+Ciao!
 
 Lakeside Events ha risposto alla tua richiesta: una copia dei dati personali che conserva su di te è pronta in un file ZIP. Il link funziona per 7 giorni. L’archivio è firmato, così puoi verificare che non sia stato modificato.
 
@@ -11953,7 +11953,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · 
   "subject": "Je persoonsgegevens van Lakeside Events staan klaar",
   "text": "Je persoonsgegevens van Lakeside Events staan klaar
 
-Hallo,
+Hallo!
 
 Lakeside Events heeft je verzoek beantwoord: een kopie van de persoonsgegevens die over je zijn opgeslagen staat klaar als zip-bestand. De link werkt 7 dagen. Het archief is ondertekend, zodat je kunt controleren dat het niet is gewijzigd.
 
@@ -12007,7 +12007,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · 
   "subject": "您在 Lakeside Events 的个人数据已准备好",
   "text": "您在 Lakeside Events 的个人数据已准备好
 
-您好：
+您好！
 
 Lakeside Events 已答复您的请求：其保存的您的个人数据副本已整理为 ZIP 文件。链接 7 天内有效。存档带有签名，您可以核实其未被篡改。
 
@@ -12025,7 +12025,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.archive-ready · 
   "subject": "您在 Lakeside Events 的個人資料已準備好",
   "text": "您在 Lakeside Events 的個人資料已準備好
 
-您好：
+您好！
 
 Lakeside Events 已回覆您的請求：其保存的您的個人資料副本已整理為 ZIP 檔案。連結 7 天內有效。封存檔附有簽章，您可以確認其未被竄改。
 
@@ -12043,7 +12043,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · a
   "subject": "محت Lakeside Events بياناتك الشخصية",
   "text": "محت Lakeside Events بياناتك الشخصية
 
-مرحبًا،
+مرحبًا!
 
 محت Lakeside Events بياناتك الشخصية كما طلبت. يجب الاحتفاظ ببعض السجلات بحكم القانون (مثل الطلبات المدفوعة لأغراض الضرائب) بعد إزالة اسمك وبريدك الإلكتروني؛ ويذكرها الإيصال مع السبب. هذه آخر رسالة بهذا الشأن.
 
@@ -12061,7 +12061,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · d
   "subject": "Lakeside Events hat Ihre personenbezogenen Daten gelöscht",
   "text": "Lakeside Events hat Ihre personenbezogenen Daten gelöscht
 
-Hallo,
+Hallo!
 
 Lakeside Events hat Ihre personenbezogenen Daten wie gewünscht gelöscht. Einige Unterlagen müssen gesetzlich aufbewahrt werden (zum Beispiel bezahlte Bestellungen für die Steuer), ohne Ihren Namen und Ihre E-Mail; die Bestätigung listet sie mit Grund auf. Dies ist die letzte E-Mail dazu.
 
@@ -12079,7 +12079,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · e
   "subject": "Lakeside Events erased your personal data",
   "text": "Lakeside Events erased your personal data
 
-Hello,
+Hello!
 
 Lakeside Events erased your personal data as you asked. Some records must be kept by law (for example paid orders for tax), with your name and email removed; the receipt lists them and why. This is the last email you will get about it.
 
@@ -12097,7 +12097,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · e
   "subject": "Lakeside Events borró tus datos personales",
   "text": "Lakeside Events borró tus datos personales
 
-Hola:
+¡Hola!
 
 Lakeside Events borró tus datos personales como pediste. Algunos registros deben conservarse por ley (por ejemplo, pedidos pagados por impuestos), sin tu nombre ni tu correo; el recibo los enumera con el motivo. Este es el último correo sobre el tema.
 
@@ -12115,7 +12115,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · f
   "subject": "Lakeside Events a effacé vos données personnelles",
   "text": "Lakeside Events a effacé vos données personnelles
 
-Bonjour,
+Bonjour !
 
 Lakeside Events a effacé vos données personnelles comme demandé. Certains documents doivent être conservés par la loi (par exemple les commandes payées, pour les impôts), sans votre nom ni votre e-mail ; le reçu les liste avec la raison. C’est le dernier e-mail à ce sujet.
 
@@ -12133,7 +12133,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · h
   "subject": "Lakeside Events ने आपका निजी डेटा मिटा दिया",
   "text": "Lakeside Events ने आपका निजी डेटा मिटा दिया
 
-नमस्ते,
+नमस्ते!
 
 Lakeside Events ने आपके कहे अनुसार आपका निजी डेटा मिटा दिया। कुछ रिकॉर्ड कानूनन रखने होते हैं (जैसे कर के लिए भुगतान किए गए ऑर्डर), आपके नाम और ईमेल के बिना; रसीद उन्हें कारण सहित बताती है। इस बारे में यह आखिरी ईमेल है।
 
@@ -12151,7 +12151,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · i
   "subject": "Lakeside Events ha cancellato i tuoi dati personali",
   "text": "Lakeside Events ha cancellato i tuoi dati personali
 
-Ciao,
+Ciao!
 
 Lakeside Events ha cancellato i tuoi dati personali come richiesto. Alcuni documenti vanno conservati per legge (per esempio gli ordini pagati, ai fini fiscali), senza il tuo nome né la tua email; la ricevuta li elenca con il motivo. Questa è l’ultima email al riguardo.
 
@@ -12187,7 +12187,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · n
   "subject": "Lakeside Events heeft je persoonsgegevens gewist",
   "text": "Lakeside Events heeft je persoonsgegevens gewist
 
-Hallo,
+Hallo!
 
 Lakeside Events heeft je persoonsgegevens gewist zoals gevraagd. Sommige gegevens moeten wettelijk bewaard blijven (bijvoorbeeld betaalde bestellingen voor de belasting), zonder je naam en e-mail; het ontvangstbewijs noemt ze met de reden. Dit is de laatste e-mail hierover.
 
@@ -12241,7 +12241,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · z
   "subject": "Lakeside Events 已删除您的个人数据",
   "text": "Lakeside Events 已删除您的个人数据
 
-您好：
+您好！
 
 Lakeside Events 已按您的要求删除您的个人数据。部分记录依法必须保留（例如用于税务的已付款订单），但已去除您的姓名和电子邮件；收据中列出了这些记录及原因。这是关于此事的最后一封邮件。
 
@@ -12259,7 +12259,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.erasure-done · z
   "subject": "Lakeside Events 已刪除您的個人資料",
   "text": "Lakeside Events 已刪除您的個人資料
 
-您好：
+您好！
 
 Lakeside Events 已依您的要求刪除您的個人資料。部分紀錄依法必須保留（例如供稅務使用的已付款訂單），但已移除您的姓名與電子郵件；收據列出這些紀錄及原因。這是關於此事的最後一封郵件。
 
@@ -12277,7 +12277,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.request-code · a
   "subject": "305117 هو رمزك لتأكيد طلب الخصوصية",
   "text": "305117 هو رمزك لتأكيد طلب الخصوصية
 
-مرحبًا،
+مرحبًا!
 
 أدخل 305117 لتأكيد طلبك إلى Lakeside Events: محو بياناتك الشخصية. يعمل الرمز مرة واحدة وتنتهي صلاحيته خلال 10 دقائق. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة: لن يحدث شيء دون الرمز.
 
@@ -12293,7 +12293,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.request-code · d
   "subject": "305117 ist Ihr Code zur Bestätigung Ihrer Datenschutzanfrage",
   "text": "305117 ist Ihr Code zur Bestätigung Ihrer Datenschutzanfrage
 
-Hallo,
+Hallo!
 
 Geben Sie 305117 ein, um Ihre Anfrage an Lakeside Events zu bestätigen: Löschung Ihrer personenbezogenen Daten. Der Code gilt einmal und läuft in 10 Minuten ab. Wenn Sie ihn nicht angefordert haben, können Sie diese E-Mail ignorieren: Ohne den Code passiert nichts.
 
@@ -12309,7 +12309,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.request-code · e
   "subject": "305117 is your code to confirm your privacy request",
   "text": "305117 is your code to confirm your privacy request
 
-Hello,
+Hello!
 
 Enter 305117 to confirm your request to Lakeside Events for erasing your personal data. The code works once and expires in 10 minutes. If you didn't ask for it, you can ignore this email: nothing happens without the code.
 
@@ -12325,7 +12325,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.request-code · e
   "subject": "305117 es tu código para confirmar tu solicitud de privacidad",
   "text": "305117 es tu código para confirmar tu solicitud de privacidad
 
-Hola:
+¡Hola!
 
 Introduce 305117 para confirmar tu solicitud a Lakeside Events: borrar tus datos personales. El código sirve una vez y caduca en 10 minutos. Si no lo pediste, puedes ignorar este correo: sin el código no pasa nada.
 
@@ -12341,7 +12341,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.request-code · f
   "subject": "305117 est votre code pour confirmer votre demande de confidentialité",
   "text": "305117 est votre code pour confirmer votre demande de confidentialité
 
-Bonjour,
+Bonjour !
 
 Saisissez 305117 pour confirmer votre demande à Lakeside Events : effacer vos données personnelles. Le code fonctionne une fois et expire dans 10 minutes. Si vous ne l’avez pas demandé, ignorez cet e-mail : rien ne se passe sans le code.
 
@@ -12357,7 +12357,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.request-code · h
   "subject": "305117 आपके गोपनीयता अनुरोध की पुष्टि का कोड है",
   "text": "305117 आपके गोपनीयता अनुरोध की पुष्टि का कोड है
 
-नमस्ते,
+नमस्ते!
 
 Lakeside Events को अपने अनुरोध की पुष्टि के लिए 305117 दर्ज करें: आपका निजी डेटा मिटाना। कोड एक बार काम करता है और 10 मिनट में समाप्त हो जाता है। अगर आपने यह नहीं माँगा, तो इस ईमेल को अनदेखा करें: कोड के बिना कुछ नहीं होगा।
 
@@ -12373,7 +12373,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.request-code · i
   "subject": "305117 è il tuo codice per confermare la richiesta sulla privacy",
   "text": "305117 è il tuo codice per confermare la richiesta sulla privacy
 
-Ciao,
+Ciao!
 
 Inserisci 305117 per confermare la tua richiesta a Lakeside Events: cancellare i tuoi dati personali. Il codice vale una volta e scade tra 10 minuti. Se non l’hai richiesto, ignora questa email: senza il codice non succede nulla.
 
@@ -12405,7 +12405,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.request-code · n
   "subject": "305117 is je code om je privacyverzoek te bevestigen",
   "text": "305117 is je code om je privacyverzoek te bevestigen
 
-Hallo,
+Hallo!
 
 Voer 305117 in om je verzoek aan Lakeside Events te bevestigen: je persoonsgegevens wissen. De code werkt één keer en verloopt over 10 minuten. Heb je dit niet gevraagd, negeer dan deze e-mail: zonder de code gebeurt er niets.
 
@@ -12453,7 +12453,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.request-code · z
   "subject": "305117 是您确认隐私请求的验证码",
   "text": "305117 是您确认隐私请求的验证码
 
-您好：
+您好！
 
 输入 305117 以确认您向 Lakeside Events 提出的请求：删除您的个人数据。验证码仅可使用一次，10 分钟后失效。如果这不是您的请求，请忽略此邮件：没有验证码不会发生任何操作。
 
@@ -12469,7 +12469,7 @@ exports[`renderMessage: every kind in all 13 locales > privacy.request-code · z
   "subject": "305117 是您確認隱私請求的驗證碼",
   "text": "305117 是您確認隱私請求的驗證碼
 
-您好：
+您好！
 
 輸入 305117 以確認您向 Lakeside Events 提出的請求：刪除您的個人資料。驗證碼僅能使用一次，10 分鐘後失效。如果這不是您的請求，請忽略此郵件：沒有驗證碼不會發生任何事。
 
@@ -12485,7 +12485,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · a
   "subject": "تم قبول مقترحك «Designing for trust»",
   "text": "تم قبول مقترحك «Designing for trust»
 
-مرحبًا،
+مرحبًا!
 
 أخبار سارة: قبلت Lakeside Events «Designing for trust» في Midwest Leadership Summit. سيرسل إليك المنظمون موعد جلستك قريبًا. ملاحظة من المنظمين: We would love a 30-minute version.
 
@@ -12501,7 +12501,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · d
   "subject": "Ihr Vorschlag „Designing for trust“ wurde angenommen",
   "text": "Ihr Vorschlag „Designing for trust“ wurde angenommen
 
-Hallo,
+Hallo!
 
 Gute Nachrichten: Lakeside Events hat „Designing for trust“ für Midwest Leadership Summit angenommen. Die Veranstalter teilen Ihnen bald die Zeit Ihrer Session mit. Hinweis der Veranstalter: We would love a 30-minute version.
 
@@ -12517,7 +12517,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · e
   "subject": "Your proposal “Designing for trust” was accepted",
   "text": "Your proposal “Designing for trust” was accepted
 
-Hello,
+Hello!
 
 Good news: Lakeside Events accepted “Designing for trust” for Midwest Leadership Summit. The organizers will share your session time soon. Note from the organizers: We would love a 30-minute version.
 
@@ -12533,7 +12533,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · e
   "subject": "Tu propuesta «Designing for trust» ha sido aceptada",
   "text": "Tu propuesta «Designing for trust» ha sido aceptada
 
-Hola:
+¡Hola!
 
 Buenas noticias: Lakeside Events ha aceptado «Designing for trust» para Midwest Leadership Summit. Los organizadores compartirán pronto el horario de tu sesión. Nota de los organizadores: We would love a 30-minute version.
 
@@ -12549,7 +12549,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · f
   "subject": "Votre proposition « Designing for trust » est acceptée",
   "text": "Votre proposition « Designing for trust » est acceptée
 
-Bonjour,
+Bonjour !
 
 Bonne nouvelle : Lakeside Events a accepté « Designing for trust » pour Midwest Leadership Summit. Les organisateurs vous communiqueront bientôt l’horaire de votre session. Message des organisateurs : We would love a 30-minute version.
 
@@ -12565,7 +12565,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · h
   "subject": "आपका प्रस्ताव “Designing for trust” स्वीकार कर लिया गया है",
   "text": "आपका प्रस्ताव “Designing for trust” स्वीकार कर लिया गया है
 
-नमस्ते,
+नमस्ते!
 
 अच्छी खबर: Lakeside Events ने Midwest Leadership Summit के लिए “Designing for trust” स्वीकार कर लिया है। आयोजक जल्द ही आपके सत्र का समय बताएँगे। आयोजकों का संदेश: We would love a 30-minute version.
 
@@ -12581,7 +12581,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · i
   "subject": "La tua proposta «Designing for trust» è stata accettata",
   "text": "La tua proposta «Designing for trust» è stata accettata
 
-Ciao,
+Ciao!
 
 Buone notizie: Lakeside Events ha accettato «Designing for trust» per Midwest Leadership Summit. Gli organizzatori condivideranno presto l’orario della tua sessione. Nota degli organizzatori: We would love a 30-minute version.
 
@@ -12613,7 +12613,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · n
   "subject": "Je voorstel ‘Designing for trust’ is geaccepteerd",
   "text": "Je voorstel ‘Designing for trust’ is geaccepteerd
 
-Hallo,
+Hallo!
 
 Goed nieuws: Lakeside Events heeft ‘Designing for trust’ voor Midwest Leadership Summit geaccepteerd. De organisatoren laten je binnenkort weten wanneer je sessie is. Bericht van de organisatoren: We would love a 30-minute version.
 
@@ -12661,7 +12661,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · z
   "subject": "您的提案“Designing for trust”已被接受",
   "text": "您的提案“Designing for trust”已被接受
 
-您好：
+您好！
 
 好消息：Lakeside Events 已接受您为 Midwest Leadership Summit 提交的“Designing for trust”。主办方将很快告知您的场次时间。 主办方留言：We would love a 30-minute version.
 
@@ -12677,7 +12677,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-accepted · z
   "subject": "您的提案「Designing for trust」已獲接受",
   "text": "您的提案「Designing for trust」已獲接受
 
-您好：
+您好！
 
 好消息：Lakeside Events 已接受您為 Midwest Leadership Summit 提交的「Designing for trust」。主辦單位將盡快告知您的場次時間。 主辦單位留言：We would love a 30-minute version.
 
@@ -12693,7 +12693,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-received · a
   "subject": "استلمنا مقترحك «Designing for trust»",
   "text": "استلمنا مقترحك «Designing for trust»
 
-مرحبًا،
+مرحبًا!
 
 شكرًا لتقديمك «Designing for trust» إلى Midwest Leadership Summit. ستراجعه Lakeside Events وترسل إليك القرار بالبريد الإلكتروني.
 
@@ -12709,7 +12709,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-received · d
   "subject": "Wir haben Ihren Vorschlag „Designing for trust“ erhalten",
   "text": "Wir haben Ihren Vorschlag „Designing for trust“ erhalten
 
-Hallo,
+Hallo!
 
 Danke für Ihren Vorschlag „Designing for trust“ für Midwest Leadership Summit. Lakeside Events prüft ihn und schickt Ihnen die Entscheidung per E-Mail.
 
@@ -12725,7 +12725,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-received · e
   "subject": "We received your proposal “Designing for trust”",
   "text": "We received your proposal “Designing for trust”
 
-Hello,
+Hello!
 
 Thank you for proposing “Designing for trust” for Midwest Leadership Summit. Lakeside Events will review it and email you the decision.
 
@@ -12741,7 +12741,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-received · e
   "subject": "Hemos recibido tu propuesta «Designing for trust»",
   "text": "Hemos recibido tu propuesta «Designing for trust»
 
-Hola:
+¡Hola!
 
 Gracias por proponer «Designing for trust» para Midwest Leadership Summit. Lakeside Events la revisará y te enviará la decisión por correo.
 
@@ -12757,7 +12757,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-received · f
   "subject": "Nous avons bien reçu votre proposition « Designing for trust »",
   "text": "Nous avons bien reçu votre proposition « Designing for trust »
 
-Bonjour,
+Bonjour !
 
 Merci d’avoir proposé « Designing for trust » pour Midwest Leadership Summit. Lakeside Events va l’examiner et vous enverra sa décision par e-mail.
 
@@ -12773,7 +12773,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-received · h
   "subject": "हमें आपका प्रस्ताव “Designing for trust” मिल गया है",
   "text": "हमें आपका प्रस्ताव “Designing for trust” मिल गया है
 
-नमस्ते,
+नमस्ते!
 
 Midwest Leadership Summit के लिए “Designing for trust” प्रस्तावित करने के लिए धन्यवाद। Lakeside Events इसकी समीक्षा करेगा और निर्णय आपको ईमेल करेगा।
 
@@ -12789,7 +12789,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-received · i
   "subject": "Abbiamo ricevuto la tua proposta «Designing for trust»",
   "text": "Abbiamo ricevuto la tua proposta «Designing for trust»
 
-Ciao,
+Ciao!
 
 Grazie per aver proposto «Designing for trust» per Midwest Leadership Summit. Lakeside Events la valuterà e ti invierà la decisione via email.
 
@@ -12821,7 +12821,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-received · n
   "subject": "We hebben je voorstel ‘Designing for trust’ ontvangen",
   "text": "We hebben je voorstel ‘Designing for trust’ ontvangen
 
-Hallo,
+Hallo!
 
 Bedankt voor je voorstel ‘Designing for trust’ voor Midwest Leadership Summit. Lakeside Events beoordeelt het en mailt je het besluit.
 
@@ -12869,7 +12869,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-received · z
   "subject": "我们已收到您的提案“Designing for trust”",
   "text": "我们已收到您的提案“Designing for trust”
 
-您好：
+您好！
 
 感谢您为 Midwest Leadership Summit 提交“Designing for trust”。Lakeside Events 将进行评审，并通过电子邮件告知结果。
 
@@ -12885,7 +12885,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-received · z
   "subject": "我們已收到您的提案「Designing for trust」",
   "text": "我們已收到您的提案「Designing for trust」
 
-您好：
+您好！
 
 感謝您為 Midwest Leadership Summit 提交「Designing for trust」。Lakeside Events 將進行審查，並以電子郵件通知結果。
 
@@ -12901,7 +12901,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · a
   "subject": "بخصوص مقترحك «Designing for trust»",
   "text": "بخصوص مقترحك «Designing for trust»
 
-مرحبًا،
+مرحبًا!
 
 شكرًا لتقديمك «Designing for trust» إلى Midwest Leadership Summit. لم تتمكن Lakeside Events من إدراجه في البرنامج هذه المرة.
 
@@ -12917,7 +12917,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · d
   "subject": "Zu Ihrem Vorschlag „Designing for trust“",
   "text": "Zu Ihrem Vorschlag „Designing for trust“
 
-Hallo,
+Hallo!
 
 Danke für Ihren Vorschlag „Designing for trust“ für Midwest Leadership Summit. Lakeside Events konnte ihn diesmal leider nicht ins Programm aufnehmen.
 
@@ -12933,7 +12933,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · e
   "subject": "About your proposal “Designing for trust”",
   "text": "About your proposal “Designing for trust”
 
-Hello,
+Hello!
 
 Thank you for proposing “Designing for trust” for Midwest Leadership Summit. Lakeside Events could not include it in the program this time.
 
@@ -12949,7 +12949,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · e
   "subject": "Sobre tu propuesta «Designing for trust»",
   "text": "Sobre tu propuesta «Designing for trust»
 
-Hola:
+¡Hola!
 
 Gracias por proponer «Designing for trust» para Midwest Leadership Summit. Lakeside Events no ha podido incluirla en el programa esta vez.
 
@@ -12965,7 +12965,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · f
   "subject": "À propos de votre proposition « Designing for trust »",
   "text": "À propos de votre proposition « Designing for trust »
 
-Bonjour,
+Bonjour !
 
 Merci d’avoir proposé « Designing for trust » pour Midwest Leadership Summit. Lakeside Events n’a pas pu l’inclure au programme cette fois-ci.
 
@@ -12981,7 +12981,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · h
   "subject": "आपके प्रस्ताव “Designing for trust” के बारे में",
   "text": "आपके प्रस्ताव “Designing for trust” के बारे में
 
-नमस्ते,
+नमस्ते!
 
 Midwest Leadership Summit के लिए “Designing for trust” प्रस्तावित करने के लिए धन्यवाद। इस बार Lakeside Events इसे कार्यक्रम में शामिल नहीं कर सका।
 
@@ -12997,7 +12997,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · i
   "subject": "Sulla tua proposta «Designing for trust»",
   "text": "Sulla tua proposta «Designing for trust»
 
-Ciao,
+Ciao!
 
 Grazie per aver proposto «Designing for trust» per Midwest Leadership Summit. Questa volta Lakeside Events non ha potuto includerla nel programma.
 
@@ -13029,7 +13029,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · n
   "subject": "Over je voorstel ‘Designing for trust’",
   "text": "Over je voorstel ‘Designing for trust’
 
-Hallo,
+Hallo!
 
 Bedankt voor je voorstel ‘Designing for trust’ voor Midwest Leadership Summit. Lakeside Events kon het deze keer niet in het programma opnemen.
 
@@ -13077,7 +13077,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · z
   "subject": "关于您的提案“Designing for trust”",
   "text": "关于您的提案“Designing for trust”
 
-您好：
+您好！
 
 感谢您为 Midwest Leadership Summit 提交“Designing for trust”。很遗憾，Lakeside Events 本次未能将其纳入议程。
 
@@ -13093,7 +13093,7 @@ exports[`renderMessage: every kind in all 13 locales > program.cfp-rejected · z
   "subject": "關於您的提案「Designing for trust」",
   "text": "關於您的提案「Designing for trust」
 
-您好：
+您好！
 
 感謝您為 Midwest Leadership Summit 提交「Designing for trust」。很遺憾，Lakeside Events 這次未能將其納入議程。
 
@@ -13109,7 +13109,7 @@ exports[`renderMessage: every kind in all 13 locales > program.task-reminder · 
   "subject": "تذكير: Upload your slides لـ Midwest Leadership Summit",
   "text": "تذكير: Upload your slides لـ Midwest Leadership Summit
 
-مرحبًا،
+مرحبًا!
 
 ما زالت Lakeside Events بانتظار «Upload your slides» لـ Midwest Leadership Summit. الموعد النهائي: 10‏/05‏/2027، 12:00 م.
 
@@ -13127,7 +13127,7 @@ exports[`renderMessage: every kind in all 13 locales > program.task-reminder · 
   "subject": "Erinnerung: Upload your slides für Midwest Leadership Summit",
   "text": "Erinnerung: Upload your slides für Midwest Leadership Summit
 
-Hallo,
+Hallo!
 
 Lakeside Events wartet noch auf „Upload your slides“ für Midwest Leadership Summit. Fällig: 10.05.2027, 12:00.
 
@@ -13145,7 +13145,7 @@ exports[`renderMessage: every kind in all 13 locales > program.task-reminder · 
   "subject": "Reminder: Upload your slides for Midwest Leadership Summit",
   "text": "Reminder: Upload your slides for Midwest Leadership Summit
 
-Hello,
+Hello!
 
 Lakeside Events is still waiting for “Upload your slides” for Midwest Leadership Summit. Due: May 10, 2027, 12:00 PM.
 
@@ -13163,7 +13163,7 @@ exports[`renderMessage: every kind in all 13 locales > program.task-reminder · 
   "subject": "Recordatorio: Upload your slides para Midwest Leadership Summit",
   "text": "Recordatorio: Upload your slides para Midwest Leadership Summit
 
-Hola:
+¡Hola!
 
 Lakeside Events sigue esperando «Upload your slides» para Midwest Leadership Summit. Vence: 10 may 2027, 12:00.
 
@@ -13181,7 +13181,7 @@ exports[`renderMessage: every kind in all 13 locales > program.task-reminder · 
   "subject": "Rappel : Upload your slides pour Midwest Leadership Summit",
   "text": "Rappel : Upload your slides pour Midwest Leadership Summit
 
-Bonjour,
+Bonjour !
 
 Lakeside Events attend toujours « Upload your slides » pour Midwest Leadership Summit. Échéance : 10 mai 2027, 12:00.
 
@@ -13199,7 +13199,7 @@ exports[`renderMessage: every kind in all 13 locales > program.task-reminder · 
   "subject": "याद दिलाना: Midwest Leadership Summit के लिए Upload your slides",
   "text": "याद दिलाना: Midwest Leadership Summit के लिए Upload your slides
 
-नमस्ते,
+नमस्ते!
 
 Lakeside Events को Midwest Leadership Summit के लिए अभी भी “Upload your slides” का इंतज़ार है। अंतिम तिथि: 10 मई 2027, 12:00 pm।
 
@@ -13217,7 +13217,7 @@ exports[`renderMessage: every kind in all 13 locales > program.task-reminder · 
   "subject": "Promemoria: Upload your slides per Midwest Leadership Summit",
   "text": "Promemoria: Upload your slides per Midwest Leadership Summit
 
-Ciao,
+Ciao!
 
 Lakeside Events attende ancora «Upload your slides» per Midwest Leadership Summit. Scadenza: 10 mag 2027, 12:00.
 
@@ -13253,7 +13253,7 @@ exports[`renderMessage: every kind in all 13 locales > program.task-reminder · 
   "subject": "Herinnering: Upload your slides voor Midwest Leadership Summit",
   "text": "Herinnering: Upload your slides voor Midwest Leadership Summit
 
-Hallo,
+Hallo!
 
 Lakeside Events wacht nog op ‘Upload your slides’ voor Midwest Leadership Summit. Uiterlijk: 10 mei 2027, 12:00.
 
@@ -13307,7 +13307,7 @@ exports[`renderMessage: every kind in all 13 locales > program.task-reminder · 
   "subject": "提醒：Midwest Leadership Summit的Upload your slides",
   "text": "提醒：Midwest Leadership Summit的Upload your slides
 
-您好：
+您好！
 
 Lakeside Events仍在等待您提交Midwest Leadership Summit的“Upload your slides”。截止时间：2027年5月10日 12:00。
 
@@ -13325,7 +13325,7 @@ exports[`renderMessage: every kind in all 13 locales > program.task-reminder · 
   "subject": "提醒：Midwest Leadership Summit的Upload your slides",
   "text": "提醒：Midwest Leadership Summit的Upload your slides
 
-您好：
+您好！
 
 Lakeside Events仍在等待您提交Midwest Leadership Summit的「Upload your slides」。截止時間：2027年5月10日 中午12:00。
 
@@ -13343,7 +13343,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · a
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-مرحبًا،
+مرحبًا!
 
 تم إلغاء هذه الفعالية.
 
@@ -13359,7 +13359,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · d
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Diese Veranstaltung wurde abgesagt.
 
@@ -13375,7 +13375,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · e
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hello,
+Hello!
 
 This event was cancelled.
 
@@ -13391,7 +13391,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · e
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hola:
+¡Hola!
 
 Este evento fue cancelado.
 
@@ -13407,7 +13407,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · f
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Bonjour,
+Bonjour !
 
 Cet événement a été annulé.
 
@@ -13423,7 +13423,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · h
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-नमस्ते,
+नमस्ते!
 
 यह इवेंट रद्द कर दिया गया है।
 
@@ -13439,7 +13439,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · i
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Ciao,
+Ciao!
 
 Questo evento è stato annullato.
 
@@ -13471,7 +13471,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · n
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Dit evenement is geannuleerd.
 
@@ -13519,7 +13519,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · z
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 此活动已取消。
 
@@ -13535,7 +13535,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-cancelled · z
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 此活動已取消。
 
@@ -13551,7 +13551,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-changed · ar 
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-مرحبًا،
+مرحبًا!
 
 تغيّر التاريخ أو الوقت أو المكان.
 
@@ -13567,7 +13567,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-changed · de 
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Datum, Uhrzeit oder Ort haben sich geändert.
 
@@ -13583,7 +13583,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-changed · en 
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hello,
+Hello!
 
 The date, time or venue changed.
 
@@ -13599,7 +13599,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-changed · es 
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hola:
+¡Hola!
 
 Cambió la fecha, la hora o el lugar.
 
@@ -13615,7 +13615,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-changed · fr 
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Bonjour,
+Bonjour !
 
 La date, l’heure ou le lieu a changé.
 
@@ -13631,7 +13631,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-changed · hi 
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-नमस्ते,
+नमस्ते!
 
 तारीख़, समय या स्थान बदल गया है।
 
@@ -13647,7 +13647,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-changed · it 
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Ciao,
+Ciao!
 
 Sono cambiati la data, l’orario o il luogo.
 
@@ -13679,7 +13679,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-changed · nl 
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 De datum, tijd of locatie is gewijzigd.
 
@@ -13727,7 +13727,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-changed · zh-
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 日期、时间或地点已更改。
 
@@ -13743,7 +13743,7 @@ exports[`renderMessage: every kind in all 13 locales > push.event-changed · zh-
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 日期、時間或地點已變更。
 
@@ -13759,7 +13759,7 @@ exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · a
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-مرحبًا،
+مرحبًا!
 
 تم تأكيد طلبك.
 
@@ -13775,7 +13775,7 @@ exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · d
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Deine Bestellung ist bestätigt.
 
@@ -13791,7 +13791,7 @@ exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · e
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hello,
+Hello!
 
 Your order is confirmed.
 
@@ -13807,7 +13807,7 @@ exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · e
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hola:
+¡Hola!
 
 Tu pedido está confirmado.
 
@@ -13823,7 +13823,7 @@ exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · f
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Bonjour,
+Bonjour !
 
 Votre commande est confirmée.
 
@@ -13839,7 +13839,7 @@ exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · h
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-नमस्ते,
+नमस्ते!
 
 आपका ऑर्डर कन्फ़र्म हो गया है।
 
@@ -13855,7 +13855,7 @@ exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · i
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Ciao,
+Ciao!
 
 Il tuo ordine è confermato.
 
@@ -13887,7 +13887,7 @@ exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · n
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Je bestelling is bevestigd.
 
@@ -13935,7 +13935,7 @@ exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · z
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 您的订单已确认。
 
@@ -13951,7 +13951,7 @@ exports[`renderMessage: every kind in all 13 locales > push.order-confirmed · z
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 您的訂單已確認。
 
@@ -13967,7 +13967,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · ar 1`
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-مرحبًا،
+مرحبًا!
 
 يبدأ بعد ساعتين، في 8:00 م.
 
@@ -13985,7 +13985,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · de 1`
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Beginnt in 2 Stunden, um 20:00.
 
@@ -14003,7 +14003,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · en 1`
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hello,
+Hello!
 
 Starts in 2 hours, at 8:00 PM.
 
@@ -14021,7 +14021,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · es 1`
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hola:
+¡Hola!
 
 Empieza en 2 horas, a las 20:00.
 
@@ -14039,7 +14039,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · fr 1`
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Bonjour,
+Bonjour !
 
 Commence dans 2 heures, à 20:00.
 
@@ -14057,7 +14057,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · hi 1`
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-नमस्ते,
+नमस्ते!
 
 2 घंटे में शुरू होगा, 8:00 pm पर।
 
@@ -14075,7 +14075,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · it 1`
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Ciao,
+Ciao!
 
 Inizia tra 2 ore, alle 20:00.
 
@@ -14111,7 +14111,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · nl 1`
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Begint over 2 uur, om 20:00.
 
@@ -14165,7 +14165,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · zh-CN
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 2小时后（20:00）开始。
 
@@ -14183,7 +14183,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-2h · zh-TW
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 2 小時後（晚上8:00）開始。
 
@@ -14201,7 +14201,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · ar 1
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-مرحبًا،
+مرحبًا!
 
 يبدأ غدًا في 8:00 م.
 
@@ -14219,7 +14219,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · de 1
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Beginnt morgen um 20:00.
 
@@ -14237,7 +14237,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · en 1
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hello,
+Hello!
 
 Starts tomorrow at 8:00 PM.
 
@@ -14255,7 +14255,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · es 1
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hola:
+¡Hola!
 
 Empieza mañana a las 20:00.
 
@@ -14273,7 +14273,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · fr 1
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Bonjour,
+Bonjour !
 
 Commence demain à 20:00.
 
@@ -14291,7 +14291,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · hi 1
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-नमस्ते,
+नमस्ते!
 
 कल 8:00 pm पर शुरू होगा।
 
@@ -14309,7 +14309,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · it 1
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Ciao,
+Ciao!
 
 Inizia domani alle 20:00.
 
@@ -14345,7 +14345,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · nl 1
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Begint morgen om 20:00.
 
@@ -14399,7 +14399,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · zh-C
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 明天 20:00 开始。
 
@@ -14417,7 +14417,7 @@ exports[`renderMessage: every kind in all 13 locales > push.reminder-24h · zh-T
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 明天 晚上8:00 開始。
 
@@ -14435,7 +14435,7 @@ exports[`renderMessage: every kind in all 13 locales > push.ticket-received · a
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-مرحبًا،
+مرحبًا!
 
 تم تحويل تذكرة إليك.
 
@@ -14451,7 +14451,7 @@ exports[`renderMessage: every kind in all 13 locales > push.ticket-received · d
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Dir wurde ein Ticket übertragen.
 
@@ -14467,7 +14467,7 @@ exports[`renderMessage: every kind in all 13 locales > push.ticket-received · e
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hello,
+Hello!
 
 A ticket was transferred to you.
 
@@ -14483,7 +14483,7 @@ exports[`renderMessage: every kind in all 13 locales > push.ticket-received · e
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hola:
+¡Hola!
 
 Te han transferido una entrada.
 
@@ -14499,7 +14499,7 @@ exports[`renderMessage: every kind in all 13 locales > push.ticket-received · f
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Bonjour,
+Bonjour !
 
 Un billet vous a été transféré.
 
@@ -14515,7 +14515,7 @@ exports[`renderMessage: every kind in all 13 locales > push.ticket-received · h
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-नमस्ते,
+नमस्ते!
 
 आपको एक टिकट ट्रांसफ़र किया गया है।
 
@@ -14531,7 +14531,7 @@ exports[`renderMessage: every kind in all 13 locales > push.ticket-received · i
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Ciao,
+Ciao!
 
 Ti è stato trasferito un biglietto.
 
@@ -14563,7 +14563,7 @@ exports[`renderMessage: every kind in all 13 locales > push.ticket-received · n
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Er is een ticket aan je overgedragen.
 
@@ -14611,7 +14611,7 @@ exports[`renderMessage: every kind in all 13 locales > push.ticket-received · z
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 有一张票已转让给您。
 
@@ -14627,7 +14627,7 @@ exports[`renderMessage: every kind in all 13 locales > push.ticket-received · z
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 有一張票券已轉讓給您。
 
@@ -14643,7 +14643,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted ·
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-مرحبًا،
+مرحبًا!
 
 تم قبول تحويل تذكرتك.
 
@@ -14659,7 +14659,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted ·
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Deine Ticketübertragung wurde angenommen.
 
@@ -14675,7 +14675,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted ·
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hello,
+Hello!
 
 Your ticket transfer was accepted.
 
@@ -14691,7 +14691,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted ·
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hola:
+¡Hola!
 
 Tu transferencia de entrada fue aceptada.
 
@@ -14707,7 +14707,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted ·
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Bonjour,
+Bonjour !
 
 Le transfert de votre billet a été accepté.
 
@@ -14723,7 +14723,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted ·
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-नमस्ते,
+नमस्ते!
 
 आपका टिकट ट्रांसफ़र स्वीकार कर लिया गया है।
 
@@ -14739,7 +14739,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted ·
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Ciao,
+Ciao!
 
 Il trasferimento del tuo biglietto è stato accettato.
 
@@ -14771,7 +14771,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted ·
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Je ticketoverdracht is geaccepteerd.
 
@@ -14819,7 +14819,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted ·
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 您的转票已被接受。
 
@@ -14835,7 +14835,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-accepted ·
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 您的轉讓票券已被接受。
 
@@ -14851,7 +14851,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled �
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-مرحبًا،
+مرحبًا!
 
 تم إلغاء تحويل تذكرة.
 
@@ -14867,7 +14867,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled �
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Eine Ticketübertragung wurde abgebrochen.
 
@@ -14883,7 +14883,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled �
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hello,
+Hello!
 
 A ticket transfer was cancelled.
 
@@ -14899,7 +14899,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled �
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hola:
+¡Hola!
 
 Se canceló una transferencia de entrada.
 
@@ -14915,7 +14915,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled �
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Bonjour,
+Bonjour !
 
 Un transfert de billet a été annulé.
 
@@ -14931,7 +14931,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled �
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-नमस्ते,
+नमस्ते!
 
 एक टिकट ट्रांसफ़र रद्द कर दिया गया है।
 
@@ -14947,7 +14947,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled �
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Ciao,
+Ciao!
 
 Un trasferimento di biglietto è stato annullato.
 
@@ -14979,7 +14979,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled �
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Een ticketoverdracht is geannuleerd.
 
@@ -15027,7 +15027,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled �
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 一次转票已被取消。
 
@@ -15043,7 +15043,7 @@ exports[`renderMessage: every kind in all 13 locales > push.transfer-cancelled �
   "subject": "Lakeside Jazz Night",
   "text": "Lakeside Jazz Night
 
-您好：
+您好！
 
 一次票券轉讓已被取消。
 
@@ -16268,7 +16268,7 @@ exports[`renderMessage: every kind in all 13 locales > seating.finder-code · ar
   "subject": "482913 هو رمز البحث عن مقعدك في Lakeside Jazz Night",
   "text": "482913 هو رمز البحث عن مقعدك في Lakeside Jazz Night
 
-مرحبًا،
+مرحبًا!
 
 أدخل 482913 في أداة البحث عن المقعد لمعرفة مقعدك. يعمل الرمز مرة واحدة وتنتهي صلاحيته خلال 10 دقائق. إذا لم تطلبه، يمكنك تجاهل هذه الرسالة.
 
@@ -16286,7 +16286,7 @@ exports[`renderMessage: every kind in all 13 locales > seating.finder-code · de
   "subject": "482913 ist dein Code für die Platzsuche bei Lakeside Jazz Night",
   "text": "482913 ist dein Code für die Platzsuche bei Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Gib 482913 in der Platzsuche ein, um deinen Platz zu sehen. Der Code gilt einmal und läuft in 10 Minuten ab. Wenn du ihn nicht angefordert hast, kannst du diese E-Mail ignorieren.
 
@@ -16304,7 +16304,7 @@ exports[`renderMessage: every kind in all 13 locales > seating.finder-code · en
   "subject": "482913 is your seat finder code for Lakeside Jazz Night",
   "text": "482913 is your seat finder code for Lakeside Jazz Night
 
-Hello,
+Hello!
 
 Enter 482913 on the seat finder to see your seat. The code works once and expires in 10 minutes. If you didn't ask for it, you can ignore this email.
 
@@ -16322,7 +16322,7 @@ exports[`renderMessage: every kind in all 13 locales > seating.finder-code · es
   "subject": "482913 es tu código para buscar tu asiento en Lakeside Jazz Night",
   "text": "482913 es tu código para buscar tu asiento en Lakeside Jazz Night
 
-Hola:
+¡Hola!
 
 Introduce 482913 en el buscador de asientos para ver tu asiento. El código se usa una sola vez y caduca en 10 minutos. Si no lo pediste, puedes ignorar este correo.
 
@@ -16340,7 +16340,7 @@ exports[`renderMessage: every kind in all 13 locales > seating.finder-code · fr
   "subject": "482913 est votre code pour trouver votre place à Lakeside Jazz Night",
   "text": "482913 est votre code pour trouver votre place à Lakeside Jazz Night
 
-Bonjour,
+Bonjour !
 
 Saisissez 482913 dans l'outil de recherche de place pour voir votre place. Le code ne sert qu'une fois et expire dans 10 minutes. Si vous ne l'avez pas demandé, vous pouvez ignorer cet e-mail.
 
@@ -16358,7 +16358,7 @@ exports[`renderMessage: every kind in all 13 locales > seating.finder-code · hi
   "subject": "Lakeside Jazz Night के लिए आपका सीट खोज कोड 482913 है",
   "text": "Lakeside Jazz Night के लिए आपका सीट खोज कोड 482913 है
 
-नमस्ते,
+नमस्ते!
 
 अपनी सीट देखने के लिए सीट खोज में 482913 दर्ज करें। यह कोड एक बार काम करता है और 10 मिनट में समाप्त हो जाता है। अगर आपने इसे नहीं माँगा था, तो इस ईमेल को अनदेखा कर सकते हैं।
 
@@ -16376,7 +16376,7 @@ exports[`renderMessage: every kind in all 13 locales > seating.finder-code · it
   "subject": "482913 è il tuo codice per trovare il posto a Lakeside Jazz Night",
   "text": "482913 è il tuo codice per trovare il posto a Lakeside Jazz Night
 
-Ciao,
+Ciao!
 
 Inserisci 482913 nella ricerca del posto per vedere il tuo posto. Il codice vale una sola volta e scade tra 10 minuti. Se non l'hai richiesto, puoi ignorare questa email.
 
@@ -16412,7 +16412,7 @@ exports[`renderMessage: every kind in all 13 locales > seating.finder-code · nl
   "subject": "482913 is je code voor de plaatszoeker van Lakeside Jazz Night",
   "text": "482913 is je code voor de plaatszoeker van Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Voer 482913 in bij de plaatszoeker om je plaats te zien. De code werkt één keer en verloopt over 10 minuten. Heb je hem niet aangevraagd? Dan kun je deze e-mail negeren.
 
@@ -16466,7 +16466,7 @@ exports[`renderMessage: every kind in all 13 locales > seating.finder-code · zh
   "subject": "482913 是您在 Lakeside Jazz Night 的座位查询码",
   "text": "482913 是您在 Lakeside Jazz Night 的座位查询码
 
-您好：
+您好！
 
 在座位查询中输入 482913 即可查看您的座位。此代码仅可使用一次，10 分钟后失效。如果这不是您本人的请求，请忽略此邮件。
 
@@ -16484,7 +16484,7 @@ exports[`renderMessage: every kind in all 13 locales > seating.finder-code · zh
   "subject": "482913 是您在 Lakeside Jazz Night 的座位查詢碼",
   "text": "482913 是您在 Lakeside Jazz Night 的座位查詢碼
 
-您好：
+您好！
 
 在座位查詢中輸入 482913 即可查看您的座位。此代碼僅能使用一次，10 分鐘後失效。如果這不是您本人的請求，請忽略此郵件。
 
@@ -16502,7 +16502,7 @@ exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · 
   "subject": "تنبيه احتيال: طلبات كثيرة من مشترٍ واحد",
   "text": "تنبيه احتيال: طلبات كثيرة من مشترٍ واحد
 
-مرحبًا،
+مرحبًا!
 
 توجد إشارة عالية الخطورة تحتاج إلى مراجعة في Lakeside Events (Lakeside Jazz Night): طلبات كثيرة من مشترٍ واحد. افتحها لتأكيدها أو تجاهلها.
 
@@ -16519,7 +16519,7 @@ exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · 
   "subject": "Betrugswarnung: viele Bestellungen von einer Person",
   "text": "Betrugswarnung: viele Bestellungen von einer Person
 
-Hallo,
+Hallo!
 
 Ein Signal mit hohem Schweregrad bei Lakeside Events (Lakeside Jazz Night) muss geprüft werden: viele Bestellungen von einer Person. Öffne es, um es zu übernehmen oder zu verwerfen.
 
@@ -16536,7 +16536,7 @@ exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · 
   "subject": "Fraud alert: many orders from one buyer",
   "text": "Fraud alert: many orders from one buyer
 
-Hello,
+Hello!
 
 A high-severity signal needs a look at Lakeside Events (Lakeside Jazz Night): many orders from one buyer. Open it to acknowledge or dismiss it.
 
@@ -16553,7 +16553,7 @@ exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · 
   "subject": "Alerta de fraude: muchos pedidos de un mismo comprador",
   "text": "Alerta de fraude: muchos pedidos de un mismo comprador
 
-Hola:
+¡Hola!
 
 Una señal de gravedad alta requiere revisión en Lakeside Events (Lakeside Jazz Night): muchos pedidos de un mismo comprador. Ábrela para confirmarla o descartarla.
 
@@ -16570,7 +16570,7 @@ exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · 
   "subject": "Alerte fraude : de nombreuses commandes d’un même acheteur",
   "text": "Alerte fraude : de nombreuses commandes d’un même acheteur
 
-Bonjour,
+Bonjour !
 
 Un signal de gravité élevée est à examiner chez Lakeside Events (Lakeside Jazz Night) : de nombreuses commandes d’un même acheteur. Ouvrez-le pour le prendre en charge ou l’écarter.
 
@@ -16587,7 +16587,7 @@ exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · 
   "subject": "धोखाधड़ी अलर्ट: एक ही खरीदार के कई ऑर्डर",
   "text": "धोखाधड़ी अलर्ट: एक ही खरीदार के कई ऑर्डर
 
-नमस्ते,
+नमस्ते!
 
 Lakeside Events (Lakeside Jazz Night) में एक उच्च-गंभीरता संकेत को देखना ज़रूरी है: एक ही खरीदार के कई ऑर्डर। इसे स्वीकार या खारिज करने के लिए खोलें।
 
@@ -16604,7 +16604,7 @@ exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · 
   "subject": "Avviso di frode: molti ordini dallo stesso acquirente",
   "text": "Avviso di frode: molti ordini dallo stesso acquirente
 
-Ciao,
+Ciao!
 
 Un segnale di gravità alta va controllato presso Lakeside Events (Lakeside Jazz Night): molti ordini dallo stesso acquirente. Aprilo per prenderlo in carico o archiviarlo.
 
@@ -16638,7 +16638,7 @@ exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · 
   "subject": "Fraudemelding: veel bestellingen van één koper",
   "text": "Fraudemelding: veel bestellingen van één koper
 
-Hallo,
+Hallo!
 
 Een signaal met hoge ernst bij Lakeside Events (Lakeside Jazz Night) moet bekeken worden: veel bestellingen van één koper. Open het om het op te pakken of te negeren.
 
@@ -16689,7 +16689,7 @@ exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · 
   "subject": "欺诈警报：同一买家的大量订单",
   "text": "欺诈警报：同一买家的大量订单
 
-您好：
+您好！
 
 Lakeside Events（Lakeside Jazz Night）有一个高严重性信号需要查看：同一买家的大量订单。打开它以确认或忽略。
 
@@ -16706,7 +16706,7 @@ exports[`renderMessage: every kind in all 13 locales > security.fraud_signal · 
   "subject": "詐欺警示：同一買家的大量訂單",
   "text": "詐欺警示：同一買家的大量訂單
 
-您好：
+您好！
 
 Lakeside Events（Lakeside Jazz Night）有一個高嚴重性訊號需要查看：同一買家的大量訂單。開啟以確認或忽略。
 
@@ -17243,7 +17243,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation 
   "subject": "أنت مدعو للمساعدة في Amina & Tomas",
   "text": "أنت مدعو للمساعدة في Amina & Tomas
 
-مرحبًا،
+مرحبًا!
 
 دعاك Lakeside Events إلى Amina & Tomas بصفة منسق. سترى هذه المناسبة فقط.
 
@@ -17261,7 +17261,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation 
   "subject": "Sie sind zu Amina & Tomas eingeladen",
   "text": "Sie sind zu Amina & Tomas eingeladen
 
-Hallo,
+Hallo!
 
 Lakeside Events hat Sie zu Amina & Tomas als Planer eingeladen. Sie sehen nur diese Veranstaltung.
 
@@ -17279,7 +17279,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation 
   "subject": "You're invited to help with Amina & Tomas",
   "text": "You're invited to help with Amina & Tomas
 
-Hello,
+Hello!
 
 Lakeside Events invited you to Amina & Tomas as planner. You'll see this event only.
 
@@ -17297,7 +17297,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation 
   "subject": "Te invitan a colaborar en Amina & Tomas",
   "text": "Te invitan a colaborar en Amina & Tomas
 
-Hola:
+¡Hola!
 
 Lakeside Events te invitó a Amina & Tomas como planificador. Solo verás este evento.
 
@@ -17315,7 +17315,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation 
   "subject": "Vous êtes invité à participer à Amina & Tomas",
   "text": "Vous êtes invité à participer à Amina & Tomas
 
-Bonjour,
+Bonjour !
 
 Lakeside Events vous a invité à Amina & Tomas en tant que planificateur. Vous ne verrez que cet événement.
 
@@ -17333,7 +17333,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation 
   "subject": "आपको Amina & Tomas में मदद के लिए आमंत्रित किया गया है",
   "text": "आपको Amina & Tomas में मदद के लिए आमंत्रित किया गया है
 
-नमस्ते,
+नमस्ते!
 
 Lakeside Events ने आपको Amina & Tomas में योजनाकार के रूप में आमंत्रित किया है। आपको केवल यही इवेंट दिखेगा।
 
@@ -17351,7 +17351,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation 
   "subject": "Sei invitato a collaborare a Amina & Tomas",
   "text": "Sei invitato a collaborare a Amina & Tomas
 
-Ciao,
+Ciao!
 
 Lakeside Events ti ha invitato a Amina & Tomas come planner. Vedrai solo questo evento.
 
@@ -17387,7 +17387,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation 
   "subject": "Je bent uitgenodigd voor Amina & Tomas",
   "text": "Je bent uitgenodigd voor Amina & Tomas
 
-Hallo,
+Hallo!
 
 Lakeside Events heeft je uitgenodigd voor Amina & Tomas als planner. Je ziet alleen dit evenement.
 
@@ -17441,7 +17441,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation 
   "subject": "邀请您参与 Amina & Tomas",
   "text": "邀请您参与 Amina & Tomas
 
-您好：
+您好！
 
 Lakeside Events 邀请您以策划人身份参与 Amina & Tomas。您只会看到这个活动。
 
@@ -17459,7 +17459,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.event-invitation 
   "subject": "邀請您參與 Amina & Tomas",
   "text": "邀請您參與 Amina & Tomas
 
-您好：
+您好！
 
 Lakeside Events 邀請您以策劃人身分參與 Amina & Tomas。您只會看到這個活動。
 
@@ -17477,7 +17477,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.invitation · ar 
   "subject": "دعوة للانضمام إلى Lakeside Events على Yayatoh",
   "text": "دعوة للانضمام إلى Lakeside Events على Yayatoh
 
-مرحبًا،
+مرحبًا!
 
 دعتك Lakeside Events للانضمام إلى فريقها بدور مدير.
 
@@ -17495,7 +17495,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.invitation · de 
   "subject": "Einladung zu Lakeside Events auf Yayatoh",
   "text": "Einladung zu Lakeside Events auf Yayatoh
 
-Hallo,
+Hallo!
 
 Lakeside Events lädt dich ein, dem Team als Manager beizutreten.
 
@@ -17513,7 +17513,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.invitation · en 
   "subject": "You're invited to join Lakeside Events on Yayatoh",
   "text": "You're invited to join Lakeside Events on Yayatoh
 
-Hello,
+Hello!
 
 Lakeside Events invited you to join their team as manager.
 
@@ -17531,7 +17531,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.invitation · es 
   "subject": "Te invitan a unirte a Lakeside Events en Yayatoh",
   "text": "Te invitan a unirte a Lakeside Events en Yayatoh
 
-Hola:
+¡Hola!
 
 Lakeside Events te invitó a unirte a su equipo como gestor.
 
@@ -17549,7 +17549,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.invitation · fr 
   "subject": "Vous êtes invité à rejoindre Lakeside Events sur Yayatoh",
   "text": "Vous êtes invité à rejoindre Lakeside Events sur Yayatoh
 
-Bonjour,
+Bonjour !
 
 Lakeside Events vous invite à rejoindre son équipe en tant que gestionnaire.
 
@@ -17567,7 +17567,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.invitation · hi 
   "subject": "Yayatoh पर Lakeside Events से जुड़ने का निमंत्रण",
   "text": "Yayatoh पर Lakeside Events से जुड़ने का निमंत्रण
 
-नमस्ते,
+नमस्ते!
 
 Lakeside Events ने आपको अपनी टीम में मैनेजर के रूप में आमंत्रित किया है।
 
@@ -17585,7 +17585,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.invitation · it 
   "subject": "Sei invitato a unirti a Lakeside Events su Yayatoh",
   "text": "Sei invitato a unirti a Lakeside Events su Yayatoh
 
-Ciao,
+Ciao!
 
 Lakeside Events ti ha invitato a unirti al team come gestore.
 
@@ -17621,7 +17621,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.invitation · nl 
   "subject": "Uitnodiging voor Lakeside Events op Yayatoh",
   "text": "Uitnodiging voor Lakeside Events op Yayatoh
 
-Hallo,
+Hallo!
 
 Lakeside Events nodigt je uit voor hun team als manager.
 
@@ -17675,7 +17675,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.invitation · zh-
   "subject": "邀请您加入 Yayatoh 上的 Lakeside Events",
   "text": "邀请您加入 Yayatoh 上的 Lakeside Events
 
-您好：
+您好！
 
 Lakeside Events 邀请您以经理身份加入团队。
 
@@ -17693,7 +17693,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.invitation · zh-
   "subject": "邀請您加入 Yayatoh 上的 Lakeside Events",
   "text": "邀請您加入 Yayatoh 上的 Lakeside Events
 
-您好：
+您好！
 
 Lakeside Events 邀請您以經理身分加入團隊。
 
@@ -17711,7 +17711,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · ar 
   "subject": "علّقت Yayatoh ‏Lakeside Events",
   "text": "علّقت Yayatoh ‏Lakeside Events
 
-مرحبًا،
+مرحبًا!
 
 علّق فريق دعم Yayatoh ‏Lakeside Events. صفحاتها العامة وبيع التذاكر متوقفة، ولوحة التحكم للقراءة فقط. تبقى التذاكر المبيعة صالحة ويمكن مسحها عند الباب. تواصل مع دعم Yayatoh لمعرفة المزيد.
 
@@ -17729,7 +17729,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · de 
   "subject": "Yayatoh hat Lakeside Events gesperrt",
   "text": "Yayatoh hat Lakeside Events gesperrt
 
-Hallo,
+Hallo!
 
 Der Yayatoh-Support hat Lakeside Events gesperrt. Die öffentlichen Seiten und der Ticketverkauf sind offline, und die Konsole ist schreibgeschützt. Bereits verkaufte Tickets bleiben gültig und können weiterhin am Eingang gescannt werden. Wende dich an den Yayatoh-Support, um mehr zu erfahren.
 
@@ -17747,7 +17747,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · en 
   "subject": "Yayatoh suspended Lakeside Events",
   "text": "Yayatoh suspended Lakeside Events
 
-Hello,
+Hello!
 
 Yayatoh support suspended Lakeside Events. Its public pages and ticket sales are offline and the console is read-only. Tickets already sold stay valid and can still be scanned at the door. Contact Yayatoh support to find out more.
 
@@ -17765,7 +17765,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · es 
   "subject": "Yayatoh suspendió Lakeside Events",
   "text": "Yayatoh suspendió Lakeside Events
 
-Hola:
+¡Hola!
 
 El soporte de Yayatoh suspendió Lakeside Events. Sus páginas públicas y la venta de entradas están desconectadas y la consola es de solo lectura. Las entradas ya vendidas siguen siendo válidas y se pueden escanear en la puerta. Contacta con el soporte de Yayatoh para saber más.
 
@@ -17783,7 +17783,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · fr 
   "subject": "Yayatoh a suspendu Lakeside Events",
   "text": "Yayatoh a suspendu Lakeside Events
 
-Bonjour,
+Bonjour !
 
 Le support Yayatoh a suspendu Lakeside Events. Ses pages publiques et la vente de billets sont hors ligne et la console est en lecture seule. Les billets déjà vendus restent valables et peuvent toujours être scannés à l’entrée. Contactez le support Yayatoh pour en savoir plus.
 
@@ -17801,7 +17801,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · hi 
   "subject": "Yayatoh ने Lakeside Events को निलंबित किया",
   "text": "Yayatoh ने Lakeside Events को निलंबित किया
 
-नमस्ते,
+नमस्ते!
 
 Yayatoh सहायता टीम ने Lakeside Events को निलंबित कर दिया है। इसके सार्वजनिक पेज और टिकट बिक्री बंद हैं और कंसोल केवल पढ़ने के लिए है। पहले से बिके टिकट मान्य रहते हैं और दरवाज़े पर स्कैन किए जा सकते हैं। अधिक जानने के लिए Yayatoh सहायता से संपर्क करें।
 
@@ -17819,7 +17819,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · it 
   "subject": "Yayatoh ha sospeso Lakeside Events",
   "text": "Yayatoh ha sospeso Lakeside Events
 
-Ciao,
+Ciao!
 
 Il supporto Yayatoh ha sospeso Lakeside Events. Le pagine pubbliche e la vendita dei biglietti sono offline e la console è in sola lettura. I biglietti già venduti restano validi e possono ancora essere scansionati all’ingresso. Contatta il supporto Yayatoh per saperne di più.
 
@@ -17855,7 +17855,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · nl 
   "subject": "Yayatoh heeft Lakeside Events opgeschort",
   "text": "Yayatoh heeft Lakeside Events opgeschort
 
-Hallo,
+Hallo!
 
 Yayatoh-support heeft Lakeside Events opgeschort. De openbare pagina's en de ticketverkoop zijn offline en de console is alleen-lezen. Al verkochte tickets blijven geldig en kunnen nog steeds bij de ingang worden gescand. Neem contact op met Yayatoh-support voor meer informatie.
 
@@ -17909,7 +17909,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · zh-
   "subject": "Yayatoh 已暂停 Lakeside Events",
   "text": "Yayatoh 已暂停 Lakeside Events
 
-您好：
+您好！
 
 Yayatoh 支持团队已暂停 Lakeside Events。其公开页面和售票已下线，控制台为只读。已售出的门票仍然有效，仍可在入口扫描。如需了解详情，请联系 Yayatoh 支持。
 
@@ -17927,7 +17927,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.org-status · zh-
   "subject": "Yayatoh 已暫停 Lakeside Events",
   "text": "Yayatoh 已暫停 Lakeside Events
 
-您好：
+您好！
 
 Yayatoh 支援團隊已暫停 Lakeside Events。其公開頁面和售票已下線，主控台為唯讀。已售出的票券仍然有效，仍可在入口掃描。如需了解詳情，請聯絡 Yayatoh 支援。
 
@@ -17945,7 +17945,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · a
   "subject": "دعم Yayatoh يتصرف بصفة Jordan Lee في Lakeside Events",
   "text": "دعم Yayatoh يتصرف بصفة Jordan Lee في Lakeside Events
 
-مرحبًا،
+مرحبًا!
 
 بدأ أحد موظفي Yayatoh التصرف بصفة Jordan Lee في Lakeside Events لتقديم المساعدة. السبب: Support ticket 4312: the organizer asked for help with seating. ينتهي هذا الوصول بحلول 12‏/06‏/2027، 11:00 ص. خلال ذلك لا يمكن استرداد أي مبلغ أو صرفه أو تصدير أي بيانات أو حذفها، ويظهر كل ما يُنفَّذ في سجل النشاط لديك. إذا لم تكن تتوقع ذلك، فتواصل مع دعم Yayatoh فورًا.
 
@@ -17963,7 +17963,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · d
   "subject": "Der Yayatoh-Support handelt als Jordan Lee in Lakeside Events",
   "text": "Der Yayatoh-Support handelt als Jordan Lee in Lakeside Events
 
-Hallo,
+Hallo!
 
 Ein Mitarbeiter von Yayatoh handelt jetzt als Jordan Lee in Lakeside Events, um zu helfen. Grund: Support ticket 4312: the organizer asked for help with seating. Dieser Zugriff endet spätestens 12.06.2027, 11:00. Solange er besteht, kann nichts erstattet, ausgezahlt, exportiert oder gelöscht werden, und alles Getane erscheint in deinem Aktivitätsprotokoll. Wenn du das nicht erwartet hast, wende dich sofort an den Yayatoh-Support.
 
@@ -17981,7 +17981,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · e
   "subject": "Yayatoh support is acting as Jordan Lee in Lakeside Events",
   "text": "Yayatoh support is acting as Jordan Lee in Lakeside Events
 
-Hello,
+Hello!
 
 A Yayatoh staff member started acting as Jordan Lee in Lakeside Events to help. Reason: Support ticket 4312: the organizer asked for help with seating. This access ends by Jun 12, 2027, 11:00 AM. While it lasts, nothing can be refunded, paid out, exported or deleted, and everything done appears in your activity log. If you didn't expect this, contact Yayatoh support right away.
 
@@ -17999,7 +17999,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · e
   "subject": "El soporte de Yayatoh está actuando como Jordan Lee en Lakeside Events",
   "text": "El soporte de Yayatoh está actuando como Jordan Lee en Lakeside Events
 
-Hola:
+¡Hola!
 
 Un miembro del equipo de Yayatoh empezó a actuar como Jordan Lee en Lakeside Events para ayudar. Motivo: Support ticket 4312: the organizer asked for help with seating. Este acceso termina a más tardar el 12 jun 2027, 11:00. Mientras dure, no se puede reembolsar, pagar, exportar ni eliminar nada, y todo lo que se haga aparece en tu registro de actividad. Si no lo esperabas, contacta con el soporte de Yayatoh de inmediato.
 
@@ -18017,7 +18017,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · f
   "subject": "Le support Yayatoh agit en tant que Jordan Lee dans Lakeside Events",
   "text": "Le support Yayatoh agit en tant que Jordan Lee dans Lakeside Events
 
-Bonjour,
+Bonjour !
 
 Un membre de l'équipe Yayatoh a commencé à agir en tant que Jordan Lee dans Lakeside Events pour vous aider. Motif : Support ticket 4312: the organizer asked for help with seating. Cet accès prend fin au plus tard le 12 juin 2027, 11:00. Pendant ce temps, rien ne peut être remboursé, versé, exporté ni supprimé, et tout ce qui est fait apparaît dans votre journal d'activité. Si vous ne vous y attendiez pas, contactez immédiatement le support Yayatoh.
 
@@ -18035,7 +18035,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · h
   "subject": "Yayatoh सहायता टीम Lakeside Events में Jordan Lee के रूप में काम कर रही है",
   "text": "Yayatoh सहायता टीम Lakeside Events में Jordan Lee के रूप में काम कर रही है
 
-नमस्ते,
+नमस्ते!
 
 Yayatoh के एक कर्मचारी ने मदद के लिए Lakeside Events में Jordan Lee के रूप में काम करना शुरू किया है। कारण: Support ticket 4312: the organizer asked for help with seating। यह पहुँच 12 जून 2027, 11:00 am तक समाप्त हो जाएगी। इस दौरान कोई रिफ़ंड, भुगतान, निर्यात या हटाना नहीं हो सकता, और किया गया हर काम आपके गतिविधि लॉग में दिखता है। अगर आपको इसकी उम्मीद नहीं थी, तो तुरंत Yayatoh सहायता से संपर्क करें।
 
@@ -18053,7 +18053,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · i
   "subject": "Il supporto Yayatoh sta agendo come Jordan Lee in Lakeside Events",
   "text": "Il supporto Yayatoh sta agendo come Jordan Lee in Lakeside Events
 
-Ciao,
+Ciao!
 
 Un membro dello staff di Yayatoh ha iniziato ad agire come Jordan Lee in Lakeside Events per aiutare. Motivo: Support ticket 4312: the organizer asked for help with seating. Questo accesso termina entro il 12 giu 2027, 11:00. Nel frattempo non è possibile rimborsare, pagare, esportare o eliminare nulla, e tutto ciò che viene fatto compare nel registro attività. Se non te lo aspettavi, contatta subito il supporto Yayatoh.
 
@@ -18089,7 +18089,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · n
   "subject": "Yayatoh-support handelt als Jordan Lee in Lakeside Events",
   "text": "Yayatoh-support handelt als Jordan Lee in Lakeside Events
 
-Hallo,
+Hallo!
 
 Een medewerker van Yayatoh handelt nu als Jordan Lee in Lakeside Events om te helpen. Reden: Support ticket 4312: the organizer asked for help with seating. Deze toegang eindigt uiterlijk 12 jun 2027, 11:00. Zolang die duurt, kan niets worden terugbetaald, uitbetaald, geëxporteerd of verwijderd, en alles wat er gebeurt staat in je activiteitenlog. Had je dit niet verwacht? Neem dan direct contact op met Yayatoh-support.
 
@@ -18143,7 +18143,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · z
   "subject": "Yayatoh 支持人员正在以 Jordan Lee 的身份操作 Lakeside Events",
   "text": "Yayatoh 支持人员正在以 Jordan Lee 的身份操作 Lakeside Events
 
-您好：
+您好！
 
 一名 Yayatoh 工作人员已开始以 Jordan Lee 的身份在 Lakeside Events 中操作，以提供帮助。原因：Support ticket 4312: the organizer asked for help with seating。此访问将在 2027年6月12日 11:00 前结束。在此期间，无法进行任何退款、付款、导出或删除，所有操作都会记录在你的活动日志中。如果这不在你的预期之内，请立即联系 Yayatoh 支持。
 
@@ -18161,7 +18161,7 @@ exports[`renderMessage: every kind in all 13 locales > tenancy.staff-access · z
   "subject": "Yayatoh 支援人員正以 Jordan Lee 的身分操作 Lakeside Events",
   "text": "Yayatoh 支援人員正以 Jordan Lee 的身分操作 Lakeside Events
 
-您好：
+您好！
 
 一名 Yayatoh 工作人員已開始以 Jordan Lee 的身分在 Lakeside Events 中操作，以提供協助。原因：Support ticket 4312: the organizer asked for help with seating。此存取將在 2027年6月12日 上午11:00 前結束。在此期間，無法進行任何退款、付款、匯出或刪除，所有操作都會記錄在你的活動記錄中。如果這不在你的預期之內，請立即聯絡 Yayatoh 支援。
 
@@ -18179,7 +18179,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.claim-link · a
   "subject": "تذكرة لفعالية Lakeside Jazz Night بانتظارك",
   "text": "تذكرة لفعالية Lakeside Jazz Night بانتظارك
 
-مرحبًا،
+مرحبًا!
 
 أرسل إليك أحدهم تذكرة لفعالية Lakeside Jazz Night. استلمها لتحصل على رمز QR الخاص بك.
 
@@ -18197,7 +18197,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.claim-link · d
   "subject": "Ein Ticket für Lakeside Jazz Night wartet auf dich",
   "text": "Ein Ticket für Lakeside Jazz Night wartet auf dich
 
-Hallo,
+Hallo!
 
 Jemand hat dir ein Ticket für Lakeside Jazz Night weitergegeben. Hol es dir, um deinen eigenen QR-Code zu erhalten.
 
@@ -18215,7 +18215,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.claim-link · e
   "subject": "A ticket for Lakeside Jazz Night is waiting for you",
   "text": "A ticket for Lakeside Jazz Night is waiting for you
 
-Hello,
+Hello!
 
 Someone passed you a ticket for Lakeside Jazz Night. Claim it to get your own QR code.
 
@@ -18233,7 +18233,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.claim-link · e
   "subject": "Te espera una entrada para Lakeside Jazz Night",
   "text": "Te espera una entrada para Lakeside Jazz Night
 
-Hola:
+¡Hola!
 
 Alguien te pasó una entrada para Lakeside Jazz Night. Reclámala para obtener tu propio código QR.
 
@@ -18251,7 +18251,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.claim-link · f
   "subject": "Un billet pour Lakeside Jazz Night vous attend",
   "text": "Un billet pour Lakeside Jazz Night vous attend
 
-Bonjour,
+Bonjour !
 
 Quelqu’un vous a transmis un billet pour Lakeside Jazz Night. Réclamez-le pour obtenir votre propre code QR.
 
@@ -18269,7 +18269,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.claim-link · h
   "subject": "Lakeside Jazz Night का एक टिकट आपका इंतज़ार कर रहा है",
   "text": "Lakeside Jazz Night का एक टिकट आपका इंतज़ार कर रहा है
 
-नमस्ते,
+नमस्ते!
 
 किसी ने आपको Lakeside Jazz Night का टिकट भेजा है। अपना QR कोड पाने के लिए इसे क्लेम करें।
 
@@ -18287,7 +18287,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.claim-link · i
   "subject": "Un biglietto per Lakeside Jazz Night ti aspetta",
   "text": "Un biglietto per Lakeside Jazz Night ti aspetta
 
-Ciao,
+Ciao!
 
 Qualcuno ti ha passato un biglietto per Lakeside Jazz Night. Riscattalo per avere il tuo codice QR.
 
@@ -18323,7 +18323,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.claim-link · n
   "subject": "Er wacht een ticket voor Lakeside Jazz Night op je",
   "text": "Er wacht een ticket voor Lakeside Jazz Night op je
 
-Hallo,
+Hallo!
 
 Iemand heeft je een ticket voor Lakeside Jazz Night gegeven. Claim het voor je eigen QR-code.
 
@@ -18377,7 +18377,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.claim-link · z
   "subject": "有一张 Lakeside Jazz Night 的门票在等您",
   "text": "有一张 Lakeside Jazz Night 的门票在等您
 
-您好：
+您好！
 
 有人转给您一张 Lakeside Jazz Night 的门票。领取后即可获得您自己的二维码。
 
@@ -18395,7 +18395,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.claim-link · z
   "subject": "有一張 Lakeside Jazz Night 的票券在等您",
   "text": "有一張 Lakeside Jazz Night 的票券在等您
 
-您好：
+您好！
 
 有人轉給您一張 Lakeside Jazz Night 的票券。領取後即可取得您專屬的 QR 碼。
 
@@ -18413,7 +18413,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.holder-link · 
   "subject": "رابط تذاكرك لفعالية Lakeside Jazz Night",
   "text": "رابط تذاكرك لفعالية Lakeside Jazz Night
 
-مرحبًا،
+مرحبًا!
 
 إليك الرابط الذي طلبته. يفتح تذاكرك لفعالية Lakeside Jazz Night.
 
@@ -18431,7 +18431,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.holder-link · 
   "subject": "Dein Link zu deinen Tickets für Lakeside Jazz Night",
   "text": "Dein Link zu deinen Tickets für Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Hier ist der angeforderte Link. Er öffnet deine Tickets für Lakeside Jazz Night.
 
@@ -18449,7 +18449,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.holder-link · 
   "subject": "Your link to your tickets for Lakeside Jazz Night",
   "text": "Your link to your tickets for Lakeside Jazz Night
 
-Hello,
+Hello!
 
 Here is the link you asked for. It opens your tickets for Lakeside Jazz Night.
 
@@ -18467,7 +18467,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.holder-link · 
   "subject": "Tu enlace a tus entradas para Lakeside Jazz Night",
   "text": "Tu enlace a tus entradas para Lakeside Jazz Night
 
-Hola:
+¡Hola!
 
 Aquí tienes el enlace que pediste. Abre tus entradas para Lakeside Jazz Night.
 
@@ -18485,7 +18485,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.holder-link · 
   "subject": "Votre lien vers vos billets pour Lakeside Jazz Night",
   "text": "Votre lien vers vos billets pour Lakeside Jazz Night
 
-Bonjour,
+Bonjour !
 
 Voici le lien demandé. Il ouvre vos billets pour Lakeside Jazz Night.
 
@@ -18503,7 +18503,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.holder-link · 
   "subject": "Lakeside Jazz Night के आपके टिकटों का लिंक",
   "text": "Lakeside Jazz Night के आपके टिकटों का लिंक
 
-नमस्ते,
+नमस्ते!
 
 यह रहा आपका माँगा हुआ लिंक। यह Lakeside Jazz Night के आपके टिकट खोलता है।
 
@@ -18521,7 +18521,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.holder-link · 
   "subject": "Il link ai tuoi biglietti per Lakeside Jazz Night",
   "text": "Il link ai tuoi biglietti per Lakeside Jazz Night
 
-Ciao,
+Ciao!
 
 Ecco il link che hai richiesto. Apre i tuoi biglietti per Lakeside Jazz Night.
 
@@ -18557,7 +18557,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.holder-link · 
   "subject": "Je link naar je tickets voor Lakeside Jazz Night",
   "text": "Je link naar je tickets voor Lakeside Jazz Night
 
-Hallo,
+Hallo!
 
 Hier is de link die je vroeg. Hij opent je tickets voor Lakeside Jazz Night.
 
@@ -18611,7 +18611,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.holder-link · 
   "subject": "您的 Lakeside Jazz Night 门票链接",
   "text": "您的 Lakeside Jazz Night 门票链接
 
-您好：
+您好！
 
 这是您请求的链接，可打开您的 Lakeside Jazz Night 门票。
 
@@ -18629,7 +18629,7 @@ exports[`renderMessage: every kind in all 13 locales > ticketing.holder-link · 
   "subject": "您的 Lakeside Jazz Night 票券連結",
   "text": "您的 Lakeside Jazz Night 票券連結
 
-您好：
+您好！
 
 這是您要求的連結，可開啟您的 Lakeside Jazz Night 票券。
 
