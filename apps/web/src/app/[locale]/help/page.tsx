@@ -2,7 +2,6 @@ import { HELP_AUDIENCES } from '@yayatoh/cms';
 import { EmptyState } from '@yayatoh/ui';
 import { LifeBuoy } from 'lucide-react';
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { CategoryGrid, HelpShell } from '@/components/help/help-views.tsx';
 import { HomeFaq } from '@/components/showcase/home-sections.tsx';
@@ -17,7 +16,6 @@ type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const req = await requestHost();
-  if (!(await platformContentOrg(req))) return {};
   const t = await getTranslations({ locale, namespace: 'help' });
   return publicMetadata({
     req,
@@ -35,10 +33,9 @@ export default async function HelpCenter({ params }: Props) {
   const { locale } = await params;
   pageLocale(locale);
   const org = await platformContentOrg(await requestHost());
-  if (!org) notFound();
   const t = await getTranslations('help');
   const tp = await getTranslations('pages');
-  const center = await cachedHelpCenter(org.orgId, locale);
+  const center = org ? await cachedHelpCenter(org.orgId, locale) : { categories: [] };
   return (
     <HelpShell locale={locale} crumbs={[]}>
       <PageHero eyebrow={tp('eyebrow.help')} title={t('title')} lede={t('lede')} icon={LifeBuoy} />

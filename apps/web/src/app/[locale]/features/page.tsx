@@ -1,10 +1,9 @@
-import { EmptyState } from '@yayatoh/ui';
 import { Sparkles } from 'lucide-react';
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { SiteSections } from '@/components/marketing/site-sections.tsx';
 import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
+import { FeatureGrid, HowItWorks } from '@/components/showcase/home-sections.tsx';
 import { PageCta, PageHero } from '@/components/showcase/page-hero.tsx';
 import { cachedSections, platformContentOrg } from '@/server/help.ts';
 import { pageLocale } from '@/server/locale.ts';
@@ -16,7 +15,6 @@ type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const req = await requestHost();
-  if (!(await platformContentOrg(req))) return {};
   const t = await getTranslations({ locale, namespace: 'marketing' });
   return publicMetadata({
     req,
@@ -34,10 +32,9 @@ export default async function Features({ params }: Props) {
   const { locale } = await params;
   pageLocale(locale);
   const org = await platformContentOrg(await requestHost());
-  if (!org) notFound();
   const t = await getTranslations('marketing');
   const tp = await getTranslations('pages');
-  const sections = await cachedSections(org.orgId, 'features', locale);
+  const sections = org ? await cachedSections(org.orgId, 'features', locale) : [];
   return (
     <div className="min-h-dvh bg-surface">
       <SiteHeader />
@@ -49,7 +46,11 @@ export default async function Features({ params }: Props) {
           icon={Sparkles}
         />
         {sections.length === 0 ? (
-          <EmptyState title={t('features.emptyTitle')} description={t('features.emptyDescription')} />
+          // No staff-written sections (or no content org): the built-in overview, never an empty page.
+          <>
+            <FeatureGrid />
+            <HowItWorks />
+          </>
         ) : (
           <SiteSections sections={sections} layout="stack" locale={locale} />
         )}

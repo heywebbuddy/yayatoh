@@ -7108,7 +7108,9 @@
         "company": "Use at most 160 characters.",
         "message": "Write a message of 10 to 4,000 characters.",
         "human": "Confirm that you're a person."
-      }
+      },
+      "fallbackBody": "Write to us and we will answer by email, usually within one working day.",
+      "fallbackHelp": "Browse the help center"
     }
   },
   "status": {

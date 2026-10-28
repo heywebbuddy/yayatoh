@@ -7108,7 +7108,9 @@
         "company": "Utilisez 160 caractères au maximum.",
         "message": "Rédigez un message de 10 à 4 000 caractères.",
         "human": "Confirmez que vous êtes une personne."
-      }
+      },
+      "fallbackBody": "Écrivez-nous : nous répondons par e-mail, en général sous un jour ouvré.",
+      "fallbackHelp": "Consulter le centre d’aide"
     }
   },
   "status": {
