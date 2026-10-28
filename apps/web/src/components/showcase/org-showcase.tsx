@@ -6,11 +6,13 @@ import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { BrandSection } from '@/components/brand-styled.tsx';
 import { Pagination } from '@/components/marketplace/pagination.tsx';
-import { TagFilter } from '@/components/marketplace/tag-filter.tsx';
 import { MediaPicture } from '@/components/media-picture.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { categoryLabels, platformCategoryCatalog } from '@/server/event-categories.ts';
 import { Carousel } from './carousel.tsx';
-import { JaggedCircle } from './hero.tsx';
+import { TYPE_KEYS } from './categories.ts';
+import { CategoryRail, type RailItem } from './category-rail.tsx';
+import { HeroOrb } from './hero-orb.tsx';
 import { PosterCard } from './poster-card.tsx';
 import { Reveal } from './reveal.tsx';
 
@@ -65,6 +67,22 @@ export async function OrgShowcase({
   const t = await getTranslations('market');
   const tc = await getTranslations('cmsPublic');
   const ts = await getTranslations('showcase');
+  const tt = await getTranslations('showcase.types');
+  const tcat = await getTranslations('categories');
+  const catKeys = new Set((await platformCategoryCatalog()).map((c) => c.key));
+  const label = await categoryLabels((k) => tcat(k as 'music'));
+  // The org's own event types and platform categories, named like the marketplace pills; raw tags and counts stay out.
+  const have = new Set(listings.map((l) => l.profile));
+  const pills: RailItem[] = [
+    ...TYPE_KEYS.filter((k) => have.has(k)).map((k) => ({
+      key: `type:${k}`,
+      href: k === 'wedding' ? '/solutions/weddings' : `/events?type=${k}`,
+      label: tt(k),
+    })),
+    ...tags
+      .filter((x) => catKeys.has(x.key) && x.key !== 'other')
+      .map((x) => ({ key: `topic:${x.key}`, href: `/events?topic=${x.key}`, label: label(x.key) })),
+  ];
   const [covers, logos] = await Promise.all([
     publicCovers(listings.map((l) => l.slug)),
     publicMedia('org', orgId),
@@ -79,39 +97,34 @@ export async function OrgShowcase({
       <main id="main" className="mx-auto flex w-full max-w-7xl flex-col gap-14 px-4 pb-4 md:px-6">
         <section
           aria-labelledby="org-heading"
-          className="relative isolate grid items-center gap-8 overflow-hidden rounded-[36px] border border-line bg-surface p-6 md:grid-cols-[1.2fr_0.8fr] md:p-12"
+          className="relative isolate flex flex-col items-center gap-6 overflow-x-clip pt-10 text-center md:pt-16"
         >
           <BrandSection
             aria-hidden="true"
             brand={brand ? { background: brand.background, text: brand.text } : null}
-            className="pointer-events-none absolute -start-24 -top-24 -z-10 size-96 rounded-full bg-ember opacity-40 blur-3xl animate-breathe motion-reduce:animate-none"
+            className="pointer-events-none absolute start-1/2 top-10 -z-10 size-[28rem] -translate-x-1/2 rounded-full bg-ember opacity-40 blur-3xl animate-breathe motion-reduce:animate-none"
           />
-          <div className="flex flex-col items-start gap-5">
-            {logo ? (
-              <div
-                data-testid="org-logo"
-                className="flex size-20 items-center justify-center rounded-tile bg-white p-2"
-              >
-                <MediaPicture image={logo} sizes="80px" eager className="max-h-16 w-auto object-contain" />
-              </div>
-            ) : null}
-            <p className="m-0 text-caption font-bold tracking-widest text-ember uppercase">{eyebrow}</p>
+          {logo ? (
+            <div
+              data-testid="org-logo"
+              className="flex size-20 items-center justify-center rounded-tile bg-white p-2"
+            >
+              <MediaPicture image={logo} sizes="80px" eager className="max-h-16 w-auto object-contain" />
+            </div>
+          ) : null}
+          <p className="m-0 text-caption font-bold tracking-widest text-ember uppercase">{eyebrow}</p>
+          <HeroOrb cover={heroCover} className="w-[min(86vw,620px)]">
             <h1
               id="org-heading"
-              className="m-0 font-display text-[44px] leading-[0.95] font-black tracking-[-0.04em] text-ink uppercase animate-rise motion-reduce:animate-none md:text-[84px] [overflow-wrap:anywhere]"
+              className="pointer-events-none absolute inset-x-[-12%] top-1/2 m-0 -translate-y-1/2 px-2 font-display text-[clamp(24px,5.2vw,76px)] leading-[0.95] font-black tracking-[-0.04em] text-balance text-white uppercase [text-shadow:0_2px_24px_var(--color-scrim),0_0_2px_var(--color-scrim)]"
             >
               {name}
             </h1>
-            <p className="m-0 max-w-xl text-[17px] leading-relaxed text-ink-2">{lede}</p>
-            {links ? <div className="flex flex-wrap gap-4 text-body">{links}</div> : null}
-          </div>
-          <JaggedCircle cover={heroCover} className="mx-auto w-full max-w-sm" />
+          </HeroOrb>
+          <p className="m-0 max-w-xl text-[16px] text-ink-2 md:text-[18px]">{lede}</p>
+          {links ? <div className="flex flex-wrap justify-center gap-4 text-body">{links}</div> : null}
         </section>
-        {tags.length > 0 ? (
-          <div className="flex flex-col gap-3">
-            <TagFilter tags={tags} current={tag} path={path} />
-          </div>
-        ) : null}
+        {pills.length > 0 ? <CategoryRail items={pills} /> : null}
         {listings.length > 0 ? (
           <>
             <Carousel id="org-upcoming" title={t('upcoming')} viewAllHref="/events">
