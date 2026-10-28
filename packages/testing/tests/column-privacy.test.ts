@@ -35,7 +35,10 @@ function owners(): (schema: string) => string {
         for (const m of readFileSync(p, 'utf8').matchAll(/pgSchema\(\s*['"](\w+)['"]\s*\)/g))
           map.set(
             m[1] as string,
-            `${p.slice(root.length + 1).replace(/\/src\/.*$/, '')}/src/private-columns.ts`,
+            `${p
+              .slice(root.length + 1)
+              .replaceAll('\\', '/')
+              .replace(/\/src\/.*$/, '')}/src/private-columns.ts`,
           );
       }
     }
