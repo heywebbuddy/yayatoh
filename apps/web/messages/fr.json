@@ -20283,7 +20283,8 @@
       "eyebrow": "Clients",
       "title": "Ce que disent les organisateurs",
       "empty": "Les témoignages clients arrivent bientôt. Réservez une démo pour découvrir la plateforme avec notre équipe.",
-      "line1": "Ce que disent les organisateurs"
+      "line1": "Ce que disent les organisateurs",
+      "rating": "{n} étoiles sur 5"
     },
     "faq": {
       "title": "Questions",
@@ -20311,7 +20312,11 @@
         "q": "Puis-je quitter un autre outil de billetterie ?",
         "a": "Oui. Vous pouvez importer vos listes d'invités, et notre équipe peut vous aider à planifier la transition lors d'une démo."
       },
-      "line1": "Questions"
+      "line1": "Questions",
+      "intro": "Des réponses rapides aux questions les plus fréquentes des organisateurs. Pour le reste, un message suffit.",
+      "stillTitle": "Encore des questions ?",
+      "stillBody": "Parlez-nous de vos événements, notre équipe répond sous un jour ouvré.",
+      "stillCta": "Nous contacter"
     },
     "form": {
       "eyebrow": "Postuler",
@@ -20589,7 +20594,9 @@
         "tag1": "Dates",
         "tag2": "Place par date",
         "tag3": "Étapes"
-      }
+      },
+      "prev": "Modèles précédents",
+      "next": "Modèles suivants"
     },
     "types": {
       "eyebrow": "Types d'événements",

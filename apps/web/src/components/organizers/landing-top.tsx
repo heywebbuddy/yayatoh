@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import { HeroVideo } from '@/components/showcase/hero-video.tsx';
 import { Reveal } from '@/components/showcase/reveal.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { ScrollRow } from './interactive.tsx';
 import { CountUp, MaskLines, Parallax, Rise, StickyShowcase } from './motion.tsx';
 
 const FEATURES = [
@@ -281,7 +282,7 @@ export async function LandingTop({
           />
           <p className="m-0 max-w-2xl text-[17px] leading-relaxed text-black/70">{t('templates.lede')}</p>
         </div>
-        <ul className="no-scrollbar m-0 flex list-none snap-x gap-4 overflow-x-auto p-0 pb-2">
+        <ScrollRow label={t('templates.eyebrow')} prev={t('templates.prev')} next={t('templates.next')}>
           {TEMPLATES.map((x, i) => (
             <li key={x.key} className="w-[280px] shrink-0 snap-start md:w-[330px]">
               <Reveal delay={i % 5} className="h-full">
@@ -315,7 +316,7 @@ export async function LandingTop({
               </Reveal>
             </li>
           ))}
-        </ul>
+        </ScrollRow>
       </section>
 
       <section id="types" aria-labelledby="types-h" className="flex scroll-mt-28 flex-col gap-8">
@@ -333,28 +334,36 @@ export async function LandingTop({
               <Rise delay={0.03 * i}>
                 <Link
                   href={x.href}
-                  className="group flex min-h-20 items-center gap-3 py-4 transition-colors hover:text-ember focus-visible:text-ember md:gap-8"
+                  className="group flex min-h-20 items-center gap-3 py-4 transition-colors hover:text-ember focus-visible:text-ember md:gap-6"
                 >
                   <span className="w-10 shrink-0 font-display text-body font-black text-ink-3">
                     {String(i + 1).padStart(2, '0')}
                   </span>
-                  <span className="min-w-0 font-display text-[clamp(1.5rem,7vw,6.5rem)] leading-none font-black text-ink uppercase transition-colors group-hover:text-ember">
+                  <span className="shrink-0 font-display text-[clamp(1.5rem,5.6vw,5.5rem)] leading-none font-black text-ink uppercase transition-colors group-hover:text-ember">
                     {t(`types.${x.key}`)}
                   </span>
-                  <img
-                    src={`/organizers/shots/${x.shot}.jpg`}
-                    alt=""
-                    width={320}
-                    height={200}
-                    loading="lazy"
-                    decoding="async"
-                    className="hidden h-16 w-0 shrink-0 rounded-pill object-cover object-top opacity-0 transition-all duration-500 group-hover:w-40 group-hover:opacity-100 group-focus-visible:w-40 group-focus-visible:opacity-100 motion-reduce:transition-none md:block"
-                  />
-                  <span className="ms-auto inline-flex items-center gap-2 text-body font-bold text-ink-2">
-                    <span className="hidden md:inline">{t('types.open')}</span>
+                  <span className="ms-auto flex shrink-0 items-center gap-4">
+                    {/* The photo sits after the word in its own space: it grows in from zero width and never covers the letters. */}
+                    <span
+                      aria-hidden="true"
+                      className="hidden h-16 w-0 overflow-hidden rounded-pill opacity-0 transition-all duration-500 group-hover:w-28 group-hover:opacity-100 group-focus-visible:w-28 group-focus-visible:opacity-100 lg:block xl:group-hover:w-32 xl:group-focus-visible:w-32 motion-reduce:transition-none"
+                    >
+                      <img
+                        src={`/organizers/types/${x.key}.jpg`}
+                        alt=""
+                        width={160}
+                        height={100}
+                        loading="lazy"
+                        decoding="async"
+                        className="size-full object-cover"
+                      />
+                    </span>
+                    <span className="hidden text-body font-bold whitespace-nowrap text-ink-2 md:inline">
+                      {t('types.open')}
+                    </span>
                     <ArrowUpRight
                       aria-hidden="true"
-                      className="size-6 transition-transform group-hover:rotate-45 motion-reduce:transition-none"
+                      className="size-6 shrink-0 transition-transform group-hover:rotate-45 motion-reduce:transition-none"
                     />
                   </span>
                 </Link>

@@ -20283,7 +20283,8 @@
       "eyebrow": "Clientes",
       "title": "O que dizem os organizadores",
       "empty": "As histórias de clientes estão a caminho. Marque uma demo para ver a plataforma com a nossa equipa.",
-      "line1": "O que dizem os organizadores"
+      "line1": "O que dizem os organizadores",
+      "rating": "{n} de 5 estrelas"
     },
     "faq": {
       "title": "Perguntas",
@@ -20311,7 +20312,11 @@
         "q": "Posso migrar de outra ferramenta de bilhética?",
         "a": "Sim. Pode importar listas de convidados e a nossa equipa ajuda a planear a migração quando marcar uma demo."
       },
-      "line1": "Perguntas"
+      "line1": "Perguntas",
+      "intro": "Respostas rápidas ao que os organizadores mais perguntam. Para o resto, estamos a uma mensagem.",
+      "stillTitle": "Ainda tem dúvidas?",
+      "stillBody": "Conte-nos sobre os seus eventos e a nossa equipa responde em um dia útil.",
+      "stillCta": "Fale connosco"
     },
     "form": {
       "eyebrow": "Candidatar",
@@ -20589,7 +20594,9 @@
         "tag1": "Datas",
         "tag2": "Lugar por data",
         "tag3": "Etapas"
-      }
+      },
+      "prev": "Modelos anteriores",
+      "next": "Próximos modelos"
     },
     "types": {
       "eyebrow": "Tipos de evento",

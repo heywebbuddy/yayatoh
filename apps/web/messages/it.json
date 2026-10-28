@@ -20283,7 +20283,8 @@
       "eyebrow": "Clienti",
       "title": "Cosa dicono gli organizzatori",
       "empty": "Le storie dei clienti stanno arrivando. Prenota una demo per vedere la piattaforma con il nostro team.",
-      "line1": "Cosa dicono gli organizzatori"
+      "line1": "Cosa dicono gli organizzatori",
+      "rating": "{n} stelle su 5"
     },
     "faq": {
       "title": "Domande",
@@ -20311,7 +20312,11 @@
         "q": "Posso passare da un altro strumento di biglietteria?",
         "a": "Sì. Puoi importare le liste ospiti e il nostro team può aiutarti a pianificare il passaggio quando prenoti una demo."
       },
-      "line1": "Domande"
+      "line1": "Domande",
+      "intro": "Risposte rapide alle domande più frequenti degli organizzatori. Per il resto, basta un messaggio.",
+      "stillTitle": "Hai ancora domande?",
+      "stillBody": "Raccontaci i tuoi eventi e il nostro team risponde entro un giorno lavorativo.",
+      "stillCta": "Contattaci"
     },
     "form": {
       "eyebrow": "Candidati",
@@ -20589,7 +20594,9 @@
         "tag1": "Date",
         "tag2": "Posto per data",
         "tag3": "Tappe"
-      }
+      },
+      "prev": "Modelli precedenti",
+      "next": "Modelli successivi"
     },
     "types": {
       "eyebrow": "Tipi di evento",

@@ -6,7 +6,9 @@ import { Check, Globe, Minus } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ApplyForm } from '@/components/organizers/apply-form.tsx';
+import { ContactCard, FaqAccordion, QuoteMarquee } from '@/components/organizers/interactive.tsx';
 import { LandingTop } from '@/components/organizers/landing-top.tsx';
+import { MaskLines } from '@/components/organizers/motion.tsx';
 import { Reveal } from '@/components/showcase/reveal.tsx';
 import { ShowcaseShell } from '@/components/showcase/shell.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -72,6 +74,8 @@ const HIGHLIGHTS = ['ticketing', 'website', 'checkin', 'chat', 'ai', 'donations'
 const section = 'flex scroll-mt-28 flex-col gap-8';
 const h2 =
   'text-ink m-0 max-w-3xl font-display text-[28px] leading-[1.05] font-black tracking-[-0.03em] uppercase md:text-[40px] [overflow-wrap:anywhere]';
+const headBig =
+  'm-0 font-display text-[clamp(1.8rem,4.2vw,3.6rem)] leading-[0.95] font-black tracking-[-0.04em] text-ink uppercase';
 const eyebrow = 'm-0 text-caption font-bold tracking-widest text-ember uppercase';
 const lede = 'm-0 max-w-2xl text-[17px] leading-relaxed text-ink-2';
 const card = 'text-ink rounded-[28px] border border-line bg-surface p-6';
@@ -285,41 +289,32 @@ export default async function ForOrganizersPage({ params, searchParams }: Props)
         {quotes.length === 0 ? (
           <p className={cx(card, 'm-0 text-body text-ink-2')}>{t('stories.empty')}</p>
         ) : (
-          <ul className="m-0 grid list-none gap-4 p-0 md:grid-cols-2 lg:grid-cols-3">
-            {quotes.slice(0, 6).map((q) => (
-              <Reveal as="li" key={q.id}>
-                <figure className={cx(card, 'm-0 h-full')}>
-                  <blockquote className="m-0 text-body">“{q.quote}”</blockquote>
-                  <figcaption className="mt-3 text-caption text-ink-2">
-                    {q.name}
-                    {q.role ? ` · ${q.role}` : ''}
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
-          </ul>
+          <QuoteMarquee
+            items={quotes.slice(0, 8).map((q) => ({
+              id: q.id,
+              quote: q.quote,
+              name: q.name,
+              role: q.role,
+              photoUrl: q.photoUrl,
+              rating: q.rating,
+            }))}
+            ratings={[0, 1, 2, 3, 4, 5].map((n) => t('stories.rating', { n }))}
+          />
         )}
       </section>
 
-      <section id="faq" aria-labelledby="faq-h" className={section}>
-        <Reveal className="flex flex-col gap-3">
-          <h2 id="faq-h" className={h2}>
-            {t('faq.title')}
-          </h2>
+      <section
+        id="faq"
+        aria-labelledby="faq-h"
+        className="grid scroll-mt-28 gap-10 lg:grid-cols-[0.8fr_1.2fr]"
+      >
+        <Reveal className="flex flex-col items-start gap-5 lg:sticky lg:top-28 lg:self-start">
+          <p className={eyebrow}>{t('faq.title')}</p>
+          <MaskLines id="faq-h" lines={[t('faq.line1')]} className={headBig} />
+          <p className="m-0 max-w-md text-[17px] leading-relaxed text-ink-2">{t('faq.intro')}</p>
+          <ContactCard title={t('faq.stillTitle')} body={t('faq.stillBody')} cta={t('faq.stillCta')} />
         </Reveal>
-        <div className="flex max-w-3xl flex-col gap-2">
-          {FAQ.map((k) => (
-            <details
-              key={k}
-              className="group rounded-[20px] text-ink border border-line bg-surface px-5 py-3"
-            >
-              <summary className="min-h-10 cursor-pointer py-2 text-body font-bold marker:content-none">
-                {t(`faq.${k}.q`)}
-              </summary>
-              <p className="m-0 pb-2 text-body text-ink-2">{t(`faq.${k}.a`)}</p>
-            </details>
-          ))}
-        </div>
+        <FaqAccordion items={FAQ.map((k) => ({ q: t(`faq.${k}.q`), a: t(`faq.${k}.a`) }))} />
       </section>
 
       <section

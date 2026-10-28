@@ -20283,7 +20283,8 @@
       "eyebrow": "Customers",
       "title": "What organizers say",
       "empty": "Customer stories are on their way. Book a demo to see the platform with our team.",
-      "line1": "What organizers say"
+      "line1": "What organizers say",
+      "rating": "{n} out of 5 stars"
     },
     "faq": {
       "title": "Questions",
@@ -20311,7 +20312,11 @@
         "q": "Can I move from another ticketing tool?",
         "a": "Yes. You can import guest lists, and our team can help you plan the move when you book a demo."
       },
-      "line1": "Questions"
+      "line1": "Questions",
+      "intro": "Quick answers to what organizers ask us most. Anything else, we are one message away.",
+      "stillTitle": "Still have questions?",
+      "stillBody": "Tell us about your events and our team will answer within a working day.",
+      "stillCta": "Contact us"
     },
     "form": {
       "eyebrow": "Apply",
@@ -20589,7 +20594,9 @@
         "tag1": "Dates",
         "tag2": "Seat per date",
         "tag3": "Legs"
-      }
+      },
+      "prev": "Previous templates",
+      "next": "Next templates"
     },
     "types": {
       "eyebrow": "Event types",

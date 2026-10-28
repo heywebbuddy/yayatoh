@@ -20283,7 +20283,8 @@
       "eyebrow": "Klanten",
       "title": "Wat organisatoren zeggen",
       "empty": "Klantverhalen komen eraan. Boek een demo om het platform samen met ons team te zien.",
-      "line1": "Wat organisatoren zeggen"
+      "line1": "Wat organisatoren zeggen",
+      "rating": "{n} van 5 sterren"
     },
     "faq": {
       "title": "Vragen",
@@ -20311,7 +20312,11 @@
         "q": "Kan ik overstappen van een andere ticketingtool?",
         "a": "Ja. Je kunt gastenlijsten importeren, en ons team helpt je de overstap te plannen als je een demo boekt."
       },
-      "line1": "Vragen"
+      "line1": "Vragen",
+      "intro": "Snelle antwoorden op wat organisatoren ons het vaakst vragen. Voor de rest zijn we één bericht verwijderd.",
+      "stillTitle": "Nog vragen?",
+      "stillBody": "Vertel ons over je evenementen en ons team antwoordt binnen een werkdag.",
+      "stillCta": "Neem contact op"
     },
     "form": {
       "eyebrow": "Aanmelden",
@@ -20589,7 +20594,9 @@
         "tag1": "Data",
         "tag2": "Stoel per datum",
         "tag3": "Etappes"
-      }
+      },
+      "prev": "Vorige sjablonen",
+      "next": "Volgende sjablonen"
     },
     "types": {
       "eyebrow": "Soorten evenementen",

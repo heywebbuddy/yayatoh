@@ -20283,7 +20283,8 @@
       "eyebrow": "Kunden",
       "title": "Das sagen Veranstalter",
       "empty": "Kundengeschichten folgen bald. Buche eine Demo und sieh die Plattform mit unserem Team.",
-      "line1": "Das sagen Veranstalter"
+      "line1": "Das sagen Veranstalter",
+      "rating": "{n} von 5 Sternen"
     },
     "faq": {
       "title": "Fragen",
@@ -20311,7 +20312,11 @@
         "q": "Kann ich von einem anderen Ticketing-Tool wechseln?",
         "a": "Ja. Du kannst Gästelisten importieren, und unser Team hilft dir bei der Planung des Umzugs, wenn du eine Demo buchst."
       },
-      "line1": "Fragen"
+      "line1": "Fragen",
+      "intro": "Schnelle Antworten auf die häufigsten Fragen von Veranstaltern. Alles andere: nur eine Nachricht entfernt.",
+      "stillTitle": "Noch Fragen?",
+      "stillBody": "Erzähl uns von deinen Events, unser Team antwortet innerhalb eines Werktags.",
+      "stillCta": "Kontakt aufnehmen"
     },
     "form": {
       "eyebrow": "Bewerben",
@@ -20589,7 +20594,9 @@
         "tag1": "Termine",
         "tag2": "Platz pro Termin",
         "tag3": "Etappen"
-      }
+      },
+      "prev": "Vorherige Vorlagen",
+      "next": "Nächste Vorlagen"
     },
     "types": {
       "eyebrow": "Eventarten",

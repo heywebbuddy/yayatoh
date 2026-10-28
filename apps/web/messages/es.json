@@ -20283,7 +20283,8 @@
       "eyebrow": "Clientes",
       "title": "Lo que dicen los organizadores",
       "empty": "Las historias de clientes están en camino. Reserva una demo y conoce la plataforma con nuestro equipo.",
-      "line1": "Lo que dicen los organizadores"
+      "line1": "Lo que dicen los organizadores",
+      "rating": "{n} de 5 estrellas"
     },
     "faq": {
       "title": "Preguntas",
@@ -20311,7 +20312,11 @@
         "q": "¿Puedo migrar desde otra herramienta de venta de entradas?",
         "a": "Sí. Puedes importar listas de invitados, y nuestro equipo te ayuda a planificar el cambio cuando reserves una demo."
       },
-      "line1": "Preguntas"
+      "line1": "Preguntas",
+      "intro": "Respuestas rápidas a lo que más nos preguntan los organizadores. Para todo lo demás, estamos a un mensaje.",
+      "stillTitle": "¿Tienes más preguntas?",
+      "stillBody": "Cuéntanos sobre tus eventos y nuestro equipo responderá en un día laborable.",
+      "stillCta": "Contáctanos"
     },
     "form": {
       "eyebrow": "Solicitar",
@@ -20589,7 +20594,9 @@
         "tag1": "Fechas",
         "tag2": "Asiento por fecha",
         "tag3": "Tramos"
-      }
+      },
+      "prev": "Plantillas anteriores",
+      "next": "Plantillas siguientes"
     },
     "types": {
       "eyebrow": "Tipos de evento",

@@ -20,7 +20,10 @@ export async function ShowcaseShell({
   return (
     <div data-surface="showcase" className="min-h-dvh bg-page">
       <ShowcaseTopBar {...(name ? { name } : {})} />
-      <main id="main" className={`mx-auto flex w-full ${width} flex-col gap-16 px-4 pb-4 md:px-6`}>
+      <main
+        id="main"
+        className={`mx-auto flex w-full ${width} flex-col gap-16 px-4 pt-5 pb-4 md:px-6 md:pt-6`}
+      >
         {children}
       </main>
       <ShowcaseFooter>{footerTop}</ShowcaseFooter>

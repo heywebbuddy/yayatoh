@@ -94,7 +94,10 @@ export async function OrgShowcase({
   return (
     <div data-surface="showcase" className="min-h-dvh bg-page">
       {header}
-      <main id="main" className="mx-auto flex w-full max-w-7xl flex-col gap-14 px-4 pb-4 md:px-6">
+      <main
+        id="main"
+        className="mx-auto flex w-full max-w-7xl flex-col gap-14 px-4 pt-5 pb-4 md:px-6 md:pt-6"
+      >
         <section
           aria-labelledby="org-heading"
           className="relative isolate flex flex-col items-center gap-6 overflow-x-clip pt-10 text-center md:pt-16"
