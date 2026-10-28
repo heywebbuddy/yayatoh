@@ -1,6 +1,7 @@
 import { EVENT_PROFILES, markdownToPlainText, sanitizeMarkdown } from '@yayatoh/events';
 import { z } from 'zod';
 import { AiOutputError, addMinutesLocal, cleanAgendaDraft, parseJsonReply } from './compose.ts';
+import { guessTimeZone, isTimeZone } from './timezone.ts';
 
 /**
  * "Create with AI" (step 5 of the showcase work): the organizer describes an event in a sentence or
@@ -11,7 +12,9 @@ import { AiOutputError, addMinutesLocal, cleanAgendaDraft, parseJsonReply } from
  */
 
 export const SETUP_MAX_TICKETS = 6;
-export const SETUP_MAX_AGENDA = 12;
+export const SETUP_MAX_AGENDA = 24;
+export const SETUP_MAX_PICKUPS = 8;
+export const SETUP_MAX_REPEAT_DAYS = 30;
 export const SETUP_MAX_FAQS = 8;
 
 export const SetupTicketDto = z.object({
@@ -46,6 +49,12 @@ export const EventSetupDraftDto = z.object({
   endsLocal: z.string().regex(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/),
   venueName: z.string().max(160),
   city: z.string().max(120),
+  /** The IANA zone of the event's place when it differs from the organization's; null keeps the default. */
+  timezone: z.string().nullable(),
+  /** A tour that departs every day: how many days in a row (0 = a single date). */
+  repeatDays: z.int().min(0).max(SETUP_MAX_REPEAT_DAYS),
+  /** Named pickup points of a tour. */
+  pickups: z.array(z.string().min(1).max(80)).max(SETUP_MAX_PICKUPS),
   description: z.string().max(6000),
   tickets: z.array(SetupTicketDto).max(SETUP_MAX_TICKETS),
   agenda: z.array(SetupAgendaItemDto).max(SETUP_MAX_AGENDA),
@@ -59,6 +68,8 @@ export interface SetupBounds {
   readonly today: string;
   /** Profiles the organizer may pick (their entitled event types). */
   readonly profiles: readonly string[];
+  /** The organizer's own words: the time zone is read from a city named there when the reply has none. */
+  readonly brief?: string;
 }
 
 const stripTags = (s: string) => s.replace(/<\/?[a-zA-Z][^>]*>/g, '');
@@ -94,6 +105,9 @@ const Raw = z.object({
   endsLocal: z.string().optional(),
   venueName: z.string().nullable().optional().default(''),
   city: z.string().nullable().optional().default(''),
+  timezone: z.string().nullable().optional().default(null),
+  repeatDays: z.number().nullable().optional().default(0),
+  pickups: z.array(z.string()).nullable().optional().default([]),
   description: z.string().optional().default(''),
   tickets: z
     .array(
@@ -162,14 +176,25 @@ export function cleanEventSetupDraft(raw: string, bounds: SetupBounds): EventSet
     if (faqs.length >= SETUP_MAX_FAQS) break;
   }
   const profile = bounds.profiles.includes(d.profile) ? d.profile : 'other';
+  const city = oneLine(d.city, 120);
+  const venueName = oneLine(d.venueName, 160);
+  const timezone = isTimeZone(d.timezone) ? d.timezone : guessTimeZone(city, venueName, bounds.brief ?? '');
+  const isTour = profile === 'tour';
+  const repeatDays = isTour ? Math.min(SETUP_MAX_REPEAT_DAYS, Math.max(0, Math.round(d.repeatDays ?? 0))) : 0;
+  const pickups = isTour
+    ? [...new Set((d.pickups ?? []).map((x) => oneLine(x, 80)).filter(Boolean))].slice(0, SETUP_MAX_PICKUPS)
+    : [];
   const draft = {
     name: oneLine(d.name, 160),
     tagline: oneLine(d.tagline, 280),
     profile,
     startsLocal,
     endsLocal,
-    venueName: oneLine(d.venueName, 160),
-    city: oneLine(d.city, 120),
+    venueName,
+    city,
+    timezone,
+    repeatDays,
+    pickups,
     description: sanitizeMarkdown(stripTags(d.description).replace(/^#{1,6}\s+/gm, ''), 6000),
     tickets,
     agenda,
