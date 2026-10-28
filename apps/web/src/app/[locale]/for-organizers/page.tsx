@@ -142,9 +142,19 @@ export default async function ForOrganizersPage({ params, searchParams }: Props)
   const initialPlan = planIds.includes(sp.plan ?? '') ? (sp.plan as string) : 'unsure';
   const videoUrl = process.env.ORGANIZER_VIDEO_URL?.trim();
   const video = videoUrl && /^https:\/\//.test(videoUrl) ? videoUrl : null;
+  /** What staff set in Plans & billing: only a plan switched on there shows prices (month and year, one currency). */
   const price = (key: string) => {
-    const p = tierOf(key)?.prices.find((x) => x.interval === 'month');
-    return p ? formatMoney(money(p.unitAmountMinor, p.currency), locale) : null;
+    const tier = tierOf(key);
+    if (!tier?.active) return { state: 'pending' as const };
+    if (tier.prices.length === 0) return { state: 'custom' as const };
+    const currency = tier.prices.some((x) => x.currency === 'USD')
+      ? 'USD'
+      : (tier.prices[0]?.currency ?? 'USD');
+    const fmt = (interval: 'month' | 'year') => {
+      const x = tier.prices.find((y) => y.interval === interval && y.currency === currency);
+      return x ? formatMoney(money(x.unitAmountMinor, x.currency), locale) : null;
+    };
+    return { state: 'priced' as const, month: fmt('month'), year: fmt('year') };
   };
   return (
     <ShowcaseShell>
@@ -314,7 +324,7 @@ export default async function ForOrganizersPage({ params, searchParams }: Props)
         </Reveal>
         <ul className="m-0 grid list-none gap-4 p-0 md:grid-cols-2 xl:grid-cols-4">
           {TIERS.map((p, i) => {
-            const amount = price(p.key);
+            const pr = price(p.key);
             return (
               <Reveal as="li" key={p.id} delay={i}>
                 <article
@@ -324,9 +334,20 @@ export default async function ForOrganizersPage({ params, searchParams }: Props)
                     {t(`plans.${p.id}.name`)}
                   </h3>
                   <p className="m-0 text-body text-ink-2">{t(`plans.${p.id}.body`)}</p>
-                  <p className="m-0 font-display text-[28px] font-black">
-                    {amount ? t('plans.perMonth', { price: amount }) : t('plans.onApproval')}
-                  </p>
+                  <div className="flex flex-col gap-1">
+                    <p className="m-0 font-display text-[28px] font-black">
+                      {pr.state === 'priced' && (pr.month || pr.year)
+                        ? pr.month
+                          ? t('plans.perMonth', { price: pr.month })
+                          : t('plans.perYear', { price: pr.year ?? '' })
+                        : pr.state === 'custom'
+                          ? t('plans.custom')
+                          : t('plans.onApproval')}
+                    </p>
+                    {pr.state === 'priced' && pr.month && pr.year ? (
+                      <p className="m-0 text-caption text-ink-2">{t('plans.orYearly', { price: pr.year })}</p>
+                    ) : null}
+                  </div>
                   <ul className="m-0 flex list-none flex-col gap-2 p-0">
                     {HIGHLIGHTS.filter((m) => has(p.key, m)).map((m) => (
                       <li key={m} className="flex items-start gap-2 text-body">

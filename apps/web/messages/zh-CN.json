@@ -20307,7 +20307,10 @@
       "enterprise": {
         "name": "Enterprise",
         "body": "适合有定制需求的大型项目。"
-      }
+      },
+      "perYear": "每年 {price}",
+      "custom": "定制报价",
+      "orYearly": "或按年计费 {price}"
     },
     "modules": {
       "ticketing": "票务",

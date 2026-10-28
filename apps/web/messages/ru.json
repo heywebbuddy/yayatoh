@@ -20307,7 +20307,10 @@
       "enterprise": {
         "name": "Enterprise",
         "body": "Для крупных программ с особыми требованиями."
-      }
+      },
+      "perYear": "{price} в год",
+      "custom": "Индивидуальная цена",
+      "orYearly": "или {price} при оплате за год"
     },
     "modules": {
       "ticketing": "Продажа билетов",

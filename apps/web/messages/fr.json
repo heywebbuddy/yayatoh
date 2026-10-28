@@ -20307,7 +20307,10 @@
       "enterprise": {
         "name": "Enterprise",
         "body": "Pour les grands programmes aux besoins sur mesure."
-      }
+      },
+      "perYear": "{price} par an",
+      "custom": "Tarif sur mesure",
+      "orYearly": "ou {price} facturé annuellement"
     },
     "modules": {
       "ticketing": "Billetterie",

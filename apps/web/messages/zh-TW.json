@@ -20307,7 +20307,10 @@
       "enterprise": {
         "name": "Enterprise",
         "body": "適合有客製需求的大型專案。"
-      }
+      },
+      "perYear": "每年 {price}",
+      "custom": "客製報價",
+      "orYearly": "或按年計費 {price}"
     },
     "modules": {
       "ticketing": "票務",

@@ -20307,7 +20307,10 @@
       "enterprise": {
         "name": "Enterprise",
         "body": "अनुकूलित ज़रूरतों वाले बड़े कार्यक्रमों के लिए।"
-      }
+      },
+      "perYear": "{price} प्रति वर्ष",
+      "custom": "कस्टम मूल्य",
+      "orYearly": "या सालाना {price}"
     },
     "modules": {
       "ticketing": "टिकटिंग",

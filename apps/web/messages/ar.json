@@ -20307,7 +20307,10 @@
       "enterprise": {
         "name": "Enterprise",
         "body": "للبرامج الكبيرة ذات الاحتياجات المخصصة."
-      }
+      },
+      "perYear": "{price} في السنة",
+      "custom": "تسعير مخصص",
+      "orYearly": "أو {price} سنويًا"
     },
     "modules": {
       "ticketing": "التذاكر",

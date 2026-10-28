@@ -20307,7 +20307,10 @@
       "enterprise": {
         "name": "Enterprise",
         "body": "Voor grote programma's met maatwerk."
-      }
+      },
+      "perYear": "{price} per jaar",
+      "custom": "Prijs op maat",
+      "orYearly": "of {price} jaarlijks gefactureerd"
     },
     "modules": {
       "ticketing": "Ticketing",
