@@ -8709,7 +8709,12 @@
       "apply": "使用此草稿",
       "applied": "草稿已放入编辑器。请检查后保存。",
       "discard": "放弃",
-      "discarded": "已放弃草稿,没有任何更改。"
+      "discarded": "已放弃草稿,没有任何更改。",
+      "autoApplied": "草稿已放入下方编辑器。可以保留，或撤销以恢复你原来的文字。",
+      "keep": "保留草稿",
+      "undo": "撤销",
+      "kept": "已保留草稿。请检查后保存。",
+      "undone": "已恢复你之前的文字。"
     }
   },
   "journeys": {
@@ -19867,7 +19872,11 @@
       "venue": "场地",
       "city": "城市",
       "description": "描述",
-      "descriptionHint": "Markdown：段落、粗体、斜体和列表。"
+      "descriptionHint": "Markdown：段落、粗体、斜体和列表。",
+      "repeatDays": "每天出发，连续（天数）",
+      "repeatDaysHint": "行程连续举办的天数。0 或 1 表示单一日期。",
+      "pickups": "上车点",
+      "pickupsHint": "每行一个，例如地铁站或酒店。"
     },
     "tickets": {
       "title": "票种",

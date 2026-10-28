@@ -8709,7 +8709,12 @@
       "apply": "Diesen Entwurf verwenden",
       "applied": "Entwurf in den Editor übernommen. Prüfe ihn und speichere dann.",
       "discard": "Verwerfen",
-      "discarded": "Entwurf verworfen. Nichts wurde geändert."
+      "discarded": "Entwurf verworfen. Nichts wurde geändert.",
+      "autoApplied": "Der Entwurf steht jetzt unten im Editor. Behalte ihn oder mach ihn rückgängig, um deinen Text zurückzubekommen.",
+      "keep": "Entwurf behalten",
+      "undo": "Rückgängig",
+      "kept": "Entwurf behalten. Prüfe ihn und speichere dann.",
+      "undone": "Dein vorheriger Text ist zurück."
     }
   },
   "journeys": {
@@ -19867,7 +19872,11 @@
       "venue": "Veranstaltungsort",
       "city": "Stadt",
       "description": "Beschreibung",
-      "descriptionHint": "Markdown: Absätze, fett, kursiv und Listen."
+      "descriptionHint": "Markdown: Absätze, fett, kursiv und Listen.",
+      "repeatDays": "Fährt täglich für (Tage)",
+      "repeatDaysHint": "An wie vielen Tagen in Folge die Tour stattfindet. 0 oder 1 ist ein einzelner Termin.",
+      "pickups": "Abholpunkte",
+      "pickupsHint": "Einer pro Zeile, zum Beispiel eine U-Bahn-Station oder ein Hotel."
     },
     "tickets": {
       "title": "Tickettypen",

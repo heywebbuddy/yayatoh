@@ -8709,7 +8709,12 @@
       "apply": "使用此草稿",
       "applied": "草稿已放入編輯器。請檢查後儲存。",
       "discard": "捨棄",
-      "discarded": "已捨棄草稿,沒有任何變更。"
+      "discarded": "已捨棄草稿,沒有任何變更。",
+      "autoApplied": "草稿已放入下方編輯器。可以保留，或復原以取回你原本的文字。",
+      "keep": "保留草稿",
+      "undo": "復原",
+      "kept": "已保留草稿。請檢查後儲存。",
+      "undone": "已取回你先前的文字。"
     }
   },
   "journeys": {
@@ -19867,7 +19872,11 @@
       "venue": "場地",
       "city": "城市",
       "description": "說明",
-      "descriptionHint": "Markdown：段落、粗體、斜體與清單。"
+      "descriptionHint": "Markdown：段落、粗體、斜體與清單。",
+      "repeatDays": "每天出發，連續（天數）",
+      "repeatDaysHint": "行程連續舉辦的天數。0 或 1 表示單一日期。",
+      "pickups": "上車點",
+      "pickupsHint": "每行一個，例如捷運站或飯店。"
     },
     "tickets": {
       "title": "票種",

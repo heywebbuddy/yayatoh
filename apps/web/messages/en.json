@@ -8709,7 +8709,12 @@
       "apply": "Use this draft",
       "applied": "Draft placed in the editor. Review it, then save.",
       "discard": "Discard",
-      "discarded": "Draft discarded. Nothing changed."
+      "discarded": "Draft discarded. Nothing changed.",
+      "autoApplied": "The draft is now in the editor below. Keep it, or undo to get your text back.",
+      "keep": "Keep draft",
+      "undo": "Undo",
+      "kept": "Draft kept. Review it, then save.",
+      "undone": "Your previous text is back."
     }
   },
   "journeys": {
@@ -19867,7 +19872,11 @@
       "venue": "Venue",
       "city": "City",
       "description": "Description",
-      "descriptionHint": "Markdown: paragraphs, bold, italic and lists."
+      "descriptionHint": "Markdown: paragraphs, bold, italic and lists.",
+      "repeatDays": "Departs daily for (days)",
+      "repeatDaysHint": "How many days in a row the tour runs. 0 or 1 is a single date.",
+      "pickups": "Pickup points",
+      "pickupsHint": "One per line, for example a metro station or a hotel."
     },
     "tickets": {
       "title": "Ticket types",

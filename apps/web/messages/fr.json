@@ -8709,7 +8709,12 @@
       "apply": "Utiliser ce brouillon",
       "applied": "Brouillon placé dans l'éditeur. Relisez-le, puis enregistrez.",
       "discard": "Ignorer",
-      "discarded": "Brouillon ignoré. Rien n'a changé."
+      "discarded": "Brouillon ignoré. Rien n'a changé.",
+      "autoApplied": "Le brouillon est maintenant dans l’éditeur ci-dessous. Gardez-le, ou annulez pour retrouver votre texte.",
+      "keep": "Garder le brouillon",
+      "undo": "Annuler",
+      "kept": "Brouillon conservé. Relisez-le puis enregistrez.",
+      "undone": "Votre texte précédent est de retour."
     }
   },
   "journeys": {
@@ -19867,7 +19872,11 @@
       "venue": "Lieu",
       "city": "Ville",
       "description": "Description",
-      "descriptionHint": "Markdown : paragraphes, gras, italique et listes."
+      "descriptionHint": "Markdown : paragraphes, gras, italique et listes.",
+      "repeatDays": "Départ quotidien pendant (jours)",
+      "repeatDaysHint": "Combien de jours de suite la visite a lieu. 0 ou 1 correspond à une seule date.",
+      "pickups": "Points de prise en charge",
+      "pickupsHint": "Un par ligne, par exemple une station de métro ou un hôtel."
     },
     "tickets": {
       "title": "Types de billets",
