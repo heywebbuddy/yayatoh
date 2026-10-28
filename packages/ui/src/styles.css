@@ -65,7 +65,7 @@
   --color-ember: #ff3150;
   --color-flame: #ff7a1a;
   --color-rose: #ff3d86;
-  --color-grape: #a35bff;
+  --color-grape: #7f3fe0;
   --color-ocean: #3d9bff;
   --color-lime: #3be6a4;
 
@@ -340,6 +340,53 @@
  * light and dark. An organizer's event page can choose it too (event branding, "Showcase").
  */
 [data-surface="showcase"] {
+  --color-canvas: #f7f4f1;
+  --color-surface: #ffffff;
+  --color-surface-solid: #ffffff;
+  --color-surface-2: #f2eeea;
+  --color-surface-3: #e8e2dc;
+  --color-line: rgba(30, 20, 15, 0.12);
+  --color-line-strong: #7a726b;
+  --color-ink: #17120f;
+  --color-ink-2: #4f4640;
+  --color-ink-3: #6b625b;
+  --color-primary: #d4123a;
+  --color-primary-hover: #bd0f33;
+  --color-primary-pressed: #a50c2c;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #b00e30;
+  --color-primary-soft: rgba(212, 18, 58, 0.1);
+  --color-brand: #c91b68;
+  --color-brand-strong: #c91b68;
+  --color-brand-ink: #a8124f;
+  --color-brand-soft: rgba(201, 27, 104, 0.1);
+  --color-success: #0b7a4b;
+  --color-success-soft: rgba(11, 122, 75, 0.12);
+  --color-success-dot: #14a367;
+  --color-warning: #8a5300;
+  --color-warning-soft: rgba(138, 83, 0, 0.12);
+  --color-warning-dot: #d98a00;
+  --color-danger: #bf1b3c;
+  --color-danger-soft: rgba(191, 27, 60, 0.1);
+  --color-danger-dot: #d92d4d;
+  --color-tag: #2b2420;
+  --color-tag-ink: #ffffff;
+  --color-focus: #b00e30;
+  --color-scrim: rgba(23, 18, 15, 0.55);
+  --gradient-page: radial-gradient(60% 40% at 50% -10%, rgba(255, 49, 80, 0.16), rgba(255, 49, 80, 0) 70%);
+  --gradient-hero: radial-gradient(90% 120% at 90% 10%, #ff6a4d 0%, #d4123a 42%, #6d0a1f 100%);
+  --gradient-ember: linear-gradient(100deg, #d4122c 0%, #d8420c 52%, #c41a62 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #d4122c 0%, #e0264f 55%, #e84a6a 100%);
+  --elevation-card: 0 0 0 1px rgba(30, 20, 15, 0.06), 0 14px 36px rgba(60, 30, 15, 0.1);
+  --elevation-pop: 0 0 0 1px rgba(30, 20, 15, 0.1), 0 24px 64px rgba(60, 30, 15, 0.18);
+  --elevation-primary: 0 8px 24px rgba(212, 18, 58, 0.28);
+  color-scheme: light;
+  color: var(--color-ink);
+  background-color: var(--color-canvas);
+}
+
+/* The dark showcase: chosen with the theme switch, or followed from the system. */
+[data-theme="dark"] [data-surface="showcase"] {
   --color-canvas: #0a0a0a;
   --color-surface: #141414;
   --color-surface-solid: #141414;
@@ -350,14 +397,14 @@
   --color-ink: #ffffff;
   --color-ink-2: #bdbdbd;
   --color-ink-3: #8c8c8c;
-  --color-primary: #ff3150;
-  --color-primary-hover: #ff4d68;
-  --color-primary-pressed: #e61f40;
+  --color-primary: #e41c3f;
+  --color-primary-hover: #cf1636;
+  --color-primary-pressed: #b8122f;
   --color-on-primary: #ffffff;
   --color-primary-ink: #ff8a9b;
   --color-primary-soft: rgba(255, 49, 80, 0.18);
   --color-brand: #ff3d86;
-  --color-brand-strong: #ff3d86;
+  --color-brand-strong: #d81b68;
   --color-brand-ink: #ff7eaf;
   --color-brand-soft: rgba(255, 61, 134, 0.16);
   --color-success: #4be9ac;
@@ -383,6 +430,53 @@
   color-scheme: dark;
   color: var(--color-ink);
   background-color: var(--color-canvas);
+}
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] [data-surface="showcase"] {
+    --color-canvas: #0a0a0a;
+    --color-surface: #141414;
+    --color-surface-solid: #141414;
+    --color-surface-2: #1b1b1b;
+    --color-surface-3: #262626;
+    --color-line: rgba(255, 255, 255, 0.1);
+    --color-line-strong: #6e6e6e;
+    --color-ink: #ffffff;
+    --color-ink-2: #bdbdbd;
+    --color-ink-3: #8c8c8c;
+    --color-primary: #e41c3f;
+    --color-primary-hover: #cf1636;
+    --color-primary-pressed: #b8122f;
+    --color-on-primary: #ffffff;
+    --color-primary-ink: #ff8a9b;
+    --color-primary-soft: rgba(255, 49, 80, 0.18);
+    --color-brand: #ff3d86;
+    --color-brand-strong: #d81b68;
+    --color-brand-ink: #ff7eaf;
+    --color-brand-soft: rgba(255, 61, 134, 0.16);
+    --color-success: #4be9ac;
+    --color-success-soft: rgba(59, 230, 164, 0.14);
+    --color-success-dot: #3be6a4;
+    --color-warning: #ffc56e;
+    --color-warning-soft: rgba(255, 197, 110, 0.14);
+    --color-warning-dot: #ffb84d;
+    --color-danger: #ff8798;
+    --color-danger-soft: rgba(255, 122, 140, 0.15);
+    --color-danger-dot: #ff6b81;
+    --color-tag: rgba(255, 255, 255, 0.1);
+    --color-tag-ink: #ffffff;
+    --color-focus: #ff8a9b;
+    --color-scrim: rgba(0, 0, 0, 0.7);
+    --gradient-page: radial-gradient(60% 40% at 50% -10%, rgba(255, 49, 80, 0.28), rgba(255, 49, 80, 0) 70%);
+    --gradient-hero: radial-gradient(90% 120% at 90% 10%, #ff5d4d 0%, #c8102e 38%, #1a0508 100%);
+    --gradient-ember: linear-gradient(100deg, #ff2d3d 0%, #ff6a2b 52%, #ff3d86 100%);
+    --gradient-ember-soft: linear-gradient(135deg, #ff2d3d 0%, #ff4d6d 55%, #ff7a8c 100%);
+    --elevation-card: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 24px 48px rgba(0, 0, 0, 0.5);
+    --elevation-pop: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 24px 64px rgba(0, 0, 0, 0.7);
+    --elevation-primary: 0 8px 28px rgba(255, 49, 80, 0.45);
+    color-scheme: dark;
+    color: var(--color-ink);
+    background-color: var(--color-canvas);
+  }
 }
 
 /* An organizer's heading-font choice for the event page (event branding). */

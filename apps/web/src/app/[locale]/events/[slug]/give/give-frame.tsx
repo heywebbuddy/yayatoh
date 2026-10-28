@@ -1,7 +1,7 @@
 import { cx } from '@yayatoh/ui';
 import type { ReactNode } from 'react';
 import { ThemeSwitch } from '@/components/theme-switch.tsx';
-import { currentTheme } from '@/server/theme.ts';
+import { pageTheme } from '@/server/theme.ts';
 
 /** A public card on the giving pages, as on the v2 public event page (ADR 0022). */
 export const giveCard =
@@ -12,7 +12,7 @@ export const giveCard =
  * bar with the organizer and the theme switch, then one column.
  */
 export async function GiveFrame({ organizer, children }: { organizer: string; children: ReactNode }) {
-  const theme = await currentTheme();
+  const theme = await pageTheme();
   const initials = organizer
     .split(/\s+/)
     .filter(Boolean)

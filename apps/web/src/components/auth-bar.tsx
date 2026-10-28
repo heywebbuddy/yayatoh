@@ -1,13 +1,13 @@
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
-import { currentTheme } from '@/server/theme.ts';
+import { pageTheme } from '@/server/theme.ts';
 import { BrandMark } from './brand-mark.tsx';
 import { ThemeSwitch } from './theme-switch.tsx';
 
 /** The sign-in and onboarding frame (ADR 0022): the wordmark home and the theme switch. */
 export async function AuthBar() {
   const t = await getTranslations('brand');
-  const theme = await currentTheme();
+  const theme = await pageTheme();
   return (
     <div className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 pt-4 sm:px-6 sm:pt-6">
       <Link

@@ -354,10 +354,18 @@ export const TOUCH_TARGET_PX = 44;
  * The showcase surface (the public marketplace look): the roles it re-points inside a
  * `data-surface="showcase"` wrapper, and its accent stops. styles.css declares the same values.
  */
+export const showcaseLight = {
+  canvas: '#F7F4F1',
+  surface: '#FFFFFF',
+  ink: '#17120F',
+  primary: '#D4123A',
+  ember: ['#D4122C', '#D8420C', '#C41A62'],
+} as const;
+
 export const showcase = {
   canvas: '#0A0A0A',
   surface: '#141414',
   ink: '#FFFFFF',
-  primary: '#FF3150',
+  primary: '#E41C3F',
   ember: ['#FF2D3D', '#FF6A2B', '#FF3D86'],
 } as const;

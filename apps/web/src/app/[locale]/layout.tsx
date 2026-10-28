@@ -12,7 +12,7 @@ import { routing } from '@/i18n/routing.ts';
 import { fontVariables } from '@/lib/fonts.ts';
 import { INTL_SCOPE_HEADER, scopedMessages } from '@/lib/intl-scope.ts';
 import { showcaseSurfaceFor } from '@/lib/showcase-routes.ts';
-import { currentTheme } from '@/server/theme.ts';
+import { pageTheme } from '@/server/theme.ts';
 import '../globals.css';
 
 export function generateStaticParams() {
@@ -43,9 +43,11 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
   const dir = RTL_LOCALES.has(locale) ? 'rtl' : 'ltr';
-  // ADR 0022: light by default; the person's choice comes from a cookie read here, so the first
+  // ADR 0022: light by default (system on the public site); the person's choice comes from a cookie read here, so the first
   // HTML already carries it (no flash). "system" is resolved by CSS.
-  const theme = await currentTheme();
+  // The public showcase site starts from the visitor's system setting; everything else from light.
+  const showcase = showcaseSurfaceFor((await headers()).get('x-yy-path'));
+  const theme = await pageTheme();
   // M4.7a: a scoped page (proxy.ts) sends its client components only the namespaces it needs.
   const messages = scopedMessages(await getMessages(), (await headers()).get(INTL_SCOPE_HEADER));
   // The words the form controls say themselves (U1), with the locale for dates and digits.
@@ -55,7 +57,7 @@ export default async function LocaleLayout({
     <html lang={locale} dir={dir} data-theme={theme} className={fontVariables}>
       <body
         className="min-h-dvh bg-page text-ink antialiased"
-        {...(showcaseSurfaceFor((await headers()).get('x-yy-path')) ? { 'data-surface': 'showcase' } : {})}
+        {...(showcase ? { 'data-surface': 'showcase' } : {})}
       >
         {/* Platform-wide read-only freeze (M2.5a): on every page, public ones included. */}
         <MaintenanceBanner locale={locale} />

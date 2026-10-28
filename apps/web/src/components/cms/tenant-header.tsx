@@ -6,7 +6,7 @@ import { TenantAccount } from '@/components/tenant-account.tsx';
 import { ThemeSwitch } from '@/components/theme-switch.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { cachedContactPage, cachedEntries, cachedNavPages, entryPath } from '@/server/cms.ts';
-import { currentTheme } from '@/server/theme.ts';
+import { pageTheme } from '@/server/theme.ts';
 
 const linkClass =
   'inline-flex min-h-10 items-center rounded-[10px] px-3 font-bold text-ink-2 hover:bg-surface-3 hover:text-ink aria-[current=page]:bg-surface-3 aria-[current=page]:text-ink';
@@ -23,7 +23,7 @@ export async function TenantHeader({ org, current }: { org: PublicOrganizer; cur
     cachedEntries(org.orgId, 'post', 1),
     cachedContactPage(org.orgId),
     getLocale(),
-    currentTheme(),
+    pageTheme(),
     publicMedia('org', org.orgId),
   ]);
   // White-label (agreement §3): the org's own logo in its site's header, else its initials.

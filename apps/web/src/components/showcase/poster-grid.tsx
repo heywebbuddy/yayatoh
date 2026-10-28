@@ -30,7 +30,7 @@ export async function PosterGrid({
             listing={l}
             cover={covers.get(l.slug) ?? null}
             locale={locale}
-            className="w-full"
+            className="w-full md:w-full"
             eager={i < 10}
           />
         </li>

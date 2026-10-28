@@ -3,10 +3,12 @@ import { Menu, Search } from 'lucide-react';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { BrandMark } from '@/components/brand-mark.tsx';
 import { IncidentBanner } from '@/components/status/incident-banner.tsx';
+import { ThemeRadios, ThemeSwitch } from '@/components/theme-switch.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
 import { dashboardAccess } from '@/server/dashboard-access.ts';
 import { currentGuestSession } from '@/server/guest.ts';
+import { pageTheme } from '@/server/theme.ts';
 import { SOLUTION_KEYS } from './solutions.ts';
 
 const link =
@@ -25,6 +27,7 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
   const locale = await getLocale();
   const access = await dashboardAccess();
   const signedIn = access.kind !== 'anonymous' || Boolean(await currentGuestSession(null));
+  const theme = await pageTheme();
   const solutions = SOLUTION_KEYS.map((k) => ({ key: k, label: t(`solutions.${k}.name`) }));
   return (
     <>
@@ -109,6 +112,7 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
                 </Link>
               </>
             )}
+            <ThemeSwitch initial={theme} />
             <details className="relative xl:hidden">
               <summary
                 aria-label={t('menu')}
@@ -164,6 +168,9 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
                     </li>
                   </>
                 )}
+                <li>
+                  <ThemeRadios initial={theme} />
+                </li>
               </ul>
             </details>
           </div>

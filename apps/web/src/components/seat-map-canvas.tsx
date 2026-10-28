@@ -44,9 +44,24 @@ export default function SeatMapCanvas({
   onToggleTable?: (itemId: string) => void;
 }) {
   const [box, width] = useBoxWidth(600, 260);
-  // On the dark showcase surface the map draws in the dark palette (a white panel would glare).
+  // On the showcase surface the map draws in the palette of its resolved theme (a white panel would glare in the dark).
   const [dark, setDark] = useState(false);
-  useEffect(() => setDark(Boolean(box.current?.closest('[data-surface="showcase"]'))), [box]);
+  useEffect(() => {
+    const el = box.current;
+    const showcase = el?.closest('[data-surface="showcase"]');
+    if (!el || !showcase) return setDark(false);
+    // Light or dark follows the showcase's resolved colour scheme, also when the visitor switches.
+    const read = () => setDark(getComputedStyle(showcase).colorScheme.includes('dark'));
+    read();
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    mq.addEventListener('change', read);
+    const mo = new MutationObserver(read);
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => {
+      mq.removeEventListener('change', read);
+      mo.disconnect();
+    };
+  }, [box]);
   const paper_ = dark ? paperDark : paper;
   const { MINE, FREE, FREE_ACCESSIBLE, TAKEN } = useMemo(() => dotStyles(paper_), [paper_]);
   const view = usePanZoom(doc, width, 560);
