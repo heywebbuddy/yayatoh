@@ -1,4 +1,114 @@
-# Yayatoh QA: integration report (round 3 on top, round 2 kept below)
+# Yayatoh QA: integration report (round 4 on top; rounds 3 and 2 below)
+
+## Round 4: final round on `qa-integration`
+
+Tester session `qa-baseline`, 28 October 2026. `qa-integration` = `main` + the latest tips of `claude/batch-1-buying-39fe1a`, `claude/batch-2-setup-59fe0b` and `claude/batch-3-redesign-664a1d` (merged twice: after `fa1b432b` batch 2 was merged again; all merges clean, no conflicts). Not pushed.
+Run against a fresh database `yayatoh_qa4` (migrated; `demo-seed`, `demo-media`, `demo-marketing`, and batch 2's `demo-content` run), fake payments and fake human check, **production build** (`next build` with type-check on, then `next start`) on port 3140. The real Anthropic key was loaded for the AI tests (never printed or committed). The staff console (`apps/admin`) was started on port 3141 for the admin-panel tests; the user's staff role was added to my local test owner only in `yayatoh_qa4`.
+Screenshots are in `C:\Users\ADMIN\.claude\projects\D--yayatoh-2-0-yayatoh--claude-worktrees-qa-baseline-a94866\8e728a03-1454-42dd-9484-ed2066dd2cef\tool-results\`.
+
+### R4.1 Migrations, type-check and tests
+
+- Journal: 190 entries, no duplicates, every tag has its SQL file, snapshot chain unbroken (0176 to 0190). **Gap: there is no `0189`** (the journal goes 0188 then 0190). `drizzle-kit generate` still says "No schema changes". Harmless, but the numbering is not strictly consecutive. New migrations on top of round 3: 0188 (testimonials), 0190 (platform content). Migrate on a clean database: ok.
+- `tsc --noEmit` on `apps/web` (12 GB): **0 errors**. `pnpm typecheck` on all 76 packages: 74 pass in the parallel run; the other two (`automation-apps`, `zapier`) died with a process crash (exit `-1073740791`, memory) and show **0 errors when run alone**. `check:modules`: ok. `next build` with type-check: ok.
+- Integration tests of the changed modules (7 files, 21 tests): all pass.
+- `pnpm test` (unit): 339 of 357 files pass, 18 files fail. Compared with round 3 (which also had the Windows-only failures: golden CRLF files, `event-routes`/`empty-state-audit` path globbing, `spectral`, `sdk`, vectors, `webhooks/catalog`, `tools/*`), the **new failures** are:
+  - **`packages/modules/notifications/tests/render.test.ts`: 430 snapshot failures** (every kind in every locale). Cause: the "greeting without a name" fix changed "Hello," to "Hello!" and the snapshot file was not updated (`Expected "Hello," / Received "Hello!"`). Severity: minor (CI red), easy fix (`vitest -u` after review).
+  - **`packages/testing/tests/column-privacy.test.ts` (R1) still fails**, now with `events.speakers.bio (text) is neither private nor public. Add bio: ... in packages/modules/events/src/private-columns.ts`. (`orders.seat_legs` is fixed.) Severity: major for the canary test's purpose.
+  - Fixed since round 3: `packages/ui/tests/tokens.test.ts` (R2) passes.
+- Running the unit/integration tests again reset the shared Postgres role passwords once (`28P01`); `pnpm db:bootstrap` fixes it.
+
+### R4.2 Real AI (graded)
+
+- **Create with AI** (~12–14 s each):
+  - **Wedding** (two-day Goa, 150 guests): type Wedding, good tagline, 2 dates, free guest pass for 150, agenda, 6 sensible FAQs. **A-** (only day 1 in the agenda).
+  - **Conference** (two-day Bengaluru, 400): type Conference, three ticket types totalling 400 (early bird / standard / student), agenda, 6 FAQs. **A-** (agenda covers day 1 only, with a "Closing Keynote" on day 1).
+  - **Concert** (Pune amphitheatre, 1500 seats): it matched the organization's own "Riverside Amphitheatre" venue, split the 1500 seats between General and VIP, band-by-band agenda, weather/seating FAQs. **A**.
+  - **Tour** (Panjim sunset cruise, 40 passengers): type Tour, two ticket types adding up to 40, agenda and FAQs; "daily" was not turned into a repeating schedule and the two hotel pickups appear only in an FAQ (no pickup points proposed). **B+**.
+  - Credits: each proposal used one (20 to 16 after four); the page keeps showing the allowance.
+- **Drafting panels** on the event content page: **tagline** (4.5 s, good: "Two days in Hyderabad and online for managers and engineers rethinking AI, teams and remote work."), **description** (6 s, good Markdown with the right dates and venue), **FAQ** (7 s, six Q&As, correct but vague on specifics such as the student pass; it prints the time zone as `America/New_York` for a Hyderabad event). Grade **B+ to A-**. There is no separate "agenda" drafting panel: the agenda comes only from Create with AI.
+- **Campaign "Draft with AI"** (Campaigns, a draft campaign): the action ran (about 12 s, one credit charged) but **the subject and body fields stayed unchanged** in my run, and a second press did nothing. Not confirmed as a bug (my click may have been a scripted one); needs a recheck by hand. Severity: major if it reproduces.
+- **Attendee assistant**: single question ("When does the opening keynote start and who is speaking?") answered correctly with sources (Agenda, Schedule); two-part question ("Where is the venue and what is the refund policy?") answered **both** parts correctly with sources (round 3: only half); an unanswerable one ("free parking and can I bring my dog?") answered "I can't find that in this event's published details" and offered to contact the event team. **A**. Each answer uses a credit.
+
+### R4.3 Public pages, phone width and CSP (production)
+
+- 320 px (so 375 and 414 also fit): no horizontal overflow on home, events, pricing, status, privacy, help, features, contact, blogs, organizer page and its blog, 404 page, sign-in, attendee, solutions, venues, network, and the conference and gala event pages.
+- **CSP in production:** a clean browser tab loading the home page (and scrolling it to the bottom) logged **0 console errors**; the other pages (event page, blogs, help, features, contact, events, pricing, weddings) read back with no errors either. Caveat: my first read in a reused tab showed old messages from earlier pages (including inline-style/script violations and a React #412), and could not be attributed, so I repeated it in a new tab and got zero. The earlier 354 in that tab are not reproduced.
+- **`/help`, `/features`, `/contact`, `/blogs`** returned 404 until I set `MARKETPLACE_CONTENT_ORG=webbuddy` (outside production they default to an org called `harbor-arts`, which my seed does not create). With it set they load. The footer links to the first three, so any deployment without a content org shows dead links.
+- New home sections present: Featured events, event-type rails, Popular organizers, How it works, "Everything you need…", What organizers say, Latest from the blog, Questions answered, Earn more (affiliate teaser), final call to action. Testimonial and blog post created in the admin panel appear on home and on `/blogs`.
+- The site switched to Spanish for the rest of one test session after I fetched `/lang/es` as a probe; `/lang/en` switches back (my probe, not a bug).
+
+### R4.4 The client's points, final status
+
+| # | Point | Status | Evidence in round 4 |
+|---|---|---|---|
+| 1 | Venue description, contact | DONE | Venue page has description, contact email/phone, website. |
+| 2 | Add venue from wizard | DONE | Inline "+ Add a new venue" form; choosing a saved venue sets the time zone (Kolkata for Skyline Studio). |
+| 3 | Content editing | DONE | Row editors, live preview, toolbar, day headings. |
+| 4 | One seat or whole table | DONE | Round 3 table of 10 bought; unchanged. |
+| 5 | Checkout | DONE | Free, paid, seated, whole table, three-date seat purchase, tour; "Quick email check" code panel. |
+| 6 | DJ, MC, artists, speakers, influencers | DONE | Role list: Keynote speaker, Speaker, Panelist, Moderator, **Host / MC**, DJ, Artist / Performer, Influencer, Special guest; the public page has headings "Hosts", "MCs", "DJs", "Artists", "Performers", "Influencers". (One scripted add saved the wrong role because my click picked another option; role mapping itself not at fault.) |
+| 7 | Video background in hero | DONE | Uploaded a WebM with a poster as the hero video: it plays behind the title (`...1793178380824-alspot.jpg`); YouTube embed also in the page. MP4 not tried (no MP4 file available, and no ffmpeg; I generated the WebM in the browser). |
+| 8 | Table number on seat map | DONE | Seen in round 3, unchanged. |
+| 10 | Video overviews | DONE | Added a "Video" section in the editor with an uploaded WebM + poster; the public page shows it with controls and it is ready to play (`...1793178459446-i9evta.jpg` shows the hero). Minor: the editor's live preview says "Nothing to preview yet" for a video section. |
+| 11 | Multi-day, re-entry | DONE | Round 3: re-entry window and next-day check-in; unchanged. |
+| 12 | Seat per day/leg | DONE | On "Demo · City Hopper Express" (three Mondays) picked Row B·3 (Nov 16), Row C·5 (Nov 23) and Row A·7 (Nov 30): one order of $120, three tickets, each "Valid on <its date>" with its own seat. |
+| 13/35 | Attendee chat | DONE | Lobby chat between two attendees (round 3). |
+| 14 | Total before paying | DONE | "Your order … Total to pay … nothing is charged yet". |
+| 15 | Landing pages | DONE | `/solutions/*`. |
+| 16 | Event creation | DONE | Wizard (required fields marked with *), Create with AI, design options; event type no longer pre-selected. |
+| 17 | Frontend | DONE | New design everywhere public; see R4.3. |
+| 18 | Sponsor pages | DONE | Round 3. |
+| 19 | Keynote speakers etc. | DONE | See 6. |
+| 20 | Tour | DONE | Round 3 tour created and bought with a pickup point; round 4 the AI proposes a Tour. |
+| 21 | Blog | DONE | Organization blog (round 3), plus round 4: the platform blog from the admin console. |
+| 22 | WhatsApp | DONE | Round 3. |
+| 23 | Manage users | DONE (not fully) | Invitation sent and email delivered (round 3); accepting it was not tested. |
+| 24 | SEO | DONE | Round 3. |
+| 25 | AI setup and assistant | PARTIAL | See R4.2: Create with AI A- to A; drafts good; assistant A; **campaign draft did not fill the editor in my run**. |
+| 26 | Same ticket twice | DONE | Round 3. |
+| 27 | Organizer preview of attendee portal | DONE | A mock with sample data and inactive links (round 3). |
+| 28 | Change a seat | DONE | Round 3: swap completed in the UI. |
+| 29 | Max attendees | DONE | Event-wide limit field on the tickets page. |
+| 30 | Competitors | REF | Summary in round 3. |
+| 32 | Ticket content | DONE | Round 3. |
+| 33 | Bulk tickets to one person | PARTIAL | Submitted "Who is coming?" with two guests: both emails arrived ("QA Legs Buyer sent you a ticket for …"); the mobile field exists; SMS delivery cannot be tested without Twilio. |
+| 34 | Invoice/receipt | DONE | Receipt page and PDF. |
+| 36 | Redesign | DONE | Public side; console stays light. |
+| 37 | Separate file per ticket | DONE | ZIP, one file per ticket (round 3); the three-leg order also offers it. |
+
+### R4.5 Other things tested
+
+- **Admin panel** (staff console on :3141, sign-in with password + authenticator code): "Site content" has Blog, Testimonials and Home hero tabs. Created and published a blog post ("QA admin post…", "Live at /blogs/qa-admin-post") and a testimonial ("QA Organizer"): both appear on `/blogs` / home within seconds. The organization's own posts and the demo posts show on `/organizers/webbuddy/blogs` and open (HTTP 200).
+- **Who is coming?** two guests submitted; emails delivered.
+- **Team invitation**: the invite was sent in round 3 and the email arrived; accepting it was not tested.
+
+### R4.6 Bugs and baseline retest
+
+| # | Result |
+|---|---|
+| B01 time zone | **Fixed** (venue form and wizard). |
+| B02 multi-date range | **Fixed** on the order page (each ticket "Valid on <date>"); claim page not rechecked. |
+| B05 free button / code panel | Code panel **fixed**; free-ticket button label not rechecked. |
+| B09 empty-name greeting | **Fixed** ("Good morning, ratnesh."); the fix left 430 stale snapshot tests (R4.1). |
+| B11 net = gross | Still gross = net ($38,125); the backlog says the demo orders carry no fees. |
+| B13 AI quality | **Good** with the real key. |
+| N1 networking sign-in | **Fixed** (code on the networking page now signs in). |
+| N4 404 pages | Load only when a marketplace content org exists (see R4.3); **open as a deployment dependency**. |
+| N6 "Valid" after check-in | **Fixed** ("Checked in" on the console order page). |
+| R1 column-privacy | **Still failing** (`events.speakers.bio`). |
+| R2 tokens test | **Fixed**. |
+| R3 hero video | **Fixed** (the uploaded video fills the hero). |
+| R4 required Ends field | **Fixed** (fields marked "*"). |
+
+New in round 4: (a) 430 stale render snapshots, (b) `events.speakers.bio` privacy declaration, (c) possible campaign-draft problem, (d) journal skips 0189, (e) live preview of a video section is empty, (f) FAQ/AI drafts print `America/New_York` for non-US events.
+
+### R4.7 Not covered
+
+Accepting the team invitation; an MP4 upload (only WebM, generated in the browser); SMS delivery; the campaign AI draft with a trusted click; next-day claim-page date; the console in a light/dark review; token-only public pages. A Docker outage (engine returning HTTP 500, then restored by the lead) interrupted the round for a while; nothing was lost.
+
+---
+
+# Round 3 (history)
 
 ## Round 3: latest tips of all three batches on `qa-integration`
 
