@@ -20221,7 +20221,7 @@
       "line2": "van eerste ticket",
       "line3": "tot laatste check-in",
       "lede": "Verkoop meer tickets, bespaar uren aan setup en kom professioneel over vanaf de eerste klik. Ticketing, zitplaatsen, je eigen evenementsite, check-in, sponsors, netwerken en analyses in één platform.",
-      "apply": "Meld je nu aan",
+      "apply": "Aan de slag",
       "demo": "Boek een demo",
       "videoTitle": "Yayatoh-productvideo",
       "play": "Productvideo afspelen",
@@ -20259,20 +20259,20 @@
       "eyebrow": "Zo werkt het",
       "title": "Van aanmelding tot eerste evenement in vier stappen",
       "apply": {
-        "title": "Aanmelden",
-        "body": "Vertel ons over je organisatie en de evenementen die je organiseert."
+        "title": "Kies een abonnement",
+        "body": "Kies Free, Starter, Pro of Agency, maandelijks of jaarlijks."
       },
       "review": {
-        "title": "Wij beoordelen",
-        "body": "Ons team bekijkt elke aanvraag en stelt eventueel een vraag."
+        "title": "Maak je account aan",
+        "body": "Verifieer je e-mailadres en geef je organisatie een naam."
       },
       "invite": {
-        "title": "Ontvang je uitnodiging",
-        "body": "Na goedkeuring ontvang je een persoonlijke uitnodiging per e-mail voor je abonnement."
+        "title": "Betaal online",
+        "body": "Betaal veilig online. Gratis abonnementen slaan deze stap over."
       },
       "launch": {
-        "title": "Lanceren",
-        "body": "Maak je account aan, volg de checklist en publiceer je eerste evenement."
+        "title": "Ga live",
+        "body": "Je komt in je installatiechecklist en publiceert je eerste evenement."
       },
       "line1": "Van aanmelding tot",
       "line2": "eerste evenement in vier stappen"
@@ -20282,9 +20282,9 @@
       "title": "Kies het plan dat past",
       "lede": "Abonnementen komen uit onze actuele catalogus. Je kunt later altijd wisselen.",
       "perMonth": "{price} per maand",
-      "onApproval": "Bevestigd bij goedkeuring",
-      "choose": "Aanmelden voor {plan}",
-      "note": "Prijzen verschijnen hier zodra een abonnement beschikbaar is. De ticketkosten van het platform worden bevestigd bij goedkeuring van je aanvraag.",
+      "onApproval": "Nog niet beschikbaar",
+      "choose": "Kies {plan}",
+      "note": "Prijzen volgen de abonnementen die in de verkoop zijn. Enterprise wordt door ons team geoffreerd.",
       "starter": {
         "name": "Starter",
         "body": "Voor organisatoren die starten met betaalde evenementen."
@@ -20299,7 +20299,8 @@
       },
       "enterprise": {
         "name": "Enterprise",
-        "body": "Voor grote programma's met specifieke wensen."
+        "body": "Voor grote programma's met specifieke wensen.",
+        "cta": "Praat met sales"
       },
       "perYear": "{price} per jaar",
       "custom": "Prijs op maat",
@@ -20345,11 +20346,11 @@
       "title": "Vragen",
       "cost": {
         "q": "Wat kost het?",
-        "a": "Abonnementen en ticketkosten staan hierboven en worden bevestigd bij goedkeuring van je aanvraag. Aanmelden is gratis."
+        "a": "Abonnementen en ticketkosten staan hierboven. Free, Starter, Pro en Agency starten direct na registratie. Enterprise wordt door ons team geoffreerd."
       },
       "review": {
-        "q": "Hoe lang duurt de beoordeling?",
-        "a": "Ons team beoordeelt elke aanvraag handmatig en kan met een vraag reageren. Je krijgt hoe dan ook een e-mail."
+        "q": "Hoe werkt Enterprise?",
+        "a": "Vertel ons salesteam over je organisatie en we antwoorden per e-mail met een abonnement op maat."
       },
       "whiteLabel": {
         "q": "Kan ik mijn eigen merk en domein gebruiken?",
@@ -20810,6 +20811,101 @@
         "confirmSubject": "We hebben je bericht ontvangen",
         "confirmBody": "Hallo {name},\n\nBedankt voor je bericht aan Yayatoh. We hebben je bericht over “{subject}” ontvangen en antwoorden per e-mail, meestal binnen één werkdag.\n\nHet Yayatoh-team"
       }
+    }
+  },
+  "selfServe": {
+    "eyebrow": "Aan de slag",
+    "line1": "Kies je abonnement,",
+    "line2": "begin vandaag",
+    "lede": "Kies een abonnement, maak je account aan en begin met verkopen. Betaal online en krijg direct toegang. Geen telefoontje nodig.",
+    "steps": {
+      "plan": "Kies een abonnement",
+      "account": "Maak je account aan",
+      "payment": "Betaal en ga live"
+    },
+    "interval": {
+      "label": "Factureringsperiode",
+      "month": "Maandelijks",
+      "year": "Jaarlijks",
+      "save": "Bespaar",
+      "per_month": "maand",
+      "per_year": "jaar",
+      "perMonthEquivalent": "{price} per maand, jaarlijks gefactureerd"
+    },
+    "freePrice": "Gratis",
+    "unavailable": "Nog niet beschikbaar",
+    "free": {
+      "name": "Gratis",
+      "body": "Begin met het verkopen van gratis evenementen. Upgrade wanneer je er klaar voor bent."
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "body": "Oplossingen op maat voor grote programma's, met aangepaste voorwaarden en ondersteuning.",
+      "price": "Op maat",
+      "cta": "Praat met sales"
+    },
+    "verify": {
+      "title": "Verifieer eerst je e-mailadres",
+      "body": "We mailen je een eenmalige code, dus je hoeft geen wachtwoord te onthouden. Daarna geef je je organisatie een naam."
+    },
+    "fields": {
+      "personName": "Je naam",
+      "country": "Land"
+    },
+    "summary": {
+      "plan": "Abonnement",
+      "billing": "Facturering",
+      "total": "Vandaag te betalen",
+      "secure": "Veilig online betalen. Je kunt je abonnement wijzigen of opzeggen in je account.",
+      "noPayment": "Geen betaling nodig. Upgrade wanneer je wilt.",
+      "verifyFirst": "Verifieer je e-mailadres om verder te gaan."
+    },
+    "submit": {
+      "free": "Mijn organisatie aanmaken",
+      "paid": "Verder naar betaling"
+    },
+    "errors": {
+      "unauthenticated": "Log eerst in.",
+      "email_unverified": "Bevestig eerst je e-mailadres.",
+      "signup_closed": "Registreren is momenteel niet mogelijk.",
+      "rate_limited": "Te veel pogingen. Probeer het later opnieuw.",
+      "human_check": "Bevestig dat je een mens bent.",
+      "plan_unavailable": "Dit abonnement is momenteel niet beschikbaar. Kies een ander.",
+      "slug_taken": "Dit webadres is al in gebruik.",
+      "invalid": "Controleer het formulier en probeer het opnieuw.",
+      "billing_off": "Online betalen is momenteel niet beschikbaar.",
+      "failed": "We konden de betaling niet starten. Probeer het opnieuw."
+    },
+    "pay": {
+      "eyebrow": "Betaling",
+      "cancelledTitle": "Betaling geannuleerd",
+      "cancelledBody": "Er is niets afgeschreven. {org} is aangemaakt en wacht: rond de betaling af om je {plan}-abonnement te starten.",
+      "failedTitle": "We konden de betaling niet starten",
+      "failedBody": "Er is niets afgeschreven. {org} is aangemaakt: probeer de betaling opnieuw om je {plan}-abonnement te starten.",
+      "retry": "Probeer de betaling opnieuw",
+      "skip": "Open voorlopig mijn organisatie"
+    },
+    "welcome": {
+      "eyebrow": "Betaling ontvangen",
+      "title": "Welkom, {org}",
+      "waiting": "Je betaling wordt bevestigd…",
+      "done": "Betaling bevestigd. Je organisatie wordt geopend…",
+      "slow": "De bevestiging duurt langer dan gewoonlijk. Je abonnement gaat in zodra de betaling is bevestigd. Je kunt je organisatie nu al openen.",
+      "open": "Open mijn organisatie"
+    },
+    "fake": {
+      "eyebrow": "Alleen voor ontwikkeling",
+      "title": "Testafrekening",
+      "body": "Dit vervangt de pagina van de betaalprovider. Prijs: {price}.",
+      "pay": "Betaal (test)",
+      "decline": "Weigeren"
+    },
+    "sales": {
+      "title": "Praat met ons salesteam",
+      "lede": "Vertel ons over je organisatie en we reageren met een abonnement op maat.",
+      "demoTitle": "Plan een demo",
+      "demoLede": "Kies een moment en we laten je het platform zien.",
+      "close": "Sluiten"
     }
   }
 }

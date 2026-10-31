@@ -5,12 +5,12 @@ import { buttonClass, cx } from '@yayatoh/ui';
 import { Check, Globe, Minus } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { ApplyForm } from '@/components/organizers/apply-form.tsx';
 import { ContactCard, FaqAccordion, QuoteMarquee } from '@/components/organizers/interactive.tsx';
 import { LandingTop } from '@/components/organizers/landing-top.tsx';
 import { MaskLines } from '@/components/organizers/motion.tsx';
 import { Reveal } from '@/components/showcase/reveal.tsx';
 import { ShowcaseShell } from '@/components/showcase/shell.tsx';
+import { SalesButton } from '@/components/signup/sales-modal.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { humanCheckWidget } from '@/server/human-check.ts';
 import { requestHost } from '@/server/request-origin.ts';
@@ -19,7 +19,7 @@ import { applyAction } from './actions.ts';
 
 type Props = {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ mode?: string; plan?: string }>;
+  searchParams: Promise<Record<string, string | undefined>>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -80,18 +80,14 @@ const eyebrow = 'm-0 text-caption font-bold tracking-widest text-ember uppercase
 const lede = 'm-0 max-w-2xl text-[17px] leading-relaxed text-ink-2';
 const card = 'text-ink rounded-[28px] border border-line bg-surface p-6';
 
-export default async function ForOrganizersPage({ params, searchParams }: Props) {
+export default async function ForOrganizersPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const sp = await searchParams;
   const t = await getTranslations('forOrganizers');
   const [tiers, quotes] = await Promise.all([publicPlanTiers(), platformTestimonials()]);
   const tierOf = (key: string) => tiers.find((x) => x.key === key);
   const has = (key: string, m: string) => tierOf(key)?.modules.includes(m) ?? false;
   const moduleCount = new Set(tiers.flatMap((x) => x.modules)).size;
-  const initialMode = sp.mode === 'demo' ? 'demo' : 'apply';
-  const planIds = ['starter', 'pro', 'white_label', 'enterprise'];
-  const initialPlan = planIds.includes(sp.plan ?? '') ? (sp.plan as string) : 'unsure';
   const videoUrl = process.env.ORGANIZER_VIDEO_URL?.trim();
   const video = videoUrl && /^https:\/\//.test(videoUrl) ? videoUrl : null;
   /** What staff set in Plans & billing: only a plan switched on there shows prices (month and year, one currency). */
@@ -110,7 +106,12 @@ export default async function ForOrganizersPage({ params, searchParams }: Props)
   };
   return (
     <ShowcaseShell>
-      <LandingTop moduleCount={moduleCount} video={video} tierCount={TIERS.length} />
+      <LandingTop
+        moduleCount={moduleCount}
+        video={video}
+        tierCount={TIERS.length}
+        sales={{ action: applyAction, humanCheck: humanCheckWidget() }}
+      />
 
       <section id="white-label" aria-labelledby="wl-h" className={section}>
         <Reveal className="flex flex-col gap-3">
@@ -209,15 +210,24 @@ export default async function ForOrganizersPage({ params, searchParams }: Props)
                           ))
                       : null}
                   </ul>
-                  <Link
-                    href={`/for-organizers?plan=${p.id}#apply`}
-                    className={cx(
-                      buttonClass(p.id === 'pro' ? 'ember' : 'secondary', 'md'),
-                      'mt-auto self-start',
-                    )}
-                  >
-                    {t('plans.choose', { plan: t(`plans.${p.id}.name`) })}
-                  </Link>
+                  {p.id === 'enterprise' ? (
+                    <SalesButton
+                      action={applyAction}
+                      humanCheck={humanCheckWidget()}
+                      label={t('plans.enterprise.cta')}
+                      className="mt-auto self-start"
+                    />
+                  ) : (
+                    <Link
+                      href={`/signup?plan=${p.id === 'white_label' ? 'agency' : p.id}&interval=month`}
+                      className={cx(
+                        buttonClass(p.id === 'pro' ? 'ember' : 'secondary', 'md'),
+                        'mt-auto self-start',
+                      )}
+                    >
+                      {t('plans.choose', { plan: t(`plans.${p.id}.name`) })}
+                    </Link>
+                  )}
                 </article>
               </Reveal>
             );
@@ -315,26 +325,6 @@ export default async function ForOrganizersPage({ params, searchParams }: Props)
           <ContactCard title={t('faq.stillTitle')} body={t('faq.stillBody')} cta={t('faq.stillCta')} />
         </Reveal>
         <FaqAccordion items={FAQ.map((k) => ({ q: t(`faq.${k}.q`), a: t(`faq.${k}.a`) }))} />
-      </section>
-
-      <section
-        id="apply"
-        aria-labelledby="apply-h"
-        className={cx(section, 'rounded-[36px] border border-line bg-surface p-6 md:p-12')}
-      >
-        <div className="flex flex-col gap-3">
-          <p className={eyebrow}>{t('form.eyebrow')}</p>
-          <h2 id="apply-h" className={h2}>
-            {t('form.title')}
-          </h2>
-          <p className={lede}>{t('form.lede')}</p>
-        </div>
-        <ApplyForm
-          action={applyAction}
-          humanCheck={humanCheckWidget()}
-          initialMode={initialMode}
-          initialPlan={initialPlan}
-        />
       </section>
     </ShowcaseShell>
   );

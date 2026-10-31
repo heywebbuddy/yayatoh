@@ -20221,7 +20221,7 @@
       "line2": "from first ticket",
       "line3": "to last check-in",
       "lede": "Sell more tickets, save hours of setup and look professional from the first click. Ticketing, seating, your own event website, check-in, sponsors, networking and analytics in one platform.",
-      "apply": "Apply now",
+      "apply": "Get started",
       "demo": "Book a demo",
       "videoTitle": "Yayatoh product video",
       "play": "Play the product video",
@@ -20259,20 +20259,20 @@
       "eyebrow": "How it works",
       "title": "From application to first event in four steps",
       "apply": {
-        "title": "Apply",
-        "body": "Tell us about your organization and the events you run."
+        "title": "Choose a plan",
+        "body": "Pick Free, Starter, Pro or Agency, monthly or yearly."
       },
       "review": {
-        "title": "We review",
-        "body": "Our team looks at every application and may ask a question."
+        "title": "Create your account",
+        "body": "Verify your email and name your organization."
       },
       "invite": {
-        "title": "Get your invitation",
-        "body": "Once approved you receive a personal email invitation for your plan."
+        "title": "Pay online",
+        "body": "Pay securely online. Free plans skip this step."
       },
       "launch": {
-        "title": "Launch",
-        "body": "Create your account, follow the setup checklist and publish your first event."
+        "title": "Go live",
+        "body": "You land in your setup checklist and publish your first event."
       },
       "line1": "From application to",
       "line2": "first event in four steps"
@@ -20282,9 +20282,9 @@
       "title": "Pick the plan that fits",
       "lede": "Plans come from our live catalog. Every plan can be changed later.",
       "perMonth": "{price} per month",
-      "onApproval": "Confirmed when approved",
-      "choose": "Apply for {plan}",
-      "note": "Prices appear here once a plan is on sale. Platform ticket fees are confirmed when your application is approved.",
+      "onApproval": "Not on sale yet",
+      "choose": "Choose {plan}",
+      "note": "Prices follow the plans on sale. Enterprise is quoted by our team.",
       "starter": {
         "name": "Starter",
         "body": "For organizers getting started with paid events."
@@ -20299,7 +20299,8 @@
       },
       "enterprise": {
         "name": "Enterprise",
-        "body": "For large programs with custom needs."
+        "body": "For large programs with custom needs.",
+        "cta": "Talk to sales"
       },
       "perYear": "{price} per year",
       "custom": "Custom pricing",
@@ -20345,11 +20346,11 @@
       "title": "Questions",
       "cost": {
         "q": "What does it cost?",
-        "a": "Plans and ticket fees are shown above and confirmed when your application is approved. There is no charge to apply."
+        "a": "Plans and ticket fees are shown above. Free, Starter, Pro and Agency start instantly after sign-up. Enterprise is quoted by our team."
       },
       "review": {
-        "q": "How long does the review take?",
-        "a": "Our team reviews every application by hand and may reply with a question. You will get an email either way."
+        "q": "How does Enterprise work?",
+        "a": "Tell our sales team about your organization and we reply by email with a tailored plan."
       },
       "whiteLabel": {
         "q": "Can I use my own brand and domain?",
@@ -20810,6 +20811,101 @@
         "confirmSubject": "We got your message",
         "confirmBody": "Hi {name},\n\nThanks for writing to Yayatoh. We received your message about “{subject}” and will reply by email, usually within one working day.\n\nThe Yayatoh team"
       }
+    }
+  },
+  "selfServe": {
+    "eyebrow": "Get started",
+    "line1": "Pick your plan,",
+    "line2": "start today",
+    "lede": "Choose a plan, create your account and start selling. Pay online and get instant access. No call needed.",
+    "steps": {
+      "plan": "Choose a plan",
+      "account": "Create your account",
+      "payment": "Pay and go live"
+    },
+    "interval": {
+      "label": "Billing period",
+      "month": "Monthly",
+      "year": "Yearly",
+      "save": "Save",
+      "per_month": "month",
+      "per_year": "year",
+      "perMonthEquivalent": "{price} a month, billed yearly"
+    },
+    "freePrice": "Free",
+    "unavailable": "Not on sale yet",
+    "free": {
+      "name": "Free",
+      "body": "Start selling free events. Upgrade whenever you are ready."
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "body": "Tailored solutions for large programs, with custom terms and support.",
+      "price": "Custom",
+      "cta": "Talk to sales"
+    },
+    "verify": {
+      "title": "First, verify your email",
+      "body": "We email you a one-time code, so there is no password to remember. Then you name your organization."
+    },
+    "fields": {
+      "personName": "Your name",
+      "country": "Country"
+    },
+    "summary": {
+      "plan": "Plan",
+      "billing": "Billing",
+      "total": "Due today",
+      "secure": "Secure online payment. You can change or cancel your plan in your account.",
+      "noPayment": "No payment needed. Upgrade any time.",
+      "verifyFirst": "Verify your email to continue."
+    },
+    "submit": {
+      "free": "Create my organization",
+      "paid": "Continue to payment"
+    },
+    "errors": {
+      "unauthenticated": "Please sign in first.",
+      "email_unverified": "Confirm your email address first.",
+      "signup_closed": "Sign-up is not open right now.",
+      "rate_limited": "Too many attempts. Please try again later.",
+      "human_check": "Please confirm you are a person.",
+      "plan_unavailable": "That plan is not available right now. Pick another one.",
+      "slug_taken": "That web address is already taken.",
+      "invalid": "Please check the form and try again.",
+      "billing_off": "Online payment is not available right now.",
+      "failed": "We could not start the payment. Please try again."
+    },
+    "pay": {
+      "eyebrow": "Payment",
+      "cancelledTitle": "Payment cancelled",
+      "cancelledBody": "Nothing was charged. {org} is created and waiting: finish the payment to start your {plan} plan.",
+      "failedTitle": "We could not start the payment",
+      "failedBody": "Nothing was charged. {org} is created: try the payment again to start your {plan} plan.",
+      "retry": "Try the payment again",
+      "skip": "Open my organization for now"
+    },
+    "welcome": {
+      "eyebrow": "Payment received",
+      "title": "Welcome, {org}",
+      "waiting": "Confirming your payment…",
+      "done": "Payment confirmed. Opening your organization…",
+      "slow": "Confirmation is taking longer than usual. Your plan switches on as soon as the payment is confirmed. You can open your organization now.",
+      "open": "Open my organization"
+    },
+    "fake": {
+      "eyebrow": "Development only",
+      "title": "Test checkout",
+      "body": "This stands in for the payment provider's page. Price: {price}.",
+      "pay": "Pay (test)",
+      "decline": "Decline"
+    },
+    "sales": {
+      "title": "Talk to our sales team",
+      "lede": "Tell us about your organization and we will reply with a tailored plan.",
+      "demoTitle": "Book a demo",
+      "demoLede": "Pick a time and we will show you the platform.",
+      "close": "Close"
     }
   }
 }

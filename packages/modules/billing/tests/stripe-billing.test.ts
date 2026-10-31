@@ -489,6 +489,38 @@ describe('Stripe billing adapter — plan changes, payments, meters, coupons (M6
     expect(create?.body.get('customer')).toBe('cus_test_1');
   });
 
+  it('starts a hosted checkout for a new subscription: price by lookup key, return addresses, org in metadata', async () => {
+    const { provider, calls } = adapter({
+      'GET /v1/prices': priceList,
+      'POST /v1/checkout/sessions': () => ({
+        json: {
+          id: 'cs_test_1',
+          object: 'checkout.session',
+          url: 'https://checkout.stripe.test/c/pay/cs_test_1',
+        },
+      }),
+    });
+    const out = await provider.startCheckout({
+      customerId: 'cus_test_1',
+      priceLookupKey: 'tier_starter_month_usd',
+      successUrl: 'https://yayatoh.test/signup/welcome?org=acme',
+      cancelUrl: 'https://yayatoh.test/signup/pay?org=acme&cancelled=1',
+      orgId: 'org_1',
+      customerEmail: 'owner@acme.example',
+      idempotencyKey: 'checkout:org_1:1',
+    });
+    expect(out.url).toBe('https://checkout.stripe.test/c/pay/cs_test_1');
+    const create = calls.find((c) => c.method === 'POST' && c.path === '/v1/checkout/sessions');
+    expect(create?.idempotencyKey).toBe('checkout:org_1:1');
+    expect(create?.body.get('mode')).toBe('subscription');
+    expect(create?.body.get('customer')).toBe('cus_test_1');
+    expect(create?.body.get('success_url')).toBe('https://yayatoh.test/signup/welcome?org=acme');
+    expect(create?.body.get('cancel_url')).toContain('cancelled=1');
+    expect(create?.body.get('automatic_tax[enabled]')).toBe('true');
+    expect(create?.body.get('client_reference_id')).toBe('org_1');
+    expect(create?.body.get('subscription_data[metadata][org_id]')).toBe('org_1');
+  });
+
   it('pays the open invoice (idempotent); nothing open counts as paid', async () => {
     let open = true;
     const { provider, calls } = adapter({

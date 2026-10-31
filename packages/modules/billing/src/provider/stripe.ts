@@ -148,6 +148,28 @@ export function stripeBillingProvider(opts: StripeBillingOptions): BillingProvid
       return { subscriptionId: sub.id };
     },
 
+    async startCheckout(i) {
+      const price = await priceFor(i.priceLookupKey);
+      const session = await stripe.checkout.sessions.create(
+        {
+          mode: 'subscription',
+          customer: i.customerId,
+          line_items: [{ price: price.id, quantity: 1 }],
+          success_url: i.successUrl,
+          cancel_url: i.cancelUrl,
+          automatic_tax: { enabled: true },
+          billing_address_collection: 'required',
+          customer_update: { address: 'auto', name: 'auto' },
+          client_reference_id: i.orgId,
+          subscription_data: { metadata: { org_id: i.orgId } },
+          metadata: { org_id: i.orgId },
+        },
+        { idempotencyKey: i.idempotencyKey },
+      );
+      if (!session.url) throw new Error('Stripe returned no checkout address');
+      return { url: session.url };
+    },
+
     async payOutstanding(i) {
       const open = await stripe.invoices.list({
         customer: i.customerId,

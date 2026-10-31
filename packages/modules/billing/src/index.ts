@@ -26,6 +26,13 @@ export {
 export { PLACEHOLDER_PLANS, type PlaceholderPlan } from './catalog.ts';
 export { type CatalogSyncPayload, catalogSyncPayload } from './catalog-sync.ts';
 export {
+  type CheckoutInterval,
+  currentPlanKey,
+  type SelfServePrice,
+  selfServePrice,
+  startPlanCheckout,
+} from './checkout.ts';
+export {
   markDiscountPushedCommand,
   type NonprofitSource,
   nonprofitDiscountFromCharity,
@@ -127,6 +134,7 @@ export {
   type FakeBillingProvider,
   fakeBillingCatalog,
   fakeBillingProvider,
+  fakeCheckoutSignature,
   fakeCustomerId,
   fakePortalSignature,
   fakeSubscriptionId,

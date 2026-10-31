@@ -3,6 +3,7 @@ import { ArrowUpRight, BarChart3, Clock, Rocket, ShieldCheck, Sparkles } from 'l
 import { getTranslations } from 'next-intl/server';
 import { HeroVideo } from '@/components/showcase/hero-video.tsx';
 import { Reveal } from '@/components/showcase/reveal.tsx';
+import { SalesButton, type SalesProps } from '@/components/signup/sales-modal.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { ScrollRow } from './interactive.tsx';
 import { CountUp, MaskLines, Parallax, Rise, StickyShowcase } from './motion.tsx';
@@ -100,10 +101,12 @@ export async function LandingTop({
   moduleCount,
   video,
   tierCount,
+  sales,
 }: {
   moduleCount: number;
   video: string | null;
   tierCount: number;
+  sales: SalesProps;
 }) {
   const t = await getTranslations('forOrganizers');
   const words = t('marquee.words').split(' • ');
@@ -144,12 +147,10 @@ export async function LandingTop({
           />
           <p className="m-0 max-w-xl text-[17px] leading-relaxed text-ink-2">{t('hero.lede')}</p>
           <div className="flex flex-wrap gap-3">
-            <Link href="/for-organizers#apply" className={buttonClass('ember', 'lg')}>
+            <Link href="/signup" className={buttonClass('ember', 'lg')}>
               {t('hero.apply')}
             </Link>
-            <Link href="/for-organizers?mode=demo#apply" className={buttonClass('secondary', 'lg')}>
-              {t('hero.demo')}
-            </Link>
+            <SalesButton {...sales} mode="demo" label={t('hero.demo')} className="min-h-14 px-8" />
           </div>
         </div>
         <div aria-hidden="true" className="relative hidden h-[26rem] md:block">

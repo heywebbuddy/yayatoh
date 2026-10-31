@@ -20221,7 +20221,7 @@
       "line2": "du premier billet",
       "line3": "au dernier scan",
       "lede": "Vendez plus de billets, gagnez des heures de préparation et soyez pro dès le premier clic. Billetterie, plans de salle, site d'événement, contrôle d'accès, sponsors, networking et analyses sur une seule plateforme.",
-      "apply": "Postuler",
+      "apply": "Commencer",
       "demo": "Réserver une démo",
       "videoTitle": "Vidéo produit Yayatoh",
       "play": "Lire la vidéo produit",
@@ -20259,20 +20259,20 @@
       "eyebrow": "Comment ça marche",
       "title": "De la candidature au premier événement en quatre étapes",
       "apply": {
-        "title": "Postulez",
-        "body": "Parlez-nous de votre organisation et des événements que vous gérez."
+        "title": "Choisir une offre",
+        "body": "Choisissez Free, Starter, Pro ou Agency, en mensuel ou en annuel."
       },
       "review": {
-        "title": "Nous examinons",
-        "body": "Notre équipe étudie chaque candidature et peut vous poser une question."
+        "title": "Créer votre compte",
+        "body": "Vérifiez votre e-mail et nommez votre organisation."
       },
       "invite": {
-        "title": "Recevez votre invitation",
-        "body": "Une fois approuvé, vous recevez une invitation personnelle par e-mail pour votre offre."
+        "title": "Payer en ligne",
+        "body": "Payez en toute sécurité en ligne. Les offres gratuites passent cette étape."
       },
       "launch": {
-        "title": "Lancez-vous",
-        "body": "Créez votre compte, suivez la checklist de configuration et publiez votre premier événement."
+        "title": "Être en ligne",
+        "body": "Vous arrivez sur votre liste de configuration et publiez votre premier événement."
       },
       "line1": "De la candidature au",
       "line2": "premier événement en 4 étapes"
@@ -20282,9 +20282,9 @@
       "title": "Choisissez l'offre qui vous convient",
       "lede": "Les offres viennent de notre catalogue en direct. Vous pouvez en changer à tout moment.",
       "perMonth": "{price} par mois",
-      "onApproval": "Confirmé à l'approbation",
-      "choose": "Postuler pour {plan}",
-      "note": "Les prix s'affichent ici dès qu'une offre est en vente. Les frais de billetterie de la plateforme sont confirmés à l'approbation de votre candidature.",
+      "onApproval": "Pas encore en vente",
+      "choose": "Choisir {plan}",
+      "note": "Les prix suivent les offres en vente. Enterprise est chiffré par notre équipe.",
       "starter": {
         "name": "Starter",
         "body": "Pour les organisateurs qui débutent avec les événements payants."
@@ -20299,7 +20299,8 @@
       },
       "enterprise": {
         "name": "Enterprise",
-        "body": "Pour les grands programmes aux besoins sur mesure."
+        "body": "Pour les grands programmes aux besoins sur mesure.",
+        "cta": "Contacter les ventes"
       },
       "perYear": "{price} par an",
       "custom": "Tarif sur mesure",
@@ -20345,11 +20346,11 @@
       "title": "Questions",
       "cost": {
         "q": "Combien ça coûte ?",
-        "a": "Les offres et frais de billetterie sont affichés ci-dessus et confirmés à l'approbation de votre candidature. Postuler est gratuit."
+        "a": "Les offres et les frais de billetterie sont affichés ci-dessus. Free, Starter, Pro et Agency démarrent immédiatement après l'inscription. Enterprise est chiffré par notre équipe."
       },
       "review": {
-        "q": "Combien de temps dure l'examen ?",
-        "a": "Notre équipe examine chaque candidature à la main et peut vous répondre par une question. Vous recevrez un e-mail dans tous les cas."
+        "q": "Comment fonctionne Enterprise ?",
+        "a": "Parlez de votre organisation à notre équipe commerciale et nous répondons par e-mail avec une offre sur mesure."
       },
       "whiteLabel": {
         "q": "Puis-je utiliser ma marque et mon domaine ?",
@@ -20810,6 +20811,101 @@
         "confirmSubject": "Nous avons bien reçu votre message",
         "confirmBody": "Bonjour {name},\n\nMerci d’avoir écrit à Yayatoh. Nous avons bien reçu votre message concernant « {subject} » et nous vous répondrons par e-mail, en général sous un jour ouvré.\n\nL’équipe Yayatoh"
       }
+    }
+  },
+  "selfServe": {
+    "eyebrow": "Commencer",
+    "line1": "Choisissez votre offre,",
+    "line2": "lancez-vous aujourd'hui",
+    "lede": "Choisissez une offre, créez votre compte et commencez à vendre. Payez en ligne et accédez-y immédiatement. Aucun appel nécessaire.",
+    "steps": {
+      "plan": "Choisir une offre",
+      "account": "Créer votre compte",
+      "payment": "Payer et être en ligne"
+    },
+    "interval": {
+      "label": "Période de facturation",
+      "month": "Mensuel",
+      "year": "Annuel",
+      "save": "Économisez",
+      "per_month": "mois",
+      "per_year": "an",
+      "perMonthEquivalent": "{price} par mois, facturé annuellement"
+    },
+    "freePrice": "Gratuit",
+    "unavailable": "Pas encore en vente",
+    "free": {
+      "name": "Gratuit",
+      "body": "Vendez des événements gratuits. Passez à l'offre supérieure quand vous voulez."
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "body": "Des solutions sur mesure pour les grands programmes, avec conditions et assistance personnalisées.",
+      "price": "Sur mesure",
+      "cta": "Contacter les ventes"
+    },
+    "verify": {
+      "title": "D'abord, vérifiez votre e-mail",
+      "body": "Nous vous envoyons un code à usage unique, donc aucun mot de passe à retenir. Ensuite, vous nommez votre organisation."
+    },
+    "fields": {
+      "personName": "Votre nom",
+      "country": "Pays"
+    },
+    "summary": {
+      "plan": "Offre",
+      "billing": "Facturation",
+      "total": "À payer aujourd'hui",
+      "secure": "Paiement en ligne sécurisé. Vous pouvez modifier ou résilier votre offre depuis votre compte.",
+      "noPayment": "Aucun paiement requis. Passez à l'offre supérieure à tout moment.",
+      "verifyFirst": "Vérifiez votre e-mail pour continuer."
+    },
+    "submit": {
+      "free": "Créer mon organisation",
+      "paid": "Continuer vers le paiement"
+    },
+    "errors": {
+      "unauthenticated": "Veuillez d'abord vous connecter.",
+      "email_unverified": "Confirmez d'abord votre adresse e-mail.",
+      "signup_closed": "Les inscriptions ne sont pas ouvertes pour le moment.",
+      "rate_limited": "Trop de tentatives. Veuillez réessayer plus tard.",
+      "human_check": "Veuillez confirmer que vous êtes une personne.",
+      "plan_unavailable": "Cette offre n'est pas disponible pour le moment. Choisissez-en une autre.",
+      "slug_taken": "Cette adresse web est déjà prise.",
+      "invalid": "Veuillez vérifier le formulaire et réessayer.",
+      "billing_off": "Le paiement en ligne n'est pas disponible pour le moment.",
+      "failed": "Nous n'avons pas pu lancer le paiement. Veuillez réessayer."
+    },
+    "pay": {
+      "eyebrow": "Paiement",
+      "cancelledTitle": "Paiement annulé",
+      "cancelledBody": "Rien n'a été débité. Votre organisation {org} est créée et en attente : terminez le paiement pour démarrer votre offre {plan}.",
+      "failedTitle": "Nous n'avons pas pu lancer le paiement",
+      "failedBody": "Rien n'a été débité. Votre organisation {org} est créée : réessayez le paiement pour démarrer votre offre {plan}.",
+      "retry": "Réessayer le paiement",
+      "skip": "Ouvrir mon organisation pour l'instant"
+    },
+    "welcome": {
+      "eyebrow": "Paiement reçu",
+      "title": "Bienvenue, {org}",
+      "waiting": "Confirmation de votre paiement…",
+      "done": "Paiement confirmé. Ouverture de votre organisation…",
+      "slow": "La confirmation prend plus de temps que d'habitude. Votre offre s'active dès que le paiement est confirmé. Vous pouvez ouvrir votre organisation maintenant.",
+      "open": "Ouvrir mon organisation"
+    },
+    "fake": {
+      "eyebrow": "Développement uniquement",
+      "title": "Paiement de test",
+      "body": "Ceci remplace la page du prestataire de paiement. Prix : {price}.",
+      "pay": "Payer (test)",
+      "decline": "Refuser"
+    },
+    "sales": {
+      "title": "Parlez à notre équipe commerciale",
+      "lede": "Parlez-nous de votre organisation et nous vous répondrons avec une offre sur mesure.",
+      "demoTitle": "Réserver une démo",
+      "demoLede": "Choisissez un créneau et nous vous présenterons la plateforme.",
+      "close": "Fermer"
     }
   }
 }

@@ -20221,7 +20221,7 @@
       "line2": "dal primo biglietto",
       "line3": "all'ultimo check-in",
       "lede": "Vendi più biglietti, risparmia ore di preparazione e sii professionale fin dal primo clic. Biglietteria, posti a sedere, sito evento, check-in, sponsor, networking e analisi in un'unica piattaforma.",
-      "apply": "Candidati ora",
+      "apply": "Inizia ora",
       "demo": "Prenota una demo",
       "videoTitle": "Video di prodotto Yayatoh",
       "play": "Riproduci il video di prodotto",
@@ -20259,20 +20259,20 @@
       "eyebrow": "Come funziona",
       "title": "Dalla candidatura al primo evento in quattro passi",
       "apply": {
-        "title": "Candidati",
-        "body": "Raccontaci la tua organizzazione e gli eventi che gestisci."
+        "title": "Scegli un piano",
+        "body": "Scegli Free, Starter, Pro o Agency, mensile o annuale."
       },
       "review": {
-        "title": "Valutiamo",
-        "body": "Il nostro team esamina ogni candidatura e può farti una domanda."
+        "title": "Crea il tuo account",
+        "body": "Verifica la tua email e dai un nome alla tua organizzazione."
       },
       "invite": {
-        "title": "Ricevi l'invito",
-        "body": "Una volta approvato, ricevi un invito personale via email per il tuo piano."
+        "title": "Paga online",
+        "body": "Paga in sicurezza online. I piani gratuiti saltano questo passaggio."
       },
       "launch": {
-        "title": "Parti",
-        "body": "Crea il tuo account, segui la checklist di configurazione e pubblica il primo evento."
+        "title": "Vai online",
+        "body": "Arrivi nella checklist di configurazione e pubblichi il tuo primo evento."
       },
       "line1": "Dalla candidatura al",
       "line2": "primo evento in 4 passi"
@@ -20282,9 +20282,9 @@
       "title": "Scegli il piano giusto per te",
       "lede": "I piani arrivano dal nostro catalogo in tempo reale. Puoi cambiarli in qualsiasi momento.",
       "perMonth": "{price} al mese",
-      "onApproval": "Confermato all'approvazione",
-      "choose": "Candidati per {plan}",
-      "note": "I prezzi compaiono qui quando un piano è in vendita. Le commissioni sui biglietti della piattaforma vengono confermate all'approvazione della candidatura.",
+      "onApproval": "Non ancora in vendita",
+      "choose": "Scegli {plan}",
+      "note": "I prezzi seguono i piani in vendita. Enterprise è quotato dal nostro team.",
       "starter": {
         "name": "Starter",
         "body": "Per chi inizia con gli eventi a pagamento."
@@ -20299,7 +20299,8 @@
       },
       "enterprise": {
         "name": "Enterprise",
-        "body": "Per grandi programmi con esigenze su misura."
+        "body": "Per grandi programmi con esigenze su misura.",
+        "cta": "Parla con le vendite"
       },
       "perYear": "{price} all'anno",
       "custom": "Prezzo su misura",
@@ -20345,11 +20346,11 @@
       "title": "Domande",
       "cost": {
         "q": "Quanto costa?",
-        "a": "Piani e commissioni sui biglietti sono mostrati sopra e confermati all'approvazione della candidatura. Candidarsi è gratuito."
+        "a": "Piani e commissioni sui biglietti sono mostrati sopra. Free, Starter, Pro e Agency partono subito dopo la registrazione. Enterprise è quotato dal nostro team."
       },
       "review": {
-        "q": "Quanto dura la valutazione?",
-        "a": "Il nostro team esamina ogni candidatura a mano e può rispondere con una domanda. Riceverai comunque un'email."
+        "q": "Come funziona Enterprise?",
+        "a": "Racconta al nostro team vendite della tua organizzazione e ti rispondiamo via email con un piano su misura."
       },
       "whiteLabel": {
         "q": "Posso usare il mio brand e il mio dominio?",
@@ -20810,6 +20811,101 @@
         "confirmSubject": "Abbiamo ricevuto il tuo messaggio",
         "confirmBody": "Ciao {name},\n\ngrazie per aver scritto a Yayatoh. Abbiamo ricevuto il tuo messaggio su «{subject}» e risponderemo via e-mail, di solito entro un giorno lavorativo.\n\nIl team di Yayatoh"
       }
+    }
+  },
+  "selfServe": {
+    "eyebrow": "Inizia ora",
+    "line1": "Scegli il piano,",
+    "line2": "inizia oggi",
+    "lede": "Scegli un piano, crea il tuo account e inizia a vendere. Paga online e ottieni accesso immediato. Nessuna chiamata necessaria.",
+    "steps": {
+      "plan": "Scegli un piano",
+      "account": "Crea il tuo account",
+      "payment": "Paga e vai online"
+    },
+    "interval": {
+      "label": "Periodo di fatturazione",
+      "month": "Mensile",
+      "year": "Annuale",
+      "save": "Risparmia",
+      "per_month": "mese",
+      "per_year": "anno",
+      "perMonthEquivalent": "{price} al mese, fatturati annualmente"
+    },
+    "freePrice": "Gratis",
+    "unavailable": "Non ancora in vendita",
+    "free": {
+      "name": "Gratis",
+      "body": "Inizia a vendere eventi gratuiti. Passa a un piano superiore quando vuoi."
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "body": "Soluzioni su misura per grandi programmi, con condizioni e assistenza personalizzate.",
+      "price": "Su misura",
+      "cta": "Parla con le vendite"
+    },
+    "verify": {
+      "title": "Prima verifica la tua email",
+      "body": "Ti inviamo un codice monouso via email, così non devi ricordare nessuna password. Poi dai un nome alla tua organizzazione."
+    },
+    "fields": {
+      "personName": "Il tuo nome",
+      "country": "Paese"
+    },
+    "summary": {
+      "plan": "Piano",
+      "billing": "Fatturazione",
+      "total": "Da pagare oggi",
+      "secure": "Pagamento online sicuro. Puoi cambiare o annullare il piano dal tuo account.",
+      "noPayment": "Nessun pagamento richiesto. Passa a un piano superiore quando vuoi.",
+      "verifyFirst": "Verifica la tua email per continuare."
+    },
+    "submit": {
+      "free": "Crea la mia organizzazione",
+      "paid": "Continua al pagamento"
+    },
+    "errors": {
+      "unauthenticated": "Accedi prima di continuare.",
+      "email_unverified": "Conferma prima il tuo indirizzo email.",
+      "signup_closed": "Le registrazioni non sono aperte al momento.",
+      "rate_limited": "Troppi tentativi. Riprova più tardi.",
+      "human_check": "Conferma di essere una persona.",
+      "plan_unavailable": "Questo piano non è disponibile al momento. Scegline un altro.",
+      "slug_taken": "Questo indirizzo web è già in uso.",
+      "invalid": "Controlla il modulo e riprova.",
+      "billing_off": "Il pagamento online non è disponibile al momento.",
+      "failed": "Non siamo riusciti ad avviare il pagamento. Riprova."
+    },
+    "pay": {
+      "eyebrow": "Pagamento",
+      "cancelledTitle": "Pagamento annullato",
+      "cancelledBody": "Non è stato addebitato nulla. {org} è stata creata ed è in attesa: completa il pagamento per attivare il piano {plan}.",
+      "failedTitle": "Non siamo riusciti ad avviare il pagamento",
+      "failedBody": "Non è stato addebitato nulla. {org} è stata creata: riprova il pagamento per attivare il piano {plan}.",
+      "retry": "Riprova il pagamento",
+      "skip": "Apri per ora la mia organizzazione"
+    },
+    "welcome": {
+      "eyebrow": "Pagamento ricevuto",
+      "title": "Benvenuto, {org}",
+      "waiting": "Conferma del pagamento in corso…",
+      "done": "Pagamento confermato. Apertura della tua organizzazione…",
+      "slow": "La conferma sta richiedendo più tempo del solito. Il piano si attiva non appena il pagamento è confermato. Puoi aprire subito la tua organizzazione.",
+      "open": "Apri la mia organizzazione"
+    },
+    "fake": {
+      "eyebrow": "Solo per sviluppo",
+      "title": "Checkout di prova",
+      "body": "Sostituisce la pagina del fornitore di pagamenti. Prezzo: {price}.",
+      "pay": "Paga (test)",
+      "decline": "Rifiuta"
+    },
+    "sales": {
+      "title": "Parla con il nostro team vendite",
+      "lede": "Raccontaci della tua organizzazione e ti risponderemo con un piano su misura.",
+      "demoTitle": "Prenota una demo",
+      "demoLede": "Scegli un orario e ti mostreremo la piattaforma.",
+      "close": "Chiudi"
     }
   }
 }

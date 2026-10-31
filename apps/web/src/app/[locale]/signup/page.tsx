@@ -2,11 +2,14 @@ import { openSignupEnabled, signupCodeInfo } from '@yayatoh/tenancy';
 import { buttonClass, Card, Input, Label, PageHeader } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AuthBar } from '@/components/auth-bar.tsx';
+import { SalesButton } from '@/components/signup/sales-modal.tsx';
 import { SignupForm } from '@/components/signup-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { humanCheckWidget } from '@/server/human-check.ts';
 import { ownAuthSession } from '@/server/session.ts';
+import { applyAction } from '../for-organizers/actions.ts';
 import { signupAction } from './actions.ts';
+import { SelfServeView } from './self-serve-view.tsx';
 
 /** a***@example.com: enough to recognise the address, not to learn it. */
 const maskEmail = (e: string) => e.replace(/^(.).*(@.*)$/, '$1***$2');
@@ -23,10 +26,11 @@ export default async function SignupPage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ code?: string }>;
+  searchParams: Promise<{ code?: string; plan?: string; interval?: string }>;
 }) {
   const { locale } = await params;
-  const code = ((await searchParams).code ?? '').trim().slice(0, 64);
+  const sp = await searchParams;
+  const code = (sp.code ?? '').trim().slice(0, 64);
   setRequestLocale(locale);
   const t = await getTranslations();
   const [session, open] = await Promise.all([ownAuthSession(), openSignupEnabled()]);
@@ -37,6 +41,14 @@ export default async function SignupPage({
   );
   const here = code ? `/signup?code=${encodeURIComponent(code)}` : '/signup';
   const selfServe = !code && open;
+  if (selfServe)
+    return (
+      <SelfServeView
+        locale={locale}
+        plan={sp.plan ?? ''}
+        interval={sp.interval === 'year' ? 'year' : 'month'}
+      />
+    );
   return (
     <>
       <AuthBar />
@@ -56,9 +68,13 @@ export default async function SignupPage({
                 {t('signup.comingSoon')}
               </h2>
               <p className="text-body text-ink-2">{t('signup.comingSoonBody')}</p>
-              <Link href="/for-organizers#apply" className={buttonClass('primary', 'md', 'self-start')}>
-                {t('signup.applyCta')}
-              </Link>
+              <SalesButton
+                action={applyAction}
+                humanCheck={humanCheckWidget()}
+                label={t('signup.applyCta')}
+                variant="ember"
+                className="self-start"
+              />
               <p className="text-body text-ink-2">{t('signup.needCode')}</p>
               <form method="get" className="flex flex-wrap items-end gap-3">
                 <Input

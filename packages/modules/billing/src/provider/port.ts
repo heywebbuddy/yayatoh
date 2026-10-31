@@ -20,6 +20,11 @@ export interface BillingProvider {
    * not this call's answer, then move the org's plan and modules.
    */
   changePlan(i: PlanChangeRequest & { idempotencyKey: string }): Promise<{ subscriptionId: string }>;
+  /**
+   * Self-serve sign-up: a hosted checkout page where the customer pays for the first period of a
+   * new subscription. The provider's webhooks (not the redirect back) then activate the plan.
+   */
+  startCheckout(i: CheckoutRequest): Promise<{ url: string }>;
   /** M6.6b: pay the subscription's open invoice now (after a failed renewal). */
   payOutstanding(i: {
     customerId: string;
@@ -47,6 +52,19 @@ export interface CurrentSubscription {
   readonly id: string;
   readonly priceLookupKey: string | null;
   readonly currentPeriodEnd: Date | null;
+}
+
+export interface CheckoutRequest {
+  readonly customerId: string;
+  /** The price's lookup key (`tier_pro_month_usd`). */
+  readonly priceLookupKey: string;
+  /** Absolute addresses the provider sends the customer back to. */
+  readonly successUrl: string;
+  readonly cancelUrl: string;
+  /** The org this subscription is for (kept in the provider's metadata for support). */
+  readonly orgId: string;
+  readonly customerEmail: string | null;
+  readonly idempotencyKey: string;
 }
 
 export interface PlanChangeRequest {

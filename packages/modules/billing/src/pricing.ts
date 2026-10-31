@@ -86,6 +86,7 @@ export interface PublicPlanTier {
     readonly currency: string;
     readonly interval: 'month' | 'year';
     readonly unitAmountMinor: number;
+    readonly lookupKey: string;
   }[];
 }
 
@@ -97,12 +98,12 @@ export async function publicPlanTiers(): Promise<PublicPlanTier[]> {
       name: string;
       active: boolean;
       modules: string[];
-      prices: { currency: string; interval: 'month' | 'year'; unitAmountMinor: number }[];
+      prices: { currency: string; interval: 'month' | 'year'; unitAmountMinor: number; lookupKey: string }[];
     }>(sql`
       select p.key, p.name, coalesce(c.active, false) as active,
         coalesce((select jsonb_agg(m.module_key order by m.module_key) from billing.plan_modules m where m.plan_key = p.key), '[]'::jsonb) as modules,
         coalesce((select jsonb_agg(jsonb_build_object('currency', x.currency, 'interval', x.billing_interval,
-          'unitAmountMinor', x.unit_amount_minor) order by x.billing_interval) from billing.plan_prices x
+          'unitAmountMinor', x.unit_amount_minor, 'lookupKey', x.lookup_key) order by x.billing_interval) from billing.plan_prices x
           where x.plan_key = p.key and x.active and x.unit_amount_minor is not null), '[]'::jsonb) as prices
       from billing.plans p left join billing.plan_catalog c on c.plan_key = p.key
       where p.key like 'tier\_%' order by coalesce(c.sort_order, 999), p.key`),
