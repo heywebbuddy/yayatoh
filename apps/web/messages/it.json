@@ -20728,5 +20728,9 @@
     "to": "Al",
     "defaultName": "Eventi dal vivo vicino a te",
     "defaultMeta": "Concerti, conferenze, gala e altro"
+  },
+  "eventSkin": {
+    "rsvp": "Conferma",
+    "register": "Iscriviti"
   }
 }

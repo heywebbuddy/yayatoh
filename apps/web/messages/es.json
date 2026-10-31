@@ -20728,5 +20728,9 @@
     "to": "Hasta",
     "defaultName": "Eventos en vivo cerca de ti",
     "defaultMeta": "Conciertos, congresos, galas y más"
+  },
+  "eventSkin": {
+    "rsvp": "Confirmar asistencia",
+    "register": "Inscribirse"
   }
 }

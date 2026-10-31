@@ -20728,5 +20728,9 @@
     "to": "終了",
     "defaultName": "あなたの近くのライブイベント",
     "defaultMeta": "コンサート、カンファレンス、ガラなど"
+  },
+  "eventSkin": {
+    "rsvp": "出欠を回答",
+    "register": "登録する"
   }
 }

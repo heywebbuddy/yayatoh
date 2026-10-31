@@ -20728,5 +20728,9 @@
     "to": "Tot",
     "defaultName": "Live evenementen bij jou in de buurt",
     "defaultMeta": "Concerten, conferenties, gala’s en meer"
+  },
+  "eventSkin": {
+    "rsvp": "Aanmelden (RSVP)",
+    "register": "Registreren"
   }
 }

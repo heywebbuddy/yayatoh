@@ -20728,5 +20728,9 @@
     "to": "Bis",
     "defaultName": "Live-Events in deiner Nähe",
     "defaultMeta": "Konzerte, Konferenzen, Galas und mehr"
+  },
+  "eventSkin": {
+    "rsvp": "Zusagen",
+    "register": "Anmelden"
   }
 }

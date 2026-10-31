@@ -20728,5 +20728,9 @@
     "to": "To",
     "defaultName": "Live events near you",
     "defaultMeta": "Concerts, conferences, galas and more"
+  },
+  "eventSkin": {
+    "rsvp": "RSVP",
+    "register": "Register"
   }
 }

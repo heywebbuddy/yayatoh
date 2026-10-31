@@ -360,7 +360,7 @@
   --color-brand-strong: #c91b68;
   --color-brand-ink: #a8124f;
   --color-brand-soft: rgba(201, 27, 104, 0.1);
-  --color-success: #0b7a4b;
+  --color-success: #096b42;
   --color-success-soft: rgba(11, 122, 75, 0.12);
   --color-success-dot: #14a367;
   --color-warning: #8a5300;
@@ -477,6 +477,441 @@
     color: var(--color-ink);
     background-color: var(--color-canvas);
   }
+}
+
+
+/*
+ * Event page skins: each event type (profile) restyles the public event page with its own
+ * palette, display type and hero, in light and dark. They only re-point colour roles and type; the
+ * layout, tickets, seats and checkout are the same components for every type.
+ */
+[data-surface="showcase"][data-profile="wedding"] {
+  --color-canvas: #fbf4f1;
+  --color-surface: #fffdfb;
+  --color-surface-solid: #fffdfb;
+  --color-surface-2: #f6ebe7;
+  --color-surface-3: #ecdcd6;
+  --color-primary: #a8365f;
+  --color-primary-hover: #922c52;
+  --color-primary-pressed: #7d2445;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #8f2d52;
+  --color-primary-soft: rgba(168,54,95,0.1);
+  --color-focus: #8f2d52;
+  --gradient-ember: linear-gradient(100deg, #c2577a 0%, #d98b6a 52%, #e3b77a 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #c2577a 0%, #d98b6a 60%, #e3b77a 100%);
+  --elevation-primary: 0 8px 24px color-mix(in srgb, #a8365f 35%, transparent);
+}
+[data-theme="dark"] [data-surface="showcase"][data-profile="wedding"] {
+  --color-canvas: #17101a;
+  --color-surface: #211724;
+  --color-surface-solid: #211724;
+  --color-surface-2: #2a1d2d;
+  --color-surface-3: #36263a;
+  --color-primary: #c93d6e;
+  --color-primary-hover: #b3335f;
+  --color-primary-pressed: #9c2b52;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #ffa3c0;
+  --color-primary-soft: rgba(201,61,110,0.2);
+  --color-focus: #ffa3c0;
+  --gradient-ember: linear-gradient(100deg, #c2577a 0%, #d98b6a 52%, #e3b77a 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #c2577a 0%, #d98b6a 60%, #e3b77a 100%);
+  --elevation-primary: 0 8px 24px color-mix(in srgb, #c93d6e 35%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] [data-surface="showcase"][data-profile="wedding"] {
+    --color-canvas: #17101a;
+    --color-surface: #211724;
+    --color-surface-solid: #211724;
+    --color-surface-2: #2a1d2d;
+    --color-surface-3: #36263a;
+    --color-primary: #c93d6e;
+    --color-primary-hover: #b3335f;
+    --color-primary-pressed: #9c2b52;
+    --color-on-primary: #ffffff;
+    --color-primary-ink: #ffa3c0;
+    --color-primary-soft: rgba(201,61,110,0.2);
+    --color-focus: #ffa3c0;
+    --gradient-ember: linear-gradient(100deg, #c2577a 0%, #d98b6a 52%, #e3b77a 100%);
+    --gradient-ember-soft: linear-gradient(135deg, #c2577a 0%, #d98b6a 60%, #e3b77a 100%);
+    --elevation-primary: 0 8px 24px color-mix(in srgb, #c93d6e 35%, transparent);
+  }
+}
+[data-surface="showcase"][data-profile="gala"] {
+  --color-canvas: #f6f2ea;
+  --color-surface: #fffdf8;
+  --color-surface-solid: #fffdf8;
+  --color-surface-2: #efe9dc;
+  --color-surface-3: #e4dccb;
+  --color-primary: #1a1612;
+  --color-primary-hover: #2b251f;
+  --color-primary-pressed: #0f0c09;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #1a1612;
+  --color-primary-soft: rgba(138,106,31,0.14);
+  --color-focus: #1a1612;
+  --gradient-ember: linear-gradient(100deg, #8a6a1f 0%, #c9a24a 52%, #e8cc83 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #8a6a1f 0%, #c9a24a 60%, #e8cc83 100%);
+  --elevation-primary: 0 8px 24px color-mix(in srgb, #1a1612 35%, transparent);
+}
+[data-theme="dark"] [data-surface="showcase"][data-profile="gala"] {
+  --color-canvas: #0b0a08;
+  --color-surface: #15130f;
+  --color-surface-solid: #15130f;
+  --color-surface-2: #1d1a14;
+  --color-surface-3: #28241b;
+  --color-primary: #c9a24a;
+  --color-primary-hover: #d8b45c;
+  --color-primary-pressed: #b58f3c;
+  --color-on-primary: #17120f;
+  --color-primary-ink: #e8cc83;
+  --color-primary-soft: rgba(201,162,74,0.18);
+  --color-focus: #e8cc83;
+  --gradient-ember: linear-gradient(100deg, #8a6a1f 0%, #c9a24a 52%, #e8cc83 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #8a6a1f 0%, #c9a24a 60%, #e8cc83 100%);
+  --elevation-primary: 0 8px 24px color-mix(in srgb, #c9a24a 35%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] [data-surface="showcase"][data-profile="gala"] {
+    --color-canvas: #0b0a08;
+    --color-surface: #15130f;
+    --color-surface-solid: #15130f;
+    --color-surface-2: #1d1a14;
+    --color-surface-3: #28241b;
+    --color-primary: #c9a24a;
+    --color-primary-hover: #d8b45c;
+    --color-primary-pressed: #b58f3c;
+    --color-on-primary: #17120f;
+    --color-primary-ink: #e8cc83;
+    --color-primary-soft: rgba(201,162,74,0.18);
+    --color-focus: #e8cc83;
+    --gradient-ember: linear-gradient(100deg, #8a6a1f 0%, #c9a24a 52%, #e8cc83 100%);
+    --gradient-ember-soft: linear-gradient(135deg, #8a6a1f 0%, #c9a24a 60%, #e8cc83 100%);
+    --elevation-primary: 0 8px 24px color-mix(in srgb, #c9a24a 35%, transparent);
+  }
+}
+[data-surface="showcase"][data-profile="conference"] {
+  --color-canvas: #f3f6fb;
+  --color-surface: #ffffff;
+  --color-surface-solid: #ffffff;
+  --color-surface-2: #e9eef7;
+  --color-surface-3: #dbe3f1;
+  --color-primary: #1d5fd1;
+  --color-primary-hover: #174ba8;
+  --color-primary-pressed: #123c88;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #174ba8;
+  --color-primary-soft: rgba(29,95,209,0.1);
+  --color-focus: #174ba8;
+  --gradient-ember: linear-gradient(100deg, #1d5fd1 0%, #128aa8 52%, #12a37f 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #1d5fd1 0%, #128aa8 60%, #12a37f 100%);
+  --elevation-primary: 0 8px 24px color-mix(in srgb, #1d5fd1 35%, transparent);
+}
+[data-theme="dark"] [data-surface="showcase"][data-profile="conference"] {
+  --color-canvas: #0a0e16;
+  --color-surface: #111826;
+  --color-surface-solid: #111826;
+  --color-surface-2: #19223a;
+  --color-surface-3: #243050;
+  --color-primary: #2f6fe0;
+  --color-primary-hover: #2860c6;
+  --color-primary-pressed: #2150ab;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #9ec0ff;
+  --color-primary-soft: rgba(47,111,224,0.2);
+  --color-focus: #9ec0ff;
+  --gradient-ember: linear-gradient(100deg, #1d5fd1 0%, #128aa8 52%, #12a37f 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #1d5fd1 0%, #128aa8 60%, #12a37f 100%);
+  --elevation-primary: 0 8px 24px color-mix(in srgb, #2f6fe0 35%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] [data-surface="showcase"][data-profile="conference"] {
+    --color-canvas: #0a0e16;
+    --color-surface: #111826;
+    --color-surface-solid: #111826;
+    --color-surface-2: #19223a;
+    --color-surface-3: #243050;
+    --color-primary: #2f6fe0;
+    --color-primary-hover: #2860c6;
+    --color-primary-pressed: #2150ab;
+    --color-on-primary: #ffffff;
+    --color-primary-ink: #9ec0ff;
+    --color-primary-soft: rgba(47,111,224,0.2);
+    --color-focus: #9ec0ff;
+    --gradient-ember: linear-gradient(100deg, #1d5fd1 0%, #128aa8 52%, #12a37f 100%);
+    --gradient-ember-soft: linear-gradient(135deg, #1d5fd1 0%, #128aa8 60%, #12a37f 100%);
+    --elevation-primary: 0 8px 24px color-mix(in srgb, #2f6fe0 35%, transparent);
+  }
+}
+[data-surface="showcase"][data-profile="concert"] {
+  --color-canvas: #f6f1f3;
+  --color-surface: #ffffff;
+  --color-surface-solid: #ffffff;
+  --color-surface-2: #f0e8ec;
+  --color-surface-3: #e5dae0;
+  --color-primary: #d4123a;
+  --color-primary-hover: #bd0f33;
+  --color-primary-pressed: #a50c2c;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #b00e30;
+  --color-primary-soft: rgba(212,18,58,0.1);
+  --color-focus: #b00e30;
+  --gradient-ember: linear-gradient(100deg, #d4122c 0%, #d8420c 52%, #c41a62 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #d4122c 0%, #d8420c 60%, #c41a62 100%);
+  --elevation-primary: 0 8px 24px color-mix(in srgb, #d4123a 35%, transparent);
+}
+[data-theme="dark"] [data-surface="showcase"][data-profile="concert"] {
+  --color-canvas: #09060a;
+  --color-surface: #140d14;
+  --color-surface-solid: #140d14;
+  --color-surface-2: #1d131e;
+  --color-surface-3: #2a1c2c;
+  --color-primary: #e41c3f;
+  --color-primary-hover: #cf1636;
+  --color-primary-pressed: #b8122f;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #ff8a9b;
+  --color-primary-soft: rgba(228,28,63,0.2);
+  --color-focus: #ff8a9b;
+  --gradient-ember: linear-gradient(100deg, #d4122c 0%, #d8420c 52%, #c41a62 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #d4122c 0%, #d8420c 60%, #c41a62 100%);
+  --elevation-primary: 0 8px 24px color-mix(in srgb, #e41c3f 35%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] [data-surface="showcase"][data-profile="concert"] {
+    --color-canvas: #09060a;
+    --color-surface: #140d14;
+    --color-surface-solid: #140d14;
+    --color-surface-2: #1d131e;
+    --color-surface-3: #2a1c2c;
+    --color-primary: #e41c3f;
+    --color-primary-hover: #cf1636;
+    --color-primary-pressed: #b8122f;
+    --color-on-primary: #ffffff;
+    --color-primary-ink: #ff8a9b;
+    --color-primary-soft: rgba(228,28,63,0.2);
+    --color-focus: #ff8a9b;
+    --gradient-ember: linear-gradient(100deg, #d4122c 0%, #d8420c 52%, #c41a62 100%);
+    --gradient-ember-soft: linear-gradient(135deg, #d4122c 0%, #d8420c 60%, #c41a62 100%);
+    --elevation-primary: 0 8px 24px color-mix(in srgb, #e41c3f 35%, transparent);
+  }
+}
+[data-surface="showcase"][data-profile="community"] {
+  --color-canvas: #f4f8f1;
+  --color-surface: #ffffff;
+  --color-surface-solid: #ffffff;
+  --color-surface-2: #eaf1e4;
+  --color-surface-3: #dce8d3;
+  --color-primary: #1c7f44;
+  --color-primary-hover: #166a38;
+  --color-primary-pressed: #12562d;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #146232;
+  --color-primary-soft: rgba(28,127,68,0.1);
+  --color-focus: #146232;
+  --gradient-ember: linear-gradient(100deg, #1c7f44 0%, #c8860f 52%, #1f7fc4 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #1c7f44 0%, #c8860f 60%, #1f7fc4 100%);
+  --elevation-primary: 0 8px 24px color-mix(in srgb, #1c7f44 35%, transparent);
+}
+[data-theme="dark"] [data-surface="showcase"][data-profile="community"] {
+  --color-canvas: #0b120d;
+  --color-surface: #121c14;
+  --color-surface-solid: #121c14;
+  --color-surface-2: #1a271c;
+  --color-surface-3: #243627;
+  --color-primary: #1c7f44;
+  --color-primary-hover: #17703b;
+  --color-primary-pressed: #126032;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #7be0a1;
+  --color-primary-soft: rgba(28,127,68,0.24);
+  --color-focus: #7be0a1;
+  --gradient-ember: linear-gradient(100deg, #1c7f44 0%, #c8860f 52%, #1f7fc4 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #1c7f44 0%, #c8860f 60%, #1f7fc4 100%);
+  --elevation-primary: 0 8px 24px color-mix(in srgb, #1c7f44 35%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] [data-surface="showcase"][data-profile="community"] {
+    --color-canvas: #0b120d;
+    --color-surface: #121c14;
+    --color-surface-solid: #121c14;
+    --color-surface-2: #1a271c;
+    --color-surface-3: #243627;
+    --color-primary: #1c7f44;
+    --color-primary-hover: #17703b;
+    --color-primary-pressed: #126032;
+    --color-on-primary: #ffffff;
+    --color-primary-ink: #7be0a1;
+    --color-primary-soft: rgba(28,127,68,0.24);
+    --color-focus: #7be0a1;
+    --gradient-ember: linear-gradient(100deg, #1c7f44 0%, #c8860f 52%, #1f7fc4 100%);
+    --gradient-ember-soft: linear-gradient(135deg, #1c7f44 0%, #c8860f 60%, #1f7fc4 100%);
+    --elevation-primary: 0 8px 24px color-mix(in srgb, #1c7f44 35%, transparent);
+  }
+}
+[data-surface="showcase"][data-profile="tour"] {
+  --color-canvas: #f1f7f8;
+  --color-surface: #ffffff;
+  --color-surface-solid: #ffffff;
+  --color-surface-2: #e4eff1;
+  --color-surface-3: #d3e4e8;
+  --color-primary: #0e7490;
+  --color-primary-hover: #0b5f76;
+  --color-primary-pressed: #094d61;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #0b5a70;
+  --color-primary-soft: rgba(14,116,144,0.1);
+  --color-focus: #0b5a70;
+  --gradient-ember: linear-gradient(100deg, #0e7490 0%, #14867f 52%, #b87a14 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #0e7490 0%, #14867f 60%, #b87a14 100%);
+  --elevation-primary: 0 8px 24px color-mix(in srgb, #0e7490 35%, transparent);
+}
+[data-theme="dark"] [data-surface="showcase"][data-profile="tour"] {
+  --color-canvas: #081114;
+  --color-surface: #0f1c20;
+  --color-surface-solid: #0f1c20;
+  --color-surface-2: #162a30;
+  --color-surface-3: #1f3a42;
+  --color-primary: #0f7f9d;
+  --color-primary-hover: #0d6e89;
+  --color-primary-pressed: #0b5d74;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #7fd6ee;
+  --color-primary-soft: rgba(15,127,157,0.22);
+  --color-focus: #7fd6ee;
+  --gradient-ember: linear-gradient(100deg, #0e7490 0%, #14867f 52%, #b87a14 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #0e7490 0%, #14867f 60%, #b87a14 100%);
+  --elevation-primary: 0 8px 24px color-mix(in srgb, #0f7f9d 35%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] [data-surface="showcase"][data-profile="tour"] {
+    --color-canvas: #081114;
+    --color-surface: #0f1c20;
+    --color-surface-solid: #0f1c20;
+    --color-surface-2: #162a30;
+    --color-surface-3: #1f3a42;
+    --color-primary: #0f7f9d;
+    --color-primary-hover: #0d6e89;
+    --color-primary-pressed: #0b5d74;
+    --color-on-primary: #ffffff;
+    --color-primary-ink: #7fd6ee;
+    --color-primary-soft: rgba(15,127,157,0.22);
+    --color-focus: #7fd6ee;
+    --gradient-ember: linear-gradient(100deg, #0e7490 0%, #14867f 52%, #b87a14 100%);
+    --gradient-ember-soft: linear-gradient(135deg, #0e7490 0%, #14867f 60%, #b87a14 100%);
+    --elevation-primary: 0 8px 24px color-mix(in srgb, #0f7f9d 35%, transparent);
+  }
+}
+[data-surface="showcase"][data-profile="agency"] {
+  --color-canvas: #f5f4f2;
+  --color-surface: #ffffff;
+  --color-surface-solid: #ffffff;
+  --color-surface-2: #ecebe8;
+  --color-surface-3: #e0dfdb;
+  --color-primary: #17120f;
+  --color-primary-hover: #2b241f;
+  --color-primary-pressed: #0c0907;
+  --color-on-primary: #ffffff;
+  --color-primary-ink: #17120f;
+  --color-primary-soft: rgba(23,18,15,0.08);
+  --color-focus: #17120f;
+  --gradient-ember: linear-gradient(100deg, #17120f 0%, #5a524b 52%, #9a9088 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #17120f 0%, #5a524b 60%, #9a9088 100%);
+  --elevation-primary: 0 8px 24px color-mix(in srgb, #17120f 35%, transparent);
+}
+[data-theme="dark"] [data-surface="showcase"][data-profile="agency"] {
+  --color-canvas: #0a0a0a;
+  --color-surface: #131313;
+  --color-surface-solid: #131313;
+  --color-surface-2: #1b1b1b;
+  --color-surface-3: #262626;
+  --color-primary: #f2eee9;
+  --color-primary-hover: #ffffff;
+  --color-primary-pressed: #d9d4cd;
+  --color-on-primary: #17120f;
+  --color-primary-ink: #f2eee9;
+  --color-primary-soft: rgba(242,238,233,0.14);
+  --color-focus: #f2eee9;
+  --gradient-ember: linear-gradient(100deg, #17120f 0%, #5a524b 52%, #9a9088 100%);
+  --gradient-ember-soft: linear-gradient(135deg, #17120f 0%, #5a524b 60%, #9a9088 100%);
+  --elevation-primary: 0 8px 24px color-mix(in srgb, #f2eee9 35%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] [data-surface="showcase"][data-profile="agency"] {
+    --color-canvas: #0a0a0a;
+    --color-surface: #131313;
+    --color-surface-solid: #131313;
+    --color-surface-2: #1b1b1b;
+    --color-surface-3: #262626;
+    --color-primary: #f2eee9;
+    --color-primary-hover: #ffffff;
+    --color-primary-pressed: #d9d4cd;
+    --color-on-primary: #17120f;
+    --color-primary-ink: #f2eee9;
+    --color-primary-soft: rgba(242,238,233,0.14);
+    --color-focus: #f2eee9;
+    --gradient-ember: linear-gradient(100deg, #17120f 0%, #5a524b 52%, #9a9088 100%);
+    --gradient-ember-soft: linear-gradient(135deg, #17120f 0%, #5a524b 60%, #9a9088 100%);
+    --elevation-primary: 0 8px 24px color-mix(in srgb, #f2eee9 35%, transparent);
+  }
+}
+
+[data-profile="wedding"][data-heading="modern"] :is(h1, h2) {
+  font-family: var(--font-heading-classic);
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: -0.01em;
+}
+[data-profile="wedding"] [data-event-hero] {
+  align-items: center;
+  text-align: center;
+}
+[data-profile="wedding"] [data-event-hero] > ul {
+  justify-content: center;
+}
+[data-profile="gala"][data-heading="modern"] :is(h1, h2) {
+  font-family: var(--font-heading-classic);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+[data-profile="gala"] [data-event-hero] {
+  border: 1px solid var(--color-line);
+  outline: 1px solid color-mix(in srgb, var(--color-primary-ink) 60%, transparent);
+  outline-offset: -10px;
+}
+[data-profile="conference"][data-heading="modern"] [data-event-title] {
+  font-size: clamp(30px, 4.6vw, 54px);
+  letter-spacing: -0.03em;
+}
+[data-profile="concert"][data-heading="modern"] [data-event-title] {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(40px, 8vw, 104px);
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+}
+[data-profile="community"][data-heading="modern"] :is(h1, h2) {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+[data-profile="community"] [data-event-hero] {
+  border-radius: 48px;
+}
+[data-profile="tour"][data-heading="modern"] [data-event-title] {
+  font-family: var(--font-heading-classic);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+[data-profile="agency"][data-heading="modern"] [data-event-title] {
+  font-weight: 300;
+  letter-spacing: -0.05em;
+  font-size: clamp(36px, 6vw, 76px);
+}
+[data-profile="agency"] [data-event-hero] {
+  border-radius: 12px;
 }
 
 /* An organizer's heading-font choice for the event page (event branding). */

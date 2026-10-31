@@ -20728,5 +20728,9 @@
     "to": "結束",
     "defaultName": "你身邊的現場活動",
     "defaultMeta": "演唱會、研討會、晚宴等"
+  },
+  "eventSkin": {
+    "rsvp": "回覆出席",
+    "register": "立即報名"
   }
 }

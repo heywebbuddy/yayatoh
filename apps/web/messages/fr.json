@@ -20728,5 +20728,9 @@
     "to": "Au",
     "defaultName": "Des événements près de chez vous",
     "defaultMeta": "Concerts, conférences, galas et plus"
+  },
+  "eventSkin": {
+    "rsvp": "Répondre",
+    "register": "S’inscrire"
   }
 }

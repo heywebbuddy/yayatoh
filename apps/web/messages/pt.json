@@ -20728,5 +20728,9 @@
     "to": "Até",
     "defaultName": "Eventos ao vivo perto de você",
     "defaultMeta": "Shows, conferências, galas e mais"
+  },
+  "eventSkin": {
+    "rsvp": "Confirmar presença",
+    "register": "Inscrever-se"
   }
 }

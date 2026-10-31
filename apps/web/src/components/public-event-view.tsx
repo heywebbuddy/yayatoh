@@ -540,6 +540,7 @@ export async function PublicEventView({
     <div
       className={cx('min-h-dvh', showcase && 'bg-page')}
       data-heading={ev.design.headingFont}
+      data-profile={ev.profile}
       {...(showcase ? { 'data-surface': 'showcase' } : { 'data-theme': 'light' })}
     >
       {ev.visibility === 'public' ? (
@@ -599,6 +600,7 @@ export async function PublicEventView({
 
         <main id="main" className="flex flex-col gap-6">
           <section
+            data-event-hero
             className={cx(
               'relative isolate flex min-h-[380px] flex-col justify-end gap-4 overflow-hidden rounded-[32px] bg-hero px-6 pt-16 pb-8 text-white elevation-card md:px-10 md:pb-10',
               heroCircle && cover && 'md:pe-[46%]',
@@ -690,7 +692,10 @@ export async function PublicEventView({
                 </li>
               ) : null}
             </ul>
-            <h1 className="m-0 max-w-[680px] text-[40px] leading-[1.02] font-extrabold tracking-[-0.045em] md:text-display">
+            <h1
+              data-event-title
+              className="m-0 max-w-[680px] text-[40px] leading-[1.02] font-extrabold tracking-[-0.045em] md:text-display"
+            >
               {ev.name}
             </h1>
             {ev.tagline ? (
@@ -942,6 +947,24 @@ export async function PublicEventView({
               ) : null}
             </div>
           </div>
+          {(['wedding', 'gala', 'conference', 'concert', 'tour'] as const).some((p) => p === ev.profile) ? (
+            // A floating register bar for the types people decide on quickly: it follows the page down.
+            <div className="pointer-events-none sticky bottom-3 z-30 flex justify-center">
+              <a
+                href="#passes"
+                className={cx(
+                  buttonClass('ember', 'lg'),
+                  'pointer-events-auto elevation-pop shadow-lg motion-safe:animate-rise',
+                )}
+              >
+                {ev.profile === 'wedding'
+                  ? t('eventSkin.rsvp')
+                  : ev.profile === 'conference'
+                    ? t('eventSkin.register')
+                    : t('publicEvent.getTickets')}
+              </a>
+            </div>
+          ) : null}
         </main>
       </div>
     </div>
