@@ -7139,7 +7139,8 @@
         "name": "你的姓名",
         "email": "電子郵件",
         "company": "組織",
-        "message": "訊息"
+        "message": "訊息",
+        "subject": "主旨"
       },
       "topics": {
         "sales": "業務與示範",
@@ -7160,7 +7161,8 @@
         "email": "請輸入有效的電子郵件地址。",
         "company": "最多 160 個字元。",
         "message": "請輸入 10 至 4,000 個字元的訊息。",
-        "human": "請確認你是真人。"
+        "human": "請確認你是真人。",
+        "subject": "請輸入不超過 160 個字元的主旨。"
       },
       "fallbackBody": "請寄信給我們,我們通常會在一個工作天內以電子郵件回覆。",
       "fallbackHelp": "查看說明中心"
@@ -20778,6 +20780,36 @@
     "community": {
       "title": "歡迎所有人",
       "body": "隨心而來，帶上家人和朋友一起參與。參與方式見下方。"
+    }
+  },
+  "sitePages": {
+    "aboutLink": "關於我們",
+    "termsLink": "服務條款",
+    "cookiesLink": "Cookie 政策",
+    "legalEyebrow": "法律資訊",
+    "lastUpdated": "最後更新 {date} · 版本 {version}",
+    "about": {
+      "metaTitle": "關於 Yayatoh",
+      "eyebrow": "關於我們",
+      "title": "讓活動變得簡單",
+      "mission": "我們的使命",
+      "story": "我們的故事",
+      "values": "我們的價值觀",
+      "offer": "我們提供什麼",
+      "forAttendees": "面向參加者",
+      "forOrganizers": "面向主辦方",
+      "team": "我們的團隊"
+    },
+    "contact": {
+      "getInTouch": "聯絡我們",
+      "address": "地址",
+      "phone": "電話",
+      "email": "電子郵件",
+      "hours": "服務時間",
+      "mail": {
+        "confirmSubject": "我們已收到您的留言",
+        "confirmBody": "{name} 您好，\n\n感謝您聯絡 Yayatoh。我們已收到您關於「{subject}」的留言，通常會在一個工作天內以電子郵件回覆。\n\nYayatoh 團隊"
+      }
     }
   }
 }

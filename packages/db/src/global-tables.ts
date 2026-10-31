@@ -47,6 +47,14 @@ export const GLOBAL_TABLES: Readonly<Record<string, string>> = {
     'Testimonials for the home page written by staff in the admin console; app_user reads published rows through cms.public_platform_testimonials; written only by cms.platform_save_testimonial / platform_delete_testimonial (platform_reader).',
   'cms.platform_hero':
     'The home hero (headline, subtitle, image, video, call to action), one row, written by staff in the admin console; app_user reads cms.public_platform_hero; written only by cms.platform_save_hero (platform_reader).',
+  'cms.platform_settings':
+    'Site settings as JSON (contact details, the About page) written by staff in the admin console; app_user reads cms.public_platform_settings; written only by cms.platform_save_setting (platform_reader).',
+  'cms.platform_pages':
+    'Legal and static pages (privacy, terms, cookies, sub-processors) in Markdown, edited by staff; app_user reads published rows through cms.public_platform_pages; written only by cms.platform_save_page (platform_reader).',
+  'cms.platform_page_versions':
+    'Version history of every platform page save; no app_user privileges; written by cms.platform_save_page, read by staff (platform_reader).',
+  'cms.platform_contact_messages':
+    'Messages sent through the public Contact page; no app_user privileges, written by the SECURITY DEFINER cms.contact_submit and, for staff, cms.contact_* functions (platform_reader).',
   'applications.applications':
     'Organizer applications and demo requests from the for-organizers landing page (an applicant has no org yet); no app_user privileges, written by the SECURITY DEFINER applications.submit and, for staff, applications.* functions (platform_reader).',
   'applications.notes':

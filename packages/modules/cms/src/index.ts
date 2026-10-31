@@ -77,6 +77,7 @@ export {
   updateHelpCategoryCommand,
 } from './help.ts';
 export * from './platform-content.ts';
+export * from './platform-site.ts';
 export { privateColumns } from './private-columns.ts';
 export {
   createSiteSectionCommand,

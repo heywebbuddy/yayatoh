@@ -7,6 +7,7 @@ import {
   DoorOpen,
   KeyRound,
   LayoutDashboard,
+  Mail,
   MessageSquareWarning,
   Newspaper,
   Percent,
@@ -84,6 +85,13 @@ export async function Shell({ staff, children }: { staff: Staff; children: React
     { href: '/incidents', label: t('incidents'), icon: <Siren {...I} />, show: staff.can('incidents') },
     // Platform blog, testimonials and the home hero.
     { href: '/content', label: t('content'), icon: <Newspaper {...I} />, show: staff.can('content') },
+    // Messages sent through the public Contact page.
+    {
+      href: '/contact-messages',
+      label: t('contactMessages'),
+      icon: <Mail {...I} />,
+      show: staff.can('content'),
+    },
     // U8: the default event categories every new organization starts with.
     { href: '/categories', label: t('categories'), icon: <Tags {...I} />, show: staff.can('categories') },
     {

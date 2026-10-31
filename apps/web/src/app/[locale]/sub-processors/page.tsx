@@ -2,6 +2,11 @@ import { Table } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PageCta, PageHero } from '@/components/showcase/page-hero.tsx';
+import {
+  loadPlatformPage,
+  PlatformPageView,
+  platformPageMetadata,
+} from '@/components/site/platform-page.tsx';
 import { PRIVACY_UPDATED, SUB_PROCESSORS } from '@/content/sub-processors.ts';
 import { Link } from '@/i18n/navigation.ts';
 
@@ -11,6 +16,8 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const page = await loadPlatformPage('sub-processors');
+  if (page) return platformPageMetadata(page);
   const t = await getTranslations({ locale, namespace: 'subprocessors' });
   return { title: t('title') };
 }
@@ -19,6 +26,8 @@ export async function generateMetadata({
 export default async function SubProcessorsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const page = await loadPlatformPage('sub-processors');
+  if (page) return <PlatformPageView page={page} locale={locale} />;
   const t = await getTranslations('subprocessors');
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-5xl flex-col gap-6 px-4 py-6 md:px-6">

@@ -3,7 +3,10 @@ import {
   boolean,
   check,
   customType,
+  date,
+  index,
   integer,
+  jsonb,
   pgSchema,
   text,
   timestamp,
@@ -137,5 +140,99 @@ export const platformHero = cmsSchema.table(
     check('platform_hero_subtitle_check', sql`subtitle is null or char_length(subtitle) <= 300`),
     check('platform_hero_cta_check', sql`(cta_label is null) = (cta_href is null)`),
     check('platform_hero_cta_href_check', sql`cta_href is null or cta_href ~ '^(/|https://)'`),
+  ],
+);
+
+/** Small site settings as JSON, by key: `contact` (address, phone, emails) and `about` (the About page). */
+export const platformSettings = cmsSchema.table(
+  'platform_settings',
+  {
+    key: text('key').primaryKey(),
+    value: jsonb('value').notNull(),
+    updatedAt: ts('updated_at').notNull().defaultNow(),
+    updatedBy: text('updated_by').notNull(),
+  },
+  () => [check('platform_settings_key_check', sql`key in ('contact', 'about')`)],
+);
+
+/** Legal and static pages (privacy, terms, cookies, sub-processors, …) in Markdown, with versions. */
+export const platformPages = cmsSchema.table(
+  'platform_pages',
+  {
+    id: uuid('id').primaryKey().default(sql`uuidv7()`),
+    slug: text('slug').notNull(),
+    title: text('title').notNull(),
+    body: text('body').notNull().default(''),
+    /** The "last updated" date shown to readers. */
+    effectiveDate: date('effective_date', { mode: 'string' }).notNull(),
+    status: text('status').notNull().default('draft'),
+    version: integer('version').notNull().default(1),
+    publishedAt: ts('published_at'),
+    createdAt: ts('created_at').notNull().defaultNow(),
+    updatedAt: ts('updated_at').notNull().defaultNow(),
+    updatedBy: text('updated_by').notNull(),
+  },
+  (t) => [
+    uniqueIndex('platform_pages_slug_key').on(t.slug),
+    check(
+      'platform_pages_slug_check',
+      sql`slug ~ '^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$' and char_length(slug) <= 60`,
+    ),
+    check('platform_pages_title_check', sql`char_length(title) between 1 and 160`),
+    check('platform_pages_body_check', sql`char_length(body) <= 120000`),
+    check('platform_pages_status_check', sql`status in ('draft', 'published')`),
+    check('platform_pages_published_check', sql`(status = 'published') = (published_at is not null)`),
+  ],
+);
+
+/** Every save of a page, newest version last. */
+export const platformPageVersions = cmsSchema.table(
+  'platform_page_versions',
+  {
+    id: uuid('id').primaryKey().default(sql`uuidv7()`),
+    pageId: uuid('page_id')
+      .notNull()
+      .references(() => platformPages.id, { onDelete: 'cascade' }),
+    version: integer('version').notNull(),
+    title: text('title').notNull(),
+    body: text('body').notNull(),
+    effectiveDate: date('effective_date', { mode: 'string' }).notNull(),
+    status: text('status').notNull(),
+    savedBy: text('saved_by').notNull(),
+    savedAt: ts('saved_at').notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex('platform_page_versions_key').on(t.pageId, t.version)],
+);
+
+/** Messages from the public Contact page: the staff inbox (status new / replied / closed). */
+export const platformContactMessages = cmsSchema.table(
+  'platform_contact_messages',
+  {
+    id: uuid('id').primaryKey().default(sql`uuidv7()`),
+    name: text('name').notNull(),
+    email: text('email').notNull(),
+    subject: text('subject').notNull(),
+    message: text('message').notNull(),
+    locale: text('locale').notNull().default('en'),
+    status: text('status').notNull().default('new'),
+    notes: text('notes').notNull().default(''),
+    lastReply: text('last_reply'),
+    repliedAt: ts('replied_at'),
+    repliedBy: text('replied_by'),
+    createdAt: ts('created_at').notNull().defaultNow(),
+    updatedAt: ts('updated_at').notNull().defaultNow(),
+    updatedBy: text('updated_by'),
+  },
+  (t) => [
+    index('platform_contact_messages_status_idx').on(t.status, t.createdAt),
+    check('platform_contact_messages_name_check', sql`char_length(name) between 1 and 120`),
+    check(
+      'platform_contact_messages_email_check',
+      sql`email = lower(email) and email like '%@%' and char_length(email) <= 254`,
+    ),
+    check('platform_contact_messages_subject_check', sql`char_length(subject) between 1 and 160`),
+    check('platform_contact_messages_message_check', sql`char_length(message) between 1 and 4000`),
+    check('platform_contact_messages_status_check', sql`status in ('new', 'replied', 'closed')`),
+    check('platform_contact_messages_notes_check', sql`char_length(notes) <= 4000`),
   ],
 );

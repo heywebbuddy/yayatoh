@@ -20,6 +20,17 @@ export const privateColumns = columnPrivacy('cms', {
     seo_description: internal(undefined, DRAFT),
     // A member's name snapshot, shown as the byline once published.
     author_name: personal(undefined, DRAFT),
+    category: internal(undefined, DRAFT),
+    tags: internal(undefined, DRAFT),
+    cover_alt: internal(undefined, DRAFT),
+  },
+  // A post cover: image bytes served only with the published post that uses it.
+  entry_covers: {
+    content_type: 'vocab',
+    bytes: internal('none', {
+      why: 'image bytes, never text; served only through the cover route of a published entry',
+    }),
+    sha256: internal('none', { why: 'hex SHA-256 of the image bytes (CHECKed); no plaintext' }),
   },
   // M3.11b help center: category names show publicly once they hold a published article (the
   // console decides what to write there); articles as entries.

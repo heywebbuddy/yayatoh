@@ -1,6 +1,11 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PageCta, PageHero } from '@/components/showcase/page-hero.tsx';
+import {
+  loadPlatformPage,
+  PlatformPageView,
+  platformPageMetadata,
+} from '@/components/site/platform-page.tsx';
 import { PRIVACY_SECTIONS, PRIVACY_UPDATED } from '@/content/sub-processors.ts';
 import { Link } from '@/i18n/navigation.ts';
 
@@ -10,6 +15,8 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const page = await loadPlatformPage('privacy');
+  if (page) return platformPageMetadata(page);
   const t = await getTranslations({ locale, namespace: 'privacyNotice' });
   return { title: t('title') };
 }
@@ -21,6 +28,8 @@ export async function generateMetadata({
 export default async function PrivacyNoticePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const page = await loadPlatformPage('privacy');
+  if (page) return <PlatformPageView page={page} locale={locale} />;
   const t = await getTranslations('privacyNotice');
   return (
     <main id="main" className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 px-4 py-6 md:px-6">

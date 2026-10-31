@@ -7139,7 +7139,8 @@
         "name": "Il tuo nome",
         "email": "Email",
         "company": "Organizzazione",
-        "message": "Messaggio"
+        "message": "Messaggio",
+        "subject": "Oggetto"
       },
       "topics": {
         "sales": "Vendite e demo",
@@ -7160,7 +7161,8 @@
         "email": "Inserisci un indirizzo email valido.",
         "company": "Usa al massimo 160 caratteri.",
         "message": "Scrivi un messaggio da 10 a 4.000 caratteri.",
-        "human": "Conferma di essere una persona."
+        "human": "Conferma di essere una persona.",
+        "subject": "Inserisci un oggetto di massimo 160 caratteri."
       },
       "fallbackBody": "Scrivici: rispondiamo via e-mail, di solito entro un giorno lavorativo.",
       "fallbackHelp": "Vai al centro assistenza"
@@ -20778,6 +20780,36 @@
     "community": {
       "title": "Tutti sono i benvenuti",
       "body": "Vieni come sei, porta amici e famiglia e partecipa. Sotto trovi come fare."
+    }
+  },
+  "sitePages": {
+    "aboutLink": "Chi siamo",
+    "termsLink": "Termini di servizio",
+    "cookiesLink": "Cookie policy",
+    "legalEyebrow": "Note legali",
+    "lastUpdated": "Ultimo aggiornamento {date} · versione {version}",
+    "about": {
+      "metaTitle": "Informazioni su Yayatoh",
+      "eyebrow": "Chi siamo",
+      "title": "Eventi, semplificati",
+      "mission": "La nostra missione",
+      "story": "La nostra storia",
+      "values": "I nostri valori",
+      "offer": "Cosa offriamo",
+      "forAttendees": "Per i partecipanti",
+      "forOrganizers": "Per gli organizzatori",
+      "team": "Il nostro team"
+    },
+    "contact": {
+      "getInTouch": "Mettiti in contatto",
+      "address": "Indirizzo",
+      "phone": "Telefono",
+      "email": "E-mail",
+      "hours": "Orari",
+      "mail": {
+        "confirmSubject": "Abbiamo ricevuto il tuo messaggio",
+        "confirmBody": "Ciao {name},\n\ngrazie per aver scritto a Yayatoh. Abbiamo ricevuto il tuo messaggio su «{subject}» e risponderemo via e-mail, di solito entro un giorno lavorativo.\n\nIl team di Yayatoh"
+      }
     }
   }
 }

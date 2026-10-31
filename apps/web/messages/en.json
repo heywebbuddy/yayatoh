@@ -7139,7 +7139,8 @@
         "name": "Your name",
         "email": "Email",
         "company": "Organization",
-        "message": "Message"
+        "message": "Message",
+        "subject": "Subject"
       },
       "topics": {
         "sales": "Sales and demos",
@@ -7160,7 +7161,8 @@
         "email": "Enter a valid email address.",
         "company": "Use at most 160 characters.",
         "message": "Write a message of 10 to 4,000 characters.",
-        "human": "Confirm that you're a person."
+        "human": "Confirm that you're a person.",
+        "subject": "Enter a subject of up to 160 characters."
       },
       "fallbackBody": "Write to us and we will answer by email, usually within one working day.",
       "fallbackHelp": "Browse the help center"
@@ -20778,6 +20780,36 @@
     "community": {
       "title": "Everyone is welcome",
       "body": "Come as you are, bring friends and family, and join in. Details of how to take part are below."
+    }
+  },
+  "sitePages": {
+    "aboutLink": "About us",
+    "termsLink": "Terms of service",
+    "cookiesLink": "Cookie policy",
+    "legalEyebrow": "Legal",
+    "lastUpdated": "Last updated {date} · version {version}",
+    "about": {
+      "metaTitle": "About Yayatoh",
+      "eyebrow": "About us",
+      "title": "Events, made simple",
+      "mission": "Our mission",
+      "story": "Our story",
+      "values": "What we believe",
+      "offer": "What we offer",
+      "forAttendees": "For attendees",
+      "forOrganizers": "For organizers",
+      "team": "Our team"
+    },
+    "contact": {
+      "getInTouch": "Get in touch",
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "hours": "Opening hours",
+      "mail": {
+        "confirmSubject": "We got your message",
+        "confirmBody": "Hi {name},\n\nThanks for writing to Yayatoh. We received your message about “{subject}” and will reply by email, usually within one working day.\n\nThe Yayatoh team"
+      }
     }
   }
 }
