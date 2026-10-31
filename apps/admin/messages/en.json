@@ -1577,7 +1577,7 @@
       "new": "New page",
       "back": "All pages",
       "intro": "Legal and other static pages. Each save keeps a version; published pages are live at once at their address.",
-      "meta": "{path} · version {version} · last updated {date}",
+      "meta": "{path} · {language} · version {version} · last updated {date}",
       "status": {
         "draft": "Draft",
         "published": "Published"
@@ -1596,7 +1596,11 @@
         "dateHint": "Shown to readers as \"Last updated\".",
         "body": "Text (Markdown)",
         "bodyHint": "Use ## headings for sections: three or more give the page a table of contents. Supports **bold**, *italic*, - lists, > notes and [links](https://example.com)."
-      }
+      },
+      "language": "Language",
+      "hasVersion": "translated",
+      "noVersion": "English shown",
+      "translationMissing": "No {language} version yet: visitors in this language see the English page. Saving here publishes a {language} version, starting from the English text."
     },
     "contactInfo": {
       "address": "Address",

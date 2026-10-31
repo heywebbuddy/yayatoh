@@ -8,7 +8,8 @@ import { PageHero, Toc } from '@/components/showcase/page-hero.tsx';
 import { ShowcaseShell } from '@/components/showcase/shell.tsx';
 
 /** A page staff edit in the admin console ("Site content" → Pages), by slug; null when there is none. */
-export const loadPlatformPage = (slug: string): Promise<PlatformPage | null> => platformPage(slug);
+export const loadPlatformPage = (slug: string, locale: string): Promise<PlatformPage | null> =>
+  platformPage(slug, locale);
 
 export const platformPageMetadata = (page: PlatformPage): Metadata => ({ title: page.title });
 
