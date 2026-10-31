@@ -19819,7 +19819,8 @@
       "notIncluded": "غير مشمول افتراضيًا",
       "demoTitle": "فعاليات مشابهة على Yayatoh"
     },
-    "forOrganizers": "للمنظمين"
+    "forOrganizers": "للمنظمين",
+    "venues": "الأماكن"
   },
   "eventDesign": {
     "title": "تصميم الصفحة",
@@ -20673,5 +20674,34 @@
     "orgEventsTitle": "الفعاليات القادمة من {org}",
     "orgEventsAll": "عرض كل الفعاليات",
     "progress": "تقدم القراءة"
+  },
+  "homeFinder": {
+    "sliderLabel": "فعاليات مميزة",
+    "featured": "مميز",
+    "pause": "إيقاف العرض مؤقتًا",
+    "play": "تشغيل العرض",
+    "goTo": "عرض {name}",
+    "searchLabel": "ابحث عن فعاليات",
+    "what": "عمّ تبحث؟",
+    "placeholder": "فنان أو فعالية أو كلمة",
+    "where": "أين",
+    "anywhere": "في أي مكان",
+    "submit": "بحث",
+    "when": "متى",
+    "whenOptions": {
+      "any": "أي تاريخ",
+      "today": "اليوم",
+      "weekend": "نهاية هذا الأسبوع",
+      "month": "هذا الشهر",
+      "custom": "اختر تواريخ"
+    },
+    "useLocation": "استخدم موقعي",
+    "locating": "جارٍ تحديد الموقع…",
+    "locationFailed": "تعذّر الحصول على موقعك. اختر مدينة.",
+    "nearest": "أقرب مدينة: {city}",
+    "from": "من",
+    "to": "إلى",
+    "defaultName": "فعاليات حية بالقرب منك",
+    "defaultMeta": "حفلات ومؤتمرات وحفلات رسمية وأكثر"
   }
 }

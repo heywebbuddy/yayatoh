@@ -19819,7 +19819,8 @@
       "notIncluded": "標準では含まれない",
       "demoTitle": "Yayatohのこんなイベント"
     },
-    "forOrganizers": "主催者の方へ"
+    "forOrganizers": "主催者の方へ",
+    "venues": "会場"
   },
   "eventDesign": {
     "title": "ページデザイン",
@@ -20673,5 +20674,34 @@
     "orgEventsTitle": "{org}の開催予定イベント",
     "orgEventsAll": "すべてのイベントを見る",
     "progress": "読み進めた割合"
+  },
+  "homeFinder": {
+    "sliderLabel": "注目のイベント",
+    "featured": "注目",
+    "pause": "スライドショーを一時停止",
+    "play": "スライドショーを再生",
+    "goTo": "{name}を表示",
+    "searchLabel": "イベントを探す",
+    "what": "何をお探しですか？",
+    "placeholder": "アーティスト、イベント、キーワード",
+    "where": "場所",
+    "anywhere": "どこでも",
+    "submit": "検索",
+    "when": "いつ",
+    "whenOptions": {
+      "any": "日付を指定しない",
+      "today": "今日",
+      "weekend": "今週末",
+      "month": "今月",
+      "custom": "日付を選ぶ"
+    },
+    "useLocation": "現在地を使う",
+    "locating": "現在地を取得中…",
+    "locationFailed": "現在地を取得できませんでした。都市を選んでください。",
+    "nearest": "最も近い都市：{city}",
+    "from": "開始",
+    "to": "終了",
+    "defaultName": "あなたの近くのライブイベント",
+    "defaultMeta": "コンサート、カンファレンス、ガラなど"
   }
 }

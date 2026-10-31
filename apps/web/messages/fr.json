@@ -19819,7 +19819,8 @@
       "notIncluded": "Non inclus par défaut",
       "demoTitle": "Des événements comme celui-ci sur Yayatoh"
     },
-    "forOrganizers": "Pour les organisateurs"
+    "forOrganizers": "Pour les organisateurs",
+    "venues": "Lieux"
   },
   "eventDesign": {
     "title": "Design de la page",
@@ -20673,5 +20674,34 @@
     "orgEventsTitle": "Prochains événements de {org}",
     "orgEventsAll": "Voir tous les événements",
     "progress": "Progression de la lecture"
+  },
+  "homeFinder": {
+    "sliderLabel": "Événements à la une",
+    "featured": "À la une",
+    "pause": "Mettre le diaporama en pause",
+    "play": "Lancer le diaporama",
+    "goTo": "Afficher {name}",
+    "searchLabel": "Trouver des événements",
+    "what": "Que cherchez-vous ?",
+    "placeholder": "Artiste, événement ou mot-clé",
+    "where": "Où",
+    "anywhere": "Partout",
+    "submit": "Rechercher",
+    "when": "Quand",
+    "whenOptions": {
+      "any": "N’importe quand",
+      "today": "Aujourd’hui",
+      "weekend": "Ce week-end",
+      "month": "Ce mois-ci",
+      "custom": "Choisir des dates"
+    },
+    "useLocation": "Utiliser ma position",
+    "locating": "Localisation…",
+    "locationFailed": "Impossible d’obtenir votre position. Choisissez une ville.",
+    "nearest": "Ville la plus proche : {city}",
+    "from": "Du",
+    "to": "Au",
+    "defaultName": "Des événements près de chez vous",
+    "defaultMeta": "Concerts, conférences, galas et plus"
   }
 }

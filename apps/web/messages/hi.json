@@ -19819,7 +19819,8 @@
       "notIncluded": "डिफ़ॉल्ट रूप से शामिल नहीं",
       "demoTitle": "Yayatoh पर ऐसे इवेंट"
     },
-    "forOrganizers": "आयोजकों के लिए"
+    "forOrganizers": "आयोजकों के लिए",
+    "venues": "स्थल"
   },
   "eventDesign": {
     "title": "पेज डिज़ाइन",
@@ -20673,5 +20674,34 @@
     "orgEventsTitle": "{org} के आने वाले इवेंट",
     "orgEventsAll": "सभी इवेंट देखें",
     "progress": "पढ़ने की प्रगति"
+  },
+  "homeFinder": {
+    "sliderLabel": "चुनिंदा इवेंट",
+    "featured": "चुनिंदा",
+    "pause": "स्लाइडशो रोकें",
+    "play": "स्लाइडशो चलाएँ",
+    "goTo": "{name} दिखाएँ",
+    "searchLabel": "इवेंट खोजें",
+    "what": "आप क्या खोज रहे हैं?",
+    "placeholder": "कलाकार, इवेंट या कीवर्ड",
+    "where": "कहाँ",
+    "anywhere": "कहीं भी",
+    "submit": "खोजें",
+    "when": "कब",
+    "whenOptions": {
+      "any": "कोई भी तारीख़",
+      "today": "आज",
+      "weekend": "इस सप्ताहांत",
+      "month": "इस महीने",
+      "custom": "तारीख़ें चुनें"
+    },
+    "useLocation": "मेरी लोकेशन इस्तेमाल करें",
+    "locating": "लोकेशन खोजी जा रही है…",
+    "locationFailed": "आपकी लोकेशन नहीं मिल सकी। कोई शहर चुनें।",
+    "nearest": "सबसे नज़दीकी शहर: {city}",
+    "from": "से",
+    "to": "तक",
+    "defaultName": "आपके पास लाइव इवेंट",
+    "defaultMeta": "कॉन्सर्ट, सम्मेलन, गाला और बहुत कुछ"
   }
 }

@@ -19819,7 +19819,8 @@
       "notIncluded": "Non incluso di default",
       "demoTitle": "Eventi come questo su Yayatoh"
     },
-    "forOrganizers": "Per gli organizzatori"
+    "forOrganizers": "Per gli organizzatori",
+    "venues": "Sedi"
   },
   "eventDesign": {
     "title": "Design della pagina",
@@ -20673,5 +20674,34 @@
     "orgEventsTitle": "Prossimi eventi di {org}",
     "orgEventsAll": "Vedi tutti gli eventi",
     "progress": "Avanzamento della lettura"
+  },
+  "homeFinder": {
+    "sliderLabel": "Eventi in evidenza",
+    "featured": "In evidenza",
+    "pause": "Metti in pausa la presentazione",
+    "play": "Avvia la presentazione",
+    "goTo": "Mostra {name}",
+    "searchLabel": "Trova eventi",
+    "what": "Cosa cerchi?",
+    "placeholder": "Artista, evento o parola chiave",
+    "where": "Dove",
+    "anywhere": "Ovunque",
+    "submit": "Cerca",
+    "when": "Quando",
+    "whenOptions": {
+      "any": "Qualsiasi data",
+      "today": "Oggi",
+      "weekend": "Questo fine settimana",
+      "month": "Questo mese",
+      "custom": "Scegli le date"
+    },
+    "useLocation": "Usa la mia posizione",
+    "locating": "Localizzazione…",
+    "locationFailed": "Non siamo riusciti a ottenere la tua posizione. Scegli una città.",
+    "nearest": "Città più vicina: {city}",
+    "from": "Dal",
+    "to": "Al",
+    "defaultName": "Eventi dal vivo vicino a te",
+    "defaultMeta": "Concerti, conferenze, gala e altro"
   }
 }

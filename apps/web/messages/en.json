@@ -19819,7 +19819,8 @@
       "notIncluded": "Not included by default",
       "demoTitle": "Events like this on Yayatoh"
     },
-    "forOrganizers": "For organizers"
+    "forOrganizers": "For organizers",
+    "venues": "Venues"
   },
   "eventDesign": {
     "title": "Page design",
@@ -20673,5 +20674,34 @@
     "orgEventsTitle": "Upcoming events by {org}",
     "orgEventsAll": "See all events",
     "progress": "Reading progress"
+  },
+  "homeFinder": {
+    "sliderLabel": "Featured events",
+    "featured": "Featured",
+    "pause": "Pause the slideshow",
+    "play": "Play the slideshow",
+    "goTo": "Show {name}",
+    "searchLabel": "Find events",
+    "what": "What are you looking for?",
+    "placeholder": "Artist, event or keyword",
+    "where": "Where",
+    "anywhere": "Anywhere",
+    "submit": "Search",
+    "when": "When",
+    "whenOptions": {
+      "any": "Any date",
+      "today": "Today",
+      "weekend": "This weekend",
+      "month": "This month",
+      "custom": "Pick dates"
+    },
+    "useLocation": "Use my location",
+    "locating": "Locating…",
+    "locationFailed": "We could not get your location. Choose a city instead.",
+    "nearest": "Nearest city: {city}",
+    "from": "From",
+    "to": "To",
+    "defaultName": "Live events near you",
+    "defaultMeta": "Concerts, conferences, galas and more"
   }
 }

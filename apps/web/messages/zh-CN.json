@@ -19819,7 +19819,8 @@
       "notIncluded": "默认不包含",
       "demoTitle": "Yayatoh 上的同类活动"
     },
-    "forOrganizers": "面向组织者"
+    "forOrganizers": "面向组织者",
+    "venues": "场地"
   },
   "eventDesign": {
     "title": "页面设计",
@@ -20673,5 +20674,34 @@
     "orgEventsTitle": "{org} 的即将举行的活动",
     "orgEventsAll": "查看全部活动",
     "progress": "阅读进度"
+  },
+  "homeFinder": {
+    "sliderLabel": "精选活动",
+    "featured": "精选",
+    "pause": "暂停幻灯片",
+    "play": "播放幻灯片",
+    "goTo": "查看 {name}",
+    "searchLabel": "查找活动",
+    "what": "你想找什么？",
+    "placeholder": "艺人、活动或关键词",
+    "where": "地点",
+    "anywhere": "不限地点",
+    "submit": "搜索",
+    "when": "时间",
+    "whenOptions": {
+      "any": "不限日期",
+      "today": "今天",
+      "weekend": "本周末",
+      "month": "本月",
+      "custom": "选择日期"
+    },
+    "useLocation": "使用我的位置",
+    "locating": "正在定位…",
+    "locationFailed": "无法获取你的位置，请选择城市。",
+    "nearest": "最近的城市：{city}",
+    "from": "开始",
+    "to": "结束",
+    "defaultName": "你身边的现场活动",
+    "defaultMeta": "演唱会、会议、晚宴等"
   }
 }

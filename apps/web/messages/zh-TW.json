@@ -19819,7 +19819,8 @@
       "notIncluded": "預設不包含",
       "demoTitle": "Yayatoh 上的同類活動"
     },
-    "forOrganizers": "給主辦單位"
+    "forOrganizers": "給主辦單位",
+    "venues": "場地"
   },
   "eventDesign": {
     "title": "頁面設計",
@@ -20673,5 +20674,34 @@
     "orgEventsTitle": "{org} 即將舉行的活動",
     "orgEventsAll": "查看所有活動",
     "progress": "閱讀進度"
+  },
+  "homeFinder": {
+    "sliderLabel": "精選活動",
+    "featured": "精選",
+    "pause": "暫停投影片",
+    "play": "播放投影片",
+    "goTo": "查看 {name}",
+    "searchLabel": "尋找活動",
+    "what": "你想找什麼？",
+    "placeholder": "藝人、活動或關鍵字",
+    "where": "地點",
+    "anywhere": "不限地點",
+    "submit": "搜尋",
+    "when": "時間",
+    "whenOptions": {
+      "any": "不限日期",
+      "today": "今天",
+      "weekend": "本週末",
+      "month": "本月",
+      "custom": "選擇日期"
+    },
+    "useLocation": "使用我的位置",
+    "locating": "定位中…",
+    "locationFailed": "無法取得你的位置，請選擇城市。",
+    "nearest": "最近的城市：{city}",
+    "from": "開始",
+    "to": "結束",
+    "defaultName": "你身邊的現場活動",
+    "defaultMeta": "演唱會、研討會、晚宴等"
   }
 }
