@@ -57,6 +57,7 @@ const gallery = (key: string) =>
 
 const KEYS: Record<string, { key: string; alt: string }> = {
   'demo-wedding-ananya-rohan': { key: 'wed1', alt: 'The lakeside mandap at golden hour' },
+  'demo-tour-old-city-walk': { key: 'food', alt: 'A bazaar lane in the old city at dusk' },
   'demo-wedding-meera-daniel': { key: 'wed2', alt: 'A garden wedding ceremony at sunrise' },
   'demo-gala-starlight-charity': { key: 'gala1', alt: 'The ballroom set for the charity gala' },
   'demo-gala-founders-circle': { key: 'gala2', alt: 'Candlelit tables at the donors’ dinner' },

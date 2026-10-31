@@ -34,7 +34,15 @@ import {
   ticketsOf,
 } from './kit.ts';
 
-export type Profile = 'wedding' | 'gala' | 'concert' | 'conference' | 'community' | 'agency' | 'other';
+export type Profile =
+  | 'wedding'
+  | 'gala'
+  | 'concert'
+  | 'conference'
+  | 'community'
+  | 'tour'
+  | 'agency'
+  | 'other';
 
 /* -------------------------------------------------------------------------------- venues ---- */
 

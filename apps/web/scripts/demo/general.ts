@@ -3,7 +3,7 @@ import {
   createCampaignCommand as createDonationCampaignCommand,
   createLevelCommand,
 } from '@yayatoh/donations';
-import { addRecurringOccurrencesCommand } from '@yayatoh/events';
+import { addPickupPointCommand, addRecurringOccurrencesCommand } from '@yayatoh/events';
 import { recordBoxOfficeSaleCommand, startCheckoutCommand } from '@yayatoh/orders';
 import { submitReviewCommand } from '@yayatoh/reviews';
 import {
@@ -248,4 +248,47 @@ async function sellOnDate(
       owner(d),
     ),
   );
+}
+
+/** A tour: a daily departure for a week, three pickup points, adult and child places. */
+export async function tour(d: Demo, venues: Record<VenueKey, string>, spec: EventSpec, tag: string) {
+  if (await existing(d, spec.slug)) return log(`${spec.slug} exists, skipped`);
+  const b = await buildEvent(d, venues, spec);
+  await step(`${b.slug} daily departures`, () =>
+    run(
+      addRecurringOccurrencesCommand,
+      {
+        eventId: b.id,
+        rule: {
+          startDate: spec.date,
+          startTime: spec.start,
+          endTime: spec.end,
+          freq: 'daily',
+          interval: 1,
+          count: 7,
+        },
+        capacity: 20,
+      },
+      owner(d),
+    ),
+  );
+  for (const [i, p] of [
+    { name: 'Charminar gate', address: 'Charminar Rd, Hyderabad', minutesBefore: 15 },
+    { name: 'Hitech City metro', address: 'Madhapur, Hyderabad', minutesBefore: 30 },
+    { name: 'Banjara Hills Road No. 1', address: 'Banjara Hills, Hyderabad', minutesBefore: 20 },
+  ].entries())
+    await step(`${b.slug} pickup ${i + 1}`, () =>
+      run(addPickupPointCommand, { eventId: b.id, ...p }, owner(d)),
+    );
+  await ticketTypes(d, b, [
+    {
+      name: 'Adult',
+      priceMinor: 1_800,
+      quantityTotal: 120,
+      description: 'Guide, entry tickets and a tea stop.',
+    },
+    { name: 'Child (4 to 12)', priceMinor: 900, quantityTotal: 40 },
+  ]);
+  await promoCodes(d, b, tag.toUpperCase());
+  await publish(d, b);
 }

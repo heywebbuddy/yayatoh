@@ -1,6 +1,8 @@
 import { buttonClass, cx } from '@yayatoh/ui';
+import type { PublicMediaDto } from '@yayatoh/media';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
+import { MediaPicture } from '../media-picture.tsx';
 import { artGlow, GLOW } from './categories.ts';
 import { Reveal } from './reveal.tsx';
 
@@ -9,6 +11,7 @@ export interface OrganizerTile {
   readonly name: string;
   readonly events: number;
   readonly href: string;
+  readonly cover?: PublicMediaDto | null;
 }
 
 /** Heights cycle so the tiles read as a masonry rather than a grid. */
@@ -56,6 +59,13 @@ export async function OrganizersPanel({ organizers }: { organizers: readonly Org
                 SHAPES[i % SHAPES.length],
               )}
             >
+              {o.cover ? (
+                <MediaPicture
+                  image={{ ...o.cover, decorative: true }}
+                  sizes="(min-width: 768px) 200px, 40vw"
+                  className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
+                />
+              ) : null}
               <span
                 aria-hidden="true"
                 className="absolute start-4 top-3 font-display text-[40px] leading-none font-black tracking-[-0.04em] text-white/35 uppercase transition-transform duration-300 group-hover:scale-110 motion-reduce:transition-none"

@@ -4,10 +4,10 @@ import { resolveOrgSlug } from '@yayatoh/tenancy';
 import { getAuth } from '../src/server/auth.ts';
 import { type EventSpec, ensureSeries, ensureVenues, type Profile } from './demo/common.ts';
 import { conference } from './demo/conference.ts';
-import { agency, community, other } from './demo/general.ts';
+import { agency, community, other, tour } from './demo/general.ts';
 import { type Demo, failures, log } from './demo/kit.ts';
-import { orgExtras, orgFeatures, orgLibrary } from './demo/org.ts';
 import { legsTrip } from './demo/legs.ts';
+import { orgExtras, orgFeatures, orgLibrary } from './demo/org.ts';
 import { concert, gala } from './demo/seated.ts';
 import { wedding } from './demo/wedding.ts';
 
@@ -89,7 +89,7 @@ const EVENTS: { profile: Profile; tag: string; spec: EventSpec; weekly?: boolean
       tagline: 'Three days of colour by Lake Pichola.',
       profile: 'wedding',
       category: 'social_gatherings',
-      visibility: 'private',
+      visibility: 'unlisted',
       venue: 'palace',
       date: '2026-12-12',
       start: '16:00',
@@ -547,6 +547,42 @@ const EVENTS: { profile: Profile; tag: string; spec: EventSpec; weekly?: boolean
     }),
   },
   {
+    profile: 'tour',
+    tag: 'oldcity',
+    spec: base({
+      key: 'tour-old-city-walk',
+      title: 'Old City Heritage Walk',
+      tagline: 'A guided morning through the lanes, bazaars and monuments of the old city.',
+      profile: 'tour',
+      category: 'travel_leisure',
+      venue: 'convention',
+      date: '2026-11-20',
+      start: '08:30',
+      end: '12:00',
+      brandColor: '#0e7490',
+      tags: ['heritage', 'walking', 'guided'],
+      about:
+        'Our guide takes you through the old city: the bazaars, the pearl lanes, a family-run bakery and the monument it all grew around. Comfortable shoes recommended.',
+      faq: [
+        {
+          question: 'Where do we meet?',
+          answer: 'Choose a pickup point when you book; it is shown on your order.',
+        },
+        { question: 'Is it suitable for children?', answer: 'Yes, from age four, with the child ticket.' },
+      ],
+      schedule: [
+        { time: '08:30', title: 'Pickup and welcome' },
+        { time: '09:15', title: 'Bazaar and pearl lanes' },
+        { time: '10:45', title: 'Tea stop' },
+        { time: '11:30', title: 'Monument and farewell' },
+      ],
+      announcement: {
+        title: 'Departures every day',
+        body: 'Seven departures this week: pick the day that suits you.',
+      },
+    }),
+  },
+  {
     profile: 'other',
     tag: 'pottery',
     weekly: true,
@@ -625,6 +661,9 @@ for (const e of EVENTS) {
       break;
     case 'agency':
       await agency(d, venuesById, e.spec, e.tag);
+      break;
+    case 'tour':
+      await tour(d, venuesById, e.spec, e.tag);
       break;
     case 'other':
       await other(d, venuesById, e.spec, e.tag, e.weekly === true);
