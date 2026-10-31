@@ -87,7 +87,8 @@ export const planSummaryQuery = tenantQuery({
     );
     const feePlanKey = await feePlanKeyTx(tx);
     const active = enabled && Boolean(account?.providerCustomerId);
-    const [sub] = active ? await subscriptionsTx(tx) : [];
+    // An org that bought a plan keeps showing it even where this deployment has billing switched off.
+    const [sub] = account?.providerCustomerId ? await subscriptionsTx(tx) : [];
     const live = sub ? (LIVE_SUBSCRIPTION_STATUSES as readonly string[]).includes(sub.status) : false;
     const subPrice = sub?.priceLookupKey
       ? priceRows.find((p) => p.lookupKey === sub.priceLookupKey)

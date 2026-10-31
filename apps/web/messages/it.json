@@ -20889,9 +20889,12 @@
       "eyebrow": "Pagamento ricevuto",
       "title": "Benvenuto, {org}",
       "waiting": "Conferma del pagamento in corso…",
-      "done": "Pagamento confermato. Apertura della tua organizzazione…",
+      "done": "Pagamento confermato.",
       "slow": "La conferma sta richiedendo più tempo del solito. Il piano si attiva non appena il pagamento è confermato. Puoi aprire subito la tua organizzazione.",
-      "open": "Apri la mia organizzazione"
+      "open": "Apri la mia organizzazione",
+      "createdEyebrow": "Organizzazione creata",
+      "next": "Prossimo passo: proteggi il tuo account con la verifica in due passaggi e sei dentro.",
+      "setup": "Configura la verifica in due passaggi"
     },
     "fake": {
       "eyebrow": "Solo per sviluppo",
@@ -20906,6 +20909,11 @@
       "demoTitle": "Prenota una demo",
       "demoLede": "Scegli un orario e ti mostreremo la piattaforma.",
       "close": "Chiudi"
+    },
+    "comingSoon": "Presto disponibile",
+    "notice": {
+      "paidSoon": "I piani a pagamento arriveranno presto. Puoi iniziare subito con il piano Gratuito o parlare con il nostro team vendite.",
+      "planUnknown": "Non abbiamo riconosciuto quel piano, quindi non è stato creato nulla. Scegli un piano qui sotto."
     }
   }
 }

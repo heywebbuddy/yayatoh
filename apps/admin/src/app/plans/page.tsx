@@ -18,7 +18,7 @@ import { Shell } from '@/components/shell.tsx';
 import { type AdminPrice, listAdminPlans } from '@/server/plans.ts';
 import { requireStaff } from '@/server/staff.ts';
 import { listTenants } from '@/server/tenants.ts';
-import { assignPlanAction, savePlanAction } from './actions.ts';
+import { assignPlanAction, putOnSaleAction, savePlanAction } from './actions.ts';
 
 export default async function PlansPage({
   searchParams,
@@ -68,7 +68,7 @@ export default async function PlansPage({
           <p>{t('billingOffBody')}</p>
         </Alert>
       ) : null}
-      {sp.done === 'saved' || sp.done === 'assigned' ? (
+      {sp.done === 'saved' || sp.done === 'assigned' || sp.done === 'onSale' ? (
         <Alert tone="success" title={t(`done.${sp.done}`)} />
       ) : null}
       {sp.error ? (
@@ -115,10 +115,20 @@ export default async function PlansPage({
             key: 'status',
             header: t('status'),
             cell: (p) => (
-              <StatusPill
-                tone={p.active ? 'success' : 'neutral'}
-                label={p.key === 'launch_standard' ? t('included') : t(p.active ? 'active' : 'draft')}
-              />
+              <div className="flex flex-col items-start gap-2">
+                <StatusPill
+                  tone={p.active ? 'success' : 'neutral'}
+                  label={p.key === 'launch_standard' ? t('included') : t(p.active ? 'active' : 'draft')}
+                />
+                {!p.active && p.key !== 'launch_standard' && p.prices.length > 0 ? (
+                  <form action={putOnSaleAction}>
+                    <input type="hidden" name="key" value={p.key} />
+                    <Button type="submit" variant="secondary" size="sm">
+                      {t('putOnSale')}
+                    </Button>
+                  </form>
+                ) : null}
+              </div>
             ),
           },
           {

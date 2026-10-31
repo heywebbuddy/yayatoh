@@ -1,6 +1,6 @@
 'use server';
 
-import { selfServePrice } from '@yayatoh/billing';
+import { billingEnabled, selfServePrice } from '@yayatoh/billing';
 import { createCtx, isDomainError } from '@yayatoh/kernel';
 import { openSignupEnabled, signUpOrganization } from '@yayatoh/tenancy';
 import { headers } from 'next/headers';
@@ -35,6 +35,18 @@ export interface SelfServeState {
 const text = (form: FormData, k: string) => String(form.get(k) ?? '').trim();
 const PROFILES = ['wedding', 'gala', 'concert', 'conference', 'community', 'tour', 'agency', 'other'];
 
+/** One JSON line with the context an operator needs; the person only sees a plain message. */
+const logSignup = (what: string, ctx: Record<string, unknown>, err?: unknown) =>
+  console.error(
+    JSON.stringify({
+      selfServeSignup: what,
+      ...ctx,
+      billingEnabled: billingEnabled(),
+      billingProvider: process.env.BILLING_PROVIDER ?? 'fake',
+      ...(err === undefined ? {} : { message: err instanceof Error ? err.message : String(err) }),
+    }),
+  );
+
 /**
  * Self-serve sign-up (open sign-up on): the signed-in person (email verified by their sign-in
  * code) creates their organization on the plan they picked. A free plan is switched on at once;
@@ -55,6 +67,11 @@ export async function selfServeAction(_prev: SelfServeState, form: FormData): Pr
   const planKey = text(form, 'plan');
   const price = await selfServePrice(planKey, interval);
   if (!price) return { error: 'plan_unavailable' };
+  // No payment, no organization: never leave a half-made org behind when paying cannot work.
+  if (!price.free && !billingEnabled()) {
+    logSignup('billing_off', { plan: price.planKey, interval, userId: session.user.id });
+    return { error: 'billing_off' };
+  }
   const profile = PROFILES.includes(text(form, 'profile')) ? text(form, 'profile') : 'other';
   const name = text(form, 'orgName');
   const slug = text(form, 'slug').toLowerCase();
@@ -90,7 +107,7 @@ export async function selfServeAction(_prev: SelfServeState, form: FormData): Pr
       .catch(() => undefined);
   if (price.free) {
     await assignFreePlan(org.id, price.planKey);
-    return redirect({ href: `/o/${org.slug}`, locale });
+    return redirect({ href: `/signup/welcome?org=${org.slug}&plan=${price.planKey}&free=1`, locale });
   }
   let url: string;
   try {
@@ -103,7 +120,11 @@ export async function selfServeAction(_prev: SelfServeState, form: FormData): Pr
     });
   } catch (err) {
     // The organization exists on the default plan: the payment page lets the person try again.
-    void err;
+    logSignup(
+      'checkout_failed',
+      { orgId: org.id, slug: org.slug, plan: price.planKey, interval, userId: session.user.id },
+      err,
+    );
     return redirect({
       href: `/signup/pay?org=${org.slug}&plan=${price.planKey}&interval=${interval}&failed=1`,
       locale,
@@ -131,6 +152,11 @@ export async function resumePaymentAction(_prev: SelfServeState, form: FormData)
       interval,
     });
   } catch (err) {
+    logSignup(
+      'checkout_retry_failed',
+      { orgId: org.orgId, slug: org.slug, plan: price.planKey, interval, userId: session.user.id },
+      err,
+    );
     return { error: String(err).includes('billing_off') ? 'billing_off' : 'failed' };
   }
   return nextRedirect(url);

@@ -21,6 +21,8 @@ export interface PlanCard {
   readonly yearlyPerMonth: string | null;
   readonly free: boolean;
   readonly available: boolean;
+  /** Paid and not sellable because online payment is not switched on: "coming soon". */
+  readonly soon: boolean;
   readonly highlights: readonly string[];
 }
 
@@ -58,6 +60,7 @@ export function SelfServeSignup({
   plans,
   initialPlan,
   initialInterval,
+  notice,
   signedInEmail,
   humanCheck,
   sales,
@@ -67,6 +70,8 @@ export function SelfServeSignup({
   plans: readonly PlanCard[];
   initialPlan: string;
   initialInterval: 'month' | 'year';
+  /** Why the picker shows a note: paid plans not on sale, or the plan in the link is unknown. */
+  notice: 'paidSoon' | 'planUnknown' | null;
   signedInEmail: string | null;
   humanCheck: HumanCheckWidget | null;
   sales: SalesProps;
@@ -79,7 +84,11 @@ export function SelfServeSignup({
   const [state, formAction, pending] = useActionState(action, { error: null });
   const firstOpen = plans.find((p) => p.available)?.id ?? plans[0]?.id ?? 'free';
   const [plan, setPlan] = useState(
-    plans.some((p) => p.id === initialPlan && p.available) ? initialPlan : firstOpen,
+    notice === 'planUnknown'
+      ? ''
+      : plans.some((p) => p.id === initialPlan && p.available)
+        ? initialPlan
+        : firstOpen,
   );
   const [interval, setInterval] = useState<'month' | 'year'>(initialInterval);
   const [orgName, setOrgName] = useState('');
@@ -87,7 +96,7 @@ export function SelfServeSignup({
   const [touched, setTouched] = useState(false);
   const [tz, setTz] = useState('');
   useEffect(() => setTz(Intl.DateTimeFormat().resolvedOptions().timeZone), []);
-  const chosen = plans.find((p) => p.id === plan) ?? plans[0];
+  const chosen = plans.find((p) => p.id === plan);
   const price = chosen ? (interval === 'year' ? chosen.yearly : chosen.monthly) : null;
   const names = new Intl.DisplayNames([locale], { type: 'region' });
   const countries = COUNTRIES.map((c) => ({
@@ -143,6 +152,15 @@ export function SelfServeSignup({
               ))}
             </fieldset>
           </div>
+          {notice ? (
+            <div
+              role="status"
+              className="flex flex-col items-start gap-3 rounded-[20px] border border-line bg-surface-2 p-4"
+            >
+              <p className="m-0 text-body text-ink">{t(`notice.${notice}`)}</p>
+              {notice === 'paidSoon' ? <SalesButton {...sales} label={t('enterprise.cta')} /> : null}
+            </div>
+          ) : null}
           <ul className="m-0 grid list-none gap-3 p-0 sm:grid-cols-2">
             {plans.map((p) => {
               const shown = interval === 'year' ? p.yearly : p.monthly;
@@ -179,7 +197,11 @@ export function SelfServeSignup({
                     </span>
                     <span className="text-body text-ink-2">{p.blurb}</span>
                     <span className="font-display text-[26px] font-black text-ink">
-                      {!p.available ? t('unavailable') : p.free ? t('freePrice') : (shown ?? '—')}
+                      {!p.available
+                        ? t(p.soon ? 'comingSoon' : 'unavailable')
+                        : p.free
+                          ? t('freePrice')
+                          : (shown ?? '—')}
                       {p.available && !p.free && shown ? (
                         <span className="ms-1 text-body font-normal text-ink-2">
                           / {t(`interval.per_${interval}`)}

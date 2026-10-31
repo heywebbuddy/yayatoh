@@ -11,6 +11,15 @@ import { applyAction } from '../for-organizers/actions.ts';
 import { signupAction } from './actions.ts';
 import { SelfServeView } from './self-serve-view.tsx';
 
+/** `starter` and `tier_starter` name the same plan; `white_label` is Agency's old name. Anything else stays as typed, so the picker can say it is unknown. */
+const normalizePlan = (raw?: string) => {
+  const v = (raw ?? '')
+    .trim()
+    .toLowerCase()
+    .replace(/^tier_/, '');
+  return v === 'white_label' ? 'agency' : v;
+};
+
 /** a***@example.com: enough to recognise the address, not to learn it. */
 const maskEmail = (e: string) => e.replace(/^(.).*(@.*)$/, '$1***$2');
 
@@ -45,7 +54,7 @@ export default async function SignupPage({
     return (
       <SelfServeView
         locale={locale}
-        plan={sp.plan ?? ''}
+        plan={normalizePlan(sp.plan)}
         interval={sp.interval === 'year' ? 'year' : 'month'}
       />
     );

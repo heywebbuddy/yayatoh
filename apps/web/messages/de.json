@@ -20889,9 +20889,12 @@
       "eyebrow": "Zahlung eingegangen",
       "title": "Willkommen, {org}",
       "waiting": "Zahlung wird bestätigt…",
-      "done": "Zahlung bestätigt. Ihre Organisation wird geöffnet…",
+      "done": "Zahlung bestätigt.",
       "slow": "Die Bestätigung dauert länger als üblich. Ihr Plan wird aktiviert, sobald die Zahlung bestätigt ist. Sie können Ihre Organisation jetzt öffnen.",
-      "open": "Meine Organisation öffnen"
+      "open": "Meine Organisation öffnen",
+      "createdEyebrow": "Organisation erstellt",
+      "next": "Nächster Schritt: Sichern Sie Ihr Konto mit der Zwei-Faktor-Bestätigung, dann sind Sie drin.",
+      "setup": "Zwei-Faktor-Bestätigung einrichten"
     },
     "fake": {
       "eyebrow": "Nur Entwicklung",
@@ -20906,6 +20909,11 @@
       "demoTitle": "Demo buchen",
       "demoLede": "Wählen Sie einen Termin, und wir zeigen Ihnen die Plattform.",
       "close": "Schließen"
+    },
+    "comingSoon": "Demnächst",
+    "notice": {
+      "paidSoon": "Bezahlte Tarife kommen bald. Sie können jetzt mit dem Free-Tarif starten oder unser Vertriebsteam kontaktieren.",
+      "planUnknown": "Diesen Tarif kennen wir nicht, deshalb wurde nichts angelegt. Wählen Sie unten einen Tarif."
     }
   }
 }

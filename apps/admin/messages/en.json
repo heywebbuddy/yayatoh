@@ -100,6 +100,7 @@
     "title": "Plans & billing",
     "description": "Manage subscription packages, prices, included features and organization plans.",
     "create": "Create plan",
+    "putOnSale": "Put on sale",
     "catalog": "Plan catalog",
     "name": "Plan name",
     "key": "Plan key",
@@ -146,6 +147,7 @@
     "billingOffBody": "You can manage plans and assign included plans now. Enable BILLING_ENABLED in the web app and worker environment to test subscription purchases.",
     "done": {
       "saved": "Plan saved.",
+      "onSale": "The plan and its prices are on sale. People can pick it on the sign-up page.",
       "assigned": "Organization plan assigned."
     },
     "errors": {
