@@ -1,7 +1,6 @@
 'use client';
 
-import { CONTACT_TOPICS } from '@yayatoh/cms/ui';
-import { Alert, Button, Input, Select } from '@yayatoh/ui';
+import { Alert, Button, Input } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef } from 'react';
 import { HumanCheckField, type HumanCheckWidget } from '@/components/human-check-field.tsx';
@@ -46,24 +45,7 @@ export function ContactForm({
   const err = (f: string, key: string) => (bad.has(f) ? t(`errors.${key}`) : undefined);
   return (
     <form action={formAction} onSubmit={keepValues(formAction)} noValidate className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="contact-topic" className="text-[13px] font-bold text-ink">
-          {t('fields.topic')}
-        </label>
-        <Select
-          id="contact-topic"
-          name="topic"
-          defaultValue="sales"
-          aria-invalid={bad.has('topic') || undefined}
-          className="field"
-        >
-          {CONTACT_TOPICS.map((k) => (
-            <option key={k} value={k}>
-              {t(`topics.${k}`)}
-            </option>
-          ))}
-        </Select>
-      </div>
+      <input type="text" name="fax" tabIndex={-1} autoComplete="off" aria-hidden="true" className="sr-only" />
       <Input
         id="contact-name"
         name="name"
@@ -85,13 +67,12 @@ export function ContactForm({
         error={err('email', 'email')}
       />
       <Input
-        id="contact-company"
-        name="company"
+        id="contact-subject"
+        name="subject"
+        required
         maxLength={160}
-        autoComplete="organization"
-        label={t('fields.company')}
-        hint={t('optional')}
-        error={err('company', 'company')}
+        label={t('fields.subject')}
+        error={err('subject', 'subject')}
       />
       <div className="flex flex-col gap-1.5">
         <label htmlFor="contact-message" className="text-[13px] font-bold text-ink">

@@ -76,12 +76,22 @@ export default async function PostEditorPage({
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="flex flex-col gap-2 text-body font-semibold">
               {t('blog.fields.category')}
-              <input name="category" maxLength={40} defaultValue={post?.category ?? ''} className="field w-full" />
+              <input
+                name="category"
+                maxLength={40}
+                defaultValue={post?.category ?? ''}
+                className="field w-full"
+              />
               <span className="text-caption font-normal text-ink-2">{t('blog.fields.categoryHint')}</span>
             </label>
             <label className="flex flex-col gap-2 text-body font-semibold">
               {t('blog.fields.tags')}
-              <input name="tags" maxLength={200} defaultValue={post?.tags.join(', ') ?? ''} className="field w-full" />
+              <input
+                name="tags"
+                maxLength={200}
+                defaultValue={post?.tags.join(', ') ?? ''}
+                className="field w-full"
+              />
               <span className="text-caption font-normal text-ink-2">{t('blog.fields.tagsHint')}</span>
             </label>
           </div>
@@ -117,7 +127,12 @@ export default async function PostEditorPage({
             <span className="text-caption text-ink-2">{t('blog.fields.coverHint')}</span>
             <label className="flex flex-col gap-2 text-body font-semibold">
               {t('blog.fields.coverAltText')}
-              <input name="coverAlt" maxLength={300} defaultValue={post?.coverAlt ?? ''} className="field w-full" />
+              <input
+                name="coverAlt"
+                maxLength={300}
+                defaultValue={post?.coverAlt ?? ''}
+                className="field w-full"
+              />
               <span className="text-caption font-normal text-ink-2">{t('blog.fields.coverAltHint')}</span>
             </label>
           </div>

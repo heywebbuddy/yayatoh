@@ -1,52 +1,94 @@
 'use server';
 
-import { CONTACT_TOPICS, submitContactRequestCommand } from '@yayatoh/cms';
-import { createCtx, executeCommand } from '@yayatoh/kernel';
-import { headers } from 'next/headers';
-import { getLocale } from 'next-intl/server';
+import { renderPlainEmail } from '@yayatoh/applications';
+import { platformContactSettings, submitPlatformContactMessage } from '@yayatoh/cms';
+import { PLATFORM_SENDER } from '@yayatoh/notifications';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { ZodError } from 'zod';
 import type { FormState } from '@/lib/form-state.ts';
-import { failure, success } from '@/server/form.ts';
-import { platformContentOrg } from '@/server/help.ts';
-import { ports } from '@/server/ports.ts';
-import { clientIp, limitAction, retryAfterMinutes } from '@/server/rate-limit.ts';
-import { requestHost } from '@/server/request-origin.ts';
-import { getHumanCheck } from '@/server/seat-finder.ts';
+import { success } from '@/server/form.ts';
+import { getHumanCheck, passedHumanCheck } from '@/server/human-check.ts';
+import { webTransports } from '@/server/mail-transports.ts';
+import { limitAction, retryAfterMinutes } from '@/server/rate-limit.ts';
+
+const str = (form: FormData, k: string) => String(form.get(k) ?? '').trim();
 
 /**
- * Contact / sales request (M3.11b). Rate-limited per device, per sender address and per IP;
- * a human check (Turnstile where configured, the fake checkbox in dev and CI) is required when a
- * provider exists. Stored in the platform content org for its team.
+ * The Contact page form. Order matters: honeypot → rate limits (device, IP, sender address) →
+ * human check → validation → store in the staff inbox (Contact messages in the admin console).
+ * Then an alert to the platform's support address and a confirmation to the sender in their
+ * language; a mail failure never loses the message (it is stored already).
  */
 export async function contactAction(_prev: FormState, form: FormData): Promise<FormState> {
-  const email = String(form.get('email') ?? '')
-    .trim()
-    .toLowerCase();
+  // A hidden field only a script fills in: pretend it worked.
+  if (str(form, 'fax') !== '') return success();
+  const email = str(form, 'email').toLowerCase();
   const limit = await limitAction('contactRequest', { identity: email || null });
   if (!limit.allowed) return { ok: false, code: 'rate_limited', reason: String(retryAfterMinutes(limit)) };
-  const org = await platformContentOrg(await requestHost());
-  if (!org) return { ok: false, code: 'not_found' };
-  if (getHumanCheck()) {
-    const token = String(form.get('cf-turnstile-response') ?? form.get('human') ?? '');
-    const passed = token ? await getHumanCheck()?.verify(token, clientIp(await headers())) : false;
-    if (!passed) return { ok: false, code: 'validation_failed', fields: ['human'], reason: 'human' };
-  }
-  const topic = String(form.get('topic') ?? '');
+  if (getHumanCheck() && (await passedHumanCheck(form)) !== true)
+    return { ok: false, code: 'validation_failed', fields: ['human'], reason: 'human' };
+  const locale = await getLocale();
+  const name = str(form, 'name');
+  const subject = str(form, 'subject');
+  const message = str(form, 'message');
+  let id: string;
   try {
-    await executeCommand(
-      submitContactRequestCommand,
-      {
-        topic: ((CONTACT_TOPICS as readonly string[]).includes(topic) ? topic : '') as never,
-        name: String(form.get('name') ?? ''),
-        email,
-        company: String(form.get('company') ?? ''),
-        message: String(form.get('message') ?? ''),
-        locale: (await getLocale()) as never,
-      },
-      createCtx({ orgId: org.orgId }),
-      ports,
-    );
+    id = await submitPlatformContactMessage({ name, email, subject, message, locale });
   } catch (err) {
-    return failure(err);
+    if (!(err instanceof ZodError)) throw err;
+    return {
+      ok: false,
+      code: 'validation_failed',
+      fields: [...new Set(err.issues.map((i) => String(i.path[0] ?? '')).filter(Boolean))],
+    };
   }
+  await notify({ id, locale, name, email, subject, message });
   return success();
+}
+
+async function notify(m: {
+  id: string;
+  locale: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}): Promise<void> {
+  const transports = webTransports();
+  if (!transports) return;
+  const t = await getTranslations({ locale: m.locale, namespace: 'sitePages.contact.mail' });
+  const send = async (to: string, subject: string, body: string, replyTo?: string) => {
+    const r = renderPlainEmail({ subject, body });
+    await transports.email.send({
+      from: { name: 'Yayatoh', address: PLATFORM_SENDER },
+      to,
+      subject: r.subject,
+      html: r.html,
+      text: r.text,
+      headers: replyTo ? { 'Reply-To': replyTo } : {},
+      idempotencyKey: `contact-${m.id}-${to}`,
+    });
+  };
+  try {
+    await send(
+      m.email,
+      t('confirmSubject'),
+      t('confirmBody', { name: m.name.split(/\s+/)[0] ?? m.name, subject: m.subject }),
+    );
+  } catch {
+    /* stored already; staff see it in the inbox */
+  }
+  const settings = await platformContactSettings().catch(() => null);
+  const alert =
+    settings?.supportEmail.trim() || process.env.PLATFORM_CONTACT_EMAIL?.trim() || 'support@yayatoh.com';
+  try {
+    await send(
+      alert,
+      `Contact message: ${m.subject}`,
+      `${m.name} (${m.email}) wrote:\n\n${m.message}\n\nReply from the admin panel under Contact messages.`,
+      m.email,
+    );
+  } catch {
+    /* stored already */
+  }
 }
