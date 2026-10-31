@@ -729,6 +729,18 @@ async function networking(
     run(setLobbyEnabledCommand, { eventId: b.id, enabled: true }, ctx()),
   );
   if (!on) return;
+  // Booth chat is switched on by each exhibitor's own admin in the portal; the demo turns it on for
+  // the first two booths so attendees can try it (it is otherwise invisible).
+  await step(`${b.slug} booth chat`, () =>
+    read(
+      d,
+      sql`insert into engagement.booth_chat_settings (org_id, event_id, exhibitor_id, enabled)
+          select x.org_id, x.event_id, x.id, true from program.exhibitors x
+          where x.event_id = ${b.id} order by x.created_at limit 2
+          on conflict (org_id, exhibitor_id) do update set enabled = true, updated_at = now()
+          returning id`,
+    ),
+  );
   const loc = await step(`${b.slug} meeting point`, () =>
     run<unknown, { id: string }>(
       saveMeetingLocationCommand,
