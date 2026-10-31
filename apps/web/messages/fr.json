@@ -20744,5 +20744,40 @@
   "eventSkin": {
     "rsvp": "Répondre",
     "register": "S’inscrire"
+  },
+  "eventBand": {
+    "wedding": {
+      "title": "Réservez la date"
+    },
+    "gala": {
+      "title": "La cause de la soirée",
+      "progress": "Progression vers l’objectif",
+      "raised": "{amount} collectés",
+      "goal": "Objectif {amount}",
+      "evening": "Une soirée au profit d’une belle cause."
+    },
+    "conference": {
+      "title": "En un coup d’œil",
+      "counts": {
+        "sessions": "Sessions",
+        "speakers": "Intervenants",
+        "exhibitors": "Exposants",
+        "sponsors": "Sponsors"
+      }
+    },
+    "concert": {
+      "title": "Programmation et horaires"
+    },
+    "tour": {
+      "title": "Votre voyage",
+      "pickups": "Points de prise en charge",
+      "itinerary": "Itinéraire",
+      "before": "{minutes} min avant le départ",
+      "at": "À l’heure du départ"
+    },
+    "community": {
+      "title": "Tout le monde est bienvenu",
+      "body": "Venez comme vous êtes, avec famille et amis. Les détails pour participer sont ci-dessous."
+    }
   }
 }

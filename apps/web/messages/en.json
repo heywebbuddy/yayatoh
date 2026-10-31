@@ -20744,5 +20744,40 @@
   "eventSkin": {
     "rsvp": "RSVP",
     "register": "Register"
+  },
+  "eventBand": {
+    "wedding": {
+      "title": "Save the date"
+    },
+    "gala": {
+      "title": "Tonight’s cause",
+      "progress": "Progress towards the goal",
+      "raised": "{amount} raised so far",
+      "goal": "Goal {amount}",
+      "evening": "An evening in support of a good cause."
+    },
+    "conference": {
+      "title": "At a glance",
+      "counts": {
+        "sessions": "Sessions",
+        "speakers": "Speakers",
+        "exhibitors": "Exhibitors",
+        "sponsors": "Sponsors"
+      }
+    },
+    "concert": {
+      "title": "Lineup and set times"
+    },
+    "tour": {
+      "title": "Your journey",
+      "pickups": "Pickup points",
+      "itinerary": "Itinerary",
+      "before": "{minutes} min before departure",
+      "at": "At departure time"
+    },
+    "community": {
+      "title": "Everyone is welcome",
+      "body": "Come as you are, bring friends and family, and join in. Details of how to take part are below."
+    }
   }
 }

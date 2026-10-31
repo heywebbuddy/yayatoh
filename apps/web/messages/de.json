@@ -20744,5 +20744,40 @@
   "eventSkin": {
     "rsvp": "Zusagen",
     "register": "Anmelden"
+  },
+  "eventBand": {
+    "wedding": {
+      "title": "Save the Date"
+    },
+    "gala": {
+      "title": "Der Anlass des Abends",
+      "progress": "Fortschritt zum Ziel",
+      "raised": "{amount} bisher gesammelt",
+      "goal": "Ziel {amount}",
+      "evening": "Ein Abend für einen guten Zweck."
+    },
+    "conference": {
+      "title": "Auf einen Blick",
+      "counts": {
+        "sessions": "Sessions",
+        "speakers": "Sprecher",
+        "exhibitors": "Aussteller",
+        "sponsors": "Sponsoren"
+      }
+    },
+    "concert": {
+      "title": "Line-up und Spielzeiten"
+    },
+    "tour": {
+      "title": "Deine Reise",
+      "pickups": "Abholpunkte",
+      "itinerary": "Reiseverlauf",
+      "before": "{minutes} Min. vor Abfahrt",
+      "at": "Zur Abfahrtszeit"
+    },
+    "community": {
+      "title": "Alle sind willkommen",
+      "body": "Komm, wie du bist, bring Freunde und Familie mit. Wie du mitmachst, steht unten."
+    }
   }
 }

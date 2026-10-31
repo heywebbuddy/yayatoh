@@ -20744,5 +20744,40 @@
   "eventSkin": {
     "rsvp": "回覆出席",
     "register": "立即報名"
+  },
+  "eventBand": {
+    "wedding": {
+      "title": "請記住日期"
+    },
+    "gala": {
+      "title": "今晚的善舉",
+      "progress": "目標進度",
+      "raised": "已募得 {amount}",
+      "goal": "目標 {amount}",
+      "evening": "為一個好的事業而舉辦的夜晚。"
+    },
+    "conference": {
+      "title": "一覽",
+      "counts": {
+        "sessions": "場次",
+        "speakers": "講者",
+        "exhibitors": "參展商",
+        "sponsors": "贊助商"
+      }
+    },
+    "concert": {
+      "title": "陣容與演出時間"
+    },
+    "tour": {
+      "title": "你的行程",
+      "pickups": "上車點",
+      "itinerary": "行程安排",
+      "before": "發車前 {minutes} 分鐘",
+      "at": "發車時間"
+    },
+    "community": {
+      "title": "歡迎所有人",
+      "body": "隨心而來，帶上家人和朋友一起參與。參與方式見下方。"
+    }
   }
 }

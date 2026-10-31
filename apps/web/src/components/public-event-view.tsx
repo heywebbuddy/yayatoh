@@ -44,6 +44,7 @@ import { BrandLink } from '@/components/brand-styled.tsx';
 import { CheckoutForm } from '@/components/checkout-form.tsx';
 import { DatePicker } from '@/components/date-picker.tsx';
 import { EventAssistant } from '@/components/event-assistant.tsx';
+import { EventProfileBand } from '@/components/event-profile-band.tsx';
 import { EventSections } from '@/components/event-sections.tsx';
 import { GalleryLightbox } from '@/components/gallery-lightbox.tsx';
 import { HolderLinkForm } from '@/components/holder-link-form.tsx';
@@ -518,6 +519,13 @@ export async function PublicEventView({
   const hasAgenda = program.sessions.length > 0 || ev.agenda.length > 0;
   // A seated checkout needs the full width for its seat map; otherwise the ticket box sits beside.
   const wide = Boolean(seatMap);
+  // Each type of event arranges its page its own way: booking first (concert, tour) or story first
+  // (wedding, gala) in one column, or the classic content-and-sidebar split (the rest, with a seat
+  // map on top). The agenda leads a conference; see the profile rules in the stylesheet.
+  const BOOKING_FIRST = ['concert', 'tour'];
+  const STORY_FIRST = ['wedding', 'gala'];
+  const stack = wide || BOOKING_FIRST.includes(ev.profile) || STORY_FIRST.includes(ev.profile);
+  const sideLast = STORY_FIRST.includes(ev.profile) && !wide;
   const initials = ev.organizerName
     .split(/\s+/)
     .filter(Boolean)
@@ -725,11 +733,12 @@ export async function PublicEventView({
             ) : null}
           </section>
 
-          <div className={cx('grid items-start gap-6', !wide && 'lg:grid-cols-[minmax(0,1fr)_400px]')}>
+          <div className={cx('grid items-start gap-6', !stack && 'lg:grid-cols-[minmax(0,1fr)_400px]')}>
             <div
               className={cx(
                 'flex min-w-0 flex-col gap-4',
-                !wide && 'lg:sticky lg:top-4 lg:col-start-2 lg:row-start-1',
+                !stack && 'lg:sticky lg:top-4 lg:col-start-2 lg:row-start-1',
+                sideLast && 'order-last',
               )}
             >
               {dates.length > 0 ? (
@@ -764,7 +773,19 @@ export async function PublicEventView({
               ) : null}
             </div>
 
-            <div className="flex min-w-0 flex-col gap-5 lg:col-start-1 lg:row-start-1">
+            <div className={cx('flex min-w-0 flex-col gap-5', !stack && 'lg:col-start-1 lg:row-start-1')}>
+              <EventProfileBand
+                profile={ev.profile}
+                name={ev.name}
+                dateLabel={range}
+                place={[ev.venueName, ev.city].filter(Boolean).join(', ') || null}
+                agenda={ev.agenda}
+                counts={programStats}
+                giving={giving}
+                orgId={target?.orgId ?? null}
+                eventId={target?.eventId ?? null}
+                locale={locale}
+              />
               {content.announcements.length > 0 ? (
                 <section
                   aria-labelledby="announcements-heading"
@@ -810,6 +831,7 @@ export async function PublicEventView({
               {ev.agenda.length > 0 ? (
                 <section
                   id="agenda"
+                  data-block="agenda"
                   aria-label={t('publicEvent.agenda')}
                   className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
                 >
@@ -848,6 +870,7 @@ export async function PublicEventView({
               {venue ? (
                 <section
                   id="venue"
+                  data-block="venue"
                   aria-labelledby="venue-heading"
                   className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
                 >

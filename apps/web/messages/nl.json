@@ -20744,5 +20744,40 @@
   "eventSkin": {
     "rsvp": "Aanmelden (RSVP)",
     "register": "Registreren"
+  },
+  "eventBand": {
+    "wedding": {
+      "title": "Noteer de datum"
+    },
+    "gala": {
+      "title": "Het doel van vanavond",
+      "progress": "Voortgang naar het doel",
+      "raised": "{amount} tot nu toe opgehaald",
+      "goal": "Doel {amount}",
+      "evening": "Een avond voor een goed doel."
+    },
+    "conference": {
+      "title": "In één oogopslag",
+      "counts": {
+        "sessions": "Sessies",
+        "speakers": "Sprekers",
+        "exhibitors": "Exposanten",
+        "sponsors": "Sponsors"
+      }
+    },
+    "concert": {
+      "title": "Line-up en speeltijden"
+    },
+    "tour": {
+      "title": "Jouw reis",
+      "pickups": "Ophaalpunten",
+      "itinerary": "Reisschema",
+      "before": "{minutes} min voor vertrek",
+      "at": "Op vertrektijd"
+    },
+    "community": {
+      "title": "Iedereen is welkom",
+      "body": "Kom zoals je bent, neem vrienden en familie mee en doe mee. Hieronder staat hoe."
+    }
   }
 }

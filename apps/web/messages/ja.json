@@ -20744,5 +20744,40 @@
   "eventSkin": {
     "rsvp": "出欠を回答",
     "register": "登録する"
+  },
+  "eventBand": {
+    "wedding": {
+      "title": "日程をチェック"
+    },
+    "gala": {
+      "title": "今夜の目的",
+      "progress": "目標までの進捗",
+      "raised": "これまでに{amount}が集まりました",
+      "goal": "目標 {amount}",
+      "evening": "良い目的を支える一夜です。"
+    },
+    "conference": {
+      "title": "概要",
+      "counts": {
+        "sessions": "セッション",
+        "speakers": "登壇者",
+        "exhibitors": "出展者",
+        "sponsors": "スポンサー"
+      }
+    },
+    "concert": {
+      "title": "ラインナップと出演時間"
+    },
+    "tour": {
+      "title": "あなたの旅",
+      "pickups": "集合場所",
+      "itinerary": "行程",
+      "before": "出発の{minutes}分前",
+      "at": "出発時刻"
+    },
+    "community": {
+      "title": "どなたでも歓迎",
+      "body": "ありのままでお越しください。ご家族やご友人もぜひ。参加方法は下をご覧ください。"
+    }
   }
 }

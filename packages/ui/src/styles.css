@@ -914,6 +914,14 @@
   border-radius: 12px;
 }
 
+/* Block order inside the event page's body, per type: the conference leads with its agenda, the concert with the venue. */
+[data-profile="conference"] [data-block="agenda"] {
+  order: -1;
+}
+[data-profile="concert"] [data-block="venue"] {
+  order: -1;
+}
+
 /* An organizer's heading-font choice for the event page (event branding). */
 [data-heading="extended"] :is(h1, h2) {
   font-family: var(--font-display);

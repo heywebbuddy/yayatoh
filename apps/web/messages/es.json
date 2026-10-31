@@ -20744,5 +20744,40 @@
   "eventSkin": {
     "rsvp": "Confirmar asistencia",
     "register": "Inscribirse"
+  },
+  "eventBand": {
+    "wedding": {
+      "title": "Reserva la fecha"
+    },
+    "gala": {
+      "title": "La causa de esta noche",
+      "progress": "Avance hacia la meta",
+      "raised": "{amount} recaudados hasta ahora",
+      "goal": "Meta {amount}",
+      "evening": "Una velada a favor de una buena causa."
+    },
+    "conference": {
+      "title": "De un vistazo",
+      "counts": {
+        "sessions": "Sesiones",
+        "speakers": "Ponentes",
+        "exhibitors": "Expositores",
+        "sponsors": "Patrocinadores"
+      }
+    },
+    "concert": {
+      "title": "Cartel y horarios"
+    },
+    "tour": {
+      "title": "Tu viaje",
+      "pickups": "Puntos de recogida",
+      "itinerary": "Itinerario",
+      "before": "{minutes} min antes de la salida",
+      "at": "A la hora de salida"
+    },
+    "community": {
+      "title": "Todos son bienvenidos",
+      "body": "Ven como eres, trae a tu familia y amigos y participa. Abajo tienes cómo hacerlo."
+    }
   }
 }
