@@ -3832,7 +3832,17 @@
     "websiteUrl": "Sito web",
     "description": "Descrizione",
     "descriptionHint": "Mostrata nella pagina pubblica della sede. Markdown supportato.",
-    "timezoneCheck": "Questo paese ha più fusi orari. Abbiamo scelto il più probabile; controllalo, per favore."
+    "timezoneCheck": "Questo paese ha più fusi orari. Abbiamo scelto il più probabile; controllalo, per favore.",
+    "venueType": "Tipo di location",
+    "types": {
+      "lounge": "Lounge",
+      "ballroom": "Sala da ballo",
+      "conference_centre": "Centro congressi",
+      "outdoor": "All’aperto",
+      "restaurant": "Ristorante",
+      "hotel": "Hotel",
+      "other": "Altro"
+    }
   },
   "details": {
     "title": "Dettagli dell’evento",
@@ -3923,7 +3933,9 @@
       "size": "Dimensione",
       "anySize": "Qualsiasi dimensione",
       "apply": "Applica",
-      "clear": "Azzera"
+      "clear": "Azzera",
+      "type": "Tipo",
+      "anyType": "Qualsiasi tipo"
     },
     "sizes": {
       "small": "Fino a 100 ospiti",

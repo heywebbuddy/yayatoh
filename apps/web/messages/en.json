@@ -3832,7 +3832,17 @@
     "websiteUrl": "Website",
     "description": "Description",
     "descriptionHint": "Shown on the public venue page. Markdown is supported.",
-    "timezoneCheck": "This country has several time zones. We picked the most likely one; please check it."
+    "timezoneCheck": "This country has several time zones. We picked the most likely one; please check it.",
+    "venueType": "Venue type",
+    "types": {
+      "lounge": "Lounge",
+      "ballroom": "Ballroom",
+      "conference_centre": "Conference centre",
+      "outdoor": "Outdoor",
+      "restaurant": "Restaurant",
+      "hotel": "Hotel",
+      "other": "Other"
+    }
   },
   "details": {
     "title": "Event details",
@@ -3923,7 +3933,9 @@
       "size": "Size",
       "anySize": "Any size",
       "apply": "Apply",
-      "clear": "Clear"
+      "clear": "Clear",
+      "type": "Type",
+      "anyType": "Any type"
     },
     "sizes": {
       "small": "Up to 100 guests",

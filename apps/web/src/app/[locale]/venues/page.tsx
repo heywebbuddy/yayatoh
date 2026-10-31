@@ -14,6 +14,7 @@ import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
 import { venueDisplayName } from '@/lib/venue-display.ts';
+import { VENUE_TYPES } from '@/lib/venue-types.ts';
 
 export async function generateMetadata({
   params,
@@ -48,6 +49,7 @@ export default async function VenueDirectoryPage({
   await connection();
   const sp = await searchParams;
   const t = await getTranslations('directory');
+  const tv = await getTranslations('venues');
   const all = await venueDirectory();
   const region = new Intl.DisplayNames([locale], { type: 'region' });
   const cities = [...new Set(all.map((v) => v.city).filter((c): c is string => Boolean(c)))].sort((a, b) =>
@@ -55,6 +57,7 @@ export default async function VenueDirectoryPage({
   );
   const q = one(sp.q).trim().toLowerCase();
   const city = cities.includes(one(sp.city)) ? one(sp.city) : '';
+  const type = (VENUE_TYPES as readonly string[]).includes(one(sp.type)) ? one(sp.type) : '';
   const size = (SIZES as readonly string[]).includes(one(sp.size)) ? (one(sp.size) as Size) : null;
   const venues = all.filter(
     (v) =>
@@ -62,6 +65,7 @@ export default async function VenueDirectoryPage({
         venueDisplayName(v.name).toLowerCase().includes(q) ||
         (v.city ?? '').toLowerCase().includes(q)) &&
       (!city || v.city === city) &&
+      (!type || v.venueType === type) &&
       (!size || sizeOf(v.capacity) === size),
   );
   // The first photo of each venue (the cards' thumbnail); a designed tile where there is none.
@@ -74,7 +78,7 @@ export default async function VenueDirectoryPage({
       }),
     ),
   );
-  const filtered = Boolean(q || city || size);
+  const filtered = Boolean(q || city || size || type);
   return (
     <ShowcaseShell>
       <PageHero eyebrow={t('eyebrow')} title={t('title')} lede={t('subtitle')} icon={Building2} />
@@ -82,7 +86,7 @@ export default async function VenueDirectoryPage({
         <form
           action={localizedPath(locale, '/venues')}
           method="get"
-          className="grid grid-cols-1 gap-3 rounded-card border border-line bg-surface p-4 md:grid-cols-[2fr_1fr_1fr_auto] md:items-end"
+          className="grid grid-cols-1 gap-3 rounded-card border border-line bg-surface p-4 md:grid-cols-[2fr_1fr_1fr_1fr_auto] md:items-end"
         >
           <div className="flex min-w-0 flex-col gap-1.5">
             <label htmlFor="v-q" className="text-[13px] font-bold text-ink">
@@ -106,6 +110,19 @@ export default async function VenueDirectoryPage({
               {cities.map((c) => (
                 <option key={c} value={c}>
                   {c}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <label htmlFor="v-type" className="text-[13px] font-bold text-ink">
+              {t('filters.type')}
+            </label>
+            <select id="v-type" name="type" defaultValue={type} className="field w-full">
+              <option value="">{t('filters.anyType')}</option>
+              {VENUE_TYPES.map((k) => (
+                <option key={k} value={k}>
+                  {tv(`types.${k}`)}
                 </option>
               ))}
             </select>
@@ -153,7 +170,6 @@ export default async function VenueDirectoryPage({
             {venues.map((v, i) => {
               const place = [v.city, v.region, region.of(v.country) ?? v.country].filter(Boolean).join(', ');
               const photo = photos.get(v.slug) ?? null;
-              const kind = sizeOf(v.capacity);
               return (
                 <Reveal as="li" key={v.slug} delay={i % 3}>
                   <article className="group relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-surface elevation-card transition duration-300 hover:-translate-y-1 hover:border-ember motion-reduce:transition-none motion-reduce:hover:translate-y-0">
@@ -179,7 +195,7 @@ export default async function VenueDirectoryPage({
                         </span>
                       )}
                       <span className="absolute start-3 top-3 rounded-pill bg-black/65 px-2.5 py-1 text-caption font-bold text-white">
-                        {kind ? t(`types.${kind}`) : t('types.venue')}
+                        {tv(`types.${v.venueType}`)}
                       </span>
                     </div>
                     <div className="flex flex-1 flex-col gap-2 p-5">

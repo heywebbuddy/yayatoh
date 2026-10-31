@@ -3832,7 +3832,17 @@
     "websiteUrl": "الموقع الإلكتروني",
     "description": "الوصف",
     "descriptionHint": "يظهر في صفحة المكان العامة. يدعم Markdown.",
-    "timezoneCheck": "لهذا البلد عدة مناطق زمنية. اخترنا الأرجح؛ يرجى التحقق منها."
+    "timezoneCheck": "لهذا البلد عدة مناطق زمنية. اخترنا الأرجح؛ يرجى التحقق منها.",
+    "venueType": "نوع المكان",
+    "types": {
+      "lounge": "صالة",
+      "ballroom": "قاعة حفلات",
+      "conference_centre": "مركز مؤتمرات",
+      "outdoor": "في الهواء الطلق",
+      "restaurant": "مطعم",
+      "hotel": "فندق",
+      "other": "أخرى"
+    }
   },
   "details": {
     "title": "تفاصيل الفعالية",
@@ -3923,7 +3933,9 @@
       "size": "الحجم",
       "anySize": "أي حجم",
       "apply": "تطبيق",
-      "clear": "مسح"
+      "clear": "مسح",
+      "type": "النوع",
+      "anyType": "أي نوع"
     },
     "sizes": {
       "small": "حتى 100 ضيف",

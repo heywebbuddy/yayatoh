@@ -41,6 +41,8 @@ export const venues = tenantTable(
     longitude: doublePrecision('longitude'),
     timezone: text('timezone').notNull(),
     capacity: integer('capacity'),
+    /** What kind of place it is (the directory's type label and filter). */
+    venueType: text('venue_type').notNull().default('other'),
     accessibilityNotes: text('accessibility_notes'),
     mapUrl: text('map_url'),
     /** Markdown, like other descriptions. */
@@ -57,6 +59,10 @@ export const venues = tenantTable(
     check('venues_slug_format_check', sql`slug ~ '^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$'`),
     check('venues_country_check', sql`country ~ '^[A-Z]{2}$'`),
     check('venues_capacity_check', sql`capacity is null or capacity > 0`),
+    check(
+      'venues_venue_type_check',
+      sql`venue_type in ('lounge', 'ballroom', 'conference_centre', 'outdoor', 'restaurant', 'hotel', 'other')`,
+    ),
     check(
       'venues_geo_check',
       sql`(latitude is null) = (longitude is null) and (latitude is null or (latitude between -90 and 90 and longitude between -180 and 180))`,

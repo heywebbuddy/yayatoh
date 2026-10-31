@@ -273,6 +273,7 @@ function toPublic(r: PublicRow): PublicVenueDto {
     longitude: num(r.longitude),
     timezone: r.timezone,
     capacity: num(r.capacity),
+    venueType: r.venue_type ?? 'other',
     accessibilityNotes: r.accessibility_notes,
     mapUrl: r.map_url,
     description: r.description,
@@ -302,6 +303,7 @@ export async function venueDirectory(): Promise<DirectoryVenueDto[]> {
       region: r.region,
       country: r.country,
       capacity: num(r.capacity),
+      venueType: r.venue_type ?? 'other',
     }),
   );
 }

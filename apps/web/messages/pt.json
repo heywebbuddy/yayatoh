@@ -3832,7 +3832,17 @@
     "websiteUrl": "Website",
     "description": "Descrição",
     "descriptionHint": "Mostrado na página pública do local. Suporta Markdown.",
-    "timezoneCheck": "Este país tem vários fusos horários. Escolhemos o mais provável; confirme, por favor."
+    "timezoneCheck": "Este país tem vários fusos horários. Escolhemos o mais provável; confirme, por favor.",
+    "venueType": "Tipo de local",
+    "types": {
+      "lounge": "Lounge",
+      "ballroom": "Salão de baile",
+      "conference_centre": "Centro de convenções",
+      "outdoor": "Ao ar livre",
+      "restaurant": "Restaurante",
+      "hotel": "Hotel",
+      "other": "Outro"
+    }
   },
   "details": {
     "title": "Detalhes do evento",
@@ -3923,7 +3933,9 @@
       "size": "Tamanho",
       "anySize": "Qualquer tamanho",
       "apply": "Aplicar",
-      "clear": "Limpar"
+      "clear": "Limpar",
+      "type": "Tipo",
+      "anyType": "Qualquer tipo"
     },
     "sizes": {
       "small": "Até 100 convidados",

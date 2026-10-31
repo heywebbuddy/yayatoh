@@ -3832,7 +3832,17 @@
     "websiteUrl": "Website",
     "description": "Beschrijving",
     "descriptionHint": "Getoond op de openbare locatiepagina. Markdown wordt ondersteund.",
-    "timezoneCheck": "Dit land heeft meerdere tijdzones. We kozen de meest waarschijnlijke; controleer hem even."
+    "timezoneCheck": "Dit land heeft meerdere tijdzones. We kozen de meest waarschijnlijke; controleer hem even.",
+    "venueType": "Soort locatie",
+    "types": {
+      "lounge": "Lounge",
+      "ballroom": "Balzaal",
+      "conference_centre": "Congrescentrum",
+      "outdoor": "Buiten",
+      "restaurant": "Restaurant",
+      "hotel": "Hotel",
+      "other": "Overig"
+    }
   },
   "details": {
     "title": "Evenementdetails",
@@ -3923,7 +3933,9 @@
       "size": "Grootte",
       "anySize": "Elke grootte",
       "apply": "Toepassen",
-      "clear": "Wissen"
+      "clear": "Wissen",
+      "type": "Soort",
+      "anyType": "Elk soort"
     },
     "sizes": {
       "small": "Tot 100 gasten",

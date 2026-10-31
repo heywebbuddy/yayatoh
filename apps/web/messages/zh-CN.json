@@ -3832,7 +3832,17 @@
     "websiteUrl": "网站",
     "description": "简介",
     "descriptionHint": "显示在公开的场地页面上。支持 Markdown。",
-    "timezoneCheck": "该国家有多个时区。已选择最可能的一个,请核对。"
+    "timezoneCheck": "该国家有多个时区。已选择最可能的一个,请核对。",
+    "venueType": "场地类型",
+    "types": {
+      "lounge": "休闲厅",
+      "ballroom": "宴会厅",
+      "conference_centre": "会议中心",
+      "outdoor": "户外",
+      "restaurant": "餐厅",
+      "hotel": "酒店",
+      "other": "其他"
+    }
   },
   "details": {
     "title": "活动详情",
@@ -3923,7 +3933,9 @@
       "size": "规模",
       "anySize": "所有规模",
       "apply": "应用",
-      "clear": "清除"
+      "clear": "清除",
+      "type": "类型",
+      "anyType": "所有类型"
     },
     "sizes": {
       "small": "100 人以内",

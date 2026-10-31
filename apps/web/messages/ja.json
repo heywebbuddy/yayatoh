@@ -3832,7 +3832,17 @@
     "websiteUrl": "ウェブサイト",
     "description": "説明",
     "descriptionHint": "公開の会場ページに表示されます。Markdown に対応しています。",
-    "timezoneCheck": "この国には複数のタイムゾーンがあります。最も可能性の高いものを選びました。ご確認ください。"
+    "timezoneCheck": "この国には複数のタイムゾーンがあります。最も可能性の高いものを選びました。ご確認ください。",
+    "venueType": "会場の種類",
+    "types": {
+      "lounge": "ラウンジ",
+      "ballroom": "ボールルーム",
+      "conference_centre": "カンファレンスセンター",
+      "outdoor": "屋外",
+      "restaurant": "レストラン",
+      "hotel": "ホテル",
+      "other": "その他"
+    }
   },
   "details": {
     "title": "イベントの詳細",
@@ -3923,7 +3933,9 @@
       "size": "規模",
       "anySize": "すべての規模",
       "apply": "適用",
-      "clear": "クリア"
+      "clear": "クリア",
+      "type": "種類",
+      "anyType": "すべての種類"
     },
     "sizes": {
       "small": "100人まで",

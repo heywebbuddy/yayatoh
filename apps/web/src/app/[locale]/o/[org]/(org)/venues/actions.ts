@@ -28,6 +28,7 @@ function venueFields(form: FormData) {
     longitude: numberOrNull(form, 'longitude'),
     timezone: String(form.get('timezone') ?? '').trim(),
     capacity: numberOrNull(form, 'capacity'),
+    venueType: String(form.get('venueType') ?? 'other'),
     accessibilityNotes: textOrNull(form, 'accessibilityNotes'),
     mapUrl: textOrNull(form, 'mapUrl'),
     description: textOrNull(form, 'description'),

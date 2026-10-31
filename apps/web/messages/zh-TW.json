@@ -3832,7 +3832,17 @@
     "websiteUrl": "網站",
     "description": "簡介",
     "descriptionHint": "顯示在公開的場地頁面上。支援 Markdown。",
-    "timezoneCheck": "該國家有多個時區。已選擇最可能的一個,請核對。"
+    "timezoneCheck": "該國家有多個時區。已選擇最可能的一個,請核對。",
+    "venueType": "場地類型",
+    "types": {
+      "lounge": "休閒廳",
+      "ballroom": "宴會廳",
+      "conference_centre": "會議中心",
+      "outdoor": "戶外",
+      "restaurant": "餐廳",
+      "hotel": "飯店",
+      "other": "其他"
+    }
   },
   "details": {
     "title": "活動詳細資料",
@@ -3923,7 +3933,9 @@
       "size": "規模",
       "anySize": "所有規模",
       "apply": "套用",
-      "clear": "清除"
+      "clear": "清除",
+      "type": "類型",
+      "anyType": "所有類型"
     },
     "sizes": {
       "small": "100 人以內",

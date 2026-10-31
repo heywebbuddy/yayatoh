@@ -8,6 +8,7 @@ import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 import { keepValues } from '@/lib/keep-values.ts';
 import { guessVenueZone } from '@/lib/venue-timezone.ts';
+import { VENUE_TYPES } from '@/lib/venue-types.ts';
 
 const FIELD_ERRORS = [
   'name',
@@ -79,6 +80,23 @@ export function VenueForm({
           defaultValue={venue?.capacity ?? undefined}
           error={err('capacity')}
         />
+        <div className="flex min-w-0 flex-col gap-1.5">
+          <label htmlFor="venue-type" className="text-[13px] font-bold text-ink">
+            {t('venueType')}
+          </label>
+          <select
+            id="venue-type"
+            name="venueType"
+            defaultValue={venue?.venueType ?? 'other'}
+            className="field w-full"
+          >
+            {VENUE_TYPES.map((k) => (
+              <option key={k} value={k}>
+                {t(`types.${k}`)}
+              </option>
+            ))}
+          </select>
+        </div>
         {full ? (
           <>
             <Input
