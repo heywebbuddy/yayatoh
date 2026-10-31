@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, CountryPicker, Input, TimeZonePicker } from '@yayatoh/ui';
+import { Alert, Button, CountryPicker, Input, Select, TimeZonePicker } from '@yayatoh/ui';
 import type { VenueDto } from '@yayatoh/venues';
 import { useTranslations } from 'next-intl';
 import { useActionState, useState } from 'react';
@@ -80,23 +80,13 @@ export function VenueForm({
           defaultValue={venue?.capacity ?? undefined}
           error={err('capacity')}
         />
-        <div className="flex min-w-0 flex-col gap-1.5">
-          <label htmlFor="venue-type" className="text-[13px] font-bold text-ink">
-            {t('venueType')}
-          </label>
-          <select
-            id="venue-type"
-            name="venueType"
-            defaultValue={venue?.venueType ?? 'other'}
-            className="field w-full"
-          >
-            {VENUE_TYPES.map((k) => (
-              <option key={k} value={k}>
-                {t(`types.${k}`)}
-              </option>
-            ))}
-          </select>
-        </div>
+        <Select
+          id="venue-type"
+          name="venueType"
+          label={t('venueType')}
+          defaultValue={venue?.venueType ?? 'other'}
+          options={VENUE_TYPES.map((k) => ({ value: k, label: t(`types.${k}`), text: t(`types.${k}`) }))}
+        />
         {full ? (
           <>
             <Input

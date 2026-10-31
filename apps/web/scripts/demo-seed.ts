@@ -555,7 +555,7 @@ const EVENTS: { profile: Profile; tag: string; spec: EventSpec; weekly?: boolean
       tagline: 'A guided morning through the lanes, bazaars and monuments of the old city.',
       profile: 'tour',
       category: 'travel_leisure',
-      venue: 'convention',
+      venue: 'oldcity',
       date: '2026-11-20',
       start: '08:30',
       end: '12:00',

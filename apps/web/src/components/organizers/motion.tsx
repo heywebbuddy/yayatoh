@@ -40,7 +40,7 @@ export function MaskLines({
           animate(l, { y: ['110%', '0%'] }, { duration: 0.8, delay: i * 0.09, ease: [0.22, 1, 0.36, 1] });
         });
       },
-      { amount: 0.4 },
+      { amount: 0.1 },
     );
     return () => stop();
   }, []);

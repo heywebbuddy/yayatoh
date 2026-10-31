@@ -45,7 +45,7 @@ export function PageHero({
           {eyebrow}
         </p>
       ) : null}
-      <h1 className="m-0 max-w-3xl font-display text-[32px] leading-[1.05] font-black tracking-[-0.03em] uppercase animate-rise motion-reduce:animate-none md:text-[48px] [overflow-wrap:anywhere]">
+      <h1 className="m-0 max-w-3xl font-display text-[32px] leading-[1.05] font-black tracking-[-0.03em] uppercase animate-lift motion-reduce:animate-none md:text-[48px] [overflow-wrap:anywhere]">
         {title}
       </h1>
       {lede ? <p className="m-0 max-w-2xl text-[17px] leading-relaxed text-ink-2">{lede}</p> : null}

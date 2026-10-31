@@ -1,5 +1,5 @@
 import { publicMedia } from '@yayatoh/media';
-import { buttonClass, cx } from '@yayatoh/ui';
+import { buttonClass, cx, Select } from '@yayatoh/ui';
 import { quoteTarget, venueDirectory } from '@yayatoh/venues';
 import { Building2, MapPin, UsersRound } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -101,45 +101,36 @@ export default async function VenueDirectoryPage({
               className="field w-full"
             />
           </div>
-          <div className="flex min-w-0 flex-col gap-1.5">
-            <label htmlFor="v-city" className="text-[13px] font-bold text-ink">
-              {t('filters.city')}
-            </label>
-            <select id="v-city" name="city" defaultValue={city} className="field w-full">
-              <option value="">{t('filters.anyCity')}</option>
-              {cities.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex min-w-0 flex-col gap-1.5">
-            <label htmlFor="v-type" className="text-[13px] font-bold text-ink">
-              {t('filters.type')}
-            </label>
-            <select id="v-type" name="type" defaultValue={type} className="field w-full">
-              <option value="">{t('filters.anyType')}</option>
-              {VENUE_TYPES.map((k) => (
-                <option key={k} value={k}>
-                  {tv(`types.${k}`)}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex min-w-0 flex-col gap-1.5">
-            <label htmlFor="v-size" className="text-[13px] font-bold text-ink">
-              {t('filters.size')}
-            </label>
-            <select id="v-size" name="size" defaultValue={size ?? ''} className="field w-full">
-              <option value="">{t('filters.anySize')}</option>
-              {SIZES.map((s) => (
-                <option key={s} value={s}>
-                  {t(`sizes.${s}`)}
-                </option>
-              ))}
-            </select>
-          </div>
+          <Select
+            id="v-city"
+            name="city"
+            label={t('filters.city')}
+            defaultValue={city}
+            options={[
+              { value: '', label: t('filters.anyCity'), text: t('filters.anyCity') },
+              ...cities.map((c) => ({ value: c, label: c, text: c })),
+            ]}
+          />
+          <Select
+            id="v-type"
+            name="type"
+            label={t('filters.type')}
+            defaultValue={type}
+            options={[
+              { value: '', label: t('filters.anyType'), text: t('filters.anyType') },
+              ...VENUE_TYPES.map((k) => ({ value: k, label: tv(`types.${k}`), text: tv(`types.${k}`) })),
+            ]}
+          />
+          <Select
+            id="v-size"
+            name="size"
+            label={t('filters.size')}
+            defaultValue={size ?? ''}
+            options={[
+              { value: '', label: t('filters.anySize'), text: t('filters.anySize') },
+              ...SIZES.map((k) => ({ value: k, label: t(`sizes.${k}`), text: t(`sizes.${k}`) })),
+            ]}
+          />
           <div className="flex gap-2">
             <button type="submit" className={buttonClass('ember', 'md')}>
               {t('filters.apply')}

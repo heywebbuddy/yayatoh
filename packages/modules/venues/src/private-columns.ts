@@ -24,6 +24,7 @@ export const privateColumns = columnPrivacy('venues', {
     postal_code: 'public',
     country: 'vocab',
     timezone: 'vocab',
+    venue_type: 'vocab',
     accessibility_notes: 'public',
     map_url: 'public',
     description: 'public',
