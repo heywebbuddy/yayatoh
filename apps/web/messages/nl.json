@@ -3832,7 +3832,17 @@
     "websiteUrl": "Website",
     "description": "Beschrijving",
     "descriptionHint": "Getoond op de openbare locatiepagina. Markdown wordt ondersteund.",
-    "timezoneCheck": "Dit land heeft meerdere tijdzones. We kozen de meest waarschijnlijke; controleer hem even."
+    "timezoneCheck": "Dit land heeft meerdere tijdzones. We kozen de meest waarschijnlijke; controleer hem even.",
+    "venueType": "Soort locatie",
+    "types": {
+      "lounge": "Lounge",
+      "ballroom": "Balzaal",
+      "conference_centre": "Congrescentrum",
+      "outdoor": "Buiten",
+      "restaurant": "Restaurant",
+      "hotel": "Hotel",
+      "other": "Overig"
+    }
   },
   "details": {
     "title": "Evenementdetails",
@@ -3913,7 +3923,34 @@
     "subtitle": "Locaties die organisatoren op Yayatoh hebben aangemeld. Open er een om komende evenementen te zien of een offerte aan te vragen.",
     "emptyTitle": "Nog geen locaties in de gids",
     "emptyDescription": "Locaties verschijnen hier zodra hun organisatoren ze aanmelden.",
-    "capacity": "{count, plural, one {Capaciteit: # gast} other {Capaciteit: # gasten}}"
+    "capacity": "{count, plural, one {Capaciteit: # gast} other {Capaciteit: # gasten}}",
+    "eyebrow": "Locaties",
+    "filters": {
+      "label": "Locaties filteren",
+      "query": "Locaties zoeken",
+      "city": "Stad",
+      "anyCity": "Elke stad",
+      "size": "Grootte",
+      "anySize": "Elke grootte",
+      "apply": "Toepassen",
+      "clear": "Wissen",
+      "type": "Soort",
+      "anyType": "Elk soort"
+    },
+    "sizes": {
+      "small": "Tot 100 gasten",
+      "medium": "101 tot 500 gasten",
+      "large": "Meer dan 500 gasten"
+    },
+    "types": {
+      "small": "Intieme locatie",
+      "medium": "Evenementenzaal",
+      "large": "Grote locatie",
+      "venue": "Locatie"
+    },
+    "count": "{count, plural, one {# locatie} other {# locaties}}",
+    "noMatchTitle": "Geen locaties gevonden",
+    "noMatchDescription": "Probeer een andere stad of grootte, of wis de filters."
   },
   "venuePage": {
     "directory": "Locatiegids",
@@ -19819,7 +19856,8 @@
       "notIncluded": "Standaard niet inbegrepen",
       "demoTitle": "Evenementen zoals dit op Yayatoh"
     },
-    "forOrganizers": "Voor organisatoren"
+    "forOrganizers": "Voor organisatoren",
+    "venues": "Locaties"
   },
   "eventDesign": {
     "title": "Paginaontwerp",
@@ -20673,5 +20711,73 @@
     "orgEventsTitle": "Aankomende evenementen van {org}",
     "orgEventsAll": "Alle evenementen bekijken",
     "progress": "Leesvoortgang"
+  },
+  "homeFinder": {
+    "sliderLabel": "Uitgelichte evenementen",
+    "featured": "Uitgelicht",
+    "pause": "Diavoorstelling pauzeren",
+    "play": "Diavoorstelling afspelen",
+    "goTo": "{name} tonen",
+    "searchLabel": "Evenementen zoeken",
+    "what": "Waar ben je naar op zoek?",
+    "placeholder": "Artiest, evenement of trefwoord",
+    "where": "Waar",
+    "anywhere": "Overal",
+    "submit": "Zoeken",
+    "when": "Wanneer",
+    "whenOptions": {
+      "any": "Elke datum",
+      "today": "Vandaag",
+      "weekend": "Dit weekend",
+      "month": "Deze maand",
+      "custom": "Kies datums"
+    },
+    "useLocation": "Mijn locatie gebruiken",
+    "locating": "Locatie bepalen…",
+    "locationFailed": "We konden je locatie niet ophalen. Kies een stad.",
+    "nearest": "Dichtstbijzijnde stad: {city}",
+    "from": "Van",
+    "to": "Tot",
+    "defaultName": "Live evenementen bij jou in de buurt",
+    "defaultMeta": "Concerten, conferenties, gala’s en meer"
+  },
+  "eventSkin": {
+    "rsvp": "Aanmelden (RSVP)",
+    "register": "Registreren"
+  },
+  "eventBand": {
+    "wedding": {
+      "title": "Noteer de datum"
+    },
+    "gala": {
+      "title": "Het doel van vanavond",
+      "progress": "Voortgang naar het doel",
+      "raised": "{amount} tot nu toe opgehaald",
+      "goal": "Doel {amount}",
+      "evening": "Een avond voor een goed doel."
+    },
+    "conference": {
+      "title": "In één oogopslag",
+      "counts": {
+        "sessions": "Sessies",
+        "speakers": "Sprekers",
+        "exhibitors": "Exposanten",
+        "sponsors": "Sponsors"
+      }
+    },
+    "concert": {
+      "title": "Line-up en speeltijden"
+    },
+    "tour": {
+      "title": "Jouw reis",
+      "pickups": "Ophaalpunten",
+      "itinerary": "Reisschema",
+      "before": "{minutes} min voor vertrek",
+      "at": "Op vertrektijd"
+    },
+    "community": {
+      "title": "Iedereen is welkom",
+      "body": "Kom zoals je bent, neem vrienden en familie mee en doe mee. Hieronder staat hoe."
+    }
   }
 }

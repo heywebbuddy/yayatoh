@@ -1,6 +1,7 @@
 import type { PublicOccurrenceDto } from '@yayatoh/events';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
+import { zoneLabel } from '@/lib/zone-label.ts';
 
 /**
  * M1.4b: the public date picker of a multi-date event. Plain links (`?date=<id>#passes`), so it
@@ -43,7 +44,7 @@ export async function DatePicker({
         {t('chooseDate')}
       </h2>
       <p className="text-caption text-ink-2">
-        {t('datesTimezone', { timezone: timeZone.replace(/_/g, ' ') })}
+        {t('datesTimezone', { timezone: zoneLabel(timeZone, locale) })}
       </p>
       {shown.length === 0 ? (
         <p className="text-body text-ink-2">{t('noUpcomingDates')}</p>

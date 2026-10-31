@@ -3832,7 +3832,17 @@
     "websiteUrl": "Website",
     "description": "Beschreibung",
     "descriptionHint": "Wird auf der öffentlichen Veranstaltungsort-Seite angezeigt. Markdown wird unterstützt.",
-    "timezoneCheck": "Dieses Land hat mehrere Zeitzonen. Wir haben die wahrscheinlichste gewählt; bitte prüfe sie."
+    "timezoneCheck": "Dieses Land hat mehrere Zeitzonen. Wir haben die wahrscheinlichste gewählt; bitte prüfe sie.",
+    "venueType": "Art des Ortes",
+    "types": {
+      "lounge": "Lounge",
+      "ballroom": "Ballsaal",
+      "conference_centre": "Konferenzzentrum",
+      "outdoor": "Outdoor",
+      "restaurant": "Restaurant",
+      "hotel": "Hotel",
+      "other": "Sonstiges"
+    }
   },
   "details": {
     "title": "Eventdetails",
@@ -3913,7 +3923,34 @@
     "subtitle": "Von Veranstaltern auf Yayatoh eingetragene Orte. Öffne einen, um kommende Events zu sehen oder ein Angebot anzufragen.",
     "emptyTitle": "Noch keine Orte eingetragen",
     "emptyDescription": "Veranstaltungsorte erscheinen hier, sobald ihre Veranstalter sie eintragen.",
-    "capacity": "{count, plural, one {Kapazität: # Gast} other {Kapazität: # Gäste}}"
+    "capacity": "{count, plural, one {Kapazität: # Gast} other {Kapazität: # Gäste}}",
+    "eyebrow": "Veranstaltungsorte",
+    "filters": {
+      "label": "Orte filtern",
+      "query": "Orte suchen",
+      "city": "Stadt",
+      "anyCity": "Jede Stadt",
+      "size": "Größe",
+      "anySize": "Jede Größe",
+      "apply": "Anwenden",
+      "clear": "Zurücksetzen",
+      "type": "Art",
+      "anyType": "Jede Art"
+    },
+    "sizes": {
+      "small": "Bis 100 Gäste",
+      "medium": "101 bis 500 Gäste",
+      "large": "Über 500 Gäste"
+    },
+    "types": {
+      "small": "Kleiner Ort",
+      "medium": "Eventhalle",
+      "large": "Großer Ort",
+      "venue": "Ort"
+    },
+    "count": "{count, plural, one {# Ort} other {# Orte}}",
+    "noMatchTitle": "Keine passenden Orte",
+    "noMatchDescription": "Versuche eine andere Stadt oder Größe oder setze die Filter zurück."
   },
   "venuePage": {
     "directory": "Verzeichnis der Veranstaltungsorte",
@@ -19819,7 +19856,8 @@
       "notIncluded": "Standardmäßig nicht enthalten",
       "demoTitle": "Ähnliche Events auf Yayatoh"
     },
-    "forOrganizers": "Für Veranstalter"
+    "forOrganizers": "Für Veranstalter",
+    "venues": "Veranstaltungsorte"
   },
   "eventDesign": {
     "title": "Seitendesign",
@@ -20673,5 +20711,73 @@
     "orgEventsTitle": "Kommende Events von {org}",
     "orgEventsAll": "Alle Events ansehen",
     "progress": "Lesefortschritt"
+  },
+  "homeFinder": {
+    "sliderLabel": "Ausgewählte Events",
+    "featured": "Empfohlen",
+    "pause": "Diashow anhalten",
+    "play": "Diashow abspielen",
+    "goTo": "{name} anzeigen",
+    "searchLabel": "Events finden",
+    "what": "Wonach suchst du?",
+    "placeholder": "Künstler, Event oder Stichwort",
+    "where": "Wo",
+    "anywhere": "Überall",
+    "submit": "Suchen",
+    "when": "Wann",
+    "whenOptions": {
+      "any": "Jedes Datum",
+      "today": "Heute",
+      "weekend": "Dieses Wochenende",
+      "month": "Diesen Monat",
+      "custom": "Datum wählen"
+    },
+    "useLocation": "Meinen Standort nutzen",
+    "locating": "Standort wird ermittelt…",
+    "locationFailed": "Wir konnten deinen Standort nicht ermitteln. Wähle stattdessen eine Stadt.",
+    "nearest": "Nächste Stadt: {city}",
+    "from": "Von",
+    "to": "Bis",
+    "defaultName": "Live-Events in deiner Nähe",
+    "defaultMeta": "Konzerte, Konferenzen, Galas und mehr"
+  },
+  "eventSkin": {
+    "rsvp": "Zusagen",
+    "register": "Anmelden"
+  },
+  "eventBand": {
+    "wedding": {
+      "title": "Save the Date"
+    },
+    "gala": {
+      "title": "Der Anlass des Abends",
+      "progress": "Fortschritt zum Ziel",
+      "raised": "{amount} bisher gesammelt",
+      "goal": "Ziel {amount}",
+      "evening": "Ein Abend für einen guten Zweck."
+    },
+    "conference": {
+      "title": "Auf einen Blick",
+      "counts": {
+        "sessions": "Sessions",
+        "speakers": "Sprecher",
+        "exhibitors": "Aussteller",
+        "sponsors": "Sponsoren"
+      }
+    },
+    "concert": {
+      "title": "Line-up und Spielzeiten"
+    },
+    "tour": {
+      "title": "Deine Reise",
+      "pickups": "Abholpunkte",
+      "itinerary": "Reiseverlauf",
+      "before": "{minutes} Min. vor Abfahrt",
+      "at": "Zur Abfahrtszeit"
+    },
+    "community": {
+      "title": "Alle sind willkommen",
+      "body": "Komm, wie du bist, bring Freunde und Familie mit. Wie du mitmachst, steht unten."
+    }
   }
 }

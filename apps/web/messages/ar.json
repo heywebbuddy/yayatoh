@@ -3832,7 +3832,17 @@
     "websiteUrl": "الموقع الإلكتروني",
     "description": "الوصف",
     "descriptionHint": "يظهر في صفحة المكان العامة. يدعم Markdown.",
-    "timezoneCheck": "لهذا البلد عدة مناطق زمنية. اخترنا الأرجح؛ يرجى التحقق منها."
+    "timezoneCheck": "لهذا البلد عدة مناطق زمنية. اخترنا الأرجح؛ يرجى التحقق منها.",
+    "venueType": "نوع المكان",
+    "types": {
+      "lounge": "صالة",
+      "ballroom": "قاعة حفلات",
+      "conference_centre": "مركز مؤتمرات",
+      "outdoor": "في الهواء الطلق",
+      "restaurant": "مطعم",
+      "hotel": "فندق",
+      "other": "أخرى"
+    }
   },
   "details": {
     "title": "تفاصيل الفعالية",
@@ -3913,7 +3923,34 @@
     "subtitle": "أماكن أدرجها المنظِّمون على Yayatoh. افتح أحدها للاطلاع على الفعاليات القادمة أو لطلب عرض سعر.",
     "emptyTitle": "لا توجد أماكن مُدرجة بعد",
     "emptyDescription": "تظهر الأماكن هنا عندما يدرجها منظِّموها.",
-    "capacity": "{count, plural, zero {السعة: لا ضيوف} one {السعة: ضيف واحد} two {السعة: ضيفان} few {السعة: # ضيوف} many {السعة: # ضيفًا} other {السعة: # ضيف}}"
+    "capacity": "{count, plural, zero {السعة: لا ضيوف} one {السعة: ضيف واحد} two {السعة: ضيفان} few {السعة: # ضيوف} many {السعة: # ضيفًا} other {السعة: # ضيف}}",
+    "eyebrow": "الأماكن",
+    "filters": {
+      "label": "تصفية الأماكن",
+      "query": "ابحث عن أماكن",
+      "city": "المدينة",
+      "anyCity": "أي مدينة",
+      "size": "الحجم",
+      "anySize": "أي حجم",
+      "apply": "تطبيق",
+      "clear": "مسح",
+      "type": "النوع",
+      "anyType": "أي نوع"
+    },
+    "sizes": {
+      "small": "حتى 100 ضيف",
+      "medium": "من 101 إلى 500 ضيف",
+      "large": "أكثر من 500 ضيف"
+    },
+    "types": {
+      "small": "مكان صغير",
+      "medium": "قاعة فعاليات",
+      "large": "مكان كبير",
+      "venue": "مكان"
+    },
+    "count": "{count, plural, one {# مكان} other {# أماكن}}",
+    "noMatchTitle": "لا توجد أماكن مطابقة",
+    "noMatchDescription": "جرّب مدينة أو حجمًا آخر أو امسح عوامل التصفية."
   },
   "venuePage": {
     "directory": "دليل الأماكن",
@@ -19819,7 +19856,8 @@
       "notIncluded": "غير مشمول افتراضيًا",
       "demoTitle": "فعاليات مشابهة على Yayatoh"
     },
-    "forOrganizers": "للمنظمين"
+    "forOrganizers": "للمنظمين",
+    "venues": "الأماكن"
   },
   "eventDesign": {
     "title": "تصميم الصفحة",
@@ -20673,5 +20711,73 @@
     "orgEventsTitle": "الفعاليات القادمة من {org}",
     "orgEventsAll": "عرض كل الفعاليات",
     "progress": "تقدم القراءة"
+  },
+  "homeFinder": {
+    "sliderLabel": "فعاليات مميزة",
+    "featured": "مميز",
+    "pause": "إيقاف العرض مؤقتًا",
+    "play": "تشغيل العرض",
+    "goTo": "عرض {name}",
+    "searchLabel": "ابحث عن فعاليات",
+    "what": "عمّ تبحث؟",
+    "placeholder": "فنان أو فعالية أو كلمة",
+    "where": "أين",
+    "anywhere": "في أي مكان",
+    "submit": "بحث",
+    "when": "متى",
+    "whenOptions": {
+      "any": "أي تاريخ",
+      "today": "اليوم",
+      "weekend": "نهاية هذا الأسبوع",
+      "month": "هذا الشهر",
+      "custom": "اختر تواريخ"
+    },
+    "useLocation": "استخدم موقعي",
+    "locating": "جارٍ تحديد الموقع…",
+    "locationFailed": "تعذّر الحصول على موقعك. اختر مدينة.",
+    "nearest": "أقرب مدينة: {city}",
+    "from": "من",
+    "to": "إلى",
+    "defaultName": "فعاليات حية بالقرب منك",
+    "defaultMeta": "حفلات ومؤتمرات وحفلات رسمية وأكثر"
+  },
+  "eventSkin": {
+    "rsvp": "تأكيد الحضور",
+    "register": "التسجيل"
+  },
+  "eventBand": {
+    "wedding": {
+      "title": "احفظ الموعد"
+    },
+    "gala": {
+      "title": "قضية هذه الأمسية",
+      "progress": "التقدم نحو الهدف",
+      "raised": "تم جمع {amount} حتى الآن",
+      "goal": "الهدف {amount}",
+      "evening": "أمسية دعمًا لقضية نبيلة."
+    },
+    "conference": {
+      "title": "نظرة سريعة",
+      "counts": {
+        "sessions": "الجلسات",
+        "speakers": "المتحدثون",
+        "exhibitors": "العارضون",
+        "sponsors": "الرعاة"
+      }
+    },
+    "concert": {
+      "title": "التشكيلة ومواعيد العروض"
+    },
+    "tour": {
+      "title": "رحلتك",
+      "pickups": "نقاط الالتقاء",
+      "itinerary": "مسار الرحلة",
+      "before": "قبل الانطلاق بـ {minutes} دقيقة",
+      "at": "عند وقت الانطلاق"
+    },
+    "community": {
+      "title": "الجميع مرحّب بهم",
+      "body": "تعال كما أنت وأحضر الأصدقاء والعائلة وشارك. تجد التفاصيل أدناه."
+    }
   }
 }

@@ -53,6 +53,8 @@ export async function loadShowcaseHome(topicSections = 2) {
       name: e.orgName,
       events: (seen?.events ?? 0) + 1,
       href: organizerHref(e.orgSlug),
+      // A picture for the tile: the cover of the organizer's first upcoming event that has one.
+      cover: seen?.cover ?? covers.get(e.slug) ?? null,
     });
   }
   const organizers = [...counts.values()]

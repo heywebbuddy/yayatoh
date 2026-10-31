@@ -6,6 +6,7 @@ import { Carousel } from '@/components/showcase/carousel.tsx';
 import { CategoryRail } from '@/components/showcase/category-rail.tsx';
 import { ShowcaseHero } from '@/components/showcase/hero.tsx';
 import { loadShowcaseHome } from '@/components/showcase/home-data.ts';
+import { HomeFinder } from '@/components/showcase/home-finder.tsx';
 import { BuyerFaq, FinalCta } from '@/components/showcase/home-sections.tsx';
 import { OrganizersPanel } from '@/components/showcase/organizers-panel.tsx';
 import { PosterCard } from '@/components/showcase/poster-card.tsx';
@@ -54,6 +55,7 @@ export default async function Home({ params }: Props) {
   const first = data.featured[0];
   return (
     <ShowcaseShell>
+      <HomeFinder locale={locale} featured={data.featured} covers={data.covers} />
       <ShowcaseHero
         override={hero}
         cover={data.heroCover}

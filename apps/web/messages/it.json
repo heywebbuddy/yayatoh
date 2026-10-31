@@ -3832,7 +3832,17 @@
     "websiteUrl": "Sito web",
     "description": "Descrizione",
     "descriptionHint": "Mostrata nella pagina pubblica della sede. Markdown supportato.",
-    "timezoneCheck": "Questo paese ha più fusi orari. Abbiamo scelto il più probabile; controllalo, per favore."
+    "timezoneCheck": "Questo paese ha più fusi orari. Abbiamo scelto il più probabile; controllalo, per favore.",
+    "venueType": "Tipo di location",
+    "types": {
+      "lounge": "Lounge",
+      "ballroom": "Sala da ballo",
+      "conference_centre": "Centro congressi",
+      "outdoor": "All’aperto",
+      "restaurant": "Ristorante",
+      "hotel": "Hotel",
+      "other": "Altro"
+    }
   },
   "details": {
     "title": "Dettagli dell’evento",
@@ -3913,7 +3923,34 @@
     "subtitle": "Location inserite dagli organizzatori su Yayatoh. Aprine una per vedere i prossimi eventi o richiedere un preventivo.",
     "emptyTitle": "Ancora nessuna location in directory",
     "emptyDescription": "Le location compaiono qui quando i loro organizzatori le inseriscono.",
-    "capacity": "{count, plural, one {Capienza: # ospite} other {Capienza: # ospiti}}"
+    "capacity": "{count, plural, one {Capienza: # ospite} other {Capienza: # ospiti}}",
+    "eyebrow": "Location",
+    "filters": {
+      "label": "Filtra le location",
+      "query": "Cerca location",
+      "city": "Città",
+      "anyCity": "Qualsiasi città",
+      "size": "Dimensione",
+      "anySize": "Qualsiasi dimensione",
+      "apply": "Applica",
+      "clear": "Azzera",
+      "type": "Tipo",
+      "anyType": "Qualsiasi tipo"
+    },
+    "sizes": {
+      "small": "Fino a 100 ospiti",
+      "medium": "Da 101 a 500 ospiti",
+      "large": "Oltre 500 ospiti"
+    },
+    "types": {
+      "small": "Location intima",
+      "medium": "Sala eventi",
+      "large": "Grande location",
+      "venue": "Location"
+    },
+    "count": "{count, plural, one {# location} other {# location}}",
+    "noMatchTitle": "Nessuna location corrisponde",
+    "noMatchDescription": "Prova un’altra città o dimensione, oppure azzera i filtri."
   },
   "venuePage": {
     "directory": "Directory delle location",
@@ -19819,7 +19856,8 @@
       "notIncluded": "Non incluso di default",
       "demoTitle": "Eventi come questo su Yayatoh"
     },
-    "forOrganizers": "Per gli organizzatori"
+    "forOrganizers": "Per gli organizzatori",
+    "venues": "Sedi"
   },
   "eventDesign": {
     "title": "Design della pagina",
@@ -20673,5 +20711,73 @@
     "orgEventsTitle": "Prossimi eventi di {org}",
     "orgEventsAll": "Vedi tutti gli eventi",
     "progress": "Avanzamento della lettura"
+  },
+  "homeFinder": {
+    "sliderLabel": "Eventi in evidenza",
+    "featured": "In evidenza",
+    "pause": "Metti in pausa la presentazione",
+    "play": "Avvia la presentazione",
+    "goTo": "Mostra {name}",
+    "searchLabel": "Trova eventi",
+    "what": "Cosa cerchi?",
+    "placeholder": "Artista, evento o parola chiave",
+    "where": "Dove",
+    "anywhere": "Ovunque",
+    "submit": "Cerca",
+    "when": "Quando",
+    "whenOptions": {
+      "any": "Qualsiasi data",
+      "today": "Oggi",
+      "weekend": "Questo fine settimana",
+      "month": "Questo mese",
+      "custom": "Scegli le date"
+    },
+    "useLocation": "Usa la mia posizione",
+    "locating": "Localizzazione…",
+    "locationFailed": "Non siamo riusciti a ottenere la tua posizione. Scegli una città.",
+    "nearest": "Città più vicina: {city}",
+    "from": "Dal",
+    "to": "Al",
+    "defaultName": "Eventi dal vivo vicino a te",
+    "defaultMeta": "Concerti, conferenze, gala e altro"
+  },
+  "eventSkin": {
+    "rsvp": "Conferma",
+    "register": "Iscriviti"
+  },
+  "eventBand": {
+    "wedding": {
+      "title": "Segna la data"
+    },
+    "gala": {
+      "title": "La causa della serata",
+      "progress": "Avanzamento verso l’obiettivo",
+      "raised": "{amount} raccolti finora",
+      "goal": "Obiettivo {amount}",
+      "evening": "Una serata a sostegno di una buona causa."
+    },
+    "conference": {
+      "title": "In breve",
+      "counts": {
+        "sessions": "Sessioni",
+        "speakers": "Relatori",
+        "exhibitors": "Espositori",
+        "sponsors": "Sponsor"
+      }
+    },
+    "concert": {
+      "title": "Programma e orari"
+    },
+    "tour": {
+      "title": "Il tuo viaggio",
+      "pickups": "Punti di ritrovo",
+      "itinerary": "Itinerario",
+      "before": "{minutes} min prima della partenza",
+      "at": "All’ora di partenza"
+    },
+    "community": {
+      "title": "Tutti sono i benvenuti",
+      "body": "Vieni come sei, porta amici e famiglia e partecipa. Sotto trovi come fare."
+    }
   }
 }

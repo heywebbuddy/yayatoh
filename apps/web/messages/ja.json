@@ -3832,7 +3832,17 @@
     "websiteUrl": "ウェブサイト",
     "description": "説明",
     "descriptionHint": "公開の会場ページに表示されます。Markdown に対応しています。",
-    "timezoneCheck": "この国には複数のタイムゾーンがあります。最も可能性の高いものを選びました。ご確認ください。"
+    "timezoneCheck": "この国には複数のタイムゾーンがあります。最も可能性の高いものを選びました。ご確認ください。",
+    "venueType": "会場の種類",
+    "types": {
+      "lounge": "ラウンジ",
+      "ballroom": "ボールルーム",
+      "conference_centre": "カンファレンスセンター",
+      "outdoor": "屋外",
+      "restaurant": "レストラン",
+      "hotel": "ホテル",
+      "other": "その他"
+    }
   },
   "details": {
     "title": "イベントの詳細",
@@ -3913,7 +3923,34 @@
     "subtitle": "主催者が Yayatoh に掲載している会場です。会場を開くと、今後のイベントの確認や見積もり依頼ができます。",
     "emptyTitle": "掲載されている会場はまだありません",
     "emptyDescription": "主催者が会場を掲載すると、ここに表示されます。",
-    "capacity": "{count, plural, other {収容人数: #名}}"
+    "capacity": "{count, plural, other {収容人数: #名}}",
+    "eyebrow": "会場",
+    "filters": {
+      "label": "会場を絞り込む",
+      "query": "会場を検索",
+      "city": "都市",
+      "anyCity": "すべての都市",
+      "size": "規模",
+      "anySize": "すべての規模",
+      "apply": "適用",
+      "clear": "クリア",
+      "type": "種類",
+      "anyType": "すべての種類"
+    },
+    "sizes": {
+      "small": "100人まで",
+      "medium": "101〜500人",
+      "large": "500人以上"
+    },
+    "types": {
+      "small": "小規模会場",
+      "medium": "イベントホール",
+      "large": "大規模会場",
+      "venue": "会場"
+    },
+    "count": "{count, plural, other {# 件の会場}}",
+    "noMatchTitle": "該当する会場がありません",
+    "noMatchDescription": "別の都市や規模を試すか、絞り込みをクリアしてください。"
   },
   "venuePage": {
     "directory": "会場ディレクトリ",
@@ -19819,7 +19856,8 @@
       "notIncluded": "標準では含まれない",
       "demoTitle": "Yayatohのこんなイベント"
     },
-    "forOrganizers": "主催者の方へ"
+    "forOrganizers": "主催者の方へ",
+    "venues": "会場"
   },
   "eventDesign": {
     "title": "ページデザイン",
@@ -20673,5 +20711,73 @@
     "orgEventsTitle": "{org}の開催予定イベント",
     "orgEventsAll": "すべてのイベントを見る",
     "progress": "読み進めた割合"
+  },
+  "homeFinder": {
+    "sliderLabel": "注目のイベント",
+    "featured": "注目",
+    "pause": "スライドショーを一時停止",
+    "play": "スライドショーを再生",
+    "goTo": "{name}を表示",
+    "searchLabel": "イベントを探す",
+    "what": "何をお探しですか？",
+    "placeholder": "アーティスト、イベント、キーワード",
+    "where": "場所",
+    "anywhere": "どこでも",
+    "submit": "検索",
+    "when": "いつ",
+    "whenOptions": {
+      "any": "日付を指定しない",
+      "today": "今日",
+      "weekend": "今週末",
+      "month": "今月",
+      "custom": "日付を選ぶ"
+    },
+    "useLocation": "現在地を使う",
+    "locating": "現在地を取得中…",
+    "locationFailed": "現在地を取得できませんでした。都市を選んでください。",
+    "nearest": "最も近い都市：{city}",
+    "from": "開始",
+    "to": "終了",
+    "defaultName": "あなたの近くのライブイベント",
+    "defaultMeta": "コンサート、カンファレンス、ガラなど"
+  },
+  "eventSkin": {
+    "rsvp": "出欠を回答",
+    "register": "登録する"
+  },
+  "eventBand": {
+    "wedding": {
+      "title": "日程をチェック"
+    },
+    "gala": {
+      "title": "今夜の目的",
+      "progress": "目標までの進捗",
+      "raised": "これまでに{amount}が集まりました",
+      "goal": "目標 {amount}",
+      "evening": "良い目的を支える一夜です。"
+    },
+    "conference": {
+      "title": "概要",
+      "counts": {
+        "sessions": "セッション",
+        "speakers": "登壇者",
+        "exhibitors": "出展者",
+        "sponsors": "スポンサー"
+      }
+    },
+    "concert": {
+      "title": "ラインナップと出演時間"
+    },
+    "tour": {
+      "title": "あなたの旅",
+      "pickups": "集合場所",
+      "itinerary": "行程",
+      "before": "出発の{minutes}分前",
+      "at": "出発時刻"
+    },
+    "community": {
+      "title": "どなたでも歓迎",
+      "body": "ありのままでお越しください。ご家族やご友人もぜひ。参加方法は下をご覧ください。"
+    }
   }
 }

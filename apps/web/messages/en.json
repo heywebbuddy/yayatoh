@@ -3832,7 +3832,17 @@
     "websiteUrl": "Website",
     "description": "Description",
     "descriptionHint": "Shown on the public venue page. Markdown is supported.",
-    "timezoneCheck": "This country has several time zones. We picked the most likely one; please check it."
+    "timezoneCheck": "This country has several time zones. We picked the most likely one; please check it.",
+    "venueType": "Venue type",
+    "types": {
+      "lounge": "Lounge",
+      "ballroom": "Ballroom",
+      "conference_centre": "Conference centre",
+      "outdoor": "Outdoor",
+      "restaurant": "Restaurant",
+      "hotel": "Hotel",
+      "other": "Other"
+    }
   },
   "details": {
     "title": "Event details",
@@ -3913,7 +3923,34 @@
     "subtitle": "Venues listed by organizers on Yayatoh. Open one to see upcoming events or request a quote.",
     "emptyTitle": "No venues listed yet",
     "emptyDescription": "Venues appear here when their organizers list them.",
-    "capacity": "{count, plural, one {Capacity: # guest} other {Capacity: # guests}}"
+    "capacity": "{count, plural, one {Capacity: # guest} other {Capacity: # guests}}",
+    "eyebrow": "Venues",
+    "filters": {
+      "label": "Filter venues",
+      "query": "Search venues",
+      "city": "City",
+      "anyCity": "Any city",
+      "size": "Size",
+      "anySize": "Any size",
+      "apply": "Apply",
+      "clear": "Clear",
+      "type": "Type",
+      "anyType": "Any type"
+    },
+    "sizes": {
+      "small": "Up to 100 guests",
+      "medium": "101 to 500 guests",
+      "large": "Over 500 guests"
+    },
+    "types": {
+      "small": "Intimate venue",
+      "medium": "Event hall",
+      "large": "Large venue",
+      "venue": "Venue"
+    },
+    "count": "{count, plural, one {# venue} other {# venues}}",
+    "noMatchTitle": "No venues match",
+    "noMatchDescription": "Try another city or size, or clear the filters."
   },
   "venuePage": {
     "directory": "Venue directory",
@@ -19819,7 +19856,8 @@
       "notIncluded": "Not included by default",
       "demoTitle": "Events like this on Yayatoh"
     },
-    "forOrganizers": "For organizers"
+    "forOrganizers": "For organizers",
+    "venues": "Venues"
   },
   "eventDesign": {
     "title": "Page design",
@@ -20673,5 +20711,73 @@
     "orgEventsTitle": "Upcoming events by {org}",
     "orgEventsAll": "See all events",
     "progress": "Reading progress"
+  },
+  "homeFinder": {
+    "sliderLabel": "Featured events",
+    "featured": "Featured",
+    "pause": "Pause the slideshow",
+    "play": "Play the slideshow",
+    "goTo": "Show {name}",
+    "searchLabel": "Find events",
+    "what": "What are you looking for?",
+    "placeholder": "Artist, event or keyword",
+    "where": "Where",
+    "anywhere": "Anywhere",
+    "submit": "Search",
+    "when": "When",
+    "whenOptions": {
+      "any": "Any date",
+      "today": "Today",
+      "weekend": "This weekend",
+      "month": "This month",
+      "custom": "Pick dates"
+    },
+    "useLocation": "Use my location",
+    "locating": "Locating…",
+    "locationFailed": "We could not get your location. Choose a city instead.",
+    "nearest": "Nearest city: {city}",
+    "from": "From",
+    "to": "To",
+    "defaultName": "Live events near you",
+    "defaultMeta": "Concerts, conferences, galas and more"
+  },
+  "eventSkin": {
+    "rsvp": "RSVP",
+    "register": "Register"
+  },
+  "eventBand": {
+    "wedding": {
+      "title": "Save the date"
+    },
+    "gala": {
+      "title": "Tonight’s cause",
+      "progress": "Progress towards the goal",
+      "raised": "{amount} raised so far",
+      "goal": "Goal {amount}",
+      "evening": "An evening in support of a good cause."
+    },
+    "conference": {
+      "title": "At a glance",
+      "counts": {
+        "sessions": "Sessions",
+        "speakers": "Speakers",
+        "exhibitors": "Exhibitors",
+        "sponsors": "Sponsors"
+      }
+    },
+    "concert": {
+      "title": "Lineup and set times"
+    },
+    "tour": {
+      "title": "Your journey",
+      "pickups": "Pickup points",
+      "itinerary": "Itinerary",
+      "before": "{minutes} min before departure",
+      "at": "At departure time"
+    },
+    "community": {
+      "title": "Everyone is welcome",
+      "body": "Come as you are, bring friends and family, and join in. Details of how to take part are below."
+    }
   }
 }

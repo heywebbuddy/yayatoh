@@ -30,6 +30,17 @@ export const WebUrl = z
     }
   }, 'must be an http(s):// link');
 
+export const VENUE_TYPES = [
+  'lounge',
+  'ballroom',
+  'conference_centre',
+  'outdoor',
+  'restaurant',
+  'hotel',
+  'other',
+] as const;
+export type VenueType = (typeof VENUE_TYPES)[number];
+
 export const VenueDto = z.object({
   id: z.uuid(),
   slug: z.string(),
@@ -44,6 +55,7 @@ export const VenueDto = z.object({
   longitude: z.number().nullable(),
   timezone: z.string(),
   capacity: z.number().int().nullable(),
+  venueType: z.enum(VENUE_TYPES),
   accessibilityNotes: z.string().nullable(),
   mapUrl: z.string().nullable(),
   description: z.string().nullable(),
@@ -72,6 +84,7 @@ const VenueFields = z.object({
   longitude: z.number().min(-180).max(180).nullable().default(null),
   timezone: IanaTimezone,
   capacity: z.number().int().min(1).max(1_000_000).nullable().default(null),
+  venueType: z.enum(VENUE_TYPES).default('other'),
   accessibilityNotes: text(2000),
   mapUrl: HttpsUrl.nullable().default(null),
   description: text(10_000),
@@ -106,6 +119,7 @@ export const PublicVenueDto = z.object({
   longitude: z.number().nullable(),
   timezone: z.string(),
   capacity: z.number().int().nullable(),
+  venueType: z.enum(VENUE_TYPES),
   accessibilityNotes: z.string().nullable(),
   mapUrl: z.string().nullable(),
   description: z.string().nullable(),
@@ -124,6 +138,7 @@ export const DirectoryVenueDto = PublicVenueDto.pick({
   region: true,
   country: true,
   capacity: true,
+  venueType: true,
 });
 export type DirectoryVenueDto = z.infer<typeof DirectoryVenueDto>;
 export const directoryVenueSerializer = defineSerializer('venues.directoryVenue', DirectoryVenueDto);

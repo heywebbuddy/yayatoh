@@ -44,6 +44,7 @@ import { BrandLink } from '@/components/brand-styled.tsx';
 import { CheckoutForm } from '@/components/checkout-form.tsx';
 import { DatePicker } from '@/components/date-picker.tsx';
 import { EventAssistant } from '@/components/event-assistant.tsx';
+import { EventProfileBand } from '@/components/event-profile-band.tsx';
 import { EventSections } from '@/components/event-sections.tsx';
 import { GalleryLightbox } from '@/components/gallery-lightbox.tsx';
 import { HolderLinkForm } from '@/components/holder-link-form.tsx';
@@ -518,6 +519,13 @@ export async function PublicEventView({
   const hasAgenda = program.sessions.length > 0 || ev.agenda.length > 0;
   // A seated checkout needs the full width for its seat map; otherwise the ticket box sits beside.
   const wide = Boolean(seatMap);
+  // Each type of event arranges its page its own way: booking first (concert, tour) or story first
+  // (wedding, gala) in one column, or the classic content-and-sidebar split (the rest, with a seat
+  // map on top). The agenda leads a conference; see the profile rules in the stylesheet.
+  const BOOKING_FIRST = ['concert', 'tour'];
+  const STORY_FIRST = ['wedding', 'gala'];
+  const stack = wide || BOOKING_FIRST.includes(ev.profile) || STORY_FIRST.includes(ev.profile);
+  const sideLast = STORY_FIRST.includes(ev.profile) && !wide;
   const initials = ev.organizerName
     .split(/\s+/)
     .filter(Boolean)
@@ -540,6 +548,7 @@ export async function PublicEventView({
     <div
       className={cx('min-h-dvh', showcase && 'bg-page')}
       data-heading={ev.design.headingFont}
+      data-profile={ev.profile}
       {...(showcase ? { 'data-surface': 'showcase' } : { 'data-theme': 'light' })}
     >
       {ev.visibility === 'public' ? (
@@ -599,6 +608,7 @@ export async function PublicEventView({
 
         <main id="main" className="flex flex-col gap-6">
           <section
+            data-event-hero
             className={cx(
               'relative isolate flex min-h-[380px] flex-col justify-end gap-4 overflow-hidden rounded-[32px] bg-hero px-6 pt-16 pb-8 text-white elevation-card md:px-10 md:pb-10',
               heroCircle && cover && 'md:pe-[46%]',
@@ -690,7 +700,10 @@ export async function PublicEventView({
                 </li>
               ) : null}
             </ul>
-            <h1 className="m-0 max-w-[680px] text-[40px] leading-[1.02] font-extrabold tracking-[-0.045em] md:text-display">
+            <h1
+              data-event-title
+              className="m-0 max-w-[680px] text-[40px] leading-[1.02] font-extrabold tracking-[-0.045em] md:text-display"
+            >
               {ev.name}
             </h1>
             {ev.tagline ? (
@@ -720,11 +733,12 @@ export async function PublicEventView({
             ) : null}
           </section>
 
-          <div className={cx('grid items-start gap-6', !wide && 'lg:grid-cols-[minmax(0,1fr)_400px]')}>
+          <div className={cx('grid items-start gap-6', !stack && 'lg:grid-cols-[minmax(0,1fr)_400px]')}>
             <div
               className={cx(
                 'flex min-w-0 flex-col gap-4',
-                !wide && 'lg:sticky lg:top-4 lg:col-start-2 lg:row-start-1',
+                !stack && 'lg:sticky lg:top-4 lg:col-start-2 lg:row-start-1',
+                sideLast && 'order-last',
               )}
             >
               {dates.length > 0 ? (
@@ -759,7 +773,19 @@ export async function PublicEventView({
               ) : null}
             </div>
 
-            <div className="flex min-w-0 flex-col gap-5 lg:col-start-1 lg:row-start-1">
+            <div className={cx('flex min-w-0 flex-col gap-5', !stack && 'lg:col-start-1 lg:row-start-1')}>
+              <EventProfileBand
+                profile={ev.profile}
+                name={ev.name}
+                dateLabel={range}
+                place={[ev.venueName, ev.city].filter(Boolean).join(', ') || null}
+                agenda={ev.agenda}
+                counts={programStats}
+                giving={giving}
+                orgId={target?.orgId ?? null}
+                eventId={target?.eventId ?? null}
+                locale={locale}
+              />
               {content.announcements.length > 0 ? (
                 <section
                   aria-labelledby="announcements-heading"
@@ -805,6 +831,7 @@ export async function PublicEventView({
               {ev.agenda.length > 0 ? (
                 <section
                   id="agenda"
+                  data-block="agenda"
                   aria-label={t('publicEvent.agenda')}
                   className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
                 >
@@ -843,6 +870,7 @@ export async function PublicEventView({
               {venue ? (
                 <section
                   id="venue"
+                  data-block="venue"
                   aria-labelledby="venue-heading"
                   className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
                 >
@@ -942,6 +970,24 @@ export async function PublicEventView({
               ) : null}
             </div>
           </div>
+          {(['wedding', 'gala', 'conference', 'concert', 'tour'] as const).some((p) => p === ev.profile) ? (
+            // A floating register bar for the types people decide on quickly: it follows the page down.
+            <div className="pointer-events-none sticky bottom-3 z-30 flex justify-center">
+              <a
+                href="#passes"
+                className={cx(
+                  buttonClass('ember', 'lg'),
+                  'pointer-events-auto elevation-pop shadow-lg motion-safe:animate-rise',
+                )}
+              >
+                {ev.profile === 'wedding'
+                  ? t('eventSkin.rsvp')
+                  : ev.profile === 'conference'
+                    ? t('eventSkin.register')
+                    : t('publicEvent.getTickets')}
+              </a>
+            </div>
+          ) : null}
         </main>
       </div>
     </div>

@@ -34,7 +34,15 @@ import {
   ticketsOf,
 } from './kit.ts';
 
-export type Profile = 'wedding' | 'gala' | 'concert' | 'conference' | 'community' | 'agency' | 'other';
+export type Profile =
+  | 'wedding'
+  | 'gala'
+  | 'concert'
+  | 'conference'
+  | 'community'
+  | 'tour'
+  | 'agency'
+  | 'other';
 
 /* -------------------------------------------------------------------------------- venues ---- */
 
@@ -48,6 +56,7 @@ export const VENUES = {
     latitude: 24.5764,
     longitude: 73.6802,
     capacity: 400,
+    venueType: 'outdoor' as const,
     accessibilityNotes: 'Step-free paths through the gardens; ramps to the lawn and the terrace.',
     palette: PALETTES.wedding,
   },
@@ -60,6 +69,7 @@ export const VENUES = {
     latitude: 18.9432,
     longitude: 72.8232,
     capacity: 600,
+    venueType: 'ballroom' as const,
     accessibilityNotes: 'Lift to the ballroom level; accessible restrooms beside the foyer.',
     palette: PALETTES.gala,
   },
@@ -72,6 +82,7 @@ export const VENUES = {
     latitude: 12.9763,
     longitude: 77.5929,
     capacity: 1200,
+    venueType: 'outdoor' as const,
     accessibilityNotes: 'Wheelchair spaces in rows A and B; step-free entrance at Gate 2.',
     palette: PALETTES.concert,
   },
@@ -84,6 +95,7 @@ export const VENUES = {
     latitude: 17.4435,
     longitude: 78.3772,
     capacity: 2000,
+    venueType: 'conference_centre' as const,
     accessibilityNotes: 'All halls step-free; hearing loop in the main auditorium.',
     palette: PALETTES.conference,
   },
@@ -96,6 +108,7 @@ export const VENUES = {
     latitude: 15.4989,
     longitude: 73.8278,
     capacity: 250,
+    venueType: 'lounge' as const,
     accessibilityNotes: 'Ground-floor hall with a ramp at the side entrance.',
     palette: PALETTES.community,
   },
@@ -108,6 +121,7 @@ export const VENUES = {
     latitude: 28.6315,
     longitude: 77.2167,
     capacity: 120,
+    venueType: 'restaurant' as const,
     accessibilityNotes: 'Lift access; accessible restroom on the same floor.',
     palette: PALETTES.agency,
   },

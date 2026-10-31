@@ -3832,7 +3832,17 @@
     "websiteUrl": "網站",
     "description": "簡介",
     "descriptionHint": "顯示在公開的場地頁面上。支援 Markdown。",
-    "timezoneCheck": "該國家有多個時區。已選擇最可能的一個,請核對。"
+    "timezoneCheck": "該國家有多個時區。已選擇最可能的一個,請核對。",
+    "venueType": "場地類型",
+    "types": {
+      "lounge": "休閒廳",
+      "ballroom": "宴會廳",
+      "conference_centre": "會議中心",
+      "outdoor": "戶外",
+      "restaurant": "餐廳",
+      "hotel": "飯店",
+      "other": "其他"
+    }
   },
   "details": {
     "title": "活動詳細資料",
@@ -3913,7 +3923,34 @@
     "subtitle": "主辦單位在 Yayatoh 上刊登的場地。開啟場地即可查看即將舉行的活動或索取報價。",
     "emptyTitle": "尚無刊登的場地",
     "emptyDescription": "主辦單位刊登場地後，場地會顯示在這裡。",
-    "capacity": "{count, plural, other {容納人數：# 位賓客}}"
+    "capacity": "{count, plural, other {容納人數：# 位賓客}}",
+    "eyebrow": "場地",
+    "filters": {
+      "label": "篩選場地",
+      "query": "搜尋場地",
+      "city": "城市",
+      "anyCity": "所有城市",
+      "size": "規模",
+      "anySize": "所有規模",
+      "apply": "套用",
+      "clear": "清除",
+      "type": "類型",
+      "anyType": "所有類型"
+    },
+    "sizes": {
+      "small": "100 人以內",
+      "medium": "101 至 500 人",
+      "large": "500 人以上"
+    },
+    "types": {
+      "small": "小型場地",
+      "medium": "活動廳",
+      "large": "大型場地",
+      "venue": "場地"
+    },
+    "count": "{count, plural, other {# 個場地}}",
+    "noMatchTitle": "沒有符合的場地",
+    "noMatchDescription": "試試其他城市或規模，或清除篩選。"
   },
   "venuePage": {
     "directory": "場地目錄",
@@ -19819,7 +19856,8 @@
       "notIncluded": "預設不包含",
       "demoTitle": "Yayatoh 上的同類活動"
     },
-    "forOrganizers": "給主辦單位"
+    "forOrganizers": "給主辦單位",
+    "venues": "場地"
   },
   "eventDesign": {
     "title": "頁面設計",
@@ -20673,5 +20711,73 @@
     "orgEventsTitle": "{org} 即將舉行的活動",
     "orgEventsAll": "查看所有活動",
     "progress": "閱讀進度"
+  },
+  "homeFinder": {
+    "sliderLabel": "精選活動",
+    "featured": "精選",
+    "pause": "暫停投影片",
+    "play": "播放投影片",
+    "goTo": "查看 {name}",
+    "searchLabel": "尋找活動",
+    "what": "你想找什麼？",
+    "placeholder": "藝人、活動或關鍵字",
+    "where": "地點",
+    "anywhere": "不限地點",
+    "submit": "搜尋",
+    "when": "時間",
+    "whenOptions": {
+      "any": "不限日期",
+      "today": "今天",
+      "weekend": "本週末",
+      "month": "本月",
+      "custom": "選擇日期"
+    },
+    "useLocation": "使用我的位置",
+    "locating": "定位中…",
+    "locationFailed": "無法取得你的位置，請選擇城市。",
+    "nearest": "最近的城市：{city}",
+    "from": "開始",
+    "to": "結束",
+    "defaultName": "你身邊的現場活動",
+    "defaultMeta": "演唱會、研討會、晚宴等"
+  },
+  "eventSkin": {
+    "rsvp": "回覆出席",
+    "register": "立即報名"
+  },
+  "eventBand": {
+    "wedding": {
+      "title": "請記住日期"
+    },
+    "gala": {
+      "title": "今晚的善舉",
+      "progress": "目標進度",
+      "raised": "已募得 {amount}",
+      "goal": "目標 {amount}",
+      "evening": "為一個好的事業而舉辦的夜晚。"
+    },
+    "conference": {
+      "title": "一覽",
+      "counts": {
+        "sessions": "場次",
+        "speakers": "講者",
+        "exhibitors": "參展商",
+        "sponsors": "贊助商"
+      }
+    },
+    "concert": {
+      "title": "陣容與演出時間"
+    },
+    "tour": {
+      "title": "你的行程",
+      "pickups": "上車點",
+      "itinerary": "行程安排",
+      "before": "發車前 {minutes} 分鐘",
+      "at": "發車時間"
+    },
+    "community": {
+      "title": "歡迎所有人",
+      "body": "隨心而來，帶上家人和朋友一起參與。參與方式見下方。"
+    }
   }
 }
