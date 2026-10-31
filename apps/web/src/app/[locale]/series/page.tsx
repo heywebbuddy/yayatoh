@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { connection } from 'next/server';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { SiteFooter, SiteHeader } from '@/components/marketplace/site-chrome.tsx';
+import { artGlow, GLOW } from '@/components/showcase/categories.ts';
 import { Link } from '@/i18n/navigation.ts';
 
 export async function generateMetadata({
@@ -67,24 +68,23 @@ export default async function SeriesDirectoryPage({ params }: { params: Promise<
               <li key={item.slug}>
                 <Link
                   href={`/series/${item.slug}`}
-                  className="group flex h-full min-h-52 flex-col gap-5 rounded-[24px] border border-line bg-surface p-6 elevation-card transition hover:-translate-y-0.5 hover:border-primary/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus"
+                  className="group relative flex h-full flex-col overflow-hidden rounded-[24px] border border-line bg-surface elevation-card transition hover:-translate-y-0.5 hover:border-primary/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus"
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <span className="flex size-12 items-center justify-center rounded-[16px] bg-primary-soft text-primary-ink">
-                      <Layers3 aria-hidden="true" className="size-5" />
-                    </span>
-                    <ArrowUpRight
-                      aria-hidden="true"
-                      className="size-4 text-ink-2 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                    />
+                  <div
+                    aria-hidden="true"
+                    className={`relative flex aspect-[16/9] w-full items-center justify-center overflow-hidden bg-linear-to-br ${GLOW[artGlow(item.slug)].art}`}
+                  >
+                    <Layers3 className="size-16 text-white/55" strokeWidth={1.25} />
+                    <span className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/35 to-transparent" />
+                    <ArrowUpRight className="absolute end-3 top-3 size-5 text-white transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                   </div>
-                  <div className="flex flex-1 flex-col gap-2">
+                  <div className="flex flex-1 flex-col gap-2 px-6 pt-5">
                     <h2 className="m-0 text-card font-extrabold tracking-[-0.02em]">{item.name}</h2>
                     <p className="m-0 text-body text-ink-2">
                       {item.description || tPublic('eyebrow', { org: item.organizerName })}
                     </p>
                   </div>
-                  <span className="text-caption font-semibold text-ink-2">
+                  <span className="px-6 pt-3 pb-5 text-caption font-semibold text-ink-2">
                     {tMarket('by', { org: item.organizerName })}
                   </span>
                 </Link>
