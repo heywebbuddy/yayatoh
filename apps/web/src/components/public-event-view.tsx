@@ -50,6 +50,7 @@ import { GalleryLightbox } from '@/components/gallery-lightbox.tsx';
 import { HolderLinkForm } from '@/components/holder-link-form.tsx';
 import { fallbackOf, MediaPicture } from '@/components/media-picture.tsx';
 import { ProgramSections } from '@/components/program-sections.tsx';
+import { RegisterBar } from '@/components/register-bar.tsx';
 import { EventReviews } from '@/components/reviews/event-reviews.tsx';
 import { JaggedCircle } from '@/components/showcase/hero.tsx';
 import { HeroUploadedVideo, HeroVideo } from '@/components/showcase/hero-video.tsx';
@@ -522,6 +523,16 @@ export async function PublicEventView({
   // Each type of event arranges its page its own way: booking first (concert, tour) or story first
   // (wedding, gala) in one column, or the classic content-and-sidebar split (the rest, with a seat
   // map on top). The agenda leads a conference; see the profile rules in the stylesheet.
+  const hasBar = (['wedding', 'gala', 'conference', 'concert', 'tour'] as const).some(
+    (p) => p === ev.profile,
+  );
+  // A wedding asks for an RSVP; a conference for registration; the rest sell tickets.
+  const getLabel =
+    ev.profile === 'wedding'
+      ? t('eventSkin.rsvp')
+      : ev.profile === 'conference'
+        ? t('eventSkin.register')
+        : t('publicEvent.getTickets');
   const BOOKING_FIRST = ['concert', 'tour'];
   const STORY_FIRST = ['wedding', 'gala'];
   const stack = wide || BOOKING_FIRST.includes(ev.profile) || STORY_FIRST.includes(ev.profile);
@@ -558,7 +569,12 @@ export async function PublicEventView({
           dangerouslySetInnerHTML={{ __html: jsonLdScript(ld) }}
         />
       ) : null}
-      <div className="mx-auto flex max-w-[1240px] flex-col gap-6 px-3 pt-3 pb-12 sm:px-5 sm:pt-5">
+      <div
+        className={cx(
+          'mx-auto flex max-w-[1240px] flex-col gap-6 px-3 pt-3 pb-12 sm:px-5 sm:pt-5',
+          hasBar && 'pb-28',
+        )}
+      >
         <header className="relative z-20 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[22px] border border-line bg-surface p-2.5 ps-4 elevation-card glass">
           <span className="flex min-w-0 items-center gap-2.5 text-ink">
             <span
@@ -601,7 +617,7 @@ export async function PublicEventView({
             ) : null}
             <ThemeSwitch initial={theme} />
             <a href="#passes" className={buttonClass('dark')}>
-              {t('publicEvent.getTickets')}
+              {getLabel}
             </a>
           </div>
         </header>
@@ -711,7 +727,7 @@ export async function PublicEventView({
             ) : null}
             <div className="flex flex-wrap gap-2.5 pt-1">
               <a href="#passes" className={buttonClass('inverse')}>
-                {t('publicEvent.getTickets')}
+                {getLabel}
               </a>
               {hasAgenda ? (
                 <a href="#agenda" className={buttonClass('inverse')}>
@@ -970,24 +986,7 @@ export async function PublicEventView({
               ) : null}
             </div>
           </div>
-          {(['wedding', 'gala', 'conference', 'concert', 'tour'] as const).some((p) => p === ev.profile) ? (
-            // A floating register bar for the types people decide on quickly: it follows the page down.
-            <div className="pointer-events-none sticky bottom-3 z-30 flex justify-center">
-              <a
-                href="#passes"
-                className={cx(
-                  buttonClass('ember', 'lg'),
-                  'pointer-events-auto elevation-pop shadow-lg motion-safe:animate-rise',
-                )}
-              >
-                {ev.profile === 'wedding'
-                  ? t('eventSkin.rsvp')
-                  : ev.profile === 'conference'
-                    ? t('eventSkin.register')
-                    : t('publicEvent.getTickets')}
-              </a>
-            </div>
-          ) : null}
+          {hasBar ? <RegisterBar label={getLabel} /> : null}
         </main>
       </div>
     </div>
