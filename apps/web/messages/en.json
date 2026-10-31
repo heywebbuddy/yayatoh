@@ -3913,7 +3913,32 @@
     "subtitle": "Venues listed by organizers on Yayatoh. Open one to see upcoming events or request a quote.",
     "emptyTitle": "No venues listed yet",
     "emptyDescription": "Venues appear here when their organizers list them.",
-    "capacity": "{count, plural, one {Capacity: # guest} other {Capacity: # guests}}"
+    "capacity": "{count, plural, one {Capacity: # guest} other {Capacity: # guests}}",
+    "eyebrow": "Venues",
+    "filters": {
+      "label": "Filter venues",
+      "query": "Search venues",
+      "city": "City",
+      "anyCity": "Any city",
+      "size": "Size",
+      "anySize": "Any size",
+      "apply": "Apply",
+      "clear": "Clear"
+    },
+    "sizes": {
+      "small": "Up to 100 guests",
+      "medium": "101 to 500 guests",
+      "large": "Over 500 guests"
+    },
+    "types": {
+      "small": "Intimate venue",
+      "medium": "Event hall",
+      "large": "Large venue",
+      "venue": "Venue"
+    },
+    "count": "{count, plural, one {# venue} other {# venues}}",
+    "noMatchTitle": "No venues match",
+    "noMatchDescription": "Try another city or size, or clear the filters."
   },
   "venuePage": {
     "directory": "Venue directory",

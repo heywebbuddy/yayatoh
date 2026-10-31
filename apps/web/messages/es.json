@@ -3913,7 +3913,32 @@
     "subtitle": "Recintos publicados por organizadores en Yayatoh. Abre uno para ver sus próximos eventos o pedir presupuesto.",
     "emptyTitle": "Aún no hay recintos publicados",
     "emptyDescription": "Los recintos aparecen aquí cuando sus organizadores los publican.",
-    "capacity": "{count, plural, one {Aforo: # invitado} other {Aforo: # invitados}}"
+    "capacity": "{count, plural, one {Aforo: # invitado} other {Aforo: # invitados}}",
+    "eyebrow": "Recintos",
+    "filters": {
+      "label": "Filtrar recintos",
+      "query": "Buscar recintos",
+      "city": "Ciudad",
+      "anyCity": "Cualquier ciudad",
+      "size": "Tamaño",
+      "anySize": "Cualquier tamaño",
+      "apply": "Aplicar",
+      "clear": "Borrar"
+    },
+    "sizes": {
+      "small": "Hasta 100 invitados",
+      "medium": "101 a 500 invitados",
+      "large": "Más de 500 invitados"
+    },
+    "types": {
+      "small": "Espacio íntimo",
+      "medium": "Salón de eventos",
+      "large": "Gran recinto",
+      "venue": "Recinto"
+    },
+    "count": "{count, plural, one {# recinto} other {# recintos}}",
+    "noMatchTitle": "Ningún recinto coincide",
+    "noMatchDescription": "Prueba otra ciudad o tamaño, o borra los filtros."
   },
   "venuePage": {
     "directory": "Directorio de recintos",

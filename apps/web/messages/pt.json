@@ -3913,7 +3913,32 @@
     "subtitle": "Locais listados por organizadores na Yayatoh. Abra um para ver os próximos eventos ou pedir um orçamento.",
     "emptyTitle": "Nenhum local listado ainda",
     "emptyDescription": "Os locais aparecem aqui quando seus organizadores os listam.",
-    "capacity": "{count, plural, one {Capacidade: # convidado} other {Capacidade: # convidados}}"
+    "capacity": "{count, plural, one {Capacidade: # convidado} other {Capacidade: # convidados}}",
+    "eyebrow": "Locais",
+    "filters": {
+      "label": "Filtrar locais",
+      "query": "Buscar locais",
+      "city": "Cidade",
+      "anyCity": "Qualquer cidade",
+      "size": "Tamanho",
+      "anySize": "Qualquer tamanho",
+      "apply": "Aplicar",
+      "clear": "Limpar"
+    },
+    "sizes": {
+      "small": "Até 100 convidados",
+      "medium": "101 a 500 convidados",
+      "large": "Mais de 500 convidados"
+    },
+    "types": {
+      "small": "Espaço intimista",
+      "medium": "Salão de eventos",
+      "large": "Grande espaço",
+      "venue": "Local"
+    },
+    "count": "{count, plural, one {# local} other {# locais}}",
+    "noMatchTitle": "Nenhum local encontrado",
+    "noMatchDescription": "Tente outra cidade ou tamanho, ou limpe os filtros."
   },
   "venuePage": {
     "directory": "Diretório de locais",

@@ -3913,7 +3913,32 @@
     "subtitle": "Von Veranstaltern auf Yayatoh eingetragene Orte. Öffne einen, um kommende Events zu sehen oder ein Angebot anzufragen.",
     "emptyTitle": "Noch keine Orte eingetragen",
     "emptyDescription": "Veranstaltungsorte erscheinen hier, sobald ihre Veranstalter sie eintragen.",
-    "capacity": "{count, plural, one {Kapazität: # Gast} other {Kapazität: # Gäste}}"
+    "capacity": "{count, plural, one {Kapazität: # Gast} other {Kapazität: # Gäste}}",
+    "eyebrow": "Veranstaltungsorte",
+    "filters": {
+      "label": "Orte filtern",
+      "query": "Orte suchen",
+      "city": "Stadt",
+      "anyCity": "Jede Stadt",
+      "size": "Größe",
+      "anySize": "Jede Größe",
+      "apply": "Anwenden",
+      "clear": "Zurücksetzen"
+    },
+    "sizes": {
+      "small": "Bis 100 Gäste",
+      "medium": "101 bis 500 Gäste",
+      "large": "Über 500 Gäste"
+    },
+    "types": {
+      "small": "Kleiner Ort",
+      "medium": "Eventhalle",
+      "large": "Großer Ort",
+      "venue": "Ort"
+    },
+    "count": "{count, plural, one {# Ort} other {# Orte}}",
+    "noMatchTitle": "Keine passenden Orte",
+    "noMatchDescription": "Versuche eine andere Stadt oder Größe oder setze die Filter zurück."
   },
   "venuePage": {
     "directory": "Verzeichnis der Veranstaltungsorte",

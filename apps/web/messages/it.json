@@ -3913,7 +3913,32 @@
     "subtitle": "Location inserite dagli organizzatori su Yayatoh. Aprine una per vedere i prossimi eventi o richiedere un preventivo.",
     "emptyTitle": "Ancora nessuna location in directory",
     "emptyDescription": "Le location compaiono qui quando i loro organizzatori le inseriscono.",
-    "capacity": "{count, plural, one {Capienza: # ospite} other {Capienza: # ospiti}}"
+    "capacity": "{count, plural, one {Capienza: # ospite} other {Capienza: # ospiti}}",
+    "eyebrow": "Location",
+    "filters": {
+      "label": "Filtra le location",
+      "query": "Cerca location",
+      "city": "Città",
+      "anyCity": "Qualsiasi città",
+      "size": "Dimensione",
+      "anySize": "Qualsiasi dimensione",
+      "apply": "Applica",
+      "clear": "Azzera"
+    },
+    "sizes": {
+      "small": "Fino a 100 ospiti",
+      "medium": "Da 101 a 500 ospiti",
+      "large": "Oltre 500 ospiti"
+    },
+    "types": {
+      "small": "Location intima",
+      "medium": "Sala eventi",
+      "large": "Grande location",
+      "venue": "Location"
+    },
+    "count": "{count, plural, one {# location} other {# location}}",
+    "noMatchTitle": "Nessuna location corrisponde",
+    "noMatchDescription": "Prova un’altra città o dimensione, oppure azzera i filtri."
   },
   "venuePage": {
     "directory": "Directory delle location",

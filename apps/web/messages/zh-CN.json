@@ -3913,7 +3913,32 @@
     "subtitle": "主办方在 Yayatoh 上收录的场地。打开场地可查看即将举行的活动或发起询价。",
     "emptyTitle": "暂无收录的场地",
     "emptyDescription": "主办方收录场地后，场地会显示在这里。",
-    "capacity": "{count, plural, other {容纳人数：# 位宾客}}"
+    "capacity": "{count, plural, other {容纳人数：# 位宾客}}",
+    "eyebrow": "场地",
+    "filters": {
+      "label": "筛选场地",
+      "query": "搜索场地",
+      "city": "城市",
+      "anyCity": "所有城市",
+      "size": "规模",
+      "anySize": "所有规模",
+      "apply": "应用",
+      "clear": "清除"
+    },
+    "sizes": {
+      "small": "100 人以内",
+      "medium": "101 至 500 人",
+      "large": "500 人以上"
+    },
+    "types": {
+      "small": "小型场地",
+      "medium": "活动厅",
+      "large": "大型场地",
+      "venue": "场地"
+    },
+    "count": "{count, plural, other {# 个场地}}",
+    "noMatchTitle": "没有匹配的场地",
+    "noMatchDescription": "试试其他城市或规模，或清除筛选。"
   },
   "venuePage": {
     "directory": "场地目录",

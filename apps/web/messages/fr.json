@@ -3913,7 +3913,32 @@
     "subtitle": "Lieux inscrits par des organisateurs sur Yayatoh. Ouvrez-en un pour voir ses prochains événements ou demander un devis.",
     "emptyTitle": "Aucun lieu inscrit pour l’instant",
     "emptyDescription": "Les lieux apparaissent ici lorsque leurs organisateurs les inscrivent.",
-    "capacity": "{count, plural, one {Capacité : # invité} other {Capacité : # invités}}"
+    "capacity": "{count, plural, one {Capacité : # invité} other {Capacité : # invités}}",
+    "eyebrow": "Lieux",
+    "filters": {
+      "label": "Filtrer les lieux",
+      "query": "Rechercher des lieux",
+      "city": "Ville",
+      "anyCity": "Toutes les villes",
+      "size": "Taille",
+      "anySize": "Toutes les tailles",
+      "apply": "Appliquer",
+      "clear": "Effacer"
+    },
+    "sizes": {
+      "small": "Jusqu’à 100 invités",
+      "medium": "101 à 500 invités",
+      "large": "Plus de 500 invités"
+    },
+    "types": {
+      "small": "Lieu intimiste",
+      "medium": "Salle d’événements",
+      "large": "Grand lieu",
+      "venue": "Lieu"
+    },
+    "count": "{count, plural, one {# lieu} other {# lieux}}",
+    "noMatchTitle": "Aucun lieu ne correspond",
+    "noMatchDescription": "Essayez une autre ville ou taille, ou effacez les filtres."
   },
   "venuePage": {
     "directory": "Annuaire des lieux",

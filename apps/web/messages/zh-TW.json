@@ -3913,7 +3913,32 @@
     "subtitle": "主辦單位在 Yayatoh 上刊登的場地。開啟場地即可查看即將舉行的活動或索取報價。",
     "emptyTitle": "尚無刊登的場地",
     "emptyDescription": "主辦單位刊登場地後，場地會顯示在這裡。",
-    "capacity": "{count, plural, other {容納人數：# 位賓客}}"
+    "capacity": "{count, plural, other {容納人數：# 位賓客}}",
+    "eyebrow": "場地",
+    "filters": {
+      "label": "篩選場地",
+      "query": "搜尋場地",
+      "city": "城市",
+      "anyCity": "所有城市",
+      "size": "規模",
+      "anySize": "所有規模",
+      "apply": "套用",
+      "clear": "清除"
+    },
+    "sizes": {
+      "small": "100 人以內",
+      "medium": "101 至 500 人",
+      "large": "500 人以上"
+    },
+    "types": {
+      "small": "小型場地",
+      "medium": "活動廳",
+      "large": "大型場地",
+      "venue": "場地"
+    },
+    "count": "{count, plural, other {# 個場地}}",
+    "noMatchTitle": "沒有符合的場地",
+    "noMatchDescription": "試試其他城市或規模，或清除篩選。"
   },
   "venuePage": {
     "directory": "場地目錄",

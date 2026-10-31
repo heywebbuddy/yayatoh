@@ -3913,7 +3913,32 @@
     "subtitle": "主催者が Yayatoh に掲載している会場です。会場を開くと、今後のイベントの確認や見積もり依頼ができます。",
     "emptyTitle": "掲載されている会場はまだありません",
     "emptyDescription": "主催者が会場を掲載すると、ここに表示されます。",
-    "capacity": "{count, plural, other {収容人数: #名}}"
+    "capacity": "{count, plural, other {収容人数: #名}}",
+    "eyebrow": "会場",
+    "filters": {
+      "label": "会場を絞り込む",
+      "query": "会場を検索",
+      "city": "都市",
+      "anyCity": "すべての都市",
+      "size": "規模",
+      "anySize": "すべての規模",
+      "apply": "適用",
+      "clear": "クリア"
+    },
+    "sizes": {
+      "small": "100人まで",
+      "medium": "101〜500人",
+      "large": "500人以上"
+    },
+    "types": {
+      "small": "小規模会場",
+      "medium": "イベントホール",
+      "large": "大規模会場",
+      "venue": "会場"
+    },
+    "count": "{count, plural, other {# 件の会場}}",
+    "noMatchTitle": "該当する会場がありません",
+    "noMatchDescription": "別の都市や規模を試すか、絞り込みをクリアしてください。"
   },
   "venuePage": {
     "directory": "会場ディレクトリ",

@@ -3913,7 +3913,32 @@
     "subtitle": "Locaties die organisatoren op Yayatoh hebben aangemeld. Open er een om komende evenementen te zien of een offerte aan te vragen.",
     "emptyTitle": "Nog geen locaties in de gids",
     "emptyDescription": "Locaties verschijnen hier zodra hun organisatoren ze aanmelden.",
-    "capacity": "{count, plural, one {Capaciteit: # gast} other {Capaciteit: # gasten}}"
+    "capacity": "{count, plural, one {Capaciteit: # gast} other {Capaciteit: # gasten}}",
+    "eyebrow": "Locaties",
+    "filters": {
+      "label": "Locaties filteren",
+      "query": "Locaties zoeken",
+      "city": "Stad",
+      "anyCity": "Elke stad",
+      "size": "Grootte",
+      "anySize": "Elke grootte",
+      "apply": "Toepassen",
+      "clear": "Wissen"
+    },
+    "sizes": {
+      "small": "Tot 100 gasten",
+      "medium": "101 tot 500 gasten",
+      "large": "Meer dan 500 gasten"
+    },
+    "types": {
+      "small": "Intieme locatie",
+      "medium": "Evenementenzaal",
+      "large": "Grote locatie",
+      "venue": "Locatie"
+    },
+    "count": "{count, plural, one {# locatie} other {# locaties}}",
+    "noMatchTitle": "Geen locaties gevonden",
+    "noMatchDescription": "Probeer een andere stad of grootte, of wis de filters."
   },
   "venuePage": {
     "directory": "Locatiegids",
