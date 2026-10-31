@@ -20889,9 +20889,12 @@
       "eyebrow": "Betaling ontvangen",
       "title": "Welkom, {org}",
       "waiting": "Je betaling wordt bevestigd…",
-      "done": "Betaling bevestigd. Je organisatie wordt geopend…",
+      "done": "Betaling bevestigd.",
       "slow": "De bevestiging duurt langer dan gewoonlijk. Je abonnement gaat in zodra de betaling is bevestigd. Je kunt je organisatie nu al openen.",
-      "open": "Open mijn organisatie"
+      "open": "Open mijn organisatie",
+      "createdEyebrow": "Organisatie aangemaakt",
+      "next": "Volgende stap: beveilig uw account met tweestapsverificatie, dan bent u binnen.",
+      "setup": "Tweestapsverificatie instellen"
     },
     "fake": {
       "eyebrow": "Alleen voor ontwikkeling",
@@ -20906,6 +20909,11 @@
       "demoTitle": "Plan een demo",
       "demoLede": "Kies een moment en we laten je het platform zien.",
       "close": "Sluiten"
+    },
+    "comingSoon": "Binnenkort",
+    "notice": {
+      "paidSoon": "Betaalde abonnementen komen binnenkort. U kunt nu starten met het gratis abonnement of contact opnemen met ons verkoopteam.",
+      "planUnknown": "Dat abonnement kennen we niet, dus er is niets aangemaakt. Kies hieronder een abonnement."
     }
   }
 }

@@ -20889,9 +20889,12 @@
       "eyebrow": "Paiement reçu",
       "title": "Bienvenue, {org}",
       "waiting": "Confirmation de votre paiement…",
-      "done": "Paiement confirmé. Ouverture de votre organisation…",
+      "done": "Paiement confirmé.",
       "slow": "La confirmation prend plus de temps que d'habitude. Votre offre s'active dès que le paiement est confirmé. Vous pouvez ouvrir votre organisation maintenant.",
-      "open": "Ouvrir mon organisation"
+      "open": "Ouvrir mon organisation",
+      "createdEyebrow": "Organisation créée",
+      "next": "Étape suivante : sécurisez votre compte avec la vérification en deux étapes, et vous y êtes.",
+      "setup": "Configurer la vérification en deux étapes"
     },
     "fake": {
       "eyebrow": "Développement uniquement",
@@ -20906,6 +20909,11 @@
       "demoTitle": "Réserver une démo",
       "demoLede": "Choisissez un créneau et nous vous présenterons la plateforme.",
       "close": "Fermer"
+    },
+    "comingSoon": "Bientôt disponible",
+    "notice": {
+      "paidSoon": "Les forfaits payants arrivent bientôt. Vous pouvez démarrer dès maintenant avec le forfait Gratuit ou parler à notre équipe commerciale.",
+      "planUnknown": "Nous n'avons pas reconnu ce forfait, donc rien n'a été créé. Choisissez un forfait ci-dessous."
     }
   }
 }

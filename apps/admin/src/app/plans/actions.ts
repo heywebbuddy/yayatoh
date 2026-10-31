@@ -5,7 +5,7 @@ import { executeCommand, isDomainError } from '@yayatoh/kernel';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
-import { parsePlanForm, saveAdminPlan } from '@/server/plans.ts';
+import { parsePlanForm, putPlanOnSale, saveAdminPlan } from '@/server/plans.ts';
 import { ports } from '@/server/ports.ts';
 import { requireStaff } from '@/server/staff.ts';
 
@@ -50,4 +50,19 @@ export async function assignPlanAction(form: FormData): Promise<void> {
   revalidatePath('/plans');
   revalidatePath(`/tenants/${orgId}`);
   redirect(`/plans?${new URLSearchParams(error ? { error } : { done: 'assigned', org: orgId })}`);
+}
+
+export async function putOnSaleAction(form: FormData): Promise<void> {
+  const staff = await requireStaff('plans');
+  let error: string | null = null;
+  try {
+    await putPlanOnSale(staff.actor, String(form.get('key') ?? ''));
+  } catch (err) {
+    error =
+      err instanceof Error && ['active_price_required', 'provider_mismatch'].includes(err.message)
+        ? err.message
+        : 'invalid_plan';
+  }
+  revalidatePath('/plans');
+  redirect(`/plans?${new URLSearchParams(error ? { error } : { done: 'onSale' })}`);
 }

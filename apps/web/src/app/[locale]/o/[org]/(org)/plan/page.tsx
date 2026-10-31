@@ -169,7 +169,7 @@ export default async function PlanPage({
             : t('change.errors.other')}
         </Alert>
       ) : null}
-      {!s.billingEnabled ? (
+      {!s.billingEnabled && !s.subscription ? (
         <Alert tone="info" title={t('dormantTitle')}>
           {t('dormantBody')}
         </Alert>

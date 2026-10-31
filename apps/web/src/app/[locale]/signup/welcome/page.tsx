@@ -14,7 +14,7 @@ export default async function WelcomePage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ org?: string; plan?: string }>;
+  searchParams: Promise<{ org?: string; plan?: string; free?: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
@@ -24,13 +24,16 @@ export default async function WelcomePage({
   const org = await myOrgBySlug(session.user.id, sp.org ?? '');
   if (!org) return redirect({ href: '/signup', locale });
   const t = await getTranslations('selfServe.welcome');
+  const free = sp.free === '1';
   return (
     <ShowcaseShell>
       <section
         aria-labelledby="welcome-h"
         className="mx-auto flex w-full max-w-2xl flex-col gap-5 rounded-[36px] border border-line bg-surface p-8 md:p-12"
       >
-        <p className="m-0 text-caption font-bold tracking-widest text-ember uppercase">{t('eyebrow')}</p>
+        <p className="m-0 text-caption font-bold tracking-widest text-ember uppercase">
+          {t(free ? 'createdEyebrow' : 'eyebrow')}
+        </p>
         <h1
           id="welcome-h"
           className="m-0 font-display text-[clamp(1.8rem,4vw,3rem)] leading-tight font-black text-ink uppercase"
@@ -40,7 +43,15 @@ export default async function WelcomePage({
         <WelcomePoll
           slug={org.slug}
           plan={sp.plan ?? ''}
-          labels={{ waiting: t('waiting'), done: t('done'), slow: t('slow'), open: t('open') }}
+          wait={!free}
+          labels={{
+            waiting: t('waiting'),
+            done: t('done'),
+            slow: t('slow'),
+            open: t('open'),
+            next: t('next'),
+            setup: t('setup'),
+          }}
         />
       </section>
     </ShowcaseShell>

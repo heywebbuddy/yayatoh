@@ -1,4 +1,4 @@
-import { publicPlanTiers } from '@yayatoh/billing';
+import { billingEnabled, publicPlanTiers } from '@yayatoh/billing';
 import { formatMoney, money } from '@yayatoh/kernel';
 import { getTranslations } from 'next-intl/server';
 import { MaskLines } from '@/components/organizers/motion.tsx';
@@ -40,11 +40,13 @@ export async function SelfServeView({
   const t = await getTranslations();
   const [session, tiers] = await Promise.all([ownAuthSession(), publicPlanTiers()]);
   const fmt = (minor: number, currency: string) => formatMoney(money(minor, currency), locale);
+  const payments = billingEnabled();
   const cards: PlanCard[] = TIERS.map((p) => {
     const tier = tiers.find((x) => x.key === p.key);
     const m = tier?.prices.find((x) => x.interval === 'month');
     const y = tier?.prices.find((x) => x.interval === 'year');
     const free = Boolean(m && m.unitAmountMinor === 0);
+    const priced = Boolean(tier?.active && (m ?? y));
     return {
       key: p.key,
       id: p.id,
@@ -54,12 +56,17 @@ export async function SelfServeView({
       yearly: y ? fmt(y.unitAmountMinor, y.currency) : null,
       yearlyPerMonth: y ? fmt(Math.round(y.unitAmountMinor / 12), y.currency) : null,
       free,
-      available: Boolean(tier?.active && (m ?? y)),
+      // Paid plans are sold only while online payment is switched on; Free never needs it.
+      available: priced && (free || payments),
+      soon: priced && !free && !payments,
       highlights: HIGHLIGHTS.filter((h) => tier?.modules.includes(h))
         .slice(0, 5)
         .map((h) => t(`forOrganizers.modules.${h}`)),
     };
   });
+  const unknownPlan = plan !== '' && !TIERS.some((p) => p.id === plan);
+  const paidOnSale = cards.some((c) => !c.free && c.available);
+  const notice = unknownPlan ? 'planUnknown' : paidOnSale ? null : 'paidSoon';
   return (
     <ShowcaseShell>
       <header className="relative isolate flex flex-col gap-5 overflow-hidden rounded-[40px] border border-line bg-surface p-6 md:p-12">
@@ -82,6 +89,7 @@ export async function SelfServeView({
         plans={cards}
         initialPlan={plan}
         initialInterval={interval}
+        notice={notice}
         signedInEmail={session?.user.email ?? null}
         humanCheck={humanCheckWidget()}
         sales={{ action: applyAction, humanCheck: humanCheckWidget() }}

@@ -138,3 +138,25 @@ export async function saveAdminPlan(
     { callsWritingFunctions: true },
   );
 }
+
+/**
+ * One click from "Not on sale yet" to selling: the plan and every priced price (those with an
+ * amount) are switched on, through the same save as the editor, so all of its checks apply.
+ */
+export async function putPlanOnSale(actor: string, planKey: string): Promise<void> {
+  const plan = (await listAdminPlans(actor)).find((p) => p.key === planKey);
+  if (!plan || plan.key === 'launch_standard') throw new Error('invalid_plan');
+  await saveAdminPlan(
+    actor,
+    {
+      key: plan.key,
+      name: plan.name,
+      active: true,
+      sortOrder: Math.max(plan.sortOrder, 0),
+      productId: plan.productId,
+      modules: plan.modules as z.infer<typeof AdminPlanInput>['modules'],
+      prices: plan.prices.map((x) => ({ ...x, active: x.unitAmountMinor !== null })),
+    },
+    'Put on sale from the plans list',
+  );
+}
