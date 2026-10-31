@@ -9,7 +9,7 @@ import {
   sendBoothMessageCommand,
   sendChatMessageCommand,
 } from '@yayatoh/engagement';
-import { type Ctx, executeCommand } from '@yayatoh/kernel';
+import { type Ctx, executeCommand, isDomainError } from '@yayatoh/kernel';
 import { refresh } from 'next/cache';
 import type { FormState } from '@/lib/form-state.ts';
 import { failure, success } from '@/server/form.ts';
@@ -47,7 +47,11 @@ async function run(
   try {
     await fn(a);
   } catch (err) {
-    return failure(err);
+    if (isDomainError(err)) return failure(err);
+    // A real failure (database, a missing migration): log it for operators and tell the person
+    // plainly, instead of throwing past the form and leaving it looking as if nothing happened.
+    console.error(JSON.stringify({ chat: 'action_failed', eventId: a.at.eventId, message: String(err) }));
+    return { ok: false, code: 'internal', reason: 'send_failed' };
   }
   if (opts.refresh) refresh();
   return success();

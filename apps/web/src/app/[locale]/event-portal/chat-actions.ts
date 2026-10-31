@@ -9,7 +9,7 @@ import {
   reportVisitorCommand,
   setBoothChatCommand,
 } from '@yayatoh/engagement';
-import { type Ctx, executeCommand } from '@yayatoh/kernel';
+import { type Ctx, executeCommand, isDomainError } from '@yayatoh/kernel';
 import { refresh } from 'next/cache';
 import type { FormState } from '@/lib/form-state.ts';
 import { failure, success } from '@/server/form.ts';
@@ -36,7 +36,9 @@ async function run(fn: (ctx: Ctx) => Promise<unknown>, opts: { refresh?: boolean
   try {
     await fn(a.ctx);
   } catch (err) {
-    return failure(err);
+    if (isDomainError(err)) return failure(err);
+    console.error(JSON.stringify({ chat: 'portal_action_failed', message: String(err) }));
+    return { ok: false, code: 'internal', reason: 'send_failed' };
   }
   if (opts.refresh) refresh();
   return success();

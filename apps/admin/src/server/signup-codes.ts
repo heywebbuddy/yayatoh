@@ -36,7 +36,13 @@ export function signupCodeState(
 export async function actorNames(actors: readonly string[]): Promise<Map<string, string>> {
   const id = (a: string) => /^staff:([0-9a-f-]{36})$/.exec(a)?.[1] ?? null;
   const users = await getUsersByIds(actors.map(id).filter((x): x is string => x !== null));
-  return new Map(actors.map((a) => [a, users.get(id(a) ?? '')?.name ?? a]));
+  // A staff member without a display name shows by email.
+  return new Map(
+    actors.map((a) => {
+      const u = users.get(id(a) ?? '');
+      return [a, u?.name?.trim() || u?.email || a];
+    }),
+  );
 }
 
 /** The latest codes (platform_reader through `platform.list_signup_codes`, audited). */

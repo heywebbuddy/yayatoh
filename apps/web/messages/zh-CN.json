@@ -15320,7 +15320,8 @@
       "awaiting_reply": "请等对方回复后再继续发送。",
       "required": "请先输入消息。",
       "too_long": "消息最多 2,000 个字符。",
-      "already_removed": "这条消息已被移除。"
+      "already_removed": "这条消息已被移除。",
+      "send_failed": "消息未发送。请检查网络连接后重试。"
     },
     "safety": {
       "summary": "屏蔽或举报 {name}",
@@ -15366,7 +15367,8 @@
         "not_connected": "此聊天已关闭。"
       },
       "reported": "谢谢。主办方和 Yayatoh 会审核你的举报；该访客已无法再给你的展位发消息。"
-    }
+    },
+    "polling": "暂时无法实时更新。本页面每隔几秒会检查一次新消息。"
   },
   "people": {
     "title": "人员",

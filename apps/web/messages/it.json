@@ -15320,7 +15320,8 @@
       "awaiting_reply": "Aspetta una risposta prima di inviare altri messaggi.",
       "required": "Scrivi prima un messaggio.",
       "too_long": "Un messaggio può avere al massimo 2.000 caratteri.",
-      "already_removed": "Questo messaggio è già stato rimosso."
+      "already_removed": "Questo messaggio è già stato rimosso.",
+      "send_failed": "Il messaggio non è stato inviato. Controlla la connessione e riprova."
     },
     "safety": {
       "summary": "Blocca o segnala {name}",
@@ -15366,7 +15367,8 @@
         "not_connected": "Questa chat è chiusa."
       },
       "reported": "Grazie. L’organizzatore e Yayatoh esamineranno la tua segnalazione; questo visitatore non può più scrivere al tuo stand."
-    }
+    },
+    "polling": "Gli aggiornamenti in tempo reale non sono disponibili al momento. Questa pagina controlla i nuovi messaggi ogni pochi secondi."
   },
   "people": {
     "title": "Persone",

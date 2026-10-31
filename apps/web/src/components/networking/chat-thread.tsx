@@ -28,6 +28,9 @@ interface Wire extends ChatMessageView {
   readonly conversationId: string;
 }
 
+/** How often a chat without the live stream re-reads its messages. */
+const POLL_MS = 5_000;
+
 type Action = (prev: FormState, form: FormData) => Promise<FormState>;
 
 function merge(a: readonly ChatMessageView[], b: readonly ChatMessageView[]): ChatMessageView[] {
@@ -71,6 +74,8 @@ export function ChatThread({
   const router = useRouter();
   const [messages, setMessages] = useState<ChatMessageView[]>(() => merge([], initial));
   const form = useRef<HTMLFormElement>(null);
+  // The text is controlled, so a message that failed to send is still there to try again.
+  const [draft, setDraft] = useState('');
   const reading = useRef(false);
 
   // A re-rendered page (after sending, or a snapshot) brings the stored messages: merge them.
@@ -107,10 +112,25 @@ export function ChatThread({
     snapshot: () => router.refresh(),
   });
 
+  // Without the live stream, look for new messages every few seconds (only while the tab is shown).
+  useEffect(() => {
+    if (state === 'live' || !conversationId) return;
+    const id = setInterval(() => {
+      if (document.visibilityState === 'visible') router.refresh();
+    }, POLL_MS);
+    return () => clearInterval(id);
+  }, [state, conversationId, router]);
+
   const [result, action, pending] = useActionState(async (prev: FormState, data: FormData) => {
-    const r = await send(prev, data);
+    let r: FormState;
+    try {
+      r = await send(prev, data);
+    } catch {
+      // The server or the network failed before an answer came back: say so, keep the text.
+      return { ok: false, code: 'send_failed' } as FormState;
+    }
     if (r.ok) {
-      form.current?.reset();
+      setDraft('');
       router.refresh();
     }
     return r;
@@ -181,12 +201,20 @@ export function ChatThread({
             error={bodyError ?? undefined}
             rows={3}
             maxLength={2000}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
             onKeyDown={onKey}
             required
           />
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="text-caption text-ink-2" aria-live="polite">
-              {state === 'live' ? t('live') : state === 'offline' ? t('reconnecting') : t('connecting')}
+              {state === 'live'
+                ? t('live')
+                : state === 'offline'
+                  ? conversationId
+                    ? t('polling')
+                    : t('reconnecting')
+                  : t('connecting')}
             </span>
             <Button type="submit" variant="primary" loading={pending}>
               {t('send')}

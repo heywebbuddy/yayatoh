@@ -15320,7 +15320,8 @@
       "awaiting_reply": "Wacht op een antwoord voordat je meer berichten stuurt.",
       "required": "Schrijf eerst een bericht.",
       "too_long": "Een bericht mag maximaal 2.000 tekens lang zijn.",
-      "already_removed": "Dit bericht is al verwijderd."
+      "already_removed": "Dit bericht is al verwijderd.",
+      "send_failed": "Je bericht is niet verzonden. Controleer je verbinding en probeer het opnieuw."
     },
     "safety": {
       "summary": "{name} blokkeren of melden",
@@ -15366,7 +15367,8 @@
         "not_connected": "Deze chat is gesloten."
       },
       "reported": "Bedankt. De organisator en Yayatoh bekijken je melding; deze bezoeker kan je stand geen berichten meer sturen."
-    }
+    },
+    "polling": "Live-updates zijn nu niet beschikbaar. Deze pagina controleert om de paar seconden op nieuwe berichten."
   },
   "people": {
     "title": "Personen",

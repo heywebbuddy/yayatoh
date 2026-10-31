@@ -15320,7 +15320,8 @@
       "awaiting_reply": "Wait for a reply before you send more messages.",
       "required": "Write a message first.",
       "too_long": "A message can be at most 2,000 characters.",
-      "already_removed": "This message was already removed."
+      "already_removed": "This message was already removed.",
+      "send_failed": "Your message wasn't sent. Check your connection and try again."
     },
     "safety": {
       "summary": "Block or report {name}",
@@ -15366,7 +15367,8 @@
         "not_connected": "This chat is closed."
       },
       "reported": "Thanks. The organizer and Yayatoh will review your report; this visitor can't write to your booth any more."
-    }
+    },
+    "polling": "Live updates aren't available right now. This page checks for new messages every few seconds."
   },
   "people": {
     "title": "People",

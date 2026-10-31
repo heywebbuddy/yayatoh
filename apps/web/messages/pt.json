@@ -15320,7 +15320,8 @@
       "awaiting_reply": "Espere uma resposta antes de enviar mais mensagens.",
       "required": "Escreva uma mensagem primeiro.",
       "too_long": "Uma mensagem pode ter no máximo 2.000 caracteres.",
-      "already_removed": "Esta mensagem já foi removida."
+      "already_removed": "Esta mensagem já foi removida.",
+      "send_failed": "Sua mensagem não foi enviada. Verifique sua conexão e tente novamente."
     },
     "safety": {
       "summary": "Bloquear ou denunciar {name}",
@@ -15366,7 +15367,8 @@
         "not_connected": "Esta conversa está fechada."
       },
       "reported": "Obrigado. O organizador e a Yayatoh vão analisar sua denúncia; este visitante não pode mais escrever para o seu estande."
-    }
+    },
+    "polling": "As atualizações em tempo real não estão disponíveis agora. Esta página verifica novas mensagens a cada poucos segundos."
   },
   "people": {
     "title": "Pessoas",

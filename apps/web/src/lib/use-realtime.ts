@@ -24,8 +24,13 @@ export function useRealtime(
   current.current = handlers;
   const names = events.join(',');
   useEffect(() => {
-    if (!url || typeof EventSource === 'undefined') return;
+    // No channel, or a browser without EventSource: there is nothing to wait for.
+    if (!url || typeof EventSource === 'undefined') {
+      setState('offline');
+      return;
+    }
     let source: EventSource | null = null;
+    let give: ReturnType<typeof setTimeout> | null = null;
     let lastId: string | null = null;
     let retry: ReturnType<typeof setTimeout> | null = null;
     let backoff = 2_000;
@@ -45,7 +50,12 @@ export function useRealtime(
       const es = new EventSource(u.toString());
       source = es;
       setState('connecting');
+      // A connection that never opens (a proxy that buffers or blocks streams) counts as offline,
+      // so callers fall back to polling instead of showing "Connecting…" for ever.
+      if (give) clearTimeout(give);
+      give = setTimeout(() => setState((s) => (s === 'live' ? s : 'offline')), 8_000);
       es.addEventListener('open', () => {
+        if (give) clearTimeout(give);
         backoff = 2_000;
         setState('live');
       });
@@ -70,6 +80,7 @@ export function useRealtime(
     return () => {
       stopped = true;
       if (retry) clearTimeout(retry);
+      if (give) clearTimeout(give);
       source?.close();
     };
   }, [url, names]);

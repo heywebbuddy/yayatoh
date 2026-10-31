@@ -15320,7 +15320,8 @@
       "awaiting_reply": "Attendez une réponse avant d’envoyer d’autres messages.",
       "required": "Écrivez d’abord un message.",
       "too_long": "Un message ne peut pas dépasser 2 000 caractères.",
-      "already_removed": "Ce message a déjà été supprimé."
+      "already_removed": "Ce message a déjà été supprimé.",
+      "send_failed": "Votre message n'a pas été envoyé. Vérifiez votre connexion et réessayez."
     },
     "safety": {
       "summary": "Bloquer ou signaler {name}",
@@ -15366,7 +15367,8 @@
         "not_connected": "Cette discussion est fermée."
       },
       "reported": "Merci. L’organisateur et Yayatoh vont examiner votre signalement ; ce visiteur ne peut plus écrire à votre stand."
-    }
+    },
+    "polling": "Les mises à jour en direct ne sont pas disponibles pour le moment. Cette page vérifie les nouveaux messages toutes les quelques secondes."
   },
   "people": {
     "title": "Personnes",
