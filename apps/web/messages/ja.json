@@ -7102,7 +7102,8 @@
         "name": "お名前",
         "email": "メールアドレス",
         "company": "組織名",
-        "message": "メッセージ"
+        "message": "メッセージ",
+        "subject": "件名"
       },
       "topics": {
         "sales": "営業・デモ",
@@ -7123,7 +7124,8 @@
         "email": "有効なメールアドレスを入力してください。",
         "company": "160 文字以内で入力してください。",
         "message": "メッセージは 10～4,000 文字で入力してください。",
-        "human": "人間であることを確認してください。"
+        "human": "人間であることを確認してください。",
+        "subject": "件名を160文字以内で入力してください。"
       },
       "fallbackBody": "メールでご連絡ください。通常1営業日以内にご返信します。",
       "fallbackHelp": "ヘルプセンターを見る"
@@ -20673,5 +20675,35 @@
     "orgEventsTitle": "{org}の開催予定イベント",
     "orgEventsAll": "すべてのイベントを見る",
     "progress": "読み進めた割合"
+  },
+  "sitePages": {
+    "aboutLink": "会社概要",
+    "termsLink": "利用規約",
+    "cookiesLink": "クッキーポリシー",
+    "legalEyebrow": "法的情報",
+    "lastUpdated": "最終更新日 {date} · バージョン {version}",
+    "about": {
+      "metaTitle": "Yayatohについて",
+      "eyebrow": "会社概要",
+      "title": "イベントをシンプルに",
+      "mission": "私たちのミッション",
+      "story": "私たちの物語",
+      "values": "大切にしていること",
+      "offer": "提供するもの",
+      "forAttendees": "参加者の方へ",
+      "forOrganizers": "主催者の方へ",
+      "team": "チーム紹介"
+    },
+    "contact": {
+      "getInTouch": "お問い合わせ",
+      "address": "住所",
+      "phone": "電話",
+      "email": "メール",
+      "hours": "受付時間",
+      "mail": {
+        "confirmSubject": "メッセージを受け付けました",
+        "confirmBody": "{name} 様\n\nYayatohにご連絡いただきありがとうございます。「{subject}」についてのメッセージを受け付けました。通常1営業日以内にメールでご返信します。\n\nYayatohチーム"
+      }
+    }
   }
 }

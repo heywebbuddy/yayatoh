@@ -7102,7 +7102,8 @@
         "name": "你的姓名",
         "email": "电子邮件",
         "company": "组织",
-        "message": "消息"
+        "message": "消息",
+        "subject": "主题"
       },
       "topics": {
         "sales": "销售与演示",
@@ -7123,7 +7124,8 @@
         "email": "请输入有效的电子邮件地址。",
         "company": "最多 160 个字符。",
         "message": "请输入 10 至 4,000 个字符的消息。",
-        "human": "请确认你是真人。"
+        "human": "请确认你是真人。",
+        "subject": "请输入不超过 160 个字符的主题。"
       },
       "fallbackBody": "请给我们写信,我们通常会在一个工作日内通过邮件回复。",
       "fallbackHelp": "查看帮助中心"
@@ -20673,5 +20675,35 @@
     "orgEventsTitle": "{org} 的即将举行的活动",
     "orgEventsAll": "查看全部活动",
     "progress": "阅读进度"
+  },
+  "sitePages": {
+    "aboutLink": "关于我们",
+    "termsLink": "服务条款",
+    "cookiesLink": "Cookie 政策",
+    "legalEyebrow": "法律信息",
+    "lastUpdated": "最后更新 {date} · 版本 {version}",
+    "about": {
+      "metaTitle": "关于 Yayatoh",
+      "eyebrow": "关于我们",
+      "title": "让活动变得简单",
+      "mission": "我们的使命",
+      "story": "我们的故事",
+      "values": "我们的价值观",
+      "offer": "我们提供什么",
+      "forAttendees": "面向参会者",
+      "forOrganizers": "面向主办方",
+      "team": "我们的团队"
+    },
+    "contact": {
+      "getInTouch": "联系我们",
+      "address": "地址",
+      "phone": "电话",
+      "email": "电子邮件",
+      "hours": "服务时间",
+      "mail": {
+        "confirmSubject": "我们已收到您的留言",
+        "confirmBody": "{name} 您好，\n\n感谢您联系 Yayatoh。我们已收到您关于“{subject}”的留言，通常会在一个工作日内通过邮件回复。\n\nYayatoh 团队"
+      }
+    }
   }
 }

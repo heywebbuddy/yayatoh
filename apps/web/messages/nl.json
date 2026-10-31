@@ -7102,7 +7102,8 @@
         "name": "Je naam",
         "email": "E-mail",
         "company": "Organisatie",
-        "message": "Bericht"
+        "message": "Bericht",
+        "subject": "Onderwerp"
       },
       "topics": {
         "sales": "Sales en demo's",
@@ -7123,7 +7124,8 @@
         "email": "Vul een geldig e-mailadres in.",
         "company": "Gebruik maximaal 160 tekens.",
         "message": "Schrijf een bericht van 10 tot 4.000 tekens.",
-        "human": "Bevestig dat je een mens bent."
+        "human": "Bevestig dat je een mens bent.",
+        "subject": "Voer een onderwerp in van maximaal 160 tekens."
       },
       "fallbackBody": "Schrijf ons; we antwoorden per e-mail, meestal binnen één werkdag.",
       "fallbackHelp": "Naar het helpcentrum"
@@ -20673,5 +20675,35 @@
     "orgEventsTitle": "Aankomende evenementen van {org}",
     "orgEventsAll": "Alle evenementen bekijken",
     "progress": "Leesvoortgang"
+  },
+  "sitePages": {
+    "aboutLink": "Over ons",
+    "termsLink": "Servicevoorwaarden",
+    "cookiesLink": "Cookiebeleid",
+    "legalEyebrow": "Juridisch",
+    "lastUpdated": "Laatst bijgewerkt op {date} · versie {version}",
+    "about": {
+      "metaTitle": "Over Yayatoh",
+      "eyebrow": "Over ons",
+      "title": "Evenementen, eenvoudig gemaakt",
+      "mission": "Onze missie",
+      "story": "Ons verhaal",
+      "values": "Waar we in geloven",
+      "offer": "Wat we bieden",
+      "forAttendees": "Voor bezoekers",
+      "forOrganizers": "Voor organisatoren",
+      "team": "Ons team"
+    },
+    "contact": {
+      "getInTouch": "Neem contact op",
+      "address": "Adres",
+      "phone": "Telefoon",
+      "email": "E-mail",
+      "hours": "Openingstijden",
+      "mail": {
+        "confirmSubject": "We hebben je bericht ontvangen",
+        "confirmBody": "Hallo {name},\n\nBedankt voor je bericht aan Yayatoh. We hebben je bericht over “{subject}” ontvangen en antwoorden per e-mail, meestal binnen één werkdag.\n\nHet Yayatoh-team"
+      }
+    }
   }
 }

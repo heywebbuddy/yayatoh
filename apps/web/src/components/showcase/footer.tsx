@@ -17,6 +17,7 @@ export async function ShowcaseFooter({ children }: { children?: ReactNode }) {
   const t = await getTranslations('showcase');
   const m = await getTranslations('market');
   const home = await getTranslations('home');
+  const sp = await getTranslations('sitePages');
   return (
     <footer className="relative mt-24 overflow-hidden border-t border-line">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-4 pt-14 md:px-6">
@@ -73,6 +74,9 @@ export async function ShowcaseFooter({ children }: { children?: ReactNode }) {
                 {t(`solutions.${k}.name`)}
               </Link>
             ))}
+            <Link href="/about" className={colLink}>
+              {sp('aboutLink')}
+            </Link>
             <Link href="/features" className={colLink}>
               {t('footer.features')}
             </Link>
@@ -93,6 +97,12 @@ export async function ShowcaseFooter({ children }: { children?: ReactNode }) {
             </Link>
             <Link href="/sub-processors" className={colLink}>
               {home('subProcessorsLink')}
+            </Link>
+            <Link href="/terms" className={colLink}>
+              {sp('termsLink')}
+            </Link>
+            <Link href="/cookies" className={colLink}>
+              {sp('cookiesLink')}
             </Link>
           </nav>
         </div>

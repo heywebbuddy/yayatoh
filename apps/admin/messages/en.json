@@ -227,7 +227,8 @@
     "categories": "Event categories",
     "listings": "Marketplace listings",
     "content": "Site content",
-    "applications": "Organizer applications"
+    "applications": "Organizer applications",
+    "contactMessages": "Contact messages"
   },
   "tenants": {
     "add": "Add organization",
@@ -1476,7 +1477,10 @@
       "label": "Site content areas",
       "blog": "Blog",
       "testimonials": "Testimonials",
-      "hero": "Home hero"
+      "hero": "Home hero",
+      "pages": "Pages",
+      "about": "About us",
+      "contact": "Contact details"
     },
     "done": {
       "saved": "Saved.",
@@ -1567,6 +1571,66 @@
       "ctaHref": "Button link",
       "ctaHint": "A path on this site (/events) or an https:// link. Text and link go together.",
       "save": "Save hero"
+    },
+    "save": "Save changes",
+    "pages": {
+      "new": "New page",
+      "back": "All pages",
+      "intro": "Legal and other static pages. Each save keeps a version; published pages are live at once at their address.",
+      "meta": "{path} · version {version} · last updated {date}",
+      "status": {
+        "draft": "Draft",
+        "published": "Published"
+      },
+      "liveAt": "Live at {path}",
+      "newHint": "Choose an address, then write the page in Markdown.",
+      "history": "Version history",
+      "versionLine": "Version {version} · {status} · {by} · {when} UTC",
+      "publish": "Publish",
+      "saveDraft": "Save as draft",
+      "fields": {
+        "title": "Title",
+        "slug": "Address (slug)",
+        "slugHint": "Lowercase letters, digits and hyphens. Fixed once the page exists.",
+        "date": "Last updated date",
+        "dateHint": "Shown to readers as \"Last updated\".",
+        "body": "Text (Markdown)",
+        "bodyHint": "Use ## headings for sections: three or more give the page a table of contents. Supports **bold**, *italic*, - lists, > notes and [links](https://example.com)."
+      }
+    },
+    "contactInfo": {
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Public email",
+      "emailHint": "Shown on the Contact page.",
+      "supportEmail": "Support inbox",
+      "supportEmailHint": "New contact messages are emailed here.",
+      "hours": "Opening hours"
+    },
+    "about": {
+      "intro": "Introduction",
+      "lede": "Short introduction under the title",
+      "mission": "Mission",
+      "story": "Story",
+      "storyHint": "Paragraphs separated by a blank line. Supports **bold** and [links](https://example.com).",
+      "stats": "Numbers",
+      "statValue": "Number (for example 13)",
+      "statLabel": "What it counts",
+      "values": "Values",
+      "valueTitle": "Value",
+      "valueText": "One sentence about it",
+      "offer": "What we offer",
+      "attendees": "For attendees",
+      "organizers": "For organizers",
+      "team": "Team",
+      "memberName": "Name",
+      "memberRole": "Role",
+      "memberBio": "Short bio",
+      "cta": "Closing call to action",
+      "ctaTitle": "Headline",
+      "ctaLabel": "Button label",
+      "ctaHref": "Button address",
+      "ctaHrefHint": "A path on this site (/for-organizers) or an https:// address. Leave the label empty for the default."
     }
   },
   "applications": {
@@ -1708,6 +1772,39 @@
       "approve": "Could not approve (check the plan and the status).",
       "resend": "Could not resend (the invitation may already be used).",
       "email": "The email was not sent, so nothing changed."
+    }
+  },
+  "contactMessages": {
+    "title": "Contact messages",
+    "description": "Messages sent through the Contact page on yayatoh.com. Replies go by email from the platform address.",
+    "filter": "Filter by status",
+    "all": "All",
+    "status": {
+      "new": "New",
+      "replied": "Replied",
+      "closed": "Closed"
+    },
+    "emptyTitle": "No messages here",
+    "emptyDescription": "Messages from the Contact page appear in this inbox.",
+    "back": "All messages",
+    "received": "Received {when} UTC · language {locale}",
+    "lastReply": "Last reply",
+    "repliedBy": "Sent by {by} at {when} UTC",
+    "reply": "Reply by email",
+    "replyHint": "Sent to {email}. The message is marked Replied.",
+    "send": "Send reply",
+    "statusLabel": "Status",
+    "notes": "Private notes",
+    "notesHint": "Only staff see these.",
+    "saveStatus": "Save status and notes",
+    "done": {
+      "saved": "Saved.",
+      "replied": "Reply sent."
+    },
+    "error": {
+      "invalid": "Check the fields and try again.",
+      "empty": "Write a reply first.",
+      "mail": "The reply could not be sent. Nothing was marked as replied."
     }
   }
 }

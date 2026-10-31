@@ -7102,7 +7102,8 @@
         "name": "Seu nome",
         "email": "E-mail",
         "company": "Organização",
-        "message": "Mensagem"
+        "message": "Mensagem",
+        "subject": "Assunto"
       },
       "topics": {
         "sales": "Vendas e demonstrações",
@@ -7123,7 +7124,8 @@
         "email": "Informe um endereço de e-mail válido.",
         "company": "Use no máximo 160 caracteres.",
         "message": "Escreva uma mensagem de 10 a 4.000 caracteres.",
-        "human": "Confirme que você é uma pessoa."
+        "human": "Confirme que você é uma pessoa.",
+        "subject": "Digite um assunto com até 160 caracteres."
       },
       "fallbackBody": "Escreva-nos e respondemos por e-mail, normalmente num dia útil.",
       "fallbackHelp": "Ver o centro de ajuda"
@@ -20673,5 +20675,35 @@
     "orgEventsTitle": "Próximos eventos de {org}",
     "orgEventsAll": "Ver todos os eventos",
     "progress": "Progresso da leitura"
+  },
+  "sitePages": {
+    "aboutLink": "Sobre nós",
+    "termsLink": "Termos de serviço",
+    "cookiesLink": "Política de cookies",
+    "legalEyebrow": "Legal",
+    "lastUpdated": "Última atualização: {date} · versão {version}",
+    "about": {
+      "metaTitle": "Sobre a Yayatoh",
+      "eyebrow": "Sobre nós",
+      "title": "Eventos, sem complicações",
+      "mission": "Nossa missão",
+      "story": "Nossa história",
+      "values": "No que acreditamos",
+      "offer": "O que oferecemos",
+      "forAttendees": "Para participantes",
+      "forOrganizers": "Para organizadores",
+      "team": "Nossa equipe"
+    },
+    "contact": {
+      "getInTouch": "Entre em contato",
+      "address": "Endereço",
+      "phone": "Telefone",
+      "email": "E-mail",
+      "hours": "Horário de atendimento",
+      "mail": {
+        "confirmSubject": "Recebemos a sua mensagem",
+        "confirmBody": "Olá {name},\n\nObrigado por escrever à Yayatoh. Recebemos a sua mensagem sobre “{subject}” e responderemos por e-mail, normalmente num dia útil.\n\nA equipa da Yayatoh"
+      }
+    }
   }
 }

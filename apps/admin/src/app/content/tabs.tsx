@@ -2,7 +2,7 @@ import { Alert } from '@yayatoh/ui';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
-const TABS = ['blog', 'testimonials', 'hero'] as const;
+const TABS = ['blog', 'testimonials', 'hero', 'pages', 'about', 'contact'] as const;
 
 /** The three areas of "Site content", and the outcome of the last save (from the address). */
 export async function ContentTabs({

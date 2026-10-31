@@ -7102,7 +7102,8 @@
         "name": "Ihr Name",
         "email": "E-Mail",
         "company": "Organisation",
-        "message": "Nachricht"
+        "message": "Nachricht",
+        "subject": "Betreff"
       },
       "topics": {
         "sales": "Vertrieb und Demos",
@@ -7123,7 +7124,8 @@
         "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
         "company": "Verwenden Sie höchstens 160 Zeichen.",
         "message": "Schreiben Sie eine Nachricht mit 10 bis 4.000 Zeichen.",
-        "human": "Bestätigen Sie, dass Sie ein Mensch sind."
+        "human": "Bestätigen Sie, dass Sie ein Mensch sind.",
+        "subject": "Gib einen Betreff mit höchstens 160 Zeichen ein."
       },
       "fallbackBody": "Schreib uns, wir antworten per E-Mail, meist innerhalb eines Werktags.",
       "fallbackHelp": "Zum Hilfecenter"
@@ -20673,5 +20675,35 @@
     "orgEventsTitle": "Kommende Events von {org}",
     "orgEventsAll": "Alle Events ansehen",
     "progress": "Lesefortschritt"
+  },
+  "sitePages": {
+    "aboutLink": "Über uns",
+    "termsLink": "Nutzungsbedingungen",
+    "cookiesLink": "Cookie-Richtlinie",
+    "legalEyebrow": "Rechtliches",
+    "lastUpdated": "Zuletzt aktualisiert am {date} · Version {version}",
+    "about": {
+      "metaTitle": "Über Yayatoh",
+      "eyebrow": "Über uns",
+      "title": "Events, einfach gemacht",
+      "mission": "Unsere Mission",
+      "story": "Unsere Geschichte",
+      "values": "Woran wir glauben",
+      "offer": "Was wir bieten",
+      "forAttendees": "Für Teilnehmende",
+      "forOrganizers": "Für Veranstalter",
+      "team": "Unser Team"
+    },
+    "contact": {
+      "getInTouch": "Kontakt aufnehmen",
+      "address": "Adresse",
+      "phone": "Telefon",
+      "email": "E-Mail",
+      "hours": "Öffnungszeiten",
+      "mail": {
+        "confirmSubject": "Wir haben deine Nachricht erhalten",
+        "confirmBody": "Hallo {name},\n\nvielen Dank für deine Nachricht an Yayatoh. Wir haben deine Nachricht zum Thema „{subject}“ erhalten und antworten per E-Mail, meist innerhalb eines Werktags.\n\nDein Yayatoh-Team"
+      }
+    }
   }
 }

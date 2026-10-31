@@ -7102,7 +7102,8 @@
         "name": "Su nombre",
         "email": "Correo electrónico",
         "company": "Organización",
-        "message": "Mensaje"
+        "message": "Mensaje",
+        "subject": "Asunto"
       },
       "topics": {
         "sales": "Ventas y demostraciones",
@@ -7123,7 +7124,8 @@
         "email": "Introduzca una dirección de correo electrónico válida.",
         "company": "Use 160 caracteres como máximo.",
         "message": "Escriba un mensaje de entre 10 y 4000 caracteres.",
-        "human": "Confirme que es una persona."
+        "human": "Confirme que es una persona.",
+        "subject": "Escribe un asunto de hasta 160 caracteres."
       },
       "fallbackBody": "Escríbenos y te responderemos por correo, normalmente en un día laborable.",
       "fallbackHelp": "Ver el centro de ayuda"
@@ -20673,5 +20675,35 @@
     "orgEventsTitle": "Próximos eventos de {org}",
     "orgEventsAll": "Ver todos los eventos",
     "progress": "Progreso de lectura"
+  },
+  "sitePages": {
+    "aboutLink": "Sobre nosotros",
+    "termsLink": "Términos del servicio",
+    "cookiesLink": "Política de cookies",
+    "legalEyebrow": "Legal",
+    "lastUpdated": "Última actualización: {date} · versión {version}",
+    "about": {
+      "metaTitle": "Acerca de Yayatoh",
+      "eyebrow": "Sobre nosotros",
+      "title": "Eventos, sin complicaciones",
+      "mission": "Nuestra misión",
+      "story": "Nuestra historia",
+      "values": "En qué creemos",
+      "offer": "Lo que ofrecemos",
+      "forAttendees": "Para asistentes",
+      "forOrganizers": "Para organizadores",
+      "team": "Nuestro equipo"
+    },
+    "contact": {
+      "getInTouch": "Ponte en contacto",
+      "address": "Dirección",
+      "phone": "Teléfono",
+      "email": "Correo electrónico",
+      "hours": "Horario de atención",
+      "mail": {
+        "confirmSubject": "Hemos recibido tu mensaje",
+        "confirmBody": "Hola {name}:\n\nGracias por escribir a Yayatoh. Hemos recibido tu mensaje sobre «{subject}» y te responderemos por correo, normalmente en un día laborable.\n\nEl equipo de Yayatoh"
+      }
+    }
   }
 }
