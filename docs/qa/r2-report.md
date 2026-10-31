@@ -1,5 +1,49 @@
 # Yayatoh QA: second client feedback (R2), branch `qa-r2`
 
+## R2 recheck (after the fixes)
+
+Merged the latest tips of `claude/batch-3-redesign-664a1d`, `claude/batch-2-setup-59fe0b` and `claude/bold-aryabhata-b8c8f1` into `qa-r2` (all clean). Journal: 195 entries (`0195_page_locales` is new), no duplicates, only the old 0189 gap; `drizzle-kit generate`: "No schema changes". Database `yayatoh_qa5` migrated; production build (type-check on) on port 3140; staff console in dev mode on 3141. No integration tests were run.
+
+### Checks
+
+- `pnpm check:modules`: **ok** (was 7 violations). `tsc --noEmit` on `apps/web` (12 GB): **0 errors**. `next build`: ok.
+- `pnpm test`: 345 of 362 files pass, 53 tests fail, **all the known Windows-only ones** (golden CRLF, event-routes/empty-state globbing, spectral, sdk, vectors, webhooks catalog, staff-mail, tools/*). `column-privacy` and the `check-modules` test now pass. No new failures.
+
+### The ten bugs
+
+| # | Result | How I checked |
+|---|---|---|
+| B1 floating bar covers content | **Fixed** | On the gala page the bar fades out (opacity 0) while the passes are on screen; the $500 price and seat list are clear (`...1793485709867-p6j6sb.jpg`). |
+| B2 wedding says Get tickets and RSVP | **Fixed** | All three buttons (top bar, hero, bar) say RSVP. |
+| B3 paid sign-up fails silently with billing off | **Fixed** | With `BILLING_ENABLED` unset and plans off, `/signup` says the paid plans are "coming soon. You can start on the Free plan now, or talk to our sales team." |
+| B4 plans "Not on sale yet", no way to change it | **Fixed** | Admin "Plans & billing" now has a **Put on sale** button per plan; I put four on sale from the admin and `/signup` showed prices. |
+| B5 unknown plan in the link falls back to Free | **Fixed** | `/signup?plan=tier_starter` selects Starter. |
+| B6 no note about two-step verification / plan page | **Fixed** | After payment a **welcome page** ("Payment received", "Welcome, QA Paid Org Three", "Next step: secure your account with two-step verification, then you are in", button "Set up two-step verification"). |
+| B7 pale page titles | **Fixed** | "VENUE DIRECTORY" is solid in light and dark (`...1793485925133-20cir1.jpg`). |
+| B8 tour at the wrong venue | **Not verified** | The seed now starts the tour at Charminar Heritage Plaza, but my database already had the old event (the seed skips existing events), which still shows Tech Park Convention Centre. Needs a fresh seed. |
+| B9 privacy "Last updated" | **Fixed** | A new version (3) shows "Last updated October 31, 2026 · version 3"; the editor now has locale and effective date fields (per-language pages). |
+| B10 admin shows a raw user id | **Partly fixed** | No id any more, but the "Sent by" and version-history editor fields are now **blank** for my staff user (no display name); fall back to the email. Cosmetic. |
+| B11 check:modules / venue_type privacy | **Fixed** | See Checks. |
+
+### Paid sign-up end to end (fresh user)
+
+`/sign-up` with the email code, organization form, "Continue to payment" ($29.00 due today), fake checkout, **Pay (test)**, then the welcome page; `billing.org_plans` shows the new organization on `tier_starter`. (Decline and retry were already verified in the first pass.)
+
+### Messaging (conference demo event)
+
+- **Lobby**: posted as an attendee; the message is saved.
+- **1:1 chat after connecting**: the demo attendee is connected to Kabir Haddad; a message sent from the chat page is saved and shown. The status line stays on "Connecting…" (the live connection does not come up in this environment, but the message still arrives after the page refreshes).
+- **Organizer announcement**: created in the organizer content page; it shows on the public event page.
+- **Booth chat**: **not working in my run.** On the Kite Robotics booth chat page (booth chat is switched on for two demo booths) I sent messages three times (Send button, Enter key); no message appeared after reload and no row was written to `engagement.chat_messages`, and no error is shown. Severity: major until explained (it may need a booth operator or the realtime connection, but a silent drop is a bug either way).
+
+### Verdict
+
+**Ready to merge to `main` apart from the booth chat finding and B8's verification.** Merge hygiene is good (check:modules, tsc, build and tests clean; migrations in order; generate clean). Before merging: (1) look at booth chat (confirm whether it needs a staff reply or a realtime backend, and show an error if a message cannot be sent); (2) re-seed once to confirm the tour venue. Deployment notes carry over from the first pass: self-service sign-up needs `BILLING_ENABLED=1` and the plans put on sale in the admin; the live deployment's content org and the "Connecting…" realtime status should be checked there.
+
+---
+
+# First pass (history)
+
 Tester session `qa-baseline`. `qa-r2` is a new local branch from `main` (`a70fdfcc`) with these merged in order: `claude/batch-3-redesign-664a1d` (R2-A), `claude/batch-2-setup-59fe0b` (R2-B), `claude/bold-aryabhata-b8c8f1` (R2-C). Not pushed.
 Run against a fresh database `yayatoh_qa5` (demo-seed, demo-media, demo-content, the worker's demo-platform-content, catalog sync), fake payments, `BILLING_PROVIDER=fake`, the fake human check, open sign-up on, **production build** on port 3140 (the staff console `apps/admin` ran in dev mode on 3141 because its production build ran out of memory in `tsc`). No Anthropic key was used. No integration tests were run (they would reset the shared Postgres role passwords).
 Screenshots are in `C:\Users\ADMIN\.claude\projects\D--yayatoh-2-0-yayatoh--claude-worktrees-qa-baseline-a94866\8e728a03-1454-42dd-9484-ed2066dd2cef\tool-results\`.
