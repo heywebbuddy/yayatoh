@@ -1,7 +1,7 @@
 'use client';
 
-import { buttonClass, cx } from '@yayatoh/ui';
-import { CalendarDays, LocateFixed, MapPin, Search } from 'lucide-react';
+import { buttonClass, cx, DatePicker, Select } from '@yayatoh/ui';
+import { CalendarDays, LocateFixed, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useId, useState } from 'react';
 
@@ -117,31 +117,17 @@ export function HeroSearch({
               />
             </div>
           </div>
-          <div className="flex min-w-0 flex-col gap-1.5">
-            <label htmlFor={`${id}-city`} className="text-[13px] font-bold text-ink">
-              {t('where')}
-            </label>
-            <div className="relative">
-              <MapPin
-                aria-hidden="true"
-                className="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-2"
-              />
-              <select
-                id={`${id}-city`}
-                name="city"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                className="field w-full ps-10"
-              >
-                <option value="">{t('anywhere')}</option>
-                {cities.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+          <Select
+            id={`${id}-city`}
+            name="city"
+            label={t('where')}
+            value={city}
+            onValueChange={setCity}
+            options={[
+              { value: '', label: t('anywhere'), text: t('anywhere') },
+              ...cities.map((c) => ({ value: c, label: c, text: c })),
+            ]}
+          />
           <div className="flex items-end">
             <button type="submit" className={cx(buttonClass('ember', 'lg'), 'w-full md:w-auto')}>
               {t('submit')}
@@ -178,32 +164,20 @@ export function HeroSearch({
         </div>
         {when === 'custom' ? (
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor={`${id}-from`} className="text-[13px] font-bold text-ink">
-                {t('from')}
-              </label>
-              <input
-                id={`${id}-from`}
-                type="date"
-                value={from}
-                max={to || undefined}
-                onChange={(e) => setFrom(e.target.value)}
-                className="field w-full"
-              />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor={`${id}-to`} className="text-[13px] font-bold text-ink">
-                {t('to')}
-              </label>
-              <input
-                id={`${id}-to`}
-                type="date"
-                value={to}
-                min={from || undefined}
-                onChange={(e) => setTo(e.target.value)}
-                className="field w-full"
-              />
-            </div>
+            <DatePicker
+              id={`${id}-from`}
+              label={t('from')}
+              value={from}
+              {...(to ? { max: to } : {})}
+              onValueChange={setFrom}
+            />
+            <DatePicker
+              id={`${id}-to`}
+              label={t('to')}
+              value={to}
+              {...(from ? { min: from } : {})}
+              onValueChange={setTo}
+            />
           </div>
         ) : null}
         {range?.from ? <input type="hidden" name="from" value={range.from} /> : null}
