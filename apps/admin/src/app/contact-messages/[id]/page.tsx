@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { Shell } from '@/components/shell.tsx';
 import { CONTACT_STATUSES, getContactMessage } from '@/server/platform-site.ts';
+import { actorNames } from '@/server/signup-codes.ts';
 import { requireStaff } from '@/server/staff.ts';
 import { replyMessageAction, updateMessageAction } from '../../content/site-actions.ts';
 
@@ -21,6 +22,7 @@ export default async function ContactMessagePage({
   const t = await getTranslations('contactMessages');
   const m = await getContactMessage(staff.actor, id);
   if (!m) notFound();
+  const names = await actorNames(m.repliedBy ? [m.repliedBy] : []);
   return (
     <Shell staff={staff}>
       <PageHeader
@@ -62,7 +64,7 @@ export default async function ContactMessagePage({
           <h2 className="text-section">{t('lastReply')}</h2>
           <p className="m-0 text-caption text-ink-2">
             {t('repliedBy', {
-              by: (m.repliedBy ?? '').replace(/^staff:/, ''),
+              by: names.get(m.repliedBy ?? '') ?? m.repliedBy ?? '',
               when: m.repliedAt?.toISOString().slice(0, 16).replace('T', ' ') ?? '',
             })}
           </p>

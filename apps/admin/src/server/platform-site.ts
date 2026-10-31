@@ -23,6 +23,7 @@ const write = <T>(actor: string, reason: string, fn: (tx: Tx) => Promise<T>) =>
 export interface PageRow {
   readonly id: string;
   readonly slug: string;
+  readonly locale: string;
   readonly title: string;
   readonly body: string;
   readonly effectiveDate: string;
@@ -35,6 +36,7 @@ export interface PageRow {
 const toPage = (r: Row): PageRow => ({
   id: String(r.id),
   slug: String(r.slug),
+  locale: String(r.locale),
   title: String(r.title),
   body: String(r.body ?? ''),
   effectiveDate: String(r.effective_date),
@@ -44,18 +46,22 @@ const toPage = (r: Row): PageRow => ({
   updatedBy: String(r.updated_by),
 });
 
-const PAGE_COLUMNS = sql`id, slug, title, body, to_char(effective_date, 'YYYY-MM-DD') as effective_date, status, version, updated_at, updated_by`;
+const PAGE_COLUMNS = sql`id, slug, locale, title, body, to_char(effective_date, 'YYYY-MM-DD') as effective_date, status, version, updated_at, updated_by`;
 
 export async function listPages(actor: string): Promise<PageRow[]> {
   const rows = await read(actor, 'list site pages', (tx) =>
-    tx.execute<Row>(sql`select ${PAGE_COLUMNS} from cms.platform_pages order by slug`),
+    tx.execute<Row>(
+      sql`select ${PAGE_COLUMNS} from cms.platform_pages order by slug, (locale <> 'en'), locale`,
+    ),
   );
   return rows.map(toPage);
 }
 
-export async function getPage(actor: string, slug: string): Promise<PageRow | null> {
-  const rows = await read(actor, `open site page ${slug}`, (tx) =>
-    tx.execute<Row>(sql`select ${PAGE_COLUMNS} from cms.platform_pages where slug = ${slug}`),
+export async function getPage(actor: string, slug: string, locale = 'en'): Promise<PageRow | null> {
+  const rows = await read(actor, `open site page ${slug} (${locale})`, (tx) =>
+    tx.execute<Row>(
+      sql`select ${PAGE_COLUMNS} from cms.platform_pages where slug = ${slug} and locale = ${locale}`,
+    ),
   );
   return rows[0] ? toPage(rows[0]) : null;
 }
@@ -70,12 +76,12 @@ export interface PageVersion {
   readonly savedAt: Date;
 }
 
-export async function pageVersions(actor: string, slug: string): Promise<PageVersion[]> {
-  const rows = await read(actor, `list versions of site page ${slug}`, (tx) =>
+export async function pageVersions(actor: string, slug: string, locale = 'en'): Promise<PageVersion[]> {
+  const rows = await read(actor, `list versions of site page ${slug} (${locale})`, (tx) =>
     tx.execute<Row>(
       sql`select v.version, v.title, v.body, to_char(v.effective_date, 'YYYY-MM-DD') as effective_date, v.status, v.saved_by, v.saved_at
           from cms.platform_page_versions v join cms.platform_pages p on p.id = v.page_id
-          where p.slug = ${slug} order by v.version desc`,
+          where p.slug = ${slug} and p.locale = ${locale} order by v.version desc`,
     ),
   );
   return rows.map((r) => ({
@@ -95,6 +101,7 @@ export const PageInput = z.object({
     .trim()
     .regex(/^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/)
     .max(60),
+  locale: z.string().regex(/^[a-z]{2}(-[A-Z]{2})?$/),
   title: z.string().trim().min(1).max(160),
   body: z.string().transform((v) => sanitizeMarkdown(v, 120_000)),
   effectiveDate: z.iso.date(),
@@ -104,7 +111,7 @@ export type PageInput = z.infer<typeof PageInput>;
 
 /** Save a page: a new version every time (the history keeps all of them). */
 export async function savePage(actor: string, input: PageInput): Promise<void> {
-  await write(actor, `save site page ${input.slug} (${input.status})`, (tx) =>
+  await write(actor, `save site page ${input.slug} (${input.locale}, ${input.status})`, (tx) =>
     tx.execute(sql`select cms.platform_save_page(${JSON.stringify(input)}::jsonb, ${actor})`),
   );
 }

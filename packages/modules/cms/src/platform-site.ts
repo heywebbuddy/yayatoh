@@ -19,10 +19,12 @@ export interface PlatformPage {
   readonly version: number;
 }
 
-export async function platformPage(slug: string): Promise<PlatformPage | null> {
+/** The page in the visitor's language, or the English one when there is no translation yet. */
+export async function platformPage(slug: string, locale = 'en'): Promise<PlatformPage | null> {
   const rows = await withoutTenant((tx) =>
     tx.execute<Row>(
-      sql`select slug, title, body, to_char(effective_date, 'YYYY-MM-DD') as effective_date, version from cms.public_platform_pages where slug = ${slug}`,
+      sql`select slug, title, body, to_char(effective_date, 'YYYY-MM-DD') as effective_date, version from cms.public_platform_pages
+          where slug = ${slug} and locale in (${locale}, 'en') order by (locale = ${locale}) desc limit 1`,
     ),
   );
   const r = rows[0];

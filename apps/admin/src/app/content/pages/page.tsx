@@ -32,10 +32,13 @@ export default async function PagesAdminPage({
         <p className="m-0 text-body text-ink-2">{t('pages.intro')}</p>
         <ul className="m-0 flex list-none flex-col divide-y divide-line p-0">
           {pages.map((p) => (
-            <li key={p.slug} className="flex flex-wrap items-center justify-between gap-3 py-3">
+            <li
+              key={`${p.slug}-${p.locale}`}
+              className="flex flex-wrap items-center justify-between gap-3 py-3"
+            >
               <div className="flex min-w-0 flex-col">
                 <Link
-                  href={`/content/pages/${p.slug}`}
+                  href={`/content/pages/${p.slug}?locale=${p.locale}`}
                   className="text-body font-bold underline underline-offset-4"
                 >
                   {p.title}
@@ -43,6 +46,7 @@ export default async function PagesAdminPage({
                 <span className="text-caption text-ink-2">
                   {t('pages.meta', {
                     path: `/${p.slug}`,
+                    language: p.locale,
                     version: p.version,
                     date: p.effectiveDate,
                   })}

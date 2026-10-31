@@ -16,7 +16,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const page = await loadPlatformPage('sub-processors');
+  const page = await loadPlatformPage('sub-processors', locale);
   if (page) return platformPageMetadata(page);
   const t = await getTranslations({ locale, namespace: 'subprocessors' });
   return { title: t('title') };
@@ -26,7 +26,7 @@ export async function generateMetadata({
 export default async function SubProcessorsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const page = await loadPlatformPage('sub-processors');
+  const page = await loadPlatformPage('sub-processors', locale);
   if (page) return <PlatformPageView page={page} locale={locale} />;
   const t = await getTranslations('subprocessors');
   return (

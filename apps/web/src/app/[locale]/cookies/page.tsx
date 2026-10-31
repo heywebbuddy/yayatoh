@@ -7,8 +7,13 @@ import {
   platformPageMetadata,
 } from '@/components/site/platform-page.tsx';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const page = await loadPlatformPage('cookies');
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const page = await loadPlatformPage('cookies', locale);
   return page ? platformPageMetadata(page) : {};
 }
 
@@ -16,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const page = await loadPlatformPage('cookies');
+  const page = await loadPlatformPage('cookies', locale);
   if (!page) notFound();
   return <PlatformPageView page={page} locale={locale} />;
 }

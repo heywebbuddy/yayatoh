@@ -21,19 +21,21 @@ const s = (form: FormData, k: string) => String(form.get(k) ?? '').trim();
 export async function savePageAction(form: FormData) {
   const staff = await requireStaff('content');
   const slug = s(form, 'slug');
-  const back = `/content/pages/${slug || 'new'}`;
+  const locale = s(form, 'locale') || 'en';
+  const back = `/content/pages/${slug || 'new'}?locale=${locale}`;
   const parsed = PageInput.safeParse({
     slug,
+    locale,
     title: s(form, 'title'),
     body: String(form.get('body') ?? ''),
     effectiveDate: s(form, 'effectiveDate'),
     status: form.get('intent') === 'draft' ? 'draft' : 'published',
   });
-  if (!parsed.success) redirect(`${back}?error=invalid`);
+  if (!parsed.success) redirect(`${back}&error=invalid`);
   await savePage(staff.actor, parsed.data);
   revalidatePath('/content/pages');
   redirect(
-    `/content/pages/${parsed.data.slug}?done=${parsed.data.status === 'published' ? 'published' : 'saved'}`,
+    `/content/pages/${parsed.data.slug}?locale=${parsed.data.locale}&done=${parsed.data.status === 'published' ? 'published' : 'saved'}`,
   );
 }
 

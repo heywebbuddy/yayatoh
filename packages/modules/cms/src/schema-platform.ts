@@ -161,6 +161,8 @@ export const platformPages = cmsSchema.table(
   {
     id: uuid('id').primaryKey().default(sql`uuidv7()`),
     slug: text('slug').notNull(),
+    /** The language of this version of the page; `en` is the fallback for every other. */
+    locale: text('locale').notNull().default('en'),
     title: text('title').notNull(),
     body: text('body').notNull().default(''),
     /** The "last updated" date shown to readers. */
@@ -173,7 +175,8 @@ export const platformPages = cmsSchema.table(
     updatedBy: text('updated_by').notNull(),
   },
   (t) => [
-    uniqueIndex('platform_pages_slug_key').on(t.slug),
+    uniqueIndex('platform_pages_slug_locale_key').on(t.slug, t.locale),
+    check('platform_pages_locale_check', sql`locale ~ '^[a-z]{2}(-[A-Z]{2})?$'`),
     check(
       'platform_pages_slug_check',
       sql`slug ~ '^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$' and char_length(slug) <= 60`,
