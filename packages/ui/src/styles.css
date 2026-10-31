@@ -1029,6 +1029,14 @@
   }
 }
 /* The headline, lede and call to action fade and rise in on load. */
+@keyframes showcase-lift {
+  from {
+    transform: translateY(18px);
+  }
+}
+@utility animate-lift {
+  animation: showcase-lift 0.7s var(--ease-out) both;
+}
 @utility animate-rise {
   animation: showcase-rise 0.8s var(--ease-out) both;
 }
