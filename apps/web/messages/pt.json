@@ -20181,7 +20181,7 @@
       "line2": "do primeiro bilhete",
       "line3": "ao último check-in",
       "lede": "Venda mais bilhetes, poupe horas de configuração e passe uma imagem profissional desde o primeiro clique. Bilhética, lugares, site próprio do evento, check-in, patrocinadores, networking e análises numa só plataforma.",
-      "apply": "Candidate-se já",
+      "apply": "Começar",
       "demo": "Marcar demo",
       "videoTitle": "Vídeo do produto Yayatoh",
       "play": "Reproduzir o vídeo do produto",
@@ -20219,20 +20219,20 @@
       "eyebrow": "Como funciona",
       "title": "Da candidatura ao primeiro evento em quatro passos",
       "apply": {
-        "title": "Candidatar",
-        "body": "Conte-nos sobre a sua organização e os eventos que realiza."
+        "title": "Escolha um plano",
+        "body": "Escolha Free, Starter, Pro ou Agency, mensal ou anual."
       },
       "review": {
-        "title": "Nós analisamos",
-        "body": "A nossa equipa analisa todas as candidaturas e pode fazer perguntas."
+        "title": "Crie sua conta",
+        "body": "Verifique seu e-mail e dê um nome à sua organização."
       },
       "invite": {
-        "title": "Receba o convite",
-        "body": "Após a aprovação, recebe por e-mail um convite pessoal para o seu plano."
+        "title": "Pague online",
+        "body": "Pague com segurança online. Os planos gratuitos pulam esta etapa."
       },
       "launch": {
-        "title": "Lançar",
-        "body": "Crie a sua conta, siga a lista de configuração e publique o seu primeiro evento."
+        "title": "Publique",
+        "body": "Você chega ao checklist de configuração e publica seu primeiro evento."
       },
       "line1": "Da candidatura ao",
       "line2": "primeiro evento em quatro passos"
@@ -20242,9 +20242,9 @@
       "title": "Escolha o plano certo",
       "lede": "Os planos vêm do nosso catálogo atual. Pode mudar de plano mais tarde.",
       "perMonth": "{price} por mês",
-      "onApproval": "Confirmado na aprovação",
-      "choose": "Candidatar a {plan}",
-      "note": "Os preços aparecem aqui quando um plano estiver à venda. As taxas de bilhética da plataforma são confirmadas quando a sua candidatura for aprovada.",
+      "onApproval": "Ainda não disponível",
+      "choose": "Escolher {plan}",
+      "note": "Os preços seguem os planos à venda. O Enterprise é cotado pela nossa equipe.",
       "starter": {
         "name": "Starter",
         "body": "Para organizadores que estão a começar com eventos pagos."
@@ -20259,7 +20259,8 @@
       },
       "enterprise": {
         "name": "Enterprise",
-        "body": "Para grandes programas com necessidades específicas."
+        "body": "Para grandes programas com necessidades específicas.",
+        "cta": "Falar com vendas"
       },
       "perYear": "{price} por ano",
       "custom": "Preço à medida",
@@ -20305,11 +20306,11 @@
       "title": "Perguntas",
       "cost": {
         "q": "Quanto custa?",
-        "a": "Os planos e as taxas de bilhética estão acima e são confirmados na aprovação da candidatura. Candidatar-se é gratuito."
+        "a": "Os planos e as taxas de ingresso são mostrados acima. Os planos Free, Starter, Pro e Agency começam imediatamente após o cadastro. O Enterprise é cotado pela nossa equipe."
       },
       "review": {
-        "q": "Quanto tempo demora a análise?",
-        "a": "A nossa equipa analisa cada candidatura manualmente e pode responder com uma pergunta. Receberá sempre um e-mail."
+        "q": "Como funciona o Enterprise?",
+        "a": "Conte à nossa equipe de vendas sobre sua organização e responderemos por e-mail com um plano sob medida."
       },
       "whiteLabel": {
         "q": "Posso usar a minha marca e o meu domínio?",
@@ -20673,5 +20674,100 @@
     "orgEventsTitle": "Próximos eventos de {org}",
     "orgEventsAll": "Ver todos os eventos",
     "progress": "Progresso da leitura"
+  },
+  "selfServe": {
+    "eyebrow": "Comece agora",
+    "line1": "Escolha seu plano,",
+    "line2": "comece hoje",
+    "lede": "Escolha um plano, crie sua conta e comece a vender. Pague online e tenha acesso imediato. Sem ligações.",
+    "steps": {
+      "plan": "Escolha um plano",
+      "account": "Crie sua conta",
+      "payment": "Pague e publique"
+    },
+    "interval": {
+      "label": "Período de cobrança",
+      "month": "Mensal",
+      "year": "Anual",
+      "save": "Economize",
+      "per_month": "mês",
+      "per_year": "ano",
+      "perMonthEquivalent": "{price} por mês, cobrado anualmente"
+    },
+    "freePrice": "Grátis",
+    "unavailable": "Ainda não disponível",
+    "free": {
+      "name": "Grátis",
+      "body": "Comece a vender eventos gratuitos. Faça upgrade quando quiser."
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "body": "Soluções sob medida para grandes programas, com condições e suporte personalizados.",
+      "price": "Sob consulta",
+      "cta": "Falar com vendas"
+    },
+    "verify": {
+      "title": "Primeiro, verifique seu e-mail",
+      "body": "Enviamos um código único por e-mail, então não há senha para lembrar. Depois, você dá um nome à sua organização."
+    },
+    "fields": {
+      "personName": "Seu nome",
+      "country": "País"
+    },
+    "summary": {
+      "plan": "Plano",
+      "billing": "Cobrança",
+      "total": "A pagar hoje",
+      "secure": "Pagamento online seguro. Você pode alterar ou cancelar seu plano na sua conta.",
+      "noPayment": "Nenhum pagamento necessário. Faça upgrade quando quiser.",
+      "verifyFirst": "Verifique seu e-mail para continuar."
+    },
+    "submit": {
+      "free": "Criar minha organização",
+      "paid": "Continuar para o pagamento"
+    },
+    "errors": {
+      "unauthenticated": "Faça login primeiro.",
+      "email_unverified": "Confirme primeiro seu endereço de e-mail.",
+      "signup_closed": "O cadastro não está aberto no momento.",
+      "rate_limited": "Muitas tentativas. Tente novamente mais tarde.",
+      "human_check": "Confirme que você é uma pessoa.",
+      "plan_unavailable": "Esse plano não está disponível no momento. Escolha outro.",
+      "slug_taken": "Esse endereço web já está em uso.",
+      "invalid": "Verifique o formulário e tente novamente.",
+      "billing_off": "O pagamento online não está disponível no momento.",
+      "failed": "Não foi possível iniciar o pagamento. Tente novamente."
+    },
+    "pay": {
+      "eyebrow": "Pagamento",
+      "cancelledTitle": "Pagamento cancelado",
+      "cancelledBody": "Nada foi cobrado. {org} foi criada e está aguardando: conclua o pagamento para iniciar seu plano {plan}.",
+      "failedTitle": "Não foi possível iniciar o pagamento",
+      "failedBody": "Nada foi cobrado. {org} foi criada: tente o pagamento novamente para iniciar seu plano {plan}.",
+      "retry": "Tentar o pagamento novamente",
+      "skip": "Abrir minha organização por enquanto"
+    },
+    "welcome": {
+      "eyebrow": "Pagamento recebido",
+      "title": "Bem-vindo, {org}",
+      "waiting": "Confirmando seu pagamento…",
+      "done": "Pagamento confirmado. Abrindo sua organização…",
+      "slow": "A confirmação está demorando mais que o normal. Seu plano é ativado assim que o pagamento for confirmado. Você já pode abrir sua organização.",
+      "open": "Abrir minha organização"
+    },
+    "fake": {
+      "eyebrow": "Somente desenvolvimento",
+      "title": "Checkout de teste",
+      "body": "Isto substitui a página do provedor de pagamento. Preço: {price}.",
+      "pay": "Pagar (teste)",
+      "decline": "Recusar"
+    },
+    "sales": {
+      "title": "Fale com nossa equipe de vendas",
+      "lede": "Conte-nos sobre sua organização e responderemos com um plano sob medida.",
+      "demoTitle": "Agendar uma demonstração",
+      "demoLede": "Escolha um horário e mostraremos a plataforma.",
+      "close": "Fechar"
+    }
   }
 }

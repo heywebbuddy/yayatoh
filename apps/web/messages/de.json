@@ -20181,7 +20181,7 @@
       "line2": "vom ersten Ticket",
       "line3": "bis zum letzten Check-in",
       "lede": "Verkaufe mehr Tickets, spare Stunden bei der Einrichtung und wirke vom ersten Klick an professionell. Ticketing, Sitzplätze, eigene Event-Website, Check-in, Sponsoren, Networking und Analysen in einer Plattform.",
-      "apply": "Jetzt bewerben",
+      "apply": "Starten Sie jetzt",
       "demo": "Demo buchen",
       "videoTitle": "Yayatoh-Produktvideo",
       "play": "Produktvideo abspielen",
@@ -20219,20 +20219,20 @@
       "eyebrow": "So funktioniert es",
       "title": "Von der Bewerbung zum ersten Event in vier Schritten",
       "apply": {
-        "title": "Bewerben",
-        "body": "Erzähl uns von deiner Organisation und deinen Events."
+        "title": "Plan wählen",
+        "body": "Wählen Sie Free, Starter, Pro oder Agency, monatlich oder jährlich."
       },
       "review": {
-        "title": "Wir prüfen",
-        "body": "Unser Team sieht sich jede Bewerbung an und stellt bei Bedarf Rückfragen."
+        "title": "Konto erstellen",
+        "body": "Bestätigen Sie Ihre E-Mail und benennen Sie Ihre Organisation."
       },
       "invite": {
-        "title": "Einladung erhalten",
-        "body": "Nach der Freigabe bekommst du eine persönliche Einladung per E-Mail für deinen Tarif."
+        "title": "Online bezahlen",
+        "body": "Bezahlen Sie sicher online. Kostenlose Pläne überspringen diesen Schritt."
       },
       "launch": {
-        "title": "Starten",
-        "body": "Konto erstellen, der Einrichtungs-Checkliste folgen und dein erstes Event veröffentlichen."
+        "title": "Live gehen",
+        "body": "Sie landen in Ihrer Einrichtungs-Checkliste und veröffentlichen Ihr erstes Event."
       },
       "line1": "Von der Bewerbung",
       "line2": "zum ersten Event in vier Schritten"
@@ -20242,9 +20242,9 @@
       "title": "Wähle den passenden Tarif",
       "lede": "Die Tarife kommen aus unserem Live-Katalog. Jeder Tarif lässt sich später ändern.",
       "perMonth": "{price} pro Monat",
-      "onApproval": "Wird bei Freigabe bestätigt",
-      "choose": "{plan} beantragen",
-      "note": "Preise erscheinen hier, sobald ein Tarif im Verkauf ist. Die Ticketgebühren der Plattform werden bei der Freigabe deiner Bewerbung bestätigt.",
+      "onApproval": "Noch nicht verfügbar",
+      "choose": "{plan} wählen",
+      "note": "Die Preise folgen den verfügbaren Plänen. Enterprise wird von unserem Team individuell angeboten.",
       "starter": {
         "name": "Starter",
         "body": "Für Veranstalter, die mit bezahlten Events starten."
@@ -20259,7 +20259,8 @@
       },
       "enterprise": {
         "name": "Enterprise",
-        "body": "Für große Programme mit individuellen Anforderungen."
+        "body": "Für große Programme mit individuellen Anforderungen.",
+        "cta": "Vertrieb kontaktieren"
       },
       "perYear": "{price} pro Jahr",
       "custom": "Individueller Preis",
@@ -20305,11 +20306,11 @@
       "title": "Fragen",
       "cost": {
         "q": "Was kostet es?",
-        "a": "Tarife und Ticketgebühren siehst du oben, sie werden bei der Freigabe deiner Bewerbung bestätigt. Die Bewerbung selbst ist kostenlos."
+        "a": "Pläne und Ticketgebühren sehen Sie oben. Free, Starter, Pro und Agency starten sofort nach der Registrierung. Enterprise wird von unserem Team individuell angeboten."
       },
       "review": {
-        "q": "Wie lange dauert die Prüfung?",
-        "a": "Unser Team prüft jede Bewerbung von Hand und stellt bei Bedarf eine Rückfrage. Du bekommst in jedem Fall eine E-Mail."
+        "q": "Wie funktioniert Enterprise?",
+        "a": "Erzählen Sie unserem Vertriebsteam von Ihrer Organisation, und wir antworten per E-Mail mit einem maßgeschneiderten Plan."
       },
       "whiteLabel": {
         "q": "Kann ich meine eigene Marke und Domain nutzen?",
@@ -20673,5 +20674,100 @@
     "orgEventsTitle": "Kommende Events von {org}",
     "orgEventsAll": "Alle Events ansehen",
     "progress": "Lesefortschritt"
+  },
+  "selfServe": {
+    "eyebrow": "Starten Sie jetzt",
+    "line1": "Plan wählen,",
+    "line2": "heute loslegen",
+    "lede": "Wählen Sie einen Plan, erstellen Sie Ihr Konto und starten Sie den Verkauf. Online bezahlen und sofort Zugriff erhalten. Kein Anruf nötig.",
+    "steps": {
+      "plan": "Plan wählen",
+      "account": "Konto erstellen",
+      "payment": "Bezahlen und live gehen"
+    },
+    "interval": {
+      "label": "Abrechnungszeitraum",
+      "month": "Monatlich",
+      "year": "Jährlich",
+      "save": "Sparen",
+      "per_month": "Monat",
+      "per_year": "Jahr",
+      "perMonthEquivalent": "{price} pro Monat, jährlich abgerechnet"
+    },
+    "freePrice": "Kostenlos",
+    "unavailable": "Noch nicht verfügbar",
+    "free": {
+      "name": "Kostenlos",
+      "body": "Verkaufen Sie kostenlose Events. Upgraden Sie, wann immer Sie bereit sind."
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "body": "Maßgeschneiderte Lösungen für große Programme, mit individuellen Konditionen und Support.",
+      "price": "Individuell",
+      "cta": "Vertrieb kontaktieren"
+    },
+    "verify": {
+      "title": "Zuerst E-Mail bestätigen",
+      "body": "Wir senden Ihnen einen Einmalcode per E-Mail, sodass Sie sich kein Passwort merken müssen. Danach benennen Sie Ihre Organisation."
+    },
+    "fields": {
+      "personName": "Ihr Name",
+      "country": "Land"
+    },
+    "summary": {
+      "plan": "Plan",
+      "billing": "Abrechnung",
+      "total": "Heute fällig",
+      "secure": "Sichere Online-Zahlung. Sie können Ihren Plan in Ihrem Konto ändern oder kündigen.",
+      "noPayment": "Keine Zahlung nötig. Jederzeit upgraden.",
+      "verifyFirst": "Bestätigen Sie Ihre E-Mail, um fortzufahren."
+    },
+    "submit": {
+      "free": "Meine Organisation erstellen",
+      "paid": "Weiter zur Zahlung"
+    },
+    "errors": {
+      "unauthenticated": "Bitte melden Sie sich zuerst an.",
+      "email_unverified": "Bestätigen Sie zuerst Ihre E-Mail-Adresse.",
+      "signup_closed": "Die Registrierung ist derzeit nicht geöffnet.",
+      "rate_limited": "Zu viele Versuche. Bitte versuchen Sie es später erneut.",
+      "human_check": "Bitte bestätigen Sie, dass Sie ein Mensch sind.",
+      "plan_unavailable": "Dieser Plan ist derzeit nicht verfügbar. Wählen Sie einen anderen.",
+      "slug_taken": "Diese Webadresse ist bereits vergeben.",
+      "invalid": "Bitte prüfen Sie das Formular und versuchen Sie es erneut.",
+      "billing_off": "Online-Zahlung ist derzeit nicht verfügbar.",
+      "failed": "Die Zahlung konnte nicht gestartet werden. Bitte versuchen Sie es erneut."
+    },
+    "pay": {
+      "eyebrow": "Zahlung",
+      "cancelledTitle": "Zahlung abgebrochen",
+      "cancelledBody": "Es wurde nichts abgebucht. {org} ist erstellt und wartet: Schließen Sie die Zahlung ab, um Ihren Plan {plan} zu starten.",
+      "failedTitle": "Zahlung konnte nicht gestartet werden",
+      "failedBody": "Es wurde nichts abgebucht. {org} ist erstellt: Versuchen Sie die Zahlung erneut, um Ihren Plan {plan} zu starten.",
+      "retry": "Zahlung erneut versuchen",
+      "skip": "Meine Organisation vorerst öffnen"
+    },
+    "welcome": {
+      "eyebrow": "Zahlung eingegangen",
+      "title": "Willkommen, {org}",
+      "waiting": "Zahlung wird bestätigt…",
+      "done": "Zahlung bestätigt. Ihre Organisation wird geöffnet…",
+      "slow": "Die Bestätigung dauert länger als üblich. Ihr Plan wird aktiviert, sobald die Zahlung bestätigt ist. Sie können Ihre Organisation jetzt öffnen.",
+      "open": "Meine Organisation öffnen"
+    },
+    "fake": {
+      "eyebrow": "Nur Entwicklung",
+      "title": "Test-Checkout",
+      "body": "Dies ersetzt die Seite des Zahlungsanbieters. Preis: {price}.",
+      "pay": "Bezahlen (Test)",
+      "decline": "Ablehnen"
+    },
+    "sales": {
+      "title": "Sprechen Sie mit unserem Vertriebsteam",
+      "lede": "Erzählen Sie uns von Ihrer Organisation, und wir melden uns mit einem maßgeschneiderten Plan.",
+      "demoTitle": "Demo buchen",
+      "demoLede": "Wählen Sie einen Termin, und wir zeigen Ihnen die Plattform.",
+      "close": "Schließen"
+    }
   }
 }

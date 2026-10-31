@@ -196,6 +196,18 @@ export function fakeBillingProvider(opts: FakeBillingOptions): FakeBillingProvid
       ]);
       return { subscriptionId };
     },
+    async startCheckout(i) {
+      // The fake "hosted page" is our own dev page; its link is signed so it only acts on what was asked for.
+      const origin = new URL(i.successUrl).origin;
+      const q = new URLSearchParams({
+        customer: i.customerId,
+        price: i.priceLookupKey,
+        ok: i.successUrl,
+        no: i.cancelUrl,
+        sig: fakeCheckoutSignature(opts.secret, i),
+      });
+      return { url: `${origin}/signup/pay/fake?${q}` };
+    },
     async payOutstanding(i) {
       if (opts.declinePayments) return { paid: false };
       const createdAt = new Date();
@@ -246,6 +258,14 @@ export function signFakeBillingEvent(
     body,
     headers: { 'content-type': 'application/json', [FAKE_BILLING_SIGNATURE_HEADER]: sign(secret, body) },
   };
+}
+
+/** The fake checkout link's signature: the page pays only for the customer, price and return addresses it was minted for. */
+export function fakeCheckoutSignature(
+  secret: string,
+  i: { customerId: string; priceLookupKey: string; successUrl: string; cancelUrl: string },
+): string {
+  return short(secret, `checkout:${i.customerId}:${i.priceLookupKey}:${i.successUrl}:${i.cancelUrl}`, 32);
 }
 
 /**
