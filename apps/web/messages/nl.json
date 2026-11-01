@@ -20801,7 +20801,15 @@
       "offer": "Wat we bieden",
       "forAttendees": "Voor bezoekers",
       "forOrganizers": "Voor organisatoren",
-      "team": "Ons team"
+      "team": "Ons team",
+      "browse": "Bekijk evenementen",
+      "howTitle": "Hoe het werkt",
+      "step1Title": "Ontdek",
+      "step1Text": "Vind evenementen die je leuk vindt, van lokale avonden tot grote congressen.",
+      "step2Title": "Boek",
+      "step2Text": "Kies je tickets en betaal veilig in een paar tikken.",
+      "step3Title": "Geniet",
+      "step3Text": "Je ticket staat op je telefoon. Kom langs en geniet."
     },
     "contact": {
       "getInTouch": "Neem contact op",

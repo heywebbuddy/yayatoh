@@ -20801,7 +20801,15 @@
       "offer": "O que oferecemos",
       "forAttendees": "Para participantes",
       "forOrganizers": "Para organizadores",
-      "team": "Nossa equipe"
+      "team": "Nossa equipe",
+      "browse": "Ver eventos",
+      "howTitle": "Como funciona",
+      "step1Title": "Descubra",
+      "step1Text": "Encontre eventos de que gosta, de noites locais a grandes conferências.",
+      "step2Title": "Reserve",
+      "step2Text": "Escolha os seus bilhetes e pague com segurança em poucos toques.",
+      "step3Title": "Aproveite",
+      "step3Text": "O seu bilhete está no telemóvel. Apareça e divirta-se."
     },
     "contact": {
       "getInTouch": "Entre em contato",

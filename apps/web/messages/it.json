@@ -20801,7 +20801,15 @@
       "offer": "Cosa offriamo",
       "forAttendees": "Per i partecipanti",
       "forOrganizers": "Per gli organizzatori",
-      "team": "Il nostro team"
+      "team": "Il nostro team",
+      "browse": "Sfoglia gli eventi",
+      "howTitle": "Come funziona",
+      "step1Title": "Scopri",
+      "step1Text": "Trova eventi che ami, dalle serate locali alle grandi conferenze.",
+      "step2Title": "Prenota",
+      "step2Text": "Scegli i biglietti e paga in sicurezza con pochi tocchi.",
+      "step3Title": "Divertiti",
+      "step3Text": "Il biglietto è sul tuo telefono. Arriva e goditi l’evento."
     },
     "contact": {
       "getInTouch": "Mettiti in contatto",
