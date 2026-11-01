@@ -20801,7 +20801,15 @@
       "offer": "我们提供什么",
       "forAttendees": "面向参会者",
       "forOrganizers": "面向主办方",
-      "team": "我们的团队"
+      "team": "我们的团队",
+      "browse": "浏览活动",
+      "howTitle": "如何运作",
+      "step1Title": "发现",
+      "step1Text": "找到你喜爱的活动，从本地聚会到大型会议。",
+      "step2Title": "预订",
+      "step2Text": "选择门票，几步即可安全支付。",
+      "step3Title": "尽享",
+      "step3Text": "电子票就在手机里。到场即可尽情享受。"
     },
     "contact": {
       "getInTouch": "联系我们",

@@ -20801,7 +20801,15 @@
       "offer": "What we offer",
       "forAttendees": "For attendees",
       "forOrganizers": "For organizers",
-      "team": "Our team"
+      "team": "Our team",
+      "browse": "Browse events",
+      "howTitle": "How it works",
+      "step1Title": "Discover",
+      "step1Text": "Find events you love, from local nights out to big conferences.",
+      "step2Title": "Book",
+      "step2Text": "Pick your tickets and pay securely in a few taps.",
+      "step3Title": "Enjoy",
+      "step3Text": "Your ticket is on your phone. Show up and have a great time."
     },
     "contact": {
       "getInTouch": "Get in touch",

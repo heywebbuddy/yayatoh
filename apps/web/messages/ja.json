@@ -20801,7 +20801,15 @@
       "offer": "提供するもの",
       "forAttendees": "参加者の方へ",
       "forOrganizers": "主催者の方へ",
-      "team": "チーム紹介"
+      "team": "チーム紹介",
+      "browse": "イベントを探す",
+      "howTitle": "ご利用の流れ",
+      "step1Title": "見つける",
+      "step1Text": "地元の夜から大規模カンファレンスまで、好きなイベントが見つかります。",
+      "step2Title": "予約する",
+      "step2Text": "チケットを選んで、数タップで安全に支払えます。",
+      "step3Title": "楽しむ",
+      "step3Text": "チケットはスマホの中。会場へ行って、楽しい時間を。"
     },
     "contact": {
       "getInTouch": "お問い合わせ",
