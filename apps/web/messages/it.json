@@ -4657,7 +4657,9 @@
       "from": "Dalla data",
       "to": "Alla data",
       "submit": "Cerca",
-      "clear": "Cancella i filtri"
+      "clear": "Cancella i filtri",
+      "nearYou": "Vicino a te",
+      "inCountry": "In {country}"
     },
     "pagination": {
       "label": "Pagine",
@@ -20744,7 +20746,23 @@
     "from": "Dal",
     "to": "Al",
     "defaultName": "Eventi dal vivo vicino a te",
-    "defaultMeta": "Concerti, conferenze, gala e altro"
+    "defaultMeta": "Concerti, conferenze, gala e altro",
+    "wherePlaceholder": "Città o paese",
+    "clearWhere": "Cancella luogo",
+    "listLabel": "Città e paesi",
+    "noPlaces": "Nessun luogo corrispondente",
+    "otherPlaces": "Altri luoghi",
+    "hasEvents": "Eventi",
+    "placeResults": "{count, plural, one {# città disponibile} other {# città disponibili}}",
+    "nearPlace": "Vicino a {place}",
+    "yourLocation": "La tua posizione",
+    "locate": {
+      "insecure": "Il browser condivide la posizione solo su pagine sicure (HTTPS). Scegli una città.",
+      "unsupported": "Questo browser non può condividere la tua posizione. Scegli una città.",
+      "denied": "L’accesso alla posizione è bloccato. Consentilo nelle impostazioni del browser o scegli una città.",
+      "unavailable": "La tua posizione non è disponibile al momento. Scegli una città.",
+      "timeout": "Rilevare la posizione ha richiesto troppo tempo. Riprova o scegli una città."
+    }
   },
   "eventSkin": {
     "rsvp": "Conferma",

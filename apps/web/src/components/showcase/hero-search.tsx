@@ -1,9 +1,20 @@
 'use client';
 
-import { buttonClass, cx, DatePicker, Select } from '@yayatoh/ui';
+import { buttonClass, cx, DatePicker } from '@yayatoh/ui';
 import { CalendarDays, LocateFixed, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useId, useState } from 'react';
+import {
+  type LocateProblem,
+  locateBlocker,
+  locateProblem,
+  NEAREST_MAX_KM,
+  nearestPlace,
+  type Place,
+  placeLabel,
+  roundCoord,
+} from '@/lib/places.ts';
+import { NOWHERE, type Where, WherePicker } from './where-picker.tsx';
 
 type When = 'any' | 'today' | 'weekend' | 'month' | 'custom';
 
@@ -27,60 +38,66 @@ export function whenRange(when: When, now = new Date()): { from: string; to: str
   return null;
 }
 
-const distanceKm = (aLat: number, aLng: number, bLat: number, bLng: number) => {
-  const r = (n: number) => (n * Math.PI) / 180;
-  const h =
-    Math.sin(r(bLat - aLat) / 2) ** 2 +
-    Math.cos(r(aLat)) * Math.cos(r(bLat)) * Math.sin(r(bLng - aLng) / 2) ** 2;
-  return 12742 * Math.asin(Math.sqrt(h));
-};
-
 /**
- * The home page's finder: free text, a city (from our events and venues, or the nearest one to
- * "Use my location", asked only when pressed), and a date (presets or a calendar). It is a plain
- * GET form to the events list, so the filters are in the address.
+ * The home page's finder: free text, a place (any city or country, or the visitor's own position,
+ * asked only when pressed), and a date (presets or a calendar). It is a plain GET form to the events
+ * list, so the filters are in the address.
  */
 export function HeroSearch({
   action,
-  cities,
-  centers,
+  locale,
+  places,
 }: {
   action: string;
-  cities: readonly string[];
-  centers: readonly { city: string; lat: number; lng: number }[];
+  locale: string;
+  places: readonly Place[];
 }) {
   const t = useTranslations('homeFinder');
   const id = useId();
-  const [city, setCity] = useState('');
+  const [where, setWhere] = useState<Where>(NOWHERE);
   const [when, setWhen] = useState<When>('any');
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
-  const [note, setNote] = useState<string | null>(null);
+  const [note, setNote] = useState<{ text: string; problem: boolean } | null>(null);
   const [locating, setLocating] = useState(false);
   const range = when === 'custom' ? { from, to: to || from } : whenRange(when);
 
+  const fail = (problem: LocateProblem) => {
+    setLocating(false);
+    setNote({ text: t(`locate.${problem}`), problem: true });
+  };
   const locate = () => {
-    if (!navigator.geolocation) return setNote(t('locationFailed'));
+    if (locating) return;
+    const blocked = locateBlocker({
+      isSecureContext: window.isSecureContext,
+      hasGeolocation: 'geolocation' in navigator,
+    });
+    if (blocked) return fail(blocked);
     setLocating(true);
-    setNote(null);
+    setNote({ text: t('locating'), problem: false });
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setLocating(false);
-        const near = [...centers].sort(
-          (a, b) =>
-            distanceKm(pos.coords.latitude, pos.coords.longitude, a.lat, a.lng) -
-            distanceKm(pos.coords.latitude, pos.coords.longitude, b.lat, b.lng),
-        )[0];
-        if (near) {
-          setCity(near.city);
-          setNote(t('nearest', { city: near.city }));
-        } else setNote(t('locationFailed'));
+        const { latitude, longitude } = pos.coords;
+        const near = nearestPlace(latitude, longitude, places);
+        const text =
+          near && near.km <= NEAREST_MAX_KM
+            ? t('nearPlace', { place: placeLabel(near.place, locale) })
+            : t('yourLocation');
+        setWhere({
+          city: '',
+          country: '',
+          lat: roundCoord(latitude),
+          lng: roundCoord(longitude),
+          text,
+        });
+        setNote({
+          text: near && near.km <= NEAREST_MAX_KM ? t('nearest', { city: near.place.city }) : text,
+          problem: false,
+        });
       },
-      () => {
-        setLocating(false);
-        setNote(t('locationFailed'));
-      },
-      { maximumAge: 600_000, timeout: 10_000 },
+      (err) => fail(locateProblem(err.code)),
+      { enableHighAccuracy: false, timeout: 10_000, maximumAge: 600_000 },
     );
   };
 
@@ -117,17 +134,7 @@ export function HeroSearch({
               />
             </div>
           </div>
-          <Select
-            id={`${id}-city`}
-            name="city"
-            label={t('where')}
-            value={city}
-            onValueChange={setCity}
-            options={[
-              { value: '', label: t('anywhere'), text: t('anywhere') },
-              ...cities.map((c) => ({ value: c, label: c, text: c })),
-            ]}
-          />
+          <WherePicker id={`${id}-where`} locale={locale} places={places} value={where} onChange={setWhere} />
           <div className="flex items-end">
             <button type="submit" className={cx(buttonClass('ember', 'lg'), 'w-full md:w-auto')}>
               {t('submit')}
@@ -150,17 +157,16 @@ export function HeroSearch({
               {t(`whenOptions.${w}`)}
             </button>
           ))}
-          {centers.length > 0 ? (
-            <button
-              type="button"
-              onClick={locate}
-              disabled={locating}
-              className={cx(chip(false), 'ms-auto gap-1.5')}
-            >
-              <LocateFixed aria-hidden="true" className="size-4" />
-              {locating ? t('locating') : t('useLocation')}
-            </button>
-          ) : null}
+          <button
+            type="button"
+            onClick={locate}
+            aria-disabled={locating}
+            aria-busy={locating}
+            className={cx(chip(false), 'ms-auto gap-1.5', locating && 'opacity-70')}
+          >
+            <LocateFixed aria-hidden="true" className={cx('size-4', locating && 'animate-pulse')} />
+            {locating ? t('locating') : t('useLocation')}
+          </button>
         </div>
         {when === 'custom' ? (
           <div className="grid gap-3 sm:grid-cols-2">
@@ -182,8 +188,12 @@ export function HeroSearch({
         ) : null}
         {range?.from ? <input type="hidden" name="from" value={range.from} /> : null}
         {range?.from ? <input type="hidden" name="to" value={range.to} /> : null}
-        <p role="status" aria-live="polite" className="m-0 min-h-5 text-caption text-ink-2">
-          {note}
+        <p
+          role="status"
+          aria-live="polite"
+          className={cx('m-0 min-h-5 text-caption', note?.problem ? 'text-danger' : 'text-ink-2')}
+        >
+          {note?.text}
         </p>
       </form>
     </search>

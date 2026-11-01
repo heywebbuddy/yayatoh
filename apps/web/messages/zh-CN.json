@@ -4657,7 +4657,9 @@
       "from": "开始日期",
       "to": "结束日期",
       "submit": "搜索",
-      "clear": "清除筛选"
+      "clear": "清除筛选",
+      "nearYou": "你附近",
+      "inCountry": "{country}"
     },
     "pagination": {
       "label": "分页",
@@ -20744,7 +20746,23 @@
     "from": "开始",
     "to": "结束",
     "defaultName": "你身边的现场活动",
-    "defaultMeta": "演唱会、会议、晚宴等"
+    "defaultMeta": "演唱会、会议、晚宴等",
+    "wherePlaceholder": "城市或国家",
+    "clearWhere": "清除地点",
+    "listLabel": "城市和国家",
+    "noPlaces": "没有匹配的地点",
+    "otherPlaces": "其他地点",
+    "hasEvents": "活动",
+    "placeResults": "{count, plural, other {# 个城市}}",
+    "nearPlace": "{place}附近",
+    "yourLocation": "你的位置",
+    "locate": {
+      "insecure": "浏览器仅在安全(HTTPS)页面共享位置。请改为选择城市。",
+      "unsupported": "此浏览器无法共享你的位置。请改为选择城市。",
+      "denied": "位置访问已被阻止。请在浏览器设置中允许,或选择城市。",
+      "unavailable": "暂时无法获取你的位置。请改为选择城市。",
+      "timeout": "获取位置用时过长。请重试或选择城市。"
+    }
   },
   "eventSkin": {
     "rsvp": "回复出席",

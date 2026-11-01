@@ -4657,7 +4657,9 @@
       "from": "Desde la fecha",
       "to": "Hasta la fecha",
       "submit": "Buscar",
-      "clear": "Borrar filtros"
+      "clear": "Borrar filtros",
+      "nearYou": "Cerca de tu ubicación",
+      "inCountry": "En {country}"
     },
     "pagination": {
       "label": "Páginas",
@@ -20744,7 +20746,23 @@
     "from": "Desde",
     "to": "Hasta",
     "defaultName": "Eventos en vivo cerca de ti",
-    "defaultMeta": "Conciertos, congresos, galas y más"
+    "defaultMeta": "Conciertos, congresos, galas y más",
+    "wherePlaceholder": "Ciudad o país",
+    "clearWhere": "Borrar lugar",
+    "listLabel": "Ciudades y países",
+    "noPlaces": "Ningún lugar coincide",
+    "otherPlaces": "Otros lugares",
+    "hasEvents": "Eventos",
+    "placeResults": "{count, plural, one {# ciudad disponible} other {# ciudades disponibles}}",
+    "nearPlace": "Cerca de {place}",
+    "yourLocation": "Tu ubicación",
+    "locate": {
+      "insecure": "Tu navegador solo comparte la ubicación en páginas seguras (HTTPS). Elige una ciudad.",
+      "unsupported": "Este navegador no puede compartir tu ubicación. Elige una ciudad.",
+      "denied": "El acceso a la ubicación está bloqueado. Permítelo en los ajustes del navegador o elige una ciudad.",
+      "unavailable": "Tu posición no está disponible ahora. Elige una ciudad.",
+      "timeout": "Obtener tu ubicación tardó demasiado. Inténtalo de nuevo o elige una ciudad."
+    }
   },
   "eventSkin": {
     "rsvp": "Confirmar asistencia",

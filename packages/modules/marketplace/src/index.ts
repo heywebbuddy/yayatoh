@@ -34,6 +34,7 @@ export {
   CATEGORIES,
   dayRange,
   escapeLike,
+  NEAR_RADIUS_KM,
   PAGE_SIZE,
   PRICE_FILTERS,
   pageCount,
@@ -52,8 +53,10 @@ export {
   ORG_LISTING_EVENTS,
 } from './projector.ts';
 export {
+  type ListingPlace,
   listingBySlug,
   listingCities,
+  listingPlaces,
   matchLegacyRedirect,
   orgListings,
   orgListingTags,

@@ -4,6 +4,7 @@ import {
   type ListingDto,
   type ListingPageDto,
   listingCities,
+  listingPlaces,
   orgListings,
   orgListingTags,
   type PublicEventHit,
@@ -74,6 +75,15 @@ export const cachedCities = () =>
     ['cities'],
     () => listingCities(),
     (raw) => raw as string[],
+  );
+
+/** Every city (with country and centre) that has upcoming listings: the home finder's "Where" list. */
+export const cachedPlaces = () =>
+  publicCached(
+    'marketplace',
+    ['places'],
+    () => listingPlaces(),
+    (raw) => raw as { city: string; country: string | null; lat: number | null; lng: number | null }[],
   );
 
 /** An event's public reviews (M1.4g), cached under its org's scope (moderation revalidates it). */

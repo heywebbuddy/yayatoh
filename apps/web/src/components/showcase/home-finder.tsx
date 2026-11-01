@@ -1,8 +1,9 @@
 import type { ListingDto } from '@yayatoh/marketplace';
 import type { PublicMediaDto } from '@yayatoh/media';
 import { getTranslations } from 'next-intl/server';
+import { mergePlaces } from '@/lib/places.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
-import { cachedCities, cachedCityCenters } from '@/server/public-data.ts';
+import { cachedPlaces } from '@/server/public-data.ts';
 import { MediaPicture } from '../media-picture.tsx';
 import { HeroSearch } from './hero-search.tsx';
 import { type HeroSlide, HeroSlider } from './hero-slider.tsx';
@@ -21,7 +22,7 @@ export async function HomeFinder({
   covers: ReadonlyMap<string, PublicMediaDto>;
 }) {
   const t = await getTranslations('homeFinder');
-  const [cities, centers] = await Promise.all([cachedCities(), cachedCityCenters()]);
+  const places = mergePlaces((await cachedPlaces()).map((p) => ({ ...p, country: p.country ?? '' })));
   const slides: HeroSlide[] = featured
     .filter((l) => covers.has(l.slug))
     .slice(0, 5)
@@ -56,7 +57,7 @@ export async function HomeFinder({
   return (
     <div className="flex flex-col gap-0 pt-4 pb-2 md:pt-6">
       <HeroSlider slides={slides} />
-      <HeroSearch action={localizedPath(locale, '/events')} cities={cities} centers={centers} />
+      <HeroSearch action={localizedPath(locale, '/events')} locale={locale} places={places} />
     </div>
   );
 }

@@ -4657,7 +4657,9 @@
       "from": "À partir du",
       "to": "Jusqu'au",
       "submit": "Rechercher",
-      "clear": "Effacer les filtres"
+      "clear": "Effacer les filtres",
+      "nearYou": "Près de chez vous",
+      "inCountry": "En {country}"
     },
     "pagination": {
       "label": "Pages",
@@ -20744,7 +20746,23 @@
     "from": "Du",
     "to": "Au",
     "defaultName": "Des événements près de chez vous",
-    "defaultMeta": "Concerts, conférences, galas et plus"
+    "defaultMeta": "Concerts, conférences, galas et plus",
+    "wherePlaceholder": "Ville ou pays",
+    "clearWhere": "Effacer le lieu",
+    "listLabel": "Villes et pays",
+    "noPlaces": "Aucun lieu correspondant",
+    "otherPlaces": "Autres lieux",
+    "hasEvents": "Événements",
+    "placeResults": "{count, plural, one {# ville disponible} other {# villes disponibles}}",
+    "nearPlace": "Près de {place}",
+    "yourLocation": "Votre position",
+    "locate": {
+      "insecure": "Votre navigateur ne partage la position que sur les pages sécurisées (HTTPS). Choisissez plutôt une ville.",
+      "unsupported": "Ce navigateur ne peut pas partager votre position. Choisissez plutôt une ville.",
+      "denied": "L’accès à la position est bloqué. Autorisez-le dans les réglages du navigateur ou choisissez une ville.",
+      "unavailable": "Votre position n’est pas disponible pour le moment. Choisissez plutôt une ville.",
+      "timeout": "La localisation a pris trop de temps. Réessayez ou choisissez une ville."
+    }
   },
   "eventSkin": {
     "rsvp": "Répondre",

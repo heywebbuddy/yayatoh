@@ -4657,7 +4657,9 @@
       "from": "A partir de",
       "to": "Até",
       "submit": "Pesquisar",
-      "clear": "Limpar filtros"
+      "clear": "Limpar filtros",
+      "nearYou": "Perto de si",
+      "inCountry": "Em {country}"
     },
     "pagination": {
       "label": "Páginas",
@@ -20744,7 +20746,23 @@
     "from": "De",
     "to": "Até",
     "defaultName": "Eventos ao vivo perto de você",
-    "defaultMeta": "Shows, conferências, galas e mais"
+    "defaultMeta": "Shows, conferências, galas e mais",
+    "wherePlaceholder": "Cidade ou país",
+    "clearWhere": "Limpar local",
+    "listLabel": "Cidades e países",
+    "noPlaces": "Nenhum local correspondente",
+    "otherPlaces": "Outros locais",
+    "hasEvents": "Eventos",
+    "placeResults": "{count, plural, one {# cidade disponível} other {# cidades disponíveis}}",
+    "nearPlace": "Perto de {place}",
+    "yourLocation": "Sua localização",
+    "locate": {
+      "insecure": "O navegador só partilha a localização em páginas seguras (HTTPS). Escolha uma cidade.",
+      "unsupported": "Este navegador não pode partilhar a sua localização. Escolha uma cidade.",
+      "denied": "O acesso à localização está bloqueado. Permita-o nas definições do navegador ou escolha uma cidade.",
+      "unavailable": "A sua posição não está disponível agora. Escolha uma cidade.",
+      "timeout": "Obter a localização demorou demais. Tente de novo ou escolha uma cidade."
+    }
   },
   "eventSkin": {
     "rsvp": "Confirmar presença",

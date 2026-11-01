@@ -76,10 +76,10 @@ export interface SecurityHeaderOptions {
 
 /**
  * M6.14a: paths (after the locale) whose page may ask for the visitor's location: the
- * marketplace search's "Use my location". Everything else keeps `geolocation=()`.
+ * marketplace search's and the home finder's "Use my location". Everything else keeps `geolocation=()`.
  */
-const GEOLOCATION_PATHS: readonly string[] = ['/search'];
-export const geolocationAllowed = (pathname: string) => GEOLOCATION_PATHS.includes(pathname);
+const GEOLOCATION_PATHS: readonly string[] = ['/search', '/'];
+export const geolocationAllowed = (pathname: string) => GEOLOCATION_PATHS.includes(pathname || '/');
 
 /** Every header a page response carries, by page type. */
 export function securityHeaders(type: PageType, o: SecurityHeaderOptions): Record<string, string> {
