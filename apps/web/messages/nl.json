@@ -4657,7 +4657,9 @@
       "from": "Vanaf datum",
       "to": "Tot datum",
       "submit": "Zoeken",
-      "clear": "Filters wissen"
+      "clear": "Filters wissen",
+      "nearYou": "In de buurt",
+      "inCountry": "In {country}"
     },
     "pagination": {
       "label": "Pagina's",
@@ -20744,7 +20746,23 @@
     "from": "Van",
     "to": "Tot",
     "defaultName": "Live evenementen bij jou in de buurt",
-    "defaultMeta": "Concerten, conferenties, gala’s en meer"
+    "defaultMeta": "Concerten, conferenties, gala’s en meer",
+    "wherePlaceholder": "Stad of land",
+    "clearWhere": "Plaats wissen",
+    "listLabel": "Steden en landen",
+    "noPlaces": "Geen passende plaats",
+    "otherPlaces": "Andere plaatsen",
+    "hasEvents": "Evenementen",
+    "placeResults": "{count, plural, one {# stad beschikbaar} other {# steden beschikbaar}}",
+    "nearPlace": "In de buurt van {place}",
+    "yourLocation": "Jouw locatie",
+    "locate": {
+      "insecure": "Je browser deelt je locatie alleen op beveiligde (HTTPS-)pagina’s. Kies in plaats daarvan een stad.",
+      "unsupported": "Deze browser kan je locatie niet delen. Kies in plaats daarvan een stad.",
+      "denied": "Toegang tot locatie is geblokkeerd. Sta het toe in de browserinstellingen of kies een stad.",
+      "unavailable": "Je positie is nu niet beschikbaar. Kies in plaats daarvan een stad.",
+      "timeout": "Je locatie bepalen duurde te lang. Probeer het opnieuw of kies een stad."
+    }
   },
   "eventSkin": {
     "rsvp": "Aanmelden (RSVP)",

@@ -5,6 +5,9 @@ export const PAGE_SIZE = 12;
 export const PRICE_FILTERS = ['free', 'paid'] as const;
 export const CATEGORIES = ['gala', 'concert', 'conference', 'community', 'tour', 'other'] as const;
 
+/** How far "near me" reaches around the visitor's coordinates. */
+export const NEAR_RADIUS_KM = 60;
+
 const blank = (v: unknown) => (typeof v === 'string' && v.trim() === '' ? undefined : v);
 const day = z.preprocess(
   blank,
@@ -24,12 +27,28 @@ export const SearchParams = z
   .object({
     q: z.preprocess(blank, z.string().trim().max(100).optional().catch(undefined)),
     city: z.preprocess(blank, z.string().trim().max(120).optional().catch(undefined)),
+    country: z.preprocess(
+      blank,
+      z
+        .string()
+        .trim()
+        .regex(/^[A-Za-z]{2}$/)
+        .transform((c) => c.toUpperCase())
+        .optional()
+        .catch(undefined),
+    ),
+    lat: z.preprocess(blank, z.coerce.number().min(-90).max(90).optional().catch(undefined)),
+    lng: z.preprocess(blank, z.coerce.number().min(-180).max(180).optional().catch(undefined)),
     category: z.preprocess(blank, EventCategoryKey.optional().catch(undefined)),
     price: z.preprocess(blank, z.enum(PRICE_FILTERS).optional().catch(undefined)),
     from: day,
     to: day,
     page: z.coerce.number().int().min(1).max(500).catch(1).default(1),
   })
+  // Coordinates only count as a pair (and a city or country chosen explicitly wins over them).
+  .transform((v) =>
+    v.lat === undefined || v.lng === undefined ? { ...v, lat: undefined, lng: undefined } : v,
+  )
   .transform((v) => (v.from && v.to && v.to < v.from ? { ...v, to: undefined, from: v.from } : v));
 export type SearchParams = z.output<typeof SearchParams>;
 

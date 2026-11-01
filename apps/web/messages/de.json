@@ -4657,7 +4657,9 @@
       "from": "Ab Datum",
       "to": "Bis Datum",
       "submit": "Suchen",
-      "clear": "Filter zurücksetzen"
+      "clear": "Filter zurücksetzen",
+      "nearYou": "In deiner Nähe",
+      "inCountry": "In {country}"
     },
     "pagination": {
       "label": "Seiten",
@@ -20744,7 +20746,23 @@
     "from": "Von",
     "to": "Bis",
     "defaultName": "Live-Events in deiner Nähe",
-    "defaultMeta": "Konzerte, Konferenzen, Galas und mehr"
+    "defaultMeta": "Konzerte, Konferenzen, Galas und mehr",
+    "wherePlaceholder": "Stadt oder Land",
+    "clearWhere": "Ort löschen",
+    "listLabel": "Städte und Länder",
+    "noPlaces": "Kein passender Ort",
+    "otherPlaces": "Weitere Orte",
+    "hasEvents": "Events",
+    "placeResults": "{count, plural, one {# Stadt verfügbar} other {# Städte verfügbar}}",
+    "nearPlace": "In der Nähe von {place}",
+    "yourLocation": "Dein Standort",
+    "locate": {
+      "insecure": "Dein Browser gibt den Standort nur auf sicheren Seiten (HTTPS) frei. Wähle stattdessen eine Stadt.",
+      "unsupported": "Dieser Browser kann deinen Standort nicht teilen. Wähle stattdessen eine Stadt.",
+      "denied": "Der Standortzugriff ist blockiert. Erlaube ihn in den Browsereinstellungen oder wähle eine Stadt.",
+      "unavailable": "Dein Standort ist gerade nicht verfügbar. Wähle stattdessen eine Stadt.",
+      "timeout": "Die Standortbestimmung hat zu lange gedauert. Versuche es erneut oder wähle eine Stadt."
+    }
   },
   "eventSkin": {
     "rsvp": "Zusagen",

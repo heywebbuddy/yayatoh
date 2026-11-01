@@ -4657,7 +4657,9 @@
       "from": "From date",
       "to": "To date",
       "submit": "Search",
-      "clear": "Clear filters"
+      "clear": "Clear filters",
+      "nearYou": "Near your location",
+      "inCountry": "In {country}"
     },
     "pagination": {
       "label": "Pages",
@@ -20744,7 +20746,23 @@
     "from": "From",
     "to": "To",
     "defaultName": "Live events near you",
-    "defaultMeta": "Concerts, conferences, galas and more"
+    "defaultMeta": "Concerts, conferences, galas and more",
+    "wherePlaceholder": "City or country",
+    "clearWhere": "Clear place",
+    "listLabel": "Cities and countries",
+    "noPlaces": "No matching place",
+    "otherPlaces": "Other places",
+    "hasEvents": "Events",
+    "placeResults": "{count, plural, one {# city available} other {# cities available}}",
+    "nearPlace": "Near {place}",
+    "yourLocation": "Your location",
+    "locate": {
+      "insecure": "Your browser only shares its location on secure (HTTPS) pages. Choose a city instead.",
+      "unsupported": "This browser cannot share your location. Choose a city instead.",
+      "denied": "Location access is blocked. Allow it in your browser settings, or choose a city.",
+      "unavailable": "Your position is not available right now. Choose a city instead.",
+      "timeout": "Finding your location took too long. Try again or choose a city."
+    }
   },
   "eventSkin": {
     "rsvp": "RSVP",

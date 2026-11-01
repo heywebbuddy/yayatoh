@@ -4657,7 +4657,9 @@
       "from": "開始日",
       "to": "終了日",
       "submit": "検索",
-      "clear": "フィルターをクリア"
+      "clear": "フィルターをクリア",
+      "nearYou": "現在地の近く",
+      "inCountry": "{country}内"
     },
     "pagination": {
       "label": "ページ",
@@ -20744,7 +20746,23 @@
     "from": "開始",
     "to": "終了",
     "defaultName": "あなたの近くのライブイベント",
-    "defaultMeta": "コンサート、カンファレンス、ガラなど"
+    "defaultMeta": "コンサート、カンファレンス、ガラなど",
+    "wherePlaceholder": "都市または国",
+    "clearWhere": "場所をクリア",
+    "listLabel": "都市と国",
+    "noPlaces": "一致する場所がありません",
+    "otherPlaces": "その他の場所",
+    "hasEvents": "イベント",
+    "placeResults": "{count, plural, other {#件の都市}}",
+    "nearPlace": "{place}の近く",
+    "yourLocation": "現在地",
+    "locate": {
+      "insecure": "ブラウザは安全な(HTTPS)ページでのみ位置情報を共有します。代わりに都市を選んでください。",
+      "unsupported": "このブラウザでは位置情報を共有できません。代わりに都市を選んでください。",
+      "denied": "位置情報へのアクセスがブロックされています。ブラウザの設定で許可するか、都市を選んでください。",
+      "unavailable": "現在、位置情報を取得できません。代わりに都市を選んでください。",
+      "timeout": "位置情報の取得に時間がかかりすぎました。もう一度試すか、都市を選んでください。"
+    }
   },
   "eventSkin": {
     "rsvp": "出欠を回答",

@@ -127,6 +127,8 @@ describe('page types and headers', () => {
       'geolocation=()',
     );
     expect(geolocationAllowed('/search')).toBe(true);
+    expect(geolocationAllowed('/')).toBe(true);
+    expect(geolocationAllowed('')).toBe(true);
     expect(geolocationAllowed('/events')).toBe(false);
 
     const scan = securityHeaders('scan', { nonce });

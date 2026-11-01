@@ -4,7 +4,14 @@ import { createCtx } from '@yayatoh/kernel';
 import { organizationPublicTx, resolveOrgSlug } from '@yayatoh/tenancy';
 import { and, arrayContains, asc, count, gt, sql } from 'drizzle-orm';
 import { followRedirectChain, type RedirectRule } from './domain/redirects.ts';
-import { dayRange, escapeLike, PAGE_SIZE, pageCount, type SearchParams } from './domain/search.ts';
+import {
+  dayRange,
+  escapeLike,
+  NEAR_RADIUS_KM,
+  PAGE_SIZE,
+  pageCount,
+  type SearchParams,
+} from './domain/search.ts';
 import {
   type ListingDto,
   type ListingPageDto,
@@ -55,12 +62,16 @@ export async function searchListings(
 ): Promise<ListingPageDto> {
   const { from, to } = dayRange(p);
   const offset = (p.page - 1) * PAGE_SIZE;
+  // Coordinates are a radius only when no city or country was chosen (those are exact).
+  const near = p.lat !== undefined && p.lng !== undefined && !p.city && !p.country;
   const rows = await withoutTenant((tx) =>
     tx.execute<Row>(sql`select * from marketplace.search_listings(
       ${p.q ? escapeLike(p.q) : null}, ${p.city ?? null}, ${p.category ?? null},
       ${from ? from.toISOString() : null}::timestamptz, ${to ? to.toISOString() : null}::timestamptz,
       ${p.price ?? null}, ${p.orgSlug ?? null}, ${!p.orgSlug}, ${now.toISOString()}::timestamptz,
-      ${PAGE_SIZE}, ${offset})`),
+      ${PAGE_SIZE}, ${offset},
+      ${p.country ?? null}, ${near ? p.lat : null}::double precision, ${near ? p.lng : null}::double precision,
+      ${near ? NEAR_RADIUS_KM : null}::double precision)`),
   );
   const total = rows.length > 0 ? Number(rows[0]?.total ?? 0) : 0;
   return { items: rows.map(toListing), total, page: p.page, pageCount: pageCount(total) };
@@ -74,6 +85,29 @@ export async function listingCities(now: Date = new Date()): Promise<string[]> {
     ),
   );
   return rows.map((r) => r.city);
+}
+
+export interface ListingPlace {
+  readonly city: string;
+  /** ISO 3166-1 alpha-2, or null when the event has none. */
+  readonly country: string | null;
+  readonly lat: number | null;
+  readonly lng: number | null;
+}
+
+/** Every city (with its country and centre) that has upcoming marketplace listings. */
+export async function listingPlaces(now: Date = new Date()): Promise<ListingPlace[]> {
+  const rows = await withoutTenant((tx) =>
+    tx.execute<{ city: string; country: string | null; lat: number | null; lng: number | null }>(
+      sql`select city, country, lat, lng from marketplace.listing_places(${now.toISOString()}::timestamptz)`,
+    ),
+  );
+  return rows.map((r) => ({
+    city: r.city,
+    country: r.country ? r.country.toUpperCase() : null,
+    lat: num(r.lat),
+    lng: num(r.lng),
+  }));
 }
 
 /** One listing by event slug (canonical URL, organizer link), cross-tenant; null when not listed. */

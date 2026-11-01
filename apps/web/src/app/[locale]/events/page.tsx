@@ -37,6 +37,8 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const filtered = Boolean(
     sp.q ||
       sp.city ||
+      sp.country ||
+      sp.lat !== undefined ||
       sp.category ||
       sp.price ||
       sp.from ||

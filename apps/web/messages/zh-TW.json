@@ -4657,7 +4657,9 @@
       "from": "開始日期",
       "to": "結束日期",
       "submit": "搜尋",
-      "clear": "清除篩選"
+      "clear": "清除篩選",
+      "nearYou": "你附近",
+      "inCountry": "{country}"
     },
     "pagination": {
       "label": "分頁",
@@ -20744,7 +20746,23 @@
     "from": "開始",
     "to": "結束",
     "defaultName": "你身邊的現場活動",
-    "defaultMeta": "演唱會、研討會、晚宴等"
+    "defaultMeta": "演唱會、研討會、晚宴等",
+    "wherePlaceholder": "城市或國家",
+    "clearWhere": "清除地點",
+    "listLabel": "城市和國家",
+    "noPlaces": "沒有相符的地點",
+    "otherPlaces": "其他地點",
+    "hasEvents": "活動",
+    "placeResults": "{count, plural, other {# 個城市}}",
+    "nearPlace": "{place}附近",
+    "yourLocation": "你的位置",
+    "locate": {
+      "insecure": "瀏覽器僅在安全(HTTPS)頁面分享位置。請改為選擇城市。",
+      "unsupported": "此瀏覽器無法分享你的位置。請改為選擇城市。",
+      "denied": "位置存取已被封鎖。請在瀏覽器設定中允許,或選擇城市。",
+      "unavailable": "暫時無法取得你的位置。請改為選擇城市。",
+      "timeout": "取得位置耗時過長。請重試或選擇城市。"
+    }
   },
   "eventSkin": {
     "rsvp": "回覆出席",
