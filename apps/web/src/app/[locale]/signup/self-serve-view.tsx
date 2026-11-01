@@ -1,5 +1,6 @@
-import { billingEnabled, publicPlanTiers } from '@yayatoh/billing';
+import { billingEnabled, pricingCurrency, publicFeeSchedules, publicPlanTiers } from '@yayatoh/billing';
 import { formatMoney, money } from '@yayatoh/kernel';
+import { headers } from 'next/headers';
 import { getTranslations } from 'next-intl/server';
 import { MaskLines } from '@/components/organizers/motion.tsx';
 import { ShowcaseShell } from '@/components/showcase/shell.tsx';
@@ -38,8 +39,26 @@ export async function SelfServeView({
   interval: 'month' | 'year';
 }) {
   const t = await getTranslations();
-  const [session, tiers] = await Promise.all([ownAuthSession(), publicPlanTiers()]);
+  const [session, tiers, fees] = await Promise.all([ownAuthSession(), publicPlanTiers(), publicFeeSchedules()]);
   const fmt = (minor: number, currency: string) => formatMoney(money(minor, currency), locale);
+  // The per-ticket platform fee (the old /pricing page), in the visitor's country's currency.
+  const feeCurrency = pricingCurrency(
+    fees.map((f) => f.currency),
+    { country: (await headers()).get('x-vercel-ip-country') },
+  );
+  const fee = fees.find((f) => f.currency === feeCurrency) ?? null;
+  const percent = fee
+    ? new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(fee.percentBps / 10_000)
+    : '';
+  const feeSummary = !fee
+    ? null
+    : fee.percentBps === 0 && fee.fixedMinor === 0
+      ? t('pricingPage.feeNone')
+      : fee.fixedMinor === 0
+        ? t('pricingPage.feePercent', { percent })
+        : fee.percentBps === 0
+          ? t('pricingPage.feeFixed', { fixed: fmt(fee.fixedMinor, fee.currency) })
+          : t('pricingPage.feeBoth', { percent, fixed: fmt(fee.fixedMinor, fee.currency) });
   const payments = billingEnabled();
   const cards: PlanCard[] = TIERS.map((p) => {
     const tier = tiers.find((x) => x.key === p.key);
@@ -95,6 +114,17 @@ export async function SelfServeView({
         sales={{ action: applyAction, humanCheck: humanCheckWidget() }}
         defaultCountry="US"
       />
+      {fee && feeSummary ? (
+        <section aria-labelledby="fee-heading" className="flex flex-col gap-2 rounded-[28px] border border-line bg-surface p-6">
+          <h2 id="fee-heading" className="m-0 text-section">
+            {t('pricingPage.feeHeading', { currency: fee.currency })}
+          </h2>
+          <p className="m-0 text-[20px] font-extrabold tracking-[-0.02em]">{feeSummary}</p>
+          <p className="m-0 text-body text-ink-2">{t('pricingPage.freeTickets')}</p>
+          <p className="m-0 text-body text-ink-2">{t('pricingPage.passOnExplained')}</p>
+          <p className="m-0 text-body text-ink-2">{t('pricingPage.absorbExplained')}</p>
+        </section>
+      ) : null}
     </ShowcaseShell>
   );
 }

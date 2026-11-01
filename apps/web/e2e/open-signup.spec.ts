@@ -25,10 +25,7 @@ test.describe('self-serve signup', () => {
       await expect(page.getByRole('heading', { name: 'Self-serve signup is coming soon' })).toBeVisible();
       await expect(page.getByText('You need a signup code')).toBeVisible();
       await expect(page.getByRole('button', { name: 'Create organization' })).toHaveCount(0);
-      await expect(page.getByRole('link', { name: 'See pricing and fees' })).toHaveAttribute(
-        'href',
-        '/pricing',
-      );
+      await expect(page.getByRole('link', { name: 'See pricing and fees' })).toHaveCount(0);
       await expectAccessible(page);
       // Keyboard: type a code and submit it with Enter.
       await page.getByLabel('Signup code').focus();
@@ -41,6 +38,18 @@ test.describe('self-serve signup', () => {
       await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
       await expect(page.getByRole('heading', { name: 'التسجيل الذاتي متاح قريبًا' })).toBeVisible();
       await expectAccessible(page);
+    });
+  });
+
+  test('the old /pricing page redirects to /signup, where open signup shows the per-ticket fee', async ({
+    page,
+  }) => {
+    test.setTimeout(120_000);
+    await withOpenSignup(true, async () => {
+      await page.goto('/pricing');
+      await expect(page).toHaveURL(/\/signup$/);
+      await expect(page.getByRole('heading', { name: /platform fee/i })).toBeVisible();
+      await expect(page.getByRole('link', { name: /^pricing$/i })).toHaveCount(0);
     });
   });
 
