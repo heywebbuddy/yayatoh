@@ -99,9 +99,6 @@ export default async function SignupPage({
                   {t('signup.useCode')}
                 </button>
               </form>
-              <Link href="/pricing" className="self-start text-body underline underline-offset-2">
-                {t('signup.seePricing')}
-              </Link>
             </section>
           ) : code && !valid ? (
             <p className="text-body text-ink-2">{t('signup.invalidCode')}</p>
@@ -124,22 +121,11 @@ export default async function SignupPage({
               <p className="text-caption text-ink-2">
                 {t('signup.signedInAs', { email: session.user.email })}
               </p>
-              {selfServe ? (
-                <p className="text-body text-ink-2">
-                  {t.rich('signup.openNote', {
-                    pricing: (chunks) => (
-                      <Link href="/pricing" className="underline underline-offset-2">
-                        {chunks}
-                      </Link>
-                    ),
-                  })}
-                </p>
-              ) : null}
               <SignupForm
                 action={signupAction}
                 code={code}
-                open={selfServe}
-                humanCheck={selfServe ? humanCheckWidget() : null}
+                open={false}
+                humanCheck={null}
               />
             </>
           )}

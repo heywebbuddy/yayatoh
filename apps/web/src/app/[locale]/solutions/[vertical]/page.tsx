@@ -186,8 +186,8 @@ export default async function SolutionPage({ params }: Props) {
           <Link href="/signup" className={buttonClass('white', 'lg', 'px-8')}>
             {t('createEvent')}
           </Link>
-          <Link href="/pricing" className={buttonClass('inverse', 'lg', 'rounded-pill px-6')}>
-            {ts('pricing')}
+          <Link href="/for-organizers" className={buttonClass('inverse', 'lg', 'rounded-pill px-6')}>
+            {ts('forOrganizers')}
           </Link>
         </div>
       </section>

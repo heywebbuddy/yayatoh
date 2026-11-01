@@ -57,9 +57,6 @@ export async function ShowcaseFooter({ children }: { children?: ReactNode }) {
             <Link href="/my-tickets" className={colLink}>
               {t('myTickets')}
             </Link>
-            <Link href="/pricing" className={colLink}>
-              {t('pricing')}
-            </Link>
             <Link href="/for-organizers" className={colLink}>
               {t('forOrganizers')}
             </Link>
