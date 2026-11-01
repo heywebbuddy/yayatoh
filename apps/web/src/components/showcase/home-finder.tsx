@@ -54,7 +54,7 @@ export async function HomeFinder({
       picture: <div className="size-full bg-ember-soft" />,
     });
   return (
-    <div className="flex flex-col gap-0 pb-2">
+    <div className="flex flex-col gap-0 pt-4 pb-2 md:pt-6">
       <HeroSlider slides={slides} />
       <HeroSearch action={localizedPath(locale, '/events')} cities={cities} centers={centers} />
     </div>
