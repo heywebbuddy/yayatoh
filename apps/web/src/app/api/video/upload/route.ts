@@ -17,9 +17,13 @@ async function frame(video: Uint8Array): Promise<Uint8Array | null> {
   const dir = await mkdtemp(join(tmpdir(), 'yy-video-'));
   try {
     await writeFile(join(dir, 'in'), video);
-    await run('ffmpeg', ['-y', '-ss', '1', '-i', join(dir, 'in'), '-frames:v', '1', '-q:v', '3', join(dir, 'out.jpg')], {
-      timeout: 30_000,
-    });
+    await run(
+      'ffmpeg',
+      ['-y', '-ss', '1', '-i', join(dir, 'in'), '-frames:v', '1', '-q:v', '3', join(dir, 'out.jpg')],
+      {
+        timeout: 30_000,
+      },
+    );
     return new Uint8Array(await readFile(join(dir, 'out.jpg')));
   } catch {
     return null;
@@ -48,7 +52,8 @@ export async function POST(req: Request): Promise<Response> {
   const slug = String(form.get('org') ?? '');
   const org = slug ? await resolveOrgSlug(slug) : null;
   const actor = org ? await orgActor(org.orgId, session) : null;
-  if (!org || !actor || !roleCan(actor.role, 'events:write')) return reply(404, { ok: false, code: 'not_found' });
+  if (!org || !actor || !roleCan(actor.role, 'events:write'))
+    return reply(404, { ok: false, code: 'not_found' });
   const video = form.get('video');
   const poster = form.get('poster');
   if (!(video instanceof File) || video.size === 0) return reply(400, { ok: false, code: 'unsupported' });

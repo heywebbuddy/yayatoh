@@ -246,9 +246,13 @@ for (const [i, p] of POSTS.entries()) {
   const [row] = await platform(
     `look for post ${p.slug}`,
     (tx) =>
-      tx.execute<{ id: string; category: string | null; body: string; status: string; published_at: string | null }>(
-        sql`select id, category, body, status, published_at from cms.platform_posts where slug = ${p.slug}`,
-      ),
+      tx.execute<{
+        id: string;
+        category: string | null;
+        body: string;
+        status: string;
+        published_at: string | null;
+      }>(sql`select id, category, body, status, published_at from cms.platform_posts where slug = ${p.slug}`),
     false,
   );
   if (row?.category) {

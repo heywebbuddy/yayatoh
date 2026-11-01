@@ -39,11 +39,18 @@ export async function GET(
     start = Math.max(0, start);
     end = Math.min(end, total - 1);
     if (start > end || start >= total)
-      return new Response(null, { status: 416, headers: { ...headers, 'content-range': `bytes */${total}` } });
+      return new Response(null, {
+        status: 416,
+        headers: { ...headers, 'content-range': `bytes */${total}` },
+      });
     const part = obj.bytes.subarray(start, end + 1);
     return new Response(part as Uint8Array<ArrayBuffer>, {
       status: 206,
-      headers: { ...headers, 'content-range': `bytes ${start}-${end}/${total}`, 'content-length': String(part.byteLength) },
+      headers: {
+        ...headers,
+        'content-range': `bytes ${start}-${end}/${total}`,
+        'content-length': String(part.byteLength),
+      },
     });
   }
   return new Response(obj.bytes as Uint8Array<ArrayBuffer>, {

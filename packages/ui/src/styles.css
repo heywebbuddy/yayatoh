@@ -479,7 +479,6 @@
   }
 }
 
-
 /*
  * Event page skins: each event type (profile) restyles the public event page with its own
  * palette, display type and hero, in light and dark. They only re-point colour roles and type; the
@@ -496,7 +495,7 @@
   --color-primary-pressed: #7d2445;
   --color-on-primary: #ffffff;
   --color-primary-ink: #8f2d52;
-  --color-primary-soft: rgba(168,54,95,0.1);
+  --color-primary-soft: rgba(168, 54, 95, 0.1);
   --color-focus: #8f2d52;
   --gradient-ember: linear-gradient(100deg, #c2577a 0%, #d98b6a 52%, #e3b77a 100%);
   --gradient-ember-soft: linear-gradient(135deg, #c2577a 0%, #d98b6a 60%, #e3b77a 100%);
@@ -513,7 +512,7 @@
   --color-primary-pressed: #9c2b52;
   --color-on-primary: #ffffff;
   --color-primary-ink: #ffa3c0;
-  --color-primary-soft: rgba(201,61,110,0.2);
+  --color-primary-soft: rgba(201, 61, 110, 0.2);
   --color-focus: #ffa3c0;
   --gradient-ember: linear-gradient(100deg, #c2577a 0%, #d98b6a 52%, #e3b77a 100%);
   --gradient-ember-soft: linear-gradient(135deg, #c2577a 0%, #d98b6a 60%, #e3b77a 100%);
@@ -531,7 +530,7 @@
     --color-primary-pressed: #9c2b52;
     --color-on-primary: #ffffff;
     --color-primary-ink: #ffa3c0;
-    --color-primary-soft: rgba(201,61,110,0.2);
+    --color-primary-soft: rgba(201, 61, 110, 0.2);
     --color-focus: #ffa3c0;
     --gradient-ember: linear-gradient(100deg, #c2577a 0%, #d98b6a 52%, #e3b77a 100%);
     --gradient-ember-soft: linear-gradient(135deg, #c2577a 0%, #d98b6a 60%, #e3b77a 100%);
@@ -549,7 +548,7 @@
   --color-primary-pressed: #0f0c09;
   --color-on-primary: #ffffff;
   --color-primary-ink: #1a1612;
-  --color-primary-soft: rgba(138,106,31,0.14);
+  --color-primary-soft: rgba(138, 106, 31, 0.14);
   --color-focus: #1a1612;
   --gradient-ember: linear-gradient(100deg, #8a6a1f 0%, #c9a24a 52%, #e8cc83 100%);
   --gradient-ember-soft: linear-gradient(135deg, #8a6a1f 0%, #c9a24a 60%, #e8cc83 100%);
@@ -566,7 +565,7 @@
   --color-primary-pressed: #b58f3c;
   --color-on-primary: #17120f;
   --color-primary-ink: #e8cc83;
-  --color-primary-soft: rgba(201,162,74,0.18);
+  --color-primary-soft: rgba(201, 162, 74, 0.18);
   --color-focus: #e8cc83;
   --gradient-ember: linear-gradient(100deg, #8a6a1f 0%, #c9a24a 52%, #e8cc83 100%);
   --gradient-ember-soft: linear-gradient(135deg, #8a6a1f 0%, #c9a24a 60%, #e8cc83 100%);
@@ -584,7 +583,7 @@
     --color-primary-pressed: #b58f3c;
     --color-on-primary: #17120f;
     --color-primary-ink: #e8cc83;
-    --color-primary-soft: rgba(201,162,74,0.18);
+    --color-primary-soft: rgba(201, 162, 74, 0.18);
     --color-focus: #e8cc83;
     --gradient-ember: linear-gradient(100deg, #8a6a1f 0%, #c9a24a 52%, #e8cc83 100%);
     --gradient-ember-soft: linear-gradient(135deg, #8a6a1f 0%, #c9a24a 60%, #e8cc83 100%);
@@ -602,7 +601,7 @@
   --color-primary-pressed: #123c88;
   --color-on-primary: #ffffff;
   --color-primary-ink: #174ba8;
-  --color-primary-soft: rgba(29,95,209,0.1);
+  --color-primary-soft: rgba(29, 95, 209, 0.1);
   --color-focus: #174ba8;
   --gradient-ember: linear-gradient(100deg, #1d5fd1 0%, #128aa8 52%, #12a37f 100%);
   --gradient-ember-soft: linear-gradient(135deg, #1d5fd1 0%, #128aa8 60%, #12a37f 100%);
@@ -619,7 +618,7 @@
   --color-primary-pressed: #2150ab;
   --color-on-primary: #ffffff;
   --color-primary-ink: #9ec0ff;
-  --color-primary-soft: rgba(47,111,224,0.2);
+  --color-primary-soft: rgba(47, 111, 224, 0.2);
   --color-focus: #9ec0ff;
   --gradient-ember: linear-gradient(100deg, #1d5fd1 0%, #128aa8 52%, #12a37f 100%);
   --gradient-ember-soft: linear-gradient(135deg, #1d5fd1 0%, #128aa8 60%, #12a37f 100%);
@@ -637,7 +636,7 @@
     --color-primary-pressed: #2150ab;
     --color-on-primary: #ffffff;
     --color-primary-ink: #9ec0ff;
-    --color-primary-soft: rgba(47,111,224,0.2);
+    --color-primary-soft: rgba(47, 111, 224, 0.2);
     --color-focus: #9ec0ff;
     --gradient-ember: linear-gradient(100deg, #1d5fd1 0%, #128aa8 52%, #12a37f 100%);
     --gradient-ember-soft: linear-gradient(135deg, #1d5fd1 0%, #128aa8 60%, #12a37f 100%);
@@ -655,7 +654,7 @@
   --color-primary-pressed: #a50c2c;
   --color-on-primary: #ffffff;
   --color-primary-ink: #b00e30;
-  --color-primary-soft: rgba(212,18,58,0.1);
+  --color-primary-soft: rgba(212, 18, 58, 0.1);
   --color-focus: #b00e30;
   --gradient-ember: linear-gradient(100deg, #d4122c 0%, #d8420c 52%, #c41a62 100%);
   --gradient-ember-soft: linear-gradient(135deg, #d4122c 0%, #d8420c 60%, #c41a62 100%);
@@ -672,7 +671,7 @@
   --color-primary-pressed: #b8122f;
   --color-on-primary: #ffffff;
   --color-primary-ink: #ff8a9b;
-  --color-primary-soft: rgba(228,28,63,0.2);
+  --color-primary-soft: rgba(228, 28, 63, 0.2);
   --color-focus: #ff8a9b;
   --gradient-ember: linear-gradient(100deg, #d4122c 0%, #d8420c 52%, #c41a62 100%);
   --gradient-ember-soft: linear-gradient(135deg, #d4122c 0%, #d8420c 60%, #c41a62 100%);
@@ -690,7 +689,7 @@
     --color-primary-pressed: #b8122f;
     --color-on-primary: #ffffff;
     --color-primary-ink: #ff8a9b;
-    --color-primary-soft: rgba(228,28,63,0.2);
+    --color-primary-soft: rgba(228, 28, 63, 0.2);
     --color-focus: #ff8a9b;
     --gradient-ember: linear-gradient(100deg, #d4122c 0%, #d8420c 52%, #c41a62 100%);
     --gradient-ember-soft: linear-gradient(135deg, #d4122c 0%, #d8420c 60%, #c41a62 100%);
@@ -708,7 +707,7 @@
   --color-primary-pressed: #12562d;
   --color-on-primary: #ffffff;
   --color-primary-ink: #146232;
-  --color-primary-soft: rgba(28,127,68,0.1);
+  --color-primary-soft: rgba(28, 127, 68, 0.1);
   --color-focus: #146232;
   --gradient-ember: linear-gradient(100deg, #1c7f44 0%, #c8860f 52%, #1f7fc4 100%);
   --gradient-ember-soft: linear-gradient(135deg, #1c7f44 0%, #c8860f 60%, #1f7fc4 100%);
@@ -725,7 +724,7 @@
   --color-primary-pressed: #126032;
   --color-on-primary: #ffffff;
   --color-primary-ink: #7be0a1;
-  --color-primary-soft: rgba(28,127,68,0.24);
+  --color-primary-soft: rgba(28, 127, 68, 0.24);
   --color-focus: #7be0a1;
   --gradient-ember: linear-gradient(100deg, #1c7f44 0%, #c8860f 52%, #1f7fc4 100%);
   --gradient-ember-soft: linear-gradient(135deg, #1c7f44 0%, #c8860f 60%, #1f7fc4 100%);
@@ -743,7 +742,7 @@
     --color-primary-pressed: #126032;
     --color-on-primary: #ffffff;
     --color-primary-ink: #7be0a1;
-    --color-primary-soft: rgba(28,127,68,0.24);
+    --color-primary-soft: rgba(28, 127, 68, 0.24);
     --color-focus: #7be0a1;
     --gradient-ember: linear-gradient(100deg, #1c7f44 0%, #c8860f 52%, #1f7fc4 100%);
     --gradient-ember-soft: linear-gradient(135deg, #1c7f44 0%, #c8860f 60%, #1f7fc4 100%);
@@ -761,7 +760,7 @@
   --color-primary-pressed: #094d61;
   --color-on-primary: #ffffff;
   --color-primary-ink: #0b5a70;
-  --color-primary-soft: rgba(14,116,144,0.1);
+  --color-primary-soft: rgba(14, 116, 144, 0.1);
   --color-focus: #0b5a70;
   --gradient-ember: linear-gradient(100deg, #0e7490 0%, #14867f 52%, #b87a14 100%);
   --gradient-ember-soft: linear-gradient(135deg, #0e7490 0%, #14867f 60%, #b87a14 100%);
@@ -778,7 +777,7 @@
   --color-primary-pressed: #0b5d74;
   --color-on-primary: #ffffff;
   --color-primary-ink: #7fd6ee;
-  --color-primary-soft: rgba(15,127,157,0.22);
+  --color-primary-soft: rgba(15, 127, 157, 0.22);
   --color-focus: #7fd6ee;
   --gradient-ember: linear-gradient(100deg, #0e7490 0%, #14867f 52%, #b87a14 100%);
   --gradient-ember-soft: linear-gradient(135deg, #0e7490 0%, #14867f 60%, #b87a14 100%);
@@ -796,7 +795,7 @@
     --color-primary-pressed: #0b5d74;
     --color-on-primary: #ffffff;
     --color-primary-ink: #7fd6ee;
-    --color-primary-soft: rgba(15,127,157,0.22);
+    --color-primary-soft: rgba(15, 127, 157, 0.22);
     --color-focus: #7fd6ee;
     --gradient-ember: linear-gradient(100deg, #0e7490 0%, #14867f 52%, #b87a14 100%);
     --gradient-ember-soft: linear-gradient(135deg, #0e7490 0%, #14867f 60%, #b87a14 100%);
@@ -814,7 +813,7 @@
   --color-primary-pressed: #0c0907;
   --color-on-primary: #ffffff;
   --color-primary-ink: #17120f;
-  --color-primary-soft: rgba(23,18,15,0.08);
+  --color-primary-soft: rgba(23, 18, 15, 0.08);
   --color-focus: #17120f;
   --gradient-ember: linear-gradient(100deg, #17120f 0%, #5a524b 52%, #9a9088 100%);
   --gradient-ember-soft: linear-gradient(135deg, #17120f 0%, #5a524b 60%, #9a9088 100%);
@@ -831,7 +830,7 @@
   --color-primary-pressed: #d9d4cd;
   --color-on-primary: #17120f;
   --color-primary-ink: #f2eee9;
-  --color-primary-soft: rgba(242,238,233,0.14);
+  --color-primary-soft: rgba(242, 238, 233, 0.14);
   --color-focus: #f2eee9;
   --gradient-ember: linear-gradient(100deg, #17120f 0%, #5a524b 52%, #9a9088 100%);
   --gradient-ember-soft: linear-gradient(135deg, #17120f 0%, #5a524b 60%, #9a9088 100%);
@@ -849,7 +848,7 @@
     --color-primary-pressed: #d9d4cd;
     --color-on-primary: #17120f;
     --color-primary-ink: #f2eee9;
-    --color-primary-soft: rgba(242,238,233,0.14);
+    --color-primary-soft: rgba(242, 238, 233, 0.14);
     --color-focus: #f2eee9;
     --gradient-ember: linear-gradient(100deg, #17120f 0%, #5a524b 52%, #9a9088 100%);
     --gradient-ember-soft: linear-gradient(135deg, #17120f 0%, #5a524b 60%, #9a9088 100%);

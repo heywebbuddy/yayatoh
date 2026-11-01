@@ -35,7 +35,8 @@ import { log, owner, run } from './demo/kit.ts';
 const slug = process.env.DEMO_ORG_SLUG;
 const ownerEmail = process.env.DEMO_OWNER_EMAIL?.toLowerCase();
 const images = process.env.DEMO_IMAGES_DIR;
-if (!slug || !ownerEmail || !images) throw new Error('Set DEMO_ORG_SLUG, DEMO_OWNER_EMAIL and DEMO_IMAGES_DIR');
+if (!slug || !ownerEmail || !images)
+  throw new Error('Set DEMO_ORG_SLUG, DEMO_OWNER_EMAIL and DEMO_IMAGES_DIR');
 
 const resolved = await resolveOrgSlug(slug);
 if (!resolved) throw new Error(`No organization ${slug}`);
@@ -162,8 +163,11 @@ for (const p of ORG_POSTS) {
     { entryId: row.id, ...rich, ...(row.body.length >= 700 ? { body: undefined } : {}) },
     owner(d),
   );
-  if (row.status !== 'published') await run(setEntryStatusCommand, { entryId: row.id, action: 'publish' }, owner(d));
-  log(`org post "${p.title}": updated (cover, category, tags, author${row.body.length >= 700 ? '' : ', body'})`);
+  if (row.status !== 'published')
+    await run(setEntryStatusCommand, { entryId: row.id, action: 'publish' }, owner(d));
+  log(
+    `org post "${p.title}": updated (cover, category, tags, author${row.body.length >= 700 ? '' : ', body'})`,
+  );
 }
 
 log('demo content: done');
