@@ -1366,6 +1366,13 @@
       "when": 1793480795392,
       "tag": "0195_page_locales",
       "breakpoints": true
+    },
+    {
+      "idx": 196,
+      "version": "7",
+      "when": 1793481795392,
+      "tag": "0196_refund_policy_page",
+      "breakpoints": true
     }
   ]
 }
