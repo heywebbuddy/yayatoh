@@ -40,6 +40,8 @@ const VALUE_ICONS = [Heart, Star, Zap, Sparkles, Users, Compass];
 function parseStat(value: string): { to: number; prefix: string; suffix: string } | null {
   const m = /^(\D*?)(\d[\d,.]*)(\D*)$/.exec(value.trim());
   if (!m) return null;
+  // Decimals ("4.9") stay plain text; only thousands separators are stripped.
+  if (/\.\d{1,2}$/.test(m[2] ?? '')) return null;
   const to = Number((m[2] ?? '').replace(/[,.]/g, ''));
   if (!Number.isFinite(to) || to > 1e9) return null;
   return { to, prefix: m[1] ?? '', suffix: m[3] ?? '' };
