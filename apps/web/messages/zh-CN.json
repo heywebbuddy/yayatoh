@@ -20823,6 +20823,8 @@
     "aboutLink": "关于我们",
     "termsLink": "服务条款",
     "cookiesLink": "Cookie 政策",
+
+    "refundLink": "退款政策",
     "legalEyebrow": "法律信息",
     "lastUpdated": "最后更新 {date} · 版本 {version}",
     "about": {

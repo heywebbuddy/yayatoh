@@ -98,6 +98,9 @@ export async function ShowcaseFooter({ children }: { children?: ReactNode }) {
             <Link href="/terms" className={colLink}>
               {sp('termsLink')}
             </Link>
+            <Link href="/refund-policy" className={colLink}>
+              {sp('refundLink')}
+            </Link>
             <Link href="/cookies" className={colLink}>
               {sp('cookiesLink')}
             </Link>

@@ -20823,6 +20823,8 @@
     "aboutLink": "О нас",
     "termsLink": "Условия использования",
     "cookiesLink": "Политика cookie",
+
+    "refundLink": "Политика возврата средств",
     "legalEyebrow": "Правовая информация",
     "lastUpdated": "Последнее обновление: {date} · версия {version}",
     "about": {

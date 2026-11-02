@@ -40,7 +40,7 @@ export async function platformPage(slug: string, locale = 'en'): Promise<Platfor
 }
 
 /** Pages shown in the footer's legal column, in a fixed order. */
-export const LEGAL_SLUGS = ['privacy', 'terms', 'cookies', 'sub-processors'] as const;
+export const LEGAL_SLUGS = ['privacy', 'terms', 'refund-policy', 'cookies', 'sub-processors'] as const;
 
 export const ContactSettings = z.object({
   address: z.string().max(400).default(''),

@@ -5,8 +5,8 @@ import { createJourneyCommand } from '@yayatoh/automations';
 import { createCampaignCommand, saveCampaignCommand, setAudienceCommand } from '@yayatoh/campaigns';
 import { createEntryCommand, setEntryStatusCommand } from '@yayatoh/cms';
 import { sql } from '@yayatoh/db';
-import { updateSiteSettingsCommand } from '@yayatoh/marketplace';
 import { buildRoundTable, buildRow } from '@yayatoh/floorplan';
+import { updateSiteSettingsCommand } from '@yayatoh/marketplace';
 import { setTemplateOverrideCommand } from '@yayatoh/notifications';
 import { saveSupportMacroCommand, setRefundPolicyCommand } from '@yayatoh/orders';
 import { saveLayoutCommand } from '@yayatoh/seating';
@@ -307,9 +307,10 @@ export async function orgExtras(d: Demo) {
   );
   if (!org?.brand_color)
     await step('org brand colour', () => run(updateOrganizationCommand, { brandColor: '#6d28d9' }, ctx()));
-  const legal = await read<{ kind: string } & Record<string, unknown>>(d, sql`select kind from tenancy.legal_pages`).catch(
-    () => [],
-  );
+  const legal = await read<{ kind: string } & Record<string, unknown>>(
+    d,
+    sql`select kind from tenancy.legal_pages`,
+  ).catch(() => []);
   for (const [kind, body] of Object.entries(LEGAL))
     if (!legal.some((l) => l.kind === kind))
       await step(`legal page ${kind}`, () => run(setLegalPageCommand, { kind, body }, ctx()));
@@ -330,8 +331,12 @@ export async function orgExtras(d: Demo) {
       avoid: ['awesome', 'crazy'],
     },
   ])
-    if (!kits.some((k) => k.name === kit.name)) await step(`brand kit ${kit.name}`, () => run(saveBrandKitCommand, kit, ctx()));
-  const entries = await read<{ title: string } & Record<string, unknown>>(d, sql`select title from cms.entries`).catch(() => []);
+    if (!kits.some((k) => k.name === kit.name))
+      await step(`brand kit ${kit.name}`, () => run(saveBrandKitCommand, kit, ctx()));
+  const entries = await read<{ title: string } & Record<string, unknown>>(
+    d,
+    sql`select title from cms.entries`,
+  ).catch(() => []);
   for (const [title, excerpt, body] of POSTS) {
     if (entries.some((e) => e.title === title)) continue;
     await step(`post ${title}`, async () => {
@@ -355,26 +360,55 @@ export async function orgExtras(d: Demo) {
 export async function orgLibrary(d: Demo) {
   const ctx = () => owner(d);
   const events = await demoEvents(d);
-  const templates = await read<{ name: string } & Record<string, unknown>>(d, sql`select name from templates.event_templates`).catch(
-    () => [],
-  );
+  const templates = await read<{ name: string } & Record<string, unknown>>(
+    d,
+    sql`select name from templates.event_templates`,
+  ).catch(() => []);
   const fromEvent: [string, string, string][] = [
-    ['demo-wedding-ananya-rohan', 'Destination wedding (3 days)', 'Mehendi, sangeet, ceremony and reception, with the guest website and seating chart.'],
-    ['demo-conference-future-of-work', 'Two-day conference', 'Tracks, rooms, session types, sponsor tiers and badges, ready for a new edition.'],
-    ['demo-concert-sunset-sessions', 'Seated concert', 'Gold and silver zones, standing room and a VIP lounge.'],
+    [
+      'demo-wedding-ananya-rohan',
+      'Destination wedding (3 days)',
+      'Mehendi, sangeet, ceremony and reception, with the guest website and seating chart.',
+    ],
+    [
+      'demo-conference-future-of-work',
+      'Two-day conference',
+      'Tracks, rooms, session types, sponsor tiers and badges, ready for a new edition.',
+    ],
+    [
+      'demo-concert-sunset-sessions',
+      'Seated concert',
+      'Gold and silver zones, standing room and a VIP lounge.',
+    ],
   ];
   for (const [slug, name, description] of fromEvent) {
     const ev = events.find((e) => e.slug === slug);
     if (ev && !templates.some((t) => t.name === name))
-      await step(`template ${name}`, () => run(saveTemplateCommand, { eventId: ev.id, name, description }, ctx()));
+      await step(`template ${name}`, () =>
+        run(saveTemplateCommand, { eventId: ev.id, name, description }, ctx()),
+      );
   }
   if (!templates.some((t) => t.name === 'Charity gala starter'))
     await step('starter gala template', () =>
-      run(copyStarterCommand, { starter: 'gala', name: 'Charity gala starter', timezone: d.timezone, currency: d.currency }, ctx()),
+      run(
+        copyStarterCommand,
+        { starter: 'gala', name: 'Charity gala starter', timezone: d.timezone, currency: d.currency },
+        ctx(),
+      ),
     );
 
-  const layouts = await read<{ name: string } & Record<string, unknown>>(d, sql`select name from seating.layouts`).catch(() => []);
-  const object = (objectType: string, label: string, x: number, y: number, width: number, height: number) => ({
+  const layouts = await read<{ name: string } & Record<string, unknown>>(
+    d,
+    sql`select name from seating.layouts`,
+  ).catch(() => []);
+  const object = (
+    objectType: string,
+    label: string,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+  ) => ({
     kind: 'object' as const,
     id: crypto.randomUUID(),
     objectType,
@@ -393,7 +427,12 @@ export async function orgLibrary(d: Demo) {
         height: 2000,
         items: [
           ...Array.from({ length: 12 }, (_, i) =>
-            buildRoundTable({ label: `${i + 1}`, seats: 10, x: 300 + (i % 4) * 450, y: 600 + Math.floor(i / 4) * 450 }),
+            buildRoundTable({
+              label: `${i + 1}`,
+              seats: 10,
+              x: 300 + (i % 4) * 450,
+              y: 600 + Math.floor(i / 4) * 450,
+            }),
           ),
           object('stage', 'Stage', 800, 60, 400, 180),
           object('dance_floor', 'Dance floor', 850, 1800, 300, 150),
@@ -407,16 +446,22 @@ export async function orgLibrary(d: Demo) {
         width: 1800,
         height: 1500,
         items: [
-          ...Array.from({ length: 10 }, (_, i) => buildRow({ label: String.fromCharCode(65 + i), count: 20, x: 300, y: 400 + i * 90 })),
+          ...Array.from({ length: 10 }, (_, i) =>
+            buildRow({ label: String.fromCharCode(65 + i), count: 20, x: 300, y: 400 + i * 90 }),
+          ),
           object('stage', 'Stage', 500, 60, 800, 220),
         ],
       },
     ],
   ];
   for (const [name, doc] of plans)
-    if (!layouts.some((l) => l.name === name)) await step(`seating plan ${name}`, () => run(saveLayoutCommand, { name, doc }, ctx()));
+    if (!layouts.some((l) => l.name === name))
+      await step(`seating plan ${name}`, () => run(saveLayoutCommand, { name, doc }, ctx()));
 
-  const macros = await read<{ name: string } & Record<string, unknown>>(d, sql`select name from orders.support_macros`).catch(() => []);
+  const macros = await read<{ name: string } & Record<string, unknown>>(
+    d,
+    sql`select name from orders.support_macros`,
+  ).catch(() => []);
   const MACROS = [
     {
       name: 'Resend tickets',
@@ -438,17 +483,31 @@ export async function orgLibrary(d: Demo) {
     },
   ];
   for (const m of MACROS)
-    if (!macros.some((x) => x.name === m.name)) await step(`macro ${m.name}`, () => run(saveSupportMacroCommand, m, ctx()));
+    if (!macros.some((x) => x.name === m.name))
+      await step(`macro ${m.name}`, () => run(saveSupportMacroCommand, m, ctx()));
 
-  const overrides = await read<{ kind: string } & Record<string, unknown>>(d, sql`select kind from notifications.template_overrides`).catch(
-    () => [],
-  );
+  const overrides = await read<{ kind: string } & Record<string, unknown>>(
+    d,
+    sql`select kind from notifications.template_overrides`,
+  ).catch(() => []);
   const EMAILS = [
-    { kind: 'orders.tickets', subject: 'Your WebBuddy Events tickets are here', intro: 'Thank you for booking with WebBuddy Events! Your tickets are below: show the QR code at the door.' },
-    { kind: 'events.reminder', subject: 'See you tomorrow!', intro: 'Your event is tomorrow. Doors open 30 minutes before the start: bring your QR ticket for a fast check-in.' },
+    {
+      kind: 'orders.tickets',
+      subject: 'Your WebBuddy Events tickets are here',
+      intro:
+        'Thank you for booking with WebBuddy Events! Your tickets are below: show the QR code at the door.',
+    },
+    {
+      kind: 'events.reminder',
+      subject: 'See you tomorrow!',
+      intro:
+        'Your event is tomorrow. Doors open 30 minutes before the start: bring your QR ticket for a fast check-in.',
+    },
   ];
   for (const e of EMAILS)
     if (!overrides.some((o) => o.kind === e.kind))
-      await step(`email copy ${e.kind}`, () => run(setTemplateOverrideCommand, { ...e, locale: 'en' }, ctx()));
+      await step(`email copy ${e.kind}`, () =>
+        run(setTemplateOverrideCommand, { ...e, locale: 'en' }, ctx()),
+      );
   log('org library');
 }

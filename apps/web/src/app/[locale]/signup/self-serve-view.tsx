@@ -39,7 +39,11 @@ export async function SelfServeView({
   interval: 'month' | 'year';
 }) {
   const t = await getTranslations();
-  const [session, tiers, fees] = await Promise.all([ownAuthSession(), publicPlanTiers(), publicFeeSchedules()]);
+  const [session, tiers, fees] = await Promise.all([
+    ownAuthSession(),
+    publicPlanTiers(),
+    publicFeeSchedules(),
+  ]);
   const fmt = (minor: number, currency: string) => formatMoney(money(minor, currency), locale);
   // The per-ticket platform fee (the old /pricing page), in the visitor's country's currency.
   const feeCurrency = pricingCurrency(
@@ -48,7 +52,9 @@ export async function SelfServeView({
   );
   const fee = fees.find((f) => f.currency === feeCurrency) ?? null;
   const percent = fee
-    ? new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(fee.percentBps / 10_000)
+    ? new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(
+        fee.percentBps / 10_000,
+      )
     : '';
   const feeSummary = !fee
     ? null
@@ -115,7 +121,10 @@ export async function SelfServeView({
         defaultCountry="US"
       />
       {fee && feeSummary ? (
-        <section aria-labelledby="fee-heading" className="flex flex-col gap-2 rounded-[28px] border border-line bg-surface p-6">
+        <section
+          aria-labelledby="fee-heading"
+          className="flex flex-col gap-2 rounded-[28px] border border-line bg-surface p-6"
+        >
           <h2 id="fee-heading" className="m-0 text-section">
             {t('pricingPage.feeHeading', { currency: fee.currency })}
           </h2>

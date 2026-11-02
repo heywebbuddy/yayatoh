@@ -121,12 +121,7 @@ export default async function SignupPage({
               <p className="text-caption text-ink-2">
                 {t('signup.signedInAs', { email: session.user.email })}
               </p>
-              <SignupForm
-                action={signupAction}
-                code={code}
-                open={false}
-                humanCheck={null}
-              />
+              <SignupForm action={signupAction} code={code} open={false} humanCheck={null} />
             </>
           )}
         </Card>

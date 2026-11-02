@@ -86,7 +86,11 @@ export async function sendConsoleMail(m: {
   text: string;
   key: string;
 }): Promise<void> {
-  const transport = liveEmail() ?? (isProductionEnv() ? null : (devMailbox ??= devMailboxTransports().email));
+  let transport = liveEmail();
+  if (!transport && !isProductionEnv()) {
+    devMailbox ??= devMailboxTransports().email;
+    transport = devMailbox;
+  }
   if (!transport) throw new Error('No email provider is configured (EMAIL_PROVIDER=ses)');
   await transport.send({
     from: { name: 'Yayatoh', address: PLATFORM_SENDER },

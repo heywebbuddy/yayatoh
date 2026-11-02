@@ -20823,6 +20823,8 @@
     "aboutLink": "About us",
     "termsLink": "Terms of service",
     "cookiesLink": "Cookie policy",
+
+    "refundLink": "Refund policy",
     "legalEyebrow": "Legal",
     "lastUpdated": "Last updated {date} · version {version}",
     "about": {
