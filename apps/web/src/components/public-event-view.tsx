@@ -636,7 +636,7 @@ export async function PublicEventView({
           hasBar && 'pb-28',
         )}
       >
-        <header className="sticky top-2 z-30 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-[22px] border border-line bg-surface p-2.5 ps-4 elevation-card glass sm:top-3 lg:flex-nowrap">
+        <header className="sticky top-2 z-30 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-[22px] border border-line bg-surface p-2.5 ps-4 elevation-card glass sm:top-3">
           <span className="flex min-w-0 items-center gap-2.5 text-ink">
             <span
               aria-hidden="true"
@@ -644,11 +644,11 @@ export async function PublicEventView({
             >
               {initials}
             </span>
-            <span className="max-w-[40vw] truncate text-[17px] font-extrabold tracking-[-0.02em] lg:max-w-[220px]">
+            <span className="max-w-[40vw] truncate text-[17px] font-extrabold tracking-[-0.02em] lg:max-w-[420px]">
               {ev.organizerName}
             </span>
           </span>
-          <div className="order-last w-full min-w-0 lg:order-none lg:w-auto lg:grow">
+          <div className="order-last w-full min-w-0 border-t border-line pt-2">
             <EventPageNav items={navItems} label={t('publicEvent.nav')} />
           </div>
           <div className="ms-auto flex flex-wrap items-center gap-2">

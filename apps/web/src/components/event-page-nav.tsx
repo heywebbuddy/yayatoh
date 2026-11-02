@@ -35,7 +35,7 @@ export function EventPageNav({ items, label }: { items: readonly EventNavItem[];
         if (first) setActive(first.id);
       },
       // The band just below the sticky bar: a section is "current" once its top passes it.
-      { rootMargin: '-96px 0px -55% 0px', threshold: 0 },
+      { rootMargin: '-140px 0px -55% 0px', threshold: 0 },
     );
     for (const el of els) io.observe(el);
     return () => io.disconnect();
