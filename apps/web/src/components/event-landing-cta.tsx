@@ -29,15 +29,15 @@ export function EventLandingCta({
         aria-hidden="true"
         className="pointer-events-none absolute -start-20 -bottom-28 -z-10 size-96 rotate-12 rounded-[96px] bg-black/10"
       />
-      <p className="m-0 text-label font-bold tracking-[0.12em] uppercase opacity-90">{heading}</p>
+      <p className="m-0 text-label font-bold tracking-[0.12em] uppercase">{heading}</p>
       <h2
         id="cta-heading"
         className="m-0 max-w-[760px] text-[length:calc(40px*var(--ev-scale,1))] leading-[1.05] font-extrabold tracking-[-0.03em]"
       >
         {name}
       </h2>
-      {when ? <p className="m-0 text-body font-bold opacity-95">{when}</p> : null}
-      <a href="#passes" className={cx(buttonClass('inverse', 'lg'), 'mt-2')}>
+      {when ? <p className="m-0 text-body font-bold">{when}</p> : null}
+      <a href="#passes" className={cx(buttonClass('inverse', 'lg'), 'ev-white-card mt-2 hover:opacity-90')}>
         {label}
       </a>
     </section>
