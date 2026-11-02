@@ -21035,7 +21035,12 @@
     "ctaHeading": "Não perca",
     "showDetails": "Mostrar detalhes de {title}",
     "previous": "Palestrantes anteriores",
-    "next": "Próximos palestrantes"
+    "next": "Próximos palestrantes",
+    "speakersEyebrow": "Os oradores",
+    "exhibitorsEyebrow": "No evento",
+    "agendaEyebrow": "Programação",
+    "speakerBio": "Sobre {name}",
+    "speakerProfile": "Perfil completo"
   },
   "pageStyle": {
     "title": "Cores e layout da página",

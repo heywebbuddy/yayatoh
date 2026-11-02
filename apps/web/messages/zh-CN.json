@@ -21035,7 +21035,12 @@
     "ctaHeading": "不要错过",
     "showDetails": "显示{title}的详情",
     "previous": "上一组讲者",
-    "next": "下一组讲者"
+    "next": "下一组讲者",
+    "speakersEyebrow": "演讲嘉宾",
+    "exhibitorsEyebrow": "现场展商",
+    "agendaEyebrow": "议程",
+    "speakerBio": "关于{name}",
+    "speakerProfile": "完整简介"
   },
   "pageStyle": {
     "title": "页面颜色与布局",

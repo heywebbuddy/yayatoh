@@ -21035,7 +21035,12 @@
     "ctaHeading": "お見逃しなく",
     "showDetails": "{title}の詳細を表示",
     "previous": "前のスピーカー",
-    "next": "次のスピーカー"
+    "next": "次のスピーカー",
+    "speakersEyebrow": "登壇者",
+    "exhibitorsEyebrow": "出展者",
+    "agendaEyebrow": "プログラム",
+    "speakerBio": "{name}について",
+    "speakerProfile": "プロフィール全文"
   },
   "pageStyle": {
     "title": "ページの色とレイアウト",

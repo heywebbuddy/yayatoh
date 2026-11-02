@@ -21035,7 +21035,12 @@
     "ctaHeading": "No te lo pierdas",
     "showDetails": "Mostrar detalles de {title}",
     "previous": "Ponentes anteriores",
-    "next": "Siguientes ponentes"
+    "next": "Siguientes ponentes",
+    "speakersEyebrow": "El cartel",
+    "exhibitorsEyebrow": "En la feria",
+    "agendaEyebrow": "Programa",
+    "speakerBio": "Sobre {name}",
+    "speakerProfile": "Perfil completo"
   },
   "pageStyle": {
     "title": "Colores y diseño de la página",

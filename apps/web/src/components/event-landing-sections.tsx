@@ -1,42 +1,16 @@
 import type { PublicMediaDto } from '@yayatoh/media';
 import { groupByDay, type PublicProgramDto, speakerRoleRank } from '@yayatoh/program';
+import { buttonClass } from '@yayatoh/ui';
+import { ExternalLink, Map as MapIcon } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { AgendaRow } from '@/components/agenda-accordion.tsx';
 import { Markdown } from '@/components/markdown.tsx';
 import { MediaPicture } from '@/components/media-picture.tsx';
 import type { ProgramImages } from '@/components/program-sections.tsx';
-import { SpeakerCarousel } from '@/components/speaker-carousel.tsx';
+import { SpeakerCard } from '@/components/speaker-card.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { zoneLabel } from '@/lib/zone-label.ts';
-
-/** The centered section heading of the landing page (an accent bar above). */
-export function LandingHeading({
-  id,
-  children,
-  onBand = false,
-}: {
-  id: string;
-  children: string;
-  onBand?: boolean;
-}) {
-  return (
-    <div className="flex flex-col items-center gap-3 text-center">
-      <span
-        aria-hidden="true"
-        className={
-          onBand ? 'h-1.5 w-12 rounded-full bg-current opacity-70' : 'ev-accent-bar h-1.5 w-12 rounded-full'
-        }
-      />
-      <h2
-        id={id}
-        className="m-0 text-[length:calc(36px*var(--ev-scale,1))] leading-[1.1] font-extrabold tracking-[-0.03em]"
-      >
-        {children}
-      </h2>
-    </div>
-  );
-}
 
 /** A simple agenda item from the showcase overlay (no session behind it). */
 export type DemoAgendaItem = { time: string; title: string; room?: string };
@@ -85,15 +59,17 @@ export async function EventAgenda({
       data-ev-section
       aria-labelledby="agenda-heading"
       style={style}
-      className="ev-card flex flex-col gap-6 rounded-[28px] px-4 py-10 sm:px-8 md:py-14"
+      className="ev-card flex flex-col gap-8 rounded-panel p-6 md:p-10"
     >
-      <LandingHeading id="agenda-heading">{t('agenda')}</LandingHeading>
-      {days.length > 0 ? (
-        <p className="m-0 -mt-3 text-center text-caption text-ink-2">
-          {t('datesTimezone', { timezone: zoneLabel(timeZone, locale) })}
-        </p>
-      ) : null}
-      <div className="mx-auto flex w-full max-w-[860px] flex-col gap-8">
+      <div className="flex flex-col gap-4">
+        <SectionIntro
+          id="agenda-heading"
+          eyebrow={tp('agendaEyebrow')}
+          title={t('agenda')}
+          lede={days.length > 0 ? t('datesTimezone', { timezone: zoneLabel(timeZone, locale) }) : null}
+        />
+      </div>
+      <div className="flex w-full min-w-0 flex-col gap-8">
         {days.map((d) => (
           <section key={d.day} aria-labelledby={`agenda-${d.day}`} className="flex flex-col gap-3">
             {days.length > 1 ? (
@@ -132,7 +108,7 @@ export async function EventAgenda({
                               <li key={p.id}>
                                 <Link
                                   href={`/events/${slug}/speakers/${p.id}`}
-                                  className="inline-flex min-h-6 items-center gap-2 font-bold text-ink underline underline-offset-2"
+                                  className="inline-flex min-h-9 items-center gap-2 rounded-pill bg-surface py-1 ps-1 pe-3 font-bold text-ink hover:bg-surface-3"
                                 >
                                   {images[p.id] ? (
                                     <MediaPicture
@@ -151,7 +127,7 @@ export async function EventAgenda({
                         {live ? (
                           <Link
                             href={`/events/${slug}/live/${s.id}`}
-                            className="inline-flex min-h-11 items-center self-start font-bold underline underline-offset-2"
+                            className={buttonClass('secondary', 'md', 'self-start')}
                           >
                             {tl('join')}
                           </Link>
@@ -182,15 +158,55 @@ export async function EventAgenda({
   );
 }
 
-const SHAPES = ['ev-shape-circle', 'ev-shape-quarter', 'ev-shape-pill', 'ev-shape-diamond'] as const;
-const TONES = ['ev-tone-1', 'ev-tone-2', 'ev-tone-3'] as const;
+/** Initials for a portrait without a photo. */
+const initialsOf = (name: string) =>
+  name
+    .replace(/^(dr|mr|mrs|ms|prof)\.?\s+/i, '')
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? '')
+    .join('');
+
+/** The left-aligned section heading of the landing look: an eyebrow, a title and an optional lede. */
+export function SectionIntro({
+  id,
+  eyebrow,
+  title,
+  lede,
+  action,
+}: {
+  id: string;
+  eyebrow?: string;
+  title: string;
+  lede?: string | null;
+  action?: ReactNode;
+}) {
+  return (
+    <div className="flex flex-wrap items-end justify-between gap-4">
+      <div className="flex max-w-[640px] flex-col gap-2">
+        {eyebrow ? (
+          <span className="ev-eyebrow text-label font-extrabold tracking-[0.14em] uppercase">{eyebrow}</span>
+        ) : null}
+        <h2
+          id={id}
+          className="m-0 font-display text-[length:calc(clamp(26px,3.4vw,34px)*var(--ev-scale,1))] leading-none font-black tracking-[-0.02em] uppercase [overflow-wrap:anywhere]"
+        >
+          {title}
+        </h2>
+        {lede ? <p className="m-0 text-body text-ink-2">{lede}</p> : null}
+      </div>
+      {action}
+    </div>
+  );
+}
 
 /**
- * The speakers as the client's reference shows them: a bold full-width colour band with soft
- * background shapes and a centered white heading, over a carousel of white cards (photo beside a
- * decorative geometric shape in a varying accent, company, name, bold role and job title).
+ * The speakers as an image-led grid: large portraits (the featured people take a double tile),
+ * name and role over the photo, the bio revealed on hover, focus or a tap. A speaker without a
+ * photo gets an initials tile in the event's accent.
  */
-export async function SpeakerBand({
+export async function SpeakerGrid({
   program,
   slug,
   images = {},
@@ -210,81 +226,166 @@ export async function SpeakerBand({
       speakerRoleRank(a.role) - speakerRoleRank(b.role) ||
       a.name.localeCompare(b.name),
   );
+  // Only the first featured person gets the large tile, and only when the grid has room for it.
+  const lead = people.length >= 4 && people[0]?.featured ? people[0].id : null;
   return (
     <section
       id="speakers"
       data-block="speakers"
+      data-ev-section
       aria-labelledby="speakers-heading"
       style={style}
-      className="ev-band relative isolate flex flex-col gap-8 overflow-hidden rounded-[28px] px-4 py-12 sm:px-8 md:py-16"
+      className="flex flex-col gap-8 py-4"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -start-24 -top-28 -z-10 size-[380px] rounded-full bg-white/12"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -end-20 -bottom-32 -z-10 size-[460px] rotate-12 rounded-[120px] bg-black/10"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute end-[30%] top-10 -z-10 size-40 rounded-full bg-white/8"
-      />
-      <LandingHeading id="speakers-heading" onBand>
-        {t('speakers')}
-      </LandingHeading>
-      <SpeakerCarousel label={t('speakers')} prevLabel={tp('previous')} nextLabel={tp('next')}>
-        {people.map((p, i) => {
+      <SectionIntro id="speakers-heading" eyebrow={tp('speakersEyebrow')} title={t('speakers')} />
+      <ul className="m-0 grid list-none grid-cols-2 gap-3 p-0 sm:gap-4 lg:grid-cols-3">
+        {people.map((p) => {
           const photo = images[p.id];
           return (
-            <li
+            <SpeakerCard
               key={p.id}
-              className="flex w-[78%] max-w-[300px] shrink-0 snap-start flex-col gap-4 rounded-[24px] ev-white-card p-5 shadow-xl sm:w-[280px]"
-            >
-              <div className="relative flex h-44 items-end">
-                <span
-                  aria-hidden="true"
-                  className={`ev-shape ${SHAPES[i % SHAPES.length]} ${TONES[i % TONES.length]}`}
-                />
-                {photo ? (
+              href={`/events/${slug}/speakers/${p.id}`}
+              name={p.name}
+              role={t(`speakerRoles.${p.role}`)}
+              meta={[p.title, p.company].filter(Boolean).join(' · ') || null}
+              bio={p.bio}
+              bioLabel={tp('speakerBio', { name: p.name })}
+              profileLabel={tp('speakerProfile')}
+              featured={p.id === lead}
+              portrait={
+                photo ? (
                   <MediaPicture
                     image={photo}
-                    sizes="176px"
+                    sizes={
+                      p.id === lead ? '(min-width: 1024px) 50vw, 100vw' : '(min-width: 1024px) 25vw, 50vw'
+                    }
                     alt=""
-                    className="relative size-40 rounded-[20px] object-cover"
+                    className="ev-speaker-photo size-full object-cover"
                   />
                 ) : (
                   <span
                     aria-hidden="true"
-                    className={`relative flex size-40 items-center justify-center rounded-[20px] text-[48px] font-extrabold ${TONES[i % TONES.length]} ev-tone-fill`}
+                    className="ev-speaker-fallback flex size-full items-start justify-center pt-[22%] font-display text-[clamp(56px,8vw,96px)] leading-none font-black tracking-[-0.04em]"
                   >
-                    {p.name
-                      .split(/\s+/)
-                      .slice(0, 2)
-                      .map((w) => w[0]?.toUpperCase() ?? '')
-                      .join('')}
+                    {initialsOf(p.name)}
                   </span>
-                )}
-              </div>
-              <div className="flex flex-col gap-1">
-                {p.company ? (
-                  <span className="text-[13px] font-extrabold tracking-[0.08em] ev-muted uppercase">
-                    {p.company}
-                  </span>
-                ) : null}
-                <Link
-                  href={`/events/${slug}/speakers/${p.id}`}
-                  className="text-[length:calc(20px*var(--ev-scale,1))] leading-tight font-extrabold underline-offset-2 hover:underline"
-                >
-                  {p.name}
-                </Link>
-                <span className="text-[15px] font-extrabold">{t(`speakerRoles.${p.role}`)}</span>
-                {p.title ? <span className="text-[14px] ev-muted">{p.title}</span> : null}
-              </div>
-            </li>
+                )
+              }
+            />
           );
         })}
-      </SpeakerCarousel>
+      </ul>
     </section>
   );
 }
+
+/**
+ * Exhibitors as logo-led cards: the logo on a quiet tile (initials without one), the name, the
+ * booth as a badge, and a short description. The whole card opens the exhibitor page; the
+ * website is its own small button above that link.
+ */
+export async function ExhibitorGrid({
+  program,
+  slug,
+  images = {},
+  exhibitorMap = false,
+  style,
+}: {
+  program: PublicProgramDto;
+  slug: string;
+  images?: ProgramImages;
+  exhibitorMap?: boolean;
+  style?: CSSProperties;
+}) {
+  if (program.exhibitors.length === 0) return null;
+  const t = await getTranslations('publicEvent');
+  const tp = await getTranslations('eventPage');
+  return (
+    <section
+      id="exhibitors"
+      data-ev-section
+      aria-labelledby="exhibitors-heading"
+      style={style}
+      className="ev-card flex flex-col gap-8 rounded-panel p-6 md:p-10"
+    >
+      <SectionIntro
+        id="exhibitors-heading"
+        eyebrow={tp('exhibitorsEyebrow')}
+        title={t('exhibitors')}
+        action={
+          exhibitorMap ? (
+            <Link href={`/events/${slug}/exhibitors`} className={buttonClass('secondary', 'md')}>
+              <MapIcon aria-hidden="true" className="size-4" />
+              {t('exhibitorMap')}
+            </Link>
+          ) : null
+        }
+      />
+      <ul className="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 xl:grid-cols-3">
+        {program.exhibitors.map((x) => {
+          const logo = images[x.id];
+          return (
+            <li
+              key={x.id}
+              className="ev-lift group relative flex flex-col gap-4 rounded-card border border-line bg-surface p-5"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex h-16 w-32 items-center justify-start">
+                  {logo ? (
+                    <MediaPicture
+                      image={logo}
+                      sizes="128px"
+                      alt=""
+                      className="max-h-16 w-auto max-w-32 object-contain"
+                    />
+                  ) : (
+                    <span
+                      aria-hidden="true"
+                      className="ev-accent-fill flex size-14 items-center justify-center rounded-tile text-[18px] font-black"
+                    >
+                      {initialsOf(x.name)}
+                    </span>
+                  )}
+                </div>
+                {x.boothLabel ? (
+                  <span className="ev-badge inline-flex shrink-0 items-center rounded-pill px-3 py-1 text-caption font-extrabold tabular-nums">
+                    {t('booth', { booth: x.boothLabel })}
+                  </span>
+                ) : null}
+              </div>
+              <div className="flex grow flex-col gap-1.5">
+                <Link
+                  href={`/events/${slug}/exhibitors/${x.id}`}
+                  className="text-[length:calc(18px*var(--ev-scale,1))] leading-tight font-extrabold text-ink after:absolute after:inset-0 after:rounded-card focus-visible:outline-none"
+                >
+                  {x.name}
+                </Link>
+                {x.description ? (
+                  <p className="m-0 line-clamp-3 text-caption text-ink-2">{plain(x.description)}</p>
+                ) : null}
+              </div>
+              {x.websiteUrl ? (
+                <a
+                  href={x.websiteUrl}
+                  rel="noopener noreferrer nofollow"
+                  className="relative z-10 inline-flex min-h-9 max-w-full items-center gap-1.5 self-start rounded-pill border border-line px-3 text-caption font-bold whitespace-nowrap text-ink-2 hover:border-ink hover:text-ink"
+                >
+                  <ExternalLink aria-hidden="true" className="size-3.5 shrink-0" />
+                  <span className="truncate">{t('website', { name: x.name })}</span>
+                </a>
+              ) : null}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
+/** A Markdown description as one plain line (cards show a short excerpt). */
+const plain = (md: string) =>
+  md
+    .replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/[*_`>#]+/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();

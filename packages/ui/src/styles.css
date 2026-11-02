@@ -1325,7 +1325,7 @@
   --ev-tone-3: var(--color-warning-dot);
 }
 [data-ev-page] :is(section, div)[id] {
-  scroll-margin-top: 140px;
+  scroll-margin-top: 150px;
 }
 [data-ev-page] [id][tabindex="-1"]:focus {
   outline: none;
@@ -1413,7 +1413,95 @@
   color: var(--ev-band-ink, var(--color-on-primary));
 }
 
-/* Speaker cards: a decorative geometric shape beside the photo, in a rotating accent. */
+/* No underlined links anywhere on the event page: links are cards, pills and buttons with hover states. */
+[data-ev-page] a,
+[data-ev-page] a:hover {
+  text-decoration: none;
+}
+[data-ev-page] .prose a,
+[data-ev-page] :is(.ev-card, .ev-program) p a {
+  color: var(--ev-accent-ink, var(--color-primary-ink));
+  font-weight: 700;
+  border-radius: 4px;
+}
+[data-ev-page] :is(.ev-card, .ev-program) p a:hover {
+  background: color-mix(in srgb, var(--ev-accent, var(--color-primary)) 14%, transparent);
+}
+[data-ev-page] .ev-eyebrow {
+  color: var(--ev-accent-ink, var(--color-primary-ink));
+}
+[data-ev-page] .ev-badge {
+  background: color-mix(in srgb, var(--ev-accent, var(--color-primary)) 14%, transparent);
+  color: var(--ev-accent-ink, var(--color-primary-ink));
+}
+[data-ev-page] .ev-lift {
+  transition:
+    transform 300ms ease,
+    border-color 300ms ease;
+}
+[data-ev-page] .ev-lift:hover {
+  transform: translateY(-4px);
+  border-color: var(--ev-accent, var(--color-ember));
+}
+[data-ev-page] .ev-lift:has(a:focus-visible),
+[data-ev-page] .ev-speaker:has(a:focus-visible) {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* Speaker portraits: the bio rises over the photo on hover, keyboard focus or a tap. */
+[data-ev-page] .ev-speaker-role {
+  background: var(--ev-accent, var(--color-ember));
+  color: var(--ev-on-accent, #ffffff);
+}
+[data-ev-page] .ev-speaker-fallback {
+  background:
+    radial-gradient(circle at 30% 25%, rgb(255 255 255 / 0.22), transparent 55%),
+    var(--ev-accent, var(--color-brand-strong));
+  color: var(--ev-on-accent, #ffffff);
+}
+[data-ev-page] .ev-speaker-photo {
+  transition: transform 600ms ease;
+}
+[data-ev-page] .ev-speaker-bio {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(16px);
+  transition:
+    opacity 250ms ease,
+    transform 250ms ease,
+    visibility 250ms;
+}
+[data-ev-page] .ev-speaker[data-open] .ev-speaker-bio,
+[data-ev-page] .ev-speaker:focus-within .ev-speaker-bio {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+@media (hover: hover) {
+  [data-ev-page] .ev-speaker:hover .ev-speaker-bio {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+  [data-ev-page] .ev-speaker:hover .ev-speaker-photo {
+    transform: scale(1.04);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-ev-page] :is(.ev-lift, .ev-speaker-photo, .ev-speaker-bio) {
+    transition: none;
+  }
+  [data-ev-page] .ev-lift:hover,
+  [data-ev-page] .ev-speaker:hover .ev-speaker-photo {
+    transform: none;
+  }
+  [data-ev-page] .ev-speaker-bio {
+    transform: none;
+  }
+}
+
+/* Accent swatches of the page design preview. */
 .ev-tone-1 {
   --ev-tone: var(--ev-tone-1);
 }
@@ -1423,42 +1511,33 @@
 .ev-tone-3 {
   --ev-tone: var(--ev-tone-3);
 }
-.ev-shape {
-  position: absolute;
-  inset-inline-end: 0;
-  top: 0;
-  width: 112px;
-  height: 112px;
-  background: var(--ev-tone);
-}
-.ev-shape-circle {
-  border-radius: 9999px;
-}
-.ev-shape-quarter {
-  border-start-end-radius: 112px;
-}
-.ev-shape-pill {
-  width: 72px;
-  height: 150px;
-  border-radius: 9999px;
-}
-.ev-shape-diamond {
-  width: 92px;
-  height: 92px;
-  top: 10px;
-  inset-inline-end: 10px;
-  transform: rotate(45deg);
-  border-radius: 14px;
-}
 .ev-tone-fill {
   background: color-mix(in srgb, var(--ev-tone) 22%, #ffffff);
   color: #14110f;
 }
-/* White speaker cards and carousel buttons on the colour band (fixed light, any theme). */
-.ev-white-card {
-  background: #ffffff;
-  color: #14110f;
+
+/* The section menu fades out at its end edge when it scrolls sideways. */
+.ev-nav-fade {
+  mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
 }
-.ev-white-card .ev-muted {
-  color: #4f4640;
+.ev-nav-fade:dir(rtl) {
+  mask-image: linear-gradient(to left, #000 calc(100% - 40px), transparent);
+}
+
+/* Older section blocks (about, FAQ, sponsors, venue…) take the landing page's display headings. */
+[data-ev-page]
+  :is(.ev-card, .ev-program)
+  h2:is(.text-section, .text-card):not(#have-tickets-heading, #access-code-heading) {
+  font-family: var(--font-display);
+  font-size: calc(clamp(24px, 3vw, 30px) * var(--ev-scale, 1));
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+[data-ev-page] .ev-program li:has(> a, > div > a) {
+  transition: border-color 200ms ease;
+}
+[data-ev-page] .ev-program li:has(> a, > div > a):hover {
+  border-color: var(--ev-accent, var(--color-ember));
 }

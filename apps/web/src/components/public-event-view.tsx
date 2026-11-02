@@ -29,7 +29,7 @@ import { publicSeatMap } from '@yayatoh/seating';
 import { publicOrgProfile } from '@yayatoh/tenancy';
 import { publicTicketTypes } from '@yayatoh/ticketing';
 import { Alert, brandPalette, buttonClass, cx, EmptyState } from '@yayatoh/ui';
-import { CalendarDays, Layers, MapPin } from 'lucide-react';
+import { CalendarDays, Layers, MapPin, Share2 } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import type { CSSProperties } from 'react';
@@ -50,7 +50,12 @@ import { CheckoutForm } from '@/components/checkout-form.tsx';
 import { DatePicker } from '@/components/date-picker.tsx';
 import { EventAssistant } from '@/components/event-assistant.tsx';
 import { EventLandingCta } from '@/components/event-landing-cta.tsx';
-import { EventAgenda, LandingHeading, SpeakerBand } from '@/components/event-landing-sections.tsx';
+import {
+  EventAgenda,
+  ExhibitorGrid,
+  SectionIntro,
+  SpeakerGrid,
+} from '@/components/event-landing-sections.tsx';
 import { type EventNavItem, EventPageNav } from '@/components/event-page-nav.tsx';
 import { EventProfileBand } from '@/components/event-profile-band.tsx';
 import { EventSections } from '@/components/event-sections.tsx';
@@ -60,10 +65,11 @@ import { fallbackOf, MediaPicture } from '@/components/media-picture.tsx';
 import { ProgramSections } from '@/components/program-sections.tsx';
 import { RegisterBar } from '@/components/register-bar.tsx';
 import { EventReviews } from '@/components/reviews/event-reviews.tsx';
+import { ShowcaseFooter } from '@/components/showcase/footer.tsx';
 import { JaggedCircle } from '@/components/showcase/hero.tsx';
 import { HeroUploadedVideo, HeroVideo } from '@/components/showcase/hero-video.tsx';
+import { ShowcaseTopBar } from '@/components/showcase/top-bar.tsx';
 import { TenantAccount } from '@/components/tenant-account.tsx';
-import { ThemeSwitch } from '@/components/theme-switch.tsx';
 import { VenueGuide } from '@/components/venue-guide.tsx';
 import { VenueMap } from '@/components/venue-map.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -84,7 +90,6 @@ import { requestHost } from '@/server/request-origin.ts';
 import { searchConfigured } from '@/server/search.ts';
 import { openVenueMap } from '@/server/seat-finder.ts';
 import { apexOrigin, eventOrigin } from '@/server/seo.ts';
-import { currentTheme } from '@/server/theme.ts';
 import { currentAccess } from '@/server/visitor.ts';
 
 /**
@@ -310,7 +315,7 @@ export async function PublicEventView({
       id="passes"
       data-ev-section
       aria-labelledby="passes-heading"
-      className="ev-card ev-passes flex flex-col gap-4 rounded-[28px] p-5 md:p-7"
+      className="ev-card ev-passes flex flex-col gap-4 rounded-card p-5 md:p-7"
     >
       <div className="flex flex-col gap-1.5">
         <h2
@@ -529,7 +534,6 @@ export async function PublicEventView({
     })),
   });
   const ld = rating ? { ...baseLd, aggregateRating: rating } : baseLd;
-  const theme = await currentTheme();
   const hasAgenda = program.sessions.length > 0 || ev.agenda.length > 0;
   // A seated checkout needs the full width for its seat map; otherwise the ticket box sits beside.
   const wide = Boolean(seatMap);
@@ -611,459 +615,417 @@ export async function PublicEventView({
     .map((k) => ({ id: k, label: navLabel[k] }));
   const styleVars = pageStyleVars(pageStyle);
   const navLink =
-    'inline-flex min-h-10 items-center rounded-[10px] px-3 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink';
+    'inline-flex min-h-10 items-center gap-2 whitespace-nowrap rounded-pill px-3.5 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink';
   const chip =
     'inline-flex min-h-8 items-center gap-2 rounded-pill border border-white/30 bg-surface/15 px-3 text-[13px] font-bold';
+  const siteName = orgId ? ev.organizerName : undefined;
   return (
-    <div
-      className={cx('min-h-dvh', showcase && 'bg-page')}
-      data-heading={ev.design.headingFont}
-      data-profile={ev.profile}
-      data-ev-page
-      style={styleVars as CSSProperties}
-      {...(showcase ? { 'data-surface': 'showcase' } : { 'data-theme': 'light' })}
-    >
-      {ev.visibility === 'public' ? (
-        <script
-          type="application/ld+json"
-          // JSON-LD must be inline; jsonLdScript escapes `<` so the text cannot close the script.
-          dangerouslySetInnerHTML={{ __html: jsonLdScript(ld) }}
-        />
-      ) : null}
+    <div data-surface="showcase" className="min-h-dvh bg-page">
+      <ShowcaseTopBar {...(siteName ? { name: siteName } : {})} />
       <div
-        className={cx(
-          'mx-auto flex max-w-[1240px] flex-col gap-6 px-3 pt-3 pb-12 sm:px-5 sm:pt-5',
-          hasBar && 'pb-28',
-        )}
+        className={cx('ev-frame', !showcase && 'bg-page')}
+        data-heading={ev.design.headingFont}
+        data-profile={ev.profile}
+        data-ev-page
+        style={styleVars as CSSProperties}
+        {...(showcase ? { 'data-surface': 'showcase' } : { 'data-theme': 'light' })}
       >
-        <header className="sticky top-2 z-30 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-[22px] border border-line bg-surface p-2.5 ps-4 elevation-card glass sm:top-3">
-          <span className="flex min-w-0 items-center gap-2.5 text-ink">
-            <span
-              aria-hidden="true"
-              className="ev-accent-fill flex size-[34px] shrink-0 items-center justify-center rounded-[11px] text-[13px] font-extrabold"
-            >
-              {initials}
-            </span>
-            <span className="max-w-[40vw] truncate text-[17px] font-extrabold tracking-[-0.02em] lg:max-w-[420px]">
-              {ev.organizerName}
-            </span>
-          </span>
-          <div className="order-last w-full min-w-0 border-t border-line pt-2">
-            <EventPageNav items={navItems} label={t('publicEvent.nav')} />
-          </div>
-          <div className="ms-auto flex flex-wrap items-center gap-2">
-            <a
-              href={whatsappHref(t('publicEvent.shareMessage', { name: ev.name, url: canonical }))}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={navLink}
-            >
-              <span className="sm:hidden">{t('eventPage.share')}</span>
-              <span className="hidden sm:inline">{t('publicEvent.shareWhatsApp')}</span>
-              <span className="sr-only"> {t('widget.newTab')}</span>
-            </a>
-            {networking ? (
-              // M5.8a: the event's networking (on the marketplace host only).
-              <Link href={`/events/${slug}/network`} className={navLink}>
-                {t('networking.publicLink')}
-              </Link>
-            ) : null}
-            {orgId ? (
-              // M1.2f: the account corner on the org's own site (this host's session; no other org shown).
-              <TenantAccount locale={locale} path={`/events/${slug}`} orgId={orgId} />
-            ) : null}
-            <ThemeSwitch initial={theme} />
-            <a href="#passes" className={cx(buttonClass('dark'), 'ev-cta')}>
-              {getLabel}
-            </a>
-          </div>
-        </header>
-
-        <main id="main" className="flex flex-col gap-6">
-          <section
-            data-event-hero
-            className={cx(
-              'relative isolate flex min-h-[380px] flex-col justify-end gap-4 overflow-hidden rounded-[32px] bg-hero px-6 pt-16 pb-8 text-white elevation-card md:px-10 md:pb-10',
-              heroCircle && cover && 'md:pe-[46%]',
-            )}
-          >
-            {heroCircle && cover ? (
-              <JaggedCircle
-                cover={cover}
-                className="pointer-events-none absolute end-6 top-1/2 hidden w-[min(42%,400px)] -translate-y-1/2 md:block"
-              />
-            ) : null}
-            {cover ? (
-              // Dimmed under a dark scrim so the white text keeps its contrast.
-              <div data-testid="event-cover" className="absolute inset-0 -z-10">
-                <MediaPicture image={cover} sizes="100vw" eager className="size-full object-cover" />
-                <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/55 to-black/25" />
-              </div>
-            ) : (
-              <>
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute end-[6%] -top-20 -z-10 h-[460px] w-[180px] rotate-[32deg] rounded-full bg-surface/45 blur-[34px]"
-                />
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute -end-16 -bottom-16 -z-10 h-[300px] w-[420px] -rotate-[16deg] rounded-[64px] bg-linear-135 from-white/50 via-primary to-primary-pressed opacity-90"
-                />
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute end-40 bottom-28 -z-10 hidden h-[140px] w-[200px] -rotate-[16deg] rounded-[40px] border border-white/40 bg-surface/15 backdrop-blur-sm md:block"
-                />
-              </>
-            )}
-            {heroUpload ? (
-              <HeroUploadedVideo
-                src={heroUpload}
-                poster={ev.design.heroVideoPoster}
-                playLabel={t('showcase.event.playVideo')}
-                pauseLabel={t('showcase.event.pauseVideo')}
-              />
-            ) : heroVideo ? (
-              <HeroVideo
-                src={heroVideoSrc(heroVideo)}
-                title={ev.name}
-                playLabel={t('showcase.event.playVideo')}
-                pauseLabel={t('showcase.event.pauseVideo')}
-              />
-            ) : null}
-            <ul aria-label={t('publicEvent.facts')} className="m-0 flex list-none flex-wrap gap-2 p-0">
-              <li className={chip}>
-                <CalendarDays aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
-                {range}
-              </li>
-              {ev.venueSlug && ev.venueName ? (
-                <li>
-                  <Link
-                    href={`/venues/${ev.venueSlug}`}
-                    className={cx(chip, 'underline-offset-2 hover:underline')}
-                  >
-                    <MapPin aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
-                    {venueDisplayName(ev.venueName)}
-                  </Link>
-                </li>
-              ) : ev.city ? (
-                <li className={chip}>
-                  <MapPin aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
-                  {ev.city}
-                </li>
-              ) : null}
-              {ev.category ? <li className={chip}>{platformLabel(ev.category)}</li> : null}
-              {goingCount ? <li className={chip}>{t('publicEvent.going', { count: goingCount })}</li> : null}
-              {partOf ? (
-                <li>
-                  <Link
-                    href={`/series/${partOf.slug}`}
-                    className={cx(chip, 'underline-offset-2 hover:underline')}
-                  >
-                    <Layers aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
-                    {t('seriesLink.partOf', { name: partOf.name })}
-                  </Link>
-                </li>
-              ) : null}
-              {ev.attendanceMode !== 'in_person' ? (
-                <li className={chip}>{t(`publicEvent.mode.${ev.attendanceMode}`)}</li>
-              ) : null}
-              {ev.status !== 'published' ? (
-                <li className="inline-flex min-h-8 items-center rounded-pill bg-brand-strong px-3 text-[13px] font-extrabold">
-                  {t(`eventStatus.${ev.status}`)}
-                </li>
-              ) : null}
-            </ul>
-            <h1
-              data-event-title
-              className="m-0 max-w-[680px] text-[40px] leading-[1.02] font-extrabold tracking-[-0.045em] md:text-display"
-            >
-              {ev.name}
-            </h1>
-            {ev.tagline ? (
-              <p className="m-0 max-w-[540px] text-[17px] leading-relaxed text-white/90">{ev.tagline}</p>
-            ) : null}
-            <div className="flex flex-wrap gap-2.5 pt-1">
-              <a href="#passes" className={cx(buttonClass('inverse', 'lg'), 'ev-hero-cta')}>
-                {getLabel}
-              </a>
-              {hasAgenda ? (
-                <a href="#agenda" className={buttonClass('inverse')}>
-                  {t('publicEvent.seeAgenda')}
+        {ev.visibility === 'public' ? (
+          <script
+            type="application/ld+json"
+            // JSON-LD must be inline; jsonLdScript escapes `<` so the text cannot close the script.
+            dangerouslySetInnerHTML={{ __html: jsonLdScript(ld) }}
+          />
+        ) : null}
+        <div
+          className={cx('mx-auto flex max-w-7xl flex-col gap-6 px-4 pt-4 pb-16 md:px-6', hasBar && 'pb-28')}
+        >
+          <div className="ev-subnav sticky top-[76px] z-40 -mx-1">
+            <div className="flex items-center gap-2 rounded-pill border border-line bg-canvas/85 p-1.5 ps-2 backdrop-blur-xl">
+              <EventPageNav items={navItems} label={t('publicEvent.nav')} />
+              <div className="flex shrink-0 items-center gap-1">
+                <a
+                  href={whatsappHref(t('publicEvent.shareMessage', { name: ev.name, url: canonical }))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={navLink}
+                >
+                  <Share2 aria-hidden="true" className="size-4" />
+                  <span className="sr-only">{t('publicEvent.shareWhatsApp')}</span>
+                  <span className="sr-only"> {t('widget.newTab')}</span>
                 </a>
-              ) : null}
+                {networking ? (
+                  // M5.8a: the event's networking (on the marketplace host only).
+                  <Link href={`/events/${slug}/network`} className={cx(navLink, 'max-xl:hidden')}>
+                    {t('networking.publicLink')}
+                  </Link>
+                ) : null}
+                {orgId ? (
+                  // M1.2f: the account corner on the org's own site (this host's session; no other org shown).
+                  <TenantAccount locale={locale} path={`/events/${slug}`} orgId={orgId} />
+                ) : null}
+                <a href="#passes" className={cx(buttonClass('ember', 'md'), 'ev-cta max-sm:hidden')}>
+                  {getLabel}
+                </a>
+              </div>
             </div>
-            {ev.stats.length > 0 ? (
-              <dl className="m-0 mt-4 flex flex-wrap gap-x-12 gap-y-4">
-                {ev.stats.map((s) => (
-                  <div key={s.key} className="flex flex-col-reverse gap-1">
-                    <dt className="text-label text-white/85 uppercase">{t(`publicEvent.stats.${s.key}`)}</dt>
-                    <dd className="m-0 text-[32px] leading-none font-extrabold tracking-[-0.04em] tabular-nums">
-                      {formatNumber(s.value, locale)}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            ) : null}
-          </section>
+          </div>
 
-          <div className={cx('grid items-start gap-6', !stack && 'lg:grid-cols-[minmax(0,1fr)_400px]')}>
-            <div
+          <main id="main" className="flex flex-col gap-10 md:gap-14">
+            <section
+              data-event-hero
               className={cx(
-                'flex min-w-0 flex-col gap-4',
-                !stack && 'lg:sticky lg:top-4 lg:col-start-2 lg:row-start-1',
-                sideLast && 'order-last',
+                'relative isolate flex min-h-[460px] flex-col justify-end gap-5 overflow-hidden rounded-card bg-hero px-6 pt-20 pb-8 text-white md:min-h-[540px] md:px-12 md:pb-12',
+                heroCircle && cover && 'md:pe-[46%]',
               )}
             >
-              {dates.length > 0 ? (
-                <section data-ev-section className="ev-card flex flex-col gap-4 rounded-[28px] p-5 md:p-7">
-                  <DatePicker
-                    slug={slug}
-                    dates={dates}
-                    chosen={chosen?.id ?? null}
-                    locale={locale}
-                    timeZone={ev.timezone}
-                    now={now}
-                    waitlist={Boolean(target) && !unlockedPrivate && !embedded}
-                  />
-                </section>
-              ) : null}
-              {passesSection}
-              {live ? (
-                <section
-                  aria-labelledby="access-code-heading"
-                  data-ev-section
-                  className="ev-card flex flex-col gap-4 rounded-[28px] p-5 md:p-7"
-                >
-                  <h2 id="access-code-heading" className="m-0 text-card">
-                    {t('accessEntry.title')}
-                  </h2>
-                  {unlockedPasses || unlockedPrivate ? (
-                    <Alert tone="info" title={t('accessEntry.active')} />
-                  ) : (
-                    <p className="m-0 text-body text-ink-2">{t('accessEntry.hint')}</p>
-                  )}
-                  <AccessCodeEntry action={redeemAccessCodeAction.bind(null, slug)} />
-                </section>
-              ) : null}
-            </div>
-
-            <div className={cx('flex min-w-0 flex-col gap-5', !stack && 'lg:col-start-1 lg:row-start-1')}>
-              <EventProfileBand
-                profile={ev.profile}
-                name={ev.name}
-                dateLabel={range}
-                place={[ev.venueName, ev.city].filter(Boolean).join(', ') || null}
-                agenda={ev.agenda}
-                counts={programStats}
-                giving={giving}
-                orgId={target?.orgId ?? null}
-                eventId={target?.eventId ?? null}
-                locale={locale}
-              />
-              {present.announcements && show('announcements') ? (
-                <section
-                  id="announcements"
-                  data-ev-section
-                  aria-labelledby="announcements-heading"
-                  style={ord('announcements')}
-                  className="ev-card flex flex-col gap-4 rounded-[28px] p-6 md:p-8"
-                >
-                  <h2 id="announcements-heading" className="m-0 text-section">
-                    {t('publicEvent.announcements')}
-                  </h2>
-                  <Announcements items={content.announcements} locale={locale} timeZone={ev.timezone} />
-                </section>
-              ) : null}
-
-              {present.about && show('about') ? (
-                <div id="about" style={ord('about')} className="flex flex-col gap-5">
-                  <EventSections sections={aboutSections} />
-                </div>
-              ) : null}
-
-              {hasAgenda && show('agenda') ? (
-                <EventAgenda
-                  program={program}
-                  demo={ev.agenda}
-                  slug={slug}
-                  locale={locale}
-                  timeZone={ev.timezone}
-                  images={programImages}
-                  liveSessions={liveSessions}
-                  style={ord('agenda')}
+              {heroCircle && cover ? (
+                <JaggedCircle
+                  cover={cover}
+                  className="pointer-events-none absolute end-6 top-1/2 hidden w-[min(42%,400px)] -translate-y-1/2 md:block"
                 />
               ) : null}
-
-              {show('speakers') ? (
-                <SpeakerBand program={program} slug={slug} images={programImages} style={ord('speakers')} />
-              ) : null}
-
-              {present.faq && show('faq') ? (
-                <div id="faq" style={ord('faq')} className="flex flex-col gap-5">
-                  <EventSections sections={faqSections} />
+              {cover ? (
+                // Dimmed under a dark scrim so the white text keeps its contrast.
+                <div data-testid="event-cover" className="absolute inset-0 -z-10">
+                  <MediaPicture image={cover} sizes="100vw" eager className="size-full object-cover" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/55 to-black/25" />
                 </div>
-              ) : null}
-
-              {present.gallery && show('gallery') ? (
-                <section
-                  id="gallery"
-                  data-ev-section
-                  aria-labelledby="gallery-heading"
-                  style={ord('gallery')}
-                  className="ev-card flex flex-col gap-6 rounded-[28px] p-6 md:p-8"
-                >
-                  <LandingHeading id="gallery-heading">{t('publicEvent.gallery')}</LandingHeading>
-                  <GalleryLightbox
-                    images={gallery}
-                    labels={lightbox}
-                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                    gridClassName="m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3"
-                    imageClassName="aspect-[4/3] w-full rounded-[18px] object-cover"
+              ) : (
+                <>
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute end-[6%] -top-20 -z-10 h-[460px] w-[180px] rotate-[32deg] rounded-full bg-surface/45 blur-[34px]"
                   />
-                </section>
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -end-16 -bottom-16 -z-10 h-[300px] w-[420px] -rotate-[16deg] rounded-[64px] bg-linear-135 from-white/50 via-primary to-primary-pressed opacity-90"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute end-40 bottom-28 -z-10 hidden h-[140px] w-[200px] -rotate-[16deg] rounded-[40px] border border-white/40 bg-surface/15 backdrop-blur-sm md:block"
+                  />
+                </>
+              )}
+              {heroUpload ? (
+                <HeroUploadedVideo
+                  src={heroUpload}
+                  poster={ev.design.heroVideoPoster}
+                  playLabel={t('showcase.event.playVideo')}
+                  pauseLabel={t('showcase.event.pauseVideo')}
+                />
+              ) : heroVideo ? (
+                <HeroVideo
+                  src={heroVideoSrc(heroVideo)}
+                  title={ev.name}
+                  playLabel={t('showcase.event.playVideo')}
+                  pauseLabel={t('showcase.event.pauseVideo')}
+                />
               ) : null}
+              <ul aria-label={t('publicEvent.facts')} className="m-0 flex list-none flex-wrap gap-2 p-0">
+                <li className={chip}>
+                  <CalendarDays aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
+                  {range}
+                </li>
+                {ev.venueSlug && ev.venueName ? (
+                  <li>
+                    <Link href={`/venues/${ev.venueSlug}`} className={cx(chip, 'hover:bg-white/25')}>
+                      <MapPin aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
+                      {venueDisplayName(ev.venueName)}
+                    </Link>
+                  </li>
+                ) : ev.city ? (
+                  <li className={chip}>
+                    <MapPin aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
+                    {ev.city}
+                  </li>
+                ) : null}
+                {ev.category ? <li className={chip}>{platformLabel(ev.category)}</li> : null}
+                {goingCount ? (
+                  <li className={chip}>{t('publicEvent.going', { count: goingCount })}</li>
+                ) : null}
+                {partOf ? (
+                  <li>
+                    <Link href={`/series/${partOf.slug}`} className={cx(chip, 'hover:bg-white/25')}>
+                      <Layers aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
+                      {t('seriesLink.partOf', { name: partOf.name })}
+                    </Link>
+                  </li>
+                ) : null}
+                {ev.attendanceMode !== 'in_person' ? (
+                  <li className={chip}>{t(`publicEvent.mode.${ev.attendanceMode}`)}</li>
+                ) : null}
+                {ev.status !== 'published' ? (
+                  <li className="inline-flex min-h-8 items-center rounded-pill bg-brand-strong px-3 text-[13px] font-extrabold">
+                    {t(`eventStatus.${ev.status}`)}
+                  </li>
+                ) : null}
+              </ul>
+              <h1
+                data-event-title
+                className="m-0 max-w-[820px] font-display text-[clamp(36px,6vw,72px)] leading-[0.98] font-black tracking-[-0.04em] text-balance uppercase"
+              >
+                {ev.name}
+              </h1>
+              {ev.tagline ? (
+                <p className="m-0 max-w-[540px] text-[17px] leading-relaxed text-white/90">{ev.tagline}</p>
+              ) : null}
+              <div className="flex flex-wrap gap-2.5 pt-1">
+                <a href="#passes" className={cx(buttonClass('white', 'lg', 'px-8'), 'ev-hero-cta')}>
+                  {getLabel}
+                </a>
+                {hasAgenda ? (
+                  <a href="#agenda" className={buttonClass('inverse', 'lg')}>
+                    {t('publicEvent.seeAgenda')}
+                  </a>
+                ) : null}
+              </div>
+              {ev.stats.length > 0 ? (
+                <dl className="m-0 mt-4 flex flex-wrap gap-x-12 gap-y-4 border-t border-white/20 pt-6">
+                  {ev.stats.map((s) => (
+                    <div key={s.key} className="flex flex-col-reverse gap-1">
+                      <dt className="text-label text-white/85 uppercase">
+                        {t(`publicEvent.stats.${s.key}`)}
+                      </dt>
+                      <dd className="m-0 font-display text-[36px] leading-none font-black tracking-[-0.04em] tabular-nums">
+                        {formatNumber(s.value, locale)}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              ) : null}
+            </section>
 
-              {present.exhibitors && show('exhibitors') ? (
-                <div style={ord('exhibitors')} className="ev-program flex flex-col">
-                  <ProgramSections
+            <div className={cx('grid items-start gap-6', !stack && 'lg:grid-cols-[minmax(0,1fr)_400px]')}>
+              <div
+                className={cx(
+                  'flex min-w-0 flex-col gap-4',
+                  !stack && 'lg:sticky lg:top-40 lg:col-start-2 lg:row-start-1',
+                  sideLast && 'order-last',
+                )}
+              >
+                {dates.length > 0 ? (
+                  <section data-ev-section className="ev-card flex flex-col gap-4 rounded-card p-5 md:p-7">
+                    <DatePicker
+                      slug={slug}
+                      dates={dates}
+                      chosen={chosen?.id ?? null}
+                      locale={locale}
+                      timeZone={ev.timezone}
+                      now={now}
+                      waitlist={Boolean(target) && !unlockedPrivate && !embedded}
+                    />
+                  </section>
+                ) : null}
+                {passesSection}
+                {live ? (
+                  <section
+                    aria-labelledby="access-code-heading"
+                    data-ev-section
+                    className="ev-card flex flex-col gap-4 rounded-card p-5 md:p-7"
+                  >
+                    <h2 id="access-code-heading" className="m-0 text-card">
+                      {t('accessEntry.title')}
+                    </h2>
+                    {unlockedPasses || unlockedPrivate ? (
+                      <Alert tone="info" title={t('accessEntry.active')} />
+                    ) : (
+                      <p className="m-0 text-body text-ink-2">{t('accessEntry.hint')}</p>
+                    )}
+                    <AccessCodeEntry action={redeemAccessCodeAction.bind(null, slug)} />
+                  </section>
+                ) : null}
+              </div>
+
+              <div
+                className={cx(
+                  'flex min-w-0 flex-col gap-10 md:gap-14',
+                  !stack && 'lg:col-start-1 lg:row-start-1',
+                )}
+              >
+                <EventProfileBand
+                  profile={ev.profile}
+                  name={ev.name}
+                  dateLabel={range}
+                  place={[ev.venueName, ev.city].filter(Boolean).join(', ') || null}
+                  agenda={ev.agenda}
+                  counts={programStats}
+                  giving={giving}
+                  orgId={target?.orgId ?? null}
+                  eventId={target?.eventId ?? null}
+                  locale={locale}
+                />
+                {present.announcements && show('announcements') ? (
+                  <section
+                    id="announcements"
+                    data-ev-section
+                    aria-labelledby="announcements-heading"
+                    style={ord('announcements')}
+                    className="ev-card flex flex-col gap-4 rounded-card p-6 md:p-8"
+                  >
+                    <h2 id="announcements-heading" className="m-0 text-section">
+                      {t('publicEvent.announcements')}
+                    </h2>
+                    <Announcements items={content.announcements} locale={locale} timeZone={ev.timezone} />
+                  </section>
+                ) : null}
+
+                {present.about && show('about') ? (
+                  <div id="about" style={ord('about')} className="flex flex-col gap-5">
+                    <EventSections sections={aboutSections} />
+                  </div>
+                ) : null}
+
+                {hasAgenda && show('agenda') ? (
+                  <EventAgenda
                     program={program}
+                    demo={ev.agenda}
                     slug={slug}
                     locale={locale}
                     timeZone={ev.timezone}
+                    images={programImages}
+                    liveSessions={liveSessions}
+                    style={ord('agenda')}
+                  />
+                ) : null}
+
+                {show('speakers') ? (
+                  <SpeakerGrid program={program} slug={slug} images={programImages} style={ord('speakers')} />
+                ) : null}
+
+                {present.faq && show('faq') ? (
+                  <div id="faq" style={ord('faq')} className="flex flex-col gap-5">
+                    <EventSections sections={faqSections} />
+                  </div>
+                ) : null}
+
+                {present.gallery && show('gallery') ? (
+                  <section
+                    id="gallery"
+                    data-ev-section
+                    aria-labelledby="gallery-heading"
+                    style={ord('gallery')}
+                    className="ev-card flex flex-col gap-6 rounded-card p-6 md:p-8"
+                  >
+                    <SectionIntro id="gallery-heading" title={t('publicEvent.gallery')} />
+                    <GalleryLightbox
+                      images={gallery}
+                      labels={lightbox}
+                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                      gridClassName="m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3"
+                      imageClassName="aspect-[4/3] w-full rounded-tile object-cover"
+                    />
+                  </section>
+                ) : null}
+
+                {present.exhibitors && show('exhibitors') ? (
+                  <ExhibitorGrid
+                    program={program}
+                    slug={slug}
                     images={programImages}
                     exhibitorMap={exhibitorMap}
-                    parts={['exhibitors']}
+                    style={ord('exhibitors')}
                   />
-                </div>
-              ) : null}
+                ) : null}
 
-              {present.sponsors && show('sponsors') ? (
-                <div style={ord('sponsors')} className="ev-program flex flex-col">
-                  <ProgramSections
-                    program={program}
-                    slug={slug}
-                    locale={locale}
-                    timeZone={ev.timezone}
-                    images={programImages}
-                    parts={['sponsors']}
-                  />
-                </div>
-              ) : null}
-
-              {ev.design.assistant ? (
-                <div style={{ order: 80 }} className="flex flex-col">
-                  <EventAssistant
-                    slug={slug}
-                    ask={askAssistantAction}
-                    helpHref={`/events/${slug}/seat-finder`}
-                  />
-                </div>
-              ) : null}
-
-              {reviews && show('reviews') ? (
-                <div style={ord('reviews')} className="ev-program flex flex-col">
-                  <EventReviews slug={slug} summary={reviews} locale={locale} timeZone={ev.timezone} />
-                </div>
-              ) : null}
-
-              {venue && show('venue') ? (
-                <section
-                  id="venue"
-                  data-block="venue"
-                  data-ev-section
-                  aria-labelledby="venue-heading"
-                  style={ord('venue')}
-                  className="ev-card flex flex-col gap-4 rounded-[28px] p-6 md:p-8"
-                >
-                  <div className="flex flex-wrap items-end justify-between gap-3">
-                    <div className="flex flex-col gap-1">
-                      <h2 id="venue-heading" className="m-0 text-section">
-                        {t('venueMap.title')}
-                      </h2>
-                      <p className="m-0 text-body text-ink-2">{t('venueMap.description')}</p>
-                    </div>
-                    <Link href={`/events/${slug}/seat-finder`} className={buttonClass('primary')}>
-                      {t('venueMap.findSeat')}
-                    </Link>
+                {present.sponsors && show('sponsors') ? (
+                  <div style={ord('sponsors')} className="ev-program flex flex-col">
+                    <ProgramSections
+                      program={program}
+                      slug={slug}
+                      locale={locale}
+                      timeZone={ev.timezone}
+                      images={programImages}
+                      parts={['sponsors']}
+                    />
                   </div>
-                  <VenueMap doc={venue.doc} />
-                  <VenueGuide doc={venue.doc} />
-                </section>
-              ) : null}
+                ) : null}
 
+                {ev.design.assistant ? (
+                  <div style={{ order: 80 }} className="flex flex-col">
+                    <EventAssistant
+                      slug={slug}
+                      ask={askAssistantAction}
+                      helpHref={`/events/${slug}/seat-finder`}
+                    />
+                  </div>
+                ) : null}
+
+                {reviews && show('reviews') ? (
+                  <div style={ord('reviews')} className="ev-program flex flex-col">
+                    <EventReviews slug={slug} summary={reviews} locale={locale} timeZone={ev.timezone} />
+                  </div>
+                ) : null}
+
+                {venue && show('venue') ? (
+                  <section
+                    id="venue"
+                    data-block="venue"
+                    data-ev-section
+                    aria-labelledby="venue-heading"
+                    style={ord('venue')}
+                    className="ev-card flex flex-col gap-4 rounded-card p-6 md:p-8"
+                  >
+                    <div className="flex flex-wrap items-end justify-between gap-3">
+                      <div className="flex flex-col gap-1">
+                        <h2 id="venue-heading" className="m-0 text-section">
+                          {t('venueMap.title')}
+                        </h2>
+                        <p className="m-0 text-body text-ink-2">{t('venueMap.description')}</p>
+                      </div>
+                      <Link href={`/events/${slug}/seat-finder`} className={buttonClass('primary')}>
+                        {t('venueMap.findSeat')}
+                      </Link>
+                    </div>
+                    <VenueMap doc={venue.doc} />
+                    <VenueGuide doc={venue.doc} />
+                  </section>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4">
               <EventLandingCta
-                style={{ order: 90 }}
                 name={ev.name}
                 when={[range, ev.city].filter(Boolean).join(' · ')}
                 label={getLabel}
                 heading={t('eventPage.ctaHeading')}
               />
 
-              <section
-                aria-labelledby="hosted-heading"
-                data-ev-section
-                style={{ order: 91 }}
-                className="ev-card flex flex-row flex-wrap items-center gap-4 rounded-[28px] p-6 md:p-8"
-              >
-                <span
-                  aria-hidden="true"
-                  className="ev-accent-fill flex size-[52px] shrink-0 items-center justify-center rounded-[16px] text-[16px] font-extrabold"
-                >
-                  {initials}
-                </span>
-                <div className="flex min-w-0 grow flex-col gap-0.5">
-                  <h2 id="hosted-heading" className="m-0 text-[13px] font-bold tracking-normal text-ink-2">
-                    {t('publicEvent.hostedBy')}
-                  </h2>
-                  <p className="m-0 text-[17px] font-extrabold text-ink">{ev.organizerName}</p>
-                </div>
-                {/* M6.14a: recommendations around this event (marketplace search v2). */}
-                {req.kind === 'marketplace' && listing && searchConfigured() ? (
-                  <Link
-                    href={`/search?like=${encodeURIComponent(slug)}`}
-                    className="inline-flex min-h-6 items-center text-body underline"
-                  >
-                    {t('market.search.similarLink')}
-                  </Link>
-                ) : null}
-              </section>
-
-              {target ? (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <section
-                  aria-labelledby="have-tickets-heading"
+                  aria-labelledby="hosted-heading"
                   data-ev-section
-                  style={{ order: 92 }}
-                  className="ev-card flex flex-col gap-4 rounded-[28px] p-6 md:p-8"
+                  className="ev-card flex flex-col gap-5 rounded-card p-6 md:p-8"
                 >
-                  <h2 id="have-tickets-heading" className="m-0 text-card">
-                    {t('myTickets.requestTitle')}
-                  </h2>
-                  <HolderLinkForm action={requestHolderLinkAction.bind(null, slug)} />
-                </section>
-              ) : null}
-
-              {refundPolicy || (orgProfile && orgProfile.legalPages.length > 0) || ev.poweredByVisible ? (
-                <footer style={{ order: 93 }} className="flex flex-col gap-3 px-1">
-                  {refundPolicy ? (
-                    <section aria-labelledby="refund-policy-heading" className="flex flex-col gap-2">
-                      <h2 id="refund-policy-heading" className="m-0 text-card">
-                        {t('refundPolicy.buyerTitle')}
+                  <div className="flex items-center gap-4">
+                    <span
+                      aria-hidden="true"
+                      className="ev-accent-fill flex size-14 shrink-0 items-center justify-center rounded-tile font-display text-[18px] font-black"
+                    >
+                      {initials}
+                    </span>
+                    <div className="flex min-w-0 flex-col gap-0.5">
+                      <h2
+                        id="hosted-heading"
+                        className="ev-eyebrow m-0 text-label font-extrabold tracking-[0.14em] uppercase"
+                      >
+                        {t('publicEvent.hostedBy')}
                       </h2>
-                      <ul className="m-0 flex list-none flex-col gap-1 p-0 text-body text-ink-2">
-                        {refundPolicyLines((k, v) => t(`refundPolicy.${k}`, v), refundPolicy, locale).map(
-                          (line) => (
-                            <li key={line}>{line}</li>
-                          ),
-                        )}
-                      </ul>
-                    </section>
-                  ) : null}
+                      <p className="m-0 text-[length:calc(20px*var(--ev-scale,1))] font-extrabold text-ink">
+                        {ev.organizerName}
+                      </p>
+                    </div>
+                  </div>
                   {orgProfile && orgProfile.legalPages.length > 0 ? (
                     <nav aria-label={t('legal.organizerPages', { org: ev.organizerName })}>
-                      <ul className="m-0 flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-caption">
+                      <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
                         {orgProfile.legalPages.map((k) => (
                           <li key={k}>
-                            <Link href={`/legal/${orgProfile.slug}/${k}`} className="text-ink-2 underline">
+                            <Link
+                              href={`/legal/${orgProfile.slug}/${k}`}
+                              className="inline-flex min-h-9 items-center rounded-pill border border-line px-3.5 text-caption font-bold text-ink-2 hover:border-ink hover:text-ink"
+                            >
                               {t(`settings.legal.kind.${k}`)}
                             </Link>
                           </li>
@@ -1071,21 +1033,67 @@ export async function PublicEventView({
                       </ul>
                     </nav>
                   ) : null}
-                  {ev.poweredByVisible ? (
+                  {/* M6.14a: recommendations around this event (marketplace search v2). */}
+                  {req.kind === 'marketplace' && listing && searchConfigured() ? (
                     <Link
-                      href="/"
-                      className="inline-flex min-h-6 items-center self-start text-caption text-ink-2 underline"
+                      href={`/search?like=${encodeURIComponent(slug)}`}
+                      className={buttonClass('secondary', 'md', 'self-start')}
                     >
-                      {t('publicEvent.poweredBy')}
+                      {t('market.search.similarLink')}
                     </Link>
                   ) : null}
-                </footer>
-              ) : null}
+                </section>
+
+                {refundPolicy ? (
+                  <section
+                    aria-labelledby="refund-policy-heading"
+                    data-ev-section
+                    className="ev-card flex flex-col gap-3 rounded-card p-6 md:p-8"
+                  >
+                    <h2
+                      id="refund-policy-heading"
+                      className="ev-eyebrow m-0 text-label font-extrabold tracking-[0.14em] uppercase"
+                    >
+                      {t('refundPolicy.buyerTitle')}
+                    </h2>
+                    <ul className="m-0 flex list-none flex-col gap-2.5 p-0 text-body text-ink">
+                      {refundPolicyLines((k, v) => t(`refundPolicy.${k}`, v), refundPolicy, locale).map(
+                        (line) => (
+                          <li key={line} className="flex gap-3">
+                            <span
+                              aria-hidden="true"
+                              className="ev-accent-bar mt-2 size-1.5 shrink-0 rounded-full"
+                            />
+                            {line}
+                          </li>
+                        ),
+                      )}
+                    </ul>
+                  </section>
+                ) : null}
+
+                {target ? (
+                  <section
+                    aria-labelledby="have-tickets-heading"
+                    data-ev-section
+                    className={cx(
+                      'ev-card flex flex-col gap-4 rounded-card p-6 md:p-8',
+                      refundPolicy ? 'md:col-span-2 lg:col-span-1' : 'lg:col-span-2',
+                    )}
+                  >
+                    <h2 id="have-tickets-heading" className="m-0 text-card">
+                      {t('myTickets.requestTitle')}
+                    </h2>
+                    <HolderLinkForm action={requestHolderLinkAction.bind(null, slug)} />
+                  </section>
+                ) : null}
+              </div>
             </div>
-          </div>
-          {hasBar ? <RegisterBar label={getLabel} /> : null}
-        </main>
+            {hasBar ? <RegisterBar label={getLabel} /> : null}
+          </main>
+        </div>
       </div>
+      <ShowcaseFooter />
     </div>
   );
 }

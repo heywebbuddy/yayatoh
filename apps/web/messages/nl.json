@@ -21035,7 +21035,12 @@
     "ctaHeading": "Mis het niet",
     "showDetails": "Details van {title} tonen",
     "previous": "Vorige sprekers",
-    "next": "Volgende sprekers"
+    "next": "Volgende sprekers",
+    "speakersEyebrow": "De line-up",
+    "exhibitorsEyebrow": "Op de vloer",
+    "agendaEyebrow": "Programma",
+    "speakerBio": "Over {name}",
+    "speakerProfile": "Volledig profiel"
   },
   "pageStyle": {
     "title": "Paginakleuren en indeling",

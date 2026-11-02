@@ -21035,7 +21035,12 @@
     "ctaHeading": "Nicht verpassen",
     "showDetails": "Details zu {title} anzeigen",
     "previous": "Vorherige Speaker",
-    "next": "Nächste Speaker"
+    "next": "Nächste Speaker",
+    "speakersEyebrow": "Das Line-up",
+    "exhibitorsEyebrow": "Vor Ort",
+    "agendaEyebrow": "Programm",
+    "speakerBio": "Über {name}",
+    "speakerProfile": "Ganzes Profil"
   },
   "pageStyle": {
     "title": "Seitenfarben und Layout",
