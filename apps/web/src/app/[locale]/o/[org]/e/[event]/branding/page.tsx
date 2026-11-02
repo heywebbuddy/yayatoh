@@ -7,13 +7,14 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { BrandColorField } from '@/components/brand-color-field.tsx';
 import { EventDesignForm } from '@/components/event-design-form.tsx';
 import { MediaUploader } from '@/components/media-uploader.tsx';
+import { PageStyleForm } from '@/components/page-style-form.tsx';
 import { SettingsForm } from '@/components/settings-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { mediaPanel } from '@/server/media.ts';
 import { ports } from '@/server/ports.ts';
 import { brandAction } from '../../../(org)/settings/actions.ts';
-import { eventBrandAction, eventDesignAction } from './actions.ts';
+import { eventBrandAction, eventDesignAction, pageStyleAction } from './actions.ts';
 
 /**
  * Event branding: this event's own accent colour (agreement §3: per-event branding), over the
@@ -83,6 +84,17 @@ export default async function EventBrandingPage({
           )}
         </Card>
       </section>
+      {canEditEvent ? (
+        <section aria-labelledby="page-style-heading" className="flex flex-col gap-3">
+          <h2 id="page-style-heading" className="text-section">
+            {t('pageStyle.title')}
+          </h2>
+          <p className="text-body text-ink-2">{t('pageStyle.description')}</p>
+          <Card>
+            <PageStyleForm action={pageStyleAction.bind(null, org, event)} initial={details.design.page} />
+          </Card>
+        </section>
+      ) : null}
       {canEdit ? (
         <section aria-labelledby="event-brand-color-heading" className="flex flex-col gap-3">
           <h2 id="event-brand-color-heading" className="text-section">

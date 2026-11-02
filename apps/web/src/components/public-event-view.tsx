@@ -4,14 +4,18 @@ import { liveSessionIds, networkingOpen } from '@yayatoh/engagement';
 import {
   accessTarget,
   checkoutTarget,
+  DEFAULT_PAGE_STYLE,
   isUploadedVideo,
+  type PageSection,
   type PublicEventContentDto,
+  pageStyleVars,
   pageTarget,
   publicEventBySlug,
   publicEventContent,
   publicEventSeries,
   publicOccurrences,
   publicShowsAttendeeCount,
+  sectionOrder,
 } from '@yayatoh/events';
 import { publicForm } from '@yayatoh/forms';
 import { formatMoney, money } from '@yayatoh/kernel';
@@ -28,6 +32,7 @@ import { Alert, brandPalette, buttonClass, cx, EmptyState } from '@yayatoh/ui';
 import { CalendarDays, Layers, MapPin } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import type { CSSProperties } from 'react';
 import {
   checkoutAction,
   findBestSeatsAction,
@@ -44,6 +49,9 @@ import { BrandLink } from '@/components/brand-styled.tsx';
 import { CheckoutForm } from '@/components/checkout-form.tsx';
 import { DatePicker } from '@/components/date-picker.tsx';
 import { EventAssistant } from '@/components/event-assistant.tsx';
+import { EventLandingCta } from '@/components/event-landing-cta.tsx';
+import { EventAgenda, LandingHeading, SpeakerBand } from '@/components/event-landing-sections.tsx';
+import { type EventNavItem, EventPageNav } from '@/components/event-page-nav.tsx';
 import { EventProfileBand } from '@/components/event-profile-band.tsx';
 import { EventSections } from '@/components/event-sections.tsx';
 import { GalleryLightbox } from '@/components/gallery-lightbox.tsx';
@@ -300,11 +308,15 @@ export async function PublicEventView({
   const passesSection = (
     <section
       id="passes"
+      data-ev-section
       aria-labelledby="passes-heading"
-      className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
+      className="ev-card ev-passes flex flex-col gap-4 rounded-[28px] p-5 md:p-7"
     >
       <div className="flex flex-col gap-1.5">
-        <h2 id="passes-heading" className="m-0 text-section text-ink">
+        <h2
+          id="passes-heading"
+          className="m-0 text-[length:calc(28px*var(--ev-scale,1))] leading-tight font-extrabold tracking-[-0.03em] text-ink"
+        >
           {t('publicEvent.choosePass')}
         </h2>
         <p className="m-0 text-body text-ink-2">{t('publicEvent.allIn', { org: ev.organizerName })}</p>
@@ -552,6 +564,52 @@ export async function PublicEventView({
       ? ev.design.heroVideoUrl
       : null;
   const heroCircle = ev.design.heroLayout === 'circle';
+  // Organizer page styling (Page design): colours as CSS variables, text scale, section order and
+  // visibility. Without settings the event keeps its type's own look and block order.
+  const pageStyle = ev.design.page ?? DEFAULT_PAGE_STYLE;
+  const order = sectionOrder(pageStyle);
+  const customOrder = pageStyle.order.length > 0;
+  const hiddenSections = new Set<PageSection>(pageStyle.hidden);
+  const ord = (k: PageSection) => (customOrder ? { order: order.indexOf(k) } : undefined);
+  const show = (k: PageSection) => !hiddenSections.has(k);
+  const aboutSections = content.sections.filter((x) => x.kind !== 'faq');
+  const faqSections = content.sections.filter((x) => x.kind === 'faq');
+  const present: Record<PageSection, boolean> = {
+    announcements: content.announcements.length > 0,
+    about: aboutSections.length > 0,
+    agenda: hasAgenda,
+    speakers: program.speakers.length > 0,
+    passes: true,
+    venue: Boolean(venue),
+    faq: faqSections.length > 0,
+    gallery: gallery.length > 0,
+    exhibitors: program.exhibitors.length > 0,
+    sponsors: program.sponsorTiers.length > 0,
+    reviews: Boolean(reviews && reviews.count > 0 && reviews.average !== null),
+  };
+  const navLabel: Record<PageSection, string> = {
+    announcements: t('publicEvent.announcements'),
+    about: t('eventPage.about'),
+    agenda: t('publicEvent.agenda'),
+    speakers: t('publicEvent.speakers'),
+    passes: t('publicEvent.passes'),
+    venue: t('eventPage.venue'),
+    faq: t('eventPage.faq'),
+    gallery: t('publicEvent.gallery'),
+    exhibitors: t('publicEvent.exhibitors'),
+    sponsors: t('publicEvent.sponsors'),
+    reviews: t('eventPage.reviews'),
+  };
+  // Default nav order follows the type's block order (a conference leads with its agenda).
+  const navOrder: readonly PageSection[] = customOrder
+    ? order
+    : ev.profile === 'conference'
+      ? ['agenda', ...order.filter((k) => k !== 'agenda')]
+      : order;
+  const navItems: EventNavItem[] = navOrder
+    .filter((k) => present[k] && show(k))
+    .map((k) => ({ id: k, label: navLabel[k] }));
+  const styleVars = pageStyleVars(pageStyle);
   const navLink =
     'inline-flex min-h-10 items-center rounded-[10px] px-3 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink';
   const chip =
@@ -561,6 +619,8 @@ export async function PublicEventView({
       className={cx('min-h-dvh', showcase && 'bg-page')}
       data-heading={ev.design.headingFont}
       data-profile={ev.profile}
+      data-ev-page
+      style={styleVars as CSSProperties}
       {...(showcase ? { 'data-surface': 'showcase' } : { 'data-theme': 'light' })}
     >
       {ev.visibility === 'public' ? (
@@ -576,32 +636,30 @@ export async function PublicEventView({
           hasBar && 'pb-28',
         )}
       >
-        <header className="relative z-20 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[22px] border border-line bg-surface p-2.5 ps-4 elevation-card glass">
+        <header className="sticky top-2 z-30 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-[22px] border border-line bg-surface p-2.5 ps-4 elevation-card glass sm:top-3 lg:flex-nowrap">
           <span className="flex min-w-0 items-center gap-2.5 text-ink">
             <span
               aria-hidden="true"
-              className="flex size-[34px] shrink-0 items-center justify-center rounded-[11px] bg-brand-strong text-[13px] font-extrabold text-white"
+              className="ev-accent-fill flex size-[34px] shrink-0 items-center justify-center rounded-[11px] text-[13px] font-extrabold"
             >
               {initials}
             </span>
-            <span className="truncate text-[17px] font-extrabold tracking-[-0.02em]">{ev.organizerName}</span>
+            <span className="max-w-[40vw] truncate text-[17px] font-extrabold tracking-[-0.02em] lg:max-w-[220px]">
+              {ev.organizerName}
+            </span>
           </span>
-          <nav aria-label={t('publicEvent.nav')} className="flex grow flex-wrap gap-1">
-            <a href="#passes" className={navLink}>
-              {t('publicEvent.passes')}
-            </a>
-            {hasAgenda ? (
-              <a href="#agenda" className={navLink}>
-                {t('publicEvent.agenda')}
-              </a>
-            ) : null}
+          <div className="order-last w-full min-w-0 lg:order-none lg:w-auto lg:grow">
+            <EventPageNav items={navItems} label={t('publicEvent.nav')} />
+          </div>
+          <div className="ms-auto flex flex-wrap items-center gap-2">
             <a
               href={whatsappHref(t('publicEvent.shareMessage', { name: ev.name, url: canonical }))}
               target="_blank"
               rel="noopener noreferrer"
               className={navLink}
             >
-              {t('publicEvent.shareWhatsApp')}
+              <span className="sm:hidden">{t('eventPage.share')}</span>
+              <span className="hidden sm:inline">{t('publicEvent.shareWhatsApp')}</span>
               <span className="sr-only"> {t('widget.newTab')}</span>
             </a>
             {networking ? (
@@ -610,14 +668,12 @@ export async function PublicEventView({
                 {t('networking.publicLink')}
               </Link>
             ) : null}
-          </nav>
-          <div className="flex flex-wrap items-center gap-2">
             {orgId ? (
               // M1.2f: the account corner on the org's own site (this host's session; no other org shown).
               <TenantAccount locale={locale} path={`/events/${slug}`} orgId={orgId} />
             ) : null}
             <ThemeSwitch initial={theme} />
-            <a href="#passes" className={buttonClass('dark')}>
+            <a href="#passes" className={cx(buttonClass('dark'), 'ev-cta')}>
               {getLabel}
             </a>
           </div>
@@ -727,7 +783,7 @@ export async function PublicEventView({
               <p className="m-0 max-w-[540px] text-[17px] leading-relaxed text-white/90">{ev.tagline}</p>
             ) : null}
             <div className="flex flex-wrap gap-2.5 pt-1">
-              <a href="#passes" className={buttonClass('inverse')}>
+              <a href="#passes" className={cx(buttonClass('inverse', 'lg'), 'ev-hero-cta')}>
                 {getLabel}
               </a>
               {hasAgenda ? (
@@ -759,7 +815,7 @@ export async function PublicEventView({
               )}
             >
               {dates.length > 0 ? (
-                <section className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6">
+                <section data-ev-section className="ev-card flex flex-col gap-4 rounded-[28px] p-5 md:p-7">
                   <DatePicker
                     slug={slug}
                     dates={dates}
@@ -775,7 +831,8 @@ export async function PublicEventView({
               {live ? (
                 <section
                   aria-labelledby="access-code-heading"
-                  className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
+                  data-ev-section
+                  className="ev-card flex flex-col gap-4 rounded-[28px] p-5 md:p-7"
                 >
                   <h2 id="access-code-heading" className="m-0 text-card">
                     {t('accessEntry.title')}
@@ -803,10 +860,13 @@ export async function PublicEventView({
                 eventId={target?.eventId ?? null}
                 locale={locale}
               />
-              {content.announcements.length > 0 ? (
+              {present.announcements && show('announcements') ? (
                 <section
+                  id="announcements"
+                  data-ev-section
                   aria-labelledby="announcements-heading"
-                  className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
+                  style={ord('announcements')}
+                  className="ev-card flex flex-col gap-4 rounded-[28px] p-6 md:p-8"
                 >
                   <h2 id="announcements-heading" className="m-0 text-section">
                     {t('publicEvent.announcements')}
@@ -815,81 +875,105 @@ export async function PublicEventView({
                 </section>
               ) : null}
 
-              <EventSections sections={content.sections} />
+              {present.about && show('about') ? (
+                <div id="about" style={ord('about')} className="flex flex-col gap-5">
+                  <EventSections sections={aboutSections} />
+                </div>
+              ) : null}
 
-              {gallery.length > 0 ? (
+              {hasAgenda && show('agenda') ? (
+                <EventAgenda
+                  program={program}
+                  demo={ev.agenda}
+                  slug={slug}
+                  locale={locale}
+                  timeZone={ev.timezone}
+                  images={programImages}
+                  liveSessions={liveSessions}
+                  style={ord('agenda')}
+                />
+              ) : null}
+
+              {show('speakers') ? (
+                <SpeakerBand program={program} slug={slug} images={programImages} style={ord('speakers')} />
+              ) : null}
+
+              {present.faq && show('faq') ? (
+                <div id="faq" style={ord('faq')} className="flex flex-col gap-5">
+                  <EventSections sections={faqSections} />
+                </div>
+              ) : null}
+
+              {present.gallery && show('gallery') ? (
                 <section
+                  id="gallery"
+                  data-ev-section
                   aria-labelledby="gallery-heading"
-                  className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
+                  style={ord('gallery')}
+                  className="ev-card flex flex-col gap-6 rounded-[28px] p-6 md:p-8"
                 >
-                  <h2 id="gallery-heading" className="m-0 text-section">
-                    {t('publicEvent.gallery')}
-                  </h2>
+                  <LandingHeading id="gallery-heading">{t('publicEvent.gallery')}</LandingHeading>
                   <GalleryLightbox
                     images={gallery}
                     labels={lightbox}
                     sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                     gridClassName="m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3"
-                    imageClassName="aspect-[4/3] w-full object-cover"
+                    imageClassName="aspect-[4/3] w-full rounded-[18px] object-cover"
                   />
                 </section>
               ) : null}
 
-              <ProgramSections
-                program={program}
-                slug={slug}
-                locale={locale}
-                timeZone={ev.timezone}
-                images={programImages}
-                liveSessions={liveSessions}
-                exhibitorMap={exhibitorMap}
-              />
+              {present.exhibitors && show('exhibitors') ? (
+                <div style={ord('exhibitors')} className="ev-program flex flex-col">
+                  <ProgramSections
+                    program={program}
+                    slug={slug}
+                    locale={locale}
+                    timeZone={ev.timezone}
+                    images={programImages}
+                    exhibitorMap={exhibitorMap}
+                    parts={['exhibitors']}
+                  />
+                </div>
+              ) : null}
 
-              {ev.agenda.length > 0 ? (
-                <section
-                  id="agenda"
-                  data-block="agenda"
-                  aria-label={t('publicEvent.agenda')}
-                  className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
-                >
-                  <h2 id="agenda-heading" className="m-0 text-section">
-                    {t('publicEvent.agenda')}
-                  </h2>
-                  <ul className="m-0 flex list-none flex-col gap-2 p-0">
-                    {ev.agenda.map((s) => (
-                      <li
-                        key={s.time}
-                        className="flex items-center gap-4 rounded-tile border border-line bg-surface-2 px-3.5 py-3"
-                      >
-                        <span className="w-16 shrink-0 text-[16px] font-extrabold text-ink tabular-nums">
-                          {s.time}
-                        </span>
-                        <span className="grow text-[15px] font-bold text-ink">{s.title}</span>
-                        <span className="text-caption text-ink-2">{s.room}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
+              {present.sponsors && show('sponsors') ? (
+                <div style={ord('sponsors')} className="ev-program flex flex-col">
+                  <ProgramSections
+                    program={program}
+                    slug={slug}
+                    locale={locale}
+                    timeZone={ev.timezone}
+                    images={programImages}
+                    parts={['sponsors']}
+                  />
+                </div>
               ) : null}
 
               {ev.design.assistant ? (
-                <EventAssistant
-                  slug={slug}
-                  ask={askAssistantAction}
-                  helpHref={`/events/${slug}/seat-finder`}
-                />
+                <div style={{ order: 80 }} className="flex flex-col">
+                  <EventAssistant
+                    slug={slug}
+                    ask={askAssistantAction}
+                    helpHref={`/events/${slug}/seat-finder`}
+                  />
+                </div>
               ) : null}
 
-              {reviews ? (
-                <EventReviews slug={slug} summary={reviews} locale={locale} timeZone={ev.timezone} />
+              {reviews && show('reviews') ? (
+                <div style={ord('reviews')} className="ev-program flex flex-col">
+                  <EventReviews slug={slug} summary={reviews} locale={locale} timeZone={ev.timezone} />
+                </div>
               ) : null}
 
-              {venue ? (
+              {venue && show('venue') ? (
                 <section
                   id="venue"
                   data-block="venue"
+                  data-ev-section
                   aria-labelledby="venue-heading"
-                  className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
+                  style={ord('venue')}
+                  className="ev-card flex flex-col gap-4 rounded-[28px] p-6 md:p-8"
                 >
                   <div className="flex flex-wrap items-end justify-between gap-3">
                     <div className="flex flex-col gap-1">
@@ -907,13 +991,23 @@ export async function PublicEventView({
                 </section>
               ) : null}
 
+              <EventLandingCta
+                style={{ order: 90 }}
+                name={ev.name}
+                when={[range, ev.city].filter(Boolean).join(' · ')}
+                label={getLabel}
+                heading={t('eventPage.ctaHeading')}
+              />
+
               <section
                 aria-labelledby="hosted-heading"
-                className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6 flex-row! flex-wrap items-center"
+                data-ev-section
+                style={{ order: 91 }}
+                className="ev-card flex flex-row flex-wrap items-center gap-4 rounded-[28px] p-6 md:p-8"
               >
                 <span
                   aria-hidden="true"
-                  className="flex size-[52px] shrink-0 items-center justify-center rounded-[16px] bg-brand-strong text-[16px] font-extrabold text-white"
+                  className="ev-accent-fill flex size-[52px] shrink-0 items-center justify-center rounded-[16px] text-[16px] font-extrabold"
                 >
                   {initials}
                 </span>
@@ -937,7 +1031,9 @@ export async function PublicEventView({
               {target ? (
                 <section
                   aria-labelledby="have-tickets-heading"
-                  className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
+                  data-ev-section
+                  style={{ order: 92 }}
+                  className="ev-card flex flex-col gap-4 rounded-[28px] p-6 md:p-8"
                 >
                   <h2 id="have-tickets-heading" className="m-0 text-card">
                     {t('myTickets.requestTitle')}
@@ -947,7 +1043,7 @@ export async function PublicEventView({
               ) : null}
 
               {refundPolicy || (orgProfile && orgProfile.legalPages.length > 0) || ev.poweredByVisible ? (
-                <footer className="flex flex-col gap-3 px-1">
+                <footer style={{ order: 93 }} className="flex flex-col gap-3 px-1">
                   {refundPolicy ? (
                     <section aria-labelledby="refund-policy-heading" className="flex flex-col gap-2">
                       <h2 id="refund-policy-heading" className="m-0 text-card">

@@ -20823,7 +20823,6 @@
     "aboutLink": "关于我们",
     "termsLink": "服务条款",
     "cookiesLink": "Cookie 政策",
-
     "refundLink": "退款政策",
     "legalEyebrow": "法律信息",
     "lastUpdated": "最后更新 {date} · 版本 {version}",
@@ -21025,6 +21024,50 @@
       "published": "此语言已发布。请先取消发布再替换。",
       "tooLong": "内容过长，无法一次翻译（最多 2,000 词）。",
       "incomplete": "请先完成此草稿：需要填写邮寄地址等所有必填信息。"
+    }
+  },
+  "eventPage": {
+    "about": "简介",
+    "venue": "场地",
+    "faq": "常见问题",
+    "reviews": "评价",
+    "share": "分享",
+    "ctaHeading": "不要错过",
+    "showDetails": "显示{title}的详情",
+    "previous": "上一组讲者",
+    "next": "下一组讲者"
+  },
+  "pageStyle": {
+    "title": "页面颜色与布局",
+    "description": "设置品牌颜色、文字大小，以及显示哪些板块和顺序。系统会检查对比度，确保文字清晰可读。",
+    "colorsLegend": "颜色",
+    "accent": "品牌强调色",
+    "accent2": "第二强调色",
+    "band": "色带",
+    "sectionBg": "板块背景",
+    "text": "文字颜色",
+    "useDefault": "类型默认",
+    "textSizeLegend": "文字大小",
+    "scale": {
+      "small": "小",
+      "default": "默认",
+      "large": "大"
+    },
+    "sectionsLegend": "板块",
+    "sectionsHint": "没有内容的板块会自动隐藏。",
+    "visible": "显示{name}",
+    "moveUp": "上移{name}",
+    "moveDown": "下移{name}",
+    "alwaysShown": "始终显示",
+    "preview": "实时预览",
+    "previewSession": "开幕主题演讲",
+    "previewBody": "九点开门，咖啡免费。",
+    "reset": "恢复默认",
+    "contrastWarn": "{pair}对比度较低。页面会自动修正，确保文字清晰可读。",
+    "pair": {
+      "text": "板块背景上的文字",
+      "accent": "板块背景上的强调色",
+      "band": "色带上的文字"
     }
   }
 }

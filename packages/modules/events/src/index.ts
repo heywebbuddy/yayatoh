@@ -122,6 +122,25 @@ export {
   normalizeCategoryName,
 } from './domain/org-categories.ts';
 export {
+  contrast,
+  contrastIssues,
+  DEFAULT_PAGE_STYLE,
+  ensureContrast,
+  inkOn,
+  isDefaultPageStyle,
+  PAGE_SECTIONS,
+  type PageSection,
+  PageStyle,
+  pageStyleVars,
+  parsePageStyle,
+  REQUIRED_SECTIONS,
+  sanitizeHex,
+  sectionOrder,
+  TEXT_SCALE_FACTOR,
+  TEXT_SCALES,
+  type TextScale,
+} from './domain/page-style.ts';
+export {
   checkPortalAccount,
   checkPortalCode,
   checkPortalLink,

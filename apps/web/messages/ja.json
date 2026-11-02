@@ -20823,7 +20823,6 @@
     "aboutLink": "会社概要",
     "termsLink": "利用規約",
     "cookiesLink": "クッキーポリシー",
-
     "refundLink": "返金ポリシー",
     "legalEyebrow": "法的情報",
     "lastUpdated": "最終更新日 {date} · バージョン {version}",
@@ -21025,6 +21024,50 @@
       "published": "この言語はすでに公開されています。置き換えるには先に非公開にしてください。",
       "tooLong": "一度に翻訳するには長すぎます（最大2,000語）。",
       "incomplete": "先にこの下書きを完成させてください。郵送先住所など必須項目がすべて必要です。"
+    }
+  },
+  "eventPage": {
+    "about": "概要",
+    "venue": "会場",
+    "faq": "よくある質問",
+    "reviews": "レビュー",
+    "share": "共有",
+    "ctaHeading": "お見逃しなく",
+    "showDetails": "{title}の詳細を表示",
+    "previous": "前のスピーカー",
+    "next": "次のスピーカー"
+  },
+  "pageStyle": {
+    "title": "ページの色とレイアウト",
+    "description": "ブランドカラー、文字サイズ、表示するセクションとその順序を設定します。文字が読みやすいようにコントラストを確認します。",
+    "colorsLegend": "色",
+    "accent": "ブランドアクセント",
+    "accent2": "第2アクセント",
+    "band": "カラーバンド",
+    "sectionBg": "セクション背景",
+    "text": "文字色",
+    "useDefault": "タイプの既定",
+    "textSizeLegend": "文字サイズ",
+    "scale": {
+      "small": "小",
+      "default": "標準",
+      "large": "大"
+    },
+    "sectionsLegend": "セクション",
+    "sectionsHint": "内容のないセクションは自動的に非表示になります。",
+    "visible": "{name}を表示",
+    "moveUp": "{name}を上へ",
+    "moveDown": "{name}を下へ",
+    "alwaysShown": "常に表示",
+    "preview": "ライブプレビュー",
+    "previewSession": "オープニング基調講演",
+    "previewBody": "開場は9時。コーヒーをご用意しています。",
+    "reset": "既定に戻す",
+    "contrastWarn": "{pair}のコントラストが低いです。文字が読みやすいようにページが自動で補正します。",
+    "pair": {
+      "text": "セクション背景上の文字",
+      "accent": "セクション背景上のアクセント",
+      "band": "カラーバンド上の文字"
     }
   }
 }

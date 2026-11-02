@@ -20823,7 +20823,6 @@
     "aboutLink": "À propos",
     "termsLink": "Conditions d’utilisation",
     "cookiesLink": "Politique de cookies",
-
     "refundLink": "Politique de remboursement",
     "legalEyebrow": "Mentions légales",
     "lastUpdated": "Dernière mise à jour : {date} · version {version}",
@@ -21025,6 +21024,50 @@
       "published": "Cette langue est déjà publiée. Dépubliez-la d'abord pour la remplacer.",
       "tooLong": "Ce texte est trop long pour être traduit en une fois (2 000 mots au maximum).",
       "incomplete": "Terminez d'abord ce brouillon : il lui faut toutes les informations requises, comme l'adresse postale."
+    }
+  },
+  "eventPage": {
+    "about": "À propos",
+    "venue": "Lieu",
+    "faq": "FAQ",
+    "reviews": "Avis",
+    "share": "Partager",
+    "ctaHeading": "À ne pas manquer",
+    "showDetails": "Afficher les détails de {title}",
+    "previous": "Intervenants précédents",
+    "next": "Intervenants suivants"
+  },
+  "pageStyle": {
+    "title": "Couleurs et mise en page",
+    "description": "Choisissez vos couleurs de marque, la taille du texte et l’ordre et la visibilité des sections. Le contraste est vérifié pour que le texte reste lisible.",
+    "colorsLegend": "Couleurs",
+    "accent": "Accent de marque",
+    "accent2": "Second accent",
+    "band": "Bandeau de couleur",
+    "sectionBg": "Fond des sections",
+    "text": "Couleur du texte",
+    "useDefault": "Par défaut du type",
+    "textSizeLegend": "Taille du texte",
+    "scale": {
+      "small": "Petite",
+      "default": "Par défaut",
+      "large": "Grande"
+    },
+    "sectionsLegend": "Sections",
+    "sectionsHint": "Les sections sans contenu sont masquées automatiquement.",
+    "visible": "Afficher {name}",
+    "moveUp": "Monter {name}",
+    "moveDown": "Descendre {name}",
+    "alwaysShown": "Toujours affichée",
+    "preview": "Aperçu en direct",
+    "previewSession": "Keynote d’ouverture",
+    "previewBody": "Ouverture des portes à neuf heures. Le café est offert.",
+    "reset": "Rétablir par défaut",
+    "contrastWarn": "Contraste faible pour {pair}. La page le corrige automatiquement pour que le texte reste lisible.",
+    "pair": {
+      "text": "le texte sur le fond des sections",
+      "accent": "l’accent sur le fond des sections",
+      "band": "le texte sur le bandeau"
     }
   }
 }

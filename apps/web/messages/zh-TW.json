@@ -20823,7 +20823,6 @@
     "aboutLink": "關於我們",
     "termsLink": "服務條款",
     "cookiesLink": "Cookie 政策",
-
     "refundLink": "退款政策",
     "legalEyebrow": "法律資訊",
     "lastUpdated": "最後更新 {date} · 版本 {version}",
@@ -21025,6 +21024,50 @@
       "published": "此語言已發布。請先取消發布再取代。",
       "tooLong": "內容過長，無法一次翻譯（最多 2,000 字）。",
       "incomplete": "請先完成此草稿：需要填寫郵寄地址等所有必填資訊。"
+    }
+  },
+  "eventPage": {
+    "about": "簡介",
+    "venue": "場地",
+    "faq": "常見問題",
+    "reviews": "評價",
+    "share": "分享",
+    "ctaHeading": "不要錯過",
+    "showDetails": "顯示{title}的詳情",
+    "previous": "上一組講者",
+    "next": "下一組講者"
+  },
+  "pageStyle": {
+    "title": "頁面顏色與版面",
+    "description": "設定品牌顏色、文字大小，以及顯示哪些區塊與順序。系統會檢查對比度，確保文字清晰可讀。",
+    "colorsLegend": "顏色",
+    "accent": "品牌強調色",
+    "accent2": "第二強調色",
+    "band": "色帶",
+    "sectionBg": "區塊背景",
+    "text": "文字顏色",
+    "useDefault": "類型預設",
+    "textSizeLegend": "文字大小",
+    "scale": {
+      "small": "小",
+      "default": "預設",
+      "large": "大"
+    },
+    "sectionsLegend": "區塊",
+    "sectionsHint": "沒有內容的區塊會自動隱藏。",
+    "visible": "顯示{name}",
+    "moveUp": "上移{name}",
+    "moveDown": "下移{name}",
+    "alwaysShown": "一律顯示",
+    "preview": "即時預覽",
+    "previewSession": "開幕主題演講",
+    "previewBody": "九點開門，咖啡免費。",
+    "reset": "恢復預設",
+    "contrastWarn": "{pair}對比度偏低。頁面會自動修正，確保文字清晰可讀。",
+    "pair": {
+      "text": "區塊背景上的文字",
+      "accent": "區塊背景上的強調色",
+      "band": "色帶上的文字"
     }
   }
 }

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { isDefaultPageStyle, PageStyle } from './page-style.ts';
 import { UPLOADED_POSTER_PATH, UPLOADED_VIDEO_PATH } from './video.ts';
 
 /**
@@ -29,6 +30,8 @@ export const EventDesign = z.object({
   heroVideoPoster: z.string().regex(UPLOADED_POSTER_PATH).nullable().default(null),
   /** Show the AI assistant that answers attendees from this event's published details (off by default). */
   assistant: z.boolean().default(false),
+  /** Organizer colours, text size and section order/visibility (null: the type's own look). */
+  page: PageStyle.nullable().catch(null).default(null),
 });
 export type EventDesign = z.infer<typeof EventDesign>;
 
@@ -39,6 +42,7 @@ export const DEFAULT_EVENT_DESIGN: EventDesign = {
   heroVideoUrl: null,
   heroVideoPoster: null,
   assistant: false,
+  page: null,
 };
 
 /** The stored value, read leniently: anything unreadable is the default design. */
@@ -62,4 +66,5 @@ export const isDefaultDesign = (d: EventDesign): boolean =>
   d.heroLayout === 'full' &&
   d.heroVideoUrl === null &&
   d.heroVideoPoster === null &&
-  !d.assistant;
+  !d.assistant &&
+  (d.page === null || isDefaultPageStyle(d.page));

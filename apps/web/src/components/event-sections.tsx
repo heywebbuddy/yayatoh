@@ -11,9 +11,13 @@ export async function EventSections({ sections }: { sections: readonly PublicSec
         <section
           key={s.id}
           aria-labelledby={`section-${s.id}`}
-          className="flex scroll-mt-4 flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass md:p-6"
+          data-ev-section
+          className="ev-card flex flex-col gap-5 rounded-[28px] p-6 md:p-10"
         >
-          <h2 id={`section-${s.id}`} className="text-section">
+          <h2
+            id={`section-${s.id}`}
+            className="m-0 text-[length:calc(30px*var(--ev-scale,1))] leading-[1.1] font-extrabold tracking-[-0.03em]"
+          >
             {s.title}
           </h2>
           <SectionBodyView section={s} openMap={t('openMap')} title={s.title} />
