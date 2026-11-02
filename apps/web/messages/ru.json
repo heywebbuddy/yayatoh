@@ -21035,7 +21035,12 @@
     "ctaHeading": "Не пропустите",
     "showDetails": "Подробнее о «{title}»",
     "previous": "Предыдущие спикеры",
-    "next": "Следующие спикеры"
+    "next": "Следующие спикеры",
+    "speakersEyebrow": "Спикеры",
+    "exhibitorsEyebrow": "На площадке",
+    "agendaEyebrow": "Программа",
+    "speakerBio": "О спикере: {name}",
+    "speakerProfile": "Полный профиль"
   },
   "pageStyle": {
     "title": "Цвета и макет страницы",

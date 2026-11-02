@@ -21035,7 +21035,12 @@
     "ctaHeading": "不要錯過",
     "showDetails": "顯示{title}的詳情",
     "previous": "上一組講者",
-    "next": "下一組講者"
+    "next": "下一組講者",
+    "speakersEyebrow": "演講嘉賓",
+    "exhibitorsEyebrow": "現場展商",
+    "agendaEyebrow": "議程",
+    "speakerBio": "關於{name}",
+    "speakerProfile": "完整簡介"
   },
   "pageStyle": {
     "title": "頁面顏色與版面",

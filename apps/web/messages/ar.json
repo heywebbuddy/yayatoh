@@ -21035,7 +21035,12 @@
     "ctaHeading": "لا تفوّت الحدث",
     "showDetails": "عرض تفاصيل {title}",
     "previous": "المتحدثون السابقون",
-    "next": "المتحدثون التاليون"
+    "next": "المتحدثون التاليون",
+    "speakersEyebrow": "نخبة الضيوف",
+    "exhibitorsEyebrow": "في المعرض",
+    "agendaEyebrow": "البرنامج",
+    "speakerBio": "نبذة عن {name}",
+    "speakerProfile": "الملف الكامل"
   },
   "pageStyle": {
     "title": "ألوان الصفحة وتخطيطها",

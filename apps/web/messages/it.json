@@ -21035,7 +21035,12 @@
     "ctaHeading": "Da non perdere",
     "showDetails": "Mostra dettagli di {title}",
     "previous": "Relatori precedenti",
-    "next": "Relatori successivi"
+    "next": "Relatori successivi",
+    "speakersEyebrow": "I relatori",
+    "exhibitorsEyebrow": "In fiera",
+    "agendaEyebrow": "Programma",
+    "speakerBio": "Su {name}",
+    "speakerProfile": "Profilo completo"
   },
   "pageStyle": {
     "title": "Colori e layout della pagina",

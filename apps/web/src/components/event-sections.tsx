@@ -12,11 +12,11 @@ export async function EventSections({ sections }: { sections: readonly PublicSec
           key={s.id}
           aria-labelledby={`section-${s.id}`}
           data-ev-section
-          className="ev-card flex flex-col gap-5 rounded-[28px] p-6 md:p-10"
+          className="ev-card flex flex-col gap-5 rounded-card p-6 md:p-10"
         >
           <h2
             id={`section-${s.id}`}
-            className="m-0 text-[length:calc(30px*var(--ev-scale,1))] leading-[1.1] font-extrabold tracking-[-0.03em]"
+            className="m-0 font-display text-[length:calc(clamp(24px,3vw,30px)*var(--ev-scale,1))] leading-none font-black tracking-[-0.02em] uppercase [overflow-wrap:anywhere]"
           >
             {s.title}
           </h2>

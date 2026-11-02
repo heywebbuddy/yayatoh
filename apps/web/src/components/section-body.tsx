@@ -1,4 +1,5 @@
 import { isUploadedVideo, parseVideoUrl, type SectionBody, videoEmbedUrl } from '@yayatoh/events/ui';
+import { buttonClass } from '@yayatoh/ui';
 import { Markdown } from './markdown.tsx';
 
 /** Schedule rows grouped under their day heading (consecutive rows with the same `day`). */
@@ -74,7 +75,7 @@ export function SectionBodyView({
           <a
             href={section.content.mapUrl}
             rel="noopener noreferrer nofollow"
-            className="self-start text-body underline underline-offset-2"
+            className={buttonClass('secondary', 'md', 'self-start')}
           >
             {openMap}
           </a>
@@ -124,14 +125,10 @@ export function SectionBodyView({
     );
   }
   return (
-    <ul className="flex list-none flex-col gap-2 p-0">
+    <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
       {section.content.items.map((item, i) => (
         <li key={`${i}-${item.url}`}>
-          <a
-            href={item.url}
-            rel="noopener noreferrer nofollow"
-            className="inline-flex min-h-6 items-center text-body underline underline-offset-2"
-          >
+          <a href={item.url} rel="noopener noreferrer nofollow" className={buttonClass('secondary', 'md')}>
             {item.label}
           </a>
         </li>

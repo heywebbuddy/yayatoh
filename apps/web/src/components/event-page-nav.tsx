@@ -35,7 +35,7 @@ export function EventPageNav({ items, label }: { items: readonly EventNavItem[];
         if (first) setActive(first.id);
       },
       // The band just below the sticky bar: a section is "current" once its top passes it.
-      { rootMargin: '-140px 0px -55% 0px', threshold: 0 },
+      { rootMargin: '-150px 0px -55% 0px', threshold: 0 },
     );
     for (const el of els) io.observe(el);
     return () => io.disconnect();
@@ -51,7 +51,7 @@ export function EventPageNav({ items, label }: { items: readonly EventNavItem[];
     <nav aria-label={label} className="min-w-0 grow">
       <ul
         ref={listRef}
-        className="ev-nav-scroll m-0 flex list-none gap-1 overflow-x-auto p-0 [scrollbar-width:none]"
+        className="ev-nav-scroll ev-nav-fade m-0 flex list-none gap-1 overflow-x-auto p-0 [scrollbar-width:none]"
       >
         {items.map((i) => (
           <li key={i.id} className="shrink-0">
@@ -71,7 +71,7 @@ export function EventPageNav({ items, label }: { items: readonly EventNavItem[];
                 el.focus({ preventScroll: true });
               }}
               className={cx(
-                'inline-flex min-h-10 items-center rounded-[10px] px-3 text-body font-bold whitespace-nowrap',
+                'inline-flex min-h-10 items-center rounded-pill px-3.5 text-body font-bold whitespace-nowrap transition-colors motion-reduce:transition-none',
                 active === i.id
                   ? 'bg-[var(--ev-accent,var(--color-primary))] text-[var(--ev-on-accent,var(--color-on-primary))]'
                   : 'text-ink-2 hover:bg-surface-3 hover:text-ink',

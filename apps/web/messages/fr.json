@@ -21035,7 +21035,12 @@
     "ctaHeading": "À ne pas manquer",
     "showDetails": "Afficher les détails de {title}",
     "previous": "Intervenants précédents",
-    "next": "Intervenants suivants"
+    "next": "Intervenants suivants",
+    "speakersEyebrow": "Les intervenants",
+    "exhibitorsEyebrow": "Sur place",
+    "agendaEyebrow": "Programme",
+    "speakerBio": "À propos de {name}",
+    "speakerProfile": "Profil complet"
   },
   "pageStyle": {
     "title": "Couleurs et mise en page",

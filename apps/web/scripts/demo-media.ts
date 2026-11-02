@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { closePools, sql, withTenant } from '@yayatoh/db';
 import {
   completeGalleryUploadCommand,
@@ -23,6 +24,10 @@ import { type Demo, failures, log, owner, quietPorts, read, run, step } from './
  *   node --conditions=react-server scripts/demo-media.ts
  * Files: <key>-cover-1.jpg, <key>-gallery-<n>.jpg (key per event below) and logo-<company>.svg.
  * An event without files for a slot keeps what it has. Safe to re-run.
+ *
+ * Speaker portraits come from this repository (scripts/demo/speakers/<name>.jpg, AI-generated
+ * fictional people; sources in scripts/demo/speakers/SOURCES.md) and are only added to speakers
+ * of the demo events that have no photo yet, so re-running never replaces an organizer's upload.
  */
 const slug = process.env.DEMO_ORG_SLUG;
 const ownerEmail = process.env.DEMO_OWNER_EMAIL?.toLowerCase();
@@ -88,6 +93,18 @@ const VENUE_IMAGE: Record<keyof typeof VENUES, string> = {
   convention: 'fow',
   hall: 'food',
   studio: 'nimbus',
+};
+const SPEAKER_DIR = join(dirname(fileURLToPath(import.meta.url)), 'demo', 'speakers');
+const speakerFiles = readdirSync(SPEAKER_DIR);
+/** "Dr. Anjali Rao" → anjali-rao.jpg (titles dropped). */
+const speakerFile = (name: string) => {
+  const key = `${name
+    .replace(/^(dr|prof|mr|mrs|ms)\.?\s+/i, '')
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')}.jpg`;
+  return speakerFiles.includes(key) ? new Uint8Array(readFileSync(join(SPEAKER_DIR, key))) : null;
 };
 const logoName = (company: string) =>
   `logo-${company
@@ -183,6 +200,25 @@ for (const ev of events) {
           quietPorts,
         );
       });
+  }
+  // Speaker portraits, only where the speaker has none (idempotent; never replaces an upload).
+  const people = await read<{ id: string; name: string } & Record<string, unknown>>(
+    d,
+    sql`select s.id, s.name from program.speakers s
+        where s.event_id = ${ev.id}
+          and not exists (select 1 from media.assets a where a.owner_type = 'speaker' and a.owner_id = s.id)`,
+  );
+  for (const p of people) {
+    const portrait = speakerFile(p.name);
+    if (portrait)
+      await step(`${ev.slug} speaker photo ${p.name}`, () =>
+        uploadProgramImage(
+          owner(d),
+          'speaker',
+          { file: portrait, alt: p.name, ownerId: p.id } as never,
+          quietPorts,
+        ),
+      );
   }
   // Sponsor and exhibitor logos (and the renamed table sponsors of the galas).
   const sponsors = await read<{ id: string; name: string } & Record<string, unknown>>(

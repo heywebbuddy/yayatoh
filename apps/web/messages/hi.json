@@ -21035,7 +21035,12 @@
     "ctaHeading": "इसे न चूकें",
     "showDetails": "{title} का विवरण दिखाएँ",
     "previous": "पिछले वक्ता",
-    "next": "अगले वक्ता"
+    "next": "अगले वक्ता",
+    "speakersEyebrow": "वक्ता",
+    "exhibitorsEyebrow": "आयोजन स्थल पर",
+    "agendaEyebrow": "कार्यक्रम",
+    "speakerBio": "{name} के बारे में",
+    "speakerProfile": "पूरी प्रोफ़ाइल"
   },
   "pageStyle": {
     "title": "पेज के रंग और लेआउट",
