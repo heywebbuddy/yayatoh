@@ -15,6 +15,14 @@ export const privateColumns = columnPrivacy('ai', {
     draft_kind: 'vocab',
     actor: internal(),
   },
+  // AI1: usage holds no personal data (labels only). A summary is derived from people's words.
+  usage: { purpose: 'vocab', model: 'vocab', outcome: 'vocab' },
+  insights: {
+    subject: 'vocab',
+    input_hash: 'vocab',
+    result: internal(),
+    model: 'vocab',
+  },
   // M6.12b: a brand kit is the org's own working material (console and AI prompts only, never a
   // public page); the tone is a vocabulary word.
   brand_kits: {

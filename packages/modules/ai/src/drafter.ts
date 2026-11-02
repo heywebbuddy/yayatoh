@@ -4,8 +4,10 @@ import { AiOutputError, addMinutesLocal, buildComposePrompt, type ComposeRequest
 import { buildPrompt, DraftOutputError, type DraftRequest } from './domain/drafts.ts';
 import { fakeEmbedding } from './domain/embed.ts';
 import { ruleBasedSetup } from './domain/event-setup-rules.ts';
+import { hasRefusalFallback } from './domain/routes.ts';
 import { timeZoneLabel } from './domain/timezone.ts';
 import type { Tone } from './domain/tones.ts';
+import { aiCallScope } from './usage.ts';
 
 /**
  * The AI drafting port (M1.4f). Adapters turn a request into raw text; the caller cleans it
@@ -30,6 +32,10 @@ export class AiUnavailableError extends Error {
   }
 }
 
+/** The fake reports fixed usage, so tests can assert the log without a provider. */
+const reportFake = () =>
+  aiCallScope.getStore()?.report({ model: 'fake', input: 100, cacheRead: 0, output: 50 });
+
 const dateOnly = (local: string) => local.slice(0, 10);
 
 /**
@@ -40,6 +46,7 @@ const dateOnly = (local: string) => local.slice(0, 10);
 export const fakeDrafter: AiDrafter = {
   name: 'fake',
   async draft(req) {
+    reportFake();
     const f = req.facts;
     const place = f.attendanceMode === 'online' ? 'online' : [f.venueName, f.city].filter(Boolean).join(', ');
     const when = dateOnly(f.startsLocal);
@@ -62,6 +69,7 @@ export const fakeDrafter: AiDrafter = {
     }
   },
   async compose(req) {
+    reportFake();
     return JSON.stringify(fakeCompose(req));
   },
   async embed(texts) {
@@ -151,6 +159,44 @@ function fakeCompose(req: ComposeRequest): unknown {
           }
         : { known: false, answer: '', sources: [] };
     }
+    case 'help_answer': {
+      const best = rankSources(req.brief, req.sources).slice(0, 2);
+      return best.length > 0
+        ? {
+            known: true,
+            answer: best.map((x) => cutWords(x.text, 280)).join(' '),
+            sources: best.map((x) => x.id),
+          }
+        : { known: false, answer: '', sources: [] };
+    }
+    case 'insights': {
+      const quoted = req.answers.slice(0, 2);
+      return {
+        summary: `${req.answers.length} answers read for this ${req.subject === 'reviews' ? 'event' : 'survey'}.`,
+        sentiment: 'mixed',
+        themes: quoted.length
+          ? [{ title: 'What people said', mentions: quoted.length, quotes: quoted.map((a) => a.id) }]
+          : [],
+      };
+    }
+    case 'support_assist': {
+      const last = req.messages.at(-1)?.body ?? '';
+      return {
+        category: /refund|money back/i.test(last) ? 'refund' : 'other',
+        urgency: /urgent|today|asap/i.test(last) ? 'high' : 'normal',
+        summary: cutWords(last, 120),
+        draft:
+          req.kind === 'refund_request'
+            ? 'We are unable to refund this order, because the refund window has closed.'
+            : 'Thanks for your message. We are looking into this and will reply soon.',
+      };
+    }
+    case 'translate':
+      return {
+        segments: Object.fromEntries(
+          Object.entries(req.segments).map(([k, v]) => [k, v.trim() ? `[${req.targetLocale}] ${v}` : v]),
+        ),
+      };
     case 'event_setup':
       // No provider: a rule-based reading of the sentence (type, days, city, suitable tickets).
       return ruleBasedSetup(req.brief, req.today, req.profiles);
@@ -208,25 +254,36 @@ export const ANTHROPIC_DEFAULT_MODEL = 'claude-opus-5-5';
  * refunds the credit and the organizer carries on by hand.
  */
 export function anthropicDrafter(opts: { apiKey: string; model?: string; client?: Anthropic }): AiDrafter {
-  const model = opts.model ?? ANTHROPIC_DEFAULT_MODEL;
   const client = opts.client ?? new Anthropic({ apiKey: opts.apiKey, maxRetries: 1, timeout: 25_000 });
   async function ask(prompt: { system: string; user: string }, unusable: () => Error): Promise<string> {
     let message: Anthropic.Beta.BetaMessage;
+    const scope = aiCallScope.getStore();
+    // `AI_MODEL` (opts.model) overrides every route, as an emergency switch.
+    const model = opts.model ?? scope?.route.model ?? ANTHROPIC_DEFAULT_MODEL;
     try {
       message = await client.beta.messages.create({
         model,
-        max_tokens: 8000,
+        max_tokens: scope?.route.maxTokens ?? 8000,
         system: prompt.system,
         messages: [{ role: 'user', content: prompt.user }],
-        output_config: { effort: 'low' },
-        betas: ['server-side-fallback-2026-07-01'],
-        fallbacks: 'default',
+        output_config: { effort: scope?.route.effort ?? 'low' },
+        ...(hasRefusalFallback(model)
+          ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' as const }
+          : {}),
       });
     } catch (err) {
       if (err instanceof Anthropic.APIError)
         throw new AiUnavailableError(`The Anthropic API failed (${err.status ?? 'no connection'})`);
       throw err;
     }
+    scope?.report({
+      // The model that answered: a fallback may have taken over.
+      model: message.model,
+      input: message.usage.input_tokens,
+      cacheRead: message.usage.cache_read_input_tokens ?? 0,
+      output: message.usage.output_tokens,
+      refused: message.stop_reason === 'refusal',
+    });
     if (message.stop_reason === 'refusal' || message.stop_reason === 'max_tokens') throw unusable();
     const text = message.content
       .flatMap((block) => (block.type === 'text' ? [block.text] : []))
@@ -236,7 +293,7 @@ export function anthropicDrafter(opts: { apiKey: string; model?: string; client?
     return text;
   }
   return {
-    name: `anthropic:${model}`,
+    name: `anthropic:${opts.model ?? ANTHROPIC_DEFAULT_MODEL}`,
     draft: (req) => ask(buildPrompt(req), () => new DraftOutputError()),
     compose: (req) => ask(buildComposePrompt(req), () => new AiOutputError('no usable reply')),
     async embed() {

@@ -43,6 +43,10 @@ export const MODULE_KEYS = [
   'advanced_seating',
   'ai_seating',
   'analytics_pro',
+  // AI1: phase 1 AI features, granted org by org while they roll out.
+  'ai_insights',
+  'ai_support_assist',
+  'ai_translate',
 ] as const;
 export type ModuleKey = (typeof MODULE_KEYS)[number];
 
@@ -56,6 +60,9 @@ export const PHASE6_MODULE_KEYS = [
   'advanced_seating',
   'ai_seating',
   'analytics_pro',
+  'ai_insights',
+  'ai_support_assist',
+  'ai_translate',
 ] as const satisfies readonly ModuleKey[];
 
 export function isModuleKey(v: string): v is ModuleKey {

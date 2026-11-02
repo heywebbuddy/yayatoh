@@ -1,5 +1,6 @@
 'use server';
 
+import { type SummarizeResultDto, summarizeAnswers } from '@yayatoh/ai';
 import { type FieldDefinition, SURVEY_FIELD_TYPES } from '@yayatoh/forms';
 import { executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import {
@@ -15,7 +16,11 @@ import {
 import { revalidatePath } from 'next/cache';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { redirect } from '@/i18n/navigation.ts';
+import type { AiComposeResult } from '@/lib/ai-compose.ts';
 import type { FormState } from '@/lib/form-state.ts';
+import { aiDrafter } from '@/server/ai.ts';
+import { aiCall } from '@/server/ai-compose.ts';
+import { surveyAnswers } from '@/server/ai-insights.ts';
 import { runBulkInline } from '@/server/bulk.ts';
 import { loadEvent } from '@/server/console.ts';
 import { failure, success } from '@/server/form.ts';
@@ -309,4 +314,32 @@ export async function exportSurveyAction(
   }
   await runBulkInline(data.org.id, operationId);
   redirect({ href: `${back}?op=${operationId}`, locale });
+}
+
+/** AI1: summarize a survey's written answers. */
+export async function summarizeSurveyAction(
+  org: string,
+  event: string,
+  survey: string,
+): Promise<AiComposeResult<SummarizeResultDto>> {
+  const { data, event: ev, can } = await loadEvent(org, event, 'marketing');
+  if (!can('messages:send') || !data.modules.has('ai_insights')) return { ok: false, code: 'forbidden' };
+  const locale = await getLocale();
+  return aiCall({ orgId: data.org.id, userId: data.session.userId, key: 'insights' }, async () => {
+    const detail = await executeQuery(surveyQuery, { eventId: ev.id, surveyId: survey }, data.ctx, ports);
+    const answers = surveyAnswers(detail.questions);
+    const total = detail.questions.reduce(
+      (n, q) => n + (q.report.kind === 'text' ? q.report.answered : 0),
+      0,
+    );
+    const value = await summarizeAnswers(data.ctx, ports, aiDrafter(), {
+      subject: 'survey',
+      subjectId: survey,
+      eventId: ev.id,
+      answers,
+      total: Math.max(total, answers.length),
+      locale,
+    });
+    return { value, balance: value.balance };
+  });
 }

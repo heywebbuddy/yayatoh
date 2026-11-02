@@ -1,21 +1,27 @@
 'use server';
 
+import { translateContent } from '@yayatoh/ai';
 import {
   createHelpArticleCommand,
   createHelpCategoryCommand,
   deleteHelpArticleCommand,
   deleteHelpCategoryCommand,
+  getHelpArticleQuery,
+  listHelpQuery,
   setHelpArticleStatusCommand,
   updateHelpArticleCommand,
   updateHelpCategoryCommand,
 } from '@yayatoh/cms';
 import { LOCALES } from '@yayatoh/contracts';
-import { executeCommand } from '@yayatoh/kernel';
+import { DomainError, executeCommand, executeQuery } from '@yayatoh/kernel';
 import { revalidatePath, updateTag } from 'next/cache';
 import { notFound } from 'next/navigation';
 import { redirect } from '@/i18n/navigation.ts';
+import type { AiComposeResult } from '@/lib/ai-compose.ts';
 import { orgChangeTags } from '@/lib/cache-keys.ts';
 import type { FormState } from '@/lib/form-state.ts';
+import { aiDrafter } from '@/server/ai.ts';
+import { aiCall } from '@/server/ai-compose.ts';
 import { isPlatformContentOrg } from '@/server/cms.ts';
 import { loadConsole } from '@/server/console.ts';
 import { failure, success } from '@/server/form.ts';
@@ -198,5 +204,54 @@ export async function deleteCategoryAction(
   return redirect({
     href: `/o/${org}/help-center?tab=categories&deleted=1`,
     locale: data.ctx.locale ?? 'en',
+  });
+}
+
+/**
+ * AI1: a draft translation of a help article: a row with the same slug in the target language,
+ * which a person reviews and publishes. It never replaces a published translation, and it replaces
+ * an earlier draft only when asked to.
+ */
+export async function translateArticleAction(
+  org: string,
+  articleId: string,
+  locale: string,
+  overwrite: boolean,
+): Promise<AiComposeResult<{ href: string }>> {
+  const data = await contentConsole(org);
+  if (!data.modules.has('ai_translate') || !(LOCALES as readonly string[]).includes(locale))
+    return { ok: false, code: 'forbidden' };
+  return aiCall({ orgId: data.org.id, userId: data.session.userId, key: 'translate' }, async () => {
+    const source = await executeQuery(getHelpArticleQuery, { articleId }, data.ctx, ports);
+    const { articles } = await executeQuery(listHelpQuery, {}, data.ctx, ports);
+    const existing = articles.find((a) => a.slug === source.slug && a.locale === locale);
+    if (existing?.status === 'published')
+      throw new DomainError('invalid_state', 'Already published', { reason: 'published' });
+    if (existing && !overwrite) throw new DomainError('invalid_state', 'Draft exists', { reason: 'exists' });
+    const { segments, balance } = await translateContent(data.ctx, ports, aiDrafter(), {
+      targetLocale: locale,
+      segments: { title: source.title, summary: source.summary ?? '', body: source.body },
+    });
+    const fields = {
+      title: segments.title ?? source.title,
+      summary: segments.summary || null,
+      body: segments.body ?? '',
+    };
+    const saved = existing
+      ? await executeCommand(updateHelpArticleCommand, { articleId: existing.id, ...fields }, data.ctx, ports)
+      : await executeCommand(
+          createHelpArticleCommand,
+          {
+            categoryId: source.categoryId,
+            locale,
+            slug: source.slug,
+            position: source.position,
+            ...fields,
+          },
+          data.ctx,
+          ports,
+        );
+    refresh(org, data.org.id);
+    return { value: { href: `/o/${org}/help-center/${saved.id}` }, balance };
   });
 }

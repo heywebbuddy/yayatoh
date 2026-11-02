@@ -1,21 +1,29 @@
 import { CMS_WRITE, getHelpArticleQuery, listHelpQuery } from '@yayatoh/cms';
+import { LOCALES } from '@yayatoh/contracts';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
 import { Alert, Card, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AiTranslatePanel } from '@/components/ai/ai-translate-panel.tsx';
 import { EntryControls } from '@/components/cms/entry-controls.tsx';
 import { ArticleEditor } from '@/components/help/article-editor.tsx';
 import { helpArticlePath } from '@/components/help/help-views.tsx';
 import { Markdown } from '@/components/markdown.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { localizedPath } from '@/lib/seo/urls.ts';
+import { aiDrafter } from '@/server/ai.ts';
 import { isPlatformContentOrg } from '@/server/cms.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { apexOrigin } from '@/server/seo.ts';
-import { articleStatusAction, deleteArticleAction, updateArticleAction } from '../actions.ts';
+import {
+  articleStatusAction,
+  deleteArticleAction,
+  translateArticleAction,
+  updateArticleAction,
+} from '../actions.ts';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const DOT = { draft: 'warning', published: 'success', archived: 'neutral' } as const;
@@ -77,6 +85,15 @@ export default async function HelpArticleConsole({
           />
         ) : null}
       </Card>
+      {canWrite && data.modules.has('ai') && data.modules.has('ai_translate') && aiDrafter() ? (
+        <Card>
+          <AiTranslatePanel
+            locales={LOCALES}
+            sourceLocale={article.locale}
+            run={translateArticleAction.bind(null, org, articleId)}
+          />
+        </Card>
+      ) : null}
       {canWrite ? (
         <Card>
           <ArticleEditor

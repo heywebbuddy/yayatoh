@@ -18,7 +18,18 @@ export type DraftKind = (typeof DRAFT_KINDS)[number];
  * M6.12b: what a credit was spent on. The event-copy kinds of M1.4f, the v2 drafts (campaign,
  * page, agenda), audience suggestions and matchmaking embeddings. Stored in `draft_kind`.
  */
-export const COMPOSE_TASKS = ['campaign', 'page', 'agenda', 'audience', 'event_setup'] as const;
+export const COMPOSE_TASKS = [
+  'campaign',
+  'page',
+  'agenda',
+  'audience',
+  'event_setup',
+  // AI1: summaries of answers, support replies, help center answers, translations.
+  'insights',
+  'support_assist',
+  'help_answer',
+  'translate',
+] as const;
 export type ComposeTask = (typeof COMPOSE_TASKS)[number];
 /** An attendee's question to an event's assistant (answered from that event's published data). */
 export const ASSISTANT_PURPOSE = 'assistant' as const;

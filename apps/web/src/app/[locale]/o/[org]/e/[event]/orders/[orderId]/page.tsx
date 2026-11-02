@@ -40,12 +40,14 @@ import {
 } from '@/components/support-tools.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { refundPolicyLines } from '@/lib/refund-policy-text.ts';
+import { aiDrafter } from '@/server/ai.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { resolveSignalAction } from '../../onsite/signals/actions.ts';
 import {
   addNoteAction,
   approveRequestAction,
+  assistRefundRequestAction,
   cancelTransferAction,
   declineRequestAction,
   issueCreditNoteAction,
@@ -504,6 +506,9 @@ export default async function OrderPage({
             </div>
             {roleCan(data.role, 'orders:refund') ? (
               <RefundRequestPanel
+                {...(data.modules.has('ai') && data.modules.has('ai_support_assist') && aiDrafter()
+                  ? { assist: assistRefundRequestAction.bind(null, org, event, openRequest.id) }
+                  : {})}
                 approve={approveRequestAction.bind(null, org, event, orderId, openRequest.id)}
                 decline={declineRequestAction.bind(null, org, event, openRequest.id)}
                 currency={order.currency}

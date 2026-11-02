@@ -3,12 +3,15 @@ import { EmptyState } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { HelpAnswer } from '@/components/help/help-answer.tsx';
 import { HelpShell, helpArticlePath } from '@/components/help/help-views.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { aiDrafter } from '@/server/ai.ts';
 import { cachedHelpDocs, platformContentOrg } from '@/server/help.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { apexOrigin, publicMetadata } from '@/server/seo.ts';
+import { askHelpAction } from '../actions.ts';
 
 type Props = { params: Promise<{ locale: string }>; searchParams: Promise<{ q?: string | string[] }> };
 
@@ -57,6 +60,7 @@ export default async function HelpSearch({ params, searchParams }: Props) {
       <p role="status" className="text-body text-ink-2">
         {q ? t('search.count', { count: ranked.length }) : t('search.prompt')}
       </p>
+      {q.length >= 3 && aiDrafter() ? <HelpAnswer question={q} ask={askHelpAction} /> : null}
       {q && results.length === 0 ? (
         <EmptyState title={t('search.emptyTitle')} description={t('search.emptyDescription')} />
       ) : null}

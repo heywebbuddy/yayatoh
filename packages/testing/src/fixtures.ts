@@ -1,5 +1,5 @@
 import { createECDH } from 'node:crypto';
-import { draftEventCopy, fakeDrafter, saveBrandKitCommand } from '@yayatoh/ai';
+import { draftEventCopy, fakeDrafter, saveBrandKitCommand, summarizeAnswers } from '@yayatoh/ai';
 import {
   acknowledgeAlertCommand,
   evaluateEventAlertsTx,
@@ -2263,6 +2263,15 @@ export async function createOrgFixture(slug: string, name: string): Promise<OrgF
     ports,
   );
   await draftEventCopy(ctx(), ports, fakeDrafter, { eventId: event.id, kind: 'tagline' });
+  // AI1: a usage row and a saved summary (isolation coverage of ai.usage and ai.insights).
+  await summarizeAnswers(ctx(), ports, fakeDrafter, {
+    subject: 'reviews',
+    subjectId: event.id,
+    eventId: event.id,
+    answers: [{ id: 'a1', text: 'Fixture answer', rating: 5 }],
+    total: 1,
+    locale: 'en',
+  });
   // M6.12b: a brand kit (isolation coverage of ai.brand_kits).
   await executeCommand(
     saveBrandKitCommand,

@@ -101,6 +101,11 @@ export {
   type SetupTicketDto,
 } from './domain/event-setup.ts';
 export {
+  INSIGHTS_MAX_ANSWERS,
+  InsightAnswer,
+  InsightResultDto,
+} from './domain/insights.ts';
+export {
   AI_PURPOSES,
   type AiPurpose,
   ASSISTANT_PURPOSE,
@@ -119,8 +124,22 @@ export {
   refund,
   rollover,
 } from './domain/ledger.ts';
+export {
+  AI_ROUTES,
+  costMicros,
+  hasRefusalFallback,
+  MODEL_PRICES,
+  purposeDisabled,
+} from './domain/routes.ts';
+export {
+  SUPPORT_CATEGORIES,
+  SUPPORT_MESSAGES_MAX,
+  SUPPORT_URGENCIES,
+  SupportAssistDto,
+} from './domain/support-assist.ts';
 export { guessTimeZone, isTimeZone, timeZoneLabel } from './domain/timezone.ts';
 export { TONES, type Tone } from './domain/tones.ts';
+export { cleanTranslation, countWords, TRANSLATE_MAX_WORDS } from './domain/translate.ts';
 export {
   type AiDrafter,
   AiUnavailableError,
@@ -129,6 +148,19 @@ export {
   failingDrafter,
   fakeDrafter,
 } from './drafter.ts';
+// AI1: summaries, support help, help center answers, translation, routing and usage.
+export { AskHelpInput, askHelp } from './help-answers.ts';
+export {
+  insightInputHash,
+  reviewsInsightQuery,
+  SavedInsightDto,
+  SummarizeInput,
+  SummarizeResultDto,
+  saveReviewsInsightCommand,
+  saveSurveyInsightCommand,
+  summarizeAnswers,
+  surveyInsightQuery,
+} from './insights.ts';
 export { MAX_REFRESH_CALLS, RefreshMatchmakingDto, refreshMatchmaking } from './matchmaking.ts';
 export { privateColumns } from './private-columns.ts';
 export {
@@ -138,4 +170,7 @@ export {
   contentCredits,
   eventCredits,
   messagingCredits,
+  refundCredits,
 } from './spend.ts';
+export { assistSupport, SupportAssistInput, SupportAssistResultDto } from './support-assist.ts';
+export { TranslateInput, TranslateResultDto, translateContent } from './translate.ts';

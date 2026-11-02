@@ -1,3 +1,4 @@
+import { surveyInsightQuery } from '@yayatoh/ai';
 import { executeQuery, isDomainError, uuidv7 } from '@yayatoh/kernel';
 import type { BulkOperationDto } from '@yayatoh/platform';
 import { type SurveyDetailDto, surveyExportBulk, surveyQuery } from '@yayatoh/surveys';
@@ -5,6 +6,7 @@ import { BarChart, Button, buttonClass, Card, ChartTable, EmptyState, PageHeader
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AiInsightsPanel } from '@/components/ai/ai-insights-panel.tsx';
 import { AutoRefresh } from '@/components/auto-refresh.tsx';
 import { StepUpForm } from '@/components/step-up.tsx';
 import {
@@ -15,6 +17,8 @@ import {
 } from '@/components/survey-forms.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
+import { aiDrafter } from '@/server/ai.ts';
+import { insightView, surveyAnswers } from '@/server/ai-insights.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import {
@@ -24,6 +28,7 @@ import {
   removeSurveyQuestionAction,
   sendSurveyAction,
   setSurveyClosedAction,
+  summarizeSurveyAction,
   updateSurveyAction,
 } from '../actions.ts';
 
@@ -68,6 +73,12 @@ export default async function SurveyPage({
   const canSend = can('messages:send');
   const canExport = can('attendees:export');
   const base = `/o/${org}/e/${event}/marketing/surveys`;
+  // AI1: a summary of the written answers, when the org has the feature.
+  const aiOn = data.modules.has('ai') && data.modules.has('ai_insights');
+  const written = surveyAnswers(detail.questions);
+  const savedInsight = aiOn
+    ? await executeQuery(surveyInsightQuery, { subjectId: survey }, data.ctx, ports)
+    : null;
   const n = new Intl.NumberFormat(locale);
   const pct = (part: number, whole: number) => (whole ? Math.round((100 * part) / whole) : 0);
   const when = new Intl.DateTimeFormat(locale, {
@@ -176,6 +187,13 @@ export default async function SurveyPage({
           {s.closed ? t('status.closed') : t('status.open')}
         </span>
       </p>
+      {aiOn ? (
+        <AiInsightsPanel
+          saved={insightView(savedInsight, locale, written)}
+          answers={written.length}
+          {...(canSend && aiDrafter() ? { run: summarizeSurveyAction.bind(null, org, event, survey) } : {})}
+        />
+      ) : null}
       {s.closed ? <p className="text-body text-ink-2">{t('closedNotice')}</p> : null}
 
       <section aria-labelledby="results-heading" className="flex flex-col gap-3">

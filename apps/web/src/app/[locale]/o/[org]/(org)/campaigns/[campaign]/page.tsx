@@ -7,16 +7,19 @@ import {
   type ReachDto,
   starterContent,
 } from '@yayatoh/campaigns';
+import { LOCALES } from '@yayatoh/contracts';
 import { executeQuery, isDomainError } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
 import { Alert, Button, Card, PageHeader, StatusDot } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AiTranslatePanel } from '@/components/ai/ai-translate-panel.tsx';
 import { CampaignEditor } from '@/components/campaign-editor.tsx';
 import { AudiencePanel, LifecyclePanel, SendPanel, TestSendPanel } from '@/components/campaign-panels.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
+import { aiDrafter } from '@/server/ai.ts';
 import { aiComposeSetup } from '@/server/ai-compose.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -31,6 +34,7 @@ import {
   sendNowAction,
   setAudienceAction,
   testSendAction,
+  translateCampaignAction,
 } from '../actions.ts';
 import { STATUS_TONE } from '../status.ts';
 
@@ -147,6 +151,15 @@ export default async function CampaignPage({
       ) : null}
       {!canWrite ? <p className="text-caption text-ink-2">{t('readOnly')}</p> : null}
 
+      {canWrite && data.modules.has('ai') && data.modules.has('ai_translate') && aiDrafter() ? (
+        <Card>
+          <AiTranslatePanel
+            locales={LOCALES}
+            sourceLocale={c.locale}
+            run={translateCampaignAction.bind(null, org, c.id)}
+          />
+        </Card>
+      ) : null}
       {draft && canWrite ? (
         <CampaignEditor
           campaignId={c.id}

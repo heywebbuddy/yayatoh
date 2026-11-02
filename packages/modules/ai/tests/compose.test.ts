@@ -52,6 +52,10 @@ describe('purposes and tones (M6.12b)', () => {
       'agenda',
       'audience',
       'event_setup',
+      'insights',
+      'support_assist',
+      'help_answer',
+      'translate',
       'embedding',
       'assistant',
     ]);

@@ -1,5 +1,6 @@
 'use server';
 
+import { assistSupport, type SupportAssistResultDto } from '@yayatoh/ai';
 import { DomainError, executeCommand, executeQuery, isDomainError, moneyFromDecimal } from '@yayatoh/kernel';
 import {
   addOrderNoteCommand,
@@ -22,8 +23,12 @@ import {
 } from '@yayatoh/orders';
 import { cancelTransferCommand, startTransferCommand } from '@yayatoh/ticketing';
 import { revalidatePath } from 'next/cache';
+import { getLocale } from 'next-intl/server';
 import type { SupportState } from '@/components/support-tools.tsx';
+import type { AiComposeResult } from '@/lib/ai-compose.ts';
 import type { FormState } from '@/lib/form-state.ts';
+import { aiDrafter } from '@/server/ai.ts';
+import { aiCall } from '@/server/ai-compose.ts';
 import { loadEvent } from '@/server/console.ts';
 import { failure, success } from '@/server/form.ts';
 import { getPaymentProvider } from '@/server/payments.ts';
@@ -418,4 +423,38 @@ export async function voidInvoiceAction(
   }
   revalidatePath(`/o/${org}/e/${event}/orders/${orderId}`);
   return success();
+}
+
+/**
+ * AI1: sort a refund request and draft a reason to give if staff decline it. Sends the buyer's own
+ * message and the event's name only. It decides nothing: the request stays open until staff use
+ * the approve or decline form.
+ */
+export async function assistRefundRequestAction(
+  org: string,
+  event: string,
+  requestId: string,
+): Promise<AiComposeResult<SupportAssistResultDto>> {
+  const { data, event: ev, can } = await loadEvent(org, event, 'ticketsOrders');
+  if (!data.modules.has('ai_support_assist') || !can('orders:refund'))
+    return { ok: false, code: 'forbidden' };
+  const locale = await getLocale();
+  return aiCall({ orgId: data.org.id, userId: data.session.userId, key: 'assist' }, async () => {
+    const requests = await executeQuery(refundRequestsQuery, { eventId: ev.id, limit: 200 }, data.ctx, ports);
+    const request = requests.find((r) => r.id === requestId);
+    if (!request) throw new DomainError('not_found');
+    const value = await assistSupport(data.ctx, ports, aiDrafter(), {
+      kind: 'refund_request',
+      eventId: ev.id,
+      eventName: ev.name.slice(0, 200),
+      locale,
+      messages: [
+        {
+          from: 'customer',
+          body: (request.message?.trim() || 'The buyer asked for a refund with no message.').slice(0, 2000),
+        },
+      ],
+    });
+    return { value, balance: value.balance };
+  });
 }

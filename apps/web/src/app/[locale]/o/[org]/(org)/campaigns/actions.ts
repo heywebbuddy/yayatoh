@@ -1,6 +1,6 @@
 'use server';
 
-import { type CampaignDraftDto, draftCampaign } from '@yayatoh/ai';
+import { type CampaignDraftDto, draftCampaign, translateContent } from '@yayatoh/ai';
 import {
   AudienceChoice,
   CampaignContent,
@@ -8,6 +8,7 @@ import {
   cancelCampaignCommand,
   createCampaignCommand,
   deleteCampaignCommand,
+  getCampaignQuery,
   pauseCampaignCommand,
   resumeCampaignCommand,
   saveCampaignCommand,
@@ -17,7 +18,8 @@ import {
   testSendCommand,
   unscheduleCampaignCommand,
 } from '@yayatoh/campaigns';
-import { executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
+import { LOCALES } from '@yayatoh/contracts';
+import { DomainError, executeCommand, executeQuery, isDomainError } from '@yayatoh/kernel';
 import { storeEmailPreviewCommand } from '@yayatoh/notifications';
 import { revalidatePath } from 'next/cache';
 import { getLocale } from 'next-intl/server';
@@ -347,4 +349,77 @@ export async function draftCampaignAiAction(
       return { value: res.draft, balance: res.balance };
     },
   );
+}
+
+/** The translatable texts of a campaign's content, keyed so they can be put back. */
+function campaignTexts(content: CampaignContent): Record<string, string> {
+  const out: Record<string, string> = {
+    subject: content.subject,
+    preheader: content.preheader,
+    sms: content.smsBody,
+  };
+  for (const b of content.blocks) {
+    if (b.type === 'heading' || b.type === 'text') out[`${b.id}.text`] = b.text;
+    else if (b.type === 'button') out[`${b.id}.label`] = b.label;
+    else if (b.type === 'image') out[`${b.id}.alt`] = b.alt;
+    else if (b.type === 'footer') out[`${b.id}.note`] = b.note;
+  }
+  return out;
+}
+
+/**
+ * AI1: a draft copy of a campaign in another language, through the normal create and save
+ * commands. The audience isn't copied, so the copy can't go out until a person sets it and sends.
+ */
+export async function translateCampaignAction(
+  org: string,
+  campaignId: string,
+  locale: string,
+  // Always a new copy: nothing to overwrite.
+  _overwrite?: boolean,
+): Promise<AiComposeResult<{ href: string }>> {
+  const data = await loadConsole(org);
+  if (!data.modules.has('ai_translate') || !(LOCALES as readonly string[]).includes(locale))
+    return { ok: false, code: 'forbidden' };
+  return aiCall({ orgId: data.org.id, userId: data.session.userId, key: 'translate' }, async () => {
+    const c = await executeQuery(getCampaignQuery, { campaignId }, data.ctx, ports);
+    // Null until the draft is complete (a new campaign has no postal address yet).
+    const content = c.content;
+    if (!content) throw new DomainError('invalid_state', 'Finish the draft first', { reason: 'incomplete' });
+    const { segments, balance } = await translateContent(data.ctx, ports, aiDrafter(), {
+      targetLocale: locale,
+      segments: campaignTexts(content),
+    });
+    // Translations can run longer than their source: keep to what each field accepts.
+    const text = (key: string, fallback: string, max: number) => (segments[key] ?? fallback).slice(0, max);
+    const translated: CampaignContent = {
+      ...content,
+      subject: text('subject', content.subject, 150),
+      preheader: text('preheader', content.preheader, 150),
+      smsBody: text('sms', content.smsBody, 800),
+      blocks: content.blocks.map((b) => {
+        if (b.type === 'heading') return { ...b, text: text(`${b.id}.text`, b.text, 200) };
+        if (b.type === 'text') return { ...b, text: text(`${b.id}.text`, b.text, 5000) };
+        if (b.type === 'button') return { ...b, label: text(`${b.id}.label`, b.label, 80) };
+        if (b.type === 'image') return { ...b, alt: text(`${b.id}.alt`, b.alt, 300) };
+        if (b.type === 'footer') return { ...b, note: text(`${b.id}.note`, b.note, 300) };
+        return b;
+      }),
+    };
+    const name = `${c.name.slice(0, 100)} (${locale})`;
+    const copy = await executeCommand(
+      createCampaignCommand,
+      { name, channel: c.channel, locale },
+      data.ctx,
+      ports,
+    );
+    await executeCommand(
+      saveCampaignCommand,
+      { campaignId: copy.id, name, locale, content: translated },
+      data.ctx,
+      ports,
+    );
+    revalidatePath(`/o/${org}/campaigns`);
+    return { value: { href: `/o/${org}/campaigns/${copy.id}` }, balance };
+  });
 }

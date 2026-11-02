@@ -385,6 +385,13 @@ export const RATE_LIMIT_POLICIES = {
     identity: { limit: 60, windowMs: 60 * MIN },
     ipCeiling: { limit: 300, windowMs: 10 * MIN },
   },
+  /** AI1: help center answers spend the platform's credits (identity = the whole help center). */
+  helpAnswer: {
+    device: { limit: 8, windowMs: 10 * MIN },
+    anonymousIp: { limit: 20, windowMs: 10 * MIN },
+    identity: { limit: 200, windowMs: 60 * MIN },
+    ipCeiling: { limit: 100, windowMs: 10 * MIN },
+  },
   /** An attendee's question to an event's AI assistant: each one calls a paid model and spends the
    * organizer's credits, so bursts are cut early (identity = the event). */
   eventAssistant: {

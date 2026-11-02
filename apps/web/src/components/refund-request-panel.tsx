@@ -1,8 +1,11 @@
 'use client';
 
+import type { SupportAssistResultDto } from '@yayatoh/ai';
 import { Alert, Button } from '@yayatoh/ui';
 import { useTranslations } from 'next-intl';
 import { useActionState, useState } from 'react';
+import { AiAssistPanel } from '@/components/ai/ai-assist-panel.tsx';
+import type { AiComposeResult } from '@/lib/ai-compose.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 import { useStepUpActionState } from './step-up.tsx';
@@ -17,10 +20,13 @@ export function RefundRequestPanel({
   approve,
   decline,
   currency,
+  assist,
 }: {
   approve: (prev: FormState, form: FormData) => Promise<FormState>;
   decline: (prev: FormState, form: FormData) => Promise<FormState>;
   currency: string;
+  /** AI1: a draft reason for declining; it only fills the box, and decides nothing. */
+  assist?: () => Promise<AiComposeResult<SupportAssistResultDto>>;
 }) {
   const t = useTranslations('refundOps.request');
   const te = useTranslations();
@@ -93,6 +99,7 @@ export function RefundRequestPanel({
       </form>
       <form action={declineAction} className="flex flex-1 flex-col gap-3">
         <h3 className="text-section">{t('declineLegend')}</h3>
+        {assist ? <AiAssistPanel run={assist} targetId="request-decline-reason" mode="decline" /> : null}
         <div className="flex flex-col gap-1.5">
           <label htmlFor="request-decline-reason" className="text-[13px] font-bold text-ink">
             {t('reason')}

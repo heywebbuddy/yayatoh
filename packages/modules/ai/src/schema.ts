@@ -1,6 +1,16 @@
 import { tenantTable } from '@yayatoh/db';
 import { sql } from 'drizzle-orm';
-import { boolean, check, index, integer, pgSchema, text, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  check,
+  index,
+  integer,
+  jsonb,
+  pgSchema,
+  text,
+  uniqueIndex,
+  uuid,
+} from 'drizzle-orm/pg-core';
 import { AI_PURPOSES, CREDIT_ENTRY_KINDS } from './domain/ledger.ts';
 import { TONES } from './domain/tones.ts';
 
@@ -63,6 +73,55 @@ export const creditLedger = tenantTable(
       'credit_ledger_sign_check',
       sql`(kind = 'debit' and amount < 0) or (kind in ('grant', 'refund') and amount > 0) or kind = 'adjust'`,
     ),
+  ],
+);
+
+/**
+ * AI1: one row per provider call, for cost and quality tracking. Never the prompt or the reply.
+ * Append-only for `app_user` (UPDATE/DELETE revoked in the migration), like the ledger.
+ */
+export const aiUsage = tenantTable(
+  aiSchema,
+  'usage',
+  {
+    purpose: text('purpose').notNull(),
+    eventId: uuid('event_id'),
+    debitId: uuid('debit_id'),
+    model: text('model').notNull(),
+    inputTokens: integer('input_tokens').notNull(),
+    cacheReadTokens: integer('cache_read_tokens').notNull(),
+    outputTokens: integer('output_tokens').notNull(),
+    costMicros: integer('cost_micros').notNull(),
+    latencyMs: integer('latency_ms').notNull(),
+    outcome: text('outcome').notNull(),
+  },
+  (t) => [
+    index('usage_org_created_idx').on(t.orgId, t.createdAt),
+    check('usage_purpose_check', sql.raw(`purpose in (${list(AI_PURPOSES)})`)),
+    check('usage_outcome_check', sql`outcome in ('ok', 'refused', 'unusable', 'unavailable')`),
+  ],
+);
+
+/**
+ * AI1: the saved summary of an event's reviews or a survey's answers. `input_hash` is the digest
+ * of the answers read: unchanged answers show this row again, without a provider call or a credit.
+ */
+export const aiInsights = tenantTable(
+  aiSchema,
+  'insights',
+  {
+    eventId: uuid('event_id').notNull(),
+    subject: text('subject').notNull(),
+    subjectId: uuid('subject_id').notNull(),
+    inputHash: text('input_hash').notNull(),
+    result: jsonb('result').$type<unknown>().notNull(),
+    basedOn: integer('based_on').notNull(),
+    total: integer('total').notNull(),
+    model: text('model').notNull(),
+  },
+  (t) => [
+    uniqueIndex('insights_org_subject_key').on(t.orgId, t.subject, t.subjectId),
+    check('insights_subject_check', sql`subject in ('reviews', 'survey')`),
   ],
 );
 

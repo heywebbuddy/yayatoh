@@ -1,14 +1,23 @@
+import { reviewsInsightQuery } from '@yayatoh/ai';
 import { executeQuery } from '@yayatoh/kernel';
 import { listReviewsQuery, REVIEW_FILTERS } from '@yayatoh/reviews';
 import { buttonClass, Card, EmptyState, PageHeader, StatusDot } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { AiInsightsPanel } from '@/components/ai/ai-insights-panel.tsx';
 import { ReviewModeration } from '@/components/reviews/review-moderation.tsx';
 import { Stars } from '@/components/reviews/stars.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatDate, formatNumber } from '@/lib/format.ts';
+import { aiDrafter } from '@/server/ai.ts';
+import { insightAnswers, insightView } from '@/server/ai-insights.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { dismissReportsAction, hideReviewAction, unhideReviewAction } from './actions.ts';
+import {
+  dismissReportsAction,
+  hideReviewAction,
+  summarizeReviewsAction,
+  unhideReviewAction,
+} from './actions.ts';
 
 type Filter = (typeof REVIEW_FILTERS)[number];
 
@@ -29,6 +38,14 @@ export default async function ReviewsPage({
   // Moderation is an events:write power (event managers included, through the event's roles).
   const canModerate = can('events:write');
   const list = await executeQuery(listReviewsQuery, { eventId: ev.id, filter }, data.ctx, ports);
+  // AI1: a summary of the reviews the public can see, when the org has the feature.
+  const aiOn = data.modules.has('ai') && data.modules.has('ai_insights');
+  const written = insightAnswers(
+    list.reviews.filter((r) => r.status === 'visible').map((r) => ({ text: r.body, rating: r.rating })),
+  );
+  const savedInsight = aiOn
+    ? await executeQuery(reviewsInsightQuery, { subjectId: ev.id }, data.ctx, ports)
+    : null;
   const f = { locale, currency: ev.currency, timeZone: ev.timezone };
   const base = `/o/${org}/e/${event}/reviews`;
   return (
@@ -56,6 +73,13 @@ export default async function ReviewsPage({
           <span className="text-[28px] font-extrabold">{formatNumber(list.count, locale)}</span>
         </div>
       </Card>
+      {aiOn ? (
+        <AiInsightsPanel
+          saved={insightView(savedInsight, locale, written)}
+          answers={written.length}
+          {...(canModerate && aiDrafter() ? { run: summarizeReviewsAction.bind(null, org, event) } : {})}
+        />
+      ) : null}
       <nav aria-label={t('console.filterLabel')} className="flex flex-wrap gap-2">
         {REVIEW_FILTERS.map((k) => (
           <Link

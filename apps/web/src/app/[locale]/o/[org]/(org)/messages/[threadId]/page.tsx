@@ -6,12 +6,14 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { z } from 'zod';
+import { AiAssistPanel } from '@/components/ai/ai-assist-panel.tsx';
 import { BlockToggle, MessageForm, ReportForm } from '@/components/conversation.tsx';
 import { MessageList } from '@/components/message-list.tsx';
 import { Link } from '@/i18n/navigation.ts';
+import { aiDrafter } from '@/server/ai.ts';
 import { loadConsole } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { blockAction, replyAction, reportAction } from '../actions.ts';
+import { assistThreadAction, blockAction, replyAction, reportAction } from '../actions.ts';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('conversation');
@@ -67,7 +69,14 @@ export default async function ThreadPage({
               <h2 id="reply-heading" className="text-section">
                 {t('replyTitle')}
               </h2>
-              <Card>
+              <Card className="flex flex-col gap-3">
+                {data.modules.has('ai') && data.modules.has('ai_support_assist') && aiDrafter() ? (
+                  <AiAssistPanel
+                    run={assistThreadAction.bind(null, org, threadId)}
+                    targetId="conversation-body"
+                    mode="reply"
+                  />
+                ) : null}
                 <MessageForm
                   action={replyAction.bind(null, org, threadId)}
                   label={t('replyLabel')}
