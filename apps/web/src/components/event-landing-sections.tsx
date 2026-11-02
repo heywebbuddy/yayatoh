@@ -278,9 +278,7 @@ export async function SpeakerBand({
                 >
                   {p.name}
                 </Link>
-                <span className="text-[15px] font-extrabold">
-                  {t(`speakerRoles.${p.role}`)}
-                </span>
+                <span className="text-[15px] font-extrabold">{t(`speakerRoles.${p.role}`)}</span>
                 {p.title ? <span className="text-[14px] ev-muted">{p.title}</span> : null}
               </div>
             </li>
