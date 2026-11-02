@@ -46,10 +46,10 @@ test.describe('seated checkout', () => {
     await expect(page.getByRole('heading', { name: 'Choose your seats' })).toBeVisible();
     await expectAccessible(page);
 
-    // The map is optional; the list is the default and does the same by keyboard.
-    await page.getByRole('button', { name: 'Show seat map' }).click();
+    // The map shows first and can be hidden; the list beside it does the same by keyboard.
     await expect(page.locator('canvas').first()).toBeVisible();
     await page.getByRole('button', { name: 'Hide seat map' }).click();
+    await expect(page.locator('canvas')).toHaveCount(0);
 
     const [first, second] = await freeSeats(page, 2, 'front');
     for (const id of [first, second]) await page.locator(`input[name="seat"][value="${id}"]`).check();

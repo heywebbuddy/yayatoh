@@ -1134,7 +1134,20 @@
       "selectTable": "選擇整張桌子（{count} 個座位）",
       "unselectTable": "取消選擇整張桌子",
       "tableTooBig": "{label} 桌有 {free} 個空位，但每筆訂單最多只能訂 {max} 個座位。請逐一選擇座位，或將該桌分成兩筆訂單。",
-      "tableNoFree": "{label} 桌已沒有空位。"
+      "tableNoFree": "{label} 桌已沒有空位。",
+      "priceFilter": "價格",
+      "mapKey": "圖例",
+      "keySelected": "您的座位",
+      "yourSeats": "您的座位",
+      "removeSeat": "移除{label}",
+      "sections": "區域",
+      "allSections": "所有區域",
+      "sectionFrom": "{price}起",
+      "sectionLeft": "剩餘 {count} 個座位",
+      "sectionNone": "已售完",
+      "sectionHint": "點按區域查看座位",
+      "vip": "VIP",
+      "sectionOtherPrices": "僅其他價格"
     },
     "seatRuleCap": "超出了單筆訂單可選的座位數，請減少選擇。",
     "seatRuleAda": "無障礙座位目前為有需要的賓客保留，請選擇其他座位。",
@@ -16025,7 +16038,10 @@
       "virtual": "線上活動",
       "advanced_seating": "進階座位",
       "ai_seating": "AI 排座",
-      "analytics_pro": "進階分析"
+      "analytics_pro": "進階分析",
+      "ai_insights": "AI 摘要",
+      "ai_support_assist": "AI 客服協助",
+      "ai_translate": "AI 翻譯"
     },
     "findOwner": "尋找擁有者或管理員",
     "usageLink": "用量",
@@ -20942,6 +20958,71 @@
     "notice": {
       "paidSoon": "付費方案即將推出。您現在可以先使用免費方案，或聯絡我們的業務團隊。",
       "planUnknown": "我們無法辨識該方案，因此沒有建立任何內容。請在下方選擇方案。"
+    }
+  },
+  "aiPhase1": {
+    "insights": {
+      "title": "AI 摘要",
+      "summarize": "摘要回答",
+      "refresh": "更新摘要",
+      "working": "正在閱讀回答…",
+      "unchanged": "自此摘要以來沒有變更，因此未使用點數。",
+      "stale": "此摘要之後有新的回答。",
+      "basedOn": "根據 {count} 則回答",
+      "basedOnNewest": "根據 {total} 則回答中最新的 {count} 則",
+      "mentions": "{count} 次提及",
+      "hint": "從書面回答取得主要主題。會使用 AI 點數。",
+      "disclosure": "由 AI 撰寫，請對照回答確認。引用內容是人們的原話。",
+      "sentiment": {
+        "positive": "大多正面",
+        "mixed": "褒貶不一",
+        "negative": "大多負面"
+      }
+    },
+    "assist": {
+      "suggestReply": "建議回覆",
+      "suggestDecline": "建議理由",
+      "working": "正在閱讀請求…",
+      "useDraft": "使用此草稿",
+      "used": "已加入輸入框。請編輯後自行傳送。",
+      "disclosure": "由 AI 撰寫。在您操作之前，不會傳送或決定任何內容。",
+      "category": {
+        "refund": "退款",
+        "tickets": "票券",
+        "event_info": "活動資訊",
+        "access": "入場",
+        "payment": "付款",
+        "complaint": "客訴",
+        "other": "其他"
+      },
+      "urgency": {
+        "low": "低緊急度",
+        "normal": "一般緊急度",
+        "high": "高緊急度"
+      }
+    },
+    "help": {
+      "ask": "取得 AI 回答",
+      "working": "正在閱讀文章…",
+      "unknown": "這些文章無法回答此問題。請嘗試下方結果或聯絡支援團隊。",
+      "sources": "依據：",
+      "disclosure": "由 AI 根據說明文章撰寫。依賴前請查看文章。",
+      "unavailable": "AI 回答暫時無法使用。下方搜尋結果仍可使用。",
+      "rateLimited": "問題過多。請在 {minutes} 分鐘後再試。"
+    },
+    "translate": {
+      "title": "使用 AI 翻譯",
+      "hint": "這會建立一份草稿供人工審核。不會發布或傳送任何內容。",
+      "language": "語言",
+      "translate": "建立翻譯草稿",
+      "working": "正在翻譯…",
+      "done": "翻譯草稿已就緒。",
+      "open": "審核草稿",
+      "exists": "此語言已有草稿。",
+      "overwrite": "取代該草稿",
+      "published": "此語言已發布。請先取消發布再取代。",
+      "tooLong": "內容過長，無法一次翻譯（最多 2,000 字）。",
+      "incomplete": "請先完成此草稿：需要填寫郵寄地址等所有必填資訊。"
     }
   }
 }

@@ -381,6 +381,7 @@ export default async function TicketsPage({
                   : null
               }
               prices={Object.fromEntries(types.map((tt) => [tt.id, fmt(tt.allInMinor)]))}
+              priceAmounts={Object.fromEntries(types.map((tt) => [tt.id, tt.allInMinor]))}
               timeZone={ev.timezone}
               advancedSeating={advancedSeating}
               bestSeats={

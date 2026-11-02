@@ -375,6 +375,7 @@ export async function PublicEventView({
           passes={ev.passes.map((p) => ({
             ...p,
             priceLabel: price(p.price),
+            priceMinor: p.price,
             regularPriceLabel: p.regularPrice === null ? null : price(p.regularPrice),
             // The early-bird ends at an instant; show its day in the event's timezone.
             earlyUntil: p.earlyEndsAt ? day.format(p.earlyEndsAt) : null,

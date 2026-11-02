@@ -1134,7 +1134,20 @@
       "selectTable": "Select whole table ({count, plural, one {# seat} other {# seats}})",
       "unselectTable": "Unselect whole table",
       "tableTooBig": "Table {label} has {free, plural, one {# free seat} other {# free seats}}, but one order can hold at most {max}. Choose seats one by one, or split the table over two orders.",
-      "tableNoFree": "Table {label} has no free seats left."
+      "tableNoFree": "Table {label} has no free seats left.",
+      "priceFilter": "Price",
+      "mapKey": "Map key",
+      "keySelected": "Your seats",
+      "yourSeats": "Your seats",
+      "removeSeat": "Remove {label}",
+      "sections": "Sections",
+      "allSections": "All sections",
+      "sectionFrom": "From {price}",
+      "sectionLeft": "{count, plural, one {# seat left} other {# seats left}}",
+      "sectionNone": "Sold out",
+      "sectionHint": "Tap a section to see its seats",
+      "vip": "VIP",
+      "sectionOtherPrices": "Other prices only"
     },
     "seatRuleCap": "That's more seats than one order may have. Please choose fewer.",
     "seatRuleAda": "Accessible seats are kept for guests who need them for now. Please choose other seats.",
@@ -16025,7 +16038,10 @@
       "virtual": "Virtual events",
       "advanced_seating": "Advanced seating",
       "ai_seating": "AI seating",
-      "analytics_pro": "Advanced analytics"
+      "analytics_pro": "Advanced analytics",
+      "ai_insights": "AI summaries",
+      "ai_support_assist": "AI support help",
+      "ai_translate": "AI translation"
     },
     "findOwner": "Find an owner or admin",
     "usageLink": "Usage",
@@ -20942,6 +20958,71 @@
     "notice": {
       "paidSoon": "Paid plans are coming soon. You can start on the Free plan now, or talk to our sales team.",
       "planUnknown": "We did not recognise that plan, so nothing was created. Pick a plan below."
+    }
+  },
+  "aiPhase1": {
+    "insights": {
+      "title": "AI summary",
+      "summarize": "Summarize answers",
+      "refresh": "Update summary",
+      "working": "Reading the answers…",
+      "unchanged": "Nothing has changed since this summary, so no credit was used.",
+      "stale": "New answers have arrived since this summary.",
+      "basedOn": "Based on {count, plural, one {# answer} other {# answers}}",
+      "basedOnNewest": "Based on the newest {count} of {total} answers",
+      "mentions": "{count, plural, one {# mention} other {# mentions}}",
+      "hint": "Get the main themes from people's written answers. It uses AI credits.",
+      "disclosure": "Written by AI, so check it against the answers. Quotes are people's own words.",
+      "sentiment": {
+        "positive": "Mostly positive",
+        "mixed": "Mixed",
+        "negative": "Mostly negative"
+      }
+    },
+    "assist": {
+      "suggestReply": "Suggest a reply",
+      "suggestDecline": "Suggest a reason",
+      "working": "Reading the request…",
+      "useDraft": "Use this draft",
+      "used": "Added to the box. Edit it, then send it yourself.",
+      "disclosure": "Written by AI. Nothing is sent or decided until you do it.",
+      "category": {
+        "refund": "Refund",
+        "tickets": "Tickets",
+        "event_info": "Event information",
+        "access": "Access",
+        "payment": "Payment",
+        "complaint": "Complaint",
+        "other": "Other"
+      },
+      "urgency": {
+        "low": "Low urgency",
+        "normal": "Normal urgency",
+        "high": "High urgency"
+      }
+    },
+    "help": {
+      "ask": "Get an AI answer",
+      "working": "Reading the articles…",
+      "unknown": "These articles don't answer that. Try the results below, or contact support.",
+      "sources": "Based on:",
+      "disclosure": "Written by AI from our help articles. Check the article before relying on it.",
+      "unavailable": "AI answers aren't available right now. The search results below still work.",
+      "rateLimited": "Too many questions. Try again in {minutes, plural, one {# minute} other {# minutes}}."
+    },
+    "translate": {
+      "title": "Translate with AI",
+      "hint": "This creates a draft for a person to review. Nothing is published or sent.",
+      "language": "Language",
+      "translate": "Create draft translation",
+      "working": "Translating…",
+      "done": "The draft translation is ready.",
+      "open": "Review the draft",
+      "exists": "A draft already exists in this language.",
+      "overwrite": "Replace that draft",
+      "published": "This language is already published. Unpublish it first to replace it.",
+      "tooLong": "This is too long to translate at once (2,000 words at most).",
+      "incomplete": "Finish this draft first: it needs everything required to save, such as the postal address."
     }
   }
 }

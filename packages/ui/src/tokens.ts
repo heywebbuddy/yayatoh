@@ -308,6 +308,33 @@ export const paperDark: { [K in keyof typeof paper]: string } = {
 };
 
 /**
+ * The buyer's map colours each price (cheapest first, then round again): a seat `fill`, and the
+ * `ink` of a section's name drawn on it (every pair ≥4.5:1; every fill ≥3:1 against its paper).
+ * None is the selection colour of its palette.
+ */
+export const seatPrices: readonly { readonly fill: string; readonly ink: string }[] = [
+  { fill: '#1F5FD6', ink: '#FFFFFF' },
+  { fill: '#B85410', ink: '#FFFFFF' },
+  { fill: '#0B7A75', ink: '#FFFFFF' },
+  { fill: '#B0307A', ink: '#FFFFFF' },
+  { fill: '#2E7D32', ink: '#FFFFFF' },
+  { fill: '#7A5C12', ink: '#FFFFFF' },
+  { fill: '#0E6C99', ink: '#FFFFFF' },
+  { fill: '#5E596A', ink: '#FFFFFF' },
+];
+
+export const seatPricesDark: typeof seatPrices = [
+  { fill: '#6FA0F5', ink: '#141414' },
+  { fill: '#F0A05A', ink: '#141414' },
+  { fill: '#4CC4BD', ink: '#141414' },
+  { fill: '#E878B8', ink: '#141414' },
+  { fill: '#7CCB80', ink: '#141414' },
+  { fill: '#D6B25A', ink: '#141414' },
+  { fill: '#5EB8E6', ink: '#141414' },
+  { fill: '#BDBDBD', ink: '#141414' },
+];
+
+/**
  * Printed badges (M5.5a) are always on white stock, whatever the screen theme: the ink, the
  * paper and the ribbon colours (keys are stored in badge designs; every pair is ≥4.5:1).
  */

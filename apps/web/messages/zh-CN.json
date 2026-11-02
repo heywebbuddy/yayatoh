@@ -1134,7 +1134,20 @@
       "selectTable": "选择整张桌子（{count} 个座位）",
       "unselectTable": "取消选择整张桌子",
       "tableTooBig": "{label} 桌有 {free} 个空位，但每个订单最多只能订 {max} 个座位。请逐个选择座位，或将该桌分成两个订单。",
-      "tableNoFree": "{label} 桌已没有空位。"
+      "tableNoFree": "{label} 桌已没有空位。",
+      "priceFilter": "价格",
+      "mapKey": "图例",
+      "keySelected": "您的座位",
+      "yourSeats": "您的座位",
+      "removeSeat": "移除{label}",
+      "sections": "区域",
+      "allSections": "所有区域",
+      "sectionFrom": "{price}起",
+      "sectionLeft": "剩余 {count} 个座位",
+      "sectionNone": "已售罄",
+      "sectionHint": "点按区域查看座位",
+      "vip": "VIP",
+      "sectionOtherPrices": "仅其他价格"
     },
     "seatRuleCap": "超出了单笔订单可选的座位数，请减少选择。",
     "seatRuleAda": "无障碍座位目前为有需要的宾客保留，请选择其他座位。",
@@ -16025,7 +16038,10 @@
       "virtual": "线上活动",
       "advanced_seating": "高级座位",
       "ai_seating": "AI 排座",
-      "analytics_pro": "高级分析"
+      "analytics_pro": "高级分析",
+      "ai_insights": "AI 摘要",
+      "ai_support_assist": "AI 客服协助",
+      "ai_translate": "AI 翻译"
     },
     "findOwner": "查找所有者或管理员",
     "usageLink": "用量",
@@ -20942,6 +20958,71 @@
     "notice": {
       "paidSoon": "付费套餐即将推出。您现在可以先使用免费套餐，或联系我们的销售团队。",
       "planUnknown": "我们无法识别该套餐，因此没有创建任何内容。请在下方选择套餐。"
+    }
+  },
+  "aiPhase1": {
+    "insights": {
+      "title": "AI 摘要",
+      "summarize": "总结回答",
+      "refresh": "更新摘要",
+      "working": "正在阅读回答…",
+      "unchanged": "自此摘要以来没有变化，因此未使用积分。",
+      "stale": "此摘要之后有新的回答。",
+      "basedOn": "基于 {count} 条回答",
+      "basedOnNewest": "基于 {total} 条回答中最新的 {count} 条",
+      "mentions": "{count} 次提及",
+      "hint": "从书面回答中获取主要主题。会使用 AI 积分。",
+      "disclosure": "由 AI 撰写，请对照回答核实。引用内容是人们的原话。",
+      "sentiment": {
+        "positive": "大多正面",
+        "mixed": "褒贬不一",
+        "negative": "大多负面"
+      }
+    },
+    "assist": {
+      "suggestReply": "建议回复",
+      "suggestDecline": "建议理由",
+      "working": "正在阅读请求…",
+      "useDraft": "使用此草稿",
+      "used": "已添加到输入框。请编辑后自行发送。",
+      "disclosure": "由 AI 撰写。在您操作之前，不会发送或决定任何内容。",
+      "category": {
+        "refund": "退款",
+        "tickets": "门票",
+        "event_info": "活动信息",
+        "access": "入场",
+        "payment": "付款",
+        "complaint": "投诉",
+        "other": "其他"
+      },
+      "urgency": {
+        "low": "低紧急度",
+        "normal": "普通紧急度",
+        "high": "高紧急度"
+      }
+    },
+    "help": {
+      "ask": "获取 AI 回答",
+      "working": "正在阅读文章…",
+      "unknown": "这些文章无法回答该问题。请尝试下方结果或联系支持团队。",
+      "sources": "依据：",
+      "disclosure": "由 AI 根据帮助文章撰写。依赖前请查看文章。",
+      "unavailable": "AI 回答暂不可用。下方搜索结果仍可使用。",
+      "rateLimited": "问题过多。请在 {minutes} 分钟后重试。"
+    },
+    "translate": {
+      "title": "使用 AI 翻译",
+      "hint": "这会创建一份草稿供人工审核。不会发布或发送任何内容。",
+      "language": "语言",
+      "translate": "创建翻译草稿",
+      "working": "正在翻译…",
+      "done": "翻译草稿已就绪。",
+      "open": "审核草稿",
+      "exists": "此语言已有草稿。",
+      "overwrite": "替换该草稿",
+      "published": "此语言已发布。请先取消发布再替换。",
+      "tooLong": "内容过长，无法一次翻译（最多 2,000 词）。",
+      "incomplete": "请先完成此草稿：需要填写邮寄地址等所有必填信息。"
     }
   }
 }

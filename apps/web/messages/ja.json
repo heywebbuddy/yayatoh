@@ -1134,7 +1134,20 @@
       "selectTable": "テーブル全体を選ぶ（{count}席）",
       "unselectTable": "テーブル全体の選択を解除",
       "tableTooBig": "テーブル{label}の空席は{free}席ですが、1回のご注文は最大{max}席までです。席を1つずつ選ぶか、2回に分けてご注文ください。",
-      "tableNoFree": "テーブル{label}に空席はありません。"
+      "tableNoFree": "テーブル{label}に空席はありません。",
+      "priceFilter": "価格",
+      "mapKey": "凡例",
+      "keySelected": "選択した座席",
+      "yourSeats": "選択した座席",
+      "removeSeat": "{label}を削除",
+      "sections": "セクション",
+      "allSections": "すべてのセクション",
+      "sectionFrom": "{price}から",
+      "sectionLeft": "残り{count}席",
+      "sectionNone": "完売",
+      "sectionHint": "セクションをタップすると座席が表示されます",
+      "vip": "VIP",
+      "sectionOtherPrices": "他の価格のみ"
     },
     "seatRuleCap": "1回の注文で選べる座席数を超えています。座席数を減らしてください。",
     "seatRuleAda": "アクセシブル席は現在、必要な方のために確保されています。別の座席をお選びください。",
@@ -16025,7 +16038,10 @@
       "virtual": "オンラインイベント",
       "advanced_seating": "高度な座席",
       "ai_seating": "AI 座席配置",
-      "analytics_pro": "高度な分析"
+      "analytics_pro": "高度な分析",
+      "ai_insights": "AI要約",
+      "ai_support_assist": "AIサポート支援",
+      "ai_translate": "AI翻訳"
     },
     "findOwner": "オーナーまたは管理者を探す",
     "usageLink": "使用量",
@@ -20942,6 +20958,71 @@
     "notice": {
       "paidSoon": "有料プランは近日公開です。今はFreeプランで始めるか、営業チームにご相談ください。",
       "planUnknown": "そのプランは認識できなかったため、何も作成していません。下からプランを選んでください。"
+    }
+  },
+  "aiPhase1": {
+    "insights": {
+      "title": "AI要約",
+      "summarize": "回答を要約",
+      "refresh": "要約を更新",
+      "working": "回答を読んでいます…",
+      "unchanged": "この要約以降に変更がないため、クレジットは使用されていません。",
+      "stale": "この要約の後に新しい回答がありました。",
+      "basedOn": "{count}件の回答に基づく",
+      "basedOnNewest": "全{total}件のうち最新{count}件の回答に基づく",
+      "mentions": "{count}件の言及",
+      "hint": "記述回答の主なテーマを確認できます。AIクレジットを使用します。",
+      "disclosure": "AIが作成したため、回答と照らし合わせて確認してください。引用は回答者本人の言葉です。",
+      "sentiment": {
+        "positive": "おおむね肯定的",
+        "mixed": "賛否両論",
+        "negative": "おおむね否定的"
+      }
+    },
+    "assist": {
+      "suggestReply": "返信を提案",
+      "suggestDecline": "理由を提案",
+      "working": "リクエストを読んでいます…",
+      "useDraft": "この下書きを使う",
+      "used": "入力欄に追加しました。編集してご自身で送信してください。",
+      "disclosure": "AIが作成しました。ご自身で操作するまで、送信も決定も行われません。",
+      "category": {
+        "refund": "返金",
+        "tickets": "チケット",
+        "event_info": "イベント情報",
+        "access": "アクセス",
+        "payment": "支払い",
+        "complaint": "苦情",
+        "other": "その他"
+      },
+      "urgency": {
+        "low": "緊急度：低",
+        "normal": "緊急度：普通",
+        "high": "緊急度：高"
+      }
+    },
+    "help": {
+      "ask": "AIの回答を見る",
+      "working": "記事を読んでいます…",
+      "unknown": "これらの記事には答えがありません。下の結果を試すか、サポートにお問い合わせください。",
+      "sources": "参照元：",
+      "disclosure": "ヘルプ記事をもとにAIが作成しました。頼る前に記事をご確認ください。",
+      "unavailable": "AIの回答は現在利用できません。下の検索結果はご利用いただけます。",
+      "rateLimited": "質問が多すぎます。{minutes}分後にもう一度お試しください。"
+    },
+    "translate": {
+      "title": "AIで翻訳",
+      "hint": "担当者が確認するための下書きを作成します。公開も送信もされません。",
+      "language": "言語",
+      "translate": "翻訳の下書きを作成",
+      "working": "翻訳しています…",
+      "done": "翻訳の下書きができました。",
+      "open": "下書きを確認",
+      "exists": "この言語の下書きがすでにあります。",
+      "overwrite": "その下書きを置き換える",
+      "published": "この言語はすでに公開されています。置き換えるには先に非公開にしてください。",
+      "tooLong": "一度に翻訳するには長すぎます（最大2,000語）。",
+      "incomplete": "先にこの下書きを完成させてください。郵送先住所など必須項目がすべて必要です。"
     }
   }
 }

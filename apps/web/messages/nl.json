@@ -1134,7 +1134,20 @@
       "selectTable": "Hele tafel kiezen ({count, plural, one {# plaats} other {# plaatsen}})",
       "unselectTable": "Tafel deselecteren",
       "tableTooBig": "Tafel {label} heeft {free, plural, one {# vrije plaats} other {# vrije plaatsen}}, maar een bestelling kan er maximaal {max} bevatten. Kies de plaatsen één voor één of verdeel de tafel over twee bestellingen.",
-      "tableNoFree": "Tafel {label} heeft geen vrije plaatsen meer."
+      "tableNoFree": "Tafel {label} heeft geen vrije plaatsen meer.",
+      "priceFilter": "Prijs",
+      "mapKey": "Legenda",
+      "keySelected": "Jouw plaatsen",
+      "yourSeats": "Jouw plaatsen",
+      "removeSeat": "{label} verwijderen",
+      "sections": "Vakken",
+      "allSections": "Alle vakken",
+      "sectionFrom": "Vanaf {price}",
+      "sectionLeft": "{count, plural, one {Nog # plaats} other {Nog # plaatsen}}",
+      "sectionNone": "Uitverkocht",
+      "sectionHint": "Tik op een vak om de plaatsen te zien",
+      "vip": "VIP",
+      "sectionOtherPrices": "Alleen andere prijzen"
     },
     "seatRuleCap": "Dat zijn meer plaatsen dan één bestelling mag hebben. Kies er minder.",
     "seatRuleAda": "Toegankelijke plaatsen worden voorlopig vrijgehouden voor gasten die ze nodig hebben. Kies andere plaatsen.",
@@ -16025,7 +16038,10 @@
       "virtual": "Virtuele evenementen",
       "advanced_seating": "Geavanceerde zitplaatsen",
       "ai_seating": "Zitplaatsen met AI",
-      "analytics_pro": "Geavanceerde analyses"
+      "analytics_pro": "Geavanceerde analyses",
+      "ai_insights": "AI-samenvattingen",
+      "ai_support_assist": "AI-supporthulp",
+      "ai_translate": "AI-vertaling"
     },
     "findOwner": "Zoek een eigenaar of beheerder",
     "usageLink": "Gebruik",
@@ -20942,6 +20958,71 @@
     "notice": {
       "paidSoon": "Betaalde abonnementen komen binnenkort. U kunt nu starten met het gratis abonnement of contact opnemen met ons verkoopteam.",
       "planUnknown": "Dat abonnement kennen we niet, dus er is niets aangemaakt. Kies hieronder een abonnement."
+    }
+  },
+  "aiPhase1": {
+    "insights": {
+      "title": "AI-samenvatting",
+      "summarize": "Antwoorden samenvatten",
+      "refresh": "Samenvatting bijwerken",
+      "working": "Antwoorden lezen…",
+      "unchanged": "Er is niets veranderd sinds deze samenvatting, dus er is geen tegoed gebruikt.",
+      "stale": "Er zijn nieuwe antwoorden sinds deze samenvatting.",
+      "basedOn": "Gebaseerd op {count, plural, one {# antwoord} other {# antwoorden}}",
+      "basedOnNewest": "Gebaseerd op de nieuwste {count} van {total} antwoorden",
+      "mentions": "{count, plural, one {# vermelding} other {# vermeldingen}}",
+      "hint": "Bekijk de belangrijkste thema's uit geschreven antwoorden. Dit gebruikt AI-tegoed.",
+      "disclosure": "Geschreven door AI, dus controleer het aan de hand van de antwoorden. Citaten zijn de eigen woorden van mensen.",
+      "sentiment": {
+        "positive": "Vooral positief",
+        "mixed": "Gemengd",
+        "negative": "Vooral negatief"
+      }
+    },
+    "assist": {
+      "suggestReply": "Antwoord voorstellen",
+      "suggestDecline": "Reden voorstellen",
+      "working": "Verzoek lezen…",
+      "useDraft": "Dit concept gebruiken",
+      "used": "Toegevoegd aan het veld. Bewerk het en verstuur het zelf.",
+      "disclosure": "Geschreven door AI. Er wordt niets verstuurd of besloten totdat u dat doet.",
+      "category": {
+        "refund": "Terugbetaling",
+        "tickets": "Tickets",
+        "event_info": "Evenementinformatie",
+        "access": "Toegang",
+        "payment": "Betaling",
+        "complaint": "Klacht",
+        "other": "Overig"
+      },
+      "urgency": {
+        "low": "Lage urgentie",
+        "normal": "Normale urgentie",
+        "high": "Hoge urgentie"
+      }
+    },
+    "help": {
+      "ask": "AI-antwoord krijgen",
+      "working": "Artikelen lezen…",
+      "unknown": "Deze artikelen beantwoorden dat niet. Probeer de resultaten hieronder of neem contact op met support.",
+      "sources": "Gebaseerd op:",
+      "disclosure": "Door AI geschreven op basis van onze helpartikelen. Controleer het artikel voordat u erop vertrouwt.",
+      "unavailable": "AI-antwoorden zijn nu niet beschikbaar. De zoekresultaten hieronder werken nog.",
+      "rateLimited": "Te veel vragen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
+    },
+    "translate": {
+      "title": "Vertalen met AI",
+      "hint": "Dit maakt een concept dat iemand moet nakijken. Er wordt niets gepubliceerd of verstuurd.",
+      "language": "Taal",
+      "translate": "Conceptvertaling maken",
+      "working": "Vertalen…",
+      "done": "De conceptvertaling is klaar.",
+      "open": "Concept nakijken",
+      "exists": "Er bestaat al een concept in deze taal.",
+      "overwrite": "Dat concept vervangen",
+      "published": "Deze taal is al gepubliceerd. Maak de publicatie eerst ongedaan om te vervangen.",
+      "tooLong": "Dit is te lang om in één keer te vertalen (maximaal 2.000 woorden).",
+      "incomplete": "Maak dit concept eerst af: alle verplichte gegevens zijn nodig, zoals het postadres."
     }
   }
 }

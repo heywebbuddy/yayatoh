@@ -19,6 +19,7 @@ import {
 export function SeatSelection({
   map,
   prices,
+  priceAmounts,
   levels,
   max = 20,
   stream = null,
@@ -31,6 +32,7 @@ export function SeatSelection({
 }: {
   map: SeatMapView;
   prices: Readonly<Record<string, string>>;
+  priceAmounts?: Readonly<Record<string, number>>;
   /** The prices sold by seat, for best available. */
   levels: readonly { readonly id: string; readonly label: string }[];
   max?: number;
@@ -119,6 +121,7 @@ export function SeatSelection({
         <SeatPicker
           map={map}
           prices={prices}
+          {...(priceAmounts ? { priceAmounts } : {})}
           max={max}
           stream={stream}
           context={context}

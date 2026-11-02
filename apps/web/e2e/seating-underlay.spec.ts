@@ -124,7 +124,7 @@ test.describe('floor plan image under the plan (M1.7g)', () => {
     const slug = base.split('/').pop() as string;
     const guest = await (await browser.newContext()).newPage();
     await guest.goto(`/events/${slug}`);
-    await guest.getByRole('button', { name: 'Show seat map' }).click();
+    await expect(guest.getByRole('button', { name: 'Hide seat map' })).toBeVisible();
     await expect(guest.getByTestId('seat-map')).toBeVisible();
     await expect(guest.getByTestId('seat-map')).not.toHaveAttribute('data-underlay', /.+/);
     await page.goto(`${base}/seating`);
@@ -135,7 +135,7 @@ test.describe('floor plan image under the plan (M1.7g)', () => {
     await panel(page).getByLabel("Show it faintly on the buyer's seat map").check();
     await saved(page);
     await guest.reload();
-    await guest.getByRole('button', { name: 'Show seat map' }).click();
+    await expect(guest.getByRole('button', { name: 'Hide seat map' })).toBeVisible();
     await expect(guest.getByTestId('seat-map')).toHaveAttribute('data-underlay', imageUrl as string);
     const shown = await guest.request.get(imageUrl as string);
     expect(shown.status()).toBe(200);

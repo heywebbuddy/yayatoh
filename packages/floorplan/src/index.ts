@@ -57,3 +57,13 @@ export {
 } from './geometry.ts';
 export { itemCenter, MAP_AREAS, type MapArea, mapArea, nearestObject, seatPosition } from './guide.ts';
 export { bareItemLabel } from './labels.ts';
+export {
+  convexHull,
+  REGION_PAD_CM,
+  type RoomPoint,
+  regionAt,
+  type SeatRegion,
+  seatGrid,
+  seatNear,
+  seatRegions,
+} from './regions.ts';

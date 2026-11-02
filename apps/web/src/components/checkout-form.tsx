@@ -23,6 +23,8 @@ export interface PassView {
   readonly id: string | null;
   readonly name: string;
   readonly priceLabel: string;
+  /** The all-in amount (orders the seat map's prices). */
+  readonly priceMinor?: number;
   readonly description: string;
   readonly featured: boolean;
   readonly availability: 'available' | 'sold_out' | 'not_yet_on_sale' | 'sales_ended';
@@ -128,6 +130,9 @@ export function CheckoutForm({
     (seatMap ? seatMap.seats : (legs ?? []).flatMap((l) => l.map.seats)).map((s) => s.ticketTypeId),
   );
   const prices = Object.fromEntries(passes.flatMap((p) => (p.id ? [[p.id, p.priceLabel]] : [])));
+  const priceAmounts = Object.fromEntries(
+    passes.flatMap((p) => (p.id && p.priceMinor !== undefined ? [[p.id, p.priceMinor]] : [])),
+  );
   const error =
     state.code === null || state.code === 'verify_email'
       ? null
@@ -325,6 +330,7 @@ export function CheckoutForm({
               <SeatPicker
                 map={leg.map}
                 prices={prices}
+                priceAmounts={priceAmounts}
                 fieldName={`legseat:${leg.id}`}
                 {...(timeZone ? { timeZone } : {})}
               />
@@ -336,6 +342,7 @@ export function CheckoutForm({
           <SeatSelection
             map={seatMap}
             prices={prices}
+            priceAmounts={priceAmounts}
             levels={passes.flatMap((p) =>
               p.id && p.availability === 'available' && seatedTypes.has(p.id)
                 ? [{ id: p.id, label: `${p.name} · ${p.priceLabel}` }]

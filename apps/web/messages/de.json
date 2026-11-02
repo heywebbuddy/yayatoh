@@ -1134,7 +1134,20 @@
       "selectTable": "Ganzen Tisch wählen ({count, plural, one {# Platz} other {# Plätze}})",
       "unselectTable": "Tischauswahl aufheben",
       "tableTooBig": "Tisch {label} hat {free, plural, one {# freien Platz} other {# freie Plätze}}, aber eine Bestellung umfasst höchstens {max}. Wähle die Plätze einzeln oder teile den Tisch auf zwei Bestellungen auf.",
-      "tableNoFree": "An Tisch {label} sind keine Plätze mehr frei."
+      "tableNoFree": "An Tisch {label} sind keine Plätze mehr frei.",
+      "priceFilter": "Preis",
+      "mapKey": "Legende",
+      "keySelected": "Ihre Plätze",
+      "yourSeats": "Ihre Plätze",
+      "removeSeat": "{label} entfernen",
+      "sections": "Bereiche",
+      "allSections": "Alle Bereiche",
+      "sectionFrom": "Ab {price}",
+      "sectionLeft": "{count, plural, one {# Platz frei} other {# Plätze frei}}",
+      "sectionNone": "Ausverkauft",
+      "sectionHint": "Tippen Sie auf einen Bereich, um die Plätze zu sehen",
+      "vip": "VIP",
+      "sectionOtherPrices": "Nur andere Preise"
     },
     "seatRuleCap": "Das sind mehr Plätze, als eine Bestellung haben darf. Bitte wähle weniger.",
     "seatRuleAda": "Barrierefreie Plätze sind vorerst für Gäste reserviert, die sie brauchen. Bitte wähle andere Plätze.",
@@ -16025,7 +16038,10 @@
       "virtual": "Virtuelle Veranstaltungen",
       "advanced_seating": "Erweiterte Bestuhlung",
       "ai_seating": "KI-Bestuhlung",
-      "analytics_pro": "Erweiterte Analysen"
+      "analytics_pro": "Erweiterte Analysen",
+      "ai_insights": "KI-Zusammenfassungen",
+      "ai_support_assist": "KI-Supporthilfe",
+      "ai_translate": "KI-Übersetzung"
     },
     "findOwner": "Inhaber oder Admin finden",
     "usageLink": "Nutzung",
@@ -20942,6 +20958,71 @@
     "notice": {
       "paidSoon": "Bezahlte Tarife kommen bald. Sie können jetzt mit dem Free-Tarif starten oder unser Vertriebsteam kontaktieren.",
       "planUnknown": "Diesen Tarif kennen wir nicht, deshalb wurde nichts angelegt. Wählen Sie unten einen Tarif."
+    }
+  },
+  "aiPhase1": {
+    "insights": {
+      "title": "KI-Zusammenfassung",
+      "summarize": "Antworten zusammenfassen",
+      "refresh": "Zusammenfassung aktualisieren",
+      "working": "Antworten werden gelesen…",
+      "unchanged": "Seit dieser Zusammenfassung hat sich nichts geändert, daher wurde kein Guthaben verbraucht.",
+      "stale": "Seit dieser Zusammenfassung sind neue Antworten eingegangen.",
+      "basedOn": "Basiert auf {count, plural, one {# Antwort} other {# Antworten}}",
+      "basedOnNewest": "Basiert auf den neuesten {count} von {total} Antworten",
+      "mentions": "{count, plural, one {# Nennung} other {# Nennungen}}",
+      "hint": "Die wichtigsten Themen aus den schriftlichen Antworten. Verbraucht KI-Guthaben.",
+      "disclosure": "Von KI verfasst, also bitte mit den Antworten abgleichen. Zitate sind die Worte der Teilnehmenden.",
+      "sentiment": {
+        "positive": "Überwiegend positiv",
+        "mixed": "Gemischt",
+        "negative": "Überwiegend negativ"
+      }
+    },
+    "assist": {
+      "suggestReply": "Antwort vorschlagen",
+      "suggestDecline": "Begründung vorschlagen",
+      "working": "Anfrage wird gelesen…",
+      "useDraft": "Entwurf verwenden",
+      "used": "In das Feld eingefügt. Bearbeiten Sie ihn und senden Sie ihn selbst.",
+      "disclosure": "Von KI verfasst. Nichts wird gesendet oder entschieden, bevor Sie es tun.",
+      "category": {
+        "refund": "Erstattung",
+        "tickets": "Tickets",
+        "event_info": "Veranstaltungsinfos",
+        "access": "Zugang",
+        "payment": "Zahlung",
+        "complaint": "Beschwerde",
+        "other": "Sonstiges"
+      },
+      "urgency": {
+        "low": "Geringe Dringlichkeit",
+        "normal": "Normale Dringlichkeit",
+        "high": "Hohe Dringlichkeit"
+      }
+    },
+    "help": {
+      "ask": "KI-Antwort erhalten",
+      "working": "Artikel werden gelesen…",
+      "unknown": "Diese Artikel beantworten das nicht. Sehen Sie sich die Ergebnisse unten an oder wenden Sie sich an den Support.",
+      "sources": "Basiert auf:",
+      "disclosure": "Von KI aus unseren Hilfeartikeln verfasst. Prüfen Sie den Artikel, bevor Sie sich darauf verlassen.",
+      "unavailable": "KI-Antworten sind derzeit nicht verfügbar. Die Suchergebnisse unten funktionieren weiterhin.",
+      "rateLimited": "Zu viele Fragen. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
+    },
+    "translate": {
+      "title": "Mit KI übersetzen",
+      "hint": "Dies erstellt einen Entwurf zur Prüfung. Nichts wird veröffentlicht oder gesendet.",
+      "language": "Sprache",
+      "translate": "Übersetzungsentwurf erstellen",
+      "working": "Wird übersetzt…",
+      "done": "Der Übersetzungsentwurf ist fertig.",
+      "open": "Entwurf prüfen",
+      "exists": "In dieser Sprache gibt es bereits einen Entwurf.",
+      "overwrite": "Diesen Entwurf ersetzen",
+      "published": "Diese Sprache ist bereits veröffentlicht. Heben Sie die Veröffentlichung zuerst auf.",
+      "tooLong": "Das ist zu lang für eine Übersetzung auf einmal (höchstens 2.000 Wörter).",
+      "incomplete": "Stellen Sie diesen Entwurf zuerst fertig: Alle Pflichtangaben wie die Postanschrift müssen ausgefüllt sein."
     }
   }
 }

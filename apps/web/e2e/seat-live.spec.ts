@@ -49,7 +49,7 @@ test.describe('live seat availability (M1.7f)', () => {
     await seatBox(b, 'Table 1 · 1').check();
     await seatBox(b, 'Table 2 · 1').check();
     await expect(b.getByRole('status').filter({ hasText: '2 seats selected' })).toBeVisible();
-    await b.getByRole('button', { name: 'Show seat map' }).click();
+    await expect(b.getByRole('button', { name: 'Hide seat map' })).toBeVisible();
     await expect(b.getByTestId('seat-map').locator('canvas').first()).toBeVisible();
 
     await holdSeats(a, slug, ['Table 1 · 1', 'Table 1 · 2'], `Anna Live ${Date.now()}`);

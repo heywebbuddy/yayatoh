@@ -1134,7 +1134,20 @@
       "selectTable": "Choisir toute la table ({count, plural, one {# place} other {# places}})",
       "unselectTable": "Désélectionner la table",
       "tableTooBig": "La table {label} compte {free, plural, one {# place libre} other {# places libres}}, mais une commande peut en contenir {max} au maximum. Choisissez les places une à une ou répartissez la table sur deux commandes.",
-      "tableNoFree": "La table {label} n’a plus de place libre."
+      "tableNoFree": "La table {label} n’a plus de place libre.",
+      "priceFilter": "Prix",
+      "mapKey": "Légende",
+      "keySelected": "Vos places",
+      "yourSeats": "Vos places",
+      "removeSeat": "Retirer {label}",
+      "sections": "Sections",
+      "allSections": "Toutes les sections",
+      "sectionFrom": "À partir de {price}",
+      "sectionLeft": "{count, plural, one {# place restante} other {# places restantes}}",
+      "sectionNone": "Complet",
+      "sectionHint": "Touchez une section pour voir ses places",
+      "vip": "VIP",
+      "sectionOtherPrices": "Autres prix uniquement"
     },
     "seatRuleCap": "C’est plus de places qu’une commande ne peut en compter. Veuillez en choisir moins.",
     "seatRuleAda": "Les places accessibles sont pour l’instant réservées aux personnes qui en ont besoin. Veuillez choisir d’autres places.",
@@ -16025,7 +16038,10 @@
       "virtual": "Événements virtuels",
       "advanced_seating": "Placement avancé",
       "ai_seating": "Placement par IA",
-      "analytics_pro": "Analyses avancées"
+      "analytics_pro": "Analyses avancées",
+      "ai_insights": "Résumés par IA",
+      "ai_support_assist": "Aide au support par IA",
+      "ai_translate": "Traduction par IA"
     },
     "findOwner": "Trouver un propriétaire ou un admin",
     "usageLink": "Utilisation",
@@ -20942,6 +20958,71 @@
     "notice": {
       "paidSoon": "Les forfaits payants arrivent bientôt. Vous pouvez démarrer dès maintenant avec le forfait Gratuit ou parler à notre équipe commerciale.",
       "planUnknown": "Nous n'avons pas reconnu ce forfait, donc rien n'a été créé. Choisissez un forfait ci-dessous."
+    }
+  },
+  "aiPhase1": {
+    "insights": {
+      "title": "Résumé par IA",
+      "summarize": "Résumer les réponses",
+      "refresh": "Mettre à jour le résumé",
+      "working": "Lecture des réponses…",
+      "unchanged": "Rien n'a changé depuis ce résumé : aucun crédit n'a été utilisé.",
+      "stale": "De nouvelles réponses sont arrivées depuis ce résumé.",
+      "basedOn": "Basé sur {count, plural, one {# réponse} other {# réponses}}",
+      "basedOnNewest": "Basé sur les {count} réponses les plus récentes sur {total}",
+      "mentions": "{count, plural, one {# mention} other {# mentions}}",
+      "hint": "Obtenez les grands thèmes des réponses écrites. Utilise des crédits IA.",
+      "disclosure": "Rédigé par une IA : vérifiez-le avec les réponses. Les citations sont les propres mots des personnes.",
+      "sentiment": {
+        "positive": "Plutôt positif",
+        "mixed": "Mitigé",
+        "negative": "Plutôt négatif"
+      }
+    },
+    "assist": {
+      "suggestReply": "Suggérer une réponse",
+      "suggestDecline": "Suggérer un motif",
+      "working": "Lecture de la demande…",
+      "useDraft": "Utiliser ce brouillon",
+      "used": "Ajouté au champ. Modifiez-le, puis envoyez-le vous-même.",
+      "disclosure": "Rédigé par une IA. Rien n'est envoyé ni décidé tant que vous ne le faites pas.",
+      "category": {
+        "refund": "Remboursement",
+        "tickets": "Billets",
+        "event_info": "Informations sur l'événement",
+        "access": "Accès",
+        "payment": "Paiement",
+        "complaint": "Réclamation",
+        "other": "Autre"
+      },
+      "urgency": {
+        "low": "Urgence faible",
+        "normal": "Urgence normale",
+        "high": "Urgence élevée"
+      }
+    },
+    "help": {
+      "ask": "Obtenir une réponse par IA",
+      "working": "Lecture des articles…",
+      "unknown": "Ces articles ne répondent pas à cette question. Essayez les résultats ci-dessous ou contactez le support.",
+      "sources": "Basé sur :",
+      "disclosure": "Rédigé par une IA à partir de nos articles d'aide. Vérifiez l'article avant de vous y fier.",
+      "unavailable": "Les réponses par IA sont indisponibles pour le moment. Les résultats ci-dessous restent accessibles.",
+      "rateLimited": "Trop de questions. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
+    },
+    "translate": {
+      "title": "Traduire avec l'IA",
+      "hint": "Cela crée un brouillon à relire. Rien n'est publié ni envoyé.",
+      "language": "Langue",
+      "translate": "Créer un brouillon de traduction",
+      "working": "Traduction en cours…",
+      "done": "Le brouillon de traduction est prêt.",
+      "open": "Relire le brouillon",
+      "exists": "Un brouillon existe déjà dans cette langue.",
+      "overwrite": "Remplacer ce brouillon",
+      "published": "Cette langue est déjà publiée. Dépubliez-la d'abord pour la remplacer.",
+      "tooLong": "Ce texte est trop long pour être traduit en une fois (2 000 mots au maximum).",
+      "incomplete": "Terminez d'abord ce brouillon : il lui faut toutes les informations requises, comme l'adresse postale."
     }
   }
 }

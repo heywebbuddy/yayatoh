@@ -27,6 +27,7 @@ export function BoxOfficeForm({
   seatMap = null,
   seatStream = null,
   prices = {},
+  priceAmounts = {},
   timeZone,
   bestSeats = null,
   advancedSeating = false,
@@ -41,6 +42,7 @@ export function BoxOfficeForm({
   seatStream?: SeatStreamSource | null;
   /** Ticket type id → its all-in price label (seat list). */
   prices?: Readonly<Record<string, string>>;
+  priceAmounts?: Readonly<Record<string, number>>;
   timeZone?: string;
   /** M6.11a: best available at the door (when the organizer offers it). */
   bestSeats?: BestSeatsActions | null;
@@ -148,6 +150,7 @@ export function BoxOfficeForm({
             key={round}
             map={seatMap}
             prices={prices}
+            priceAmounts={priceAmounts}
             levels={passes.filter((p) => p.seated)}
             max={50}
             stream={seatStream}

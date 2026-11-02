@@ -209,7 +209,7 @@ test.describe('5,000-seat performance at the iPad profile (M1.7f)', () => {
     await expect(buyer.locator('input[type="hidden"][name="seat"]')).toHaveCount(1);
     await expect(buyer.getByRole('status').filter({ hasText: '1 seat selected' })).toBeVisible();
     t0 = Date.now();
-    await buyer.getByRole('button', { name: 'Show seat map' }).click();
+    await expect(buyer.getByRole('button', { name: 'Hide seat map' })).toBeVisible();
     const map = buyer.getByTestId('seat-map').locator('canvas').first();
     await expect(map).toBeVisible();
     results.pickerMapOpenMs = Date.now() - t0;
