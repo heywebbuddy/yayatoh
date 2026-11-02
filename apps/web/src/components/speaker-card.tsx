@@ -88,7 +88,7 @@ export function SpeakerCard({
               aria-controls={bioId}
               aria-label={bioLabel}
               onClick={() => setOpen((v) => !v)}
-              className="relative z-30 flex size-10 shrink-0 sm:size-11 cursor-pointer items-center justify-center rounded-full bg-white text-[#14110f] transition-transform hover:scale-105 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+              className="relative z-30 flex size-10 shrink-0 sm:size-11 cursor-pointer items-center justify-center rounded-full ev-speaker-btn transition-transform hover:scale-105 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
             >
               <Plus
                 aria-hidden="true"

@@ -1541,3 +1541,7 @@
 [data-ev-page] .ev-program li:has(> a, > div > a):hover {
   border-color: var(--ev-accent, var(--color-ember));
 }
+[data-ev-page] .ev-speaker-btn {
+  background: #ffffff;
+  color: #14110f;
+}
