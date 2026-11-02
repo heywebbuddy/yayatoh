@@ -20823,7 +20823,6 @@
     "aboutLink": "Over ons",
     "termsLink": "Servicevoorwaarden",
     "cookiesLink": "Cookiebeleid",
-
     "refundLink": "Restitutiebeleid",
     "legalEyebrow": "Juridisch",
     "lastUpdated": "Laatst bijgewerkt op {date} · versie {version}",
@@ -21025,6 +21024,50 @@
       "published": "Deze taal is al gepubliceerd. Maak de publicatie eerst ongedaan om te vervangen.",
       "tooLong": "Dit is te lang om in één keer te vertalen (maximaal 2.000 woorden).",
       "incomplete": "Maak dit concept eerst af: alle verplichte gegevens zijn nodig, zoals het postadres."
+    }
+  },
+  "eventPage": {
+    "about": "Over",
+    "venue": "Locatie",
+    "faq": "Veelgestelde vragen",
+    "reviews": "Beoordelingen",
+    "share": "Delen",
+    "ctaHeading": "Mis het niet",
+    "showDetails": "Details van {title} tonen",
+    "previous": "Vorige sprekers",
+    "next": "Volgende sprekers"
+  },
+  "pageStyle": {
+    "title": "Paginakleuren en indeling",
+    "description": "Stel je merkkleuren, tekstgrootte en de volgorde en zichtbaarheid van secties in. Kleuren worden op contrast gecontroleerd zodat tekst leesbaar blijft.",
+    "colorsLegend": "Kleuren",
+    "accent": "Merkaccent",
+    "accent2": "Tweede accent",
+    "band": "Kleurband",
+    "sectionBg": "Sectieachtergrond",
+    "text": "Tekstkleur",
+    "useDefault": "Standaard van het type",
+    "textSizeLegend": "Tekstgrootte",
+    "scale": {
+      "small": "Klein",
+      "default": "Standaard",
+      "large": "Groot"
+    },
+    "sectionsLegend": "Secties",
+    "sectionsHint": "Secties zonder inhoud worden automatisch weggelaten.",
+    "visible": "{name} tonen",
+    "moveUp": "{name} omhoog",
+    "moveDown": "{name} omlaag",
+    "alwaysShown": "Altijd zichtbaar",
+    "preview": "Live voorbeeld",
+    "previewSession": "Openingskeynote",
+    "previewBody": "Deuren open om negen uur. Koffie is van ons.",
+    "reset": "Standaard herstellen",
+    "contrastWarn": "Laag contrast bij {pair}. De pagina corrigeert dit automatisch zodat tekst leesbaar blijft.",
+    "pair": {
+      "text": "tekst op de sectieachtergrond",
+      "accent": "accent op de sectieachtergrond",
+      "band": "tekst op de kleurband"
     }
   }
 }

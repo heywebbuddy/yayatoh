@@ -20823,7 +20823,6 @@
     "aboutLink": "Über uns",
     "termsLink": "Nutzungsbedingungen",
     "cookiesLink": "Cookie-Richtlinie",
-
     "refundLink": "Rückerstattungsrichtlinie",
     "legalEyebrow": "Rechtliches",
     "lastUpdated": "Zuletzt aktualisiert am {date} · Version {version}",
@@ -21025,6 +21024,50 @@
       "published": "Diese Sprache ist bereits veröffentlicht. Heben Sie die Veröffentlichung zuerst auf.",
       "tooLong": "Das ist zu lang für eine Übersetzung auf einmal (höchstens 2.000 Wörter).",
       "incomplete": "Stellen Sie diesen Entwurf zuerst fertig: Alle Pflichtangaben wie die Postanschrift müssen ausgefüllt sein."
+    }
+  },
+  "eventPage": {
+    "about": "Über",
+    "venue": "Veranstaltungsort",
+    "faq": "FAQ",
+    "reviews": "Bewertungen",
+    "share": "Teilen",
+    "ctaHeading": "Nicht verpassen",
+    "showDetails": "Details zu {title} anzeigen",
+    "previous": "Vorherige Speaker",
+    "next": "Nächste Speaker"
+  },
+  "pageStyle": {
+    "title": "Seitenfarben und Layout",
+    "description": "Lege Markenfarben, Schriftgröße sowie Reihenfolge und Sichtbarkeit der Abschnitte fest. Farben werden auf Kontrast geprüft, damit Text lesbar bleibt.",
+    "colorsLegend": "Farben",
+    "accent": "Markenakzent",
+    "accent2": "Zweiter Akzent",
+    "band": "Farbband",
+    "sectionBg": "Abschnittshintergrund",
+    "text": "Textfarbe",
+    "useDefault": "Standard des Typs",
+    "textSizeLegend": "Schriftgröße",
+    "scale": {
+      "small": "Klein",
+      "default": "Standard",
+      "large": "Groß"
+    },
+    "sectionsLegend": "Abschnitte",
+    "sectionsHint": "Abschnitte ohne Inhalt werden automatisch ausgeblendet.",
+    "visible": "{name} anzeigen",
+    "moveUp": "{name} nach oben",
+    "moveDown": "{name} nach unten",
+    "alwaysShown": "Immer sichtbar",
+    "preview": "Live-Vorschau",
+    "previewSession": "Eröffnungs-Keynote",
+    "previewBody": "Einlass ab neun. Kaffee geht auf uns.",
+    "reset": "Auf Standard zurücksetzen",
+    "contrastWarn": "Geringer Kontrast bei {pair}. Die Seite korrigiert ihn automatisch, damit Text lesbar bleibt.",
+    "pair": {
+      "text": "Text auf dem Abschnittshintergrund",
+      "accent": "Akzent auf dem Abschnittshintergrund",
+      "band": "Text auf dem Farbband"
     }
   }
 }

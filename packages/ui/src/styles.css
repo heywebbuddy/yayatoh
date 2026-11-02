@@ -1307,3 +1307,163 @@
   }
   /* biome-ignore-end lint/complexity/noImportantStyles: reduced motion must beat every utility's transition */
 }
+
+/*
+ * The public event page as a branded landing page. Organizer page design (event branding) arrives
+ * as `--ev-*` custom properties on `[data-ev-page]`, already sanitized and contrast-corrected on
+ * the server; without them every rule falls back to the event type's own tokens.
+ */
+[data-ev-page] {
+  --text-body: calc(15px * var(--ev-scale, 1));
+  --text-prose: calc(16px * var(--ev-scale, 1));
+  --text-caption: calc(13px * var(--ev-scale, 1));
+  --text-card: calc(20px * var(--ev-scale, 1));
+  --text-section: calc(24px * var(--ev-scale, 1));
+  --text-display: calc(56px * var(--ev-scale, 1));
+  --ev-tone-1: var(--ev-accent, var(--color-primary));
+  --ev-tone-2: var(--ev-accent-2, var(--color-brand));
+  --ev-tone-3: var(--color-warning-dot);
+}
+[data-ev-page] :is(section, div)[id] {
+  scroll-margin-top: 128px;
+}
+@media (min-width: 1024px) {
+  [data-ev-page] :is(section, div)[id] {
+    scroll-margin-top: 92px;
+  }
+}
+[data-ev-page] [id][tabindex="-1"]:focus {
+  outline: none;
+}
+.ev-nav-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Section cards: the organizer's section colour and text colour (light mode). */
+[data-ev-page] .ev-card {
+  background: var(--ev-section, var(--color-surface));
+  color: var(--ev-text, var(--color-ink));
+  box-shadow: var(--elevation-card);
+}
+[data-ev-page] .ev-program > section,
+[data-ev-page] .ev-program > div > section {
+  border: 0;
+  border-radius: 28px;
+  padding: clamp(24px, 4vw, 40px);
+  background: var(--ev-section, var(--color-surface));
+  color: var(--ev-text, var(--color-ink));
+  box-shadow: var(--elevation-card);
+}
+/*
+ * Light mode takes the organizer's section, text and accent-text colours (the `-l` variables);
+ * dark mode keeps the theme's own surfaces and text, with the accent re-checked for dark rows.
+ */
+[data-ev-page][data-theme="light"],
+[data-theme="light"] [data-ev-page] {
+  --ev-section: var(--ev-section-l, var(--color-surface));
+  --ev-text: var(--ev-text-l, var(--color-ink));
+  --ev-accent-ink: var(--ev-accent-ink-l, var(--color-primary-ink));
+}
+[data-ev-page][data-theme="light"][style*="--ev-text-l"] :is(.ev-card, .ev-program),
+[data-theme="light"] [data-ev-page][style*="--ev-text-l"] :is(.ev-card, .ev-program) {
+  --color-ink: var(--ev-text);
+  --color-ink-2: var(--ev-text);
+}
+@media (prefers-color-scheme: light) {
+  [data-theme="system"] [data-ev-page] {
+    --ev-section: var(--ev-section-l, var(--color-surface));
+    --ev-text: var(--ev-text-l, var(--color-ink));
+    --ev-accent-ink: var(--ev-accent-ink-l, var(--color-primary-ink));
+  }
+  [data-theme="system"] [data-ev-page][style*="--ev-text-l"] :is(.ev-card, .ev-program) {
+    --color-ink: var(--ev-text);
+    --color-ink-2: var(--ev-text);
+  }
+}
+[data-theme="dark"] [data-ev-page]:not([data-theme="light"]) {
+  --ev-accent-ink: var(--ev-accent-ink-dark, var(--color-primary-ink));
+}
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] [data-ev-page]:not([data-theme="light"]) {
+    --ev-accent-ink: var(--ev-accent-ink-dark, var(--color-primary-ink));
+  }
+}
+
+/* Accents: time ranges, bars, fills and the main buttons. */
+[data-ev-page] .ev-time {
+  color: var(--ev-accent-ink, var(--color-primary-ink));
+}
+[data-ev-page] .ev-accent-bar {
+  background: var(--ev-accent, var(--color-primary));
+}
+[data-ev-page] .ev-accent-fill {
+  background: var(--ev-accent, var(--color-brand-strong));
+  color: var(--ev-on-accent, #ffffff);
+}
+[data-ev-page][style*="--ev-accent"] .ev-cta {
+  background: var(--ev-accent);
+  color: var(--ev-on-accent);
+}
+[data-ev-page] .ev-agenda-row {
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--color-ink) 6%, var(--ev-section, var(--color-surface)));
+}
+[data-ev-page] .ev-agenda-row:has([aria-expanded="true"]) {
+  background: color-mix(in srgb, var(--color-ink) 9%, var(--ev-section, var(--color-surface)));
+}
+
+/* The bold colour band (speakers, closing call to action). */
+[data-ev-page] .ev-band {
+  background: var(--ev-band, var(--color-primary));
+  color: var(--ev-band-ink, var(--color-on-primary));
+}
+
+/* Speaker cards: a decorative geometric shape beside the photo, in a rotating accent. */
+.ev-tone-1 {
+  --ev-tone: var(--ev-tone-1);
+}
+.ev-tone-2 {
+  --ev-tone: var(--ev-tone-2);
+}
+.ev-tone-3 {
+  --ev-tone: var(--ev-tone-3);
+}
+.ev-shape {
+  position: absolute;
+  inset-inline-end: 0;
+  top: 0;
+  width: 112px;
+  height: 112px;
+  background: var(--ev-tone);
+}
+.ev-shape-circle {
+  border-radius: 9999px;
+}
+.ev-shape-quarter {
+  border-start-end-radius: 112px;
+}
+.ev-shape-pill {
+  width: 72px;
+  height: 150px;
+  border-radius: 9999px;
+}
+.ev-shape-diamond {
+  width: 92px;
+  height: 92px;
+  top: 10px;
+  inset-inline-end: 10px;
+  transform: rotate(45deg);
+  border-radius: 14px;
+}
+.ev-tone-fill {
+  background: color-mix(in srgb, var(--ev-tone) 22%, #ffffff);
+  color: #14110f;
+}
+/* White speaker cards and carousel buttons on the colour band (fixed light, any theme). */
+.ev-white-card {
+  background: #ffffff;
+  color: #14110f;
+}
+.ev-white-card .ev-muted {
+  color: #4f4640;
+}

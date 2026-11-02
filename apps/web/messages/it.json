@@ -20823,7 +20823,6 @@
     "aboutLink": "Chi siamo",
     "termsLink": "Termini di servizio",
     "cookiesLink": "Cookie policy",
-
     "refundLink": "Politica di rimborso",
     "legalEyebrow": "Note legali",
     "lastUpdated": "Ultimo aggiornamento {date} · versione {version}",
@@ -21025,6 +21024,50 @@
       "published": "Questa lingua è già pubblicata. Annulla prima la pubblicazione per sostituirla.",
       "tooLong": "È troppo lungo da tradurre in una volta (massimo 2.000 parole).",
       "incomplete": "Completa prima questa bozza: servono tutti i dati richiesti, come l'indirizzo postale."
+    }
+  },
+  "eventPage": {
+    "about": "Informazioni",
+    "venue": "Location",
+    "faq": "FAQ",
+    "reviews": "Recensioni",
+    "share": "Condividi",
+    "ctaHeading": "Da non perdere",
+    "showDetails": "Mostra dettagli di {title}",
+    "previous": "Relatori precedenti",
+    "next": "Relatori successivi"
+  },
+  "pageStyle": {
+    "title": "Colori e layout della pagina",
+    "description": "Imposta i colori del brand, la dimensione del testo e quali sezioni mostrare e in che ordine. Il contrasto viene verificato per mantenere il testo leggibile.",
+    "colorsLegend": "Colori",
+    "accent": "Accento del brand",
+    "accent2": "Secondo accento",
+    "band": "Fascia di colore",
+    "sectionBg": "Sfondo delle sezioni",
+    "text": "Colore del testo",
+    "useDefault": "Predefinito del tipo",
+    "textSizeLegend": "Dimensione testo",
+    "scale": {
+      "small": "Piccolo",
+      "default": "Predefinito",
+      "large": "Grande"
+    },
+    "sectionsLegend": "Sezioni",
+    "sectionsHint": "Le sezioni senza contenuto vengono omesse automaticamente.",
+    "visible": "Mostra {name}",
+    "moveUp": "Sposta su {name}",
+    "moveDown": "Sposta giù {name}",
+    "alwaysShown": "Sempre visibile",
+    "preview": "Anteprima dal vivo",
+    "previewSession": "Keynote di apertura",
+    "previewBody": "Porte aperte alle nove. Il caffè lo offriamo noi.",
+    "reset": "Ripristina predefiniti",
+    "contrastWarn": "Contrasto basso per {pair}. La pagina lo corregge automaticamente per mantenere il testo leggibile.",
+    "pair": {
+      "text": "testo sullo sfondo delle sezioni",
+      "accent": "accento sullo sfondo delle sezioni",
+      "band": "testo sulla fascia di colore"
     }
   }
 }

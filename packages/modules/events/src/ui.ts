@@ -19,6 +19,25 @@ export {
 } from './domain/design.ts';
 export { type MdBlock, type MdInline, parseMarkdown } from './domain/markdown.ts';
 export { isPlatformKey, MAX_CATEGORY_NAME } from './domain/org-categories.ts';
+export {
+  contrast,
+  contrastIssues,
+  DEFAULT_PAGE_STYLE,
+  ensureContrast,
+  inkOn,
+  isDefaultPageStyle,
+  PAGE_SECTIONS,
+  type PageSection,
+  PageStyle,
+  pageStyleVars,
+  parsePageStyle,
+  REQUIRED_SECTIONS,
+  sanitizeHex,
+  sectionOrder,
+  TEXT_SCALE_FACTOR,
+  TEXT_SCALES,
+  type TextScale,
+} from './domain/page-style.ts';
 export type { SectionBody } from './domain/sections.ts';
 export { vanityProblem } from './domain/short-code.ts';
 export {

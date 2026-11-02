@@ -23,6 +23,7 @@ describe('event design options', () => {
       heroVideoUrl: null,
       heroVideoPoster: null,
       assistant: false,
+      page: null,
     });
     expect(parseEventDesign(JSON.stringify(d))).toEqual(d);
   });

@@ -20823,7 +20823,6 @@
     "aboutLink": "Sobre nosotros",
     "termsLink": "Términos del servicio",
     "cookiesLink": "Política de cookies",
-
     "refundLink": "Política de reembolsos",
     "legalEyebrow": "Legal",
     "lastUpdated": "Última actualización: {date} · versión {version}",
@@ -21025,6 +21024,50 @@
       "published": "Este idioma ya está publicado. Retira la publicación antes de reemplazarlo.",
       "tooLong": "Es demasiado largo para traducirlo de una vez (2.000 palabras como máximo).",
       "incomplete": "Termina primero este borrador: necesita todos los datos obligatorios, como la dirección postal."
+    }
+  },
+  "eventPage": {
+    "about": "Acerca de",
+    "venue": "Lugar",
+    "faq": "Preguntas frecuentes",
+    "reviews": "Reseñas",
+    "share": "Compartir",
+    "ctaHeading": "No te lo pierdas",
+    "showDetails": "Mostrar detalles de {title}",
+    "previous": "Ponentes anteriores",
+    "next": "Siguientes ponentes"
+  },
+  "pageStyle": {
+    "title": "Colores y diseño de la página",
+    "description": "Define los colores de tu marca, el tamaño del texto y qué secciones se muestran y en qué orden. Se comprueba el contraste para que el texto sea legible.",
+    "colorsLegend": "Colores",
+    "accent": "Acento de marca",
+    "accent2": "Segundo acento",
+    "band": "Banda de color",
+    "sectionBg": "Fondo de sección",
+    "text": "Color del texto",
+    "useDefault": "Predeterminado del tipo",
+    "textSizeLegend": "Tamaño del texto",
+    "scale": {
+      "small": "Pequeño",
+      "default": "Predeterminado",
+      "large": "Grande"
+    },
+    "sectionsLegend": "Secciones",
+    "sectionsHint": "Las secciones sin contenido se omiten automáticamente.",
+    "visible": "Mostrar {name}",
+    "moveUp": "Subir {name}",
+    "moveDown": "Bajar {name}",
+    "alwaysShown": "Siempre visible",
+    "preview": "Vista previa en vivo",
+    "previewSession": "Conferencia inaugural",
+    "previewBody": "Las puertas abren a las nueve. El café corre por nuestra cuenta.",
+    "reset": "Restablecer",
+    "contrastWarn": "Contraste bajo en {pair}. La página lo corrige automáticamente para que el texto sea legible.",
+    "pair": {
+      "text": "texto sobre el fondo de sección",
+      "accent": "acento sobre el fondo de sección",
+      "band": "texto sobre la banda de color"
     }
   }
 }

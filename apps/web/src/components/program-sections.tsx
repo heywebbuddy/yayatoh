@@ -96,7 +96,10 @@ export async function ProgramSections({
   images = {},
   liveSessions = [],
   exhibitorMap = false,
+  parts = ['agenda', 'speakers', 'exhibitors', 'sponsors'],
 }: {
+  /** Which parts to render (the event page renders its own agenda and speakers). */
+  parts?: readonly ('agenda' | 'speakers' | 'exhibitors' | 'sponsors')[];
   program: PublicProgramDto;
   slug: string;
   locale: string;
@@ -120,7 +123,7 @@ export async function ProgramSections({
   const days = groupByDay(program.sessions, timeZone);
   return (
     <>
-      {days.length > 0 ? (
+      {parts.includes('agenda') && days.length > 0 ? (
         <section
           id="agenda"
           aria-labelledby="agenda-heading"
@@ -158,7 +161,7 @@ export async function ProgramSections({
           ))}
         </section>
       ) : null}
-      {groupByRole(program.speakers).map((group, index) => (
+      {(parts.includes('speakers') ? groupByRole(program.speakers) : []).map((group, index) => (
         <section
           key={group.role}
           id={index === 0 ? 'speakers' : `speakers-${group.role}`}
@@ -207,7 +210,7 @@ export async function ProgramSections({
           </ul>
         </section>
       ))}
-      {program.exhibitors.length > 0 ? (
+      {parts.includes('exhibitors') && program.exhibitors.length > 0 ? (
         <section
           id="exhibitors"
           aria-labelledby="exhibitors-heading"
@@ -260,7 +263,7 @@ export async function ProgramSections({
           </ul>
         </section>
       ) : null}
-      {program.sponsorTiers.length > 0 ? (
+      {parts.includes('sponsors') && program.sponsorTiers.length > 0 ? (
         <section
           id="sponsors"
           aria-labelledby="sponsors-heading"

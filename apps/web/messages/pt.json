@@ -20823,7 +20823,6 @@
     "aboutLink": "Sobre nós",
     "termsLink": "Termos de serviço",
     "cookiesLink": "Política de cookies",
-
     "refundLink": "Política de reembolso",
     "legalEyebrow": "Legal",
     "lastUpdated": "Última atualização: {date} · versão {version}",
@@ -21025,6 +21024,50 @@
       "published": "Este idioma já está publicado. Retire a publicação antes de o substituir.",
       "tooLong": "É demasiado longo para traduzir de uma vez (2000 palavras no máximo).",
       "incomplete": "Termine primeiro este rascunho: precisa de todos os dados obrigatórios, como a morada postal."
+    }
+  },
+  "eventPage": {
+    "about": "Sobre",
+    "venue": "Local",
+    "faq": "Perguntas frequentes",
+    "reviews": "Avaliações",
+    "share": "Compartilhar",
+    "ctaHeading": "Não perca",
+    "showDetails": "Mostrar detalhes de {title}",
+    "previous": "Palestrantes anteriores",
+    "next": "Próximos palestrantes"
+  },
+  "pageStyle": {
+    "title": "Cores e layout da página",
+    "description": "Defina as cores da marca, o tamanho do texto e quais seções aparecem e em que ordem. O contraste é verificado para manter o texto legível.",
+    "colorsLegend": "Cores",
+    "accent": "Destaque da marca",
+    "accent2": "Segundo destaque",
+    "band": "Faixa de cor",
+    "sectionBg": "Fundo das seções",
+    "text": "Cor do texto",
+    "useDefault": "Padrão do tipo",
+    "textSizeLegend": "Tamanho do texto",
+    "scale": {
+      "small": "Pequeno",
+      "default": "Padrão",
+      "large": "Grande"
+    },
+    "sectionsLegend": "Seções",
+    "sectionsHint": "Seções sem conteúdo são omitidas automaticamente.",
+    "visible": "Mostrar {name}",
+    "moveUp": "Mover {name} para cima",
+    "moveDown": "Mover {name} para baixo",
+    "alwaysShown": "Sempre visível",
+    "preview": "Pré-visualização ao vivo",
+    "previewSession": "Keynote de abertura",
+    "previewBody": "Portas abertas às nove. O café é por nossa conta.",
+    "reset": "Restaurar padrão",
+    "contrastWarn": "Contraste baixo em {pair}. A página corrige automaticamente para manter o texto legível.",
+    "pair": {
+      "text": "texto sobre o fundo das seções",
+      "accent": "destaque sobre o fundo das seções",
+      "band": "texto sobre a faixa de cor"
     }
   }
 }

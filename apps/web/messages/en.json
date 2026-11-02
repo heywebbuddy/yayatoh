@@ -20823,7 +20823,6 @@
     "aboutLink": "About us",
     "termsLink": "Terms of service",
     "cookiesLink": "Cookie policy",
-
     "refundLink": "Refund policy",
     "legalEyebrow": "Legal",
     "lastUpdated": "Last updated {date} · version {version}",
@@ -21025,6 +21024,50 @@
       "published": "This language is already published. Unpublish it first to replace it.",
       "tooLong": "This is too long to translate at once (2,000 words at most).",
       "incomplete": "Finish this draft first: it needs everything required to save, such as the postal address."
+    }
+  },
+  "eventPage": {
+    "about": "About",
+    "venue": "Venue",
+    "faq": "FAQ",
+    "reviews": "Reviews",
+    "share": "Share",
+    "ctaHeading": "Don’t miss it",
+    "showDetails": "Show details for {title}",
+    "previous": "Previous speakers",
+    "next": "Next speakers"
+  },
+  "pageStyle": {
+    "title": "Page colours and layout",
+    "description": "Set your brand colours, text size and which sections show in what order. Colours are checked for contrast so text stays readable.",
+    "colorsLegend": "Colours",
+    "accent": "Brand accent",
+    "accent2": "Second accent",
+    "band": "Colour band",
+    "sectionBg": "Section background",
+    "text": "Text colour",
+    "useDefault": "Type default",
+    "textSizeLegend": "Text size",
+    "scale": {
+      "small": "Small",
+      "default": "Default",
+      "large": "Large"
+    },
+    "sectionsLegend": "Sections",
+    "sectionsHint": "Sections without content are left out automatically.",
+    "visible": "Show {name}",
+    "moveUp": "Move {name} up",
+    "moveDown": "Move {name} down",
+    "alwaysShown": "Always shown",
+    "preview": "Live preview",
+    "previewSession": "Opening keynote",
+    "previewBody": "Doors open at nine. Coffee is on us.",
+    "reset": "Reset to default",
+    "contrastWarn": "Low contrast for {pair}. The page corrects it automatically so text stays readable.",
+    "pair": {
+      "text": "text on the section background",
+      "accent": "the accent on the section background",
+      "band": "text on the colour band"
     }
   }
 }
