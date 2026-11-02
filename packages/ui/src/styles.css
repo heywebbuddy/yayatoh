@@ -1325,12 +1325,7 @@
   --ev-tone-3: var(--color-warning-dot);
 }
 [data-ev-page] :is(section, div)[id] {
-  scroll-margin-top: 128px;
-}
-@media (min-width: 1024px) {
-  [data-ev-page] :is(section, div)[id] {
-    scroll-margin-top: 92px;
-  }
+  scroll-margin-top: 140px;
 }
 [data-ev-page] [id][tabindex="-1"]:focus {
   outline: none;
