@@ -50,12 +50,12 @@ export function SpeakerCard({
         {portrait}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-black/15 to-transparent"
+          className="pointer-events-none absolute inset-0 hidden bg-linear-to-t sm:block from-black/80 via-black/15 to-transparent"
         />
         {bio ? (
           <div
             id={bioId}
-            className="ev-speaker-bio absolute inset-0 z-10 flex flex-col gap-3 bg-black/80 p-4 pb-28 text-white sm:p-5 sm:pb-32 backdrop-blur-sm"
+            className="ev-speaker-bio absolute inset-0 z-10 flex flex-col gap-3 bg-black/80 p-4 text-white sm:p-5 sm:pb-32 backdrop-blur-sm"
           >
             <p className="m-0 line-clamp-4 text-caption leading-relaxed sm:line-clamp-6 sm:text-body">
               {bio}
@@ -63,41 +63,43 @@ export function SpeakerCard({
             <span className="text-caption font-bold text-white/80">{profileLabel}</span>
           </div>
         ) : null}
-        <div className="absolute inset-x-0 bottom-0 z-20 flex items-end gap-2 p-3 text-white sm:gap-3 sm:p-5">
-          <div className="flex min-w-0 grow flex-col gap-1">
-            <span className="ev-speaker-role max-w-full self-start truncate rounded-pill px-2.5 py-1 text-[11px] font-extrabold tracking-[0.06em] whitespace-nowrap uppercase">
-              {role}
-            </span>
-            <Link
-              href={href}
-              className={cx(
-                'leading-tight font-extrabold tracking-[-0.02em] text-white after:absolute after:inset-0 after:z-0 focus-visible:outline-none',
-                featured
-                  ? 'text-[length:calc(28px*var(--ev-scale,1))]'
-                  : 'text-[length:calc(20px*var(--ev-scale,1))]',
-              )}
-            >
-              {name}
-            </Link>
-            {meta ? <span className="line-clamp-2 text-caption text-white/80">{meta}</span> : null}
-          </div>
-          {bio ? (
-            <button
-              type="button"
-              aria-expanded={open}
-              aria-controls={bioId}
-              aria-label={bioLabel}
-              onClick={() => setOpen((v) => !v)}
-              className="relative z-30 flex size-10 shrink-0 sm:size-11 cursor-pointer items-center justify-center rounded-full ev-speaker-btn transition-transform hover:scale-105 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
-            >
-              <Plus
-                aria-hidden="true"
-                className="size-5 transition-transform group-data-[open]:rotate-45 motion-reduce:transition-none"
-                strokeWidth={2.6}
-              />
-            </button>
+      </div>
+      <div className="z-20 flex items-end gap-2 p-3 text-ink sm:absolute sm:inset-x-0 sm:bottom-0 sm:gap-3 sm:p-5 sm:text-white">
+        <div className="flex min-w-0 grow flex-col gap-1">
+          <span className="ev-speaker-role max-w-full self-start truncate rounded-pill px-2.5 py-1 text-[11px] font-extrabold tracking-[0.06em] whitespace-nowrap uppercase">
+            {role}
+          </span>
+          <Link
+            href={href}
+            className={cx(
+              'leading-tight font-extrabold tracking-[-0.02em] text-ink sm:text-white after:absolute after:inset-0 after:z-0 focus-visible:outline-none',
+              featured
+                ? 'text-[length:calc(28px*var(--ev-scale,1))]'
+                : 'text-[length:calc(20px*var(--ev-scale,1))]',
+            )}
+          >
+            {name}
+          </Link>
+          {meta ? (
+            <span className="line-clamp-2 text-caption text-ink-2 sm:text-white/80">{meta}</span>
           ) : null}
         </div>
+        {bio ? (
+          <button
+            type="button"
+            aria-expanded={open}
+            aria-controls={bioId}
+            aria-label={bioLabel}
+            onClick={() => setOpen((v) => !v)}
+            className="relative z-30 flex size-10 shrink-0 sm:size-11 cursor-pointer items-center justify-center rounded-full border border-line ev-speaker-btn transition-transform sm:border-transparent hover:scale-105 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+          >
+            <Plus
+              aria-hidden="true"
+              className="size-5 transition-transform group-data-[open]:rotate-45 motion-reduce:transition-none"
+              strokeWidth={2.6}
+            />
+          </button>
+        ) : null}
       </div>
     </li>
   );

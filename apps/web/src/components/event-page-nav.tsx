@@ -5,6 +5,14 @@ import { useEffect, useRef, useState } from 'react';
 
 export type EventNavItem = { id: string; label: string };
 
+/** A sticky block (the pass sidebar) stays in the reading band, so it must not outrank the page's sections. */
+const insideSticky = (el: HTMLElement) => {
+  for (let n: HTMLElement | null = el; n && n.tagName !== 'MAIN'; n = n.parentElement) {
+    if (getComputedStyle(n).position === 'sticky') return true;
+  }
+  return false;
+};
+
 const reducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -31,7 +39,12 @@ export function EventPageNav({ items, label }: { items: readonly EventNavItem[];
           else visible.delete(e.target.id);
         }
         // The highest section in the reading band wins (page order, not observer order).
-        const first = items.find((i) => visible.has(i.id));
+        const inBand = items.filter((i) => visible.has(i.id));
+        const first =
+          inBand.find((i) => {
+            const el = document.getElementById(i.id);
+            return el !== null && !insideSticky(el);
+          }) ?? inBand[0];
         if (first) setActive(first.id);
       },
       // The band just below the sticky bar: a section is "current" once its top passes it.

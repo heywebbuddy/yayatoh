@@ -329,8 +329,8 @@ export async function ExhibitorGrid({
               key={x.id}
               className="ev-lift group relative flex flex-col gap-4 rounded-card border border-line bg-surface p-5"
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex h-16 w-32 items-center justify-start">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="flex h-16 w-32 max-w-full items-center justify-start">
                   {logo ? (
                     <MediaPicture
                       image={logo}
