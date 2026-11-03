@@ -157,11 +157,17 @@ export async function AccountSignInPage({
         ) : null}
         <div className="flex flex-wrap justify-center gap-4 text-caption">
           {!organizer ? (
-            <Link href={registration ? '/sign-in' : '/sign-up'} className="underline">
+            <Link
+              href={registration ? '/sign-in' : '/sign-up'}
+              className="inline-flex min-h-10 items-center rounded-pill px-3.5 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink"
+            >
               {flow(registration ? 'signInLink' : 'signUpLink')}
             </Link>
           ) : null}
-          <Link href={organizer ? '/sign-in' : '/o/sign-in'} className="underline">
+          <Link
+            href={organizer ? '/sign-in' : '/o/sign-in'}
+            className="inline-flex min-h-10 items-center rounded-pill px-3.5 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink"
+          >
             {flow(organizer ? 'attendeeSignInTitle' : 'organizerSignInTitle')}
           </Link>
         </div>

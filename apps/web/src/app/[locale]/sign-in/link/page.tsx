@@ -64,7 +64,10 @@ export default async function LinkProofPage({
           ) : (
             <div className="flex flex-col gap-4">
               <p className="text-body text-ink-2">{t('expired')}</p>
-              <Link href="/sign-in" className="self-start text-body underline underline-offset-4">
+              <Link
+                href="/sign-in"
+                className="inline-flex min-h-10 items-center rounded-pill px-3.5 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink self-start"
+              >
                 {t('startOver')}
               </Link>
             </div>

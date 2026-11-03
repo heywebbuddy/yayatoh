@@ -101,7 +101,7 @@ export function GoToMyTickets({ label }: { label: string }) {
   useGoWhenDone(href);
   return (
     <main id="main" className="mx-auto flex min-h-dvh w-full max-w-xl flex-col gap-6 px-4 py-12 md:px-6">
-      <a href={href} className="text-body underline underline-offset-2">
+      <a href={href} className="text-body font-bold hover:text-ink">
         {label}
       </a>
     </main>

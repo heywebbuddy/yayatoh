@@ -207,7 +207,7 @@ export function SignInForm({
       {mode === 'password' ? (
         <Link
           href="/forgot-password"
-          className="inline-flex min-h-6 items-center self-center text-caption underline underline-offset-4"
+          className="inline-flex min-h-10 items-center rounded-pill px-3.5 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink self-center"
         >
           {t('forgot')}
         </Link>
