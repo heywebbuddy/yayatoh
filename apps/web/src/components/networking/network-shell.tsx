@@ -1,7 +1,7 @@
-import { cx, Label, PageHeader, TabCount, Tabs, tabClass } from '@yayatoh/ui';
-import { ArrowLeft } from 'lucide-react';
+import { cx, TabCount, Tabs, tabClass } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { networkPath } from '@/server/networking.ts';
 import { NetworkToasts } from './network-forms.tsx';
@@ -48,15 +48,14 @@ export async function NetworkShell({
   ];
   return (
     <NetworkToasts closeLabel={t('close')}>
-      <main id="main" className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col gap-6 px-4 py-8 sm:px-6">
-        <Link
-          href={`/events/${slug}`}
-          className="inline-flex min-h-11 items-center gap-2 self-start text-body font-bold text-ink-2 underline-offset-2 hover:underline"
-        >
-          <ArrowLeft aria-hidden="true" className="size-4 rtl:-scale-x-100" />
-          {t('backToEvent', { event: eventName })}
-        </Link>
-        <PageHeader eyebrow={<Label>{eventName}</Label>} title={title} description={description} />
+      <EventSubpageFrame
+        slug={slug}
+        eventName={eventName}
+        eyebrow={eventName}
+        title={title}
+        description={description}
+        width="max-w-4xl"
+      >
         {active ? (
           <Tabs label={t('sections')}>
             {tabs.map((tab) => (
@@ -82,7 +81,7 @@ export async function NetworkShell({
           </Tabs>
         ) : null}
         {children}
-      </main>
+      </EventSubpageFrame>
     </NetworkToasts>
   );
 }

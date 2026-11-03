@@ -3,6 +3,7 @@ import { type PublicMediaDto, publicProgramMedia } from '@yayatoh/media';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { BoothMap } from '@/components/booth-map.tsx';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 import { Markdown } from '@/components/markdown.tsx';
 import { MediaPicture } from '@/components/media-picture.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -34,15 +35,7 @@ export async function PublicExhibitorMapView({ slug }: { slug: string }) {
   const t = await getTranslations('exhibitorMap');
   const nameOf = (id: string) => map.exhibitors.find((x) => x.id === id)?.name ?? '';
   return (
-    <main id="main" className="mx-auto flex min-h-dvh max-w-4xl flex-col gap-6 bg-white px-6 py-10">
-      <nav aria-label={t('breadcrumb')}>
-        <Link
-          href={`/events/${slug}`}
-          className="inline-flex min-h-6 items-center text-caption underline underline-offset-2"
-        >
-          {t('back', { name: pub.name })}
-        </Link>
-      </nav>
+    <EventSubpageFrame slug={slug} eventName={pub.name} width="max-w-6xl">
       <h1 className="text-[32px] leading-tight font-light tracking-[-0.03em]">
         {t('title', { name: pub.name })}
       </h1>
@@ -124,6 +117,6 @@ export async function PublicExhibitorMapView({ slug }: { slug: string }) {
           </table>
         </section>
       </section>
-    </main>
+    </EventSubpageFrame>
   );
 }

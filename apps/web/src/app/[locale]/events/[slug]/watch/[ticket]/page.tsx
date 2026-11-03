@@ -6,6 +6,7 @@ import { MonitorPlay } from 'lucide-react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { ports } from '@/server/ports.ts';
@@ -48,7 +49,7 @@ export default async function WatchPage({ params }: Params) {
     timeZoneName: 'short',
   });
   return (
-    <main id="main" className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col gap-6 px-4 py-10 sm:px-6">
+    <EventSubpageFrame slug={slug} width="max-w-3xl">
       <PageHeader
         eyebrow={<Label>{page.eventName}</Label>}
         title={t('title')}
@@ -83,6 +84,6 @@ export default async function WatchPage({ params }: Params) {
           ))}
         </ul>
       )}
-    </main>
+    </EventSubpageFrame>
   );
 }

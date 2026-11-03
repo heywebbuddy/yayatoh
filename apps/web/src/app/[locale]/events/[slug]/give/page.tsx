@@ -54,7 +54,7 @@ export default async function GivePage({ params, searchParams }: Params) {
   const chip =
     'inline-flex min-h-11 items-center rounded-pill border border-line bg-surface px-4 text-body font-bold text-ink-2 glass transition-colors duration-150 hover:border-line-strong hover:text-ink aria-[current=page]:border-transparent aria-[current=page]:bg-tag aria-[current=page]:text-tag-ink';
   return (
-    <GiveFrame organizer={ev.organizerName}>
+    <GiveFrame slug={slug}>
       <GiveHero>
         <Label tone="inverse">{ev.name}</Label>
         <h1 className="m-0 text-[34px] leading-[1.05] font-extrabold tracking-[-0.04em] md:text-title">

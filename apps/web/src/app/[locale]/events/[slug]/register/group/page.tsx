@@ -5,6 +5,7 @@ import { EmptyState, filterChipClass, Label, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { groupAction } from './actions.ts';
@@ -35,10 +36,7 @@ export default async function GroupRegisterPage({ params, searchParams }: Params
     label: `${o.typeName} · ${o.itemName} · ${formatMoney(money(o.allInMinor, o.currency), locale).replace(/\.00$/, '')}`,
   }));
   return (
-    <main
-      id="main"
-      className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col gap-6 px-4 py-10 sm:px-6 sm:py-16"
-    >
+    <EventSubpageFrame slug={slug} card width="max-w-3xl">
       <PageHeader eyebrow={<Label>{ev.name}</Label>} title={t('title')} description={t('description')} />
       {passes.length === 0 ? (
         <EmptyState title={t('emptyTitle')} description={t('emptyDescription')} />
@@ -69,6 +67,6 @@ export default async function GroupRegisterPage({ params, searchParams }: Params
       >
         {t('backToRegister')}
       </Link>
-    </main>
+    </EventSubpageFrame>
   );
 }

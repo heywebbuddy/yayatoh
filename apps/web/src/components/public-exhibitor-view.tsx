@@ -4,11 +4,11 @@ import { publicExhibitor } from '@yayatoh/program';
 import { Mail, Phone } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 import { Markdown } from '@/components/markdown.tsx';
 import { MediaPicture } from '@/components/media-picture.tsx';
 import { ProgramDocumentLinks } from '@/components/program-document-links.tsx';
 import { VideoEmbed } from '@/components/video-embed.tsx';
-import { Link } from '@/i18n/navigation.ts';
 import { currentAccess } from '@/server/visitor.ts';
 
 /**
@@ -44,15 +44,14 @@ export async function PublicExhibitorView({
   const t = await getTranslations('publicEvent');
   const booth = x.boothNumbers.length ? x.boothNumbers.join(', ') : x.boothLabel;
   return (
-    <main id="main" className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 bg-surface px-6 py-10">
-      <nav aria-label={t('breadcrumb')}>
-        <Link
-          href={`/events/${slug}#exhibitors`}
-          className="inline-flex min-h-6 items-center text-caption underline underline-offset-2"
-        >
-          {t('backToEvent', { name: pub.name })}
-        </Link>
-      </nav>
+    <EventSubpageFrame
+      slug={slug}
+      eventName={pub.name}
+      backHref={`/events/${slug}#exhibitors`}
+      card
+      width="max-w-4xl"
+      {...(orgId ? { siteName: pub.organizerName } : {})}
+    >
       <header className="flex flex-col gap-3">
         {logo ? (
           <MediaPicture
@@ -130,6 +129,6 @@ export async function PublicExhibitorView({
         </section>
       ) : null}
       <ProgramDocumentLinks docs={docs} heading={t('brochures')} />
-    </main>
+    </EventSubpageFrame>
   );
 }

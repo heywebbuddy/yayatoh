@@ -6,6 +6,7 @@ import { Alert, buttonClass, Label, PageHeader, StatusPill } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 import { INVOICE_TONE } from '@/components/invoice-panel.tsx';
 import { InvoicePayForm } from '@/components/invoice-pay-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -62,10 +63,7 @@ export default async function InvoicePage({ params, searchParams }: Params) {
     [t('panel.balance'), fmt(inv.balanceMinor)],
   ];
   return (
-    <main
-      id="main"
-      className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col gap-6 px-4 py-10 sm:px-6 sm:py-16"
-    >
+    <EventSubpageFrame slug={slug} card width="max-w-3xl">
       <PageHeader
         eyebrow={<Label>{ev.name}</Label>}
         title={t('public.title', { label: inv.label })}
@@ -164,6 +162,6 @@ export default async function InvoicePage({ params, searchParams }: Params) {
       >
         {t('public.backToEvent')}
       </Link>
-    </main>
+    </EventSubpageFrame>
   );
 }

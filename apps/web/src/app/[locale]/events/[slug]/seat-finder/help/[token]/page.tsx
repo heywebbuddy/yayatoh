@@ -5,6 +5,7 @@ import { buttonClass, Card, Label, PageHeader, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { RefreshStatus } from '@/components/assistance-guest.tsx';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { ports } from '@/server/ports.ts';
 
@@ -43,7 +44,7 @@ export default async function GuestHelpStatusPage({
   const t = await getTranslations('assistance');
   const when = new Intl.DateTimeFormat(locale, { timeStyle: 'short', timeZone: ev.timezone });
   return (
-    <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-4 py-10 sm:px-6">
+    <EventSubpageFrame slug={slug} width="max-w-3xl">
       <PageHeader
         eyebrow={<Label>{ev.name}</Label>}
         title={t('guest.statusTitle', { number: status.number })}
@@ -65,6 +66,6 @@ export default async function GuestHelpStatusPage({
           {t('guest.back')}
         </Link>
       </div>
-    </main>
+    </EventSubpageFrame>
   );
 }

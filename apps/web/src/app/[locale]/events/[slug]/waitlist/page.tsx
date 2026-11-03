@@ -7,6 +7,7 @@ import { EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 import { WaitlistJoinForm } from '@/components/waitlist-join-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { pageLocale } from '@/server/locale.ts';
@@ -73,10 +74,7 @@ export default async function WaitlistJoinPage({ params, searchParams }: Params)
       }).format(chosen.startsAt)
     : null;
   return (
-    <main
-      id="main"
-      className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col gap-6 px-4 py-10 sm:px-6 sm:py-16"
-    >
+    <EventSubpageFrame slug={slug} card width="max-w-3xl">
       <PageHeader
         eyebrow={<Label>{ev.name}</Label>}
         title={t('joinTitle')}
@@ -98,6 +96,6 @@ export default async function WaitlistJoinPage({ params, searchParams }: Params)
       >
         {t('backToEvent')}
       </Link>
-    </main>
+    </EventSubpageFrame>
   );
 }

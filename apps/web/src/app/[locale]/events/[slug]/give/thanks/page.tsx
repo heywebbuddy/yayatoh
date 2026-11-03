@@ -52,7 +52,7 @@ export default async function GiveThanksPage({
     </div>
   );
   return (
-    <GiveFrame organizer={ev.organizerName}>
+    <GiveFrame slug={slug}>
       {receipt.status === 'paid' ? (
         <GiveHero>
           <span aria-hidden="true" className={cx(icon, 'mb-1 bg-white/15')}>

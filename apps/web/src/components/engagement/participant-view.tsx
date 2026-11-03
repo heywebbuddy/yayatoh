@@ -94,7 +94,7 @@ export function ParticipantView({
   ];
   const questions = publicOrder(state.questions, state.stage.pinnedQuestionId);
   return (
-    <main id="main" className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col gap-8 px-4 py-10 sm:px-6">
+    <div className="flex flex-col gap-8">
       <PageHeader
         eyebrow={<Label>{eventName}</Label>}
         title={sessionTitle}
@@ -164,7 +164,7 @@ export function ParticipantView({
         <ArrowLeft aria-hidden="true" className="rtl:-scale-x-100" />
         {t('participant.backToEvent')}
       </Link>
-    </main>
+    </div>
   );
 }
 

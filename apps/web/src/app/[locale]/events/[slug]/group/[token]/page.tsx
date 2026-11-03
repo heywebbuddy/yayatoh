@@ -5,6 +5,7 @@ import { Label, PageHeader, StatusPill } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getFormatter, getTranslations } from 'next-intl/server';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 import { ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { pageLocale } from '@/server/locale.ts';
@@ -60,10 +61,7 @@ export default async function GroupPage({ params }: Params) {
     not_confirmed: t('errors.not_confirmed'),
   };
   return (
-    <main
-      id="main"
-      className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col gap-6 px-4 py-10 sm:px-6 sm:py-16"
-    >
+    <EventSubpageFrame slug={slug} card width="max-w-3xl">
       <PageHeader
         eyebrow={<Label>{ev.name}</Label>}
         title={t('title')}
@@ -119,6 +117,6 @@ export default async function GroupPage({ params }: Params) {
       >
         {ta('backToEvent')}
       </Link>
-    </main>
+    </EventSubpageFrame>
   );
 }

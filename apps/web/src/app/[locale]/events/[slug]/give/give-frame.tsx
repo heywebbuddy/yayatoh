@@ -1,42 +1,26 @@
 import { cx } from '@yayatoh/ui';
 import type { ReactNode } from 'react';
-import { ThemeSwitch } from '@/components/theme-switch.tsx';
-import { pageTheme } from '@/server/theme.ts';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 
 /** A public card on the giving pages, as on the v2 public event page (ADR 0022). */
-export const giveCard =
-  'flex flex-col gap-4 rounded-panel border border-line bg-surface p-5 elevation-card glass';
+export const giveCard = 'ev-card flex flex-col gap-4 rounded-card p-5 md:p-7';
 
 /**
- * The giving pages' frame (ADR 0022, like the public event page), phone-first: a floating header
- * bar with the organizer and the theme switch, then one column.
+ * The giving pages' frame: the event sub-page frame (site top bar and footer, the organizer's page
+ * design, a way back to the event), phone-first in one column.
  */
-export async function GiveFrame({ organizer, children }: { organizer: string; children: ReactNode }) {
-  const theme = await pageTheme();
-  const initials = organizer
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0]?.toUpperCase() ?? '')
-    .join('');
+export async function GiveFrame({
+  slug,
+  children,
+}: {
+  slug: string;
+  organizer?: string;
+  children: ReactNode;
+}) {
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-xl flex-col gap-5 px-4 pt-3 pb-12 sm:px-5 sm:pt-5">
-      <header className="flex items-center gap-3 rounded-[22px] border border-line bg-surface p-2.5 ps-4 elevation-card glass">
-        <span
-          aria-hidden="true"
-          className="flex size-[34px] shrink-0 items-center justify-center rounded-[11px] bg-brand-strong text-[13px] font-extrabold text-white"
-        >
-          {initials}
-        </span>
-        <span className="min-w-0 grow truncate text-[17px] font-extrabold tracking-[-0.02em] text-ink">
-          {organizer}
-        </span>
-        <ThemeSwitch initial={theme} />
-      </header>
-      <main id="main" className="flex flex-col gap-5">
-        {children}
-      </main>
-    </div>
+    <EventSubpageFrame slug={slug} width="max-w-xl">
+      {children}
+    </EventSubpageFrame>
   );
 }
 
@@ -45,7 +29,7 @@ export function GiveHero({ children, className }: { children: ReactNode; classNa
   return (
     <section
       className={cx(
-        'relative isolate flex flex-col gap-3 overflow-hidden rounded-[32px] bg-hero px-6 pt-10 pb-7 text-white elevation-card',
+        'relative isolate flex flex-col gap-3 overflow-hidden rounded-card bg-hero px-6 pt-10 pb-7 text-white elevation-card',
         className,
       )}
     >

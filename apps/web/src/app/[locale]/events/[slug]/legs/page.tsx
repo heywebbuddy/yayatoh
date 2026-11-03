@@ -8,6 +8,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { CheckoutForm } from '@/components/checkout-form.tsx';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { pageLocale } from '@/server/locale.ts';
 import { checkoutAction, previewOrderAction } from '../actions.ts';
@@ -79,7 +80,7 @@ export default async function LegsPage({ params }: Params) {
     })
   )?.fields;
   return (
-    <main id="main" className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 px-6 py-16">
+    <EventSubpageFrame slug={slug} card width="max-w-3xl">
       <PageHeader eyebrow={<Label>{ev.name}</Label>} title={t('title')} description={t('description')} />
       <Link href={`/events/${slug}`} className="self-start text-body underline underline-offset-2">
         {t('back')}
@@ -97,6 +98,6 @@ export default async function LegsPage({ params }: Params) {
           preview={previewOrderAction.bind(null, slug)}
         />
       )}
-    </main>
+    </EventSubpageFrame>
   );
 }

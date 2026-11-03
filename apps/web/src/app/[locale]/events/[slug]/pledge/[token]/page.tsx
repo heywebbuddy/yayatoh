@@ -56,7 +56,7 @@ export default async function PledgePage({
   const tone =
     p.status === 'paid' || p.status === 'paid_offline' ? 'success' : settled ? 'neutral' : 'waiting';
   return (
-    <GiveFrame organizer={ev.organizerName}>
+    <GiveFrame slug={slug}>
       <GiveHero>
         <Label tone="inverse">{ev.name}</Label>
         <h1 className="m-0 text-[34px] leading-[1.05] font-extrabold tracking-[-0.04em] md:text-title">

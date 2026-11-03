@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { GuestHelpForm } from '@/components/assistance-guest.tsx';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { checkHelpTicket } from '@/server/assistance.ts';
 import { askForHelpAction } from './actions.ts';
@@ -47,7 +48,7 @@ export default async function GuestHelpPage({
     </Link>
   );
   return (
-    <main id="main" className="mx-auto flex min-h-dvh max-w-xl flex-col gap-6 px-4 py-10 sm:px-6">
+    <EventSubpageFrame slug={slug} width="max-w-3xl">
       <PageHeader eyebrow={<Label>{ev.name}</Label>} title={t('title')} description={t('description')} />
       {!check ? (
         <EmptyState title={t('closedTitle')} description={t('closedDescription')} />
@@ -57,6 +58,6 @@ export default async function GuestHelpPage({
         <GuestHelpForm action={askForHelpAction.bind(null, slug, token)} />
       )}
       {back}
-    </main>
+    </EventSubpageFrame>
   );
 }

@@ -32,7 +32,7 @@ export async function CardPage(props: {
   const mine = card && card.eventId === props.eventId ? card : null;
   const open = giving.available && giving.campaigns.length > 0;
   return (
-    <GiveFrame organizer={props.organizer}>
+    <GiveFrame slug={props.slug}>
       <GiveHero>
         <Label tone="inverse">{props.eventName}</Label>
         <h1 className="m-0 text-[34px] leading-[1.05] font-extrabold tracking-[-0.04em] md:text-title">

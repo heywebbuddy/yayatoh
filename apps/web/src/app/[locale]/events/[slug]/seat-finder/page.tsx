@@ -5,6 +5,7 @@ import { Alert, buttonClass, EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 import { GuestSeatFinder } from '@/components/guest-seat-finder.tsx';
 import { SeatFinder } from '@/components/seat-finder.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -92,7 +93,7 @@ export default async function SeatFinderPage({
   );
   if (!target || !map)
     return (
-      <main id="main" className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 px-4 py-10 sm:px-6">
+      <EventSubpageFrame slug={slug} width="max-w-3xl">
         {header}
         <EmptyState
           title={t('seatFinder.closedTitle')}
@@ -104,7 +105,7 @@ export default async function SeatFinderPage({
           }
         />
         {help}
-      </main>
+      </EventSubpageFrame>
     );
   const [viewId, codeId] =
     map.mode === 'code'
@@ -123,7 +124,7 @@ export default async function SeatFinderPage({
     : null;
   const initialStep = codeId ? 'code' : 'email';
   return (
-    <main id="main" className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 px-4 py-10 sm:px-6">
+    <EventSubpageFrame slug={slug} width="max-w-3xl">
       {header}
       {dates.length > 1 ? (
         <nav aria-label={t('seatingDates.finderLabel')} className="flex flex-col gap-1.5">
@@ -173,6 +174,6 @@ export default async function SeatFinderPage({
       >
         {t('seatFinder.toEvent')}
       </Link>
-    </main>
+    </EventSubpageFrame>
   );
 }

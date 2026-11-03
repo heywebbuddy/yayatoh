@@ -4,6 +4,7 @@ import { EmptyState, Label, PageHeader } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatMoment } from '@/lib/portal-format.ts';
 import { zoneLabel } from '@/lib/zone-label.ts';
@@ -34,10 +35,7 @@ export default async function CfpPublicPage({
   if (!target || !ev || !call) notFound();
   const t = await getTranslations('cfpPublic');
   return (
-    <main
-      id="main"
-      className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col gap-6 px-4 py-10 sm:px-6 sm:py-16"
-    >
+    <EventSubpageFrame slug={slug} card width="max-w-3xl">
       <PageHeader
         eyebrow={<Label>{ev.name}</Label>}
         title={t('title')}
@@ -62,6 +60,6 @@ export default async function CfpPublicPage({
       >
         {t('backToEvent')}
       </Link>
-    </main>
+    </EventSubpageFrame>
   );
 }

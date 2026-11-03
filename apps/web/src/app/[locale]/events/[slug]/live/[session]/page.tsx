@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { FeedbackPrompt } from '@/components/engagement/feedback-prompt.tsx';
 import { ParticipantView } from '@/components/engagement/participant-view.tsx';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 import { localizedPath } from '@/lib/seo/urls.ts';
 import { liveChannelUrl, participantKeyFor, participantName, viewerAccount } from '@/server/engagement.ts';
 import { pageLocale } from '@/server/locale.ts';
@@ -55,27 +56,29 @@ export default async function LiveSessionPage({ params }: Params) {
   });
   const here = localizedPath(locale, `/events/${slug}/live/${session}`);
   return (
-    <ParticipantView
-      feedback={
-        prompt && prompt.state !== 'none' ? (
-          <FeedbackPrompt
-            state={prompt.state}
-            title={prompt.title ?? ''}
-            signInHref={`${localizedPath(locale, '/sign-in')}?next=${encodeURIComponent(here)}`}
-            open={openFeedbackAction.bind(null, slug, session)}
-          />
-        ) : null
-      }
-      eventName={live.eventName}
-      eventHref={`/events/${slug}`}
-      sessionTitle={live.sessionTitle}
-      initial={live.state}
-      me={me}
-      defaultName={await participantName()}
-      streamUrl={liveChannelUrl(target.orgId, target.eventId, session)}
-      vote={voteAction.bind(null, slug, session)}
-      ask={askAction.bind(null, slug, session)}
-      upvote={upvoteAction.bind(null, slug, session)}
-    />
+    <EventSubpageFrame slug={slug} eventName={live.eventName} width="max-w-3xl">
+      <ParticipantView
+        feedback={
+          prompt && prompt.state !== 'none' ? (
+            <FeedbackPrompt
+              state={prompt.state}
+              title={prompt.title ?? ''}
+              signInHref={`${localizedPath(locale, '/sign-in')}?next=${encodeURIComponent(here)}`}
+              open={openFeedbackAction.bind(null, slug, session)}
+            />
+          ) : null
+        }
+        eventName={live.eventName}
+        eventHref={`/events/${slug}`}
+        sessionTitle={live.sessionTitle}
+        initial={live.state}
+        me={me}
+        defaultName={await participantName()}
+        streamUrl={liveChannelUrl(target.orgId, target.eventId, session)}
+        vote={voteAction.bind(null, slug, session)}
+        ask={askAction.bind(null, slug, session)}
+        upvote={upvoteAction.bind(null, slug, session)}
+      />
+    </EventSubpageFrame>
   );
 }

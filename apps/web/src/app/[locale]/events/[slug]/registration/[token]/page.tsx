@@ -5,6 +5,7 @@ import { Alert, Label, PageHeader, StatusPill } from '@yayatoh/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { EventSubpageFrame } from '@/components/event-subpage-frame.tsx';
 import { ProgramForm } from '@/components/program-form.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { pageLocale } from '@/server/locale.ts';
@@ -72,10 +73,7 @@ export default async function RegistrantPage({ params }: Params) {
     g.items.map((i) => ({ value: `${g.id}:${i.id}`, label: `${g.name} · ${i.name}` })),
   );
   return (
-    <main
-      id="main"
-      className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col gap-6 px-4 py-10 sm:px-6 sm:py-16"
-    >
+    <EventSubpageFrame slug={slug} card width="max-w-3xl">
       <PageHeader
         eyebrow={<Label>{ev.name}</Label>}
         title={t(`title.${r.status}`)}
@@ -177,6 +175,6 @@ export default async function RegistrantPage({ params }: Params) {
       >
         {t('backToEvent')}
       </Link>
-    </main>
+    </EventSubpageFrame>
   );
 }
