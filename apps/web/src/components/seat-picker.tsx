@@ -234,7 +234,20 @@ export function SeatPicker({
     });
   // A seat taken meanwhile (a live change, or a refreshed map) drops out of the selection.
   const selected = useMemo(() => new Set([...picked].filter((id) => available.has(id))), [picked, available]);
-  const labelOf = useCallback((id: string) => bySeat.get(id)?.label ?? '', [bySeat]);
+  // The section each seat sits in, so a seat reads "Section · Row · Seat" as a ticket does: in its
+  // tip, in "Your seats", and in what screen readers announce.
+  const sectionOfSeat = useMemo(
+    () => new Map(regions.flatMap((r) => r.seatIds.map((id) => [id, r.label] as const))),
+    [regions],
+  );
+  const labelOf = useCallback(
+    (id: string) => {
+      const label = bySeat.get(id)?.label ?? '';
+      const section = sectionOfSeat.get(id);
+      return section && label ? `${section} · ${label}` : label;
+    },
+    [bySeat, sectionOfSeat],
+  );
   const pickedRef = useRef(picked);
   pickedRef.current = picked;
 
@@ -316,7 +329,7 @@ export function SeatPicker({
       const seat = bySeat.get(id);
       if (!seat) return null;
       return {
-        title: seat.label,
+        title: labelOf(id),
         detail: available.has(id)
           ? seat.accessible
             ? `${prices[seat.ticketTypeId] ?? ''} · ${t('accessible')}`
@@ -324,7 +337,7 @@ export function SeatPicker({
           : t('taken'),
       };
     },
-    [bySeat, available, prices, t],
+    [bySeat, labelOf, available, prices, t],
   );
   const groups: Group[] = useMemo(
     () =>
@@ -508,6 +521,8 @@ export function SeatPicker({
               muted={muted}
               fills={fills}
               tipOf={tipOf}
+              // At checkout the map may run edge to edge on a phone; the box office keeps it in its card.
+              bleed={context === 'checkout'}
               onToggle={onToggle}
               onToggleTable={onToggleTable}
               onSection={setActiveSection}

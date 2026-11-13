@@ -29,9 +29,12 @@ const OVERVIEW_BELOW_PX = 9;
 /** A focused section opens at this scale at least, so its seats show and can be tapped. */
 const SECTION_SCALE = (OVERVIEW_BELOW_PX + 1) / SEAT_R;
 const CLOSEST_SCALE = 16 / SEAT_R;
-/** A section's name needs this much width on screen (px), its price and seats left this much. */
-const NAME_WIDTH_PX = 44;
-const DETAIL_WIDTH_PX = 96;
+/** A section shape's name and price lines (px); a narrow shape's name shrinks to the minimum, then goes. */
+const SHAPE_NAME_PX = 13;
+const SHAPE_NAME_MIN_PX = 9;
+const SHAPE_DETAIL_PX = 11;
+/** Below this width an edge-to-edge map is a phone's, and its height is capped (see the map). */
+const PHONE_MAP_PX = 640;
 const TIP_OFFSET_PX = 14;
 /** The strip a focused section keeps clear of the zoom buttons where they float over the map (px). */
 const CONTROLS_GUTTER_PX = 56;
@@ -69,6 +72,7 @@ export default function SeatMapCanvas({
   muted,
   fills,
   tipOf,
+  bleed = false,
   onToggle,
   onToggleTable,
   onSection,
@@ -87,6 +91,8 @@ export default function SeatMapCanvas({
   /** Seat id → its price colour. */
   fills: ReadonlyMap<string, string>;
   tipOf: (seatUuid: string) => SeatTip | null;
+  /** On a phone, run the map edge to edge across the screen (checkout; not inside console cards). */
+  bleed?: boolean;
   onToggle: (seatUuid: string) => void;
   /** Tapping a table itself (not one of its seats) chooses its whole table, when offered. */
   onToggleTable?: (itemId: string) => void;
@@ -96,27 +102,87 @@ export default function SeatMapCanvas({
   const [box, width] = useBoxWidth(600, 260);
   // On the showcase surface the map draws in the palette of its resolved theme (a white panel would glare in the dark).
   const paper_ = dark ? paperDark : paper;
-  const view = usePanZoom(doc, width, 560, CLOSEST_SCALE);
+  // An edge-to-edge map on a phone stops short of the screen's height, so a finger can still
+  // scroll the page past it once it is zoomed in (and pans the map).
+  const onPhone = bleed && width < PHONE_MAP_PX && window.matchMedia(`(max-width: ${PHONE_MAP_PX - 0.02}px)`).matches;
+  const view = usePanZoom(
+    doc,
+    width,
+    onPhone ? Math.min(560, Math.round(width * 1.1), Math.round(window.innerHeight * 0.75)) : 560,
+    CLOSEST_SCALE,
+  );
   const seats = useMemo(() => placedSeats(doc), [doc]);
   const grid = useMemo(() => seatGrid(seats), [seats]);
   const accessible = useMemo(() => new Set(seats.filter((s) => s.accessible).map((s) => s.seatId)), [seats]);
-  const inRegion = useMemo(() => new Set(regions.flatMap((r) => r.seatIds)), [regions]);
   const regionIds = useMemo(() => new Set(regions.map((r) => r.id)), [regions]);
   // The scale a chosen section opened at. While the map stays at least that close, the section's
   // seats show even fitted small on a phone; zoomed out past it, the shapes return everywhere.
   const focusFloor = useRef(0);
+  const tiny = SEAT_R * view.scale < OVERVIEW_BELOW_PX && view.zoom < view.maxZoom;
   const overview =
-    regions.length > 0 &&
-    (!activeSection || view.scale < focusFloor.current * 0.95) &&
-    SEAT_R * view.scale < OVERVIEW_BELOW_PX &&
-    view.zoom < view.maxZoom;
-  // In the overview the shapes stand in for their seats, except the buyer's own.
+    regions.length > 0 && (!activeSection || view.scale < focusFloor.current * 0.95) && tiny;
+  // Sections drawn as shapes: all of them in the overview; beside a chosen section, the others
+  // while their seats would still be too small to read or tap.
+  const shaped = useMemo(
+    () => (overview ? regions : activeSection && tiny ? regions.filter((r) => r.id !== activeSection) : []),
+    [overview, activeSection, tiny, regions],
+  );
+  const shapedIds = useMemo(() => new Set(shaped.map((r) => r.id)), [shaped]);
+  const shapedSeats = useMemo(() => new Set(shaped.flatMap((r) => r.seatIds)), [shaped]);
+  // A shape stands in for its seats, except the buyer's own.
   const dots = useMemo(
     () =>
       seats
-        .filter((s) => !overview || !inRegion.has(s.seatId) || selected.has(s.seatId))
+        .filter((s) => !shapedSeats.has(s.seatId) || selected.has(s.seatId))
         .map((s) => ({ id: s.seatId, x: s.x, y: s.y })),
-    [seats, overview, inRegion, selected],
+    [seats, shapedSeats, selected],
+  );
+  // Where each sectioned row's name goes (both ends, outside its section), worked out once per plan.
+  const rowLabels = useMemo(
+    () =>
+      new Map(
+        doc.items.flatMap((i) =>
+          i.kind === 'row' && i.sectionId && regionIds.has(i.sectionId) ? [[i.id, rowEnds(i, regions)] as const] : [],
+        ),
+      ),
+    [doc, regions, regionIds],
+  );
+  // Each shape's name, measured once per plan, and how much room the shape really has (a slanted
+  // block's bounding box is wider than the block)…
+  const shapeNames = useMemo(
+    () =>
+      new Map(
+        regions.map((r) => {
+          const name = r.vip ? `${r.label} · ${t('vip')}` : r.label;
+          return [r.id, { name, nameW: textWidth(name, SHAPE_NAME_PX, 'bold'), area: polygonArea(r.outline) }] as const;
+        }),
+      ),
+    [regions, t],
+  );
+  // …and its price lines, measured again only when what they say changes.
+  const shapeText = useMemo(
+    () =>
+      new Map(
+        regions.map((r) => {
+          const s = stats.get(r.id);
+          const detail =
+            s && s.left > 0
+              ? [t('sectionFrom', { price: s.from?.label ?? '' }), t('sectionLeft', { count: s.left })]
+              : [t(s?.free ? 'sectionOtherPrices' : 'sectionNone')];
+          const named = shapeNames.get(r.id);
+          return [
+            r.id,
+            {
+              name: named?.name ?? r.label,
+              nameW: named?.nameW ?? 0,
+              area: named?.area ?? 0,
+              detail,
+              detailW: Math.max(...detail.map((l) => textWidth(l, SHAPE_DETAIL_PX, 'normal'))),
+            },
+          ] as const;
+        }),
+      ),
+    [regions, stats, t, shapeNames],
   );
   const down = useRef<{ x: number; y: number } | null>(null);
   const pinch = useRef<{ distance: number } | null>(null);
@@ -129,7 +195,7 @@ export default function SeatMapCanvas({
     void [available, selected, accessible, muted, fills];
     versions.current += 1;
     return String(versions.current);
-  }, [available, selected, accessible, muted, fills, paper_, overview]);
+  }, [available, selected, accessible, muted, fills, paper_, shaped]);
   const styleOf = ({ id }: { id: string }): DotStyle => {
     if (selected.has(id)) return { fill: paper_.selected, stroke: paper_.label, strokeWidth: 5 };
     if (!available.has(id)) return { fill: paper_.taken, stroke: paper_.taken, strokeWidth: 3 };
@@ -172,6 +238,12 @@ export default function SeatMapCanvas({
     else view.glideHome();
   }, [activeSection, regions]);
 
+  // The shape under a point, if that section is drawn as one. Resolved over every section first,
+  // so an edge seat of the chosen section where padded outlines overlap is never its neighbour's.
+  const shapeAt = (at: { x: number; y: number }) => {
+    const hit = regionAt(regions, at);
+    return hit && shapedIds.has(hit.id) ? hit : null;
+  };
   const pointerAt = (stage: Konva.Stage | null) => {
     const at = roomPoint(stage);
     const p = stage?.getPointerPosition();
@@ -180,8 +252,8 @@ export default function SeatMapCanvas({
   const describe = (stage: Konva.Stage | null) => {
     const here = pointerAt(stage);
     if (!here) return null;
-    if (overview) {
-      const region = regionAt(regions, here.at);
+    if (shaped.length) {
+      const region = shapeAt(here.at);
       if (region) {
         const s = stats.get(region.id);
         return {
@@ -208,7 +280,7 @@ export default function SeatMapCanvas({
     const at = roomPoint(stage ?? null);
     if (!at) return;
     setTip(describe(stage ?? null));
-    const region = overview ? regionAt(regions, at) : null;
+    const region = shaped.length ? shapeAt(at) : null;
     if (region) {
       setTip(null);
       if (region.id === activeSection) focusRegion(region);
@@ -260,7 +332,11 @@ export default function SeatMapCanvas({
         // The organizer's floor plan image, shown faintly under the seats when they chose (M1.7g).
         data-underlay={doc.underlay ? doc.underlay.url : undefined}
         aria-hidden="true"
-        className="relative w-full overflow-hidden rounded-card border border-line"
+        // On a phone (a narrow screen and a narrow picker) the map runs edge to edge across the
+        // screen, out of the cards around it, so the room draws as large as the screen allows. A
+        // narrow picker on a wide screen (a console side panel) keeps its frame.
+        // Equal negative margins on both sides keep it centred in either reading direction.
+        className={`relative w-full overflow-hidden rounded-card border border-line ${bleed ? 'max-sm:@max-md:mx-[calc(50%-50vw)] max-sm:@max-md:w-screen max-sm:@max-md:rounded-none max-sm:@max-md:border-x-0' : ''}`}
         // One finger scrolls the page until the map is zoomed in, then it pans the map. The frame
         // is the room's colour, so no page shows around the plan when it is panned or narrower.
         style={{ touchAction: view.zoom > 1 ? 'none' : 'pan-x pan-y', background: paper_.free }}
@@ -298,16 +374,30 @@ export default function SeatMapCanvas({
             {regions.map((r) => {
               const s = stats.get(r.id);
               const { fill, ink } = sectionFill(s);
-              const onScreen = r.bounds.width * view.scale;
-              const name = r.vip ? `${r.label} · ${t('vip')}` : r.label;
+              const asShape = shapedIds.has(r.id);
+              const label = shapeText.get(r.id);
+              const name = label?.name ?? r.label;
+              // The room the shape really has on screen: a slanted block is narrower than its box.
+              const roomW = label ? Math.min(r.bounds.width, label.area / r.bounds.height) * view.scale : 0;
+              const roomH = label ? Math.min(r.bounds.height, label.area / r.bounds.width) * view.scale : 0;
+              // The name shrinks to fit a narrow section (down to a readable size), then goes; the
+              // price lines show only where they fit whole.
+              const nameSize = label ? Math.min(SHAPE_NAME_PX, (SHAPE_NAME_PX * (roomW - 6)) / label.nameW) : 0;
+              const showName = asShape && nameSize >= SHAPE_NAME_MIN_PX && roomH >= nameSize + 4;
+              const lines = label?.detail.length ?? 0;
+              const showDetail =
+                showName &&
+                nameSize >= SHAPE_NAME_PX - 1 &&
+                (label?.detailW ?? 0) <= roomW - 10 &&
+                roomH >= SHAPE_NAME_PX + lines * SHAPE_DETAIL_PX * 1.25 + 12;
               return (
                 <Group key={r.id}>
                   <Line
                     points={r.outline.flatMap((p) => [p.x, p.y])}
                     closed
-                    fill={overview ? fill : paper_.floor}
+                    fill={asShape ? fill : paper_.floor}
                     stroke={
-                      overview
+                      asShape
                         ? r.vip
                           ? paper_.label
                           : fill
@@ -315,42 +405,36 @@ export default function SeatMapCanvas({
                           ? paper_.selected
                           : paper_.outline
                     }
-                    strokeWidth={overview ? px(r.vip ? 3 : 1) : px(r.id === activeSection ? 2 : 1)}
+                    strokeWidth={asShape ? px(r.vip ? 3 : 1) : px(r.id === activeSection ? 2 : 1)}
                     lineJoin="round"
                   />
-                  {overview && onScreen >= NAME_WIDTH_PX ? (
-                    <>
-                      <Text
-                        text={name}
-                        x={r.bounds.x}
-                        y={r.center.y - px(onScreen >= DETAIL_WIDTH_PX ? 17 : 7)}
-                        width={r.bounds.width}
-                        align="center"
-                        wrap="none"
-                        ellipsis
-                        fontSize={px(13)}
-                        fontStyle="bold"
-                        fill={ink}
-                      />
-                      {onScreen >= DETAIL_WIDTH_PX ? (
-                        <Text
-                          text={
-                            s && s.left > 0
-                              ? `${t('sectionFrom', { price: s.from?.label ?? '' })}\n${t('sectionLeft', { count: s.left })}`
-                              : t(s?.free ? 'sectionOtherPrices' : 'sectionNone')
-                          }
-                          x={r.bounds.x}
-                          y={r.center.y}
-                          width={r.bounds.width}
-                          align="center"
-                          lineHeight={1.25}
-                          fontSize={px(11)}
-                          fill={ink}
-                        />
-                      ) : null}
-                    </>
+                  {showName ? (
+                    <Text
+                      text={name}
+                      x={r.bounds.x}
+                      y={r.center.y - px(showDetail ? 17 : nameSize / 2 + 1)}
+                      width={r.bounds.width}
+                      align="center"
+                      wrap="none"
+                      ellipsis
+                      fontSize={px(nameSize)}
+                      fontStyle="bold"
+                      fill={ink}
+                    />
                   ) : null}
-                  {overview ? null : (
+                  {showDetail && label ? (
+                    <Text
+                      text={label.detail.join('\n')}
+                      x={r.bounds.x}
+                      y={r.center.y}
+                      width={r.bounds.width}
+                      align="center"
+                      lineHeight={1.25}
+                      fontSize={px(SHAPE_DETAIL_PX)}
+                      fill={ink}
+                    />
+                  ) : null}
+                  {asShape || overview ? null : (
                     // A name tag centred just above the section, clear of its seats and its edge.
                     <SectionTag
                       name={name}
@@ -396,7 +480,7 @@ export default function SeatMapCanvas({
             )}
             {doc.items.map((i) => {
               // Tables and rows of a section show with their seats, not over its shape.
-              if (overview && i.kind !== 'object' && i.sectionId && regionIds.has(i.sectionId)) return null;
+              if (i.kind !== 'object' && i.sectionId && shapedIds.has(i.sectionId)) return null;
               return i.kind === 'table' ? (
                 <Group key={`tb-${i.id}`} x={i.x} y={i.y} rotation={i.rotation}>
                   {i.shape === 'round' ? (
@@ -425,20 +509,25 @@ export default function SeatMapCanvas({
                 </Group>
               ) : i.kind === 'row' ? (
                 <Group key={`rw-${i.id}`} x={i.x} y={i.y} rotation={i.rotation}>
-                  {/* Upright whatever the row's angle, beside its first seat (outside its section). */}
-                  <Text
-                    text={bareItemLabel(i.label)}
-                    x={i.sectionId && regionIds.has(i.sectionId) ? SECTION_ROW_LABEL_X : ROW_LABEL_X}
-                    rotation={-i.rotation}
-                    width={140}
-                    offsetX={70}
-                    offsetY={20}
-                    align="center"
-                    wrap="none"
-                    fontSize={40}
-                    fontStyle="bold"
-                    fill={paper_.label}
-                  />
+                  {/* Upright whatever the row's angle, beside its first seat; a row in a section is
+                      named at both ends, outside the section's outline, as aisle signs are. */}
+                  {(rowLabels.get(i.id) ?? [{ x: ROW_LABEL_X, y: 0 }]).map((at) => (
+                    <Text
+                      key={at.x}
+                      text={bareItemLabel(i.label)}
+                      x={at.x}
+                      y={at.y}
+                      rotation={-i.rotation}
+                      width={140}
+                      offsetX={70}
+                      offsetY={20}
+                      align="center"
+                      wrap="none"
+                      fontSize={40}
+                      fontStyle="bold"
+                      fill={paper_.label}
+                    />
+                  ))}
                 </Group>
               ) : null;
             })}
@@ -477,6 +566,52 @@ export default function SeatMapCanvas({
 }
 
 /**
+ * Where a sectioned row's name goes, in the row's own coordinates: past its first and its last
+ * seat (whatever order the seats are in), outside the section. An end that would land inside
+ * another section (an aisle shared with the next block) is left out, so two names never meet.
+ */
+function rowEnds(
+  row: { x: number; y: number; rotation: number; sectionId: string | null; seats: readonly { x: number; y: number }[] },
+  regions: readonly SeatRegion[],
+): { x: number; y: number }[] {
+  const byX = [...row.seats].sort((a, b) => a.x - b.x);
+  const first = byX[0];
+  const last = byX.at(-1);
+  if (!first || !last) return [];
+  const a = (row.rotation * Math.PI) / 180;
+  const inRoom = (p: { x: number; y: number }) => ({
+    x: row.x + p.x * Math.cos(a) - p.y * Math.sin(a),
+    y: row.y + p.x * Math.sin(a) + p.y * Math.cos(a),
+  });
+  const ends = [
+    { x: first.x + SECTION_ROW_LABEL_X, y: first.y },
+    { x: last.x - SECTION_ROW_LABEL_X, y: last.y },
+  ];
+  const kept = ends.filter((p) => {
+    const other = regionAt(regions, inRoom(p));
+    return !other || other.id === row.sectionId;
+  });
+  // A block with neighbours on both sides still names every row, beside its first seat.
+  return kept.length ? kept : ends.slice(0, 1);
+}
+
+/** A text's width in px as the canvas draws it (Konva's default face), for any script. */
+function textWidth(text: string, fontSize: number, fontStyle: 'bold' | 'normal'): number {
+  return new Konva.Text({ text, fontSize, fontStyle }).width();
+}
+
+/** The area of a polygon (shoelace), in its own units squared. */
+function polygonArea(points: readonly { x: number; y: number }[]): number {
+  let sum = 0;
+  for (let k = 0; k < points.length; k += 1) {
+    const a = points[k];
+    const b = points[(k + 1) % points.length];
+    if (a && b) sum += a.x * b.y - b.x * a.y;
+  }
+  return Math.abs(sum) / 2;
+}
+
+/**
  * A section's name on a rounded tag, centred over `cx` and sitting just above `top` (room units),
  * never wider than the section (`maxWidth`): a longer name ends in an ellipsis.
  */
@@ -500,10 +635,7 @@ function SectionTag({
   ink: string;
 }) {
   // The name's own width on screen, in the face and size the tag draws it with (any script).
-  const textPx = useMemo(
-    () => new Konva.Text({ text: name, fontSize: TAG_FONT_PX, fontStyle: 'bold' }).width(),
-    [name],
-  );
+  const textPx = useMemo(() => textWidth(name, TAG_FONT_PX, 'bold'), [name]);
   const width = Math.min(px(textPx + TAG_PAD_PX * 2), maxWidth);
   const height = px(TAG_HEIGHT_PX);
   return (
