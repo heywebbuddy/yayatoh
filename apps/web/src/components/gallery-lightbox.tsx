@@ -33,6 +33,7 @@ export function GalleryLightbox({
   gridClassName,
   imageClassName,
   featureFirst = false,
+  single = false,
 }: {
   images: readonly (PictureSource & { readonly id: string })[];
   labels: GalleryLabels;
@@ -41,6 +42,11 @@ export function GalleryLightbox({
   imageClassName: string;
   /** The first photo spans two columns and rows (the guest site's strip). */
   featureFirst?: boolean;
+  /**
+   * One button (the first photo) opens the slider over all of them, and gets the focus back when
+   * it closes; its name is `labels.open` alone (the seat map's "Venue photos" button).
+   */
+  single?: boolean;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const openers = useRef<(HTMLButtonElement | null)[]>([]);
@@ -97,7 +103,7 @@ export function GalleryLightbox({
   return (
     <>
       <ul className={gridClassName}>
-        {images.map((img, k) => (
+        {(single ? images.slice(0, 1) : images).map((img, k) => (
           <li
             key={img.id}
             className={cx(
@@ -111,7 +117,11 @@ export function GalleryLightbox({
               }}
               type="button"
               onClick={() => open(k)}
-              aria-label={[fill(labels.open, k + 1, total), nameOf(img)].filter(Boolean).join(': ')}
+              aria-label={
+                single
+                  ? fill(labels.open, k + 1, total)
+                  : [fill(labels.open, k + 1, total), nameOf(img)].filter(Boolean).join(': ')
+              }
               aria-haspopup="dialog"
               className="group block size-full cursor-zoom-in focus-visible:outline-2 focus-visible:outline-offset-2"
             >
@@ -134,7 +144,7 @@ export function GalleryLightbox({
         onClose={() => {
           const was = index;
           setIndex(null);
-          if (was !== null) openers.current[was]?.focus();
+          if (was !== null) openers.current[single ? 0 : was]?.focus();
         }}
         onClick={(e) => {
           if (e.target === e.currentTarget) close();

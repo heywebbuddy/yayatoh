@@ -1148,7 +1148,8 @@
       "sectionHint": "セクションをタップすると座席が表示されます",
       "vip": "VIP",
       "sectionOtherPrices": "他の価格のみ",
-      "listTitle": "リストから選ぶ"
+      "listTitle": "リストから選ぶ",
+      "roomPhotos": "会場の写真（{total}）"
     },
     "seatRuleCap": "1回の注文で選べる座席数を超えています。座席数を減らしてください。",
     "seatRuleAda": "アクセシブル席は現在、必要な方のために確保されています。別の座席をお選びください。",

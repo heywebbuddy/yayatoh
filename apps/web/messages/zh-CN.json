@@ -1148,7 +1148,8 @@
       "sectionHint": "点按区域查看座位",
       "vip": "VIP",
       "sectionOtherPrices": "仅其他价格",
-      "listTitle": "从列表中选择"
+      "listTitle": "从列表中选择",
+      "roomPhotos": "场地照片（{total}）"
     },
     "seatRuleCap": "超出了单笔订单可选的座位数，请减少选择。",
     "seatRuleAda": "无障碍座位目前为有需要的宾客保留，请选择其他座位。",

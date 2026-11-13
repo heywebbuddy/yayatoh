@@ -1148,7 +1148,8 @@
       "sectionHint": "Tocca un settore per vedere i posti",
       "vip": "VIP",
       "sectionOtherPrices": "Solo altri prezzi",
-      "listTitle": "Scegli da un elenco"
+      "listTitle": "Scegli da un elenco",
+      "roomPhotos": "Foto della location ({total})"
     },
     "seatRuleCap": "Sono più posti di quanti un ordine ne possa avere. Scegline meno.",
     "seatRuleAda": "Per ora i posti accessibili sono riservati a chi ne ha bisogno. Scegli altri posti.",

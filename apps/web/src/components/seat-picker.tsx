@@ -14,6 +14,8 @@ import { X } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useFormatter, useTranslations } from 'next-intl';
 import { memo, type ReactNode, type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { type GalleryLabels, GalleryLightbox } from '@/components/gallery-lightbox.tsx';
+import type { PictureSource } from '@/components/media-picture.tsx';
 import { useRouter } from '@/i18n/navigation.ts';
 import { useCssomStyle } from '@/lib/cssom-style.ts';
 import { priceLevels, type SectionStats, sectionStats } from '@/lib/seat-map-model.ts';
@@ -97,6 +99,12 @@ function entriesOf(kind: SeatStreamSource['kind'], data: unknown): [string, bool
   return Object.entries(seats as Record<string, unknown>).map(([k, v]) => [k, v === 'available']);
 }
 
+/** The room's photos for the seat map, with the words of the shared photo slider. */
+export interface RoomPhotos {
+  readonly images: readonly (PictureSource & { readonly id: string })[];
+  readonly labels: GalleryLabels;
+}
+
 /**
  * Choose seats: the map, coloured by price, and beside it the buyer's seats, the sections and a
  * list grouped by row and table (every seat a checkbox, so it works by keyboard and screen
@@ -119,9 +127,12 @@ export function SeatPicker({
   accessibleNeed = false,
   onChoice,
   fieldName = 'seat',
+  roomPhotos = null,
 }: {
   /** The form field chosen seats post as (one per date when booking several dates at once). */
   fieldName?: string;
+  /** Photos of the room (the venue's own), opened from a button beside the map's zoom controls. */
+  roomPhotos?: RoomPhotos | null;
   map: SeatMapView;
   /** Ticket type id → its all-in price label. */
   prices: Readonly<Record<string, string>>;
@@ -523,6 +534,20 @@ export function SeatPicker({
               tipOf={tipOf}
               // At checkout the map may run edge to edge on a phone; the box office keeps it in its card.
               bleed={context === 'checkout'}
+              extraControl={
+                roomPhotos && roomPhotos.images.length > 0 ? (
+                  // The shared photo slider: one thumbnail button (the zoom buttons' height and
+                  // corners, its focus ring left unclipped) opens it over every photo of the room.
+                  <GalleryLightbox
+                    images={roomPhotos.images}
+                    labels={roomPhotos.labels}
+                    single
+                    sizes="48px"
+                    gridClassName="m-0 flex list-none p-0 [&>li]:overflow-visible [&>li]:rounded-[12px]"
+                    imageClassName="h-9 w-12 rounded-[12px] object-cover"
+                  />
+                ) : null
+              }
               onToggle={onToggle}
               onToggleTable={onToggleTable}
               onSection={setActiveSection}

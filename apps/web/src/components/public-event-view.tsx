@@ -29,6 +29,7 @@ import { publicSeatMap } from '@yayatoh/seating';
 import { publicOrgProfile } from '@yayatoh/tenancy';
 import { publicTicketTypes } from '@yayatoh/ticketing';
 import { Alert, brandPalette, buttonClass, cx, EmptyState } from '@yayatoh/ui';
+import { publicVenue, quoteTarget } from '@yayatoh/venues';
 import { CalendarDays, Layers, MapPin, Share2 } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -299,6 +300,12 @@ export async function PublicEventView({
   };
   const t = await getTranslations();
   const lightbox = galleryLabels(await getTranslations('publicEvent.lightbox'));
+  // The room's photos for the seat map's photo button: the venue's own public photos (a directory
+  // venue's, the same its venue page shows), resolved server-side, for seated events only.
+  // Gated exactly as the venue page gates them: only a venue its public page would show.
+  const roomTarget =
+    seatMap && ev.venueSlug && (await publicVenue(ev.venueSlug)) ? await quoteTarget(ev.venueSlug) : null;
+  const roomPhotos = roomTarget ? await publicMedia('venue', roomTarget.venueId) : [];
   const platformLabel = await categoryLabels((key) => t(`categories.${key}`));
   const f = { locale, currency: ev.currency, timeZone: ev.timezone };
   const range = formatEventDateRange(ev.startsAt.toISOString(), ev.endsAt.toISOString(), f);
@@ -425,6 +432,15 @@ export async function PublicEventView({
           timeZone={ev.timezone}
           advancedSeating={advancedSeating}
           channel={channel}
+          roomPhotos={
+            roomPhotos.length > 0
+              ? {
+                  images: roomPhotos,
+                  // "{total}" stays for the slider to fill in.
+                  labels: { ...lightbox, open: t('checkout.seats.roomPhotos', { total: '{total}' }) },
+                }
+              : null
+          }
           bestSeats={
             seatMap?.bestAvailable
               ? {

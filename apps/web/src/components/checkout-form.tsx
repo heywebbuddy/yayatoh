@@ -12,7 +12,7 @@ import type { BestSeatsActions } from '@/components/best-available.tsx';
 import { CheckoutQuestions, type QuestionView } from '@/components/checkout-questions.tsx';
 import { GuestCodeFields } from '@/components/guest-code-fields.tsx';
 import { OrderSummary } from '@/components/order-summary.tsx';
-import type { SeatMapView, SeatStreamSource } from '@/components/seat-picker.tsx';
+import type { RoomPhotos, SeatMapView, SeatStreamSource } from '@/components/seat-picker.tsx';
 import { SeatPicker } from '@/components/seat-picker.tsx';
 import { SeatSelection } from '@/components/seat-selection.tsx';
 import { Link } from '@/i18n/navigation.ts';
@@ -60,6 +60,7 @@ export function CheckoutForm({
   bestSeats = null,
   advancedSeating = false,
   channel = null,
+  roomPhotos = null,
   preview = null,
   legs = null,
 }: {
@@ -85,6 +86,8 @@ export function CheckoutForm({
   bestSeats?: BestSeatsActions | null;
   /** M6.11a: the org has advanced seating (the accessible-seat statement, companion seats). */
   advancedSeating?: boolean;
+  /** Seated events at a directory venue: the venue's photos, behind a button beside the seat map. */
+  roomPhotos?: RoomPhotos | null;
   /**
    * M6.11b: the sales channel of the link the buyer came through (its code is posted with the
    * order), or `invalid` when the link's code names none.
@@ -351,6 +354,7 @@ export function CheckoutForm({
             stream={seatStream}
             best={bestSeats}
             ada={advancedSeating}
+            roomPhotos={roomPhotos}
             occurrenceId={() => occurrenceId}
             {...(timeZone ? { timeZone } : {})}
           />

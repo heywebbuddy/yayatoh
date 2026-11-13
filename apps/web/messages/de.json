@@ -1148,7 +1148,8 @@
       "sectionHint": "Tippen Sie auf einen Bereich, um die Plätze zu sehen",
       "vip": "VIP",
       "sectionOtherPrices": "Nur andere Preise",
-      "listTitle": "Aus einer Liste wählen"
+      "listTitle": "Aus einer Liste wählen",
+      "roomPhotos": "Fotos vom Veranstaltungsort ({total})"
     },
     "seatRuleCap": "Das sind mehr Plätze, als eine Bestellung haben darf. Bitte wähle weniger.",
     "seatRuleAda": "Barrierefreie Plätze sind vorerst für Gäste reserviert, die sie brauchen. Bitte wähle andere Plätze.",

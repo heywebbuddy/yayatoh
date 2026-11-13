@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useCallback, useId, useRef, useState } from 'react';
 import { BestAvailablePanel, type BestSeatsActions } from '@/components/best-available.tsx';
 import {
+  type RoomPhotos,
   type SeatChoice,
   type SeatMapView,
   SeatPicker,
@@ -29,8 +30,11 @@ export function SeatSelection({
   ada = false,
   occurrenceId,
   onChoice,
+  roomPhotos = null,
 }: {
   map: SeatMapView;
+  /** Photos of the room, behind a button beside the map's zoom controls. */
+  roomPhotos?: RoomPhotos | null;
   prices: Readonly<Record<string, string>>;
   priceAmounts?: Readonly<Record<string, number>>;
   /** The prices sold by seat, for best available. */
@@ -128,6 +132,7 @@ export function SeatSelection({
           accessibleNeed={need}
           {...(timeZone ? { timeZone } : {})}
           {...(onChoice ? { onChoice } : {})}
+          roomPhotos={roomPhotos}
         />
       )}
     </div>

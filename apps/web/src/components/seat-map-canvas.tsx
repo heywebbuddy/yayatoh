@@ -16,7 +16,7 @@ import { paper, paperDark } from '@yayatoh/ui';
 // A value import: the section tags measure their names with it (this module only loads in the browser).
 import Konva from 'konva';
 import { useTranslations } from 'next-intl';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Circle, Group, Layer, Line, Rect, Stage, Text } from 'react-konva';
 import type { SectionStats } from '@/lib/seat-map-model.ts';
 import { PanZoomControls, roomPoint, useBoxWidth, usePanZoom } from './pan-zoom.tsx';
@@ -73,6 +73,7 @@ export default function SeatMapCanvas({
   fills,
   tipOf,
   bleed = false,
+  extraControl = null,
   onToggle,
   onToggleTable,
   onSection,
@@ -93,6 +94,8 @@ export default function SeatMapCanvas({
   tipOf: (seatUuid: string) => SeatTip | null;
   /** On a phone, run the map edge to edge across the screen (checkout; not inside console cards). */
   bleed?: boolean;
+  /** One more control beside the zoom buttons (the room's photos). */
+  extraControl?: ReactNode;
   onToggle: (seatUuid: string) => void;
   /** Tapping a table itself (not one of its seats) chooses its whole table, when offered. */
   onToggleTable?: (itemId: string) => void;
@@ -105,8 +108,27 @@ export default function SeatMapCanvas({
   // An edge-to-edge map on a phone stops short of the screen's height, so a finger can still
   // scroll the page past it once it is zoomed in (and pans the map).
   const onPhone = bleed && width < PHONE_MAP_PX && window.matchMedia(`(max-width: ${PHONE_MAP_PX - 0.02}px)`).matches;
+  // Where the zoom buttons float over the map's top-right corner, the whole room is drawn as if it
+  // were a strip wider on that side, so it sits clear of them instead of under them. (The plan is
+  // drawn from its left edge, so right-to-left pages, whose buttons sit top-left, keep the plain fit.)
+  const controls = useRef<HTMLDivElement>(null);
+  const [controlsOver, setControlsOver] = useState(false);
+  // Before the first paint, so the room is fitted once, not twice.
+  useLayoutEffect(() => {
+    const el = controls.current;
+    setControlsOver(
+      el ? getComputedStyle(el).position === 'absolute' && getComputedStyle(el).direction !== 'rtl' : false,
+    );
+  }, [width]);
+  const room = useMemo(
+    () =>
+      controlsOver && width > CONTROLS_GUTTER_PX * 4
+        ? { width: (doc.width * width) / (width - CONTROLS_GUTTER_PX), height: doc.height }
+        : doc,
+    [controlsOver, width, doc],
+  );
   const view = usePanZoom(
-    doc,
+    room,
     width,
     onPhone ? Math.min(560, Math.round(width * 1.1), Math.round(window.innerHeight * 0.75)) : 560,
     CLOSEST_SCALE,
@@ -154,7 +176,17 @@ export default function SeatMapCanvas({
       new Map(
         regions.map((r) => {
           const name = r.vip ? `${r.label} · ${t('vip')}` : r.label;
-          return [r.id, { name, nameW: textWidth(name, SHAPE_NAME_PX, 'bold'), area: polygonArea(r.outline) }] as const;
+          return [
+            r.id,
+            {
+              name,
+              nameW: textWidth(name, SHAPE_NAME_PX, 'bold'),
+              // A VIP section too small for "Floor B · VIP" still shows "Floor B" (its outline marks it VIP).
+              short: r.label,
+              shortW: textWidth(r.label, SHAPE_NAME_PX, 'bold'),
+              area: polygonArea(r.outline),
+            },
+          ] as const;
         }),
       ),
     [regions, t],
@@ -175,6 +207,8 @@ export default function SeatMapCanvas({
             {
               name: named?.name ?? r.label,
               nameW: named?.nameW ?? 0,
+              short: named?.short ?? r.label,
+              shortW: named?.shortW ?? 0,
               area: named?.area ?? 0,
               detail,
               detailW: Math.max(...detail.map((l) => textWidth(l, SHAPE_DETAIL_PX, 'normal'))),
@@ -211,7 +245,6 @@ export default function SeatMapCanvas({
   // The whole section fits, its name tag included: on a phone that is closer to its seats than the
   // overview, never wider than the screen. Where the zoom buttons float over the map's top corner
   // (the inline end: left in right-to-left languages), the section stays clear of them.
-  const controls = useRef<HTMLDivElement>(null);
   const focusRegion = ({ bounds }: SeatRegion) => {
     const over = controls.current ? getComputedStyle(controls.current).position === 'absolute' : false;
     const rtl = box.current ? getComputedStyle(box.current).direction === 'rtl' : false;
@@ -382,7 +415,12 @@ export default function SeatMapCanvas({
               const roomH = label ? Math.min(r.bounds.height, label.area / r.bounds.width) * view.scale : 0;
               // The name shrinks to fit a narrow section (down to a readable size), then goes; the
               // price lines show only where they fit whole.
-              const nameSize = label ? Math.min(SHAPE_NAME_PX, (SHAPE_NAME_PX * (roomW - 6)) / label.nameW) : 0;
+              const fitSize = (w: number) => (w > 0 ? Math.min(SHAPE_NAME_PX, (SHAPE_NAME_PX * (roomW - 6)) / w) : 0);
+              const full = label ? fitSize(label.nameW) : 0;
+              // Too small for its full name ("Floor B · VIP"): its short one ("Floor B").
+              const useShort = label !== undefined && full < SHAPE_NAME_MIN_PX && label.shortW < label.nameW;
+              const shapeName = useShort && label ? label.short : name;
+              const nameSize = useShort && label ? fitSize(label.shortW) : full;
               const showName = asShape && nameSize >= SHAPE_NAME_MIN_PX && roomH >= nameSize + 4;
               const lines = label?.detail.length ?? 0;
               const showDetail =
@@ -410,7 +448,7 @@ export default function SeatMapCanvas({
                   />
                   {showName ? (
                     <Text
-                      text={name}
+                      text={shapeName}
                       x={r.bounds.x}
                       y={r.center.y - px(showDetail ? 17 : nameSize / 2 + 1)}
                       width={r.bounds.width}
@@ -558,7 +596,10 @@ export default function SeatMapCanvas({
         ref={controls}
         className="order-first self-end rounded-card border border-line bg-surface p-0.5 @lg:absolute @lg:end-2 @lg:top-2"
       >
-        <PanZoomControls view={view} compact onReset={() => onSection(null)} />
+        <div className="flex items-center gap-1 @lg:flex-col">
+          <PanZoomControls view={view} compact onReset={() => onSection(null)} />
+          {extraControl}
+        </div>
       </div>
       {overview ? <p className="m-0 text-caption text-ink-2">{t('sectionHint')}</p> : null}
     </div>
