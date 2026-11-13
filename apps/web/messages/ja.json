@@ -1147,7 +1147,8 @@
       "sectionNone": "完売",
       "sectionHint": "セクションをタップすると座席が表示されます",
       "vip": "VIP",
-      "sectionOtherPrices": "他の価格のみ"
+      "sectionOtherPrices": "他の価格のみ",
+      "listTitle": "リストから選ぶ"
     },
     "seatRuleCap": "1回の注文で選べる座席数を超えています。座席数を減らしてください。",
     "seatRuleAda": "アクセシブル席は現在、必要な方のために確保されています。別の座席をお選びください。",

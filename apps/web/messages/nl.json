@@ -1147,7 +1147,8 @@
       "sectionNone": "Uitverkocht",
       "sectionHint": "Tik op een vak om de plaatsen te zien",
       "vip": "VIP",
-      "sectionOtherPrices": "Alleen andere prijzen"
+      "sectionOtherPrices": "Alleen andere prijzen",
+      "listTitle": "Uit een lijst kiezen"
     },
     "seatRuleCap": "Dat zijn meer plaatsen dan één bestelling mag hebben. Kies er minder.",
     "seatRuleAda": "Toegankelijke plaatsen worden voorlopig vrijgehouden voor gasten die ze nodig hebben. Kies andere plaatsen.",

@@ -1147,7 +1147,8 @@
       "sectionNone": "已售完",
       "sectionHint": "點按區域查看座位",
       "vip": "VIP",
-      "sectionOtherPrices": "僅其他價格"
+      "sectionOtherPrices": "僅其他價格",
+      "listTitle": "從清單中選擇"
     },
     "seatRuleCap": "超出了單筆訂單可選的座位數，請減少選擇。",
     "seatRuleAda": "無障礙座位目前為有需要的賓客保留，請選擇其他座位。",

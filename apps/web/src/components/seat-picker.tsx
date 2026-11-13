@@ -13,7 +13,7 @@ import { Button, paper, paperDark, seatPrices, seatPricesDark } from '@yayatoh/u
 import { X } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useFormatter, useTranslations } from 'next-intl';
-import { memo, type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, type ReactNode, type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from '@/i18n/navigation.ts';
 import { useCssomStyle } from '@/lib/cssom-style.ts';
 import { priceLevels, type SectionStats, sectionStats } from '@/lib/seat-map-model.ts';
@@ -604,7 +604,7 @@ export function SeatPicker({
               </ul>
             </section>
           ) : null}
-          <div className="flex max-h-96 flex-col gap-3 overflow-y-auto">
+          <RowList asDisclosure={showMap} title={t('listTitle')}>
             {groups.map((g) => {
               // Filtered out: chosen seats still post, and still show where their group shows.
               const inSection = !activeSection || g.sectionId === activeSection;
@@ -672,10 +672,26 @@ export function SeatPicker({
                 </details>
               );
             })}
-          </div>
+          </RowList>
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * Every row and table with its seats. Beside the map it waits behind one "Choose from a list"
+ * (the same choices for keyboards and screen readers, without a wall of rows under the sections);
+ * with the map hidden it is the picker itself. Closed, its chosen seats still post.
+ */
+function RowList({ asDisclosure, title, children }: { asDisclosure: boolean; title: string; children: ReactNode }) {
+  const list = <div className="flex max-h-96 flex-col gap-3 overflow-y-auto">{children}</div>;
+  if (!asDisclosure) return list;
+  return (
+    <details className="flex flex-col gap-1.5">
+      <summary className="min-h-11 cursor-pointer content-center text-[13px] font-bold text-ink">{title}</summary>
+      {list}
+    </details>
   );
 }
 

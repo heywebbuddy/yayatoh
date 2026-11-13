@@ -1147,7 +1147,8 @@
       "sectionNone": "Esgotado",
       "sectionHint": "Toque num setor para ver os lugares",
       "vip": "VIP",
-      "sectionOtherPrices": "Apenas outros preços"
+      "sectionOtherPrices": "Apenas outros preços",
+      "listTitle": "Escolher de uma lista"
     },
     "seatRuleCap": "São mais assentos do que um pedido pode ter. Escolha menos.",
     "seatRuleAda": "Por enquanto, os assentos acessíveis estão reservados para quem precisa. Escolha outros assentos.",

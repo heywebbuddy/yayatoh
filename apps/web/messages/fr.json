@@ -1147,7 +1147,8 @@
       "sectionNone": "Complet",
       "sectionHint": "Touchez une section pour voir ses places",
       "vip": "VIP",
-      "sectionOtherPrices": "Autres prix uniquement"
+      "sectionOtherPrices": "Autres prix uniquement",
+      "listTitle": "Choisir dans une liste"
     },
     "seatRuleCap": "C’est plus de places qu’une commande ne peut en compter. Veuillez en choisir moins.",
     "seatRuleAda": "Les places accessibles sont pour l’instant réservées aux personnes qui en ont besoin. Veuillez choisir d’autres places.",

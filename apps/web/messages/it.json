@@ -1147,7 +1147,8 @@
       "sectionNone": "Esaurito",
       "sectionHint": "Tocca un settore per vedere i posti",
       "vip": "VIP",
-      "sectionOtherPrices": "Solo altri prezzi"
+      "sectionOtherPrices": "Solo altri prezzi",
+      "listTitle": "Scegli da un elenco"
     },
     "seatRuleCap": "Sono più posti di quanti un ordine ne possa avere. Scegline meno.",
     "seatRuleAda": "Per ora i posti accessibili sono riservati a chi ne ha bisogno. Scegli altri posti.",

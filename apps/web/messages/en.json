@@ -1147,7 +1147,8 @@
       "sectionNone": "Sold out",
       "sectionHint": "Tap a section to see its seats",
       "vip": "VIP",
-      "sectionOtherPrices": "Other prices only"
+      "sectionOtherPrices": "Other prices only",
+      "listTitle": "Choose from a list"
     },
     "seatRuleCap": "That's more seats than one order may have. Please choose fewer.",
     "seatRuleAda": "Accessible seats are kept for guests who need them for now. Please choose other seats.",

@@ -6,13 +6,15 @@ import {
   hitTest,
   PUBLIC_UNDERLAY_OPACITY,
   placedSeats,
+  REGION_PAD_CM,
   regionAt,
   type SeatRegion,
   seatGrid,
   seatNear,
 } from '@yayatoh/floorplan';
 import { paper, paperDark } from '@yayatoh/ui';
-import type Konva from 'konva';
+// A value import: the section tags measure their names with it (this module only loads in the browser).
+import Konva from 'konva';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Circle, Group, Layer, Line, Rect, Stage, Text } from 'react-konva';
@@ -31,6 +33,16 @@ const CLOSEST_SCALE = 16 / SEAT_R;
 const NAME_WIDTH_PX = 44;
 const DETAIL_WIDTH_PX = 96;
 const TIP_OFFSET_PX = 14;
+/** The strip a focused section keeps clear of the zoom buttons where they float over the map (px). */
+const CONTROLS_GUTTER_PX = 56;
+/** A row's name sits this far before its first seat: clear of its section's outline when it has one. */
+const ROW_LABEL_X = -(SEAT_R + 50);
+const SECTION_ROW_LABEL_X = -(REGION_PAD_CM + 46);
+/** The name tag over a focused section: its height, its gap above the section, the room around its text (px). */
+const TAG_HEIGHT_PX = 22;
+const TAG_GAP_PX = 4;
+const TAG_PAD_PX = 10;
+const TAG_FONT_PX = 12;
 
 export interface SeatTip {
   readonly title: string;
@@ -90,7 +102,14 @@ export default function SeatMapCanvas({
   const accessible = useMemo(() => new Set(seats.filter((s) => s.accessible).map((s) => s.seatId)), [seats]);
   const inRegion = useMemo(() => new Set(regions.flatMap((r) => r.seatIds)), [regions]);
   const regionIds = useMemo(() => new Set(regions.map((r) => r.id)), [regions]);
-  const overview = regions.length > 0 && SEAT_R * view.scale < OVERVIEW_BELOW_PX && view.zoom < view.maxZoom;
+  // The scale a chosen section opened at. While the map stays at least that close, the section's
+  // seats show even fitted small on a phone; zoomed out past it, the shapes return everywhere.
+  const focusFloor = useRef(0);
+  const overview =
+    regions.length > 0 &&
+    (!activeSection || view.scale < focusFloor.current * 0.95) &&
+    SEAT_R * view.scale < OVERVIEW_BELOW_PX &&
+    view.zoom < view.maxZoom;
   // In the overview the shapes stand in for their seats, except the buyer's own.
   const dots = useMemo(
     () =>
@@ -123,7 +142,28 @@ export default function SeatMapCanvas({
 
   // The section chosen here or in the panel opens on the map; none goes back to the whole room.
   const shown = useRef(activeSection);
-  const focusRegion = (region: SeatRegion) => view.focus(region.bounds, SECTION_SCALE);
+  // The whole section fits, its name tag included: on a phone that is closer to its seats than the
+  // overview, never wider than the screen. Where the zoom buttons float over the map's top corner
+  // (the inline end: left in right-to-left languages), the section stays clear of them.
+  const controls = useRef<HTMLDivElement>(null);
+  const focusRegion = ({ bounds }: SeatRegion) => {
+    const over = controls.current ? getComputedStyle(controls.current).position === 'absolute' : false;
+    const rtl = box.current ? getComputedStyle(box.current).direction === 'rtl' : false;
+    const gutter = over ? CONTROLS_GUTTER_PX : 0;
+    const tag = TAG_HEIGHT_PX + TAG_GAP_PX;
+    const fits = Math.min((width - gutter) / bounds.width, (view.height - tag) / bounds.height) * 0.9;
+    const floor = Math.min(SECTION_SCALE, fits);
+    focusFloor.current = floor;
+    view.focus(
+      {
+        x: rtl ? bounds.x - gutter / fits : bounds.x,
+        y: bounds.y - tag / fits,
+        width: bounds.width + gutter / fits,
+        height: bounds.height + tag / fits,
+      },
+      floor,
+    );
+  };
   useEffect(() => {
     if (shown.current === activeSection) return;
     shown.current = activeSection;
@@ -221,8 +261,9 @@ export default function SeatMapCanvas({
         data-underlay={doc.underlay ? doc.underlay.url : undefined}
         aria-hidden="true"
         className="relative w-full overflow-hidden rounded-card border border-line"
-        // One finger scrolls the page until the map is zoomed in, then it pans the map.
-        style={{ touchAction: view.zoom > 1 ? 'none' : 'pan-x pan-y' }}
+        // One finger scrolls the page until the map is zoomed in, then it pans the map. The frame
+        // is the room's colour, so no page shows around the plan when it is panned or narrower.
+        style={{ touchAction: view.zoom > 1 ? 'none' : 'pan-x pan-y', background: paper_.free }}
       >
         <Stage
           width={width}
@@ -310,17 +351,16 @@ export default function SeatMapCanvas({
                     </>
                   ) : null}
                   {overview ? null : (
-                    <Text
-                      text={name}
-                      x={r.bounds.x}
-                      y={r.bounds.y + px(4)}
-                      width={r.bounds.width}
-                      align="center"
-                      wrap="none"
-                      ellipsis
-                      fontSize={px(12)}
-                      fontStyle="bold"
-                      fill={paper_.label}
+                    // A name tag centred just above the section, clear of its seats and its edge.
+                    <SectionTag
+                      name={name}
+                      cx={r.bounds.x + r.bounds.width / 2}
+                      top={r.bounds.y}
+                      maxWidth={r.bounds.width}
+                      px={px}
+                      fill={paper_.background}
+                      stroke={r.id === activeSection ? paper_.selected : paper_.outline}
+                      ink={paper_.label}
                     />
                   )}
                 </Group>
@@ -385,10 +425,10 @@ export default function SeatMapCanvas({
                 </Group>
               ) : i.kind === 'row' ? (
                 <Group key={`rw-${i.id}`} x={i.x} y={i.y} rotation={i.rotation}>
-                  {/* Upright whatever the row's angle, beside its first seat. */}
+                  {/* Upright whatever the row's angle, beside its first seat (outside its section). */}
                   <Text
                     text={bareItemLabel(i.label)}
-                    x={-SEAT_R - 50}
+                    x={i.sectionId && regionIds.has(i.sectionId) ? SECTION_ROW_LABEL_X : ROW_LABEL_X}
                     rotation={-i.rotation}
                     width={140}
                     offsetX={70}
@@ -425,10 +465,63 @@ export default function SeatMapCanvas({
         ) : null}
       </div>
       {/* Over the map where it has room; on a phone it would hide too much of it. */}
-      <div className="order-first self-end rounded-card border border-line bg-surface p-0.5 @lg:absolute @lg:end-2 @lg:top-2">
+      <div
+        ref={controls}
+        className="order-first self-end rounded-card border border-line bg-surface p-0.5 @lg:absolute @lg:end-2 @lg:top-2"
+      >
         <PanZoomControls view={view} compact onReset={() => onSection(null)} />
       </div>
       {overview ? <p className="m-0 text-caption text-ink-2">{t('sectionHint')}</p> : null}
     </div>
+  );
+}
+
+/**
+ * A section's name on a rounded tag, centred over `cx` and sitting just above `top` (room units),
+ * never wider than the section (`maxWidth`): a longer name ends in an ellipsis.
+ */
+function SectionTag({
+  name,
+  cx,
+  top,
+  maxWidth,
+  px,
+  fill,
+  stroke,
+  ink,
+}: {
+  name: string;
+  cx: number;
+  top: number;
+  maxWidth: number;
+  px: (size: number) => number;
+  fill: string;
+  stroke: string;
+  ink: string;
+}) {
+  // The name's own width on screen, in the face and size the tag draws it with (any script).
+  const textPx = useMemo(
+    () => new Konva.Text({ text: name, fontSize: TAG_FONT_PX, fontStyle: 'bold' }).width(),
+    [name],
+  );
+  const width = Math.min(px(textPx + TAG_PAD_PX * 2), maxWidth);
+  const height = px(TAG_HEIGHT_PX);
+  return (
+    <Group x={cx - width / 2} y={top - height - px(TAG_GAP_PX)}>
+      <Rect width={width} height={height} fill={fill} stroke={stroke} strokeWidth={px(1)} cornerRadius={height / 2} />
+      <Text
+        text={name}
+        x={px(TAG_PAD_PX)}
+        width={Math.max(0, width - px(TAG_PAD_PX * 2))}
+        height={height}
+        align="center"
+        verticalAlign="middle"
+        wrap="none"
+        ellipsis
+        fontSize={px(TAG_FONT_PX)}
+        fontStyle="bold"
+        fill={ink}
+      />
+    </Group>
   );
 }
