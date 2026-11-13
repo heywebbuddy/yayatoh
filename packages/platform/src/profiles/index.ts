@@ -157,7 +157,9 @@ export const PROFILES: Readonly<Record<ProfileKey, Profile>> = {
   concert: {
     key: 'concert',
     defaultModules: ['core', 'ticketing', 'orders', 'attendees', 'checkin', 'marketing', 'reports'],
-    nav: withContent([home, analysis, setupGuide, branding, ticketsOrders, attendees, marketing, onsite]),
+    // Seated concerts and arena shows: the seat plan editor (sections, rows, price zones) sits next
+    // to tickets, shown only when the org has the `seating` module.
+    nav: withContent([home, analysis, setupGuide, branding, ticketsOrders, seating, attendees, marketing, onsite]),
     vocabulary: { attendee: 'fan', attendees: 'fans' },
   },
   conference: {

@@ -32,6 +32,12 @@ describe('profiles', () => {
     expect(composeNav('gala', without).map((i) => i.key)).not.toContain('seating');
   });
 
+  it('a concert opens the seat plan when the org has seating', () => {
+    const without = new Set([...all].filter((m) => m !== 'seating'));
+    expect(navIncludes('concert', all, 'seating')).toBe(true);
+    expect(navIncludes('concert', without, 'seating')).toBe(false);
+  });
+
   it('every profile starts with Home, and nav keys and paths are unique', () => {
     for (const p of PROFILE_KEYS) {
       const nav = PROFILES[p].nav;
