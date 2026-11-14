@@ -41,6 +41,8 @@ const CONTROLS_GUTTER_PX = 56;
 /** A row's name sits this far before its first seat: clear of its section's outline when it has one. */
 const ROW_LABEL_X = -(SEAT_R + 50);
 const SECTION_ROW_LABEL_X = -(REGION_PAD_CM + 46);
+/** How far a section's row names reach past its outline box: the name's offset plus half its 140cm box. */
+const ROW_NAME_ROOM_CM = -SECTION_ROW_LABEL_X + 70 - REGION_PAD_CM;
 /** The name tag over a focused section: its height, its gap above the section, the room around its text (px). */
 const TAG_HEIGHT_PX = 22;
 const TAG_GAP_PX = 4;
@@ -178,6 +180,11 @@ export default function SeatMapCanvas({
       ),
     [doc, regions, regionIds],
   );
+  // The sections that have rows (and so row names beside them).
+  const rowSections = useMemo(
+    () => new Set(doc.items.flatMap((i) => (i.kind === 'row' && i.sectionId ? [i.sectionId] : []))),
+    [doc],
+  );
   // Each shape's name, measured once per plan, and how much room the shape really has (a slanted
   // block's bounding box is wider than the block)…
   const shapeNames = useMemo(
@@ -254,12 +261,23 @@ export default function SeatMapCanvas({
   // The whole section fits, its name tag included: on a phone that is closer to its seats than the
   // overview, never wider than the screen. Where the zoom buttons float over the map's top corner
   // (the inline end: left in right-to-left languages), the section stays clear of them.
-  const focusRegion = ({ bounds }: SeatRegion) => {
+  const focusRegion = ({ id, bounds: seatsBox }: SeatRegion) => {
     const over = controls.current ? getComputedStyle(controls.current).position === 'absolute' : false;
     const rtl = box.current ? getComputedStyle(box.current).direction === 'rtl' : false;
     const gutter = over ? CONTROLS_GUTTER_PX : 0;
     const tag = TAG_HEIGHT_PX + TAG_GAP_PX;
-    const fits = Math.min((width - gutter) / bounds.width, (view.height - tag) / bounds.height) * 0.9;
+    const fitOf = (b: { width: number; height: number }) =>
+      Math.min((width - gutter) / b.width, (view.height - tag) / b.height) * 0.9;
+    // A section's row names sit outside its outline (both ends). The fitted area takes them in
+    // where that still leaves its seats readable and easy to tap; on a phone the seats come first.
+    const named = {
+      x: seatsBox.x - ROW_NAME_ROOM_CM,
+      y: seatsBox.y - ROW_NAME_ROOM_CM,
+      width: seatsBox.width + ROW_NAME_ROOM_CM * 2,
+      height: seatsBox.height + ROW_NAME_ROOM_CM * 2,
+    };
+    const bounds = rowSections.has(id) && fitOf(named) >= SECTION_SCALE ? named : seatsBox;
+    const fits = fitOf(bounds);
     const floor = Math.min(SECTION_SCALE, fits);
     focusFloor.current = floor;
     view.focus(
