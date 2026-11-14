@@ -355,6 +355,15 @@ export default function SeatMapCanvas({
     if (e.evt.touches.length === 0) setTimeout(() => (pinched.current = false), 0);
   };
   const px = (size: number) => size / view.scale;
+  // Where a row's name goes. With a section chosen, only its rows are named (both ends); its
+  // neighbours' seats show unnamed, as context. With none chosen, every row is named at its first
+  // seat. Either way an aisle never carries two blocks' names.
+  const labelPoints = (row: { id: string; sectionId: string | null }): { x: number; y: number }[] => {
+    const at = rowLabels.get(row.id);
+    if (!at) return [{ x: ROW_LABEL_X, y: 0 }];
+    if (row.sectionId === activeSection) return at.ends;
+    return activeSection ? [] : at.start;
+  };
   return (
     <div className="relative flex flex-col gap-2">
       <div
@@ -547,9 +556,9 @@ export default function SeatMapCanvas({
                 </Group>
               ) : i.kind === 'row' ? (
                 <Group key={`rw-${i.id}`} x={i.x} y={i.y} rotation={i.rotation}>
-                  {/* Upright whatever the row's angle, beside its first seat; a row in a section is
-                      named at both ends, outside the section's outline, as aisle signs are. */}
-                  {(rowLabels.get(i.id) ?? [{ x: ROW_LABEL_X, y: 0 }]).map((at) => (
+                  {/* Upright whatever the row's angle, outside its section: at its first seat, or at
+                      both ends when its section is chosen (see labelPoints). */}
+                  {labelPoints(i).map((at) => (
                     <Text
                       key={at.x}
                       text={bareItemLabel(i.label)}
@@ -607,18 +616,19 @@ export default function SeatMapCanvas({
 }
 
 /**
- * Where a sectioned row's name goes, in the row's own coordinates: past its first and its last
- * seat (whatever order the seats are in), outside the section. An end that would land inside
- * another section (an aisle shared with the next block) is left out, so two names never meet.
+ * Where a sectioned row's name goes, in the row's own coordinates, outside the section: `start`
+ * past its first seat (used when no section is chosen: every row names that same end), and `ends`
+ * both ends for the chosen section, an end that would land inside another section left out (a
+ * block with neighbours on both sides keeps its start).
  */
 function rowEnds(
   row: { x: number; y: number; rotation: number; sectionId: string | null; seats: readonly { x: number; y: number }[] },
   regions: readonly SeatRegion[],
-): { x: number; y: number }[] {
+): { start: { x: number; y: number }[]; ends: { x: number; y: number }[] } {
   const byX = [...row.seats].sort((a, b) => a.x - b.x);
   const first = byX[0];
   const last = byX.at(-1);
-  if (!first || !last) return [];
+  if (!first || !last) return { start: [], ends: [] };
   const a = (row.rotation * Math.PI) / 180;
   const inRoom = (p: { x: number; y: number }) => ({
     x: row.x + p.x * Math.cos(a) - p.y * Math.sin(a),
@@ -632,8 +642,7 @@ function rowEnds(
     const other = regionAt(regions, inRoom(p));
     return !other || other.id === row.sectionId;
   });
-  // A block with neighbours on both sides still names every row, beside its first seat.
-  return kept.length ? kept : ends.slice(0, 1);
+  return { start: ends.slice(0, 1), ends: kept.length ? kept : ends.slice(0, 1) };
 }
 
 /** A text's width in px as the canvas draws it (Konva's default face), for any script. */
