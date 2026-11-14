@@ -1149,7 +1149,11 @@
       "vip": "VIP",
       "sectionOtherPrices": "仅其他价格",
       "listTitle": "从列表中选择",
-      "roomPhotos": "场地照片（{total}）"
+      "roomPhotos": "场地照片（{total}）",
+      "fullScreen": "全屏",
+      "closeFullScreen": "退出全屏",
+      "barSeats": "{count, plural, other {# 个座位}}",
+      "barContinue": "继续"
     },
     "seatRuleCap": "超出了单笔订单可选的座位数，请减少选择。",
     "seatRuleAda": "无障碍座位目前为有需要的宾客保留，请选择其他座位。",

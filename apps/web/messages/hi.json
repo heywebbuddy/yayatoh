@@ -1149,7 +1149,11 @@
       "vip": "VIP",
       "sectionOtherPrices": "केवल अन्य कीमतें",
       "listTitle": "सूची से चुनें",
-      "roomPhotos": "स्थल की फ़ोटो ({total})"
+      "roomPhotos": "स्थल की फ़ोटो ({total})",
+      "fullScreen": "फ़ुल स्क्रीन",
+      "closeFullScreen": "फ़ुल स्क्रीन बंद करें",
+      "barSeats": "{count, plural, one {# सीट} other {# सीटें}}",
+      "barContinue": "आगे बढ़ें"
     },
     "seatRuleCap": "एक ऑर्डर में इतनी सीटें नहीं ली जा सकतीं। कृपया कम चुनें।",
     "seatRuleAda": "सुलभ सीटें फ़िलहाल ज़रूरतमंद मेहमानों के लिए रखी गई हैं। कृपया दूसरी सीटें चुनें।",

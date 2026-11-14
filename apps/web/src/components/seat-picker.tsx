@@ -9,11 +9,21 @@ import {
   type RuleHit,
   type SeatingRule,
 } from '@yayatoh/seating/client';
-import { Button, paper, paperDark, seatPrices, seatPricesDark } from '@yayatoh/ui';
-import { X } from 'lucide-react';
+import { Button, cx, paper, paperDark, seatPrices, seatPricesDark } from '@yayatoh/ui';
+import { Maximize2, X } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useFormatter, useTranslations } from 'next-intl';
-import { memo, type ReactNode, type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  memo,
+  type ReactNode,
+  type RefObject,
+  type SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { type GalleryLabels, GalleryLightbox } from '@/components/gallery-lightbox.tsx';
 import type { PictureSource } from '@/components/media-picture.tsx';
 import { useRouter } from '@/i18n/navigation.ts';
@@ -154,6 +164,69 @@ export function SeatPicker({
   const [live, setLive] = useState<ReadonlyMap<string, boolean>>(new Map());
   const [notice, setNotice] = useState<string | null>(null);
   const [showMap, setShowMap] = useState(true);
+  // Full screen: the picker's own dialog shown as a modal over the page, with a taller map.
+  const [full, setFull] = useState(false);
+  const [fullMapHeight, setFullMapHeight] = useState(560);
+  const sheet = useRef<HTMLDialogElement>(null);
+  const expand = useRef<HTMLButtonElement>(null);
+  const toDetails = useRef(false);
+  const enterFull = () => {
+    const d = sheet.current;
+    if (!d) return;
+    // Header, price key and the seats bar take about 220px; the map gets the rest of the screen.
+    setFullMapHeight(Math.max(320, window.innerHeight - 220));
+    d.close(); // a dialog open in the page has to close before it can open as a modal
+    d.showModal();
+    setFull(true);
+  };
+  // The buyer details that follow the seats ("Full name"), or else the form's submit button.
+  const focusDetails = () => {
+    const form = root.current?.closest('form');
+    const next =
+      form?.querySelector<HTMLElement>('input[name="name"]') ??
+      form?.querySelector<HTMLElement>('[type="submit"]');
+    if (!next) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    next.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
+    next.focus({ preventScroll: true });
+  };
+  const onSheetClose = (e: SyntheticEvent<HTMLDialogElement>) => {
+    // A nested dialog's close (the venue photos slider) reaches this handler too: not ours.
+    if (e.target !== e.currentTarget) return;
+    const d = sheet.current;
+    // The close that comes before showModal() arrives once the dialog is open again: not a leave.
+    if (!d || d.open) return;
+    d.show(); // back in the page, open
+    setFull(false);
+    const details = toDetails.current;
+    toDetails.current = false;
+    requestAnimationFrame(() => (details ? focusDetails() : expand.current?.focus()));
+  };
+  const continueToDetails = () => {
+    if (!full) return focusDetails();
+    toDetails.current = true;
+    sheet.current?.close();
+  };
+  // Entering full screen: focus goes to its close button (the button that had it is gone), and the
+  // map follows the screen if it turns or is resized.
+  const closeFull = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!full) return;
+    closeFull.current?.focus();
+    const fit = () => setFullMapHeight(Math.max(320, window.innerHeight - 220));
+    window.addEventListener('resize', fit);
+    return () => window.removeEventListener('resize', fit);
+  }, [full]);
+  // The page behind a full-screen picker stays still.
+  useEffect(() => {
+    if (!full) return;
+    const html = document.documentElement;
+    const was = html.style.overflow;
+    html.style.overflow = 'hidden';
+    return () => {
+      html.style.overflow = was;
+    };
+  }, [full]);
   const [shownPrices, setShownPrices] = useState<ReadonlySet<string>>(new Set());
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const root = useRef<HTMLElement>(null);
@@ -422,299 +495,383 @@ export function SeatPicker({
       : [];
   });
 
+  // The seats bar: what is chosen, by price ("2 × €140 + 1 × €90"), and the way on to checkout.
+  const chosenByPrice = new Map<string, number>();
+  for (const id of selected) {
+    const label = prices[bySeat.get(id)?.ticketTypeId ?? ''];
+    if (label) chosenByPrice.set(label, (chosenByPrice.get(label) ?? 0) + 1);
+  }
+  const chosenPrices = [...chosenByPrice].map(([label, n]) => `${n} × ${label}`).join(' + ');
+  const showBar = context === 'checkout' && selected.size > 0;
+
   return (
-    <section
-      ref={root}
-      aria-labelledby="seats-heading"
-      className="@container flex flex-col gap-3 text-ink"
-      data-live={stream ? liveState : undefined}
-    >
-      <div className="flex flex-wrap items-center gap-3">
-        <h3 id="seats-heading" className="text-section">
-          {t('title')}
-        </h3>
-        <p role="status" className="text-caption text-ink-2">
-          {t('selected', { count: selected.size })}
-        </p>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={() => setShowMap(!showMap)}
-          aria-expanded={showMap}
+    <section ref={root} className="text-ink" data-live={stream ? liveState : undefined}>
+      {/* One element, never remounted: open in the page, or shown as a full-screen modal. The
+          modal sits in the browser's top layer, so it escapes the page's containers (a fixed
+          overlay would not), keeps focus inside and closes on Escape; its fields stay in the
+          checkout form either way, so the chosen seats always post. The price: in the page, screen
+          readers announce it as a dialog too. */}
+      <dialog
+        ref={sheet}
+        open
+        aria-labelledby="seats-heading"
+        onClose={onSheetClose}
+        className={
+          full
+            ? '@container fixed inset-0 m-0 h-dvh max-h-none w-screen max-w-none overflow-y-auto border-0 bg-surface p-0 text-ink backdrop:bg-black/60'
+            : '@container static m-0 block w-full max-w-none border-0 bg-transparent p-0 text-ink'
+        }
+      >
+        <div
+          className={cx(
+            full ? 'flex min-h-full flex-col gap-3 p-4 @lg:p-6' : 'flex flex-col gap-3',
+            // A control scrolled into view (Tab) stays clear of the pinned seats bar.
+            showBar && '[&_button]:scroll-mb-28 [&_input]:scroll-mb-28 [&_summary]:scroll-mb-28',
+          )}
         >
-          {showMap ? t('hideMap') : t('showMap')}
-        </Button>
-      </div>
-      {ada || capMax || companionRule ? (
-        <ul className="flex list-none flex-col gap-1 p-0 text-caption text-ink-2">
-          {ada ? (
-            <li>
-              {ada.severity === 'enforce'
-                ? // M6.11a: with best available, a buyer who needs one can still get one online.
-                  t(
-                    map.bestAvailable && context === 'checkout'
-                      ? 'rules.adaEnforcedBest'
-                      : 'rules.adaEnforced',
-                    {
-                      date: date(ada.releaseAt),
-                    },
-                  )
-                : t('rules.adaWarn', { date: date(ada.releaseAt) })}
-            </li>
-          ) : null}
-          {capMax ? (
-            <li>
-              {cap?.severity === 'enforce'
-                ? t('rules.capEnforced', { max: capMax })
-                : t('rules.capWarn', { max: capMax })}
-            </li>
-          ) : null}
-          {companionRule ? (
-            <li>
-              {t(companionRule.severity === 'enforce' ? 'rules.companionEnforced' : 'rules.companionWarn', {
-                max: companionRule.maxPerAccessible,
-              })}
-            </li>
-          ) : null}
-        </ul>
-      ) : null}
-      {/* Live changes, limits and rule warnings are announced politely. */}
-      <div aria-live="polite" className="flex flex-col gap-1">
-        {notice ? (
-          <p
-            className="rounded-card border border-line bg-surface-2 px-3 py-2 text-body"
-            data-testid="seat-notice"
-          >
-            {notice}
-          </p>
-        ) : null}
-        {warnings.map((w) => (
-          <p
-            key={w}
-            className="rounded-card border border-primary/40 bg-primary-soft px-3 py-2 text-body text-primary-ink"
-          >
-            {w}
-          </p>
-        ))}
-      </div>
-      {levels.length > 1 ? (
-        <fieldset className="flex flex-wrap items-center gap-1.5">
-          <legend className="float-start me-1.5 text-caption text-ink-2">{t('priceFilter')}</legend>
-          {levels.map((level) => (
-            <Button
-              key={level.label}
-              type="button"
-              size="sm"
-              variant={shownPrices.has(level.label) ? 'secondary' : 'ghost'}
-              aria-pressed={shownPrices.has(level.label)}
-              onClick={() => togglePrice(level.label)}
-            >
-              <Swatch fill={colorOf(level.index).fill} />
-              {level.label}
-            </Button>
-          ))}
-        </fieldset>
-      ) : null}
-      <div className={`grid gap-4 ${showMap ? '@3xl:grid-cols-[minmax(0,1.7fr)_minmax(17rem,1fr)]' : ''}`}>
-        {showMap ? (
-          <div className="flex min-w-0 flex-col gap-2">
-            {/* The list beside it offers the same choices by keyboard and screen reader. */}
-            <SeatMapCanvas
-              doc={map.doc}
-              dark={dark}
-              regions={regions}
-              stats={stats}
-              sectionFill={sectionFill}
-              activeSection={activeSection}
-              available={available}
-              selected={selected}
-              muted={muted}
-              fills={fills}
-              tipOf={tipOf}
-              // At checkout the map may run edge to edge on a phone; the box office keeps it in its card.
-              bleed={context === 'checkout'}
-              extraControl={
-                roomPhotos && roomPhotos.images.length > 0 ? (
-                  // The shared photo slider: one thumbnail button (the zoom buttons' height and
-                  // corners, its focus ring left unclipped) opens it over every photo of the room.
-                  <GalleryLightbox
-                    images={roomPhotos.images}
-                    labels={roomPhotos.labels}
-                    single
-                    sizes="48px"
-                    gridClassName="m-0 flex list-none p-0 [&>li]:overflow-visible [&>li]:rounded-[12px]"
-                    imageClassName="h-9 w-12 rounded-[12px] object-cover"
-                  />
-                ) : null
-              }
-              onToggle={onToggle}
-              onToggleTable={onToggleTable}
-              onSection={setActiveSection}
-            />
-            <ul
-              aria-label={t('mapKey')}
-              className="m-0 flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-caption text-ink-2"
-            >
-              {levels.length === 1 && levels[0] ? (
-                <KeyItem fill={colorOf(levels[0].index).fill} label={levels[0].label} />
+          <div className="flex flex-wrap items-center gap-3">
+            <h3 id="seats-heading" className="text-section">
+              {t('title')}
+            </h3>
+            <p role="status" className="text-caption text-ink-2">
+              {t('selected', { count: selected.size })}
+            </p>
+            {full ? null : (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowMap(!showMap)}
+                aria-expanded={showMap}
+              >
+                {showMap ? t('hideMap') : t('showMap')}
+              </Button>
+            )}
+            {showMap ? (
+              full ? (
+                <Button
+                  ref={closeFull}
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  className="ms-auto"
+                  onClick={() => sheet.current?.close()}
+                >
+                  <X aria-hidden="true" className="size-4" />
+                  {t('closeFullScreen')}
+                </Button>
+              ) : (
+                <Button ref={expand} type="button" variant="ghost" size="sm" onClick={enterFull}>
+                  <Maximize2 aria-hidden="true" className="size-4" />
+                  {t('fullScreen')}
+                </Button>
+              )
+            ) : null}
+          </div>
+          {ada || capMax || companionRule ? (
+            <ul className="flex list-none flex-col gap-1 p-0 text-caption text-ink-2">
+              {ada ? (
+                <li>
+                  {ada.severity === 'enforce'
+                    ? // M6.11a: with best available, a buyer who needs one can still get one online.
+                      t(
+                        map.bestAvailable && context === 'checkout'
+                          ? 'rules.adaEnforcedBest'
+                          : 'rules.adaEnforced',
+                        {
+                          date: date(ada.releaseAt),
+                        },
+                      )
+                    : t('rules.adaWarn', { date: date(ada.releaseAt) })}
+                </li>
               ) : null}
-              <KeyItem fill={paper_.selected} stroke={paper_.label} label={t('keySelected')} />
-              <KeyItem fill={paper_.taken} label={t('taken')} />
-              {map.seats.some((s) => s.accessible) ? (
-                <KeyItem
-                  fill={colorOf(levels[0]?.index ?? 0).fill}
-                  stroke={paper_.label}
-                  label={t('accessible')}
-                />
+              {capMax ? (
+                <li>
+                  {cap?.severity === 'enforce'
+                    ? t('rules.capEnforced', { max: capMax })
+                    : t('rules.capWarn', { max: capMax })}
+                </li>
+              ) : null}
+              {companionRule ? (
+                <li>
+                  {t(
+                    companionRule.severity === 'enforce' ? 'rules.companionEnforced' : 'rules.companionWarn',
+                    {
+                      max: companionRule.maxPerAccessible,
+                    },
+                  )}
+                </li>
               ) : null}
             </ul>
-          </div>
-        ) : null}
-        <div className="flex min-w-0 flex-col gap-3">
-          {selected.size > 0 ? (
-            <section aria-labelledby="your-seats" className="flex flex-col gap-1.5">
-              <h4 id="your-seats" className="m-0 text-[13px] font-bold text-ink">
-                {t('yourSeats')}
-              </h4>
-              <ul className="m-0 flex list-none flex-col gap-1 p-0">
-                {[...selected].map((id) => (
-                  <li
-                    key={id}
-                    className="flex items-center justify-between gap-2 rounded-card border border-line bg-surface px-2.5 py-1 text-body"
-                  >
-                    <span className="min-w-0">{labelOf(id)}</span>
-                    <span className="ms-auto shrink-0 text-ink-2">
-                      {prices[bySeat.get(id)?.ticketTypeId ?? '']}
-                    </span>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => onToggle(id)}
-                      aria-label={t('removeSeat', { label: labelOf(id) })}
-                    >
-                      <X aria-hidden="true" className="size-4" />
-                    </Button>
-                  </li>
-                ))}
-              </ul>
-            </section>
           ) : null}
-          {regions.length > 0 ? (
-            <section aria-labelledby="seat-sections" className="flex flex-col gap-1.5">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <h4 id="seat-sections" className="m-0 text-[13px] font-bold text-ink">
-                  {t('sections')}
-                </h4>
-                {activeSection ? (
-                  <Button type="button" size="sm" variant="ghost" onClick={() => setActiveSection(null)}>
-                    {t('allSections')}
-                  </Button>
-                ) : null}
-              </div>
-              <ul
-                ref={sectionList}
-                className="m-0 flex max-h-48 list-none flex-col gap-1 overflow-y-auto p-0"
+          {/* Live changes, limits and rule warnings are announced politely. */}
+          <div aria-live="polite" className="flex flex-col gap-1">
+            {notice ? (
+              <p
+                className="rounded-card border border-line bg-surface-2 px-3 py-2 text-body"
+                data-testid="seat-notice"
               >
-                {regions.map((r) => {
-                  const s = stats.get(r.id);
-                  const on = r.id === activeSection;
-                  return (
-                    <li key={r.id}>
-                      <button
-                        type="button"
-                        aria-pressed={on}
-                        onClick={() => setActiveSection(on ? null : r.id)}
-                        className={`flex min-h-11 w-full items-center gap-2 rounded-card border px-2.5 py-1 text-start text-body ${on ? 'border-primary bg-primary-soft' : 'border-line bg-surface'}`}
-                      >
-                        <Swatch fill={sectionFill(s).fill} />
-                        <span className="min-w-0 flex-1 font-bold">
-                          {r.vip ? `${r.label} · ${t('vip')}` : r.label}
-                        </span>
-                        <span className="shrink-0 text-caption text-ink-2">
-                          {s && s.left > 0
-                            ? `${t('sectionFrom', { price: s.from?.label ?? '' })} · ${t('sectionLeft', { count: s.left })}`
-                            : t(s?.free ? 'sectionOtherPrices' : 'sectionNone')}
-                        </span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
+                {notice}
+              </p>
+            ) : null}
+            {warnings.map((w) => (
+              <p
+                key={w}
+                className="rounded-card border border-primary/40 bg-primary-soft px-3 py-2 text-body text-primary-ink"
+              >
+                {w}
+              </p>
+            ))}
+          </div>
+          {levels.length > 1 ? (
+            <fieldset className="flex flex-wrap items-center gap-1.5">
+              <legend className="float-start me-1.5 text-caption text-ink-2">{t('priceFilter')}</legend>
+              {levels.map((level) => (
+                <Button
+                  key={level.label}
+                  type="button"
+                  size="sm"
+                  variant={shownPrices.has(level.label) ? 'secondary' : 'ghost'}
+                  aria-pressed={shownPrices.has(level.label)}
+                  onClick={() => togglePrice(level.label)}
+                >
+                  <Swatch fill={colorOf(level.index).fill} />
+                  {level.label}
+                </Button>
+              ))}
+            </fieldset>
           ) : null}
-          <RowList asDisclosure={showMap} title={t('listTitle')}>
-            {groups.map((g) => {
-              // Filtered out: chosen seats still post, and still show where their group shows.
-              const inSection = !activeSection || g.sectionId === activeSection;
-              const visibleSeats = inSection
-                ? g.seats.filter((id) => selected.has(id) || !muted.has(id))
-                : [];
-              if (visibleSeats.length === 0)
-                return g.seats
-                  .filter((id) => selected.has(id))
-                  .map((id) => <input key={id} type="hidden" name={fieldName} value={id} />);
-              const group = (
-                <SeatGroup
-                  key={g.id}
-                  group={g}
-                  sig={g.seats
-                    .map(
-                      (id) =>
-                        `${available.has(id) ? 'a' : ''}${selected.has(id) ? 's' : ''}${visibleSeats.includes(id) ? '' : 'h'}`,
-                    )
-                    .join('|')}
-                  visible={visibleSeats}
-                  map={bySeat}
-                  prices={prices}
-                  keptNote={keptNote}
-                  fieldName={fieldName}
+          <div
+            className={`grid gap-4 ${showMap ? '@3xl:grid-cols-[minmax(0,1.7fr)_minmax(17rem,1fr)]' : ''}`}
+          >
+            {showMap ? (
+              <div className="flex min-w-0 flex-col gap-2">
+                {/* The list beside it offers the same choices by keyboard and screen reader. */}
+                <SeatMapCanvas
+                  doc={map.doc}
+                  dark={dark}
+                  regions={regions}
+                  stats={stats}
+                  sectionFill={sectionFill}
+                  activeSection={activeSection}
                   available={available}
                   selected={selected}
+                  muted={muted}
+                  fills={fills}
+                  tipOf={tipOf}
+                  // At checkout the map may run edge to edge on a phone; the box office keeps it in its card.
+                  // In full screen it is already edge to edge, and taller.
+                  bleed={context === 'checkout' && !full}
+                  {...(full ? { maxHeight: fullMapHeight } : {})}
+                  extraControl={
+                    roomPhotos && roomPhotos.images.length > 0 ? (
+                      // The shared photo slider: one thumbnail button (the zoom buttons' height and
+                      // corners, its focus ring left unclipped) opens it over every photo of the room.
+                      <GalleryLightbox
+                        images={roomPhotos.images}
+                        labels={roomPhotos.labels}
+                        single
+                        sizes="48px"
+                        gridClassName="m-0 flex list-none p-0 [&>li]:overflow-visible [&>li]:rounded-[12px]"
+                        imageClassName="h-9 w-12 rounded-[12px] object-cover"
+                      />
+                    ) : null
+                  }
                   onToggle={onToggle}
                   onToggleTable={onToggleTable}
+                  onSection={setActiveSection}
                 />
-              );
-              if (!large) return group;
-              // Large rooms: each row or table opens on request (thousands of boxes at once help no
-              // one); chosen seats in a closed one still post.
-              const isOpen = open.has(g.id);
-              return (
-                <details
-                  key={g.id}
-                  open={isOpen}
-                  onToggle={(e) => {
-                    const now = e.currentTarget.open;
-                    setOpen((prev) => {
-                      if (prev.has(g.id) === now) return prev;
-                      const next = new Set(prev);
-                      if (now) next.add(g.id);
-                      else next.delete(g.id);
-                      return next;
-                    });
-                  }}
-                  className="flex flex-col gap-1.5"
+                <ul
+                  aria-label={t('mapKey')}
+                  className="m-0 flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-caption text-ink-2"
                 >
-                  <summary className="min-h-6 cursor-pointer text-body">
-                    {t('groupSummary', {
-                      group: t(`group.${g.kind}`, { label: bareItemLabel(g.label) }),
-                      free: g.seats.filter((id) => available.has(id)).length,
-                      total: g.seats.length,
-                      chosen: g.seats.filter((id) => selected.has(id)).length,
+                  {levels.length === 1 && levels[0] ? (
+                    <KeyItem fill={colorOf(levels[0].index).fill} label={levels[0].label} />
+                  ) : null}
+                  <KeyItem fill={paper_.selected} stroke={paper_.label} label={t('keySelected')} />
+                  <KeyItem fill={paper_.taken} label={t('taken')} />
+                  {map.seats.some((s) => s.accessible) ? (
+                    <KeyItem
+                      fill={colorOf(levels[0]?.index ?? 0).fill}
+                      stroke={paper_.label}
+                      label={t('accessible')}
+                    />
+                  ) : null}
+                </ul>
+              </div>
+            ) : null}
+            <div className="flex min-w-0 flex-col gap-3">
+              {selected.size > 0 ? (
+                <section aria-labelledby="your-seats" className="flex flex-col gap-1.5">
+                  <h4 id="your-seats" className="m-0 text-[13px] font-bold text-ink">
+                    {t('yourSeats')}
+                  </h4>
+                  <ul className="m-0 flex list-none flex-col gap-1 p-0">
+                    {[...selected].map((id) => (
+                      <li
+                        key={id}
+                        className="flex items-center justify-between gap-2 rounded-card border border-line bg-surface px-2.5 py-1 text-body"
+                      >
+                        <span className="min-w-0">{labelOf(id)}</span>
+                        <span className="ms-auto shrink-0 text-ink-2">
+                          {prices[bySeat.get(id)?.ticketTypeId ?? '']}
+                        </span>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => onToggle(id)}
+                          aria-label={t('removeSeat', { label: labelOf(id) })}
+                        >
+                          <X aria-hidden="true" className="size-4" />
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
+              {regions.length > 0 ? (
+                <section aria-labelledby="seat-sections" className="flex flex-col gap-1.5">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <h4 id="seat-sections" className="m-0 text-[13px] font-bold text-ink">
+                      {t('sections')}
+                    </h4>
+                    {activeSection ? (
+                      <Button type="button" size="sm" variant="ghost" onClick={() => setActiveSection(null)}>
+                        {t('allSections')}
+                      </Button>
+                    ) : null}
+                  </div>
+                  <ul
+                    ref={sectionList}
+                    className="m-0 flex max-h-48 list-none flex-col gap-1 overflow-y-auto p-0"
+                  >
+                    {regions.map((r) => {
+                      const s = stats.get(r.id);
+                      const on = r.id === activeSection;
+                      return (
+                        <li key={r.id}>
+                          <button
+                            type="button"
+                            aria-pressed={on}
+                            onClick={() => setActiveSection(on ? null : r.id)}
+                            className={`flex min-h-11 w-full items-center gap-2 rounded-card border px-2.5 py-1 text-start text-body ${on ? 'border-primary bg-primary-soft' : 'border-line bg-surface'}`}
+                          >
+                            <Swatch fill={sectionFill(s).fill} />
+                            <span className="min-w-0 flex-1 font-bold">
+                              {r.vip ? `${r.label} · ${t('vip')}` : r.label}
+                            </span>
+                            <span className="shrink-0 text-caption text-ink-2">
+                              {s && s.left > 0
+                                ? `${t('sectionFrom', { price: s.from?.label ?? '' })} · ${t('sectionLeft', { count: s.left })}`
+                                : t(s?.free ? 'sectionOtherPrices' : 'sectionNone')}
+                            </span>
+                          </button>
+                        </li>
+                      );
                     })}
-                  </summary>
-                  {isOpen
-                    ? group
-                    : g.seats
-                        .filter((id) => selected.has(id))
-                        .map((id) => <input key={id} type="hidden" name={fieldName} value={id} />)}
-                </details>
-              );
-            })}
-          </RowList>
+                  </ul>
+                </section>
+              ) : null}
+              <RowList asDisclosure={showMap} title={t('listTitle')}>
+                {groups.map((g) => {
+                  // Filtered out: chosen seats still post, and still show where their group shows.
+                  const inSection = !activeSection || g.sectionId === activeSection;
+                  const visibleSeats = inSection
+                    ? g.seats.filter((id) => selected.has(id) || !muted.has(id))
+                    : [];
+                  if (visibleSeats.length === 0)
+                    return g.seats
+                      .filter((id) => selected.has(id))
+                      .map((id) => <input key={id} type="hidden" name={fieldName} value={id} />);
+                  const group = (
+                    <SeatGroup
+                      key={g.id}
+                      group={g}
+                      sig={g.seats
+                        .map(
+                          (id) =>
+                            `${available.has(id) ? 'a' : ''}${selected.has(id) ? 's' : ''}${visibleSeats.includes(id) ? '' : 'h'}`,
+                        )
+                        .join('|')}
+                      visible={visibleSeats}
+                      map={bySeat}
+                      prices={prices}
+                      keptNote={keptNote}
+                      fieldName={fieldName}
+                      available={available}
+                      selected={selected}
+                      onToggle={onToggle}
+                      onToggleTable={onToggleTable}
+                    />
+                  );
+                  if (!large) return group;
+                  // Large rooms: each row or table opens on request (thousands of boxes at once help no
+                  // one); chosen seats in a closed one still post.
+                  const isOpen = open.has(g.id);
+                  return (
+                    <details
+                      key={g.id}
+                      open={isOpen}
+                      onToggle={(e) => {
+                        const now = e.currentTarget.open;
+                        setOpen((prev) => {
+                          if (prev.has(g.id) === now) return prev;
+                          const next = new Set(prev);
+                          if (now) next.add(g.id);
+                          else next.delete(g.id);
+                          return next;
+                        });
+                      }}
+                      className="flex flex-col gap-1.5"
+                    >
+                      <summary className="min-h-6 cursor-pointer text-body">
+                        {t('groupSummary', {
+                          group: t(`group.${g.kind}`, { label: bareItemLabel(g.label) }),
+                          free: g.seats.filter((id) => available.has(id)).length,
+                          total: g.seats.length,
+                          chosen: g.seats.filter((id) => selected.has(id)).length,
+                        })}
+                      </summary>
+                      {isOpen
+                        ? group
+                        : g.seats
+                            .filter((id) => selected.has(id))
+                            .map((id) => <input key={id} type="hidden" name={fieldName} value={id} />)}
+                    </details>
+                  );
+                })}
+              </RowList>
+            </div>
+          </div>
+          {showBar ? (
+            // Pinned to the foot of the screen while seats are being chosen (in the page, while the
+            // picker is on screen; in full screen, always). The page's own "Get tickets" bar hides
+            // here, so the two never meet.
+            <div className={full ? 'sticky bottom-0 -mx-4 mt-auto @lg:-mx-6' : 'sticky bottom-3 z-20'}>
+              <div
+                className={cx(
+                  'flex items-center gap-3 bg-surface px-4 py-3',
+                  full ? 'border-t border-line @lg:px-6' : 'elevation-pop rounded-card border border-line',
+                )}
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="m-0 text-body font-bold">
+                    {t('barSeats', { count: selected.size })}
+                    {chosenPrices ? <span className="font-normal text-ink-2"> · {chosenPrices}</span> : null}
+                  </p>
+                  <p className="m-0 truncate text-caption text-ink-2">
+                    {[...selected].map(labelOf).join(', ')}
+                  </p>
+                </div>
+                <Button type="button" onClick={continueToDetails}>
+                  {t('barContinue')}
+                </Button>
+              </div>
+            </div>
+          ) : null}
         </div>
-      </div>
+      </dialog>
     </section>
   );
 }
@@ -724,12 +881,22 @@ export function SeatPicker({
  * (the same choices for keyboards and screen readers, without a wall of rows under the sections);
  * with the map hidden it is the picker itself. Closed, its chosen seats still post.
  */
-function RowList({ asDisclosure, title, children }: { asDisclosure: boolean; title: string; children: ReactNode }) {
+function RowList({
+  asDisclosure,
+  title,
+  children,
+}: {
+  asDisclosure: boolean;
+  title: string;
+  children: ReactNode;
+}) {
   const list = <div className="flex max-h-96 flex-col gap-3 overflow-y-auto">{children}</div>;
   if (!asDisclosure) return list;
   return (
     <details className="flex flex-col gap-1.5">
-      <summary className="min-h-11 cursor-pointer content-center text-[13px] font-bold text-ink">{title}</summary>
+      <summary className="min-h-11 cursor-pointer content-center text-[13px] font-bold text-ink">
+        {title}
+      </summary>
       {list}
     </details>
   );

@@ -1149,7 +1149,11 @@
       "vip": "VIP",
       "sectionOtherPrices": "Autres prix uniquement",
       "listTitle": "Choisir dans une liste",
-      "roomPhotos": "Photos du lieu ({total})"
+      "roomPhotos": "Photos du lieu ({total})",
+      "fullScreen": "Plein écran",
+      "closeFullScreen": "Quitter le plein écran",
+      "barSeats": "{count, plural, one {# place} other {# places}}",
+      "barContinue": "Continuer"
     },
     "seatRuleCap": "C’est plus de places qu’une commande ne peut en compter. Veuillez en choisir moins.",
     "seatRuleAda": "Les places accessibles sont pour l’instant réservées aux personnes qui en ont besoin. Veuillez choisir d’autres places.",

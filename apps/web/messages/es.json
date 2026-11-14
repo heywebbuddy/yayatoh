@@ -1149,7 +1149,11 @@
       "vip": "VIP",
       "sectionOtherPrices": "Solo otros precios",
       "listTitle": "Elegir de una lista",
-      "roomPhotos": "Fotos del recinto ({total})"
+      "roomPhotos": "Fotos del recinto ({total})",
+      "fullScreen": "Pantalla completa",
+      "closeFullScreen": "Salir de pantalla completa",
+      "barSeats": "{count, plural, one {# asiento} other {# asientos}}",
+      "barContinue": "Continuar"
     },
     "seatRuleCap": "Son más asientos de los permitidos en un pedido. Elige menos, por favor.",
     "seatRuleAda": "Por ahora, los asientos accesibles están reservados para quienes los necesitan. Elige otros asientos.",

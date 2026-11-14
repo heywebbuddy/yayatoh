@@ -73,6 +73,7 @@ export default function SeatMapCanvas({
   fills,
   tipOf,
   bleed = false,
+  maxHeight,
   extraControl = null,
   onToggle,
   onToggleTable,
@@ -94,6 +95,11 @@ export default function SeatMapCanvas({
   tipOf: (seatUuid: string) => SeatTip | null;
   /** On a phone, run the map edge to edge across the screen (checkout; not inside console cards). */
   bleed?: boolean;
+  /**
+   * The map's height limit (px) when the picker sets one (full screen, which also turns `bleed`
+   * off: the map is already edge to edge there); otherwise the default.
+   */
+  maxHeight?: number;
   /** One more control beside the zoom buttons (the room's photos). */
   extraControl?: ReactNode;
   onToggle: (seatUuid: string) => void;
@@ -107,7 +113,8 @@ export default function SeatMapCanvas({
   const paper_ = dark ? paperDark : paper;
   // An edge-to-edge map on a phone stops short of the screen's height, so a finger can still
   // scroll the page past it once it is zoomed in (and pans the map).
-  const onPhone = bleed && width < PHONE_MAP_PX && window.matchMedia(`(max-width: ${PHONE_MAP_PX - 0.02}px)`).matches;
+  const onPhone =
+    bleed && width < PHONE_MAP_PX && window.matchMedia(`(max-width: ${PHONE_MAP_PX - 0.02}px)`).matches;
   // Where the zoom buttons float over the map's top-right corner, the whole room is drawn as if it
   // were a strip wider on that side, so it sits clear of them instead of under them. (The plan is
   // drawn from its left edge, so right-to-left pages, whose buttons sit top-left, keep the plain fit.)
@@ -130,7 +137,8 @@ export default function SeatMapCanvas({
   const view = usePanZoom(
     room,
     width,
-    onPhone ? Math.min(560, Math.round(width * 1.1), Math.round(window.innerHeight * 0.75)) : 560,
+    maxHeight ??
+      (onPhone ? Math.min(560, Math.round(width * 1.1), Math.round(window.innerHeight * 0.75)) : 560),
     CLOSEST_SCALE,
   );
   const seats = useMemo(() => placedSeats(doc), [doc]);
@@ -141,8 +149,7 @@ export default function SeatMapCanvas({
   // seats show even fitted small on a phone; zoomed out past it, the shapes return everywhere.
   const focusFloor = useRef(0);
   const tiny = SEAT_R * view.scale < OVERVIEW_BELOW_PX && view.zoom < view.maxZoom;
-  const overview =
-    regions.length > 0 && (!activeSection || view.scale < focusFloor.current * 0.95) && tiny;
+  const overview = regions.length > 0 && (!activeSection || view.scale < focusFloor.current * 0.95) && tiny;
   // Sections drawn as shapes: all of them in the overview; beside a chosen section, the others
   // while their seats would still be too small to read or tap.
   const shaped = useMemo(
@@ -164,7 +171,9 @@ export default function SeatMapCanvas({
     () =>
       new Map(
         doc.items.flatMap((i) =>
-          i.kind === 'row' && i.sectionId && regionIds.has(i.sectionId) ? [[i.id, rowEnds(i, regions)] as const] : [],
+          i.kind === 'row' && i.sectionId && regionIds.has(i.sectionId)
+            ? [[i.id, rowEnds(i, regions)] as const]
+            : [],
         ),
       ),
     [doc, regions, regionIds],
@@ -424,7 +433,8 @@ export default function SeatMapCanvas({
               const roomH = label ? Math.min(r.bounds.height, label.area / r.bounds.width) * view.scale : 0;
               // The name shrinks to fit a narrow section (down to a readable size), then goes; the
               // price lines show only where they fit whole.
-              const fitSize = (w: number) => (w > 0 ? Math.min(SHAPE_NAME_PX, (SHAPE_NAME_PX * (roomW - 6)) / w) : 0);
+              const fitSize = (w: number) =>
+                w > 0 ? Math.min(SHAPE_NAME_PX, (SHAPE_NAME_PX * (roomW - 6)) / w) : 0;
               const full = label ? fitSize(label.nameW) : 0;
               // Too small for its full name ("Floor B · VIP"): its short one ("Floor B").
               const useShort = label !== undefined && full < SHAPE_NAME_MIN_PX && label.shortW < label.nameW;
@@ -622,7 +632,13 @@ export default function SeatMapCanvas({
  * block with neighbours on both sides keeps its start).
  */
 function rowEnds(
-  row: { x: number; y: number; rotation: number; sectionId: string | null; seats: readonly { x: number; y: number }[] },
+  row: {
+    x: number;
+    y: number;
+    rotation: number;
+    sectionId: string | null;
+    seats: readonly { x: number; y: number }[];
+  },
   regions: readonly SeatRegion[],
 ): { start: { x: number; y: number }[]; ends: { x: number; y: number }[] } {
   const byX = [...row.seats].sort((a, b) => a.x - b.x);
@@ -690,7 +706,14 @@ function SectionTag({
   const height = px(TAG_HEIGHT_PX);
   return (
     <Group x={cx - width / 2} y={top - height - px(TAG_GAP_PX)}>
-      <Rect width={width} height={height} fill={fill} stroke={stroke} strokeWidth={px(1)} cornerRadius={height / 2} />
+      <Rect
+        width={width}
+        height={height}
+        fill={fill}
+        stroke={stroke}
+        strokeWidth={px(1)}
+        cornerRadius={height / 2}
+      />
       <Text
         text={name}
         x={px(TAG_PAD_PX)}

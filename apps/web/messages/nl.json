@@ -1149,7 +1149,11 @@
       "vip": "VIP",
       "sectionOtherPrices": "Alleen andere prijzen",
       "listTitle": "Uit een lijst kiezen",
-      "roomPhotos": "Foto's van de locatie ({total})"
+      "roomPhotos": "Foto's van de locatie ({total})",
+      "fullScreen": "Volledig scherm",
+      "closeFullScreen": "Volledig scherm sluiten",
+      "barSeats": "{count, plural, one {# plaats} other {# plaatsen}}",
+      "barContinue": "Doorgaan"
     },
     "seatRuleCap": "Dat zijn meer plaatsen dan één bestelling mag hebben. Kies er minder.",
     "seatRuleAda": "Toegankelijke plaatsen worden voorlopig vrijgehouden voor gasten die ze nodig hebben. Kies andere plaatsen.",

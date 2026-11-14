@@ -1149,7 +1149,11 @@
       "vip": "VIP",
       "sectionOtherPrices": "أسعار أخرى فقط",
       "listTitle": "اختر من قائمة",
-      "roomPhotos": "صور المكان ({total})"
+      "roomPhotos": "صور المكان ({total})",
+      "fullScreen": "ملء الشاشة",
+      "closeFullScreen": "الخروج من ملء الشاشة",
+      "barSeats": "{count, plural, zero {لا مقاعد} one {مقعد واحد} two {مقعدان} few {# مقاعد} many {# مقعدًا} other {# مقعد}}",
+      "barContinue": "متابعة"
     },
     "seatRuleCap": "هذا عدد مقاعد يتجاوز المسموح به في الطلب الواحد. يُرجى اختيار عدد أقل.",
     "seatRuleAda": "المقاعد المهيأة لذوي الإعاقة محفوظة حاليًا للضيوف الذين يحتاجونها. يُرجى اختيار مقاعد أخرى.",
