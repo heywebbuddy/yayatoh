@@ -48,6 +48,8 @@ const COMPACT_ROW_NAME_FONT = 26;
 const COMPACT_ROW_NAME_GAP_CM = 8;
 /** The clear space a full-size row name needs around it from any other section (cm). */
 const ROW_NAME_MARGIN_CM = 20;
+/** The room two names of one section keep between them (cm). */
+const ROW_NAME_GAP_CM = 6;
 /** The name tag over a focused section: its height, its gap above the section, the room around its text (px). */
 const TAG_HEIGHT_PX = 22;
 const TAG_GAP_PX = 4;
@@ -173,18 +175,25 @@ export default function SeatMapCanvas({
         .map((s) => ({ id: s.seatId, x: s.x, y: s.y })),
     [seats, shapedSeats, selected],
   );
-  // Where each sectioned row's name goes (both ends, outside its section), worked out once per plan.
-  const rowLabels = useMemo(
-    () =>
-      new Map(
-        doc.items.flatMap((i) =>
-          i.kind === 'row' && i.sectionId && regionIds.has(i.sectionId)
-            ? [[i.id, rowEnds(i, regions)] as const]
-            : [],
-        ),
-      ),
-    [doc, regions, regionIds],
-  );
+  // Where each sectioned row's name goes (both ends, outside its section), worked out once per plan,
+  // then spaced out within each section so no two of its names touch.
+  const rowLabels = useMemo(() => {
+    const rows = doc.items.flatMap((i) =>
+      i.kind === 'row' && i.sectionId && regionIds.has(i.sectionId)
+        ? [
+            {
+              id: i.id,
+              sectionId: i.sectionId,
+              x: i.x,
+              y: i.y,
+              rotation: i.rotation,
+              names: rowEnds(i, regions),
+            },
+          ]
+        : [],
+    );
+    return spaceOutRowNames(rows);
+  }, [doc, regions, regionIds]);
   // Where each section's row names reach in the room (both ends, as when it is chosen): the zoom
   // takes them in, and its name tag sits above them.
   const namesOver = (which: 'start' | 'ends') => {
@@ -708,6 +717,8 @@ interface RowName {
   readonly x: number;
   readonly y: number;
   readonly compact: boolean;
+  /** Which end of its row it names: past the first seat or past the last. */
+  readonly side: 'first' | 'last';
   readonly box: RoomBox;
 }
 
@@ -743,10 +754,20 @@ function rowEnds(
   const others = regions.filter((r) => r.id !== row.sectionId);
   const fullW = textWidth(text, ROW_NAME_FONT, 'bold');
   const compactW = textWidth(text, COMPACT_ROW_NAME_FONT, 'bold');
-  const nameAt = (p: { x: number; y: number }, font: number, compact: boolean): RowName => {
+  const nameAt = (
+    p: { x: number; y: number },
+    font: number,
+    compact: boolean,
+    side: 'first' | 'last' = 'first',
+  ): RowName => {
     const c = inRoom(p);
     const hw = (compact ? compactW : fullW) / 2;
-    return { ...p, compact, box: { x0: c.x - hw, y0: c.y - font / 2, x1: c.x + hw, y1: c.y + font / 2 } };
+    return {
+      ...p,
+      compact,
+      side,
+      box: { x0: c.x - hw, y0: c.y - font / 2, x1: c.x + hw, y1: c.y + font / 2 },
+    };
   };
   // Clear when its corners and edge middles, pushed out by the margin, are outside every other
   // section's outline (each tested on its own: padded outlines overlap in narrow aisles).
@@ -759,7 +780,7 @@ function rowEnds(
     return true;
   };
   const startName = nameAt({ x: first.x + SECTION_ROW_LABEL_X, y: first.y }, ROW_NAME_FONT, false);
-  const endName = nameAt({ x: last.x - SECTION_ROW_LABEL_X, y: last.y }, ROW_NAME_FONT, false);
+  const endName = nameAt({ x: last.x - SECTION_ROW_LABEL_X, y: last.y }, ROW_NAME_FONT, false, 'last');
   // The compact name's box ends just short of the first seat, whatever the row's angle: its reach
   // along the row is half its width and half its height, each as far as the angle turns it.
   const reach = (compactW / 2) * Math.abs(Math.cos(a)) + (COMPACT_ROW_NAME_FONT / 2) * Math.abs(Math.sin(a));
@@ -772,6 +793,82 @@ function rowEnds(
   const endClear = clear(endName, ROW_NAME_MARGIN_CM);
   const ends = [...(startClear ? [startName] : []), ...(endClear ? [endName] : [])];
   return { start: [startClear ? startName : compact], ends: ends.length > 0 ? ends : [compact] };
+}
+
+const boxesMeet = (a: RoomBox, b: RoomBox) =>
+  a.x0 - ROW_NAME_GAP_CM < b.x1 &&
+  b.x0 - ROW_NAME_GAP_CM < a.x1 &&
+  a.y0 - ROW_NAME_GAP_CM < b.y1 &&
+  b.y0 - ROW_NAME_GAP_CM < a.y1;
+
+/**
+ * A section's rows can lie closer together than their names are wide (rows running up the screen,
+ * 90cm apart, named "U1-3"): side by side, the names would run into each other. So, section by
+ * section and in row order, a name is kept only where it meets none already kept. With no section
+ * chosen (`start`), that may name every other row. For the chosen section (`ends`), the first-seat
+ * names go first, then the far ends, rows still unnamed before the others, so the names alternate
+ * and nearly every row is named once (a row whose names would meet on both sides stays unnamed;
+ * its seats' tips still say their row).
+ */
+function spaceOutRowNames(
+  rows: readonly {
+    id: string;
+    sectionId: string;
+    x: number;
+    y: number;
+    rotation: number;
+    names: { start: RowName[]; ends: RowName[] };
+  }[],
+): Map<string, { start: RowName[]; ends: RowName[] }> {
+  const out = new Map<string, { start: RowName[]; ends: RowName[] }>();
+  const sections = new Map<string, (typeof rows)[number][]>();
+  for (const r of rows) {
+    const list = sections.get(r.sectionId) ?? [];
+    list.push(r);
+    sections.set(r.sectionId, list);
+  }
+  for (const unordered of sections.values()) {
+    // In the order the rows sit on the map, whatever order the plan lists them in: each row's
+    // place across the section, all measured along one direction (the first row's), from it.
+    const ref = unordered[0];
+    const a = ((ref?.rotation ?? 0) * Math.PI) / 180;
+    const across = (r: { x: number; y: number }) =>
+      -(r.x - (ref?.x ?? 0)) * Math.sin(a) + (r.y - (ref?.y ?? 0)) * Math.cos(a);
+    const section = [...unordered].sort((p, q) => across(p) - across(q));
+    const keptStart: RoomBox[] = [];
+    const keptEnds: RoomBox[] = [];
+    const start = new Map<string, RowName[]>();
+    const ends = new Map<string, RowName[]>();
+    const named = new Set<string>();
+    const keep = (kept: RoomBox[], n: RowName) => {
+      if (kept.some((b) => boxesMeet(n.box, b))) return false;
+      kept.push(n.box);
+      return true;
+    };
+    for (const r of section) {
+      start.set(
+        r.id,
+        r.names.start.filter((n) => keep(keptStart, n)),
+      );
+      ends.set(r.id, []);
+    }
+    for (const r of section) {
+      for (const n of r.names.ends) {
+        if (n.side === 'first' && keep(keptEnds, n)) {
+          ends.get(r.id)?.push(n);
+          named.add(r.id);
+        }
+      }
+    }
+    const farEnds = [...section].sort((a, b) => Number(named.has(a.id)) - Number(named.has(b.id)));
+    for (const r of farEnds) {
+      for (const n of r.names.ends) {
+        if (n.side === 'last' && keep(keptEnds, n)) ends.get(r.id)?.push(n);
+      }
+    }
+    for (const r of section) out.set(r.id, { start: start.get(r.id) ?? [], ends: ends.get(r.id) ?? [] });
+  }
+  return out;
 }
 
 /** Whether a point lies inside a polygon (ray casting; the outlines are convex, any polygon works). */
