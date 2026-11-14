@@ -41,8 +41,13 @@ const CONTROLS_GUTTER_PX = 56;
 /** A row's name sits this far before its first seat: clear of its section's outline when it has one. */
 const ROW_LABEL_X = -(SEAT_R + 50);
 const SECTION_ROW_LABEL_X = -(REGION_PAD_CM + 46);
-/** How far a section's row names reach past its outline box: the name's offset plus half its 140cm box. */
-const ROW_NAME_ROOM_CM = -SECTION_ROW_LABEL_X + 70 - REGION_PAD_CM;
+/** A row name's size (cm, room units); the compact one beside the first seat, and its offset. */
+const ROW_NAME_FONT = 40;
+const COMPACT_ROW_NAME_FONT = 26;
+/** The space between a compact name's box and its row's first seat (cm). */
+const COMPACT_ROW_NAME_GAP_CM = 8;
+/** The clear space a full-size row name needs around it from any other section (cm). */
+const ROW_NAME_MARGIN_CM = 20;
 /** The name tag over a focused section: its height, its gap above the section, the room around its text (px). */
 const TAG_HEIGHT_PX = 22;
 const TAG_GAP_PX = 4;
@@ -180,11 +185,37 @@ export default function SeatMapCanvas({
       ),
     [doc, regions, regionIds],
   );
-  // The sections that have rows (and so row names beside them).
-  const rowSections = useMemo(
-    () => new Set(doc.items.flatMap((i) => (i.kind === 'row' && i.sectionId ? [i.sectionId] : []))),
-    [doc],
-  );
+  // Where each section's row names reach in the room (both ends, as when it is chosen): the zoom
+  // takes them in, and its name tag sits above them.
+  const namesOver = (which: 'start' | 'ends') => {
+    const boxes = new Map<string, RoomBox>();
+    for (const i of doc.items) {
+      if (i.kind !== 'row' || !i.sectionId) continue;
+      for (const { box } of rowLabels.get(i.id)?.[which] ?? []) {
+        const b = boxes.get(i.sectionId);
+        boxes.set(
+          i.sectionId,
+          b
+            ? {
+                x0: Math.min(b.x0, box.x0),
+                y0: Math.min(b.y0, box.y0),
+                x1: Math.max(b.x1, box.x1),
+                y1: Math.max(b.y1, box.y1),
+              }
+            : box,
+        );
+      }
+    }
+    return boxes;
+  };
+  const sectionNames = useMemo(() => namesOver('ends'), [doc, rowLabels]);
+  const sectionStartNames = useMemo(() => namesOver('start'), [doc, rowLabels]);
+  // How far above its seats a section's tag moves to clear the row names drawn: both ends for the
+  // chosen section, the first seat's names when none is chosen.
+  const tagLift = (id: string, top: number, chosen = true) => {
+    const names = (chosen ? sectionNames : sectionStartNames).get(id);
+    return names ? Math.max(0, top - names.y0) : 0;
+  };
   // Each shape's name, measured once per plan, and how much room the shape really has (a slanted
   // block's bounding box is wider than the block)…
   const shapeNames = useMemo(
@@ -268,15 +299,21 @@ export default function SeatMapCanvas({
     const tag = TAG_HEIGHT_PX + TAG_GAP_PX;
     const fitOf = (b: { width: number; height: number }) =>
       Math.min((width - gutter) / b.width, (view.height - tag) / b.height) * 0.9;
-    // A section's row names sit outside its outline (both ends). The fitted area takes them in
-    // where that still leaves its seats readable and easy to tap; on a phone the seats come first.
+    // A section's row names sit outside its outline. The fitted area takes them in where that still
+    // leaves its seats readable and easy to tap; otherwise (a phone) only the strip above, for its
+    // name tag, and not even that if it would shrink the seats below readable.
+    const names = sectionNames.get(id);
+    const x0 = Math.min(seatsBox.x, names?.x0 ?? seatsBox.x);
+    const y0 = Math.min(seatsBox.y, names?.y0 ?? seatsBox.y);
     const named = {
-      x: seatsBox.x - ROW_NAME_ROOM_CM,
-      y: seatsBox.y - ROW_NAME_ROOM_CM,
-      width: seatsBox.width + ROW_NAME_ROOM_CM * 2,
-      height: seatsBox.height + ROW_NAME_ROOM_CM * 2,
+      x: x0,
+      y: y0,
+      width: Math.max(seatsBox.x + seatsBox.width, names?.x1 ?? 0) - x0,
+      height: Math.max(seatsBox.y + seatsBox.height, names?.y1 ?? 0) - y0,
     };
-    const bounds = rowSections.has(id) && fitOf(named) >= SECTION_SCALE ? named : seatsBox;
+    const lift = tagLift(id, seatsBox.y);
+    const plain = { ...seatsBox, y: seatsBox.y - lift, height: seatsBox.height + lift };
+    const bounds = fitOf(named) >= SECTION_SCALE ? named : fitOf(plain) >= SECTION_SCALE ? plain : seatsBox;
     const fits = fitOf(bounds);
     const floor = Math.min(SECTION_SCALE, fits);
     focusFloor.current = floor;
@@ -385,9 +422,12 @@ export default function SeatMapCanvas({
   // Where a row's name goes. With a section chosen, only its rows are named (both ends); its
   // neighbours' seats show unnamed, as context. With none chosen, every row is named at its first
   // seat. Either way an aisle never carries two blocks' names.
-  const labelPoints = (row: { id: string; sectionId: string | null }): { x: number; y: number }[] => {
+  const labelPoints = (row: {
+    id: string;
+    sectionId: string | null;
+  }): Pick<RowName, 'x' | 'y' | 'compact'>[] => {
     const at = rowLabels.get(row.id);
-    if (!at) return [{ x: ROW_LABEL_X, y: 0 }];
+    if (!at) return [{ x: ROW_LABEL_X, y: 0, compact: false }];
     if (row.sectionId === activeSection) return at.ends;
     return activeSection ? [] : at.start;
   };
@@ -514,7 +554,16 @@ export default function SeatMapCanvas({
                     <SectionTag
                       name={name}
                       cx={r.bounds.x + r.bounds.width / 2}
-                      top={r.bounds.y}
+                      // Above its row names, so the tag never sits on one (a neighbour's names are
+                      // hidden while a section is chosen, so its tag stays put).
+                      top={
+                        r.bounds.y -
+                        (r.id === activeSection
+                          ? tagLift(r.id, r.bounds.y)
+                          : activeSection
+                            ? 0
+                            : tagLift(r.id, r.bounds.y, false))
+                      }
                       maxWidth={r.bounds.width}
                       px={px}
                       fill={paper_.background}
@@ -593,12 +642,12 @@ export default function SeatMapCanvas({
                       x={at.x}
                       y={at.y}
                       rotation={-i.rotation}
-                      width={140}
-                      offsetX={70}
-                      offsetY={20}
+                      width={at.compact ? 100 : 140}
+                      offsetX={at.compact ? 50 : 70}
+                      offsetY={(at.compact ? COMPACT_ROW_NAME_FONT : ROW_NAME_FONT) / 2}
                       align="center"
                       wrap="none"
-                      fontSize={40}
+                      fontSize={at.compact ? COMPACT_ROW_NAME_FONT : ROW_NAME_FONT}
                       fontStyle="bold"
                       fill={paper_.label}
                     />
@@ -643,22 +692,44 @@ export default function SeatMapCanvas({
   );
 }
 
+/** A box in room coordinates (cm). */
+interface RoomBox {
+  readonly x0: number;
+  readonly y0: number;
+  readonly x1: number;
+  readonly y1: number;
+}
+
 /**
- * Where a sectioned row's name goes, in the row's own coordinates, outside the section: `start`
- * past its first seat (used when no section is chosen: every row names that same end), and `ends`
- * both ends for the chosen section, an end that would land inside another section left out (a
- * block with neighbours on both sides keeps its start).
+ * Where a row's name is drawn: its point in the row's own coordinates, whether it is the compact
+ * name beside the first seat, and the box it covers in the room (it is drawn upright, so level).
+ */
+interface RowName {
+  readonly x: number;
+  readonly y: number;
+  readonly compact: boolean;
+  readonly box: RoomBox;
+}
+
+/**
+ * Where a sectioned row's name goes. `start` names its first seat's end (used when no section is
+ * chosen: every row names that same end) and `ends` both ends (the chosen section). A full-size
+ * name sits outside the section where its whole box, with a margin, lies outside every other
+ * section's outline; a row with no such end gets the compact name tucked against its first seat.
+ * In an aisle too narrow even for that, the compact name may still reach a neighbour's outline
+ * (never its seats' centres): the plan's own aisles are the limit there.
  */
 function rowEnds(
   row: {
     x: number;
     y: number;
     rotation: number;
+    label: string;
     sectionId: string | null;
     seats: readonly { x: number; y: number }[];
   },
   regions: readonly SeatRegion[],
-): { start: { x: number; y: number }[]; ends: { x: number; y: number }[] } {
+): { start: RowName[]; ends: RowName[] } {
   const byX = [...row.seats].sort((a, b) => a.x - b.x);
   const first = byX[0];
   const last = byX.at(-1);
@@ -668,20 +739,59 @@ function rowEnds(
     x: row.x + p.x * Math.cos(a) - p.y * Math.sin(a),
     y: row.y + p.x * Math.sin(a) + p.y * Math.cos(a),
   });
-  const ends = [
-    { x: first.x + SECTION_ROW_LABEL_X, y: first.y },
-    { x: last.x - SECTION_ROW_LABEL_X, y: last.y },
-  ];
-  const kept = ends.filter((p) => {
-    const other = regionAt(regions, inRoom(p));
-    return !other || other.id === row.sectionId;
-  });
-  return { start: ends.slice(0, 1), ends: kept.length ? kept : ends.slice(0, 1) };
+  const text = bareItemLabel(row.label);
+  const others = regions.filter((r) => r.id !== row.sectionId);
+  const fullW = textWidth(text, ROW_NAME_FONT, 'bold');
+  const compactW = textWidth(text, COMPACT_ROW_NAME_FONT, 'bold');
+  const nameAt = (p: { x: number; y: number }, font: number, compact: boolean): RowName => {
+    const c = inRoom(p);
+    const hw = (compact ? compactW : fullW) / 2;
+    return { ...p, compact, box: { x0: c.x - hw, y0: c.y - font / 2, x1: c.x + hw, y1: c.y + font / 2 } };
+  };
+  // Clear when its corners and edge middles, pushed out by the margin, are outside every other
+  // section's outline (each tested on its own: padded outlines overlap in narrow aisles).
+  const clear = ({ box }: RowName, margin: number) => {
+    for (const x of [box.x0 - margin, (box.x0 + box.x1) / 2, box.x1 + margin]) {
+      for (const y of [box.y0 - margin, (box.y0 + box.y1) / 2, box.y1 + margin]) {
+        if (others.some((r) => inPolygon({ x, y }, r.outline))) return false;
+      }
+    }
+    return true;
+  };
+  const startName = nameAt({ x: first.x + SECTION_ROW_LABEL_X, y: first.y }, ROW_NAME_FONT, false);
+  const endName = nameAt({ x: last.x - SECTION_ROW_LABEL_X, y: last.y }, ROW_NAME_FONT, false);
+  // The compact name's box ends just short of the first seat, whatever the row's angle: its reach
+  // along the row is half its width and half its height, each as far as the angle turns it.
+  const reach = (compactW / 2) * Math.abs(Math.cos(a)) + (COMPACT_ROW_NAME_FONT / 2) * Math.abs(Math.sin(a));
+  const compact = nameAt(
+    { x: first.x - (SEAT_R + COMPACT_ROW_NAME_GAP_CM + reach), y: first.y },
+    COMPACT_ROW_NAME_FONT,
+    true,
+  );
+  const startClear = clear(startName, ROW_NAME_MARGIN_CM);
+  const endClear = clear(endName, ROW_NAME_MARGIN_CM);
+  const ends = [...(startClear ? [startName] : []), ...(endClear ? [endName] : [])];
+  return { start: [startClear ? startName : compact], ends: ends.length > 0 ? ends : [compact] };
+}
+
+/** Whether a point lies inside a polygon (ray casting; the outlines are convex, any polygon works). */
+function inPolygon(p: { x: number; y: number }, poly: readonly { x: number; y: number }[]): boolean {
+  let inside = false;
+  for (let k = 0, j = poly.length - 1; k < poly.length; j = k, k += 1) {
+    const a = poly[k];
+    const b = poly[j];
+    if (a && b && a.y > p.y !== b.y > p.y && p.x < ((b.x - a.x) * (p.y - a.y)) / (b.y - a.y) + a.x)
+      inside = !inside;
+  }
+  return inside;
 }
 
 /** A text's width in px as the canvas draws it (Konva's default face), for any script. */
+let measurer: Konva.Text | undefined;
 function textWidth(text: string, fontSize: number, fontStyle: 'bold' | 'normal'): number {
-  return new Konva.Text({ text, fontSize, fontStyle }).width();
+  measurer ??= new Konva.Text();
+  measurer.setAttrs({ text, fontSize, fontStyle });
+  return measurer.width();
 }
 
 /** The area of a polygon (shoelace), in its own units squared. */
