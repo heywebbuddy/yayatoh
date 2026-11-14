@@ -190,7 +190,9 @@ export default async function GuestSitePage({
           {programId ? (
             <a
               href={`#${programId}`}
-              className="inline-flex min-h-11 items-center rounded-pill bg-white px-5 text-body font-bold text-ink"
+              // A white pill over the photo: its text stays black in either theme (`text-ink` turns
+              // near-white in dark mode, which left the label invisible).
+              className="inline-flex min-h-11 items-center rounded-pill bg-white px-5 text-body font-bold text-black"
             >
               {t('seeProgram')}
             </a>
