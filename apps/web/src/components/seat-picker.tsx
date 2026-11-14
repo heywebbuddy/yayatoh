@@ -166,6 +166,10 @@ export function SeatPicker({
   const [showMap, setShowMap] = useState(true);
   // Full screen: the picker's own dialog shown as a modal over the page, with a taller map.
   const [full, setFull] = useState(false);
+  // The page renders before its scripts run: the header's buttons stay disabled until they can
+  // respond (a tap before then would do nothing on a slow phone), keeping their place meanwhile.
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
   const [fullMapHeight, setFullMapHeight] = useState(560);
   const sheet = useRef<HTMLDialogElement>(null);
   const expand = useRef<HTMLButtonElement>(null);
@@ -542,6 +546,7 @@ export function SeatPicker({
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowMap(!showMap)}
+                disabled={!ready}
                 aria-expanded={showMap}
               >
                 {showMap ? t('hideMap') : t('showMap')}
@@ -561,7 +566,14 @@ export function SeatPicker({
                   {t('closeFullScreen')}
                 </Button>
               ) : (
-                <Button ref={expand} type="button" variant="ghost" size="sm" onClick={enterFull}>
+                <Button
+                  ref={expand}
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={enterFull}
+                  disabled={!ready}
+                >
                   <Maximize2 aria-hidden="true" className="size-4" />
                   {t('fullScreen')}
                 </Button>
