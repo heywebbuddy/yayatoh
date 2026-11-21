@@ -60,13 +60,12 @@ test.describe('security headers and CSP', () => {
     expect(h['permissions-policy']).toContain('camera=()');
     expect(h['reporting-endpoints']).toContain('/api/csp-report');
 
-    // Every script element carries this response's nonce (browsers hide it from getAttribute
-    // once applied; the `nonce` property keeps it).
-    const nonces = await page
-      .locator('script')
-      .evaluateAll((els) => els.map((e) => (e as HTMLScriptElement).nonce));
-    expect(nonces.length).toBeGreaterThan(0);
-    for (const n of nonces) expect(n).toBe(nonce);
+    // Every script the server writes carries this response's nonce. Read from the response, not
+    // the live page: chunks the bundler adds at runtime (the message catalogue, lazy components)
+    // carry none and need none, since 'strict-dynamic' trusts what a nonced script loads.
+    const tags = ((await res?.text()) ?? '').match(/<script\b[^>]*>/g) ?? [];
+    expect(tags.length).toBeGreaterThan(0);
+    for (const tag of tags) expect(tag).toContain(`nonce="${nonce}"`);
 
     const again = await page.goto('/o/lakeside-events');
     const next = directives(again?.headers()['content-security-policy']).get('script-src') ?? [];
