@@ -4,13 +4,12 @@ import { composeNav, type NavItem } from '@yayatoh/platform';
 import { roleCan } from '@yayatoh/tenancy';
 import { buttonClass, StatusPill } from '@yayatoh/ui';
 import { CopyPlus, Layers } from 'lucide-react';
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
+import { getTimeZone, getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { CatalogueIntlProvider } from '@/components/catalogue-intl-provider.tsx';
 import { ConsoleShell } from '@/components/console-shell.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { eventPhase } from '@/lib/event-status.ts';
-import { profileMessages } from '@/lib/profile-copy.ts';
 import { loadEventBase } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { loadReadiness } from '@/server/readiness.ts';
@@ -155,10 +154,11 @@ export default async function EventLayout({
         </>
       }
     >
-      {/* M4.2a: the event's profile rewords the sentences its client components show. */}
-      <NextIntlClientProvider messages={profileMessages(await getMessages(), profile)}>
+      {/* M4.2a: the event's profile rewords the sentences its client components show (from the
+          cached catalogue: the messages are not written into every event page and navigation). */}
+      <CatalogueIntlProvider locale={locale} timeZone={await getTimeZone()} profile={profile}>
         {children}
-      </NextIntlClientProvider>
+      </CatalogueIntlProvider>
     </ConsoleShell>
   );
 }

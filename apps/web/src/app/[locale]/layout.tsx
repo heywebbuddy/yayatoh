@@ -5,8 +5,9 @@ import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { connection } from 'next/server';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
-import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
+import { getMessages, getTimeZone, getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
+import { CatalogueIntlProvider } from '@/components/catalogue-intl-provider.tsx';
 import { MaintenanceBanner } from '@/components/maintenance-banner.tsx';
 import { routing } from '@/i18n/routing.ts';
 import { fontVariables } from '@/lib/fonts.ts';
@@ -48,8 +49,10 @@ export default async function LocaleLayout({
   // The public showcase site starts from the visitor's system setting; everything else from light.
   const showcase = showcaseSurfaceFor((await headers()).get('x-yy-path'));
   const theme = await pageTheme();
-  // M4.7a: a scoped page (proxy.ts) sends its client components only the namespaces it needs.
+  // M4.7a: a scoped page (proxy.ts) sends its client components only the namespaces it needs, in
+  // the page. Every other page loads the locale's whole catalogue as a cached file (i18n/catalogue.ts).
   const messages = scopedMessages(await getMessages(), (await headers()).get(INTL_SCOPE_HEADER));
+  const timeZone = await getTimeZone();
   // The words the form controls say themselves (U1), with the locale for dates and digits.
   const tf = await getTranslations({ locale, namespace: 'formControls' });
   const uiStrings = Object.fromEntries(UI_STRING_KEYS.map((k) => [k, tf.raw(k) as string]));
@@ -61,11 +64,19 @@ export default async function LocaleLayout({
       >
         {/* Platform-wide read-only freeze (M2.5a): on every page, public ones included. */}
         <MaintenanceBanner locale={locale} />
-        <NextIntlClientProvider {...(messages ? { messages } : {})}>
-          <UiLocaleProvider locale={locale} strings={uiStrings}>
-            {children}
-          </UiLocaleProvider>
-        </NextIntlClientProvider>
+        {messages ? (
+          <NextIntlClientProvider messages={messages}>
+            <UiLocaleProvider locale={locale} strings={uiStrings}>
+              {children}
+            </UiLocaleProvider>
+          </NextIntlClientProvider>
+        ) : (
+          <CatalogueIntlProvider locale={locale} timeZone={timeZone}>
+            <UiLocaleProvider locale={locale} strings={uiStrings}>
+              {children}
+            </UiLocaleProvider>
+          </CatalogueIntlProvider>
+        )}
       </body>
     </html>
   );
