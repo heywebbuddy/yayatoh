@@ -116,7 +116,8 @@ export function securityHeaders(type: PageType, o: SecurityHeaderOptions): Recor
       `geolocation=${o.geolocation && type === 'public' ? '(self)' : '()'}`,
       'payment=()',
       'usb=()',
-      'browsing-topics=()',
+      // No `browsing-topics`: Chrome dropped the Topics API and logs the unknown feature as a
+      // console error on every page.
     ].join(', '),
     'cross-origin-opener-policy': 'same-origin',
     'cross-origin-resource-policy': 'same-origin',

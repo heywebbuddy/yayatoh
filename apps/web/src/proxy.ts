@@ -200,7 +200,8 @@ export default async function proxy(req: NextRequest, event?: NextFetchEvent): P
     return res;
   }
 
-  const lang = /^\/lang\/([a-z]{2})\/?$/.exec(path);
+  // Region-tagged codes too (zh-CN, zh-TW): the footer's language list links them all.
+  const lang = /^\/lang\/([a-z]{2}(?:-[A-Z]{2})?)\/?$/.exec(path);
   if (lang) return secure(languageSwitch(req, lang[1] ?? '', host));
 
   let orgId: string | null = null;

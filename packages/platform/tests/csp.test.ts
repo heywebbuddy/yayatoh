@@ -112,6 +112,7 @@ describe('page types and headers', () => {
     expect(console['strict-transport-security']).toMatch(/max-age=63072000/);
     expect(console['cross-origin-opener-policy']).toBe('same-origin');
     expect(console['permissions-policy']).toContain('camera=()');
+    expect(console['permissions-policy']).not.toContain('browsing-topics');
     expect(console['content-security-policy']).toContain("'strict-dynamic'");
 
     const token = securityHeaders('token', { nonce });
