@@ -36,13 +36,59 @@ const LOADERS: Readonly<Record<string, Loader>> = {
 // promise it has seen settle without suspending again, so only the first render waits.
 const loaded = new Map<string, Promise<Catalogue>>();
 
+const RETRY_MS = [400, 1500];
+const RELOADED = 'yy-catalogue-reload';
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Loads a catalogue file, trying again after a dropped connection. A file that still cannot be
+ * loaded in the browser usually means the page is from an earlier release whose files are gone:
+ * the page reloads once to pick up the current one. Anything else is thrown, and not kept, so the
+ * next render tries again rather than failing for good.
+ */
+async function fetchCatalogue(load: Loader): Promise<Catalogue> {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      const { default: messages } = await load();
+      if (typeof window !== 'undefined') {
+        try {
+          window.sessionStorage.removeItem(RELOADED);
+        } catch {
+          // No session storage: nothing to reset.
+        }
+      }
+      return messages;
+    } catch (err) {
+      const delay = RETRY_MS.at(attempt);
+      if (delay !== undefined) {
+        await wait(delay);
+        continue;
+      }
+      if (typeof window !== 'undefined') {
+        try {
+          if (!window.sessionStorage.getItem(RELOADED)) {
+            window.sessionStorage.setItem(RELOADED, '1');
+            window.location.reload();
+          }
+        } catch {
+          // No session storage: no reload, the error stands.
+        }
+      }
+      throw err;
+    }
+  }
+}
+
 /** The catalogue of a locale (the default locale's for an unknown one). */
 export function catalogue(locale: string): Promise<Catalogue> {
   const key = Object.hasOwn(LOADERS, locale) ? locale : DEFAULT_LOCALE;
   let p = loaded.get(key);
   if (!p) {
-    const load = LOADERS[key] as Loader;
-    p = load().then((m) => m.default);
+    p = fetchCatalogue(LOADERS[key] as Loader);
+    const mine = p;
+    p.catch(() => {
+      if (loaded.get(key) === mine) loaded.delete(key);
+    });
     loaded.set(key, p);
   }
   return p;

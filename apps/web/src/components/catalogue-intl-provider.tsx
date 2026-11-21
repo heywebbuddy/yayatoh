@@ -5,6 +5,12 @@ import { type ReactNode, use, useMemo } from 'react';
 import { catalogue } from '@/i18n/catalogue.ts';
 import { profileMessages } from '@/lib/profile-copy.ts';
 
+// Start the page language's download as soon as this script runs, before hydration reaches the
+// provider (the root layout writes the locale into <html lang>).
+if (typeof document !== 'undefined') {
+  catalogue(document.documentElement.lang).catch(() => undefined);
+}
+
 /**
  * Gives client components the locale's messages from its cached catalogue file (`i18n/catalogue.ts`)
  * instead of from a prop written into the page, so the page and every navigation stay small. With
