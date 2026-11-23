@@ -18,6 +18,22 @@ export const siteSettingsQuery = tenantQuery({
 });
 
 /**
+ * Whether the org has saved its public site settings at least once (the row exists only then).
+ * The setup checklist uses it as "the marketplace choice is made": listing stays opt-in (D13), so
+ * choosing not to list completes the step as much as choosing to list.
+ */
+export const siteSettingsSavedQuery = tenantQuery({
+  name: 'marketplace.siteSettingsSaved',
+  input: z.object({}),
+  output: z.object({ saved: z.boolean() }),
+  entitlement: 'core',
+  permission: 'org:read',
+  handler: async ({ tx }) => ({
+    saved: (await tx.select({ orgId: siteSettings.orgId }).from(siteSettings).limit(1)).length > 0,
+  }),
+});
+
+/**
  * Change the org's public site settings. Enrollment and the tenant-site switch change the org's
  * own listings in the same transaction (the marketplace owns the projection); the event lets
  * other consumers (cache revalidation) follow.

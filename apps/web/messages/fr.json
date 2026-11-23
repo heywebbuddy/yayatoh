@@ -1837,6 +1837,7 @@
       "brand": "Choisir votre couleur de marque",
       "event": "Créer votre premier événement",
       "team": "Inviter un membre de l’équipe",
+      "marketplace": "Choisir si vos événements apparaissent sur la marketplace Yayatoh",
       "payouts": "Configurer les versements"
     },
     "finished": "Configuration terminée. Votre organisation est pleinement active.",

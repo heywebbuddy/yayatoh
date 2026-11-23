@@ -115,6 +115,10 @@ test.describe('self-serve signup', () => {
       'href',
       `/o/${slug}/team`,
     );
+    // Marketplace listing is opt-in: a new org is asked to choose, on its Public site settings.
+    await expect(
+      setup.getByRole('link', { name: 'Choose whether to list your events on the Yayatoh marketplace' }),
+    ).toHaveAttribute('href', `/o/${slug}/site`);
     await expect(setup.getByRole('button', { name: 'Finish setup' })).toHaveCount(0);
     await expectAccessible(page);
 

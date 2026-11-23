@@ -19,7 +19,11 @@ export {
   promotionsQuery,
 } from './commands/promotions.ts';
 export { addLegacyRedirectCommand, LegacyRedirectDto, LegacyRedirectInput } from './commands/redirects.ts';
-export { siteSettingsQuery, updateSiteSettingsCommand } from './commands/settings.ts';
+export {
+  siteSettingsQuery,
+  siteSettingsSavedQuery,
+  updateSiteSettingsCommand,
+} from './commands/settings.ts';
 export { frameAncestors, MAX_EMBED_ORIGINS, normalizeOrigin } from './domain/embed.ts';
 export { canonicalHostFor, isListable, isOnMarketplace, type ListingSource } from './domain/listing.ts';
 export {

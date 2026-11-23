@@ -6,6 +6,7 @@ import {
   searchEventsQuery,
 } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
+import { siteSettingsSavedQuery } from '@yayatoh/marketplace';
 import { payoutAccountQuery } from '@yayatoh/payments';
 import {
   legalPagesQuery,
@@ -435,7 +436,7 @@ async function EventList({
 async function SetupChecklist({ org, outcome }: { org: string; outcome: string | null }) {
   const data = await loadConsole(org);
   const t = await getTranslations('setup');
-  const [onboarding, legal, events, members, invitations, sells, payouts] = await Promise.all([
+  const [onboarding, legal, events, members, invitations, sells, payouts, siteSaved] = await Promise.all([
     executeQuery(onboardingQuery, {}, data.ctx, ports),
     executeQuery(legalPagesQuery, {}, data.ctx, ports),
     executeQuery(listEventsQuery, {}, data.ctx, ports),
@@ -445,6 +446,7 @@ async function SetupChecklist({ org, outcome }: { org: string; outcome: string |
       ? executeQuery(sellsPaidTicketsQuery, {}, data.ctx, ports)
       : { paid: false },
     executeQuery(payoutAccountQuery, {}, data.ctx, ports),
+    executeQuery(siteSettingsSavedQuery, {}, data.ctx, ports),
   ]);
   const step = onboarding.steps;
   const settings = `/o/${org}/settings`;
@@ -465,6 +467,13 @@ async function SetupChecklist({ org, outcome }: { org: string; outcome: string |
       key: 'team',
       done: step.team !== null || members.length > 1 || invitations.length > 0,
       href: `/o/${org}/team`,
+    },
+    // Listing on the public Events page is opt-in (D13): the step is to choose, either way, so an
+    // org that keeps its events unlisted can still finish the list.
+    {
+      key: 'marketplace',
+      done: siteSaved.saved,
+      href: `/o/${org}/site`,
     },
     ...(sells.paid
       ? [
