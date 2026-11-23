@@ -469,12 +469,9 @@ async function SetupChecklist({ org, outcome }: { org: string; outcome: string |
       href: `/o/${org}/team`,
     },
     // Listing on the public Events page is opt-in (D13): the step is to choose, either way, so an
-    // org that keeps its events unlisted can still finish the list.
-    {
-      key: 'marketplace',
-      done: siteSaved.saved,
-      href: `/o/${org}/site`,
-    },
+    // org that keeps its events unlisted can still finish the list. Done once the Public site
+    // settings were saved (that page leads with the listing choice). A sandbox org can never list.
+    ...(data.org.sandbox ? [] : [{ key: 'marketplace', done: siteSaved.saved, href: `/o/${org}/site` }]),
     ...(sells.paid
       ? [
           {
