@@ -3753,6 +3753,8 @@
     "anyCategory": "Tutte le categorie",
     "tag": "Tag",
     "anyTag": "Tutti i tag",
+    "status": "Stato",
+    "anyStatus": "Tutti gli stati",
     "apply": "Filtra",
     "clear": "Rimuovi i filtri",
     "noneTitle": "Nessun evento corrisponde a questi filtri",

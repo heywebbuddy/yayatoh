@@ -3753,6 +3753,8 @@
     "anyCategory": "所有類別",
     "tag": "標籤",
     "anyTag": "所有標籤",
+    "status": "狀態",
+    "anyStatus": "所有狀態",
     "apply": "篩選",
     "clear": "清除篩選",
     "noneTitle": "沒有符合篩選條件的活動",

@@ -3753,6 +3753,8 @@
     "anyCategory": "Alle Kategorien",
     "tag": "Tag",
     "anyTag": "Alle Tags",
+    "status": "Status",
+    "anyStatus": "Alle Status",
     "apply": "Filtern",
     "clear": "Filter zurücksetzen",
     "noneTitle": "Keine Events passen zu diesen Filtern",

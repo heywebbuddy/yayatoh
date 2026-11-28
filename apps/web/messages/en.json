@@ -3753,6 +3753,8 @@
     "anyCategory": "Any category",
     "tag": "Tag",
     "anyTag": "Any tag",
+    "status": "Status",
+    "anyStatus": "Any status",
     "apply": "Filter",
     "clear": "Clear filters",
     "noneTitle": "No events match these filters",

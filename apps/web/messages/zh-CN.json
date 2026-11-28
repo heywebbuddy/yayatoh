@@ -3753,6 +3753,8 @@
     "anyCategory": "所有类别",
     "tag": "标签",
     "anyTag": "所有标签",
+    "status": "状态",
+    "anyStatus": "所有状态",
     "apply": "筛选",
     "clear": "清除筛选",
     "noneTitle": "没有符合筛选条件的活动",

@@ -3753,6 +3753,8 @@
     "anyCategory": "Alle categorieën",
     "tag": "Tag",
     "anyTag": "Alle tags",
+    "status": "Status",
+    "anyStatus": "Alle statussen",
     "apply": "Filteren",
     "clear": "Filters wissen",
     "noneTitle": "Geen evenementen gevonden met deze filters",

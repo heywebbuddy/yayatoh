@@ -3753,6 +3753,8 @@
     "anyCategory": "Toutes les catégories",
     "tag": "Mot-clé",
     "anyTag": "Tous les mots-clés",
+    "status": "Statut",
+    "anyStatus": "Tous les statuts",
     "apply": "Filtrer",
     "clear": "Effacer les filtres",
     "noneTitle": "Aucun événement ne correspond à ces filtres",

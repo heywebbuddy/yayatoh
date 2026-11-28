@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { expectAccessible, newUser } from './helpers.ts';
+import { expectAccessible, newUser, pickOption } from './helpers.ts';
 
 /**
  * Design v2: the org home's events list stays light with many events. It shows 24 cards a page
@@ -70,6 +70,17 @@ test.describe('org home events list (design v2)', () => {
     await page.getByLabel('Search by name').fill('no such event');
     await page.getByRole('button', { name: 'Filter', exact: true }).click();
     await expect(page.getByText('No events match these filters')).toBeVisible();
+    await page.getByRole('link', { name: 'Clear filters' }).click();
+    await expect(page.getByTestId('org-events-count')).toHaveText('1–24 of 27 events');
+
+    // QA #35: the Events page filters by status (and category and tag) next to the name search.
+    await page.goto(`/o/${org}/events`);
+    await expect(page.getByTestId('org-events-count')).toHaveText('1–24 of 27 events');
+    await pickOption(page.getByLabel('Status', { exact: true }), { label: 'Published' });
+    await page.getByRole('button', { name: 'Filter', exact: true }).click();
+    await expect(page).toHaveURL(/[?&]status=published/);
+    await expect(page.getByTestId('org-events-count')).toHaveText('1–1 of 1 event');
+    await expectAccessible(page);
     await page.getByRole('link', { name: 'Clear filters' }).click();
     await expect(page.getByTestId('org-events-count')).toHaveText('1–24 of 27 events');
 
