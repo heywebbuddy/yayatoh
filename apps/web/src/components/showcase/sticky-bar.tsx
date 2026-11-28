@@ -17,7 +17,7 @@ export function StickyBar({ children }: { children: ReactNode }) {
   return (
     <div
       data-scrolled={scrolled || undefined}
-      className="sticky top-0 z-50 px-3 pt-3 transition-colors duration-200 motion-reduce:transition-none sm:px-5 after:pointer-events-none after:absolute after:inset-x-0 after:top-full after:h-4 after:bg-linear-to-b after:from-canvas after:to-transparent after:opacity-0 data-[scrolled]:bg-canvas data-[scrolled]:after:opacity-100"
+      className="sticky top-0 z-50 px-3 pt-3 transition-colors duration-200 motion-reduce:transition-none sm:px-5 after:pointer-events-none after:absolute after:inset-x-0 after:top-full after:h-4 after:bg-linear-to-b after:from-canvas after:to-transparent after:opacity-0 after:transition-opacity after:duration-200 motion-reduce:after:transition-none data-[scrolled]:bg-canvas data-[scrolled]:after:opacity-100"
     >
       {children}
     </div>
