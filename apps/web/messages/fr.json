@@ -3354,6 +3354,7 @@
     "org": {
       "title": "Ventes",
       "keyNumbers": "Chiffres clés des ventes",
+      "perCurrency": "Chaque devise est totalisée à part, telle que les acheteurs l’ont payée. Les montants ne sont ni convertis ni additionnés.",
       "period": "Période",
       "periods": {
         "7d": "7 derniers jours",

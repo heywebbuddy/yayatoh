@@ -3354,6 +3354,7 @@
     "org": {
       "title": "Verkopen",
       "keyNumbers": "Kerncijfers verkoop",
+      "perCurrency": "Elke valuta wordt apart opgeteld, zoals kopers betaalden. Bedragen worden niet omgerekend of bij elkaar opgeteld.",
       "period": "Periode",
       "periods": {
         "7d": "Afgelopen 7 dagen",

@@ -196,7 +196,7 @@ test.describe('reports and dashboard (M1.12)', () => {
     // Event home: live key numbers (no demo overlay for a real event).
     await page.goto(base);
     await expect(kpi(page, 'Key numbers', 'Gross sales')).toContainText(usd(gross));
-    await expect(kpi(page, 'Key numbers', 'Gross sales')).toContainText(`${usd(refunded)} refunded`);
+    await expect(kpi(page, 'Key numbers', 'Gross sales')).toContainText(`${usd(refunded)} USD refunded`);
     await expect(kpi(page, 'Key numbers', 'Net revenue')).toContainText(usd(net));
     await expect(kpi(page, 'Key numbers', 'Tickets sold')).toContainText('3');
     await expect(kpi(page, 'Key numbers', 'Tickets sold')).toContainText('of 15 places · 1 complimentary');

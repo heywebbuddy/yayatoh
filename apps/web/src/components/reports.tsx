@@ -16,16 +16,32 @@ export const fmtPercent = (bps: number, locale: string) =>
 export const valuesOf = (ms: readonly MetricValue[], key: MetricKey) => ms.filter((m) => m.key === key);
 export const countOf = (ms: readonly MetricValue[], key: MetricKey) => valuesOf(ms, key)[0]?.value ?? 0;
 
-/** A metric's value(s) as text: money per currency (never summed across currencies). */
-export function metricText(ms: readonly MetricValue[], key: MetricKey, locale: string): string[] {
+/** One shown value; money carries its ISO currency code. */
+export interface KpiValue {
+  readonly text: string;
+  readonly code?: string;
+}
+
+/**
+ * A metric's value(s): money one per currency, each with its code (QA #31: "$0.00" and "₹0.00"
+ * side by side read as one figure). Never converted, never summed across currencies.
+ */
+export function metricAmounts(ms: readonly MetricValue[], key: MetricKey, locale: string): KpiValue[] {
   return valuesOf(ms, key).map((m) =>
     m.unit === 'money'
-      ? fmtMoney(m.value, m.currency ?? 'USD', locale)
-      : m.unit === 'percent'
-        ? fmtPercent(m.value, locale)
-        : formatNumber(m.value, locale),
+      ? { text: fmtMoney(m.value, m.currency ?? 'USD', locale), code: m.currency ?? 'USD' }
+      : { text: m.unit === 'percent' ? fmtPercent(m.value, locale) : formatNumber(m.value, locale) },
   );
 }
+
+/** A metric's value(s) as text ("$12.00 USD"): money per currency (never summed across currencies). */
+export function metricText(ms: readonly MetricValue[], key: MetricKey, locale: string): string[] {
+  return metricAmounts(ms, key, locale).map((v) => (v.code ? `${v.text} ${v.code}` : v.text));
+}
+
+/** The currencies a money metric has values in. */
+export const currenciesOf = (ms: readonly MetricValue[], key: MetricKey) =>
+  new Set(valuesOf(ms, key).flatMap((m) => (m.currency ? [m.currency] : [])));
 
 /** "Updated now" / "Updated 2 minutes ago": every report shows when its numbers were read. */
 export async function AsOf({ asOf, locale }: { asOf: Date; locale: string }) {
@@ -49,16 +65,33 @@ export async function AsOf({ asOf, locale }: { asOf: Date; locale: string }) {
 }
 
 /** One key number: label, value (one line per currency for money), and a note. */
-export function Kpi({ label, values, note }: { label: string; values: string[]; note?: ReactNode }) {
+export function Kpi({
+  label,
+  values,
+  note,
+}: {
+  label: string;
+  values: readonly (string | KpiValue)[];
+  note?: ReactNode;
+}) {
   return (
     <Card className="flex flex-col gap-2.5 px-[22px]">
       <Label>{label}</Label>
       <div className="flex flex-col gap-1">
-        {values.map((v) => (
-          <p key={v} className="text-[32px] leading-none font-extrabold tracking-[-0.045em] tabular-nums">
-            {v}
-          </p>
-        ))}
+        {values.map((value) => {
+          const v = typeof value === 'string' ? { text: value } : value;
+          return (
+            <p
+              key={`${v.text}-${v.code ?? ''}`}
+              className="text-[32px] leading-none font-extrabold tracking-[-0.045em] tabular-nums"
+            >
+              {v.text}
+              {v.code ? (
+                <span className="text-[13px] font-bold tracking-normal text-ink-2"> {v.code}</span>
+              ) : null}
+            </p>
+          );
+        })}
       </div>
       {note ? <p className="text-[13px] text-ink-2">{note}</p> : null}
     </Card>

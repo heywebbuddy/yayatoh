@@ -8,7 +8,16 @@ import { formatNumber } from '@/lib/format.ts';
 import { PERIODS, type ResolvedPeriod } from '@/lib/period.ts';
 import type { ConsoleData } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { AsOf, countOf, fmtMoney, Kpi, KpiGrid, metricText } from './reports.tsx';
+import {
+  AsOf,
+  countOf,
+  currenciesOf,
+  fmtMoney,
+  Kpi,
+  KpiGrid,
+  metricAmounts,
+  metricText,
+} from './reports.tsx';
 
 /**
  * The org home's sales across events for a period (M1.12): a GET form with presets or custom
@@ -110,7 +119,7 @@ export async function OrgSales({
           <KpiGrid label={t('reports.org.keyNumbers')}>
             <Kpi
               label={t('reports.metric.sales.gross')}
-              values={metricText(m, 'sales.gross', locale)}
+              values={metricAmounts(m, 'sales.gross', locale)}
               note={t('reports.note.refunded', {
                 amount: metricText(m, 'sales.refunds', locale).join(' · '),
               })}
@@ -118,7 +127,7 @@ export async function OrgSales({
             {f ? (
               <Kpi
                 label={t('reports.metric.finance.net')}
-                values={metricText(f.metrics, 'finance.net', locale)}
+                values={metricAmounts(f.metrics, 'finance.net', locale)}
                 note={t('reports.note.afterFees')}
               />
             ) : (
@@ -135,6 +144,9 @@ export async function OrgSales({
             />
             <Kpi label={t('reports.metric.checkins.tickets')} values={[n(countOf(m, 'checkins.tickets'))]} />
           </KpiGrid>
+          {currenciesOf(m, 'sales.gross').size > 1 ? (
+            <p className="text-caption text-ink-2">{t('reports.org.perCurrency')}</p>
+          ) : null}
           <Table
             caption={t('reports.org.byEvent')}
             rowKey={(x) => `${x.eventId}-${x.currency}`}
@@ -176,7 +188,7 @@ export async function OrgSales({
               {
                 key: 'gross',
                 header: t('reports.gross'),
-                cell: (x) => fmtMoney(x.grossMinor, x.currency, locale),
+                cell: (x) => `${fmtMoney(x.grossMinor, x.currency, locale)} ${x.currency}`,
                 mono: true,
                 align: 'end',
               },

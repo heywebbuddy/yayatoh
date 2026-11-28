@@ -3354,6 +3354,7 @@
     "org": {
       "title": "Sales",
       "keyNumbers": "Sales key numbers",
+      "perCurrency": "Each currency is totalled on its own, as buyers paid. Amounts are not converted or added together.",
       "period": "Period",
       "periods": {
         "7d": "Last 7 days",

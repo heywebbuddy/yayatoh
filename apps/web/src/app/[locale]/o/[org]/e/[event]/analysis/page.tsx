@@ -18,6 +18,7 @@ import {
   fmtPercent,
   Kpi,
   KpiGrid,
+  metricAmounts,
   metricText,
   ReportTabs,
 } from '@/components/reports.tsx';
@@ -94,7 +95,7 @@ export default async function AnalysisPage({
           <KpiGrid label={t('reports.keyNumbers')}>
             <Kpi
               label={t('reports.metric.sales.gross')}
-              values={metricText(m, 'sales.gross', locale)}
+              values={metricAmounts(m, 'sales.gross', locale)}
               note={t('reports.note.refunded', {
                 amount: metricText(m, 'sales.refunds', locale).join(' · '),
               })}

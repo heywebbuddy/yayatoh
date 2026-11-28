@@ -3354,6 +3354,7 @@
     "org": {
       "title": "Ventas",
       "keyNumbers": "Cifras clave de ventas",
+      "perCurrency": "Cada moneda se suma por separado, tal como pagaron los compradores. Los importes no se convierten ni se suman entre sí.",
       "period": "Periodo",
       "periods": {
         "7d": "Últimos 7 días",

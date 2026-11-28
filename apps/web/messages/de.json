@@ -3354,6 +3354,7 @@
     "org": {
       "title": "Verkäufe",
       "keyNumbers": "Verkaufskennzahlen",
+      "perCurrency": "Jede Währung wird für sich summiert, so wie Käufer bezahlt haben. Beträge werden weder umgerechnet noch zusammengezählt.",
       "period": "Zeitraum",
       "periods": {
         "7d": "Letzte 7 Tage",

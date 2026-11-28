@@ -2,7 +2,7 @@ import { type Ctx, executeQuery } from '@yayatoh/kernel';
 import { applyUnpublishedMetricEvents, eventFinanceKpisQuery, eventKpisQuery } from '@yayatoh/reports';
 import { buttonClass, EmptyState } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
-import { AsOf, countOf, fmtPercent, Kpi, KpiGrid, metricText } from '@/components/reports.tsx';
+import { AsOf, countOf, fmtPercent, Kpi, KpiGrid, metricAmounts, metricText } from '@/components/reports.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
 import { ports } from '@/server/ports.ts';
@@ -49,13 +49,13 @@ export async function EventKpis({
       <KpiGrid label={t('dashboard.keyNumbers')}>
         <Kpi
           label={t('reports.metric.sales.gross')}
-          values={metricText(m, 'sales.gross', locale)}
+          values={metricAmounts(m, 'sales.gross', locale)}
           note={t('reports.note.refunded', { amount: metricText(m, 'sales.refunds', locale).join(' · ') })}
         />
         {f ? (
           <Kpi
             label={t('reports.metric.finance.net')}
-            values={metricText(f.metrics, 'finance.net', locale)}
+            values={metricAmounts(f.metrics, 'finance.net', locale)}
             note={t('reports.note.afterFees')}
           />
         ) : (
