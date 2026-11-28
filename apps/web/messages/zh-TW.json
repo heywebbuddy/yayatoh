@@ -883,6 +883,7 @@
     "useCode": "改用一次性驗證碼",
     "usePassword": "改用密碼",
     "invalid": "電子郵件與密碼不符。",
+    "invalidEmail": "請輸入有效的電子郵件地址，例如 name@example.com。",
     "invalidCode": "驗證碼錯誤或已過期。",
     "failed": "無法寄送驗證碼，請再試一次。",
     "devPersonas": "開發測試角色",

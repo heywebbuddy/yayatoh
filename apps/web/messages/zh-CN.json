@@ -883,6 +883,7 @@
     "useCode": "改用一次性验证码",
     "usePassword": "改用密码",
     "invalid": "邮箱和密码不匹配。",
+    "invalidEmail": "请输入有效的邮箱地址，例如 name@example.com。",
     "invalidCode": "验证码错误或已过期。",
     "failed": "无法发送验证码，请重试。",
     "devPersonas": "开发测试角色",

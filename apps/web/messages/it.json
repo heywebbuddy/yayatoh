@@ -883,6 +883,7 @@
     "useCode": "Usa invece un codice monouso",
     "usePassword": "Usa invece la tua password",
     "invalid": "Email e password non corrispondono.",
+    "invalidEmail": "Inserisci un indirizzo email valido, come nome@esempio.it.",
     "invalidCode": "Il codice è errato o scaduto.",
     "failed": "Non siamo riusciti a inviare il codice. Riprova.",
     "devPersonas": "Personas di sviluppo",

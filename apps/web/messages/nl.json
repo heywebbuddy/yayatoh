@@ -883,6 +883,7 @@
     "useCode": "Gebruik in plaats daarvan een eenmalige code",
     "usePassword": "Gebruik in plaats daarvan je wachtwoord",
     "invalid": "Dit e-mailadres en wachtwoord komen niet overeen.",
+    "invalidEmail": "Voer een geldig e-mailadres in, zoals naam@voorbeeld.nl.",
     "invalidCode": "Deze code is onjuist of verlopen.",
     "failed": "We konden geen code versturen. Probeer het opnieuw.",
     "devPersonas": "Ontwikkelpersona’s",
