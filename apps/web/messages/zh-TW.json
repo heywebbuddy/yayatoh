@@ -893,6 +893,8 @@
       "backupLabel": "備用碼",
       "backupHint": "例如：abcde-12345",
       "verify": "驗證並登入",
+      "verifying": "正在驗證代碼…",
+      "signingIn": "正在登入…",
       "useBackup": "改用備用碼",
       "useTotp": "改用驗證器應用程式",
       "startOver": "重新登入",

@@ -893,6 +893,8 @@
       "backupLabel": "Código de backup",
       "backupHint": "Por exemplo: abcde-12345",
       "verify": "Verificar e entrar",
+      "verifying": "Verificando o código…",
+      "signingIn": "Entrando…",
       "useBackup": "Usar um código de backup",
       "useTotp": "Usar o app autenticador",
       "startOver": "Entrar de novo",

@@ -893,6 +893,8 @@
       "backupLabel": "Back-upcode",
       "backupHint": "Bijvoorbeeld: abcde-12345",
       "verify": "Controleren en inloggen",
+      "verifying": "Code wordt gecontroleerd…",
+      "signingIn": "Je wordt ingelogd…",
       "useBackup": "Een back-upcode gebruiken",
       "useTotp": "De authenticator-app gebruiken",
       "startOver": "Opnieuw inloggen",

@@ -285,8 +285,9 @@ function ChallengeForm({ finish, onRestart }: { finish: () => Promise<void>; onR
       {restart ? (
         <Button onClick={onRestart}>{t('startOver')}</Button>
       ) : (
-        <Button type="submit" disabled={pending || state.ok}>
-          {t('verify')}
+        <Button type="submit" disabled={pending || state.ok} aria-busy={pending || state.ok}>
+          {/* QA #4: say what is happening while the code is checked and the next page loads. */}
+          {state.ok ? t('signingIn') : pending ? t('verifying') : t('verify')}
         </Button>
       )}
       <Button variant="ghost" onClick={() => setKind(kind === 'totp' ? 'backup_code' : 'totp')}>

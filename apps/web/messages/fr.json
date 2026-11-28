@@ -893,6 +893,8 @@
       "backupLabel": "Code de secours",
       "backupHint": "Par exemple : abcde-12345",
       "verify": "Vérifier et se connecter",
+      "verifying": "Vérification du code…",
+      "signingIn": "Connexion en cours…",
       "useBackup": "Utiliser plutôt un code de secours",
       "useTotp": "Utiliser plutôt l’application d’authentification",
       "startOver": "Se reconnecter",

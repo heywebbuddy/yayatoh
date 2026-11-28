@@ -893,6 +893,8 @@
       "backupLabel": "バックアップコード",
       "backupHint": "例: abcde-12345",
       "verify": "確認してサインイン",
+      "verifying": "コードを確認しています…",
+      "signingIn": "サインインしています…",
       "useBackup": "バックアップコードを使う",
       "useTotp": "認証アプリを使う",
       "startOver": "もう一度サインイン",
