@@ -1,6 +1,7 @@
 import { clearSignInFailures, recordSignInFailure, signInNeedsHumanCheck } from '@yayatoh/auth';
 import type { RateLimitPolicyName } from '@yayatoh/platform/security';
 import { tooManyRequests } from '@yayatoh/platform/security';
+import { isEmailAddress } from '@/lib/email-address.ts';
 import { getAuth } from '@/server/auth.ts';
 import { requireHumanCheck } from '@/server/human-check.ts';
 import { clientIp, limitRequest } from '@/server/rate-limit.ts';
@@ -57,6 +58,9 @@ export async function POST(req: Request) {
     const decision = await limitRequest(req, policy, { identity: email });
     if (!decision.allowed) return tooManyRequests(decision, { message: 'Too many attempts' });
   }
+  // QA #12: no code or link goes to an address like "nitin@gmail"; the form shows the field error.
+  if (ALWAYS_CHECKED.test(path) && !(email && isEmailAddress(email)))
+    return Response.json({ code: 'INVALID_EMAIL', message: 'Enter a valid email address' }, { status: 400 });
   const token = req.headers.get('x-human-check') ?? '';
   const password = PASSWORD_SIGN_IN.test(path) && email !== null;
   if (ALWAYS_CHECKED.test(path) || (password && (await signInNeedsHumanCheck(email)))) {

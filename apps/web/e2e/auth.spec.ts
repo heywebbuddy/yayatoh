@@ -29,6 +29,49 @@ test.describe('sign-in', () => {
     expect(res?.status()).toBe(200);
   });
 
+  test('the email and password fields keep their labels and show example placeholders', async ({ page }) => {
+    for (const path of ['/sign-in', '/o/sign-in']) {
+      await page.goto(path);
+      await expect(page.getByLabel('Email')).toHaveAttribute('placeholder', 'name@example.com');
+      await expect(page.getByLabel('Password', { exact: true })).toHaveAttribute(
+        'placeholder',
+        'Enter your password',
+      );
+    }
+  });
+
+  test('the eye button shows the typed password and hides it again', async ({ page }) => {
+    for (const path of ['/sign-in', '/o/sign-in']) {
+      await page.goto(path);
+      const password = page.getByLabel('Password', { exact: true });
+      await password.fill('not-a-real-password');
+      await expect(password).toHaveAttribute('type', 'password');
+      await page.getByRole('button', { name: 'Show password' }).click();
+      await expect(password).toHaveAttribute('type', 'text');
+      await page.getByRole('button', { name: 'Hide password' }).click();
+      await expect(password).toHaveAttribute('type', 'password');
+    }
+  });
+
+  test('an address without a dot in the domain is named at the field, and no code is sent', async ({
+    page,
+  }) => {
+    await page.goto('/sign-up');
+    await page.waitForLoadState('load');
+    const email = page.getByLabel('Email', { exact: true });
+    await email.fill('nitin@gmail');
+    await page.getByRole('button', { name: 'Email me a code' }).click();
+    await expect(email).toHaveAttribute('aria-invalid', 'true');
+    await expect(email).toHaveAccessibleDescription('Enter a valid email address, like name@example.com.');
+    await expect(email).toBeFocused();
+    // The auth route refuses it too, for anything that skips the form.
+    const res = await page.request.post('/api/auth/email-otp/send-verification-otp', {
+      data: { email: 'nitin@gmail', type: 'sign-in' },
+    });
+    expect(res.status()).toBe(400);
+    expect(((await res.json()) as { code: string }).code).toBe('INVALID_EMAIL');
+  });
+
   test('sign-in page passes axe', async ({ page }) => {
     const { expectAccessible } = await import('./helpers.ts');
     await page.goto('/sign-in');

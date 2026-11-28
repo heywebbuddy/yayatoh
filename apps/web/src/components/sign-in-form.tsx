@@ -1,7 +1,8 @@
 'use client';
 
 import { authClient } from '@yayatoh/auth/client';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Field, fieldClass, Input } from '@yayatoh/ui';
+import { Eye, EyeOff } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, useActionState, useEffect, useId, useRef, useState } from 'react';
 import {
@@ -10,10 +11,15 @@ import {
   verifyChallengeAction,
 } from '@/app/[locale]/sign-in/actions.ts';
 import { Link, useRouter } from '@/i18n/navigation.ts';
+import { isEmailAddress } from '@/lib/email-address.ts';
 import { continueToSiteAction, signOutHereAction } from '@/server/session-actions.ts';
 import { HumanCheckGroup, type HumanCheckWidget } from './human-check-field.tsx';
 
 type Mode = 'password' | 'code';
+
+/** The show/hide password button inside the field: the date picker's trailing icon button. */
+const REVEAL_BUTTON =
+  'absolute inset-y-0 end-1.5 my-auto inline-grid size-8 cursor-pointer place-items-center rounded-tag text-ink-2 hover:bg-surface-3 hover:text-ink focus-visible:outline-2 focus-visible:outline-focus';
 
 /** Better Auth client errors carry the HTTP status and our 429 body (`retryAfter` seconds). */
 type AuthError = { status?: number; retryAfter?: unknown; code?: unknown } | null;
@@ -75,6 +81,8 @@ export function SignInForm({
   const [codeSent, setCodeSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
   // M1.2f: the check is always asked before a code is emailed, and for passwords after failures.
   const [needHuman, setNeedHuman] = useState(false);
   const [humanToken, setHumanToken] = useState('');
@@ -117,7 +125,23 @@ export function SignInForm({
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
-    const email = String(form.get('email') ?? '');
+    const email = String(form.get('email') ?? '').trim();
+    const emailField = e.currentTarget.elements.namedItem('email');
+    // QA #12: an address like "nitin@gmail" is named at the field (the auth route refuses it too).
+    const showEmailError = () => {
+      setError(null);
+      setEmailError(t('invalidEmail'));
+      if (emailField instanceof HTMLInputElement) emailField.focus();
+    };
+    const badEmail = (err: AuthError) => {
+      if (err?.code !== 'INVALID_EMAIL') return false;
+      showEmailError();
+      return true;
+    };
+    // Hidden again on submit, so password managers see a password field when they offer to save.
+    setShowPassword(false);
+    if (!isEmailAddress(email)) return showEmailError();
+    setEmailError(null);
     setBusy(true);
     setError(null);
     const usedHuman = Boolean(humanToken);
@@ -128,7 +152,7 @@ export function SignInForm({
           { email, password: String(form.get('password') ?? '') },
           fetchOptions(),
         );
-        if (limited(err) || humanRefused(err)) return;
+        if (limited(err) || humanRefused(err) || badEmail(err)) return;
         if (err) return setError(t('invalid'));
         twoFactor = Boolean((data as { twoFactorRedirect?: boolean } | null)?.twoFactorRedirect);
       } else if (!codeSent) {
@@ -137,7 +161,7 @@ export function SignInForm({
           { email, type: 'sign-in' },
           fetchOptions(),
         );
-        if (limited(err) || humanRefused(err)) return;
+        if (limited(err) || humanRefused(err) || badEmail(err)) return;
         if (err) return setError(t('failed'));
         return setCodeSent(true);
       } else {
@@ -145,7 +169,7 @@ export function SignInForm({
           email,
           otp: String(form.get('otp') ?? ''),
         });
-        if (limited(err)) return;
+        if (limited(err) || badEmail(err)) return;
         if (err) return setError(t('invalidCode'));
         twoFactor = Boolean((data as { twoFactorRedirect?: boolean } | null)?.twoFactorRedirect);
       }
@@ -165,15 +189,43 @@ export function SignInForm({
     // POST even before hydration: a GET fallback would put the password in the URL (M1.14 ZAP).
     <form method="post" onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
       {error ? <Alert title={error} /> : null}
-      <Input name="email" type="email" autoComplete="email" required label={t('email')} />
+      <Input
+        name="email"
+        type="email"
+        autoComplete="email"
+        required
+        label={t('email')}
+        placeholder={t('emailPlaceholder')}
+        error={emailError ?? undefined}
+      />
       {mode === 'password' ? (
-        <Input
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          label={t('password')}
-        />
+        <Field id="password" label={t('password')} required>
+          <div className="relative">
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="current-password"
+              required
+              placeholder={t('passwordPlaceholder')}
+              className={fieldClass('md', 'field-trailing w-full')}
+            />
+            {/* The name is text inside the button: "Password" stays the field's only label. */}
+            <button
+              type="button"
+              aria-controls="password"
+              onClick={() => setShowPassword((s) => !s)}
+              className={REVEAL_BUTTON}
+            >
+              {showPassword ? (
+                <EyeOff aria-hidden="true" className="size-4" />
+              ) : (
+                <Eye aria-hidden="true" className="size-4" />
+              )}
+              <span className="sr-only">{showPassword ? t('hidePassword') : t('showPassword')}</span>
+            </button>
+          </div>
+        </Field>
       ) : codeSent ? (
         <Input
           name="otp"
@@ -199,6 +251,8 @@ export function SignInForm({
             setMode(mode === 'password' ? 'code' : 'password');
             setCodeSent(false);
             setError(null);
+            setEmailError(null);
+            setShowPassword(false);
           }}
         >
           {mode === 'password' ? t('useCode') : t('usePassword')}
