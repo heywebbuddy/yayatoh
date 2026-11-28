@@ -1,5 +1,5 @@
 import { buttonClass, cx } from '@yayatoh/ui';
-import { Menu, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { BrandMark } from '@/components/brand-mark.tsx';
 import { IncidentBanner } from '@/components/status/incident-banner.tsx';
@@ -9,6 +9,7 @@ import { localizedPath } from '@/lib/seo/urls.ts';
 import { dashboardAccess } from '@/server/dashboard-access.ts';
 import { currentGuestSession } from '@/server/guest.ts';
 import { pageTheme } from '@/server/theme.ts';
+import { SiteMenu } from './site-menu.tsx';
 import { SOLUTION_KEYS } from './solutions.ts';
 
 const link =
@@ -20,10 +21,11 @@ const popover =
 /**
  * The floating top bar of the public site: search and the logo on the left, links with a
  * "Sign up" pill and "Sign in" on the right. Under 1280 px the links fold into a menu (a
- * `<details>`, so it works without JavaScript).
+ * `<details>`, so it works without JavaScript; see `SiteMenu`).
  */
 export async function ShowcaseTopBar({ name }: { name?: string }) {
   const t = await getTranslations('showcase');
+  const shell = await getTranslations('shell');
   const locale = await getLocale();
   const access = await dashboardAccess();
   const signedIn = access.kind !== 'anonymous' || Boolean(await currentGuestSession(null));
@@ -113,14 +115,10 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
               </>
             )}
             <ThemeSwitch initial={theme} />
-            <details className="relative xl:hidden">
-              <summary
-                aria-label={t('menu')}
-                className="inline-flex size-10 cursor-pointer list-none items-center justify-center rounded-pill border border-line bg-surface [&::-webkit-details-marker]:hidden"
+            <SiteMenu openLabel={t('menu')} closeLabel={shell('closeMenu')}>
+              <ul
+                className={`${popover} max-h-[calc(100dvh-6rem)] w-[min(20rem,calc(100vw-3rem))] overflow-y-auto overscroll-contain`}
               >
-                <Menu aria-hidden="true" className="size-5" />
-              </summary>
-              <ul className={`${popover} w-64`}>
                 <li>
                   <Link href="/events" className={`${link} w-full`}>
                     {t('events')}
@@ -172,7 +170,7 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
                   <ThemeRadios initial={theme} />
                 </li>
               </ul>
-            </details>
+            </SiteMenu>
           </div>
         </header>
       </div>

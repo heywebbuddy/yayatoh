@@ -49,7 +49,8 @@ export function ThemeSwitch({ initial, className }: { initial: ThemeChoice; clas
 
 /**
  * The same choice as three buttons in a row (for the small-screen menu, where a popover inside a
- * popover is awkward): Light, Dark, System. The current one is pressed.
+ * popover is awkward): Light, Dark, System. The current one is pressed. The three share the row
+ * equally and a long label wraps under its icon, so none spills past the menu's edge.
  */
 export function ThemeRadios({ initial }: { initial: ThemeChoice }) {
   const t = useTranslations('theme');
@@ -63,7 +64,7 @@ export function ThemeRadios({ initial }: { initial: ThemeChoice }) {
     });
   };
   return (
-    <fieldset className="m-0 flex min-w-0 gap-1 border-0 p-1">
+    <fieldset className="m-0 grid min-w-0 grid-cols-3 gap-1 border-0 p-0 pt-1">
       <legend className="sr-only">{t('label')}</legend>
       {(['light', 'dark', 'system'] as const).map((k) => {
         const I = ICON[k];
@@ -74,7 +75,7 @@ export function ThemeRadios({ initial }: { initial: ThemeChoice }) {
             aria-pressed={theme === k}
             onClick={() => choose(k)}
             className={cx(
-              'inline-flex min-h-10 flex-1 items-center justify-center gap-1.5 rounded-pill border px-3 text-caption font-bold',
+              'inline-flex min-h-10 min-w-0 flex-wrap items-center justify-center gap-x-1.5 gap-y-0.5 rounded-pill border px-2 py-1 text-center text-caption font-bold',
               theme === k
                 ? 'border-primary bg-primary-soft text-primary-ink'
                 : 'border-line bg-surface text-ink-2',
