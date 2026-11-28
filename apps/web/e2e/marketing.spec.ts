@@ -51,9 +51,7 @@ test.describe('marketing site (M3.11b)', () => {
     await expect(page.getByText('Check the highlighted fields.')).toBeVisible();
     await expect(page.getByText("Confirm that you're a person.")).toBeVisible();
     // Every try counts against the device limit, so the form says how many are left.
-    await expect(
-      page.getByText('You can send 2 more messages from this device in the next 10 minutes.'),
-    ).toBeVisible();
+    await expect(page.getByText('You can send 2 more messages in the next 10 minutes.')).toBeVisible();
 
     await pickOption(page.getByRole('combobox', { name: 'Topic' }), 'sales');
     await page.getByRole('textbox', { name: 'Your name' }).fill(`Robin ${s}`);
@@ -73,7 +71,7 @@ test.describe('marketing site (M3.11b)', () => {
     const done = page.getByRole('status').filter({ hasText: 'Thanks, your message was sent.' });
     await expect(done).toBeVisible();
     await expect(done).toBeFocused();
-    await expect(done).toContainText("You've reached this device's message limit for now.");
+    await expect(done).toContainText("You've reached the message limit for now.");
     await expectAccessible(page);
 
     // Three tries per device in ten minutes (contactRequest policy): the fourth is refused.

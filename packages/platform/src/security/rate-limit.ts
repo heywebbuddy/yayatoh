@@ -32,6 +32,8 @@ export interface RateLimitDecision {
   readonly remaining: number;
   /** When denied: how long until one more request would be allowed. 0 when allowed. */
   readonly retryAfterMs: number;
+  /** The window of the bucket that decided (set by the limiter's `check`; absent when it failed open). */
+  readonly windowMs?: number;
 }
 
 /**
@@ -569,7 +571,7 @@ export function createRateLimiter(store: RateLimitStore, onError?: (err: unknown
       for (const [key, rule] of buckets) {
         let d: RateLimitDecision;
         try {
-          d = await store.hit(key, rule, now);
+          d = { ...(await store.hit(key, rule, now)), windowMs: rule.windowMs };
         } catch (err) {
           onError?.(err);
           continue;

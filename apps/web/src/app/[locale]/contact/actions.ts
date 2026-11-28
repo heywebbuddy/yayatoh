@@ -3,7 +3,7 @@
 import { renderPlainEmail } from '@yayatoh/applications';
 import { platformContactSettings, submitPlatformContactMessage } from '@yayatoh/cms';
 import { PLATFORM_SENDER } from '@yayatoh/notifications';
-import { RATE_LIMIT_POLICIES, type RateLimitDecision } from '@yayatoh/platform/security';
+import type { RateLimitDecision } from '@yayatoh/platform/security';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { ZodError } from 'zod';
 import type { FormState } from '@/lib/form-state.ts';
@@ -15,14 +15,12 @@ import { limitAction, retryAfterMinutes } from '@/server/rate-limit.ts';
 const str = (form: FormData, k: string) => String(form.get(k) ?? '').trim();
 
 /**
- * What the form shows under its result: how many more messages this device may send (every try
- * counts, field errors included) within the policy's device window. Nothing when the limiter's
- * store was unreachable (it failed open, so there is no count).
+ * What the form shows under its result: how many more messages may be sent (every try counts,
+ * field errors included) and the window of the limit that is closest (this device, or the sender's
+ * address across devices). Nothing when the limiter's store was unreachable (it failed open).
  */
 const quotaOf = (d: RateLimitDecision): FormState['quota'] =>
-  d.limit > 0
-    ? { left: d.remaining, minutes: RATE_LIMIT_POLICIES.contactRequest.device.windowMs / 60_000 }
-    : undefined;
+  d.limit > 0 && d.windowMs ? { left: d.remaining, minutes: Math.ceil(d.windowMs / 60_000) } : undefined;
 
 /**
  * The Contact page form. Order matters: honeypot → rate limits (device, IP, sender address) →

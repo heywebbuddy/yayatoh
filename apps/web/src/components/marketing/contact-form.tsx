@@ -115,7 +115,7 @@ export function ContactForm({
         </div>
       ) : null}
       <p className="text-caption text-ink-2">{t('privacy')}</p>
-      <div aria-live="polite">
+      <div aria-live="polite" className="flex flex-col gap-2">
         {state.code === 'rate_limited' ? (
           <Alert title={t('rateLimited', { minutes: Number(state.reason ?? 1) })} />
         ) : state.code === 'validation_failed' ? (
