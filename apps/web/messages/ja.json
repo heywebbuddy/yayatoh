@@ -484,9 +484,9 @@
     "evening": "こんばんは、{name}さん。"
   },
   "phase": {
-    "planning": "準備中 · あと{days, plural, other {#日}}",
+    "planning": "あと{days, plural, other {#日}}",
     "live": "開催中",
-    "completed": "終了"
+    "completed": "開催日経過"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {イベントはまだありません} other {#件のイベント}}",

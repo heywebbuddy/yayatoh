@@ -484,9 +484,9 @@
     "evening": "مساء الخير يا {name}."
   },
   "phase": {
-    "planning": "التخطيط · {days, plural, zero {لا أيام متبقية} one {يوم واحد متبقٍ} two {يومان متبقيان} few {# أيام متبقية} many {# يومًا متبقيًا} other {# يوم متبقٍ}}",
+    "planning": "{days, plural, zero {لا أيام متبقية} one {يوم واحد متبقٍ} two {يومان متبقيان} few {# أيام متبقية} many {# يومًا متبقيًا} other {# يوم متبقٍ}}",
     "live": "مباشر الآن",
-    "completed": "مكتملة"
+    "completed": "انقضى موعدها"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {لا توجد فعاليات بعد} zero {لا توجد فعاليات} one {فعالية واحدة} two {فعاليتان} few {# فعاليات} many {# فعالية} other {# فعالية}}",

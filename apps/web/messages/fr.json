@@ -484,9 +484,9 @@
     "evening": "Bonsoir, {name}."
   },
   "phase": {
-    "planning": "Préparation · encore {days, plural, one {# jour} other {# jours}}",
+    "planning": "encore {days, plural, one {# jour} other {# jours}}",
     "live": "En cours",
-    "completed": "Terminé"
+    "completed": "Date passée"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {aucun événement pour l’instant} one {# événement} other {# événements}}",

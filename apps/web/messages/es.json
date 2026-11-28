@@ -484,9 +484,9 @@
     "evening": "Buenas noches, {name}."
   },
   "phase": {
-    "planning": "Planificación · {days, plural, one {falta # día} other {faltan # días}}",
+    "planning": "{days, plural, one {falta # día} other {faltan # días}}",
     "live": "En directo",
-    "completed": "Finalizado"
+    "completed": "Fecha pasada"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {aún no hay eventos} one {# evento} other {# eventos}}",

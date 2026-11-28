@@ -484,9 +484,9 @@
     "evening": "Goedenavond, {name}."
   },
   "phase": {
-    "planning": "Planning · nog {days, plural, one {# dag} other {# dagen}}",
+    "planning": "nog {days, plural, one {# dag} other {# dagen}}",
     "live": "Nu live",
-    "completed": "Afgerond"
+    "completed": "Datum voorbij"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {nog geen evenementen} one {# evenement} other {# evenementen}}",

@@ -5,7 +5,7 @@ import { buttonClass, Card, EmptyState, Label, PageHeader, Pagination, StatusDot
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
-import { eventPhase } from '@/lib/event-status.ts';
+import { eventPhase, eventStatusLine } from '@/lib/event-status.ts';
 import { formatEventDateRange } from '@/lib/format.ts';
 import { loadConsoleBase } from '@/server/console.ts';
 import { categoryLabels } from '@/server/event-categories.ts';
@@ -149,7 +149,10 @@ export default async function OrgEventsPage({
                     </p>
                     <StatusDot
                       status={STATUS_DOT[event.status]}
-                      label={`${t(`eventStatus.${event.status}`)} · ${t(`phase.${phase.phase}`, { days: phase.days })}`}
+                      label={eventStatusLine(event.status, phase, {
+                        status: (s) => t(`eventStatus.${s}`),
+                        phase: (p, days) => t(`phase.${p}`, { days }),
+                      })}
                     />
                     <Link
                       href={`/o/${org}/e/${event.slug}`}

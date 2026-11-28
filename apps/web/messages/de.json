@@ -484,9 +484,9 @@
     "evening": "Guten Abend, {name}."
   },
   "phase": {
-    "planning": "Planung · noch {days, plural, one {# Tag} other {# Tage}}",
+    "planning": "noch {days, plural, one {# Tag} other {# Tage}}",
     "live": "Jetzt live",
-    "completed": "Abgeschlossen"
+    "completed": "Termin vorbei"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {noch keine Events} one {# Event} other {# Events}}",

@@ -484,9 +484,9 @@
     "evening": "晚上好，{name}。"
   },
   "phase": {
-    "planning": "筹备中 · 还有 {days, plural, other {# 天}}",
+    "planning": "还有 {days, plural, other {# 天}}",
     "live": "正在进行",
-    "completed": "已结束"
+    "completed": "日期已过"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {暂无活动} other {# 个活动}}",

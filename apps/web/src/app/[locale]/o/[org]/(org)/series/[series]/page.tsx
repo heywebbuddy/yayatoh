@@ -18,7 +18,7 @@ import { fmtMoney } from '@/components/reports.tsx';
 import { AddEventToSeriesForm } from '@/components/series-forms.tsx';
 import { SeriesTabs } from '@/components/series-tabs.tsx';
 import { Link } from '@/i18n/navigation.ts';
-import { eventPhase } from '@/lib/event-status.ts';
+import { eventPhase, eventStatusLine } from '@/lib/event-status.ts';
 import { formatEventDateRange, formatNumber } from '@/lib/format.ts';
 import { ports } from '@/server/ports.ts';
 import { addEventToSeriesAction, removeEventFromSeriesAction } from './actions.ts';
@@ -92,7 +92,10 @@ export default async function SeriesEventsPage({
         return (
           <StatusPill
             tone={tone(e.status, phase.phase)}
-            label={`${t(`eventStatus.${e.status}`)} · ${t(`phase.${phase.phase}`, { days: phase.days })}`}
+            label={eventStatusLine(e.status, phase, {
+              status: (s) => t(`eventStatus.${s}`),
+              phase: (p, days) => t(`phase.${p}`, { days }),
+            })}
           />
         );
       },

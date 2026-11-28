@@ -484,9 +484,9 @@
     "evening": "Добрый вечер, {name}."
   },
   "phase": {
-    "planning": "Подготовка · {days, plural, one {остался # день} few {осталось # дня} many {осталось # дней} other {осталось # дня}}",
+    "planning": "{days, plural, one {остался # день} few {осталось # дня} many {осталось # дней} other {осталось # дня}}",
     "live": "Идёт сейчас",
-    "completed": "Завершено"
+    "completed": "Дата прошла"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {пока нет мероприятий} one {# мероприятие} few {# мероприятия} many {# мероприятий} other {# мероприятия}}",

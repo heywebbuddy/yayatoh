@@ -25,6 +25,8 @@ const ACTIONS: readonly EventTransition[] = [
   'cancel',
   'archive',
 ];
+/** Only a step forward is the primary button: never postpone, unpublish or cancel. */
+const FORWARD: ReadonlySet<EventTransition> = new Set(['publish', 'reschedule', 'complete', 'archive']);
 
 export default async function EventDashboard({
   params,
@@ -49,9 +51,14 @@ export default async function EventDashboard({
       : [];
   const readiness = readinessPercent(rules);
   const canWrite = can('events:write');
-  const actions = ACTIONS.filter((a) =>
+  // QA #30: "Mark completed" waits for the event to start (it was the first button on a published
+  // event). Its place is not handed to the next action: cancelling a published event goes through
+  // the cancel wizard below.
+  const allowed = ACTIONS.filter((a) =>
     eventLifecycle.can(ev.status as (typeof eventLifecycle.states)[number], a),
   );
+  const early = allowed.includes('complete') && ev.startsAt.getTime() > Date.now();
+  const actions = early ? allowed.slice(0, 3).filter((a) => a !== 'complete') : allowed.slice(0, 3);
   const isPublic =
     ['published', 'postponed', 'cancelled', 'completed'].includes(ev.status) && ev.visibility !== 'private';
   const place = [ev.venueName, ev.city].filter(Boolean).join(', ');
@@ -78,9 +85,9 @@ export default async function EventDashboard({
               </Link>
             ) : null}
             {canWrite
-              ? actions.slice(0, 3).map((a, i) => (
+              ? actions.map((a, i) => (
                   <form key={a} id={`event-action-${a}`} action={transitionAction.bind(null, org, event, a)}>
-                    <Button type="submit" variant={i === 0 && a !== 'cancel' ? 'primary' : 'secondary'}>
+                    <Button type="submit" variant={i === 0 && FORWARD.has(a) ? 'primary' : 'secondary'}>
                       {t(`eventActions.${a}`)}
                     </Button>
                   </form>

@@ -484,9 +484,9 @@
     "evening": "शुभ संध्या, {name}।"
   },
   "phase": {
-    "planning": "योजना · {days, plural, one {# दिन} other {# दिन}} बाकी",
+    "planning": "{days, plural, one {# दिन} other {# दिन}} बाकी",
     "live": "अभी लाइव",
-    "completed": "पूरा हुआ"
+    "completed": "तारीख निकल गई"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {अभी कोई इवेंट नहीं} one {# इवेंट} other {# इवेंट}}",

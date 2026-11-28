@@ -157,6 +157,11 @@ export const transitionEventCommand = tenantCommand({
       current.status as (typeof eventLifecycle.states)[number],
       input.transition,
     );
+    // QA #30: an event that hasn't started can't be completed (it then read "Completed · 2 days to go").
+    if (input.transition === 'complete' && ctx.now < current.startsAt)
+      throw new DomainError('invalid_state', 'An event can be marked completed once it has started', {
+        reason: 'not_started',
+      });
     const [row] = await tx
       .update(events)
       .set({
