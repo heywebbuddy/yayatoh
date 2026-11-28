@@ -82,7 +82,7 @@ const marketing = item('marketing', 'build', 'marketing', 'megaphone');
 // Tours: the repeating departures (the event's dates) and where each one picks passengers up.
 const departures = item('dates', 'build', 'events', 'calendar-range');
 const pickups = item('pickups', 'build', 'events', 'bus');
-const onsite = item('onsite', 'run', 'checkin', 'scan');
+const onsite = item('onsite', 'run', 'checkin', 'scan-qr');
 const libraries = item('libraries', 'run', 'core', 'library');
 // M1.4c/d/e: venue, category, tags and short links; page content and announcements; cover and
 // gallery images; private info and access codes. Every profile has them, after its own build items.

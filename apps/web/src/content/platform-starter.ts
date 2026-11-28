@@ -197,7 +197,7 @@ You can also **assign seats** yourself (for example for guests or table plans) a
     summary: 'Scan tickets at the door with a phone or tablet, even without an internet connection.',
     keywords: 'check-in, scan, QR code, door, offline, devices, door staff',
     position: 10,
-    body: `Open **Scan** on a phone or tablet and enroll the device for your event (from the event's **On-site** page). Door staff don't need a full console account.
+    body: `Open **Scan** on a phone or tablet and enroll the device for your event (from the event's **Check-in** page). Door staff don't need a full console account.
 
 - Point the camera at the ticket's QR code: a green screen means the ticket is valid and checked in; red explains why not (already used, wrong event, refunded…).
 - **Offline mode:** the app keeps a copy of the guest list, so scanning continues if the Wi-Fi drops. Scans sync when the connection is back.

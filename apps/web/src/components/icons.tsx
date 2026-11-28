@@ -44,6 +44,7 @@ import {
   Percent,
   Scale,
   ScanLine,
+  ScanQrCode,
   Search,
   Send,
   Settings,
@@ -75,6 +76,8 @@ const ICONS: Record<string, LucideIcon> = {
   bus: Bus,
   workflow: Workflow,
   scan: ScanLine,
+  // QA #22: the event's Check-in page (scanning ticket QR codes at the door).
+  'scan-qr': ScanQrCode,
   sparkles: Sparkles,
   library: Library,
   clipboard: ClipboardList,
