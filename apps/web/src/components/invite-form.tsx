@@ -34,8 +34,14 @@ export function InviteForm({
   // Inviting grants a role: a step-up command (M1.2c).
   const [state, formAction, pending, formRef] = useStepUpActionState(action, { ok: false, code: null });
   return (
-    <form ref={formRef} action={formAction} className="flex flex-col gap-3 md:flex-row md:items-end">
-      <div className="flex-1">
+    // QA #10: the row wraps, so the full-width notice below takes its own line instead of squeezing
+    // the email field down to a few characters.
+    <form
+      ref={formRef}
+      action={formAction}
+      className="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-end"
+    >
+      <div className="min-w-0 flex-1">
         <Input name="email" type="email" required autoComplete="off" label={t('team.inviteEmail')} />
       </div>
       <div className="flex flex-col gap-1.5">
