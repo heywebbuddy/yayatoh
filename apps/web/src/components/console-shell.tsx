@@ -278,7 +278,8 @@ async function SidebarContent({
               className={cx(buttonClass('primary', 'md'), 'w-full')}
             >
               <Plus aria-hidden="true" strokeWidth={2.4} />
-              {t('shell.newEvent')}
+              {/* QA #33: the same words as the pages' own "Create event", for the same page. */}
+              {t('orgHome.create')}
             </Link>
           ) : null}
         </div>
@@ -292,8 +293,8 @@ const SIDEBAR =
 
 /**
  * The console frame (ADR 0022): a floating near-black sidebar (rounded 28, inset 16) with the org
- * switcher, MENU and ACCOUNT sections and the "New event" action; a topbar with search (⌘K or /),
- * the theme switch and notifications. Below 1024 px the sidebar is a drawer.
+ * switcher, MENU and ACCOUNT sections and the "Create event" action; a topbar with search (⌘K or
+ * /), the Create menu, the theme switch and notifications. Below 1024 px the sidebar is a drawer.
  */
 export async function ConsoleShell({
   data,

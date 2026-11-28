@@ -89,9 +89,10 @@ export default async function OrgHome({
   ) : undefined;
   return (
     <>
+      {/* QA #33: the organization is the page's heading; the greeting follows it. */}
       <PageHeader
-        title={t(`greeting.${greetingKey(data.org.timezone)}`, { name: firstName })}
-        description={data.org.name}
+        title={data.org.name}
+        description={t(`greeting.${greetingKey(data.org.timezone)}`, { name: firstName })}
         actions={create}
       />
       {paused.length > 0 ? (

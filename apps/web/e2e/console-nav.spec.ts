@@ -139,6 +139,9 @@ test.describe('Create menu and Help', () => {
   test('keyboard: open the menu, see every entry, go to a new venue', async ({ page }) => {
     await signIn(page);
     await page.goto(ORG);
+    // QA #33: the organization is the home's heading, and "Create event" has one name everywhere.
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Lakeside Events');
+    await expect(page.getByRole('link', { name: 'New event' })).toHaveCount(0);
     const trigger = page.getByRole('button', { name: 'Create', exact: true });
     await trigger.focus();
     await page.keyboard.press('Enter');
