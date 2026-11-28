@@ -11,6 +11,7 @@ import { currentGuestSession } from '@/server/guest.ts';
 import { pageTheme } from '@/server/theme.ts';
 import { SiteMenu } from './site-menu.tsx';
 import { SOLUTION_KEYS } from './solutions.ts';
+import { StickyBar } from './sticky-bar.tsx';
 
 const link =
   'inline-flex min-h-10 items-center whitespace-nowrap rounded-pill px-3.5 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink aria-[current=page]:text-ink';
@@ -34,7 +35,7 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
   return (
     <>
       <IncidentBanner variant="site" />
-      <div className="sticky top-0 z-50 px-3 pt-3 sm:px-5">
+      <StickyBar>
         <header className="mx-auto flex w-full max-w-7xl items-center gap-2 rounded-pill border border-line bg-canvas/85 p-2 ps-2 sm:gap-3 sm:ps-3 backdrop-blur-xl">
           <search className="min-w-0 shrink">
             <form
@@ -173,7 +174,7 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
             </SiteMenu>
           </div>
         </header>
-      </div>
+      </StickyBar>
     </>
   );
 }
