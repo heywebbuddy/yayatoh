@@ -106,6 +106,9 @@
       }
     },
     "kinds": {
+      "assistance": {
+        "requested": "新的求助請求"
+      },
       "orders": {
         "tickets": "票券",
         "refund": "退款",

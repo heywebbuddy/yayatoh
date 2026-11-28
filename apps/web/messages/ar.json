@@ -106,6 +106,9 @@
       }
     },
     "kinds": {
+      "assistance": {
+        "requested": "طلب مساعدة جديد"
+      },
       "orders": {
         "tickets": "التذاكر",
         "refund": "استرداد",

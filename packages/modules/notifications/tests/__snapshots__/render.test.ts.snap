@@ -1259,6 +1259,7 @@ exports[`renderMessage: every kind in all 13 locales > assistance.requested · a
 
 --
 أرسلته Lakeside Events عبر Yayatoh.
+إلغاء الاشتراك: https://app.yayatoh.test/unsubscribe/sample
 بدعم من Yayatoh
 ",
 }
@@ -1275,6 +1276,7 @@ Ein Gast hat bei Lakeside Jazz Night um Hilfe gebeten. Öffne die Hilfe-Wartesch
 
 --
 Gesendet von Lakeside Events mit Yayatoh.
+Abmelden: https://app.yayatoh.test/unsubscribe/sample
 Bereitgestellt von Yayatoh
 ",
 }
@@ -1291,6 +1293,7 @@ A guest asked for help at Lakeside Jazz Night. Open the help queue to take it.
 
 --
 Sent by Lakeside Events with Yayatoh.
+Unsubscribe: https://app.yayatoh.test/unsubscribe/sample
 Powered by Yayatoh
 ",
 }
@@ -1307,6 +1310,7 @@ Un invitado pidió ayuda en Lakeside Jazz Night. Abre la cola de ayuda para aten
 
 --
 Enviado por Lakeside Events con Yayatoh.
+Cancelar suscripción: https://app.yayatoh.test/unsubscribe/sample
 Con tecnología de Yayatoh
 ",
 }
@@ -1323,6 +1327,7 @@ Un invité a demandé de l’aide à Lakeside Jazz Night. Ouvrez la file d’aid
 
 --
 Envoyé par Lakeside Events avec Yayatoh.
+Se désabonner: https://app.yayatoh.test/unsubscribe/sample
 Propulsé par Yayatoh
 ",
 }
@@ -1339,6 +1344,7 @@ Lakeside Jazz Night में एक मेहमान ने मदद मा�
 
 --
 Lakeside Events ने Yayatoh से भेजा।
+सदस्यता छोड़ें: https://app.yayatoh.test/unsubscribe/sample
 Yayatoh द्वारा संचालित
 ",
 }
@@ -1355,6 +1361,7 @@ Un ospite ha chiesto aiuto a Lakeside Jazz Night. Apri la coda delle richieste p
 
 --
 Inviato da Lakeside Events con Yayatoh.
+Annulla iscrizione: https://app.yayatoh.test/unsubscribe/sample
 Con tecnologia Yayatoh
 ",
 }
@@ -1371,6 +1378,7 @@ Lakeside Jazz Night でゲストがヘルプを求めています。ヘルプキ
 
 --
 Lakeside Events が Yayatoh から送信しました。
+配信停止: https://app.yayatoh.test/unsubscribe/sample
 Powered by Yayatoh
 ",
 }
@@ -1387,6 +1395,7 @@ Een gast vroeg om hulp bij Lakeside Jazz Night. Open de hulpwachtrij om het op t
 
 --
 Verzonden door Lakeside Events met Yayatoh.
+Afmelden: https://app.yayatoh.test/unsubscribe/sample
 Mogelijk gemaakt door Yayatoh
 ",
 }
@@ -1403,6 +1412,7 @@ Um convidado pediu ajuda em Lakeside Jazz Night. Abra a fila de ajuda para atend
 
 --
 Enviado por Lakeside Events com a Yayatoh.
+Cancelar inscrição: https://app.yayatoh.test/unsubscribe/sample
 Com tecnologia Yayatoh
 ",
 }
@@ -1419,6 +1429,7 @@ exports[`renderMessage: every kind in all 13 locales > assistance.requested · r
 
 --
 Отправлено Lakeside Events через Yayatoh.
+Отписаться: https://app.yayatoh.test/unsubscribe/sample
 Работает на Yayatoh
 ",
 }
@@ -1435,6 +1446,7 @@ exports[`renderMessage: every kind in all 13 locales > assistance.requested · z
 
 --
 由 Lakeside Events 通过 Yayatoh 发送。
+退订: https://app.yayatoh.test/unsubscribe/sample
 由 Yayatoh 提供支持
 ",
 }
@@ -1451,6 +1463,7 @@ exports[`renderMessage: every kind in all 13 locales > assistance.requested · z
 
 --
 由 Lakeside Events 透過 Yayatoh 寄送。
+取消訂閱: https://app.yayatoh.test/unsubscribe/sample
 由 Yayatoh 提供技術支援
 ",
 }

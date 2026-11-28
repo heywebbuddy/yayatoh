@@ -106,6 +106,9 @@
       }
     },
     "kinds": {
+      "assistance": {
+        "requested": "Neue Hilfeanfrage"
+      },
       "orders": {
         "tickets": "Tickets",
         "refund": "Erstattung",

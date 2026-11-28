@@ -106,6 +106,9 @@
       }
     },
     "kinds": {
+      "assistance": {
+        "requested": "新しいヘルプリクエスト"
+      },
       "orders": {
         "tickets": "チケット",
         "refund": "返金",

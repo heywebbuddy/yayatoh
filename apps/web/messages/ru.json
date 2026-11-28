@@ -106,6 +106,9 @@
       }
     },
     "kinds": {
+      "assistance": {
+        "requested": "Новый запрос помощи"
+      },
       "orders": {
         "tickets": "Билеты",
         "refund": "Возврат",

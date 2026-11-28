@@ -106,6 +106,9 @@
       }
     },
     "kinds": {
+      "assistance": {
+        "requested": "मदद का नया अनुरोध"
+      },
       "orders": {
         "tickets": "टिकट",
         "refund": "रिफ़ंड",
