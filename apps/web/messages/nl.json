@@ -20946,6 +20946,8 @@
       "slow": "De bevestiging duurt langer dan gewoonlijk. Je abonnement gaat in zodra de betaling is bevestigd. Je kunt je organisatie nu al openen.",
       "open": "Open mijn organisatie",
       "createdEyebrow": "Organisatie aangemaakt",
+      "createdNotice": "Uw organisatie {org} is aangemaakt.",
+      "createdNoticeBody": "Ze is nu klaar: u hoeft zich niet opnieuw aan te melden. Rond de stap hieronder af om ze te openen.",
       "next": "Volgende stap: beveilig uw account met tweestapsverificatie, dan bent u binnen.",
       "setup": "Tweestapsverificatie instellen"
     },

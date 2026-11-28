@@ -20946,6 +20946,8 @@
       "slow": "Confirmation is taking longer than usual. Your plan switches on as soon as the payment is confirmed. You can open your organization now.",
       "open": "Open my organization",
       "createdEyebrow": "Organization created",
+      "createdNotice": "Your organization {org} has been created.",
+      "createdNoticeBody": "It is ready now: you don't need to sign up again. Finish the step below to open it.",
       "next": "Next step: secure your account with two-step verification, then you are in.",
       "setup": "Set up two-step verification"
     },

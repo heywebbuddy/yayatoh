@@ -1,3 +1,4 @@
+import { Alert } from '@yayatoh/ui';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ShowcaseShell } from '@/components/showcase/shell.tsx';
 import { WelcomePoll } from '@/components/signup/welcome-poll.tsx';
@@ -40,6 +41,13 @@ export default async function WelcomePage({
         >
           {t('title', { org: org.name })}
         </h1>
+        {/* QA #15: say plainly that the organization exists (the small eyebrow was missed, and
+            people signed up again), and what comes before the console opens. */}
+        <div role="status">
+          <Alert tone="success" title={t('createdNotice', { org: org.name })}>
+            {t('createdNoticeBody')}
+          </Alert>
+        </div>
         <WelcomePoll
           slug={org.slug}
           plan={sp.plan ?? ''}

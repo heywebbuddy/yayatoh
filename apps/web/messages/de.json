@@ -20946,6 +20946,8 @@
       "slow": "Die Bestätigung dauert länger als üblich. Ihr Plan wird aktiviert, sobald die Zahlung bestätigt ist. Sie können Ihre Organisation jetzt öffnen.",
       "open": "Meine Organisation öffnen",
       "createdEyebrow": "Organisation erstellt",
+      "createdNotice": "Ihre Organisation {org} wurde erstellt.",
+      "createdNoticeBody": "Sie ist jetzt bereit, Sie müssen sich nicht erneut registrieren. Schließen Sie den Schritt unten ab, um sie zu öffnen.",
       "next": "Nächster Schritt: Sichern Sie Ihr Konto mit der Zwei-Faktor-Bestätigung, dann sind Sie drin.",
       "setup": "Zwei-Faktor-Bestätigung einrichten"
     },

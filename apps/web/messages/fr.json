@@ -20946,6 +20946,8 @@
       "slow": "La confirmation prend plus de temps que d'habitude. Votre offre s'active dès que le paiement est confirmé. Vous pouvez ouvrir votre organisation maintenant.",
       "open": "Ouvrir mon organisation",
       "createdEyebrow": "Organisation créée",
+      "createdNotice": "Votre organisation {org} a été créée.",
+      "createdNoticeBody": "Elle est prête : inutile de vous réinscrire. Terminez l’étape ci-dessous pour l’ouvrir.",
       "next": "Étape suivante : sécurisez votre compte avec la vérification en deux étapes, et vous y êtes.",
       "setup": "Configurer la vérification en deux étapes"
     },

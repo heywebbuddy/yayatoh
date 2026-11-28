@@ -20946,6 +20946,8 @@
       "slow": "La confirmación está tardando más de lo normal. Tu plan se activa en cuanto se confirme el pago. Ya puedes abrir tu organización.",
       "open": "Abrir mi organización",
       "createdEyebrow": "Organización creada",
+      "createdNotice": "Se ha creado su organización {org}.",
+      "createdNoticeBody": "Ya está lista: no necesita registrarse de nuevo. Complete el paso de abajo para abrirla.",
       "next": "Siguiente paso: proteja su cuenta con la verificación en dos pasos y ya estará dentro.",
       "setup": "Configurar la verificación en dos pasos"
     },
