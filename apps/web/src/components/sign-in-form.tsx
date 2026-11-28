@@ -1,7 +1,8 @@
 'use client';
 
 import { authClient } from '@yayatoh/auth/client';
-import { Alert, Button, Input } from '@yayatoh/ui';
+import { Alert, Button, Field, fieldClass, Input } from '@yayatoh/ui';
+import { Eye, EyeOff } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, useActionState, useEffect, useId, useRef, useState } from 'react';
 import {
@@ -14,6 +15,10 @@ import { continueToSiteAction, signOutHereAction } from '@/server/session-action
 import { HumanCheckGroup, type HumanCheckWidget } from './human-check-field.tsx';
 
 type Mode = 'password' | 'code';
+
+/** The show/hide password button inside the field: the date picker's trailing icon button. */
+const REVEAL_BUTTON =
+  'absolute inset-y-0 end-1.5 my-auto inline-grid size-8 cursor-pointer place-items-center rounded-tag text-ink-2 hover:bg-surface-3 hover:text-ink focus-visible:outline-2 focus-visible:outline-focus';
 
 /** Better Auth client errors carry the HTTP status and our 429 body (`retryAfter` seconds). */
 type AuthError = { status?: number; retryAfter?: unknown; code?: unknown } | null;
@@ -75,6 +80,7 @@ export function SignInForm({
   const [codeSent, setCodeSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   // M1.2f: the check is always asked before a code is emailed, and for passwords after failures.
   const [needHuman, setNeedHuman] = useState(false);
   const [humanToken, setHumanToken] = useState('');
@@ -118,6 +124,8 @@ export function SignInForm({
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const email = String(form.get('email') ?? '');
+    // Hidden again on submit, so password managers see a password field when they offer to save.
+    setShowPassword(false);
     setBusy(true);
     setError(null);
     const usedHuman = Boolean(humanToken);
@@ -174,14 +182,33 @@ export function SignInForm({
         placeholder={t('emailPlaceholder')}
       />
       {mode === 'password' ? (
-        <Input
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          label={t('password')}
-          placeholder={t('passwordPlaceholder')}
-        />
+        <Field id="password" label={t('password')} required>
+          <div className="relative">
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="current-password"
+              required
+              placeholder={t('passwordPlaceholder')}
+              className={fieldClass('md', 'field-trailing w-full')}
+            />
+            {/* The name is text inside the button: "Password" stays the field's only label. */}
+            <button
+              type="button"
+              aria-controls="password"
+              onClick={() => setShowPassword((s) => !s)}
+              className={REVEAL_BUTTON}
+            >
+              {showPassword ? (
+                <EyeOff aria-hidden="true" className="size-4" />
+              ) : (
+                <Eye aria-hidden="true" className="size-4" />
+              )}
+              <span className="sr-only">{showPassword ? t('hidePassword') : t('showPassword')}</span>
+            </button>
+          </div>
+        </Field>
       ) : codeSent ? (
         <Input
           name="otp"

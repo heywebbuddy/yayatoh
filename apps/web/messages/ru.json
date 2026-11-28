@@ -873,6 +873,8 @@
     "password": "Пароль",
     "emailPlaceholder": "name@example.com",
     "passwordPlaceholder": "Введите пароль",
+    "showPassword": "Показать пароль",
+    "hidePassword": "Скрыть пароль",
     "code": "6-значный код",
     "codeHint": "Мы отправили код на вашу почту. Он действителен 10 минут.",
     "submit": "Войти",

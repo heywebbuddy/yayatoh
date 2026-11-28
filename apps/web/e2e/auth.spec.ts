@@ -40,6 +40,19 @@ test.describe('sign-in', () => {
     }
   });
 
+  test('the eye button shows the typed password and hides it again', async ({ page }) => {
+    for (const path of ['/sign-in', '/o/sign-in']) {
+      await page.goto(path);
+      const password = page.getByLabel('Password', { exact: true });
+      await password.fill('not-a-real-password');
+      await expect(password).toHaveAttribute('type', 'password');
+      await page.getByRole('button', { name: 'Show password' }).click();
+      await expect(password).toHaveAttribute('type', 'text');
+      await page.getByRole('button', { name: 'Hide password' }).click();
+      await expect(password).toHaveAttribute('type', 'password');
+    }
+  });
+
   test('sign-in page passes axe', async ({ page }) => {
     const { expectAccessible } = await import('./helpers.ts');
     await page.goto('/sign-in');

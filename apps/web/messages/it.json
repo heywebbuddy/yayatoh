@@ -873,6 +873,8 @@
     "password": "Password",
     "emailPlaceholder": "nome@esempio.it",
     "passwordPlaceholder": "Inserisci la tua password",
+    "showPassword": "Mostra la password",
+    "hidePassword": "Nascondi la password",
     "code": "Codice a 6 cifre",
     "codeHint": "Ti abbiamo inviato un codice via email. Scade tra 10 minuti.",
     "submit": "Accedi",

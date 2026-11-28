@@ -873,6 +873,8 @@
     "password": "密碼",
     "emailPlaceholder": "name@example.com",
     "passwordPlaceholder": "請輸入密碼",
+    "showPassword": "顯示密碼",
+    "hidePassword": "隱藏密碼",
     "code": "6 位數驗證碼",
     "codeHint": "我們已將驗證碼寄到你的電子郵件，10 分鐘內有效。",
     "submit": "登入",

@@ -873,6 +873,8 @@
     "password": "パスワード",
     "emailPlaceholder": "name@example.com",
     "passwordPlaceholder": "パスワードを入力してください",
+    "showPassword": "パスワードを表示",
+    "hidePassword": "パスワードを非表示",
     "code": "6桁のコード",
     "codeHint": "メールアドレスにコードを送信しました。有効期限は10分です。",
     "submit": "サインイン",
