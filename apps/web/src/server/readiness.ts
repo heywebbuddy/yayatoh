@@ -1,6 +1,6 @@
 import 'server-only';
 import { eventDetailsQuery, eventSectionsQuery, listOccurrencesQuery } from '@yayatoh/events';
-import { guestCountQuery, guestSitePublishedQuery } from '@yayatoh/guests';
+import { guestCountQuery, guestSitePublishedQuery, rsvpSettingsQuery } from '@yayatoh/guests';
 import { executeQuery } from '@yayatoh/kernel';
 import { composeNav, PROFILES } from '@yayatoh/platform';
 import { programCountsQuery } from '@yayatoh/program';
@@ -16,7 +16,7 @@ export const loadReadiness = cache(async (orgSlug: string, eventSlug: string): P
   const { data, event: ev, profile, can } = await loadEventBase(orgSlug, eventSlug);
   const nav = new Set(composeNav(profile, data.modules).map((i) => i.key));
   const checklist = PROFILES[profile].checklist ?? [];
-  const [details, sections, dates, tickets, counts, seating, guestList, site] = await Promise.all([
+  const [details, sections, dates, tickets, counts, seating, guestList, site, rsvp] = await Promise.all([
     executeQuery(eventDetailsQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(eventSectionsQuery, { eventId: ev.id }, data.ctx, ports),
     executeQuery(listOccurrencesQuery, { eventId: ev.id }, data.ctx, ports),
@@ -34,6 +34,12 @@ export const loadReadiness = cache(async (orgSlug: string, eventSlug: string): P
     // M4.5a: whether the guest website is published.
     checklist.includes('guestSitePublished') && data.modules.has('website') && can('guests:read')
       ? executeQuery(guestSitePublishedQuery, { eventId: ev.id }, data.ctx, ports)
+      : Promise.resolve(null),
+    // QA #23: the wedding checklist's RSVP deadline. It was never read here, so the setup guide
+    // showed "RSVP deadline set" as open whatever the RSVP page said (the Command Center's copy
+    // of the rules read it).
+    checklist.includes('rsvpDeadlineSet') && data.modules.has('guests') && can('guests:read')
+      ? executeQuery(rsvpSettingsQuery, { eventId: ev.id }, data.ctx, ports)
       : Promise.resolve(null),
   ]);
   const now = new Date();
@@ -56,6 +62,7 @@ export const loadReadiness = cache(async (orgSlug: string, eventSlug: string): P
     floorPlan: seating !== null,
     guests: guestList?.guests ?? 0,
     guestSite: site?.published ?? false,
+    rsvpDeadline: rsvp?.deadline != null,
     // M4.2b: table tickets on sale (the gala's "tables & sponsors" item).
     tableTickets: tickets.filter((t) => t.tableSize !== null && t.archivedAt === null).length,
     now,
