@@ -486,9 +486,9 @@
     "evening": "Buenas noches, {name}."
   },
   "phase": {
-    "planning": "Planificación · {days, plural, one {falta # día} other {faltan # días}}",
+    "planning": "{days, plural, one {falta # día} other {faltan # días}}",
     "live": "En directo",
-    "completed": "Finalizado"
+    "completed": "Fecha pasada"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {aún no hay eventos} one {# evento} other {# eventos}}",
@@ -1020,13 +1020,16 @@
     "title": "Crear un evento",
     "description": "Puedes cambiarlo todo más adelante. El evento seguirá como borrador hasta que lo publiques.",
     "name": "Nombre del evento",
+    "namePlaceholder": "Noche de jazz de verano",
     "profile": "Tipo de evento",
     "timezone": "Zona horaria",
     "startsAt": "Inicio",
     "endsAt": "Fin",
     "localTimeHint": "En la zona horaria del evento.",
     "venue": "Lugar",
+    "venuePlaceholder": "Sala del Río",
     "city": "Ciudad",
+    "cityPlaceholder": "Madrid",
     "submit": "Crear borrador",
     "slugTaken": "Ya existe un evento con este nombre. Prueba con un nombre ligeramente distinto.",
     "fromTemplate": "Empezar con una plantilla",
@@ -1048,6 +1051,7 @@
     "emptyTitle": "Aún no hay tipos de entrada",
     "emptyDescription": "Añade un tipo de entrada para empezar a vender o a recibir inscripciones.",
     "name": "Nombre",
+    "namePlaceholder": "Entrada general",
     "price": "Valor nominal",
     "allIn": "El comprador paga",
     "feeIncluded": "incluye {fee} de tarifa",
@@ -1069,6 +1073,7 @@
     "passOn": "El comprador paga la tarifa",
     "absorb": "Asumo la tarifa",
     "description": "Descripción (opcional)",
+    "descriptionPlaceholder": "Entrada para una persona, con una bebida en la puerta",
     "add": "Añadir tipo de entrada",
     "added": "Tipo de entrada añadido.",
     "earlyPrice": "Precio de preventa ({currency}, opcional)",
@@ -3363,6 +3368,7 @@
     "org": {
       "title": "Ventas",
       "keyNumbers": "Cifras clave de ventas",
+      "perCurrency": "Cada moneda se suma por separado, tal como pagaron los compradores. Los importes no se convierten ni se suman entre sí.",
       "period": "Periodo",
       "periods": {
         "7d": "Últimos 7 días",
@@ -3375,7 +3381,7 @@
       },
       "from": "Desde",
       "to": "Hasta",
-      "customHint": "Para fechas personalizadas",
+      "customHint": "Elige un día de inicio y uno de fin; ambos días se incluyen.",
       "apply": "Aplicar",
       "badRange": "La fecha final es anterior a la inicial.",
       "badDate": "Elige ambas fechas para un periodo personalizado.",
@@ -5187,6 +5193,7 @@
     "name": "Nombre del evento",
     "tagline": "Eslogan (opcional)",
     "taglineHint": "Una frase que se muestra bajo el nombre.",
+    "taglinePlaceholder": "Una velada de jazz en directo junto al lago",
     "profile": "Tipo de evento",
     "timezone": "Zona horaria",
     "startsAt": "Inicio",
@@ -18357,7 +18364,7 @@
     "question": "¿Qué tipo de evento?",
     "summaryLabel": "Qué incluye un evento de tipo {kind}",
     "includes": "Incluye",
-    "labelsHint": "El tipo decide qué secciones tiene el evento. Tus propias categorías y etiquetas se ponen en la página de Detalles del evento.",
+    "labelsHint": "El tipo decide qué secciones tiene el evento. De qué trata, como Deporte y fitness, es su categoría.",
     "descriptions": {
       "conference": "Sesiones, ponentes, patrocinadores y expositores, con inscripción y credenciales.",
       "gala": "Una cena con entradas, mesas, patrocinadores y donaciones.",
@@ -18365,7 +18372,7 @@
       "wedding": "Invitados, confirmaciones, asientos y una web para invitados.",
       "community": "Miembros, inscripciones y mensajes para un grupo o una causa.",
       "agency": "Eventos que organizas para clientes, con marketing e informes.",
-      "other": "Entradas, asistentes y check-in para cualquier otra cosa.",
+      "other": "Entradas, asistentes y check-in para cualquier otra cosa, como partidos, carreras y torneos.",
       "tour": "Salidas programadas, un aforo por salida y puntos de recogida a elegir."
     },
     "choose": "Elige el tipo de evento…"

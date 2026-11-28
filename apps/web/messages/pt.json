@@ -486,9 +486,9 @@
     "evening": "Boa noite, {name}."
   },
   "phase": {
-    "planning": "Planejamento · {days, plural, one {falta # dia} other {faltam # dias}}",
+    "planning": "{days, plural, one {falta # dia} other {faltam # dias}}",
     "live": "Ao vivo",
-    "completed": "Concluído"
+    "completed": "Data passada"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {nenhum evento ainda} one {# evento} other {# eventos}}",
@@ -1020,13 +1020,16 @@
     "title": "Criar um evento",
     "description": "Você pode alterar tudo depois. O evento fica como rascunho até você publicá-lo.",
     "name": "Nome do evento",
+    "namePlaceholder": "Noite de jazz de verão",
     "profile": "Tipo de evento",
     "timezone": "Fuso horário",
     "startsAt": "Início",
     "endsAt": "Término",
     "localTimeHint": "No fuso horário do evento.",
     "venue": "Local",
+    "venuePlaceholder": "Salão do Rio",
     "city": "Cidade",
+    "cityPlaceholder": "Lisboa",
     "submit": "Criar rascunho",
     "slugTaken": "Já existe um evento com este nome. Tente um nome um pouco diferente.",
     "fromTemplate": "Começar com um modelo",
@@ -1048,6 +1051,7 @@
     "emptyTitle": "Nenhum tipo de ingresso ainda",
     "emptyDescription": "Adicione um tipo de ingresso para começar a vender ou receber inscrições.",
     "name": "Nome",
+    "namePlaceholder": "Entrada geral",
     "price": "Valor de face",
     "allIn": "Comprador paga",
     "feeIncluded": "inclui taxa de {fee}",
@@ -1069,6 +1073,7 @@
     "passOn": "O comprador paga a taxa",
     "absorb": "Eu absorvo a taxa",
     "description": "Descrição (opcional)",
+    "descriptionPlaceholder": "Entrada para uma pessoa, com uma bebida na porta",
     "add": "Adicionar tipo de ingresso",
     "added": "Tipo de ingresso adicionado.",
     "earlyPrice": "Preço de pré-venda ({currency}, opcional)",
@@ -3363,6 +3368,7 @@
     "org": {
       "title": "Vendas",
       "keyNumbers": "Números-chave de vendas",
+      "perCurrency": "Cada moeda é somada separadamente, como os compradores pagaram. Os valores não são convertidos nem somados entre si.",
       "period": "Período",
       "periods": {
         "7d": "Últimos 7 dias",
@@ -3375,7 +3381,7 @@
       },
       "from": "De",
       "to": "Até",
-      "customHint": "Para datas personalizadas",
+      "customHint": "Escolha um dia de início e um de fim; os dois dias são incluídos.",
       "apply": "Aplicar",
       "badRange": "A data final é anterior à data inicial.",
       "badDate": "Escolha ambas as datas para um período personalizado.",
@@ -5187,6 +5193,7 @@
     "name": "Nome do evento",
     "tagline": "Slogan (opcional)",
     "taglineHint": "Uma frase exibida abaixo do nome.",
+    "taglinePlaceholder": "Uma noite de jazz ao vivo à beira do lago",
     "profile": "Tipo de evento",
     "timezone": "Fuso horário",
     "startsAt": "Início",
@@ -18357,7 +18364,7 @@
     "question": "Que tipo de evento?",
     "summaryLabel": "O que um evento do tipo {kind} inclui",
     "includes": "Inclui",
-    "labelsHint": "O tipo decide quais seções o evento tem. Suas categorias e tags ficam na página Detalhes do evento.",
+    "labelsHint": "O tipo decide quais seções o evento tem. Do que ele trata, como Esportes e fitness, é a sua categoria.",
     "descriptions": {
       "conference": "Sessões, palestrantes, patrocinadores e expositores, com inscrição e crachás.",
       "gala": "Um jantar com ingressos, mesas, patrocinadores e doações.",
@@ -18365,7 +18372,7 @@
       "wedding": "Convidados, confirmações, lugares e um site para convidados.",
       "community": "Membros, inscrições e mensagens para um grupo ou uma causa.",
       "agency": "Eventos que você organiza para clientes, com marketing e relatórios.",
-      "other": "Ingressos, participantes e check-in para qualquer outra coisa.",
+      "other": "Ingressos, participantes e check-in para qualquer outra coisa, como partidas, corridas e torneios.",
       "tour": "Saídas programadas, uma capacidade por saída e pontos de embarque à escolha."
     },
     "choose": "Escolha o tipo de evento…"

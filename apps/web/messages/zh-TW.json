@@ -486,9 +486,9 @@
     "evening": "晚安，{name}。"
   },
   "phase": {
-    "planning": "籌備中 · 還有 {days, plural, other {# 天}}",
+    "planning": "還有 {days, plural, other {# 天}}",
     "live": "進行中",
-    "completed": "已結束"
+    "completed": "日期已過"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {尚無活動} other {# 個活動}}",
@@ -1020,13 +1020,16 @@
     "title": "建立活動",
     "description": "所有內容之後都可以修改。發布之前，活動會維持草稿狀態。",
     "name": "活動名稱",
+    "namePlaceholder": "夏日爵士之夜",
     "profile": "活動類型",
     "timezone": "時區",
     "startsAt": "開始",
     "endsAt": "結束",
     "localTimeHint": "以活動所在時區為準。",
     "venue": "場地",
+    "venuePlaceholder": "河畔音樂廳",
     "city": "城市",
+    "cityPlaceholder": "台北",
     "submit": "建立草稿",
     "slugTaken": "已有同名活動。請改用稍有不同的名稱。",
     "fromTemplate": "從範本開始",
@@ -1048,6 +1051,7 @@
     "emptyTitle": "尚無票種",
     "emptyDescription": "新增票種，開始售票或報名。",
     "name": "名稱",
+    "namePlaceholder": "一般入場",
     "price": "票面價",
     "allIn": "買家支付",
     "feeIncluded": "含 {fee} 費用",
@@ -1069,6 +1073,7 @@
     "passOn": "由買家支付費用",
     "absorb": "由我吸收費用",
     "description": "說明（選填）",
+    "descriptionPlaceholder": "一人入場，入口處贈飲品一杯",
     "add": "新增票種",
     "added": "已新增票種。",
     "earlyPrice": "早鳥價（{currency}，選填）",
@@ -3363,6 +3368,7 @@
     "org": {
       "title": "銷售",
       "keyNumbers": "銷售關鍵數據",
+      "perCurrency": "金額依買家支付的幣別分別加總，不做換算，也不跨幣別相加。",
       "period": "期間",
       "periods": {
         "7d": "最近 7 天",
@@ -3375,7 +3381,7 @@
       },
       "from": "開始",
       "to": "結束",
-      "customHint": "用於自訂日期",
+      "customHint": "請選擇開始日和結束日，兩天都計算在內。",
       "apply": "套用",
       "badRange": "結束日期早於開始日期。",
       "badDate": "自訂期間請選擇兩個日期。",
@@ -5187,6 +5193,7 @@
     "name": "活動名稱",
     "tagline": "標語(可選)",
     "taglineHint": "顯示在名稱下方的一句話。",
+    "taglinePlaceholder": "湖畔現場爵士樂之夜",
     "profile": "活動類型",
     "timezone": "時區",
     "startsAt": "開始",
@@ -18357,7 +18364,7 @@
     "question": "是什麼類型的活動？",
     "summaryLabel": "{kind}活動包含的內容",
     "includes": "包含",
-    "labelsHint": "類型決定活動有哪些區塊。你自己的分類和標籤在活動的詳細資料頁設定。",
+    "labelsHint": "類型決定活動有哪些區塊。活動的主題（例如「運動與健身」）用分類來表示。",
     "descriptions": {
       "conference": "議程、講者、贊助商和參展商，含報名和識別證。",
       "gala": "售票晚宴，含桌位、贊助商和捐款。",
@@ -18365,7 +18372,7 @@
       "wedding": "賓客、回覆、座位安排和賓客網站。",
       "community": "為團體或公益事業管理成員、報名和訊息。",
       "agency": "為客戶舉辦的活動，含行銷和報表。",
-      "other": "其他任何活動的門票、參與者和報到。",
+      "other": "其他任何活動的門票、參與者和報到，例如比賽、路跑和錦標賽。",
       "tour": "依時程出發，每個班次有各自的名額，乘客可選擇上車點。"
     },
     "choose": "選擇活動類型…"

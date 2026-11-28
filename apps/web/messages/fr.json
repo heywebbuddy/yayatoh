@@ -486,9 +486,9 @@
     "evening": "Bonsoir, {name}."
   },
   "phase": {
-    "planning": "Préparation · encore {days, plural, one {# jour} other {# jours}}",
+    "planning": "encore {days, plural, one {# jour} other {# jours}}",
     "live": "En cours",
-    "completed": "Terminé"
+    "completed": "Date passée"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {aucun événement pour l’instant} one {# événement} other {# événements}}",
@@ -1020,13 +1020,16 @@
     "title": "Créer un événement",
     "description": "Vous pourrez tout modifier plus tard. L’événement reste un brouillon jusqu’à sa publication.",
     "name": "Nom de l’événement",
+    "namePlaceholder": "Nuit du jazz d’été",
     "profile": "Type d’événement",
     "timezone": "Fuseau horaire",
     "startsAt": "Début",
     "endsAt": "Fin",
     "localTimeHint": "Dans le fuseau horaire de l’événement.",
     "venue": "Lieu",
+    "venuePlaceholder": "Salle des Quais",
     "city": "Ville",
+    "cityPlaceholder": "Lyon",
     "submit": "Créer le brouillon",
     "slugTaken": "Un événement porte déjà ce nom. Essayez un nom légèrement différent.",
     "fromTemplate": "Partir d’un modèle",
@@ -1048,6 +1051,7 @@
     "emptyTitle": "Aucun type de billet pour l’instant",
     "emptyDescription": "Ajoutez un type de billet pour commencer à vendre ou à enregistrer des inscriptions.",
     "name": "Nom",
+    "namePlaceholder": "Entrée générale",
     "price": "Valeur faciale",
     "allIn": "Prix payé par l’acheteur",
     "feeIncluded": "dont {fee} de frais",
@@ -1069,6 +1073,7 @@
     "passOn": "L’acheteur paie les frais",
     "absorb": "J’absorbe les frais",
     "description": "Description (facultatif)",
+    "descriptionPlaceholder": "Entrée pour une personne, avec une boisson à l’accueil",
     "add": "Ajouter le type de billet",
     "added": "Type de billet ajouté.",
     "earlyPrice": "Tarif prévente ({currency}, facultatif)",
@@ -3363,6 +3368,7 @@
     "org": {
       "title": "Ventes",
       "keyNumbers": "Chiffres clés des ventes",
+      "perCurrency": "Chaque devise est totalisée à part, telle que les acheteurs l’ont payée. Les montants ne sont ni convertis ni additionnés.",
       "period": "Période",
       "periods": {
         "7d": "7 derniers jours",
@@ -3375,7 +3381,7 @@
       },
       "from": "Du",
       "to": "Au",
-      "customHint": "Pour des dates personnalisées",
+      "customHint": "Choisissez un jour de début et un jour de fin ; les deux jours sont inclus.",
       "apply": "Appliquer",
       "badRange": "La date de fin est antérieure à la date de début.",
       "badDate": "Choisissez les deux dates pour une période personnalisée.",
@@ -5187,6 +5193,7 @@
     "name": "Nom de l'événement",
     "tagline": "Accroche (facultatif)",
     "taglineHint": "Une phrase affichée sous le nom.",
+    "taglinePlaceholder": "Une soirée de jazz en live au bord du lac",
     "profile": "Type d'événement",
     "timezone": "Fuseau horaire",
     "startsAt": "Début",
@@ -18357,7 +18364,7 @@
     "question": "Quel genre d’événement ?",
     "summaryLabel": "Ce que comprend un événement de type {kind}",
     "includes": "Comprend",
-    "labelsHint": "Le genre décide des sections de l’événement. Vos catégories et tags se règlent sur la page Détails de l’événement.",
+    "labelsHint": "Le type décide des sections de l’événement. Son sujet, comme Sport et fitness, est sa catégorie.",
     "descriptions": {
       "conference": "Sessions, intervenants, sponsors et exposants, avec inscription et badges.",
       "gala": "Un dîner sur billets avec tables, sponsors et dons.",
@@ -18365,7 +18372,7 @@
       "wedding": "Invités, réponses, placement et un site pour les invités.",
       "community": "Membres, inscriptions et messages pour un groupe ou une cause.",
       "agency": "Des événements organisés pour vos clients, avec marketing et rapports.",
-      "other": "Billets, participants et enregistrement pour tout le reste.",
+      "other": "Billets, participants et enregistrement pour tout le reste, comme les matchs, les courses et les tournois.",
       "tour": "Des départs planifiés, une capacité par départ et des points de prise en charge au choix."
     },
     "choose": "Choisissez le type d’événement…"

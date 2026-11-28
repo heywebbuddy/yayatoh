@@ -35,7 +35,7 @@ import { type ReactNode, Suspense } from 'react';
 import { MyTeamEvents } from '@/components/my-team-events.tsx';
 import { OrgSales } from '@/components/org-sales.tsx';
 import { Link } from '@/i18n/navigation.ts';
-import { eventPhase, greetingKey } from '@/lib/event-status.ts';
+import { eventPhase, eventStatusLine, greetingKey } from '@/lib/event-status.ts';
 import { formatEventDateRange } from '@/lib/format.ts';
 import { resolvePeriod } from '@/lib/period.ts';
 import { loadConsole, loadConsoleBase } from '@/server/console.ts';
@@ -399,7 +399,10 @@ async function EventList({
                     ) : null}
                     <StatusDot
                       status={STATUS_DOT[e.status]}
-                      label={`${t(`eventStatus.${e.status}`)} · ${t(`phase.${phase.phase}`, { days: phase.days })}`}
+                      label={eventStatusLine(e.status, phase, {
+                        status: (s) => t(`eventStatus.${s}`),
+                        phase: (p, days) => t(`phase.${p}`, { days }),
+                      })}
                     />
                     <Link
                       href={`/o/${org}/e/${e.slug}`}

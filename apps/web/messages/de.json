@@ -486,9 +486,9 @@
     "evening": "Guten Abend, {name}."
   },
   "phase": {
-    "planning": "Planung · noch {days, plural, one {# Tag} other {# Tage}}",
+    "planning": "noch {days, plural, one {# Tag} other {# Tage}}",
     "live": "Jetzt live",
-    "completed": "Abgeschlossen"
+    "completed": "Termin vorbei"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {noch keine Events} one {# Event} other {# Events}}",
@@ -1020,13 +1020,16 @@
     "title": "Event erstellen",
     "description": "Du kannst später alles ändern. Das Event bleibt ein Entwurf, bis du es veröffentlichst.",
     "name": "Eventname",
+    "namePlaceholder": "Sommer-Jazznacht",
     "profile": "Eventtyp",
     "timezone": "Zeitzone",
     "startsAt": "Beginn",
     "endsAt": "Ende",
     "localTimeHint": "In der Zeitzone des Events.",
     "venue": "Veranstaltungsort",
+    "venuePlaceholder": "Halle am Fluss",
     "city": "Stadt",
+    "cityPlaceholder": "Berlin",
     "submit": "Entwurf erstellen",
     "slugTaken": "Es gibt bereits ein Event mit diesem Namen. Versuche einen leicht abweichenden Namen.",
     "fromTemplate": "Mit einer Vorlage beginnen",
@@ -1048,6 +1051,7 @@
     "emptyTitle": "Noch keine Ticketarten",
     "emptyDescription": "Füge eine Ticketart hinzu, um mit dem Verkauf oder der Anmeldung zu starten.",
     "name": "Name",
+    "namePlaceholder": "Normaler Eintritt",
     "price": "Nennwert",
     "allIn": "Käufer zahlt",
     "feeIncluded": "inkl. {fee} Gebühr",
@@ -1069,6 +1073,7 @@
     "passOn": "Käufer zahlt die Gebühr",
     "absorb": "Ich übernehme die Gebühr",
     "description": "Beschreibung (optional)",
+    "descriptionPlaceholder": "Eintritt für eine Person, mit einem Getränk am Einlass",
     "add": "Ticketart hinzufügen",
     "added": "Ticketart hinzugefügt.",
     "earlyPrice": "Frühbucherpreis ({currency}, optional)",
@@ -3363,6 +3368,7 @@
     "org": {
       "title": "Verkäufe",
       "keyNumbers": "Verkaufskennzahlen",
+      "perCurrency": "Jede Währung wird für sich summiert, so wie Käufer bezahlt haben. Beträge werden weder umgerechnet noch zusammengezählt.",
       "period": "Zeitraum",
       "periods": {
         "7d": "Letzte 7 Tage",
@@ -3375,7 +3381,7 @@
       },
       "from": "Von",
       "to": "Bis",
-      "customHint": "Für eigene Daten",
+      "customHint": "Wähle einen Start- und einen Endtag; beide Tage zählen mit.",
       "apply": "Anwenden",
       "badRange": "Das Enddatum liegt vor dem Startdatum.",
       "badDate": "Wähle beide Daten für einen eigenen Zeitraum.",
@@ -5187,6 +5193,7 @@
     "name": "Eventname",
     "tagline": "Slogan (optional)",
     "taglineHint": "Ein Satz unter dem Namen.",
+    "taglinePlaceholder": "Ein Abend mit Live-Jazz am See",
     "profile": "Eventtyp",
     "timezone": "Zeitzone",
     "startsAt": "Beginn",
@@ -18357,7 +18364,7 @@
     "question": "Was für eine Veranstaltung?",
     "summaryLabel": "Was eine Veranstaltung der Art {kind} enthält",
     "includes": "Enthält",
-    "labelsHint": "Die Art bestimmt, welche Bereiche die Veranstaltung hat. Eigene Kategorien und Tags legen Sie auf der Detailseite der Veranstaltung fest.",
+    "labelsHint": "Die Art bestimmt, welche Bereiche die Veranstaltung hat. Worum es geht, etwa Sport & Fitness, ist ihre Kategorie.",
     "descriptions": {
       "conference": "Sessions, Speaker, Sponsoren und Aussteller, mit Registrierung und Namensschildern.",
       "gala": "Ein Dinner mit Tickets, Tischen, Sponsoren und Spenden.",
@@ -18365,7 +18372,7 @@
       "wedding": "Gäste, Zusagen, Sitzordnung und eine Gäste-Website.",
       "community": "Mitglieder, Anmeldungen und Nachrichten für eine Gruppe oder ein Anliegen.",
       "agency": "Veranstaltungen für Ihre Kunden, mit Marketing und Berichten.",
-      "other": "Tickets, Teilnehmende und Check-in für alles andere.",
+      "other": "Tickets, Teilnehmende und Check-in für alles andere, etwa Spiele, Rennen und Turniere.",
       "tour": "Abfahrten nach Zeitplan, eine Kapazität je Abfahrt und Abholpunkte zur Wahl."
     },
     "choose": "Art der Veranstaltung wählen …"

@@ -486,9 +486,9 @@
     "evening": "晚上好，{name}。"
   },
   "phase": {
-    "planning": "筹备中 · 还有 {days, plural, other {# 天}}",
+    "planning": "还有 {days, plural, other {# 天}}",
     "live": "正在进行",
-    "completed": "已结束"
+    "completed": "日期已过"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {暂无活动} other {# 个活动}}",
@@ -1020,13 +1020,16 @@
     "title": "创建活动",
     "description": "所有内容之后都可以修改。发布之前，活动将保持草稿状态。",
     "name": "活动名称",
+    "namePlaceholder": "夏日爵士之夜",
     "profile": "活动类型",
     "timezone": "时区",
     "startsAt": "开始",
     "endsAt": "结束",
     "localTimeHint": "按活动所在时区。",
     "venue": "场地",
+    "venuePlaceholder": "江畔音乐厅",
     "city": "城市",
+    "cityPlaceholder": "上海",
     "submit": "创建草稿",
     "slugTaken": "已存在同名活动。请换一个稍有不同的名称。",
     "fromTemplate": "从模板开始",
@@ -1048,6 +1051,7 @@
     "emptyTitle": "暂无票种",
     "emptyDescription": "添加一个票种，开始售票或报名。",
     "name": "名称",
+    "namePlaceholder": "普通入场",
     "price": "票面价",
     "allIn": "买家支付",
     "feeIncluded": "含 {fee} 费用",
@@ -1069,6 +1073,7 @@
     "passOn": "由买家支付费用",
     "absorb": "由我承担费用",
     "description": "描述（可选）",
+    "descriptionPlaceholder": "一人入场，入口处赠饮品一杯",
     "add": "添加票种",
     "added": "已添加票种。",
     "earlyPrice": "早鸟价（{currency}，可选）",
@@ -3363,6 +3368,7 @@
     "org": {
       "title": "销售",
       "keyNumbers": "销售关键数据",
+      "perCurrency": "金额按买家支付的币种分别合计，不做换算，也不跨币种相加。",
       "period": "时间段",
       "periods": {
         "7d": "最近 7 天",
@@ -3375,7 +3381,7 @@
       },
       "from": "开始",
       "to": "结束",
-      "customHint": "用于自定义日期",
+      "customHint": "请选择开始日和结束日，两天都计算在内。",
       "apply": "应用",
       "badRange": "结束日期早于开始日期。",
       "badDate": "自定义时间段请选择两个日期。",
@@ -5187,6 +5193,7 @@
     "name": "活动名称",
     "tagline": "标语(可选)",
     "taglineHint": "显示在名称下方的一句话。",
+    "taglinePlaceholder": "湖畔现场爵士乐之夜",
     "profile": "活动类型",
     "timezone": "时区",
     "startsAt": "开始",
@@ -18357,7 +18364,7 @@
     "question": "是什么类型的活动？",
     "summaryLabel": "{kind}活动包含的内容",
     "includes": "包含",
-    "labelsHint": "类型决定活动有哪些版块。你自己的分类和标签在活动的详情页设置。",
+    "labelsHint": "类型决定活动有哪些板块。活动的主题（例如“运动与健身”）用分类来表示。",
     "descriptions": {
       "conference": "议程、讲者、赞助商和参展商，含报名和胸牌。",
       "gala": "售票晚宴，含桌位、赞助商和捐款。",
@@ -18365,7 +18372,7 @@
       "wedding": "宾客、回复、座位安排和宾客网站。",
       "community": "为团体或公益事业管理成员、报名和消息。",
       "agency": "为客户举办的活动，含营销和报表。",
-      "other": "其他任何活动的门票、参与者和签到。",
+      "other": "其他任何活动的门票、参与者和签到，例如比赛、赛跑和锦标赛。",
       "tour": "按日程发团，每个班次有各自的名额，乘客可选择上车点。"
     },
     "choose": "选择活动类型…"

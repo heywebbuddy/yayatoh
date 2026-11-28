@@ -4,6 +4,7 @@ import { Alert, Button, CountryPicker, Input, TimeZonePicker } from '@yayatoh/ui
 import { useTranslations } from 'next-intl';
 import { useState, useTransition } from 'react';
 import type { InlineVenueResult } from '@/app/[locale]/o/[org]/(org)/venues/actions.ts';
+import { CAPACITY_EXAMPLE } from '@/lib/field-examples.ts';
 import { guessVenueZone } from '@/lib/venue-timezone.ts';
 
 export type InlineVenueInput = {
@@ -46,6 +47,7 @@ export function InlineVenueForm({
 }) {
   const t = useTranslations('wizard.newVenue');
   const tv = useTranslations('venues');
+  const te = useTranslations('newEvent');
   const [v, setV] = useState({ ...EMPTY, timezone: defaultTimezone });
   const [touched, setTouched] = useState(false);
   const [uncertain, setUncertain] = useState(false);
@@ -90,6 +92,7 @@ export function InlineVenueForm({
         <Input
           name="newVenueName"
           label={tv('name')}
+          placeholder={te('venuePlaceholder')}
           maxLength={160}
           value={v.name}
           onChange={set('name')}
@@ -105,6 +108,7 @@ export function InlineVenueForm({
         <Input
           name="newVenueCity"
           label={tv('city')}
+          placeholder={te('cityPlaceholder')}
           maxLength={120}
           value={v.city}
           onChange={(e) => {
@@ -145,6 +149,7 @@ export function InlineVenueForm({
           inputMode="numeric"
           min={1}
           label={tv('capacity')}
+          placeholder={CAPACITY_EXAMPLE}
           value={v.capacity}
           onChange={set('capacity')}
           error={err('capacity')}

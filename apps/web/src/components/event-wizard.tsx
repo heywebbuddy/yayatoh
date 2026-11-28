@@ -16,6 +16,7 @@ import { useActionState, useEffect, useRef, useState } from 'react';
 import type { WizardState } from '@/app/[locale]/o/[org]/(org)/events/new/actions.ts';
 import type { InlineVenueResult } from '@/app/[locale]/o/[org]/(org)/venues/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
+import { PRICE_EXAMPLE, QUANTITY_EXAMPLE } from '@/lib/field-examples.ts';
 import { readinessRules } from '@/lib/readiness.ts';
 import { type EventCategoryChoice, EventCategoryField } from './event-category-field.tsx';
 import { defaultEnd } from './event-times.ts';
@@ -271,6 +272,7 @@ export function EventWizard({
               required
               maxLength={160}
               label={t('name')}
+              placeholder={tn('newEvent.namePlaceholder')}
               value={v.name}
               onChange={set('name')}
               error={err('name')}
@@ -281,6 +283,7 @@ export function EventWizard({
               maxLength={280}
               label={t('tagline')}
               hint={t('taglineHint')}
+              placeholder={t('taglinePlaceholder')}
               value={v.tagline}
               onChange={set('tagline')}
               error={err('tagline')}
@@ -438,6 +441,7 @@ export function EventWizard({
                   name="venueName"
                   maxLength={160}
                   label={t('venueName')}
+                  placeholder={tn('newEvent.venuePlaceholder')}
                   value={v.venueName}
                   onChange={set('venueName')}
                   error={err('venueName')}
@@ -447,6 +451,7 @@ export function EventWizard({
                   name="city"
                   maxLength={120}
                   label={t('city')}
+                  placeholder={tn('newEvent.cityPlaceholder')}
                   value={v.city}
                   onChange={set('city')}
                   error={err('city')}
@@ -480,6 +485,7 @@ export function EventWizard({
                     name="ticketName"
                     maxLength={120}
                     label={t('ticketName')}
+                    placeholder={tn('tickets.namePlaceholder')}
                     value={v.ticketName}
                     onChange={set('ticketName')}
                     error={err('ticketName')}
@@ -490,6 +496,7 @@ export function EventWizard({
                     inputMode="decimal"
                     label={t('ticketPrice', { currency: v.currency })}
                     hint={t('ticketPriceHint')}
+                    placeholder={PRICE_EXAMPLE}
                     value={v.ticketPrice}
                     onChange={set('ticketPrice')}
                     error={err('ticketPrice')}
@@ -499,6 +506,7 @@ export function EventWizard({
                     name="ticketQuantity"
                     inputMode="numeric"
                     label={t('ticketQuantity')}
+                    placeholder={QUANTITY_EXAMPLE}
                     value={v.ticketQuantity}
                     onChange={set('ticketQuantity')}
                     error={err('ticketQuantity')}

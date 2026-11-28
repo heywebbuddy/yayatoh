@@ -3,7 +3,7 @@ import { executeQuery } from '@yayatoh/kernel';
 import { buttonClass, Card, EmptyState, Label, PageHeader, StatusDot } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
-import { eventPhase } from '@/lib/event-status.ts';
+import { eventPhase, eventStatusLine } from '@/lib/event-status.ts';
 import { formatEventDateRange } from '@/lib/format.ts';
 import type { ConsoleData } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
@@ -62,7 +62,10 @@ export async function MyTeamEvents({
                   </p>
                   <StatusDot
                     status="neutral"
-                    label={`${t(`eventStatus.${e.status}`)} · ${t(`phase.${phase.phase}`, { days: phase.days })}`}
+                    label={eventStatusLine(e.status, phase, {
+                      status: (s) => t(`eventStatus.${s}`),
+                      phase: (p, days) => t(`phase.${p}`, { days }),
+                    })}
                   />
                   <Link
                     href={`/o/${org}/e/${e.slug}`}

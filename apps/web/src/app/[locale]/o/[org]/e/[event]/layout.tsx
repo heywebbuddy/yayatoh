@@ -9,7 +9,7 @@ import type { ReactNode } from 'react';
 import { CatalogueIntlProvider } from '@/components/catalogue-intl-provider.tsx';
 import { ConsoleShell } from '@/components/console-shell.tsx';
 import { Link } from '@/i18n/navigation.ts';
-import { eventPhase } from '@/lib/event-status.ts';
+import { eventPhase, eventStatusLine } from '@/lib/event-status.ts';
 import { loadEventBase } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
 import { loadReadiness } from '@/server/readiness.ts';
@@ -126,7 +126,10 @@ export default async function EventLayout({
                       : 'info'
             }
             live={phase.phase === 'live'}
-            label={`${t(`eventStatus.${ev.status}`)} · ${t(`phase.${phase.phase}`, { days: phase.days })}`}
+            label={eventStatusLine(ev.status, phase, {
+              status: (s) => t(`eventStatus.${s}`),
+              phase: (p, days) => t(`phase.${p}`, { days }),
+            })}
           />
           {series ? (
             <Link

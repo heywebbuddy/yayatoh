@@ -1,9 +1,10 @@
 import { MONEY_GRAINS, type MoneyGrain } from '@yayatoh/reports';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, DatePicker, Select, Tabs, tabClass } from '@yayatoh/ui';
+import { Select, Tabs, tabClass } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
-import { PERIODS, type ResolvedPeriod } from '@/lib/period.ts';
+import type { ResolvedPeriod } from '@/lib/period.ts';
+import { PeriodFields } from './period-fields.tsx';
 
 export { dayLabel, deltaOf, exportHref, isGrain, periodQuery } from '@/lib/money.ts';
 
@@ -62,50 +63,29 @@ export async function PeriodForm({
   const error = period.error ? t(`reports.org.${period.error}`) : undefined;
   return (
     <form method="get" className="flex flex-wrap items-start gap-3" aria-label={t('money.periodForm')}>
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="money-period" className="text-[13px] font-bold text-ink">
-          {t('reports.org.period')}
-        </label>
-        <Select id="money-period" name="period" defaultValue={period.error ? 'custom' : period.period}>
-          {PERIODS.map((p) => (
-            <option key={p} value={p}>
-              {t(`reports.org.periods.${p}`)}
-            </option>
-          ))}
-        </Select>
-      </div>
-      <DatePicker
-        name="from"
-        id="money-from"
-        label={t('reports.org.from')}
-        defaultValue={period.period === 'custom' ? period.from : undefined}
-        hint={t('reports.org.customHint')}
-      />
-      <DatePicker
-        name="to"
-        id="money-to"
-        label={t('reports.org.to')}
-        defaultValue={period.period === 'custom' ? period.to : undefined}
+      <PeriodFields
+        idPrefix="money"
+        period={period.error ? 'custom' : period.period}
+        from={period.period === 'custom' ? period.from : undefined}
+        to={period.period === 'custom' ? period.to : undefined}
         error={error}
-      />
-      {grain ? (
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="money-grain" className="text-[13px] font-bold text-ink">
-            {t('money.grain.label')}
-          </label>
-          <Select id="money-grain" name="grain" defaultValue={grain}>
-            <option value="auto">{t('money.grain.auto')}</option>
-            {MONEY_GRAINS.map((g) => (
-              <option key={g} value={g}>
-                {t(`money.grain.${g}`)}
-              </option>
-            ))}
-          </Select>
-        </div>
-      ) : null}
-      <Button type="submit" variant="secondary" className="mt-[22px]">
-        {t('reports.org.apply')}
-      </Button>
+      >
+        {grain ? (
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="money-grain" className="text-[13px] font-bold text-ink">
+              {t('money.grain.label')}
+            </label>
+            <Select id="money-grain" name="grain" defaultValue={grain}>
+              <option value="auto">{t('money.grain.auto')}</option>
+              {MONEY_GRAINS.map((g) => (
+                <option key={g} value={g}>
+                  {t(`money.grain.${g}`)}
+                </option>
+              ))}
+            </Select>
+          </div>
+        ) : null}
+      </PeriodFields>
     </form>
   );
 }

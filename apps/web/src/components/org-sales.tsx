@@ -1,14 +1,24 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { orgFinanceQuery, orgReportQuery } from '@yayatoh/reports';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, buttonClass, DatePicker, EmptyState, Select, Table } from '@yayatoh/ui';
+import { buttonClass, EmptyState, Table } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
-import { PERIODS, type ResolvedPeriod } from '@/lib/period.ts';
+import type { ResolvedPeriod } from '@/lib/period.ts';
 import type { ConsoleData } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
-import { AsOf, countOf, fmtMoney, Kpi, KpiGrid, metricText } from './reports.tsx';
+import { PeriodFields } from './period-fields.tsx';
+import {
+  AsOf,
+  countOf,
+  currenciesOf,
+  fmtMoney,
+  Kpi,
+  KpiGrid,
+  metricAmounts,
+  metricText,
+} from './reports.tsx';
 
 /**
  * The org home's sales across events for a period (M1.12): a GET form with presets or custom
@@ -54,40 +64,13 @@ export async function OrgSales({
         <AsOf asOf={r.asOf} locale={locale} />
       </div>
       <form method="get" className="flex flex-wrap items-start gap-3">
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="report-period" className="text-[13px] font-bold text-ink">
-            {t('reports.org.period')}
-          </label>
-          <Select
-            id="report-period"
-            name="period"
-            defaultValue={period.error ? 'custom' : period.period}
-            className="field"
-          >
-            {PERIODS.map((p) => (
-              <option key={p} value={p}>
-                {t(`reports.org.periods.${p}`)}
-              </option>
-            ))}
-          </Select>
-        </div>
-        <DatePicker
-          name="from"
-          id="report-from"
-          label={t('reports.org.from')}
-          defaultValue={period.period === 'custom' ? period.from : undefined}
-          hint={t('reports.org.customHint')}
-        />
-        <DatePicker
-          name="to"
-          id="report-to"
-          label={t('reports.org.to')}
-          defaultValue={period.period === 'custom' ? period.to : undefined}
+        <PeriodFields
+          idPrefix="report"
+          period={period.error ? 'custom' : period.period}
+          from={period.period === 'custom' ? period.from : undefined}
+          to={period.period === 'custom' ? period.to : undefined}
           error={error}
         />
-        <Button type="submit" variant="secondary" className="mt-[22px]">
-          {t('reports.org.apply')}
-        </Button>
       </form>
       {!r.hasSales ? (
         <EmptyState
@@ -110,7 +93,7 @@ export async function OrgSales({
           <KpiGrid label={t('reports.org.keyNumbers')}>
             <Kpi
               label={t('reports.metric.sales.gross')}
-              values={metricText(m, 'sales.gross', locale)}
+              values={metricAmounts(m, 'sales.gross', locale)}
               note={t('reports.note.refunded', {
                 amount: metricText(m, 'sales.refunds', locale).join(' · '),
               })}
@@ -118,7 +101,7 @@ export async function OrgSales({
             {f ? (
               <Kpi
                 label={t('reports.metric.finance.net')}
-                values={metricText(f.metrics, 'finance.net', locale)}
+                values={metricAmounts(f.metrics, 'finance.net', locale)}
                 note={t('reports.note.afterFees')}
               />
             ) : (
@@ -135,6 +118,9 @@ export async function OrgSales({
             />
             <Kpi label={t('reports.metric.checkins.tickets')} values={[n(countOf(m, 'checkins.tickets'))]} />
           </KpiGrid>
+          {currenciesOf(m, 'sales.gross').size > 1 ? (
+            <p className="text-caption text-ink-2">{t('reports.org.perCurrency')}</p>
+          ) : null}
           <Table
             caption={t('reports.org.byEvent')}
             rowKey={(x) => `${x.eventId}-${x.currency}`}
@@ -176,7 +162,7 @@ export async function OrgSales({
               {
                 key: 'gross',
                 header: t('reports.gross'),
-                cell: (x) => fmtMoney(x.grossMinor, x.currency, locale),
+                cell: (x) => `${fmtMoney(x.grossMinor, x.currency, locale)} ${x.currency}`,
                 mono: true,
                 align: 'end',
               },

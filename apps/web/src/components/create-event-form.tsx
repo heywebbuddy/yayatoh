@@ -52,7 +52,14 @@ export function CreateEventForm({
             }
           />
         ) : null}
-        <Input name="name" required minLength={2} maxLength={160} label={t('newEvent.name')} />
+        <Input
+          name="name"
+          required
+          minLength={2}
+          maxLength={160}
+          label={t('newEvent.name')}
+          placeholder={t('newEvent.namePlaceholder')}
+        />
         <ProfilePicker
           id="profile"
           label={t('newEvent.profile')}
@@ -116,8 +123,18 @@ export function CreateEventForm({
             hint={t('newEvent.currencyHint')}
             className={selectClass}
           />
-          <Input name="venueName" maxLength={160} label={t('newEvent.venue')} />
-          <Input name="city" maxLength={120} label={t('newEvent.city')} />
+          <Input
+            name="venueName"
+            maxLength={160}
+            label={t('newEvent.venue')}
+            placeholder={t('newEvent.venuePlaceholder')}
+          />
+          <Input
+            name="city"
+            maxLength={120}
+            label={t('newEvent.city')}
+            placeholder={t('newEvent.cityPlaceholder')}
+          />
         </div>
         <Button type="submit" disabled={pending} className="self-start">
           {t('newEvent.submit')}

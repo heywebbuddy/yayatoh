@@ -486,9 +486,9 @@
     "evening": "Good evening, {name}."
   },
   "phase": {
-    "planning": "Planning · {days, plural, one {# day} other {# days}} to go",
+    "planning": "{days, plural, one {# day} other {# days}} to go",
     "live": "Live now",
-    "completed": "Completed"
+    "completed": "Date passed"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {no events yet} one {# event} other {# events}}",
@@ -1020,13 +1020,16 @@
     "title": "Create an event",
     "description": "You can change everything later. The event stays a draft until you publish it.",
     "name": "Event name",
+    "namePlaceholder": "Summer Jazz Night",
     "profile": "Event type",
     "timezone": "Time zone",
     "startsAt": "Starts",
     "endsAt": "Ends",
     "localTimeHint": "In the event's time zone.",
     "venue": "Venue",
+    "venuePlaceholder": "Riverside Hall",
     "city": "City",
+    "cityPlaceholder": "Lisbon",
     "submit": "Create draft",
     "slugTaken": "An event with this name already exists. Try a slightly different name.",
     "fromTemplate": "Start from a template",
@@ -1048,6 +1051,7 @@
     "emptyTitle": "No ticket types yet",
     "emptyDescription": "Add a ticket type to start selling or registering.",
     "name": "Name",
+    "namePlaceholder": "General admission",
     "price": "Face value",
     "allIn": "Buyer pays",
     "feeIncluded": "includes {fee} fee",
@@ -1069,6 +1073,7 @@
     "passOn": "Buyer pays the fee",
     "absorb": "I absorb the fee",
     "description": "Description (optional)",
+    "descriptionPlaceholder": "Entry for one person, with a drink at the door",
     "add": "Add ticket type",
     "added": "Ticket type added.",
     "earlyPrice": "Early-bird price ({currency}, optional)",
@@ -3363,6 +3368,7 @@
     "org": {
       "title": "Sales",
       "keyNumbers": "Sales key numbers",
+      "perCurrency": "Each currency is totalled on its own, as buyers paid. Amounts are not converted or added together.",
       "period": "Period",
       "periods": {
         "7d": "Last 7 days",
@@ -3375,7 +3381,7 @@
       },
       "from": "From",
       "to": "To",
-      "customHint": "For custom dates",
+      "customHint": "Pick a start and an end day; both days are included.",
       "apply": "Apply",
       "badRange": "The end date is before the start date.",
       "badDate": "Pick both dates for a custom period.",
@@ -5187,6 +5193,7 @@
     "name": "Event name",
     "tagline": "Tagline (optional)",
     "taglineHint": "One sentence shown under the name.",
+    "taglinePlaceholder": "An evening of live jazz by the lake",
     "profile": "Event type",
     "timezone": "Time zone",
     "startsAt": "Starts",
@@ -18357,7 +18364,7 @@
     "question": "What kind of event?",
     "summaryLabel": "What a {kind} event includes",
     "includes": "Includes",
-    "labelsHint": "The kind decides which sections the event has. Your own categories and tags are set on the event’s Details page.",
+    "labelsHint": "The kind decides which sections the event has. What the event is about, such as Sports & fitness, is its category.",
     "descriptions": {
       "conference": "Sessions, speakers, sponsors and exhibitors, with registration and badges.",
       "gala": "A ticketed dinner with tables, sponsors and donations.",
@@ -18365,7 +18372,7 @@
       "wedding": "Guests, RSVPs, seating and a guest website.",
       "community": "Members, sign-ups and messages for a group or a cause.",
       "agency": "Events you run for clients, with marketing and reports.",
-      "other": "Tickets, attendees and check-in for anything else.",
+      "other": "Tickets, attendees and check-in for anything else, such as matches, races and tournaments.",
       "tour": "Departures on a schedule, a capacity for each, and pickup points passengers choose."
     },
     "choose": "Choose the type of event…"

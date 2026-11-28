@@ -486,9 +486,9 @@
     "evening": "Goedenavond, {name}."
   },
   "phase": {
-    "planning": "Planning · nog {days, plural, one {# dag} other {# dagen}}",
+    "planning": "nog {days, plural, one {# dag} other {# dagen}}",
     "live": "Nu live",
-    "completed": "Afgerond"
+    "completed": "Datum voorbij"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {nog geen evenementen} one {# evenement} other {# evenementen}}",
@@ -1020,13 +1020,16 @@
     "title": "Evenement aanmaken",
     "description": "Je kunt alles later nog wijzigen. Het evenement blijft een concept totdat je het publiceert.",
     "name": "Naam van het evenement",
+    "namePlaceholder": "Zomerse jazzavond",
     "profile": "Type evenement",
     "timezone": "Tijdzone",
     "startsAt": "Begint",
     "endsAt": "Eindigt",
     "localTimeHint": "In de tijdzone van het evenement.",
     "venue": "Locatie",
+    "venuePlaceholder": "Rivierzaal",
     "city": "Plaats",
+    "cityPlaceholder": "Utrecht",
     "submit": "Concept aanmaken",
     "slugTaken": "Er bestaat al een evenement met deze naam. Probeer een iets andere naam.",
     "fromTemplate": "Beginnen met een sjabloon",
@@ -1048,6 +1051,7 @@
     "emptyTitle": "Nog geen tickettypes",
     "emptyDescription": "Voeg een tickettype toe om te beginnen met verkopen of registreren.",
     "name": "Naam",
+    "namePlaceholder": "Algemene toegang",
     "price": "Nominale waarde",
     "allIn": "Koper betaalt",
     "feeIncluded": "incl. {fee} kosten",
@@ -1069,6 +1073,7 @@
     "passOn": "Koper betaalt de kosten",
     "absorb": "Ik neem de kosten voor mijn rekening",
     "description": "Beschrijving (optioneel)",
+    "descriptionPlaceholder": "Toegang voor één persoon, met een drankje bij de deur",
     "add": "Tickettype toevoegen",
     "added": "Tickettype toegevoegd.",
     "earlyPrice": "Early-birdprijs ({currency}, optioneel)",
@@ -3363,6 +3368,7 @@
     "org": {
       "title": "Verkopen",
       "keyNumbers": "Kerncijfers verkoop",
+      "perCurrency": "Elke valuta wordt apart opgeteld, zoals kopers betaalden. Bedragen worden niet omgerekend of bij elkaar opgeteld.",
       "period": "Periode",
       "periods": {
         "7d": "Afgelopen 7 dagen",
@@ -3375,7 +3381,7 @@
       },
       "from": "Van",
       "to": "Tot en met",
-      "customHint": "Voor eigen data",
+      "customHint": "Kies een begin- en een einddag; beide dagen tellen mee.",
       "apply": "Toepassen",
       "badRange": "De einddatum ligt vóór de begindatum.",
       "badDate": "Kies beide data voor een eigen periode.",
@@ -5187,6 +5193,7 @@
     "name": "Naam van het evenement",
     "tagline": "Slogan (optioneel)",
     "taglineHint": "Eén zin onder de naam.",
+    "taglinePlaceholder": "Een avond livejazz aan het meer",
     "profile": "Type evenement",
     "timezone": "Tijdzone",
     "startsAt": "Begint",
@@ -18357,7 +18364,7 @@
     "question": "Wat voor evenement?",
     "summaryLabel": "Wat een evenement van het type {kind} bevat",
     "includes": "Bevat",
-    "labelsHint": "Het soort bepaalt welke onderdelen het evenement heeft. Eigen categorieën en tags stel je in op de pagina Details van het evenement.",
+    "labelsHint": "Het soort bepaalt welke onderdelen het evenement heeft. Waar het over gaat, zoals Sport & fitness, is de categorie.",
     "descriptions": {
       "conference": "Sessies, sprekers, sponsors en exposanten, met registratie en badges.",
       "gala": "Een diner met tickets, tafels, sponsors en donaties.",
@@ -18365,7 +18372,7 @@
       "wedding": "Gasten, reacties, tafelschikking en een gastenwebsite.",
       "community": "Leden, aanmeldingen en berichten voor een groep of een goed doel.",
       "agency": "Evenementen die je voor klanten organiseert, met marketing en rapporten.",
-      "other": "Tickets, deelnemers en inchecken voor al het andere.",
+      "other": "Tickets, deelnemers en inchecken voor al het andere, zoals wedstrijden, races en toernooien.",
       "tour": "Vertrektijden volgens een schema, een capaciteit per vertrek en ophaalpunten om uit te kiezen."
     },
     "choose": "Kies het type evenement…"

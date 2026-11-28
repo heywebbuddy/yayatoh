@@ -55,7 +55,13 @@ describe('events', () => {
   it('follows the lifecycle and refuses illegal transitions', async () => {
     const e = await executeCommand(
       createEventCommand,
-      { ...base, name: `Lifecycle ${a.org.slug}` },
+      // Far ahead: completing must still be refused as "not started" for years to come.
+      {
+        ...base,
+        startsAt: '2099-05-01T23:00:00Z',
+        endsAt: '2099-05-02T03:00:00Z',
+        name: `Lifecycle ${a.org.slug}`,
+      },
       a.ctx(),
       ports,
     );
@@ -63,6 +69,11 @@ describe('events', () => {
     const pub = await transition(e.id, 'publish');
     expect(pub.status).toBe('published');
     expect(pub.publishedAt).toBeInstanceOf(Date);
+    // QA #30: a published event that hasn't started yet can't be completed.
+    await expect(transition(e.id, 'complete')).rejects.toMatchObject({
+      code: 'invalid_state',
+      details: { reason: 'not_started' },
+    });
     expect((await transition(e.id, 'postpone')).status).toBe('postponed');
     expect((await transition(e.id, 'cancel')).status).toBe('cancelled');
     await expect(transition(e.id, 'publish')).rejects.toMatchObject({ code: 'invalid_state' });

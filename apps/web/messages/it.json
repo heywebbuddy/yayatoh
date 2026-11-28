@@ -486,9 +486,9 @@
     "evening": "Buonasera, {name}."
   },
   "phase": {
-    "planning": "Pianificazione · {days, plural, one {manca # giorno} other {mancano # giorni}}",
+    "planning": "{days, plural, one {manca # giorno} other {mancano # giorni}}",
     "live": "In corso",
-    "completed": "Concluso"
+    "completed": "Data passata"
   },
   "orgHome": {
     "subtitle": "{org} · {count, plural, =0 {ancora nessun evento} one {# evento} other {# eventi}}",
@@ -1020,13 +1020,16 @@
     "title": "Crea un evento",
     "description": "Puoi modificare tutto in seguito. L’evento resta una bozza finché non lo pubblichi.",
     "name": "Nome dell’evento",
+    "namePlaceholder": "Notte jazz d’estate",
     "profile": "Tipo di evento",
     "timezone": "Fuso orario",
     "startsAt": "Inizio",
     "endsAt": "Fine",
     "localTimeHint": "Nel fuso orario dell’evento.",
     "venue": "Luogo",
+    "venuePlaceholder": "Sala sul Fiume",
     "city": "Città",
+    "cityPlaceholder": "Milano",
     "submit": "Crea bozza",
     "slugTaken": "Esiste già un evento con questo nome. Prova con un nome leggermente diverso.",
     "fromTemplate": "Parti da un modello",
@@ -1048,6 +1051,7 @@
     "emptyTitle": "Ancora nessun tipo di biglietto",
     "emptyDescription": "Aggiungi un tipo di biglietto per iniziare a vendere o a raccogliere iscrizioni.",
     "name": "Nome",
+    "namePlaceholder": "Ingresso generale",
     "price": "Valore nominale",
     "allIn": "L’acquirente paga",
     "feeIncluded": "include {fee} di commissione",
@@ -1069,6 +1073,7 @@
     "passOn": "La commissione la paga l’acquirente",
     "absorb": "La commissione la pago io",
     "description": "Descrizione (facoltativa)",
+    "descriptionPlaceholder": "Ingresso per una persona, con un drink all’entrata",
     "add": "Aggiungi tipo di biglietto",
     "added": "Tipo di biglietto aggiunto.",
     "earlyPrice": "Prezzo early bird ({currency}, facoltativo)",
@@ -3363,6 +3368,7 @@
     "org": {
       "title": "Vendite",
       "keyNumbers": "Numeri chiave delle vendite",
+      "perCurrency": "Ogni valuta è sommata a parte, come hanno pagato gli acquirenti. Gli importi non vengono convertiti né sommati tra loro.",
       "period": "Periodo",
       "periods": {
         "7d": "Ultimi 7 giorni",
@@ -3375,7 +3381,7 @@
       },
       "from": "Dal",
       "to": "Al",
-      "customHint": "Per date personalizzate",
+      "customHint": "Scegli un giorno di inizio e uno di fine; entrambi i giorni sono inclusi.",
       "apply": "Applica",
       "badRange": "La data di fine è precedente a quella di inizio.",
       "badDate": "Scegli entrambe le date per un periodo personalizzato.",
@@ -5187,6 +5193,7 @@
     "name": "Nome dell'evento",
     "tagline": "Slogan (facoltativo)",
     "taglineHint": "Una frase mostrata sotto il nome.",
+    "taglinePlaceholder": "Una serata di jazz dal vivo sul lago",
     "profile": "Tipo di evento",
     "timezone": "Fuso orario",
     "startsAt": "Inizio",
@@ -18357,7 +18364,7 @@
     "question": "Che tipo di evento?",
     "summaryLabel": "Cosa include un evento di tipo {kind}",
     "includes": "Include",
-    "labelsHint": "Il tipo decide quali sezioni ha l’evento. Le tue categorie e i tuoi tag si impostano nella pagina Dettagli dell’evento.",
+    "labelsHint": "Il tipo decide quali sezioni ha l’evento. Di cosa tratta, come Sport e fitness, è la sua categoria.",
     "descriptions": {
       "conference": "Sessioni, relatori, sponsor ed espositori, con registrazione e badge.",
       "gala": "Una cena con biglietti, tavoli, sponsor e donazioni.",
@@ -18365,7 +18372,7 @@
       "wedding": "Ospiti, conferme, posti a sedere e un sito per gli ospiti.",
       "community": "Membri, iscrizioni e messaggi per un gruppo o una causa.",
       "agency": "Eventi che gestisci per i clienti, con marketing e report.",
-      "other": "Biglietti, partecipanti e check-in per tutto il resto.",
+      "other": "Biglietti, partecipanti e check-in per tutto il resto, come partite, gare e tornei.",
       "tour": "Partenze programmate, una capienza per ciascuna e punti di ritrovo a scelta."
     },
     "choose": "Scegli il tipo di evento…"

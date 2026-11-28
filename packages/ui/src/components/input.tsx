@@ -92,7 +92,19 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   fieldSize?: 'sm' | 'md' | 'lg';
 }
 
-export function Input({ id, label, hint, error, className, fieldSize = 'md', ...rest }: InputProps) {
+/** QA #9: the format an empty email or link field takes; the same in every language. */
+const TYPE_PLACEHOLDER: Partial<Record<string, string>> = { email: 'name@example.com', url: 'https://' };
+
+export function Input({
+  id,
+  label,
+  hint,
+  error,
+  className,
+  fieldSize = 'md',
+  placeholder,
+  ...rest
+}: InputProps) {
   const inputId = id ?? rest.name ?? '';
   return (
     <div className="flex flex-col gap-1.5">
@@ -106,6 +118,7 @@ export function Input({ id, label, hint, error, className, fieldSize = 'md', ...
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(inputId, error, hint)}
         className={fieldClass(fieldSize, cx('w-full', className))}
+        placeholder={placeholder ?? (rest.type ? TYPE_PLACEHOLDER[rest.type] : undefined)}
         {...rest}
       />
       <FieldMessage id={inputId} error={error} hint={hint} />
