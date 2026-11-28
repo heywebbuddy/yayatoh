@@ -252,6 +252,7 @@ export function SignInForm({
             setCodeSent(false);
             setError(null);
             setEmailError(null);
+            setShowPassword(false);
           }}
         >
           {mode === 'password' ? t('useCode') : t('usePassword')}
