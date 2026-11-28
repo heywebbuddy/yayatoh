@@ -195,8 +195,11 @@ export async function chargedCall<T>(
     );
     if (err instanceof AiOutputError || err instanceof DraftOutputError)
       throw new DomainError('invalid_state', 'The AI result could not be used', { reason: 'ai_output' });
-    if (err instanceof AiUnavailableError)
+    if (err instanceof AiUnavailableError) {
+      // QA #7: the cause (provider status, timeout) on the server; the person sees a generic notice.
+      console.error('ai call unavailable', spendInput.purpose, err.message);
       throw new DomainError('invalid_state', 'AI is unavailable', { reason: 'ai_unavailable' });
+    }
     throw err;
   }
 }

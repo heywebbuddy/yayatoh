@@ -339,8 +339,12 @@ export async function draftEventCopy(
     await executeCommand(refundDraftCreditCommand, { debitId: spent.debitId }, ctx, ports);
     if (err instanceof DraftOutputError)
       throw new DomainError('invalid_state', 'The draft could not be used', { reason: 'ai_output' });
-    if (err instanceof AiUnavailableError)
+    if (err instanceof AiUnavailableError) {
+      // QA #7: say why on the server (e.g. "The Anthropic API failed (401)" for a revoked key);
+      // the organizer only sees "the AI service didn't answer".
+      console.error('ai draft unavailable', err.message);
       throw new DomainError('invalid_state', 'AI drafting is unavailable', { reason: 'ai_unavailable' });
+    }
     throw err;
   }
 }
