@@ -217,7 +217,9 @@ test.describe('legacy migration — the migrated organizer', () => {
       });
     }
     await expect(page).toHaveURL(new RegExp(`/o/${h.org.slug}$`));
-    await expect(page.getByRole('heading', { level: 1 })).toContainText(h.owner.name.split(' ')[0] as string);
+    // The org is the home's heading; the greeting names the owner below it.
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(h.org.name);
+    await expect(page.getByText(new RegExp(`, ${h.owner.name.split(' ')[0]}\\.$`))).toBeVisible();
     await expect(page.getByText(h.weekly.name)).toBeVisible();
     await expect(page.getByText(h.gala.name)).toBeVisible();
     await expectAccessible(page);

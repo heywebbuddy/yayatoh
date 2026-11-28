@@ -1,7 +1,7 @@
-import { searchEventsQuery } from '@yayatoh/events';
+import { orgCategoriesQuery, orgTagsQuery, searchEventsQuery } from '@yayatoh/events';
 import { executeQuery } from '@yayatoh/kernel';
 import { roleCan } from '@yayatoh/tenancy';
-import { buttonClass, Card, EmptyState, Label, PageHeader, Pagination, StatusDot } from '@yayatoh/ui';
+import { buttonClass, Card, EmptyState, Label, PageHeader, Pagination, Select, StatusDot } from '@yayatoh/ui';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
@@ -20,14 +20,22 @@ const STATUS_DOT = {
   archived: 'info',
 } as const;
 
+type EventStatus = keyof typeof STATUS_DOT;
+const STATUSES = Object.keys(STATUS_DOT) as EventStatus[];
+const isStatus = (v: string | undefined): v is EventStatus => STATUSES.includes(v as EventStatus);
+
 const EVENTS_PER_PAGE = 24;
 
+/**
+ * The org's events (QA #35): searched by name and filtered by status, category and tag, with the
+ * same fields and "Filter" / "Clear filters" as the org home's list; the count follows the filters.
+ */
 export default async function OrgEventsPage({
   params,
   searchParams,
 }: {
   params: Promise<{ locale: string; org: string }>;
-  searchParams: Promise<{ q?: string; page?: string }>;
+  searchParams: Promise<{ q?: string; status?: string; category?: string; tag?: string; page?: string }>;
 }) {
   const { locale, org } = await params;
   const sp = await searchParams;
@@ -36,14 +44,21 @@ export default async function OrgEventsPage({
   if (!roleCan(data.role, 'events:read')) notFound();
 
   const q = sp.q?.trim().slice(0, 80) || undefined;
+  const status = isStatus(sp.status) ? sp.status : undefined;
+  // U8: an org category ref (platform key of an unchanged default, else its id).
+  const category = sp.category?.trim().slice(0, 80) || undefined;
+  const tag = sp.tag?.trim().slice(0, 40) || undefined;
+  const filtered = Boolean(q || status || category || tag);
   const page = Math.max(1, Math.floor(Number(sp.page)) || 1);
-  const [all, t, tp] = await Promise.all([
-    executeQuery(searchEventsQuery, { q }, data.ctx, ports),
+  const [all, categories, tags, t, tp] = await Promise.all([
+    executeQuery(searchEventsQuery, { q, categoryRef: category, tag }, data.ctx, ports),
+    executeQuery(orgCategoriesQuery, {}, data.ctx, ports),
+    executeQuery(orgTagsQuery, {}, data.ctx, ports),
     getTranslations(),
     getTranslations('market.pagination'),
   ]);
   const platformLabel = await categoryLabels((key) => t(`categories.${key}`));
-  const listed = all;
+  const listed = status ? all.filter((event) => event.status === status) : all;
   const now = Date.now();
   const current = listed.filter((event) => event.endsAt.getTime() >= now);
   const past = listed.filter((event) => event.endsAt.getTime() < now).reverse();
@@ -58,7 +73,7 @@ export default async function OrgEventsPage({
   ) : undefined;
   const pageHref = (nextPage: number) => {
     const query = new URLSearchParams();
-    if (q) query.set('q', q);
+    for (const [k, v] of Object.entries({ q, status, category, tag })) if (v) query.set(k, v);
     if (nextPage > 1) query.set('page', String(nextPage));
     const suffix = query.toString();
     return `/o/${org}/events${suffix ? `?${suffix}` : ''}`;
@@ -72,7 +87,12 @@ export default async function OrgEventsPage({
         actions={create}
       />
       <search aria-label={t('eventFilters.label')}>
-        <form method="get" className="flex flex-wrap items-end gap-3">
+        {/* Keyed by the filters: after "Clear filters" (a client navigation) the fields show the new values. */}
+        <form
+          key={`${q ?? ''}|${status ?? ''}|${category ?? ''}|${tag ?? ''}`}
+          method="get"
+          className="flex flex-wrap items-end gap-3"
+        >
           <div className="flex min-w-0 grow flex-col gap-1.5 sm:max-w-80">
             <label htmlFor="events-search" className="text-[13px] font-bold text-ink">
               {t('eventFilters.search')}
@@ -86,13 +106,52 @@ export default async function OrgEventsPage({
               className="field"
             />
           </div>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="events-status" className="text-[13px] font-bold text-ink">
+              {t('eventFilters.status')}
+            </label>
+            <Select id="events-status" name="status" defaultValue={status ?? ''} className="field">
+              <option value="">{t('eventFilters.anyStatus')}</option>
+              {STATUSES.map((s) => (
+                <option key={s} value={s}>
+                  {t(`eventStatus.${s}`)}
+                </option>
+              ))}
+            </Select>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="events-category" className="text-[13px] font-bold text-ink">
+              {t('eventFilters.category')}
+            </label>
+            <Select id="events-category" name="category" defaultValue={category ?? ''} className="field">
+              <option value="">{t('eventFilters.anyCategory')}</option>
+              {categories.map((c) => (
+                <option key={c.ref} value={c.ref}>
+                  {c.name ?? platformLabel(c.platformKey)}
+                </option>
+              ))}
+            </Select>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="events-tag" className="text-[13px] font-bold text-ink">
+              {t('eventFilters.tag')}
+            </label>
+            <Select id="events-tag" name="tag" defaultValue={tag?.toLowerCase() ?? ''} className="field">
+              <option value="">{t('eventFilters.anyTag')}</option>
+              {tags.map((x) => (
+                <option key={x.key} value={x.key}>
+                  {x.tag}
+                </option>
+              ))}
+            </Select>
+          </div>
           <button type="submit" className={buttonClass('secondary')}>
             {t('eventFilters.apply')}
           </button>
-          {q ? (
+          {filtered ? (
             <Link
               href={`/o/${org}/events`}
-              className="inline-flex min-h-10 items-center text-caption underline"
+              className="inline-flex min-h-10 items-center text-caption underline underline-offset-2"
             >
               {t('eventFilters.clear')}
             </Link>
@@ -101,10 +160,10 @@ export default async function OrgEventsPage({
       </search>
       {events.length === 0 ? (
         <EmptyState
-          title={q ? t('eventFilters.noneTitle') : t('orgHome.emptyTitle')}
-          description={q ? t('eventFilters.noneDescription') : t('orgHome.emptyDescription')}
+          title={filtered ? t('eventFilters.noneTitle') : t('orgHome.emptyTitle')}
+          description={filtered ? t('eventFilters.noneDescription') : t('orgHome.emptyDescription')}
           action={
-            q ? (
+            filtered ? (
               <Link href={`/o/${org}/events`} className={buttonClass('secondary', 'md')}>
                 {t('eventFilters.clear')}
               </Link>

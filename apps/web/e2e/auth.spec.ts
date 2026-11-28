@@ -15,7 +15,9 @@ test.describe('sign-in', () => {
     await page.getByLabel('6-digit code').fill(personaCode(OWNER));
     await page.getByRole('button', { name: 'Verify and sign in' }).click();
     await expect(page).toHaveURL(/\/o\/lakeside-events$/);
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('Pani');
+    // The org is the home's heading; the greeting names the member below it.
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Lakeside Events');
+    await expect(page.getByText(/^Good (morning|afternoon|evening), Pani\.$/)).toBeVisible();
   });
 
   test('a wrong password shows a localized error and no session', async ({ page }) => {

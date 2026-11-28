@@ -278,7 +278,8 @@ async function SidebarContent({
               className={cx(buttonClass('primary', 'md'), 'w-full')}
             >
               <Plus aria-hidden="true" strokeWidth={2.4} />
-              {t('shell.newEvent')}
+              {/* QA #33: the same words as the pages' own "Create event", for the same page. */}
+              {t('orgHome.create')}
             </Link>
           ) : null}
         </div>
@@ -292,8 +293,8 @@ const SIDEBAR =
 
 /**
  * The console frame (ADR 0022): a floating near-black sidebar (rounded 28, inset 16) with the org
- * switcher, MENU and ACCOUNT sections and the "New event" action; a topbar with search (⌘K or /),
- * the theme switch and notifications. Below 1024 px the sidebar is a drawer.
+ * switcher, MENU and ACCOUNT sections and the "Create event" action; a topbar with search (⌘K or
+ * /), the Create menu, the theme switch and notifications. Below 1024 px the sidebar is a drawer.
  */
 export async function ConsoleShell({
   data,
@@ -325,7 +326,8 @@ export async function ConsoleShell({
       </a>
       <nav
         aria-label={t('navigation')}
-        className={cx(SIDEBAR, 'sticky top-4 hidden h-[calc(100dvh-2rem)] w-[260px] shrink-0 lg:flex')}
+        // QA #24: above the page's own raised layers (sticky bars, popovers), so nothing scrolls over it.
+        className={cx(SIDEBAR, 'sticky top-4 z-40 hidden h-[calc(100dvh-2rem)] w-[260px] shrink-0 lg:flex')}
       >
         {sidebar}
       </nav>
@@ -335,13 +337,14 @@ export async function ConsoleShell({
         <OrgStatusBanner status={data.org.status} sandbox={data.org.sandbox} />
         <AgencyBadge data={data} />
         <IncidentBanner variant="console" />
-        <header className="relative z-30 flex flex-wrap items-center gap-2.5">
+        {/* The open drawer and its scrim live in this header, so it then rises above everything on the page. */}
+        <header className="relative z-30 flex flex-wrap items-center gap-2.5 has-[[data-mobile-nav][open]]:z-[60]">
           <MobileNav openLabel={t('menu')} closeLabel={t('closeMenu')}>
             <nav
               aria-label={t('navigation')}
               className={cx(
                 SIDEBAR,
-                'fixed inset-y-3 start-3 z-50 flex w-[min(300px,calc(100vw-1.5rem))] elevation-pop',
+                'fixed inset-y-3 start-3 z-50 flex w-[min(300px,calc(100vw-1.5rem))] overscroll-contain elevation-pop',
               )}
             >
               {sidebar}
@@ -365,8 +368,13 @@ export async function ConsoleShell({
               label={t('breadcrumb')}
               org={{ label: data.org.name, href: nav.base }}
               sections={nav.sections.map((sec) => ({
+                key: sec.key,
                 label: sec.label,
-                items: sec.items.map((i) => ({ label: i.label, href: hrefOf(nav.base, i.path) })),
+                items: sec.items.map((i) => ({
+                  key: i.key,
+                  label: i.label,
+                  href: hrefOf(nav.base, i.path),
+                })),
               }))}
             />
           ) : null}

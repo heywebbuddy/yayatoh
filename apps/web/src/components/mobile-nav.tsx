@@ -2,12 +2,13 @@
 
 import { cx, iconButtonClass } from '@yayatoh/ui';
 import { Menu, X } from 'lucide-react';
-import { type ReactNode, useEffect, useRef } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { usePathname } from '@/i18n/navigation.ts';
 
 /**
  * Below 1024 px the sidebar is a drawer (ADR 0022). It is a <details> so it works before
- * hydration; once hydrated it closes on navigation, on Esc and on a tap outside.
+ * hydration; once hydrated it closes on navigation, on Esc and on a tap outside. While it is open
+ * the page behind it stays still (QA #24), and the shell lifts its header above the page.
  */
 export function MobileNav({
   openLabel,
@@ -20,9 +21,19 @@ export function MobileNav({
 }) {
   const ref = useRef<HTMLDetailsElement>(null);
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     if (ref.current) ref.current.open = false;
   }, [pathname]);
+  useEffect(() => {
+    if (!open) return;
+    const html = document.documentElement;
+    const was = html.style.overflow;
+    html.style.overflow = 'hidden';
+    return () => {
+      html.style.overflow = was;
+    };
+  }, [open]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const d = ref.current;
@@ -35,7 +46,12 @@ export function MobileNav({
     return () => document.removeEventListener('keydown', onKey);
   }, []);
   return (
-    <details ref={ref} className="group lg:hidden">
+    <details
+      ref={ref}
+      data-mobile-nav=""
+      className="group lg:hidden"
+      onToggle={(e) => setOpen(e.currentTarget.open)}
+    >
       <summary
         className={cx(iconButtonClass('secondary', 'md'), 'list-none [&::-webkit-details-marker]:hidden')}
       >

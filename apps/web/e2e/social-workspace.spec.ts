@@ -170,7 +170,7 @@ test.describe('wedding route sweep and vocabulary (M4.2a)', () => {
       'Speakers',
       'Analysis',
       'Marketing',
-      'On-site',
+      'Check-in',
       'Reviews',
     ])
       expect(labels).not.toContain(hidden);

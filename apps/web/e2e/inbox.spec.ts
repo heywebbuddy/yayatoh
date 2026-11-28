@@ -125,6 +125,15 @@ test.describe('notifications: the inbox bell', () => {
     await expect(panel.getByRole('button', { name: 'Mark all as read' })).toBeDisabled();
     await page.keyboard.press('Escape');
     await expect(panel).toBeHidden();
+    // QA #21: the panel has its own close button, and following one of its links closes it.
+    await page.getByRole('button', { name: 'Notifications, none unread' }).click();
+    await expect(panel).toBeVisible();
+    await panel.getByRole('button', { name: 'Close', exact: true }).click();
+    await expect(panel).toBeHidden();
+    await page.getByRole('button', { name: 'Notifications, none unread' }).click();
+    await panel.getByRole('link', { name: 'All notifications' }).click();
+    await expect(page).toHaveURL(new RegExp(`/o/${me.org}/notifications$`));
+    await expect(panel).toBeHidden();
 
     // The inbox page: a new one is unread there; mark it read with its own button.
     await page.goto(`/o/${me.org}/notifications/preferences`);

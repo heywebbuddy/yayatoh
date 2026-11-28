@@ -141,6 +141,7 @@ test.describe('RSVP questions (M4.1e)', () => {
       page.getByRole('listitem').filter({ hasText: 'Ceremony: song request' }).first(),
     ).toContainText('Shown only: guests attending; adults');
     await expect(page.getByText("You have changes that guests don't see yet.")).toBeVisible();
+    await expect(page.getByRole('status').filter({ hasText: 'Question added' }).first()).toBeVisible();
 
     // The live preview follows the sample guest.
     const preview = page.getByRole('region', { name: 'Preview' });
@@ -160,7 +161,10 @@ test.describe('RSVP questions (M4.1e)', () => {
     await page.getByRole('button', { name: 'Move Ceremony: song request down' }).click();
 
     await page.getByRole('button', { name: 'Publish questions' }).click();
-    await expect(page.getByText('Published. Guests now see version 1.')).toBeVisible();
+    // QA #3: a toast confirms it.
+    await expect(
+      page.getByRole('status').filter({ hasText: 'Published. Guests now see version 1.' }),
+    ).toBeVisible();
     await page.reload();
     await expect(page.getByText('Guests see version 1.')).toBeVisible();
     const list = page.getByRole('list', { name: 'Questions' });
@@ -367,7 +371,7 @@ test.describe('RSVP questions (M4.1e)', () => {
     await expect(page.getByRole('list', { name: 'Questions' })).toContainText('Need a ride from the hotel?');
     await page.getByRole('button', { name: 'Publish questions' }).focus();
     await page.keyboard.press('Enter');
-    await expect(page.getByText('Published. Guests now see version 1.')).toBeVisible();
+    await expect(page.getByText('Published. Guests now see version 1.').first()).toBeVisible();
 
     await page.goto(link(s.chen.token));
     await pair(page, 'Mei Chen, Ceremony').getByRole('radio', { name: 'Attending' }).focus();
