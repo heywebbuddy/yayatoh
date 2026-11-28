@@ -66,6 +66,9 @@ test.describe('Google and Apple sign-in (M1.2f)', () => {
     await page.goto('/sign-in');
     await expect(page.getByRole('link', { name: 'Continue with Google' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Continue with Apple' })).toBeVisible();
+    // Each button shows its brand's logo, hidden from screen readers (the text names the button).
+    for (const name of ['Continue with Google', 'Continue with Apple'])
+      await expect(page.getByRole('link', { name }).locator('svg[aria-hidden="true"]')).toBeVisible();
     await expectAccessible(page);
     await page.getByRole('link', { name: 'Continue with Google' }).focus();
     await page.keyboard.press('Enter');
