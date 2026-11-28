@@ -7178,6 +7178,8 @@
       "sentBody": "Wir antworten so bald wie möglich an Ihre E-Mail-Adresse.",
       "fixErrors": "Prüfen Sie die markierten Felder.",
       "rateLimited": "Zu viele Nachrichten von diesem Gerät. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
+      "quotaLeft": "Sie können von diesem Gerät in den nächsten {minutes, plural, one {# Minute} other {# Minuten}} noch {count, plural, one {# Nachricht} other {# Nachrichten}} senden.",
+      "quotaNone": "Sie haben das Nachrichtenlimit für dieses Gerät vorerst erreicht. Versuchen Sie es in ein paar Minuten erneut.",
       "errors": {
         "name": "Geben Sie Ihren Namen ein.",
         "email": "Geben Sie eine gültige E-Mail-Adresse ein.",

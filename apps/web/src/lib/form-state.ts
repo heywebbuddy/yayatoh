@@ -11,6 +11,8 @@ export interface FormState {
   readonly line?: number;
   /** Changes on every success so forms can reset/announce even when nothing else changed. */
   readonly stamp?: number;
+  /** Rate-limited forms: tries this device has left, and the window (minutes) they are counted in. */
+  readonly quota?: { readonly left: number; readonly minutes: number };
 }
 
 export const INITIAL_FORM_STATE: FormState = { ok: false, code: null };

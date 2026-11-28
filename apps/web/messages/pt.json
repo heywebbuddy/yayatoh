@@ -7178,6 +7178,8 @@
       "sentBody": "Responderemos para o seu endereço de e-mail o quanto antes.",
       "fixErrors": "Verifique os campos destacados.",
       "rateLimited": "Muitas mensagens deste dispositivo. Tente novamente em {minutes, plural, one {# minuto} other {# minutos}}.",
+      "quotaLeft": "Você pode enviar mais {count, plural, one {# mensagem} other {# mensagens}} deste dispositivo {minutes, plural, one {no próximo minuto} other {nos próximos # minutos}}.",
+      "quotaNone": "Você atingiu o limite de mensagens deste dispositivo por enquanto. Tente novamente em alguns minutos.",
       "errors": {
         "name": "Informe seu nome.",
         "email": "Informe um endereço de e-mail válido.",

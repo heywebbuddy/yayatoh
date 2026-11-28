@@ -13,7 +13,8 @@ const area = 'rounded-card border bg-surface px-4 py-2 text-body';
 /**
  * The contact / sales form (M3.11b). Field errors sit next to their fields; the human check
  * shows when a provider is configured; a success replaces the form with a confirmation that
- * takes focus.
+ * takes focus. After each try it says how many more messages this device can send before the
+ * limit.
  */
 export function ContactForm({
   action,
@@ -29,6 +30,14 @@ export function ContactForm({
   useEffect(() => {
     if (state.ok) done.current?.focus();
   }, [state.ok]);
+  // Every try counts against the device limit, so say how many are left before it is reached.
+  const quota = state.quota ? (
+    <p className="text-caption text-ink-2">
+      {state.quota.left > 0
+        ? t('quotaLeft', { count: state.quota.left, minutes: state.quota.minutes })
+        : t('quotaNone')}
+    </p>
+  ) : null;
   if (state.ok)
     return (
       <div
@@ -39,6 +48,7 @@ export function ContactForm({
       >
         <p className="text-body font-medium">{t('sentTitle')}</p>
         <p className="text-body text-ink-2">{t('sentBody')}</p>
+        {quota}
       </div>
     );
   const bad = new Set(state.fields ?? []);
@@ -113,6 +123,7 @@ export function ContactForm({
         ) : state.code ? (
           <Alert title={te(errorMessageKey(state.code))} />
         ) : null}
+        {quota}
       </div>
       <Button type="submit" disabled={pending} className="self-start">
         {t('submit')}

@@ -7178,6 +7178,8 @@
       "sentBody": "We'll reply to your email address as soon as we can.",
       "fixErrors": "Check the highlighted fields.",
       "rateLimited": "Too many messages from this device. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
+      "quotaLeft": "You can send {count, plural, one {# more message} other {# more messages}} from this device in the next {minutes, plural, one {# minute} other {# minutes}}.",
+      "quotaNone": "You've reached this device's message limit for now. Try again in a few minutes.",
       "errors": {
         "name": "Enter your name.",
         "email": "Enter a valid email address.",

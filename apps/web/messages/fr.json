@@ -7178,6 +7178,8 @@
       "sentBody": "Nous vous répondrons par e-mail dès que possible.",
       "fixErrors": "Vérifiez les champs signalés.",
       "rateLimited": "Trop de messages depuis cet appareil. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
+      "quotaLeft": "Vous pouvez encore envoyer {count, plural, one {# message} other {# messages}} depuis cet appareil dans {minutes, plural, one {la prochaine minute} other {les # prochaines minutes}}.",
+      "quotaNone": "Vous avez atteint la limite de messages de cet appareil pour le moment. Réessayez dans quelques minutes.",
       "errors": {
         "name": "Saisissez votre nom.",
         "email": "Saisissez une adresse e-mail valide.",
