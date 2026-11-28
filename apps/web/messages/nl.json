@@ -18341,7 +18341,7 @@
     "question": "Wat voor evenement?",
     "summaryLabel": "Wat een evenement van het type {kind} bevat",
     "includes": "Bevat",
-    "labelsHint": "Het soort bepaalt welke onderdelen het evenement heeft. Eigen categorieën en tags stel je in op de pagina Details van het evenement.",
+    "labelsHint": "Het soort bepaalt welke onderdelen het evenement heeft. Waar het over gaat, zoals Sport & fitness, is de categorie.",
     "descriptions": {
       "conference": "Sessies, sprekers, sponsors en exposanten, met registratie en badges.",
       "gala": "Een diner met tickets, tafels, sponsors en donaties.",
@@ -18349,7 +18349,7 @@
       "wedding": "Gasten, reacties, tafelschikking en een gastenwebsite.",
       "community": "Leden, aanmeldingen en berichten voor een groep of een goed doel.",
       "agency": "Evenementen die je voor klanten organiseert, met marketing en rapporten.",
-      "other": "Tickets, deelnemers en inchecken voor al het andere.",
+      "other": "Tickets, deelnemers en inchecken voor al het andere, zoals wedstrijden, races en toernooien.",
       "tour": "Vertrektijden volgens een schema, een capaciteit per vertrek en ophaalpunten om uit te kiezen."
     },
     "choose": "Kies het type evenement…"

@@ -18341,7 +18341,7 @@
     "question": "Was für eine Veranstaltung?",
     "summaryLabel": "Was eine Veranstaltung der Art {kind} enthält",
     "includes": "Enthält",
-    "labelsHint": "Die Art bestimmt, welche Bereiche die Veranstaltung hat. Eigene Kategorien und Tags legen Sie auf der Detailseite der Veranstaltung fest.",
+    "labelsHint": "Die Art bestimmt, welche Bereiche die Veranstaltung hat. Worum es geht, etwa Sport & Fitness, ist ihre Kategorie.",
     "descriptions": {
       "conference": "Sessions, Speaker, Sponsoren und Aussteller, mit Registrierung und Namensschildern.",
       "gala": "Ein Dinner mit Tickets, Tischen, Sponsoren und Spenden.",
@@ -18349,7 +18349,7 @@
       "wedding": "Gäste, Zusagen, Sitzordnung und eine Gäste-Website.",
       "community": "Mitglieder, Anmeldungen und Nachrichten für eine Gruppe oder ein Anliegen.",
       "agency": "Veranstaltungen für Ihre Kunden, mit Marketing und Berichten.",
-      "other": "Tickets, Teilnehmende und Check-in für alles andere.",
+      "other": "Tickets, Teilnehmende und Check-in für alles andere, etwa Spiele, Rennen und Turniere.",
       "tour": "Abfahrten nach Zeitplan, eine Kapazität je Abfahrt und Abholpunkte zur Wahl."
     },
     "choose": "Art der Veranstaltung wählen …"

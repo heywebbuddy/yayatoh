@@ -18341,7 +18341,7 @@
     "question": "Quel genre d’événement ?",
     "summaryLabel": "Ce que comprend un événement de type {kind}",
     "includes": "Comprend",
-    "labelsHint": "Le genre décide des sections de l’événement. Vos catégories et tags se règlent sur la page Détails de l’événement.",
+    "labelsHint": "Le type décide des sections de l’événement. Son sujet, comme Sport et fitness, est sa catégorie.",
     "descriptions": {
       "conference": "Sessions, intervenants, sponsors et exposants, avec inscription et badges.",
       "gala": "Un dîner sur billets avec tables, sponsors et dons.",
@@ -18349,7 +18349,7 @@
       "wedding": "Invités, réponses, placement et un site pour les invités.",
       "community": "Membres, inscriptions et messages pour un groupe ou une cause.",
       "agency": "Des événements organisés pour vos clients, avec marketing et rapports.",
-      "other": "Billets, participants et enregistrement pour tout le reste.",
+      "other": "Billets, participants et enregistrement pour tout le reste, comme les matchs, les courses et les tournois.",
       "tour": "Des départs planifiés, une capacité par départ et des points de prise en charge au choix."
     },
     "choose": "Choisissez le type d’événement…"

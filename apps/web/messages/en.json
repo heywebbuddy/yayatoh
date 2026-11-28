@@ -18341,7 +18341,7 @@
     "question": "What kind of event?",
     "summaryLabel": "What a {kind} event includes",
     "includes": "Includes",
-    "labelsHint": "The kind decides which sections the event has. Your own categories and tags are set on the event’s Details page.",
+    "labelsHint": "The kind decides which sections the event has. What the event is about, such as Sports & fitness, is its category.",
     "descriptions": {
       "conference": "Sessions, speakers, sponsors and exhibitors, with registration and badges.",
       "gala": "A ticketed dinner with tables, sponsors and donations.",
@@ -18349,7 +18349,7 @@
       "wedding": "Guests, RSVPs, seating and a guest website.",
       "community": "Members, sign-ups and messages for a group or a cause.",
       "agency": "Events you run for clients, with marketing and reports.",
-      "other": "Tickets, attendees and check-in for anything else.",
+      "other": "Tickets, attendees and check-in for anything else, such as matches, races and tournaments.",
       "tour": "Departures on a schedule, a capacity for each, and pickup points passengers choose."
     },
     "choose": "Choose the type of event…"
