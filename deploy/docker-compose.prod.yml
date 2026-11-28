@@ -105,6 +105,20 @@ services:
     image: gotenberg/gotenberg:8.37.0
     restart: unless-stopped
     # Private network only (no published port); the app sends it the HTML to render.
+    # QA #16/#18: Chromium starts with the container and stays up. Started on demand, concurrent
+    # first requests were refused ("browser start already in progress") and ticket downloads failed.
+    command:
+      - gotenberg
+      - --chromium-auto-start=true
+      - --chromium-idle-shutdown-timeout=0s
+      - --chromium-start-timeout=60s
+      - --api-timeout=60s
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
     logging: *logging
 
   postgres:
