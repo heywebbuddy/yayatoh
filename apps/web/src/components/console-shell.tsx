@@ -365,8 +365,13 @@ export async function ConsoleShell({
               label={t('breadcrumb')}
               org={{ label: data.org.name, href: nav.base }}
               sections={nav.sections.map((sec) => ({
+                key: sec.key,
                 label: sec.label,
-                items: sec.items.map((i) => ({ label: i.label, href: hrefOf(nav.base, i.path) })),
+                items: sec.items.map((i) => ({
+                  key: i.key,
+                  label: i.label,
+                  href: hrefOf(nav.base, i.path),
+                })),
               }))}
             />
           ) : null}

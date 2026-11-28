@@ -53,6 +53,11 @@ test.describe('grouped sidebar', () => {
       await expect(trail.locator('[aria-current="page"]')).toHaveText(item);
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     }
+    // QA #34: the Events section's own Events page says Events once, not "Events › Events".
+    await page.goto(`${ORG}/events`);
+    const eventsTrail = page.getByTestId('org-trail');
+    await expect(eventsTrail.getByRole('listitem')).toHaveCount(2);
+    await expect(eventsTrail.locator('[aria-current="page"]')).toHaveText('Events');
     await expectAccessibleBothModes(page);
   });
 
