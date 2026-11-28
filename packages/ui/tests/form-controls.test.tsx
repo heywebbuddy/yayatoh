@@ -8,6 +8,7 @@ import {
   currencyOptions,
   DatePicker,
   DateTimePicker,
+  Input,
   mergeKnown,
   optionsFromChildren,
   parseDateText,
@@ -299,5 +300,20 @@ describe('Combobox known options (the render-loop fix, U7 and U9)', () => {
 
   it('a static render with no options and no selection does not throw', () => {
     expect(() => renderToStaticMarkup(<Combobox name="c" label="C" />)).not.toThrow();
+  });
+});
+
+describe('Input placeholders (QA #9)', () => {
+  it('an email or link field shows its format; a given placeholder wins; others stay empty', () => {
+    expect(renderToStaticMarkup(<Input name="e" type="email" label="Email" />)).toContain(
+      'placeholder="name@example.com"',
+    );
+    expect(renderToStaticMarkup(<Input name="u" type="url" label="Website" />)).toContain(
+      'placeholder="https://"',
+    );
+    expect(
+      renderToStaticMarkup(<Input name="v" type="url" label="Video" placeholder="https://youtu.be/x" />),
+    ).toContain('placeholder="https://youtu.be/x"');
+    expect(renderToStaticMarkup(<Input name="n" label="Name" />)).not.toContain('placeholder');
   });
 });

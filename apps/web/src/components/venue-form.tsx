@@ -5,6 +5,7 @@ import type { VenueDto } from '@yayatoh/venues';
 import { useTranslations } from 'next-intl';
 import { useActionState, useState } from 'react';
 import { errorMessageKey } from '@/lib/errors.ts';
+import { CAPACITY_EXAMPLE, LATITUDE_EXAMPLE, LONGITUDE_EXAMPLE } from '@/lib/field-examples.ts';
 import { type FormState, INITIAL_FORM_STATE } from '@/lib/form-state.ts';
 import { keepValues } from '@/lib/keep-values.ts';
 import { guessVenueZone } from '@/lib/venue-timezone.ts';
@@ -68,6 +69,7 @@ export function VenueForm({
           required
           maxLength={160}
           label={t('name')}
+          placeholder={te('newEvent.venuePlaceholder')}
           defaultValue={venue?.name}
           error={err('name')}
         />
@@ -77,6 +79,7 @@ export function VenueForm({
           inputMode="numeric"
           min={1}
           label={t('capacity')}
+          placeholder={CAPACITY_EXAMPLE}
           defaultValue={venue?.capacity ?? undefined}
           error={err('capacity')}
         />
@@ -110,6 +113,7 @@ export function VenueForm({
           maxLength={120}
           autoComplete="address-level2"
           label={t('city')}
+          placeholder={te('newEvent.cityPlaceholder')}
           value={city}
           onChange={(e) => {
             setCity(e.target.value);
@@ -185,6 +189,7 @@ export function VenueForm({
               name="latitude"
               inputMode="decimal"
               label={t('latitude')}
+              placeholder={LATITUDE_EXAMPLE}
               hint={t('geoHint')}
               defaultValue={venue?.latitude ?? undefined}
               error={err('latitude')}
@@ -193,6 +198,7 @@ export function VenueForm({
               name="longitude"
               inputMode="decimal"
               label={t('longitude')}
+              placeholder={LONGITUDE_EXAMPLE}
               defaultValue={venue?.longitude ?? undefined}
               error={err('longitude')}
             />

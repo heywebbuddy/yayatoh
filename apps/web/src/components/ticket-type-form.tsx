@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useActionState, useEffect, useRef } from 'react';
 import type { TicketFormState } from '@/app/[locale]/o/[org]/e/[event]/tickets-orders/actions.ts';
 import { errorMessageKey } from '@/lib/errors.ts';
+import { EARLY_PRICE_EXAMPLE, PRICE_EXAMPLE, QUANTITY_EXAMPLE } from '@/lib/field-examples.ts';
 
 export function TicketTypeForm({
   currency,
@@ -24,7 +25,13 @@ export function TicketTypeForm({
   }, [state]);
   return (
     <form ref={ref} action={formAction} className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      <Input name="name" required maxLength={120} label={t('tickets.name')} />
+      <Input
+        name="name"
+        required
+        maxLength={120}
+        label={t('tickets.name')}
+        placeholder={t('tickets.namePlaceholder')}
+      />
       <Input
         name="price"
         inputMode="decimal"
@@ -32,8 +39,17 @@ export function TicketTypeForm({
         pattern="[0-9]+([.,][0-9]{1,3})?"
         label={t('tickets.priceIn', { currency })}
         hint={t('tickets.priceHint')}
+        placeholder={PRICE_EXAMPLE}
       />
-      <Input name="quantity" type="number" min={0} max={1000000} required label={t('tickets.quantity')} />
+      <Input
+        name="quantity"
+        type="number"
+        min={0}
+        max={1000000}
+        required
+        label={t('tickets.quantity')}
+        placeholder={QUANTITY_EXAMPLE}
+      />
       <Input
         name="maxPerOrder"
         type="number"
@@ -59,13 +75,19 @@ export function TicketTypeForm({
           <option value="absorb">{t('tickets.absorb')}</option>
         </Select>
       </div>
-      <Input name="description" maxLength={500} label={t('tickets.description')} />
+      <Input
+        name="description"
+        maxLength={500}
+        label={t('tickets.description')}
+        placeholder={t('tickets.descriptionPlaceholder')}
+      />
       <Input
         name="earlyPrice"
         inputMode="decimal"
         pattern="[0-9]+([.,][0-9]{1,3})?"
         label={t('tickets.earlyPrice', { currency })}
         hint={t('tickets.earlyPriceHint')}
+        placeholder={EARLY_PRICE_EXAMPLE}
       />
       <DateTimePicker name="earlyEndsAt" label={t('tickets.earlyEndsAt')} />
       <div className="flex flex-col gap-1.5 md:col-span-2">
