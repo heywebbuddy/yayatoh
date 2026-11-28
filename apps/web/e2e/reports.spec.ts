@@ -389,13 +389,17 @@ test.describe('reports and dashboard (M1.12)', () => {
     await expect(page).toHaveURL(/period=7d/);
     await expect(byEvent.getByRole('row').filter({ hasText: name })).toBeVisible();
 
-    // A backwards custom range is refused with a message; the default period is shown.
+    // QA #32: the dates show only for custom dates, under one hint; Apply waits for a full range.
+    await expect(page.getByLabel('From', { exact: true })).toHaveCount(0);
     await pickOption(page.getByLabel('Period', { exact: true }), 'custom');
+    await expect(sales.getByText('Pick a start and an end day; both days are included.')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Apply' })).toBeDisabled();
+    // A backwards custom range is refused with a message at once.
     await page.getByLabel('From', { exact: true }).fill('2027-02-10');
     await page.getByLabel('To', { exact: true }).fill('2027-02-01');
-    await page.getByRole('button', { name: 'Apply' }).click();
     await expect(sales.getByText('The end date is before the start date.')).toBeVisible();
     await expect(page.getByLabel('To', { exact: true })).toHaveAttribute('aria-invalid', 'true');
+    await expect(page.getByRole('button', { name: 'Apply' })).toBeDisabled();
     await expectAccessible(page);
 
     // A past period with no sales.

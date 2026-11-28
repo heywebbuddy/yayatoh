@@ -1,13 +1,14 @@
 import { executeQuery } from '@yayatoh/kernel';
 import { orgFinanceQuery, orgReportQuery } from '@yayatoh/reports';
 import { roleCan } from '@yayatoh/tenancy';
-import { Button, buttonClass, DatePicker, EmptyState, Select, Table } from '@yayatoh/ui';
+import { buttonClass, EmptyState, Table } from '@yayatoh/ui';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation.ts';
 import { formatNumber } from '@/lib/format.ts';
-import { PERIODS, type ResolvedPeriod } from '@/lib/period.ts';
+import type { ResolvedPeriod } from '@/lib/period.ts';
 import type { ConsoleData } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { PeriodFields } from './period-fields.tsx';
 import {
   AsOf,
   countOf,
@@ -63,40 +64,13 @@ export async function OrgSales({
         <AsOf asOf={r.asOf} locale={locale} />
       </div>
       <form method="get" className="flex flex-wrap items-start gap-3">
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="report-period" className="text-[13px] font-bold text-ink">
-            {t('reports.org.period')}
-          </label>
-          <Select
-            id="report-period"
-            name="period"
-            defaultValue={period.error ? 'custom' : period.period}
-            className="field"
-          >
-            {PERIODS.map((p) => (
-              <option key={p} value={p}>
-                {t(`reports.org.periods.${p}`)}
-              </option>
-            ))}
-          </Select>
-        </div>
-        <DatePicker
-          name="from"
-          id="report-from"
-          label={t('reports.org.from')}
-          defaultValue={period.period === 'custom' ? period.from : undefined}
-          hint={t('reports.org.customHint')}
-        />
-        <DatePicker
-          name="to"
-          id="report-to"
-          label={t('reports.org.to')}
-          defaultValue={period.period === 'custom' ? period.to : undefined}
+        <PeriodFields
+          idPrefix="report"
+          period={period.error ? 'custom' : period.period}
+          from={period.period === 'custom' ? period.from : undefined}
+          to={period.period === 'custom' ? period.to : undefined}
           error={error}
         />
-        <Button type="submit" variant="secondary" className="mt-[22px]">
-          {t('reports.org.apply')}
-        </Button>
       </form>
       {!r.hasSales ? (
         <EmptyState

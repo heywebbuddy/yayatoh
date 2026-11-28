@@ -3367,7 +3367,7 @@
       },
       "from": "Von",
       "to": "Bis",
-      "customHint": "Für eigene Daten",
+      "customHint": "Wähle einen Start- und einen Endtag; beide Tage zählen mit.",
       "apply": "Anwenden",
       "badRange": "Das Enddatum liegt vor dem Startdatum.",
       "badDate": "Wähle beide Daten für einen eigenen Zeitraum.",

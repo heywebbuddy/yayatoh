@@ -105,8 +105,8 @@ test.describe('Money dashboards (U5)', () => {
     await pickOption(page.getByLabel('Period', { exact: true }), 'custom');
     await page.getByLabel('From', { exact: true }).fill('2026-12-31');
     await page.getByLabel('To', { exact: true }).fill('2026-01-01');
-    await page.getByRole('button', { name: 'Apply' }).click();
     await expect(page.getByText('The end date is before the start date.')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Apply' })).toBeDisabled();
 
     const overviewCsv = await download(page, page.getByRole('link', { name: 'Export CSV' }));
     expect(overviewCsv.split('\r\n')[0]).toBe('Period starting,Currency,Gross,Refunds,Fees');

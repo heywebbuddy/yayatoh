@@ -161,6 +161,18 @@ describe('Date and time pickers', () => {
     expect(html).toContain('type="hidden" name="starts" value="2026-11-05"');
     expect(html).toContain('value="11/05/2026"');
   });
+  it('show the format they take as a placeholder, in the locale’s order (QA #32)', () => {
+    expect(renderToStaticMarkup(<DatePicker name="d" label="Day" />)).toMatch(/placeholder="12\/31\/\d{4}"/);
+    const de = renderToStaticMarkup(
+      <UiLocaleProvider locale="de">
+        <DatePicker name="d" label="Tag" />
+      </UiLocaleProvider>,
+    );
+    expect(de).toMatch(/placeholder="31\.12\.\d{4}"/);
+    expect(renderToStaticMarkup(<DatePicker name="d" label="Day" placeholder="Any day" />)).toContain(
+      'placeholder="Any day"',
+    );
+  });
   it('format in the reader’s locale, with Arabic digits in Arabic', () => {
     const html = renderToStaticMarkup(
       <UiLocaleProvider locale="ar" strings={{ chooseDate: 'اختر تاريخًا' }}>

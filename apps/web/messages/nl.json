@@ -3367,7 +3367,7 @@
       },
       "from": "Van",
       "to": "Tot en met",
-      "customHint": "Voor eigen data",
+      "customHint": "Kies een begin- en een einddag; beide dagen tellen mee.",
       "apply": "Toepassen",
       "badRange": "De einddatum ligt vóór de begindatum.",
       "badDate": "Kies beide data voor een eigen periode.",

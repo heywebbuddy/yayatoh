@@ -3367,7 +3367,7 @@
       },
       "from": "Dal",
       "to": "Al",
-      "customHint": "Per date personalizzate",
+      "customHint": "Scegli un giorno di inizio e uno di fine; entrambi i giorni sono inclusi.",
       "apply": "Applica",
       "badRange": "La data di fine è precedente a quella di inizio.",
       "badDate": "Scegli entrambe le date per un periodo personalizzato.",

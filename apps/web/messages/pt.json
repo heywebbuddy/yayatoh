@@ -3367,7 +3367,7 @@
       },
       "from": "De",
       "to": "Até",
-      "customHint": "Para datas personalizadas",
+      "customHint": "Escolha um dia de início e um de fim; os dois dias são incluídos.",
       "apply": "Aplicar",
       "badRange": "A data final é anterior à data inicial.",
       "badDate": "Escolha ambas as datas para um período personalizado.",

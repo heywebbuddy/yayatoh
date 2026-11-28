@@ -3367,7 +3367,7 @@
       },
       "from": "Du",
       "to": "Au",
-      "customHint": "Pour des dates personnalisées",
+      "customHint": "Choisissez un jour de début et un jour de fin ; les deux jours sont inclus.",
       "apply": "Appliquer",
       "badRange": "La date de fin est antérieure à la date de début.",
       "badDate": "Choisissez les deux dates pour une période personnalisée.",

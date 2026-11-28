@@ -3367,7 +3367,7 @@
       },
       "from": "From",
       "to": "To",
-      "customHint": "For custom dates",
+      "customHint": "Pick a start and an end day; both days are included.",
       "apply": "Apply",
       "badRange": "The end date is before the start date.",
       "badDate": "Pick both dates for a custom period.",

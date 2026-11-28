@@ -509,6 +509,9 @@ function Picker({ kind, ...p }: DatePickerProps & { kind: Kind }) {
   }, [kind, parsed, locale]);
 
   const example = formatText(kind, { ymd: today, time: { h: 19, mi: 30 } }, locale);
+  // QA #32: an empty field shows the format it takes. 31 December keeps the day/month order plain;
+  // a fixed year keeps the server and browser renders the same around New Year.
+  const sample = formatText(kind, { ymd: { y: 2026, m: 12, d: 31 }, time: { h: 19, mi: 30 } }, locale);
   const rangeProblem = (q: Parsed): string | null => {
     const v = toNative(kind, q, timeZone, false);
     if (!v) return null;
@@ -627,7 +630,7 @@ function Picker({ kind, ...p }: DatePickerProps & { kind: Kind }) {
             spellCheck={false}
             inputMode={kind === 'date' ? 'numeric' : undefined}
             value={text}
-            placeholder={placeholder}
+            placeholder={placeholder ?? sample}
             required={required}
             disabled={disabled}
             // biome-ignore lint/a11y/noAutofocus: passed through from the call site, as on a native input
