@@ -325,7 +325,8 @@ export async function ConsoleShell({
       </a>
       <nav
         aria-label={t('navigation')}
-        className={cx(SIDEBAR, 'sticky top-4 hidden h-[calc(100dvh-2rem)] w-[260px] shrink-0 lg:flex')}
+        // QA #24: above the page's own raised layers (sticky bars, popovers), so nothing scrolls over it.
+        className={cx(SIDEBAR, 'sticky top-4 z-40 hidden h-[calc(100dvh-2rem)] w-[260px] shrink-0 lg:flex')}
       >
         {sidebar}
       </nav>
@@ -335,13 +336,14 @@ export async function ConsoleShell({
         <OrgStatusBanner status={data.org.status} sandbox={data.org.sandbox} />
         <AgencyBadge data={data} />
         <IncidentBanner variant="console" />
-        <header className="relative z-30 flex flex-wrap items-center gap-2.5">
+        {/* The open drawer and its scrim live in this header, so it then rises above everything on the page. */}
+        <header className="relative z-30 flex flex-wrap items-center gap-2.5 has-[[data-mobile-nav][open]]:z-[60]">
           <MobileNav openLabel={t('menu')} closeLabel={t('closeMenu')}>
             <nav
               aria-label={t('navigation')}
               className={cx(
                 SIDEBAR,
-                'fixed inset-y-3 start-3 z-50 flex w-[min(300px,calc(100vw-1.5rem))] elevation-pop',
+                'fixed inset-y-3 start-3 z-50 flex w-[min(300px,calc(100vw-1.5rem))] overscroll-contain elevation-pop',
               )}
             >
               {sidebar}
