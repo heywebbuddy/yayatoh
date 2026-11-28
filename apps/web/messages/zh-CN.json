@@ -871,6 +871,8 @@
     "title": "登录 Yayatoh",
     "email": "电子邮箱",
     "password": "密码",
+    "emailPlaceholder": "name@example.com",
+    "passwordPlaceholder": "请输入密码",
     "code": "6 位验证码",
     "codeHint": "我们已向你的邮箱发送验证码，10 分钟内有效。",
     "submit": "登录",

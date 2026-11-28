@@ -871,6 +871,8 @@
     "title": "Yayatoh にサインイン",
     "email": "メールアドレス",
     "password": "パスワード",
+    "emailPlaceholder": "name@example.com",
+    "passwordPlaceholder": "パスワードを入力してください",
     "code": "6桁のコード",
     "codeHint": "メールアドレスにコードを送信しました。有効期限は10分です。",
     "submit": "サインイン",

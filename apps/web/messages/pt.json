@@ -871,6 +871,8 @@
     "title": "Entrar no Yayatoh",
     "email": "E-mail",
     "password": "Senha",
+    "emailPlaceholder": "nome@exemplo.com",
+    "passwordPlaceholder": "Digite sua senha",
     "code": "Código de 6 dígitos",
     "codeHint": "Enviamos um código para seu e-mail. Ele expira em 10 minutos.",
     "submit": "Entrar",

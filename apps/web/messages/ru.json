@@ -871,6 +871,8 @@
     "title": "Вход в Yayatoh",
     "email": "Электронная почта",
     "password": "Пароль",
+    "emailPlaceholder": "name@example.com",
+    "passwordPlaceholder": "Введите пароль",
     "code": "6-значный код",
     "codeHint": "Мы отправили код на вашу почту. Он действителен 10 минут.",
     "submit": "Войти",

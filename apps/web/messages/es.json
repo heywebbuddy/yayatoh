@@ -871,6 +871,8 @@
     "title": "Inicia sesión en Yayatoh",
     "email": "Correo electrónico",
     "password": "Contraseña",
+    "emailPlaceholder": "nombre@ejemplo.com",
+    "passwordPlaceholder": "Introduce tu contraseña",
     "code": "Código de 6 dígitos",
     "codeHint": "Te enviamos un código por correo electrónico. Caduca en 10 minutos.",
     "submit": "Iniciar sesión",

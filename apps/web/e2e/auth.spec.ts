@@ -29,6 +29,17 @@ test.describe('sign-in', () => {
     expect(res?.status()).toBe(200);
   });
 
+  test('the email and password fields keep their labels and show example placeholders', async ({ page }) => {
+    for (const path of ['/sign-in', '/o/sign-in']) {
+      await page.goto(path);
+      await expect(page.getByLabel('Email')).toHaveAttribute('placeholder', 'name@example.com');
+      await expect(page.getByLabel('Password', { exact: true })).toHaveAttribute(
+        'placeholder',
+        'Enter your password',
+      );
+    }
+  });
+
   test('sign-in page passes axe', async ({ page }) => {
     const { expectAccessible } = await import('./helpers.ts');
     await page.goto('/sign-in');

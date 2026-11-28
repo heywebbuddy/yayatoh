@@ -871,6 +871,8 @@
     "title": "Yayatoh में साइन इन करें",
     "email": "ईमेल",
     "password": "पासवर्ड",
+    "emailPlaceholder": "name@example.com",
+    "passwordPlaceholder": "अपना पासवर्ड दर्ज करें",
     "code": "6 अंकों का कोड",
     "codeHint": "हमने आपके ईमेल पर एक कोड भेजा है। यह 10 मिनट में समाप्त हो जाएगा।",
     "submit": "साइन इन करें",

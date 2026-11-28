@@ -871,6 +871,8 @@
     "title": "Bei Yayatoh anmelden",
     "email": "E-Mail",
     "password": "Passwort",
+    "emailPlaceholder": "name@beispiel.de",
+    "passwordPlaceholder": "Passwort eingeben",
     "code": "6-stelliger Code",
     "codeHint": "Wir haben dir einen Code per E-Mail geschickt. Er ist 10 Minuten gültig.",
     "submit": "Anmelden",

@@ -871,6 +871,8 @@
     "title": "تسجيل الدخول إلى Yayatoh",
     "email": "البريد الإلكتروني",
     "password": "كلمة المرور",
+    "emailPlaceholder": "name@example.com",
+    "passwordPlaceholder": "أدخل كلمة المرور",
     "code": "رمز من 6 أرقام",
     "codeHint": "أرسلنا رمزًا إلى بريدك الإلكتروني. تنتهي صلاحيته خلال 10 دقائق.",
     "submit": "تسجيل الدخول",

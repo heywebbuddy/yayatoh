@@ -871,6 +871,8 @@
     "title": "Inloggen bij Yayatoh",
     "email": "E-mail",
     "password": "Wachtwoord",
+    "emailPlaceholder": "naam@voorbeeld.nl",
+    "passwordPlaceholder": "Vul je wachtwoord in",
     "code": "Code van 6 cijfers",
     "codeHint": "We hebben een code naar je e-mail gestuurd. Deze verloopt over 10 minuten.",
     "submit": "Inloggen",

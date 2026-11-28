@@ -871,6 +871,8 @@
     "title": "登入 Yayatoh",
     "email": "電子郵件",
     "password": "密碼",
+    "emailPlaceholder": "name@example.com",
+    "passwordPlaceholder": "請輸入密碼",
     "code": "6 位數驗證碼",
     "codeHint": "我們已將驗證碼寄到你的電子郵件，10 分鐘內有效。",
     "submit": "登入",

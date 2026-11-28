@@ -165,7 +165,14 @@ export function SignInForm({
     // POST even before hydration: a GET fallback would put the password in the URL (M1.14 ZAP).
     <form method="post" onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
       {error ? <Alert title={error} /> : null}
-      <Input name="email" type="email" autoComplete="email" required label={t('email')} />
+      <Input
+        name="email"
+        type="email"
+        autoComplete="email"
+        required
+        label={t('email')}
+        placeholder={t('emailPlaceholder')}
+      />
       {mode === 'password' ? (
         <Input
           name="password"
@@ -173,6 +180,7 @@ export function SignInForm({
           autoComplete="current-password"
           required
           label={t('password')}
+          placeholder={t('passwordPlaceholder')}
         />
       ) : codeSent ? (
         <Input

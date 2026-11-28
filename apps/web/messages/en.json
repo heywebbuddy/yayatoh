@@ -871,6 +871,8 @@
     "title": "Sign in to Yayatoh",
     "email": "Email",
     "password": "Password",
+    "emailPlaceholder": "name@example.com",
+    "passwordPlaceholder": "Enter your password",
     "code": "6-digit code",
     "codeHint": "We sent a code to your email. It expires in 10 minutes.",
     "submit": "Sign in",
