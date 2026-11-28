@@ -1280,8 +1280,10 @@
     outline: 2px solid var(--color-focus);
     outline-offset: 2px;
   }
+  /* Selected text: the solid primary with its own text colour, visible on every surface and theme. */
   ::selection {
-    background-color: var(--color-primary-soft);
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
   }
   input[type="checkbox"],
   input[type="radio"],
