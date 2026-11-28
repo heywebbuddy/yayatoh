@@ -1,11 +1,11 @@
 'use client';
 
 import { Button, buttonClass, cx, EmptyState, iconButtonClass } from '@yayatoh/ui';
-import { Bell, Check } from 'lucide-react';
+import { Bell, Check, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { inboxAction, markReadAction } from '@/app/[locale]/o/[org]/(org)/notifications/actions.ts';
-import { Link } from '@/i18n/navigation.ts';
+import { Link, usePathname } from '@/i18n/navigation.ts';
 import type { InboxView } from '@/server/inbox.ts';
 
 const POLL_SECONDS = 30;
@@ -13,10 +13,14 @@ const POLL_SECONDS = 30;
 /**
  * The notification bell: unread badge, a native popover with the latest items, mark read / mark
  * all read. Polls while the tab is visible (realtime arrives with Ably, roadmap §6.4); a polite
- * live region announces when new items arrive. Everything works from the keyboard.
+ * live region announces when new items arrive. Everything works from the keyboard. Opening an
+ * item marks it read and closes the panel, as does any navigation; the X closes it too (QA #21).
  */
 export function InboxBell({ org, initial }: { org: string; initial: InboxView }) {
   const t = useTranslations('notifications');
+  const tc = useTranslations('common');
+  const panel = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
   const [view, setView] = useState(initial);
   const [announcement, setAnnouncement] = useState('');
   const [pending, start] = useTransition();
@@ -36,6 +40,15 @@ export function InboxBell({ org, initial }: { org: string; initial: InboxView })
     if (view.unread > last.current) setAnnouncement(t('unreadAnnouncement', { count: view.unread }));
     last.current = view.unread;
   }, [view.unread, t]);
+
+  const close = () => {
+    const p = panel.current;
+    if (p?.matches(':popover-open')) p.hidePopover();
+  };
+  // Any navigation (an item, "All notifications", a link elsewhere) closes the panel.
+  useEffect(() => {
+    if (panel.current?.matches(':popover-open')) panel.current.hidePopover();
+  }, [pathname]);
 
   const mark = (ids: readonly string[] | 'all') =>
     start(async () => {
@@ -68,6 +81,7 @@ export function InboxBell({ org, initial }: { org: string; initial: InboxView })
         {announcement}
       </p>
       <div
+        ref={panel}
         id="notification-center"
         popover="auto"
         role="dialog"
@@ -76,15 +90,27 @@ export function InboxBell({ org, initial }: { org: string; initial: InboxView })
       >
         <div className="mb-3 flex items-center justify-between gap-2">
           <p className="text-card">{t('title')}</p>
-          <Button
-            type="button"
-            size="sm"
-            variant="ghost"
-            disabled={pending || view.unread === 0}
-            onClick={() => mark('all')}
-          >
-            {t('markAllRead')}
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              disabled={pending || view.unread === 0}
+              onClick={() => mark('all')}
+            >
+              {t('markAllRead')}
+            </Button>
+            <button
+              type="button"
+              popoverTarget="notification-center"
+              popoverTargetAction="hide"
+              aria-label={tc('close')}
+              title={tc('close')}
+              className={iconButtonClass('ghost', 'sm')}
+            >
+              <X aria-hidden="true" className="size-4" strokeWidth={2} />
+            </button>
+          </div>
         </div>
         {view.items.length === 0 ? (
           <EmptyState
@@ -92,7 +118,11 @@ export function InboxBell({ org, initial }: { org: string; initial: InboxView })
             description={t('emptyDescription')}
             className="py-8"
             action={
-              <Link href={`/o/${org}/notifications/preferences`} className={buttonClass('secondary', 'md')}>
+              <Link
+                href={`/o/${org}/notifications/preferences`}
+                onClick={close}
+                className={buttonClass('secondary', 'md')}
+              >
                 {t('choosePreferences')}
               </Link>
             }
@@ -116,7 +146,14 @@ export function InboxBell({ org, initial }: { org: string; initial: InboxView })
                 />
                 <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                   {i.href ? (
-                    <Link href={i.href} className="text-body underline-offset-2 hover:underline">
+                    <Link
+                      href={i.href}
+                      onClick={() => {
+                        if (!i.read) mark([i.id]);
+                        close();
+                      }}
+                      className="text-body underline-offset-2 hover:underline"
+                    >
                       {i.title}
                     </Link>
                   ) : (
@@ -142,10 +179,14 @@ export function InboxBell({ org, initial }: { org: string; initial: InboxView })
           </ul>
         )}
         <div className="mt-3 flex flex-wrap justify-between gap-2 border-t border-line pt-3 text-caption">
-          <Link href={`/o/${org}/notifications`} className="underline underline-offset-2">
+          <Link href={`/o/${org}/notifications`} onClick={close} className="underline underline-offset-2">
             {t('viewAll')}
           </Link>
-          <Link href={`/o/${org}/notifications/preferences`} className="underline underline-offset-2">
+          <Link
+            href={`/o/${org}/notifications/preferences`}
+            onClick={close}
+            className="underline underline-offset-2"
+          >
             {t('settings')}
           </Link>
         </div>
