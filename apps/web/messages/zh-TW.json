@@ -7189,6 +7189,8 @@
       "sentBody": "我們會盡快回覆至你的電子郵件地址。",
       "fixErrors": "請檢查醒目標示的欄位。",
       "rateLimited": "此裝置傳送的訊息過多。請在 {minutes, plural, other {# 分鐘}}後再試一次。",
+      "quotaLeft": "在接下來的 {minutes, plural, other {# 分鐘}}內，你還可以傳送 {count, plural, other {# 則}}訊息。",
+      "quotaNone": "暫時已達到訊息傳送上限。請稍後再試一次。",
       "errors": {
         "name": "請輸入你的姓名。",
         "email": "請輸入有效的電子郵件地址。",

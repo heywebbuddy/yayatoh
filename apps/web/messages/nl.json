@@ -7189,6 +7189,8 @@
       "sentBody": "We antwoorden zo snel mogelijk op je e-mailadres.",
       "fixErrors": "Controleer de gemarkeerde velden.",
       "rateLimited": "Te veel berichten vanaf dit apparaat. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
+      "quotaLeft": "Je kunt de komende {minutes, plural, one {minuut} other {# minuten}} nog {count, plural, one {# bericht} other {# berichten}} versturen.",
+      "quotaNone": "Je hebt de berichtenlimiet voorlopig bereikt. Probeer het later opnieuw.",
       "errors": {
         "name": "Vul je naam in.",
         "email": "Vul een geldig e-mailadres in.",

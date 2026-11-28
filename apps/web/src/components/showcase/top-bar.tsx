@@ -1,5 +1,5 @@
 import { buttonClass, cx } from '@yayatoh/ui';
-import { Menu, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { BrandMark } from '@/components/brand-mark.tsx';
 import { IncidentBanner } from '@/components/status/incident-banner.tsx';
@@ -9,7 +9,9 @@ import { localizedPath } from '@/lib/seo/urls.ts';
 import { dashboardAccess } from '@/server/dashboard-access.ts';
 import { currentGuestSession } from '@/server/guest.ts';
 import { pageTheme } from '@/server/theme.ts';
+import { SiteMenu } from './site-menu.tsx';
 import { SOLUTION_KEYS } from './solutions.ts';
+import { StickyBar } from './sticky-bar.tsx';
 
 const link =
   'inline-flex min-h-10 items-center whitespace-nowrap rounded-pill px-3.5 text-body font-bold text-ink-2 hover:bg-surface-3 hover:text-ink aria-[current=page]:text-ink';
@@ -20,10 +22,11 @@ const popover =
 /**
  * The floating top bar of the public site: search and the logo on the left, links with a
  * "Sign up" pill and "Sign in" on the right. Under 1280 px the links fold into a menu (a
- * `<details>`, so it works without JavaScript).
+ * `<details>`, so it works without JavaScript; see `SiteMenu`).
  */
 export async function ShowcaseTopBar({ name }: { name?: string }) {
   const t = await getTranslations('showcase');
+  const shell = await getTranslations('shell');
   const locale = await getLocale();
   const access = await dashboardAccess();
   const signedIn = access.kind !== 'anonymous' || Boolean(await currentGuestSession(null));
@@ -32,7 +35,7 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
   return (
     <>
       <IncidentBanner variant="site" />
-      <div className="sticky top-0 z-50 px-3 pt-3 sm:px-5">
+      <StickyBar>
         <header className="mx-auto flex w-full max-w-7xl items-center gap-2 rounded-pill border border-line bg-canvas/85 p-2 ps-2 sm:gap-3 sm:ps-3 backdrop-blur-xl">
           <search className="min-w-0 shrink">
             <form
@@ -113,14 +116,10 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
               </>
             )}
             <ThemeSwitch initial={theme} />
-            <details className="relative xl:hidden">
-              <summary
-                aria-label={t('menu')}
-                className="inline-flex size-10 cursor-pointer list-none items-center justify-center rounded-pill border border-line bg-surface [&::-webkit-details-marker]:hidden"
+            <SiteMenu openLabel={t('menu')} closeLabel={shell('closeMenu')}>
+              <ul
+                className={`${popover} max-h-[calc(100dvh-6rem)] w-[min(20rem,calc(100vw-3rem))] overflow-x-hidden overflow-y-auto overscroll-contain`}
               >
-                <Menu aria-hidden="true" className="size-5" />
-              </summary>
-              <ul className={`${popover} w-64`}>
                 <li>
                   <Link href="/events" className={`${link} w-full`}>
                     {t('events')}
@@ -172,10 +171,10 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
                   <ThemeRadios initial={theme} />
                 </li>
               </ul>
-            </details>
+            </SiteMenu>
           </div>
         </header>
-      </div>
+      </StickyBar>
     </>
   );
 }

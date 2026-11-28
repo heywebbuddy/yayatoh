@@ -7189,6 +7189,8 @@
       "sentBody": "我们会尽快回复到你的电子邮件地址。",
       "fixErrors": "请检查突出显示的字段。",
       "rateLimited": "此设备发送的消息过多。请在 {minutes, plural, other {# 分钟}}后重试。",
+      "quotaLeft": "在接下来的 {minutes, plural, other {# 分钟}}内，你还可以发送 {count, plural, other {# 条}}消息。",
+      "quotaNone": "暂时已达到消息发送上限。请稍后重试。",
       "errors": {
         "name": "请输入你的姓名。",
         "email": "请输入有效的电子邮件地址。",

@@ -123,10 +123,10 @@ export async function ShowcaseFooter({ children }: { children?: ReactNode }) {
           </ul>
         </nav>
       </div>
-      {/* The huge glowing wordmark. Decorative: the real one is in the column above. */}
+      {/* The huge glowing wordmark, whole (not cut by the footer's edge). Decorative: the real one is in the column above. */}
       <p
         aria-hidden="true"
-        className="animate-glow-text pointer-events-none mt-6 -mb-[0.16em] text-center font-display text-[15.5vw] leading-none font-black tracking-[-0.05em] text-ember uppercase select-none drop-shadow-[0_0_40px_var(--color-ember)]"
+        className="animate-glow-text pointer-events-none mt-6 pb-[0.15em] text-center font-display text-[15.5vw] leading-none font-black tracking-[-0.05em] text-ember uppercase select-none drop-shadow-[0_0_40px_var(--color-ember)]"
       >
         {t('wordmark')}
       </p>

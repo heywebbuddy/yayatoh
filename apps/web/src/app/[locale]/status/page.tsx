@@ -12,6 +12,7 @@ import { pageLocale } from '@/server/locale.ts';
 import { requestHost } from '@/server/request-origin.ts';
 import { apexOrigin, publicMetadata } from '@/server/seo.ts';
 import { statusSnapshot } from '@/server/status.ts';
+import { RetryButton } from './retry-button.tsx';
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -49,6 +50,7 @@ export default async function StatusPageView({ params }: Props) {
   if ((await requestHost()).kind === 'tenant') notFound();
   const t = await getTranslations('status');
   const tp = await getTranslations('pages');
+  const ta = await getTranslations('actions');
   const snapshot = await statusSnapshot();
   const when = (d: Date) =>
     formatDate(
@@ -112,7 +114,11 @@ export default async function StatusPageView({ params }: Props) {
           icon={Activity}
         />
         {!snapshot ? (
-          <EmptyState title={t('page.unavailableTitle')} description={t('page.unavailableBody')} />
+          <EmptyState
+            title={t('page.unavailableTitle')}
+            description={t('page.unavailableBody')}
+            action={<RetryButton label={ta('tryAgain')} />}
+          />
         ) : (
           <>
             <section

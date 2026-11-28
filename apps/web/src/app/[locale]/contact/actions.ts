@@ -3,6 +3,7 @@
 import { renderPlainEmail } from '@yayatoh/applications';
 import { platformContactSettings, submitPlatformContactMessage } from '@yayatoh/cms';
 import { PLATFORM_SENDER } from '@yayatoh/notifications';
+import type { RateLimitDecision } from '@yayatoh/platform/security';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { ZodError } from 'zod';
 import type { FormState } from '@/lib/form-state.ts';
@@ -12,6 +13,14 @@ import { webTransports } from '@/server/mail-transports.ts';
 import { limitAction, retryAfterMinutes } from '@/server/rate-limit.ts';
 
 const str = (form: FormData, k: string) => String(form.get(k) ?? '').trim();
+
+/**
+ * What the form shows under its result: how many more messages may be sent (every try counts,
+ * field errors included) and the window of the limit that is closest (this device, or the sender's
+ * address across devices). Nothing when the limiter's store was unreachable (it failed open).
+ */
+const quotaOf = (d: RateLimitDecision): FormState['quota'] =>
+  d.limit > 0 && d.windowMs ? { left: d.remaining, minutes: Math.ceil(d.windowMs / 60_000) } : undefined;
 
 /**
  * The Contact page form. Order matters: honeypot → rate limits (device, IP, sender address) →
@@ -25,8 +34,9 @@ export async function contactAction(_prev: FormState, form: FormData): Promise<F
   const email = str(form, 'email').toLowerCase();
   const limit = await limitAction('contactRequest', { identity: email || null });
   if (!limit.allowed) return { ok: false, code: 'rate_limited', reason: String(retryAfterMinutes(limit)) };
+  const quota = quotaOf(limit);
   if (getHumanCheck() && (await passedHumanCheck(form)) !== true)
-    return { ok: false, code: 'validation_failed', fields: ['human'], reason: 'human' };
+    return { ok: false, code: 'validation_failed', fields: ['human'], reason: 'human', quota };
   const locale = await getLocale();
   const name = str(form, 'name');
   const subject = str(form, 'subject');
@@ -40,10 +50,11 @@ export async function contactAction(_prev: FormState, form: FormData): Promise<F
       ok: false,
       code: 'validation_failed',
       fields: [...new Set(err.issues.map((i) => String(i.path[0] ?? '')).filter(Boolean))],
+      quota,
     };
   }
   await notify({ id, locale, name, email, subject, message });
-  return success();
+  return { ...success(), quota };
 }
 
 async function notify(m: {
