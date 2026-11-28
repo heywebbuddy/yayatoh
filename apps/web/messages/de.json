@@ -12740,6 +12740,7 @@
     "unreachable": "{count, plural, one {# Gruppe hat noch keine E-Mail und kein Telefon: Fügen Sie eins auf ihrer Seite hinzu oder sammeln Sie es.} other {# Gruppen haben noch keine E-Mail und kein Telefon: Fügen Sie eins auf ihrer Seite hinzu oder sammeln Sie es.}}",
     "problems": "{count, plural, one {# Gruppe hat eine unzustellbare oder fehlgeschlagene Nachricht.} other {# Gruppen haben eine unzustellbare oder fehlgeschlagene Nachricht.}}",
     "channelsLegend": "Senden per",
+    "smsUnavailable": "Textnachrichten sind auf dieser Plattform noch nicht eingeschaltet, daher werden Einladungen per E-Mail verschickt.",
     "channels": {
       "email": "E-Mail",
       "sms": "SMS"

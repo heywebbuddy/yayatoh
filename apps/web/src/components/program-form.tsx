@@ -154,7 +154,7 @@ export function ProgramForm({
             <fieldset
               key={f.name}
               className="flex flex-col gap-1.5"
-              aria-describedby={error ? `${id(f.name)}-error` : undefined}
+              aria-describedby={error ? `${id(f.name)}-error` : f.hint ? `${id(f.name)}-hint` : undefined}
             >
               <legend className="pb-1.5 text-[13px] font-bold text-ink">{f.label}</legend>
               <div className="flex flex-wrap gap-x-4 gap-y-1">
@@ -174,6 +174,10 @@ export function ProgramForm({
               {error ? (
                 <p id={`${id(f.name)}-error`} className="text-caption text-danger">
                   {error}
+                </p>
+              ) : f.hint ? (
+                <p id={`${id(f.name)}-hint`} className="text-caption text-ink-2">
+                  {f.hint}
                 </p>
               ) : null}
             </fieldset>

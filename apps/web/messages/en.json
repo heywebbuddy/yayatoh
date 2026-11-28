@@ -12740,6 +12740,7 @@
     "unreachable": "{count, plural, one {# party has no email or phone yet: add one on its page, or collect it.} other {# parties have no email or phone yet: add one on their page, or collect it.}}",
     "problems": "{count, plural, one {# party has a message that bounced or failed.} other {# parties have a message that bounced or failed.}}",
     "channelsLegend": "Send by",
+    "smsUnavailable": "Text messages aren't switched on for this platform yet, so invitations go by email.",
     "channels": {
       "email": "Email",
       "sms": "Text message"

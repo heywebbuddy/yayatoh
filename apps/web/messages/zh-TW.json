@@ -12740,6 +12740,7 @@
     "unreachable": "{count, plural, other {# 個組還沒有電子郵件或電話：請在其頁面添加或收集。}}",
     "problems": "{count, plural, other {# 個組有退回或失敗的訊息。}}",
     "channelsLegend": "傳送方式",
+    "smsUnavailable": "本平台尚未開通簡訊，因此邀請將透過電子郵件寄送。",
     "channels": {
       "email": "電子郵件",
       "sms": "簡訊"

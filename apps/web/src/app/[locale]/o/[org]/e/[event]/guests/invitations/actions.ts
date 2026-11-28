@@ -20,6 +20,7 @@ import { redirect } from '@/i18n/navigation.ts';
 import { loadEvent } from '@/server/console.ts';
 import { failure, success } from '@/server/form.ts';
 import { ports } from '@/server/ports.ts';
+import { smsAvailable } from '@/server/sms.ts';
 
 /**
  * Invitation host tools (M4.1f). Every write goes through a command that needs `guests:write`,
@@ -42,11 +43,12 @@ async function run(
   return success();
 }
 
+// QA #1: a text is never queued when the platform cannot send one (the form hides the choice).
 const channelsOf = (form: FormData): InviteChannel[] =>
   form
     .getAll('channels')
     .map(String)
-    .filter((c): c is InviteChannel => c === 'email' || c === 'sms');
+    .filter((c): c is InviteChannel => c === 'email' || (c === 'sms' && smsAvailable()));
 
 const localeOf = (raw: string): InviteLocale => {
   if (!(INVITE_LOCALES as readonly string[]).includes(raw))

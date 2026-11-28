@@ -12740,6 +12740,7 @@
     "unreachable": "{count, plural, other {# グループにメールも電話もありません。各ページで追加するか収集してください。}}",
     "problems": "{count, plural, other {# グループに不達または失敗したメッセージがあります。}}",
     "channelsLegend": "送信方法",
+    "smsUnavailable": "このプラットフォームではテキストメッセージがまだ有効になっていないため、招待状はメールで送信されます。",
     "channels": {
       "email": "メール",
       "sms": "SMS"

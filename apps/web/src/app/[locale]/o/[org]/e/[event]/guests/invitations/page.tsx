@@ -31,6 +31,7 @@ import { Link } from '@/i18n/navigation.ts';
 import { guestNav } from '@/lib/guest-nav.ts';
 import { loadEvent } from '@/server/console.ts';
 import { ports } from '@/server/ports.ts';
+import { smsAvailable } from '@/server/sms.ts';
 import { RSVP_STATE_TONE } from '../party-rsvp.tsx';
 import { GuestsCrumbs } from '../rsvp/nav.tsx';
 import {
@@ -101,10 +102,14 @@ export default async function InvitationsPage({
         timeStyle: 'short',
       }).format(ov.settings.deadline)
     : null;
+  // QA #1: texts go out only when the platform's SMS provider is live; otherwise only email is
+  // offered, and the form says why (an SMS choice was accepted and then silently not sent).
+  const sms = smsAvailable();
   const channelOptions = [
     { value: 'email', label: t('channels.email') },
-    { value: 'sms', label: t('channels.sms') },
+    ...(sms ? [{ value: 'sms', label: t('channels.sms') }] : []),
   ];
+  const channelsHint = sms ? undefined : t('smsUnavailable');
 
   return (
     <>
@@ -171,6 +176,7 @@ export default async function InvitationsPage({
                     label: t('channelsLegend'),
                     options: channelOptions,
                     defaultValues: ['email'],
+                    ...(channelsHint ? { hint: channelsHint } : {}),
                   },
                 ]}
                 idPrefix="invite-send"
@@ -380,6 +386,7 @@ export default async function InvitationsPage({
                   label: t('channelsLegend'),
                   options: channelOptions,
                   defaultValues: reminders.channels,
+                  ...(channelsHint ? { hint: channelsHint } : {}),
                 },
               ]}
               idPrefix="reminders"

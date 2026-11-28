@@ -12740,6 +12740,7 @@
     "unreachable": "{count, plural, other {# 个组还没有电子邮件或电话：请在其页面添加或收集。}}",
     "problems": "{count, plural, other {# 个组有退回或失败的消息。}}",
     "channelsLegend": "发送方式",
+    "smsUnavailable": "本平台尚未开通短信，因此邀请将通过电子邮件发送。",
     "channels": {
       "email": "电子邮件",
       "sms": "短信"

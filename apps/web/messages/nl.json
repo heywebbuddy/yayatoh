@@ -12740,6 +12740,7 @@
     "unreachable": "{count, plural, one {# groep heeft nog geen e-mail of telefoon: voeg er een toe op haar pagina of verzamel hem.} other {# groepen hebben nog geen e-mail of telefoon: voeg er een toe op hun pagina of verzamel hem.}}",
     "problems": "{count, plural, one {# groep heeft een bericht dat onbestelbaar was of mislukte.} other {# groepen hebben een bericht dat onbestelbaar was of mislukte.}}",
     "channelsLegend": "Versturen per",
+    "smsUnavailable": "Sms-berichten staan op dit platform nog niet aan, dus uitnodigingen gaan per e-mail.",
     "channels": {
       "email": "E-mail",
       "sms": "Sms"
