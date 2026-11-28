@@ -118,7 +118,7 @@ export async function ShowcaseTopBar({ name }: { name?: string }) {
             <ThemeSwitch initial={theme} />
             <SiteMenu openLabel={t('menu')} closeLabel={shell('closeMenu')}>
               <ul
-                className={`${popover} max-h-[calc(100dvh-6rem)] w-[min(20rem,calc(100vw-3rem))] overflow-y-auto overscroll-contain`}
+                className={`${popover} max-h-[calc(100dvh-6rem)] w-[min(20rem,calc(100vw-3rem))] overflow-x-hidden overflow-y-auto overscroll-contain`}
               >
                 <li>
                   <Link href="/events" className={`${link} w-full`}>

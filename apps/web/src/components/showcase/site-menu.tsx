@@ -40,15 +40,27 @@ export function SiteMenu({
       close();
       ref.current?.querySelector('summary')?.focus();
     };
-    const onPointer = (e: PointerEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) close();
+    // A tap outside only closes the menu (it doesn't also follow a link behind it); a link in the
+    // menu closes it too, even one to the page already open.
+    const onClick = (e: MouseEvent) => {
+      const d = ref.current;
+      if (!d) return;
+      if (!d.contains(e.target as Node)) {
+        e.preventDefault();
+        e.stopPropagation();
+        close();
+      } else if ((e.target as Element).closest('a')) close();
     };
+    // Widened past the breakpoint, the menu is hidden: don't leave the page locked behind it.
+    const wide = window.matchMedia('(min-width: 80rem)');
     document.addEventListener('keydown', onKey);
-    document.addEventListener('pointerdown', onPointer);
+    document.addEventListener('click', onClick, true);
+    wide.addEventListener('change', close);
     return () => {
       html.style.overflow = was;
       document.removeEventListener('keydown', onKey);
-      document.removeEventListener('pointerdown', onPointer);
+      document.removeEventListener('click', onClick, true);
+      wide.removeEventListener('change', close);
     };
   }, [open]);
   return (
