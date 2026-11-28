@@ -12945,6 +12945,9 @@
     "publishedVersion": "मेहमान संस्करण {version} देखते हैं।",
     "neverPublished": "अभी कुछ प्रकाशित नहीं हुआ।",
     "published": "प्रकाशित। मेहमान अब संस्करण {version} देखते हैं।",
+    "questionAdded": "सवाल जोड़ा गया",
+    "questionSaved": "सवाल सहेजा गया",
+    "publishToShow": "सवाल प्रकाशित करने पर यह मेहमानों को दिखेगा।",
     "publish": "सवाल प्रकाशित करें",
     "field": {
       "label": "सवाल",

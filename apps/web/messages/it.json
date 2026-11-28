@@ -12945,6 +12945,9 @@
     "publishedVersion": "Gli invitati vedono la versione {version}.",
     "neverPublished": "Ancora niente di pubblicato.",
     "published": "Pubblicato. Gli invitati ora vedono la versione {version}.",
+    "questionAdded": "Domanda aggiunta",
+    "questionSaved": "Domanda salvata",
+    "publishToShow": "Gli invitati la vedranno quando pubblichi le domande.",
     "publish": "Pubblica le domande",
     "field": {
       "label": "Domanda",

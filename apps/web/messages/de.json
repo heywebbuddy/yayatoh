@@ -12945,6 +12945,9 @@
     "publishedVersion": "Gäste sehen Version {version}.",
     "neverPublished": "Noch nichts veröffentlicht.",
     "published": "Veröffentlicht. Gäste sehen jetzt Version {version}.",
+    "questionAdded": "Frage hinzugefügt",
+    "questionSaved": "Frage gespeichert",
+    "publishToShow": "Gäste sehen sie, sobald du die Fragen veröffentlichst.",
     "publish": "Fragen veröffentlichen",
     "field": {
       "label": "Frage",

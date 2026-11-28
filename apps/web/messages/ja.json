@@ -12945,6 +12945,9 @@
     "publishedVersion": "招待客にはバージョン {version} が表示されています。",
     "neverPublished": "まだ何も公開されていません。",
     "published": "公開しました。招待客にはバージョン {version} が表示されます。",
+    "questionAdded": "質問を追加しました",
+    "questionSaved": "質問を保存しました",
+    "publishToShow": "質問を公開すると招待客に表示されます。",
     "publish": "質問を公開",
     "field": {
       "label": "質問",

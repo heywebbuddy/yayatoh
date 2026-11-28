@@ -12945,6 +12945,9 @@
     "publishedVersion": "Гости видят версию {version}.",
     "neverPublished": "Пока ничего не опубликовано.",
     "published": "Опубликовано. Теперь гости видят версию {version}.",
+    "questionAdded": "Вопрос добавлен",
+    "questionSaved": "Вопрос сохранён",
+    "publishToShow": "Гости увидят его после публикации вопросов.",
     "publish": "Опубликовать вопросы",
     "field": {
       "label": "Вопрос",

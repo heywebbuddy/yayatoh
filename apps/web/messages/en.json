@@ -12945,6 +12945,9 @@
     "publishedVersion": "Guests see version {version}.",
     "neverPublished": "Nothing published yet.",
     "published": "Published. Guests now see version {version}.",
+    "questionAdded": "Question added",
+    "questionSaved": "Question saved",
+    "publishToShow": "Guests see it once you publish the questions.",
     "publish": "Publish questions",
     "field": {
       "label": "Question",

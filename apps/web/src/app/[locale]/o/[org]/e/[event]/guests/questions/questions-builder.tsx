@@ -23,6 +23,8 @@ import {
   IconButton,
   Input,
   Select,
+  ToastProvider,
+  useToast,
 } from '@yayatoh/ui';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -128,24 +130,30 @@ function draftOf(q: RsvpQuestion): Draft {
  * where the answer is saved, required, private, and when it shows) and sees them in a live
  * preview for a sample guest (attending or not, adult or child, with a named plus-one or not)
  * before publishing them as the next version. Buttons move and remove questions (no dragging).
- * Viewers see the questions and the preview only.
+ * Viewers see the questions and the preview only. Adding, saving and publishing a question each
+ * confirm with a toast (QA #3), so the host sees it wherever they are on the page.
  */
-export function QuestionsBuilder({
-  initial,
-  version: startVersion,
-  subEvents,
-  menu,
-  canWrite,
-  publish,
-}: {
+export function QuestionsBuilder(props: BuilderProps) {
+  const tc = useTranslations('common');
+  return (
+    <ToastProvider closeLabel={tc('close')}>
+      <Builder {...props} />
+    </ToastProvider>
+  );
+}
+
+interface BuilderProps {
   initial: readonly RsvpQuestion[];
   version: number;
   subEvents: readonly SubEventOption[];
   menu: readonly FieldMenuOption[];
   canWrite: boolean;
   publish: (prev: PublishState, form: FormData) => Promise<PublishState>;
-}) {
+}
+
+function Builder({ initial, version: startVersion, subEvents, menu, canWrite, publish }: BuilderProps) {
   const t = useTranslations('rsvpQuestions');
+  const toast = useToast();
   const te = useTranslations();
   const [questions, setQuestions] = useState<RsvpQuestion[]>([...initial]);
   const [dirty, setDirty] = useState(false);
@@ -158,8 +166,9 @@ export function QuestionsBuilder({
     if (state.ok && state.stamp !== lastStamp.current) {
       lastStamp.current = state.stamp;
       setDirty(false);
+      if (state.version) toast({ title: t('published', { version: state.version }) });
     }
-  }, [state]);
+  }, [state, toast, t]);
 
   const subName = (id: string | null) =>
     id === null ? t('wholeEvent') : (subEvents.find((s) => s.id === id)?.name ?? t('unknownSubEvent'));
@@ -305,6 +314,7 @@ export function QuestionsBuilder({
                     onSave={(d) => {
                       change(questions.map((x, k) => (k === i ? build(d, x, questions) : x)));
                       setEditing(null);
+                      toast({ title: t('questionSaved'), description: t('publishToShow') });
                     }}
                   />
                 ) : null}
@@ -329,6 +339,7 @@ export function QuestionsBuilder({
                 onSave={(d) => {
                   change([...questions, build(d, null, questions)]);
                   setEditing(null);
+                  toast({ title: t('questionAdded'), description: t('publishToShow') });
                 }}
               />
             </Card>

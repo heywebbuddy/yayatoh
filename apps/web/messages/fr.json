@@ -12945,6 +12945,9 @@
     "publishedVersion": "Les invités voient la version {version}.",
     "neverPublished": "Rien n’est encore publié.",
     "published": "Publié. Les invités voient maintenant la version {version}.",
+    "questionAdded": "Question ajoutée",
+    "questionSaved": "Question enregistrée",
+    "publishToShow": "Les invités la verront une fois que vous aurez publié les questions.",
     "publish": "Publier les questions",
     "field": {
       "label": "Question",

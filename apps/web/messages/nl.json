@@ -12945,6 +12945,9 @@
     "publishedVersion": "Gasten zien versie {version}.",
     "neverPublished": "Nog niets gepubliceerd.",
     "published": "Gepubliceerd. Gasten zien nu versie {version}.",
+    "questionAdded": "Vraag toegevoegd",
+    "questionSaved": "Vraag opgeslagen",
+    "publishToShow": "Gasten zien hem zodra je de vragen publiceert.",
     "publish": "Vragen publiceren",
     "field": {
       "label": "Vraag",

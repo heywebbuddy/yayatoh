@@ -12945,6 +12945,9 @@
     "publishedVersion": "宾客看到的是第 {version} 版。",
     "neverPublished": "尚未发布任何内容。",
     "published": "已发布。宾客现在看到的是第 {version} 版。",
+    "questionAdded": "已添加问题",
+    "questionSaved": "已保存问题",
+    "publishToShow": "发布问题后，宾客才能看到。",
     "publish": "发布问题",
     "field": {
       "label": "问题",

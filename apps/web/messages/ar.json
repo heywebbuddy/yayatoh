@@ -12945,6 +12945,9 @@
     "publishedVersion": "يرى الضيوف الإصدار {version}.",
     "neverPublished": "لم يُنشر شيء بعد.",
     "published": "نُشر. يرى الضيوف الآن الإصدار {version}.",
+    "questionAdded": "تمت إضافة السؤال",
+    "questionSaved": "تم حفظ السؤال",
+    "publishToShow": "سيراه الضيوف بعد نشر الأسئلة.",
     "publish": "نشر الأسئلة",
     "field": {
       "label": "السؤال",
