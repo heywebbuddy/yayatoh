@@ -12,7 +12,7 @@ export interface TrailSection {
 /**
  * U2 (principle 8, consistent page anatomy): the breadcrumb above every org page's header,
  * derived from the grouped navigation: organization › section › page, the section left out when it
- * is the page itself (Events). The page's own title follows in its PageHeader; deeper pages
+ * is the page itself (Events, Settings). The page's own title follows in its PageHeader; deeper pages
  * (a venue, a campaign) link back to their list.
  */
 export function OrgTrail({
@@ -32,7 +32,7 @@ export function OrgTrail({
       const exact = pathname === item.href;
       if (!exact && !pathname.startsWith(`${item.href}/`)) continue;
       const page: Crumb = exact ? { label: item.label } : { label: item.label, href: item.href };
-      // The Events section's own Events page is said once: organization › Events.
+      // A section's own namesake page (Events, Settings) is said once: organization › Events.
       const items: Crumb[] =
         s.key === item.key
           ? [{ label: org.label, href: org.href }, page]
