@@ -76,6 +76,9 @@
     "pageDescription": "Оповещения для вас в этой организации: новые заказы и сообщения.",
     "allRead": "Все уведомления прочитаны.",
     "items": {
+      "assistance": {
+        "requested": "Новый запрос помощи на мероприятии {eventName}"
+      },
       "sales": {
         "order_paid": "Новый заказ: {name} купил(а) {count, plural, one {# билет} few {# билета} many {# билетов} other {# билета}} на {eventName} ({amount})"
       },

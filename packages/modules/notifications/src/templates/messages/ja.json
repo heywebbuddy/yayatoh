@@ -83,6 +83,10 @@
       "subject": "新しい注文: {name}",
       "intro": "{name} さんが {eventName} のチケットを {count, plural, other {# 枚}}購入しました（{amount}）。"
     },
+    "assistance.requested": {
+      "subject": "新しいヘルプリクエスト：{eventName}",
+      "intro": "{eventName} でゲストがヘルプを求めています。ヘルプキューを開いて対応してください。"
+    },
     "messaging.contact_replied": {
       "subject": "{name} さんから新しいメッセージ",
       "intro": "{name} さんから {eventName} についてメッセージが届きました。"

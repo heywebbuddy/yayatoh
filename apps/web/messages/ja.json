@@ -76,6 +76,9 @@
     "pageDescription": "この組織でのあなた宛てのお知らせ：新しい注文とメッセージ。",
     "allRead": "すべての通知が既読です。",
     "items": {
+      "assistance": {
+        "requested": "{eventName} で新しいヘルプリクエスト"
+      },
       "sales": {
         "order_paid": "新しい注文：{name} さんが {eventName} のチケットを {count, plural, other {# 枚}}購入しました（{amount}）"
       },

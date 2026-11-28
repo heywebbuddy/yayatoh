@@ -76,6 +76,9 @@
     "pageDescription": "Alerts for you in this organization: new orders and messages.",
     "allRead": "All notifications are marked as read.",
     "items": {
+      "assistance": {
+        "requested": "New help request at {eventName}"
+      },
       "sales": {
         "order_paid": "New order: {name} bought {count, plural, one {# ticket} other {# tickets}} for {eventName} ({amount})"
       },

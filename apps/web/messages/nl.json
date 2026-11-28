@@ -76,6 +76,9 @@
     "pageDescription": "Meldingen voor jou in deze organisatie: nieuwe bestellingen en berichten.",
     "allRead": "Alle meldingen zijn gelezen.",
     "items": {
+      "assistance": {
+        "requested": "Nieuw hulpverzoek bij {eventName}"
+      },
       "sales": {
         "order_paid": "Nieuwe bestelling: {name} kocht {count, plural, one {# ticket} other {# tickets}} voor {eventName} ({amount})"
       },

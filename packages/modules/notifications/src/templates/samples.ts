@@ -280,6 +280,7 @@ export const SAMPLE_PARAMS: Readonly<Record<MessageKind, Readonly<Record<string,
     email: 'amina@example.com',
     body: 'Hello! Do you offer group rates for twelve people at the spring gala?',
   },
+  'assistance.requested': { eventName: 'Lakeside Jazz Night' },
   'messaging.contact_replied': { name: 'Amina Diallo', eventName: 'Lakeside Jazz Night' },
   'payments.destination-changed': {
     url: 'https://app.yayatoh.test/o/lakeside-events/payouts',

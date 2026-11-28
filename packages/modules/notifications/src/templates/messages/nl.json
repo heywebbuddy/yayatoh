@@ -83,6 +83,10 @@
       "subject": "Nieuwe bestelling: {name}",
       "intro": "{name} kocht {count, plural, one {# ticket} other {# tickets}} voor {eventName} ({amount})."
     },
+    "assistance.requested": {
+      "subject": "Nieuw hulpverzoek: {eventName}",
+      "intro": "Een gast vroeg om hulp bij {eventName}. Open de hulpwachtrij om het op te pakken."
+    },
     "messaging.contact_replied": {
       "subject": "Nieuw bericht van {name}",
       "intro": "{name} schreef je over {eventName}."

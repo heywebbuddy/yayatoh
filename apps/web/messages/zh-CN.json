@@ -76,6 +76,9 @@
     "pageDescription": "您在此组织的提醒：新订单和消息。",
     "allRead": "所有通知均已读。",
     "items": {
+      "assistance": {
+        "requested": "{eventName} 有新的求助请求"
+      },
       "sales": {
         "order_paid": "新订单：{name} 购买了 {count, plural, other {# 张}} {eventName} 门票（{amount}）"
       },

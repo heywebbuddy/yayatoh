@@ -83,6 +83,10 @@
       "subject": "नया ऑर्डर: {name}",
       "intro": "{name} ने {eventName} के लिए {count, plural, one {# टिकट} other {# टिकट}} खरीदे ({amount})।"
     },
+    "assistance.requested": {
+      "subject": "मदद का नया अनुरोध: {eventName}",
+      "intro": "{eventName} में एक मेहमान ने मदद माँगी है। इसे संभालने के लिए मदद की कतार खोलें।"
+    },
     "messaging.contact_replied": {
       "subject": "{name} का नया संदेश",
       "intro": "{name} ने आपको {eventName} के बारे में लिखा।"

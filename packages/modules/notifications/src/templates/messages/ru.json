@@ -83,6 +83,10 @@
       "subject": "Новый заказ: {name}",
       "intro": "{name} купил(а) {count, plural, one {# билет} few {# билета} many {# билетов} other {# билета}} на {eventName} ({amount})."
     },
+    "assistance.requested": {
+      "subject": "Новый запрос помощи: {eventName}",
+      "intro": "Гость попросил о помощи на мероприятии {eventName}. Откройте очередь запросов, чтобы взять его."
+    },
     "messaging.contact_replied": {
       "subject": "Новое сообщение от {name}",
       "intro": "{name} написал(а) вам о {eventName}."

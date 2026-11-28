@@ -92,6 +92,7 @@ import {
 import { zoomRegistrantsSubscriber } from '@yayatoh/virtual';
 import { configureWebhooks, webhookPublisherFromEnv, webhookPublisherSubscriber } from '@yayatoh/webhooks';
 import { z } from 'zod';
+import { assistanceRequestNotifier } from './assistance-notifier.ts';
 import { contactStatsJob } from './contact-stats.ts';
 import { duplicateScanJob } from './duplicates.ts';
 import { slackJob, syncJob } from './integrations.ts';
@@ -162,6 +163,8 @@ export function subscribers(env: NodeJS.ProcessEnv = process.env): Subscriber[] 
     announcementMailer({ notifier, appOrigin }),
     threadReplyMailer({ notifier, appOrigin }),
     contactWroteNotifier({ notifier }),
+    // QA #20: a guest's help request reaches the door team at once, not only when it goes overdue.
+    assistanceRequestNotifier({ notifier }),
     // U10: messages through the org's contact page reach its members.
     orgContactNotifier({ notifier }),
     releaseCancelledSeats(),

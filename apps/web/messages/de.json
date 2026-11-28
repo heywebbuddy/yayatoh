@@ -76,6 +76,9 @@
     "pageDescription": "Hinweise für dich in dieser Organisation: neue Bestellungen und Nachrichten.",
     "allRead": "Alle Benachrichtigungen sind gelesen.",
     "items": {
+      "assistance": {
+        "requested": "Neue Hilfeanfrage bei {eventName}"
+      },
       "sales": {
         "order_paid": "Neue Bestellung: {name} hat {count, plural, one {# Ticket} other {# Tickets}} für {eventName} gekauft ({amount})"
       },

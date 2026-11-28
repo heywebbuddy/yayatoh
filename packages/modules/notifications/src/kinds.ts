@@ -406,6 +406,15 @@ export const KINDS = {
     audience: ['owner', 'admin', 'manager', 'marketing'],
     params: ['name', 'email', 'body'],
   },
+  // QA #20: a guest asked for help at an event (seat finder, guest hub): its door team hears at
+  // once, in the console and by push. Not email: the help queue is worked live.
+  'assistance.requested': {
+    category: 'messages',
+    channels: ['in_app', 'push'],
+    urgent: true,
+    audience: ['owner', 'admin', 'manager', 'box_office', 'scanner'],
+    params: ['eventName'],
+  },
   'messaging.contact_replied': {
     category: 'messages',
     channels: ['in_app', 'email', 'push'],

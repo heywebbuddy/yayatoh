@@ -83,6 +83,10 @@
       "subject": "新訂單：{name}",
       "intro": "{name} 購買了 {count, plural, other {# 張}} {eventName} 票券（{amount}）。"
     },
+    "assistance.requested": {
+      "subject": "新的求助請求：{eventName}",
+      "intro": "有賓客在 {eventName} 請求協助。開啟求助佇列來處理。"
+    },
     "messaging.contact_replied": {
       "subject": "來自 {name} 的新訊息",
       "intro": "{name} 就 {eventName} 傳訊息給您。"

@@ -76,6 +76,9 @@
     "pageDescription": "Alertas para você nesta organização: novos pedidos e mensagens.",
     "allRead": "Todas as notificações estão marcadas como lidas.",
     "items": {
+      "assistance": {
+        "requested": "Novo pedido de ajuda em {eventName}"
+      },
       "sales": {
         "order_paid": "Novo pedido: {name} comprou {count, plural, one {# ingresso} other {# ingressos}} para {eventName} ({amount})"
       },

@@ -83,6 +83,10 @@
       "subject": "New order: {name}",
       "intro": "{name} bought {count, plural, one {# ticket} other {# tickets}} for {eventName} ({amount})."
     },
+    "assistance.requested": {
+      "subject": "New help request: {eventName}",
+      "intro": "A guest asked for help at {eventName}. Open the help queue to take it."
+    },
     "messaging.contact_replied": {
       "subject": "New message from {name}",
       "intro": "{name} wrote to you about {eventName}."

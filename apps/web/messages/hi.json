@@ -76,6 +76,9 @@
     "pageDescription": "इस संगठन में आपके लिए अलर्ट: नए ऑर्डर और संदेश।",
     "allRead": "सभी सूचनाएँ पढ़ी हुई हैं।",
     "items": {
+      "assistance": {
+        "requested": "{eventName} में मदद का नया अनुरोध"
+      },
       "sales": {
         "order_paid": "नया ऑर्डर: {name} ने {eventName} के लिए {count, plural, one {# टिकट} other {# टिकट}} खरीदे ({amount})"
       },

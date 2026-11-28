@@ -83,6 +83,10 @@
       "subject": "Nuovo ordine: {name}",
       "intro": "{name} ha acquistato {count, plural, one {# biglietto} other {# biglietti}} per {eventName} ({amount})."
     },
+    "assistance.requested": {
+      "subject": "Nuova richiesta di aiuto: {eventName}",
+      "intro": "Un ospite ha chiesto aiuto a {eventName}. Apri la coda delle richieste per prenderla in carico."
+    },
     "messaging.contact_replied": {
       "subject": "Nuovo messaggio da {name}",
       "intro": "{name} ti ha scritto su {eventName}."

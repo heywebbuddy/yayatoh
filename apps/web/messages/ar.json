@@ -76,6 +76,9 @@
     "pageDescription": "تنبيهات لك في هذه المؤسسة: طلبات ورسائل جديدة.",
     "allRead": "تم تعليم كل الإشعارات كمقروءة.",
     "items": {
+      "assistance": {
+        "requested": "طلب مساعدة جديد في {eventName}"
+      },
       "sales": {
         "order_paid": "طلب جديد: اشترى {name} {count, plural, zero {# تذكرة} one {تذكرة واحدة} two {تذكرتين} few {# تذاكر} many {# تذكرة} other {# تذكرة}} لفعالية {eventName} ({amount})"
       },

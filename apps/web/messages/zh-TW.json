@@ -76,6 +76,9 @@
     "pageDescription": "您在此組織的提醒：新訂單與訊息。",
     "allRead": "所有通知皆已讀。",
     "items": {
+      "assistance": {
+        "requested": "{eventName} 有新的求助請求"
+      },
       "sales": {
         "order_paid": "新訂單：{name} 購買了 {count, plural, other {# 張}} {eventName} 票券（{amount}）"
       },
