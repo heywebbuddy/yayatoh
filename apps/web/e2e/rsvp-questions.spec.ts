@@ -161,10 +161,10 @@ test.describe('RSVP questions (M4.1e)', () => {
     await page.getByRole('button', { name: 'Move Ceremony: song request down' }).click();
 
     await page.getByRole('button', { name: 'Publish questions' }).click();
-    // QA #3: the inline notice and a toast both confirm it.
+    // QA #3: a toast confirms it.
     await expect(
       page.getByRole('status').filter({ hasText: 'Published. Guests now see version 1.' }),
-    ).toHaveCount(2);
+    ).toBeVisible();
     await page.reload();
     await expect(page.getByText('Guests see version 1.')).toBeVisible();
     const list = page.getByRole('list', { name: 'Questions' });

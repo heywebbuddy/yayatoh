@@ -369,10 +369,8 @@ function Builder({ initial, version: startVersion, subEvents, menu, canWrite, pu
             <p className={CAPTION} role="status">
               {dirty ? t('unpublished') : version ? t('publishedVersion', { version }) : t('neverPublished')}
             </p>
-            <div aria-live="polite">
-              {state.ok && !dirty ? <Alert tone="info" title={t('published', { version })} /> : null}
-              {publishError ? <Alert title={publishError} /> : null}
-            </div>
+            {/* Success is the toast (announced once); a refusal stays here, next to the button. */}
+            <div aria-live="polite">{publishError ? <Alert title={publishError} /> : null}</div>
             <Button type="submit" disabled={pending || !dirty} className="self-start">
               {t('publish')}
             </Button>
